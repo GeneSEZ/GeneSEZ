@@ -11,14 +11,14 @@
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::Conversion»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
-«EXTENSION org::genesez::platform::common::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
 
-«EXTENSION org::genesez::platform::java::scripts::Type»
-«EXTENSION org::genesez::platform::java::scripts::Naming»
-«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -36,28 +36,28 @@
 	generates imports
 «ENDREM»
 «DEFINE ImportStatements FOR MClassifier-»
-	«IF hasStereotype("di4javaNamed")
-		|| property.exists(e|e.hasStereotype("di4javaNamed"))
-		|| operation.exists(e|e.hasStereotype("di4javaNamed"))»
+	«IF emHasStereotypeAssignment("di4javaNamed")
+		|| property.exists(e|e.emHasStereotypeAssignment("di4javaNamed"))
+		|| operation.exists(e|e.emHasStereotypeAssignment("di4javaNamed"))»
 		import javax.inject.Named;
 	«ENDIF»
 			
-	«IF hasStereotype("di4javaSingleton")
-		|| property.exists(e|e.hasStereotype("di4javaSingleton"))
-		|| operation.exists(e|e.hasStereotype("di4javaSingleton"))»
+	«IF emHasStereotypeAssignment("di4javaSingleton")
+		|| property.exists(e|e.emHasStereotypeAssignment("di4javaSingleton"))
+		|| operation.exists(e|e.emHasStereotypeAssignment("di4javaSingleton"))»
 		import javax.inject.Singleton;
 	«ENDIF»
 	
-	«IF property.exists(e|e.hasStereotype("di4javaInject"))
-		|| operation.exists(e|e.hasStereotype("di4javaInject"))»
+	«IF property.exists(e|e.emHasStereotypeAssignment("di4javaInject"))
+		|| operation.exists(e|e.emHasStereotypeAssignment("di4javaInject"))»
 		import javax.inject.Inject;
 	«ENDIF»	
 	
-    «IF hasStereotype("di4javaQualifier")-»
+    «IF emHasStereotypeAssignment("di4javaQualifier")-»
         import javax.inject.Qualifier;
     «ENDIF»         
     
-    «IF hasStereotype("di4javaScope")-»
+    «IF emHasStereotypeAssignment("di4javaScope")-»
         import javax.inject.Scope;
     «ENDIF»  	
 «ENDDEFINE»

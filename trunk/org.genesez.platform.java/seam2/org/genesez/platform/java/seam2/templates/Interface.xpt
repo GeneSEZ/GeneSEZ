@@ -17,10 +17,12 @@
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::Conversion»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
-«EXTENSION org::genesez::platform::common::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::NavigateElement»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::profile::AccessorStereotype»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
 
 «REM»
 	evaluates Seam interface annotations
@@ -33,14 +35,14 @@
 	generate getter- and setter-operations in session beans with "seam2Component"-stereotype
 «ENDREM»
 «DEFINE GetterSetterForSessionBeans FOR MInterface-»
-	«FOREACH this.package().classifier.select(e|e.hasStereotype("ejb3SessionBean") && e.hasStereotype("seam2Component")) AS c-»
+	«FOREACH this.navPackage().classifier.select(e|e.emHasStereotypeAssignment("ejb3SessionBean") && e.emHasStereotypeAssignment("seam2Component")) AS c-»
 		«FOREACH c.realization AS r-»	
 			«IF r.name() == this.name-»
 				«FOREACH c.property AS p-»
-					«IF p.generateGetter()-»
-						«EXPAND org::genesez::platform::java::java5::templates::Attribute::_DerivedDeclaration FOR (MAttribute) p-»
+					«IF p.emGenerateGetAccess()-»
+						«EXPAND org::genesez::platform::java::m2t::Attribute::_DerivedDeclaration FOR (MAttribute) p-»
 					«ENDIF-»
-					«IF p.generateSetter()-»
+					«IF p.emGenerateSetAccess()-»
 						«EXPAND org::genesez::platform::java::seam2::templates::Attribute::_SetterDeclaration FOR (MAttribute) p-»
 					«ENDIF-»
 				«ENDFOREACH-»

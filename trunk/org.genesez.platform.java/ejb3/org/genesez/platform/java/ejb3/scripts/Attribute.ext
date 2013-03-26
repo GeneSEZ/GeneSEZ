@@ -1,22 +1,24 @@
 import gcore;
 
 extension org::genesez::util::logging::Logging;
-extension org::genesez::platform::common::AccessHelper;
-extension org::genesez::platform::common::m2m::CreateTemplate;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
 extension org::genesez::platform::common::m2m::CreateBasics;
-extension org::genesez::platform::java::scripts::Naming;
+extension org::genesez::platform::java::util::Naming;
+extension org::genesez::platform::java::util::JavaTypes;
 extension org::genesez::platform::java::ejb3::scripts::Stereotypes;
 extension org::genesez::platform::java::ejb3::scripts::Interface;
 extension org::genesez::platform::java::ejb3::scripts::Class;
 	
 Void checkTimerStereotype(MOperation this) :
 	parameter.exists(e|e.type.asTypeName() == "Timer") && parameter.size == 1 &&
-	(classifier.hasStereotype("ejb3MessageDrivenBean") || classifier.hasTaggedValue("ejb3SessionBean", "stateful", "false"))
+	(classifier.emHasStereotypeAssignment("ejb3MessageDrivenBean") || classifier.emHasTaggedValue("ejb3SessionBean", "stateful", "false"))
 		? addTimerStereotype()
 		: "";
 		
 Void checkTimerServiceStereotype(MAttribute this) :
-	!this.hasStereotype("ejb3Resource") && this.type.asTypeName() == "TimerService"
+	!this.emHasStereotypeAssignment("ejb3Resource") && this.type.asTypeName() == "TimerService"
 		? (
 			this.addResourceStereotype("", "", "", true)
 		)
@@ -29,7 +31,7 @@ Void checkTimerServiceStereotype(MAttribute this) :
   *	@param	model	instance of MModel as base for the search
   */
 boolean isSessionBean(MAttribute this, MModel model) :
-	allClassifiers(model).typeSelect(MClass).exists(e|e.name == type.asTypeName() && e.hasStereotype("ejb3SessionBean"))
+	allNestedClassifiers(model).typeSelect(MClass).exists(e|e.name == type.asTypeName() && e.emHasStereotypeAssignment("ejb3SessionBean"))
 		? true
 		: false;
 
@@ -38,9 +40,9 @@ boolean isSessionBean(MAttribute this, MModel model) :
   *	is a session bean interface and there is no such stereotype
   */
 Void checkEJBStereotype(MAttribute this) :
-	this.isSingleValuedType() &&
-	(this.classifier.hasStereotype("ejb3SessionBean") || this.classifier.hasStereotype("ejb3MessageDrivenBean")) && 
-	!this.hasStereotype("ejb3EJB") && isSessionBeanInterface(this.model())
+	multiplicity.isSingleValued() &&
+	(this.classifier.emHasStereotypeAssignment("ejb3SessionBean") || this.classifier.emHasStereotypeAssignment("ejb3MessageDrivenBean")) && 
+	!this.emHasStereotypeAssignment("ejb3EJB") && isSessionBeanInterface(this.navModel())
 		? this.addEJBStereotype("", "", "", "", "")
 		: ""; 
 
@@ -59,38 +61,38 @@ Void checkEJBStereotype(MAttribute this) :
   */
 Void changeSessionBeanAttributeDatatype(MAttribute this) :
 	//optimization: check no multi value and primitve datatypes
-	this.isSingleValuedType() && !this.type.isPrimitiveType()
+	multiplicity.isSingleValued() && !this.type.isPrimitiveType()
 		? (
 			//warn("Datentyp: "+this.type.asTypeName()) ->
 			//if this attribute data type is a session bean
-			isSessionBean(this.classifier.model()) 
+			isSessionBean(this.classifier.navModel()) 
 				? (
 					//check for realization of the session bean which are business interfaces
-					let s = allClassifiers(this.classifier.model()).typeSelect(MClass).selectFirst(e|e.name == this.type.asTypeName() && e.hasStereotype("ejb3SessionBean")) :
+					let s = allNestedClassifiers(this.classifier.navModel()).typeSelect(MClass).selectFirst(e|e.name == this.type.asTypeName() && e.emHasStereotypeAssignment("ejb3SessionBean")) :
 						//warn("SB: "+s) ->
 						//warn("SB Interfaces: "+s.realization.name()) ->
-						s.realization.typeSelect(MInterface).exists(e|e.hasStereotype("ejb3Local"))
+						s.realization.typeSelect(MInterface).exists(e|e.emHasStereotypeAssignment("ejb3Local"))
 							? (
 								//use this interface as new datatype for the attribute
-								//warn("BI: "+s.realization.typeSelect(MInterface).selectFirst(e|e.hasStereotype("ejb3Local"))) ->
-								this.setType(s.realization.typeSelect(MInterface).selectFirst(e|e.hasStereotype("ejb3Local")))
+								//warn("BI: "+s.realization.typeSelect(MInterface).selectFirst(e|e.emHasStereotypeAssignment("ejb3Local"))) ->
+								this.setType(s.realization.typeSelect(MInterface).selectFirst(e|e.emHasStereotypeAssignment("ejb3Local")))
 							)
 							: "" ->
-						s.realization.typeSelect(MInterface).exists(e|e.hasStereotype("ejb3Remote"))
+						s.realization.typeSelect(MInterface).exists(e|e.emHasStereotypeAssignment("ejb3Remote"))
 							? (
 								/*
 									use this interface as new datatype for the attribute if there is
 									no local business interface or there is one but the attribute has
 									the stereotype "ejb3Remote"
 								*/
-								!s.realization.typeSelect(MInterface).exists(e|e.hasStereotype("ejb3Local"))  
-								|| (s.realization.typeSelect(MInterface).exists(e|e.hasStereotype("ejb3Local")) && this.hasStereotype("ejb3Remote"))
-									? this.setType(s.realization.typeSelect(MInterface).selectFirst(e|e.hasStereotype("ejb3Remote")))
+								!s.realization.typeSelect(MInterface).exists(e|e.emHasStereotypeAssignment("ejb3Local"))  
+								|| (s.realization.typeSelect(MInterface).exists(e|e.emHasStereotypeAssignment("ejb3Local")) && this.emHasStereotypeAssignment("ejb3Remote"))
+									? this.setType(s.realization.typeSelect(MInterface).selectFirst(e|e.emHasStereotypeAssignment("ejb3Remote")))
 									: ""
 							)
 							: "" ->
 					//datatype has been changed, annotate this attribute with stereotype "ejb3EJB"
-					!this.hasStereotype("ejb3EJB")
+					!this.emHasStereotypeAssignment("ejb3EJB")
 						? this.addEJBStereotype("", "", "", "", "")
 						: ""
 				)
@@ -115,9 +117,9 @@ Void changeSessionBeanAttributeDatatype(MAttribute this) :
   *
   */
 Void checkAccessorForEJBStereotypes(MAttribute this) :
-	!this.hasStereotype("accessor") && 
-	(this.hasStereotype("ejb3Resource") ||
-	this.hasStereotype("ejb3EJB"))
+	!this.emHasStereotypeAssignment("accessor") && 
+	(this.emHasStereotypeAssignment("ejb3Resource") ||
+	this.emHasStereotypeAssignment("ejb3EJB"))
 		? createAccessor("false", "false")
 		: "";
 	
@@ -130,6 +132,6 @@ Void checkAccessorForEJBStereotypes(MAttribute this) :
  *	@return				true, if the attribute data type is a session bean interface
  */
 boolean isSessionBeanInterface(MAttribute this, MModel model):
-	allClassifiers(model).typeSelect(MInterface).exists(e|
-		(e.hasStereotype("ejb3Local") || e.hasStereotype("ejb3Remote")) && 
+	allNestedClassifiers(model).typeSelect(MInterface).exists(e|
+		(e.emHasStereotypeAssignment("ejb3Local") || e.emHasStereotypeAssignment("ejb3Remote")) && 
 		e.name().asTypeName() == type.name().asTypeName());

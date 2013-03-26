@@ -11,38 +11,38 @@
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::Conversion»
-«EXTENSION org::genesez::platform::common::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
 
-«EXTENSION org::genesez::platform::java::scripts::Type»
-«EXTENSION org::genesez::platform::java::scripts::Naming»
-«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
 
 «REM» 
 	generates import proReg and statements for jws classes
 	is used by aspects to extend import generation of java5 cartridge
 «ENDREM»
 «DEFINE ImportStatements FOR MClassifier-»
-	«IF hasStereotype("jwsWebService")-»
+	«IF emHasStereotypeAssignment("jwsWebService")-»
 		import javax.jws.WebService;
 	«ENDIF-»
-	«IF hasStereotype("jwsSOAPBinding")-»
+	«IF emHasStereotypeAssignment("jwsSOAPBinding")-»
 		import javax.jws.soap.SOAPBinding;
 	«ENDIF-»
-	«IF (hasStereotype("jwsSOAPHandler") && getTaggedValueList("jwsHandlerChain", "handlers").size > 0) || hasUtilizableValue("jwsHandlerChain", "file")-»
+	«IF (emHasStereotypeAssignment("jwsSOAPHandler") && emAllTaggedValues("jwsHandlerChain", "handlers").size > 0) || emHasUtilizableTaggedValue("jwsHandlerChain", "file")-»
 		import javax.jws.HandlerChain;
 	«ENDIF-»
-	«IF operation.exists(e|e.return.hasStereotype("jwsWebResult"))-»
+	«IF operation.exists(e|e.return.emHasStereotypeAssignment("jwsWebResult"))-»
 		import javax.jws.WebResult;
 	«ENDIF-»
-	«IF operation.exists(e|e.parameter.exists(e|e.hasStereotype("jwsWebParam")))-»
+	«IF operation.exists(e|e.parameter.exists(e|e.emHasStereotypeAssignment("jwsWebParam")))-»
 		import javax.jws.WebParam;
 	«ENDIF-»
-	«IF (this.metaType == MClass) && operation.exists(e|e.hasStereotype("jwsWebMethod"))-»
+	«IF (this.metaType == MClass) && operation.exists(e|e.emHasStereotypeAssignment("jwsWebMethod"))-»
 		import javax.jws.WebMethod;
 	«ENDIF-»
-	«IF operation.exists(e|e.hasTaggedValue("jwsWebMethod", "oneway", "true"))-»
+	«IF operation.exists(e|e.emHasTaggedValue("jwsWebMethod", "oneway", "true"))-»
 		import javax.jws.Oneway;
 	«ENDIF-»
 «ENDDEFINE»

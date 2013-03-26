@@ -1,11 +1,11 @@
 import gcore;
 
 extension org::genesez::util::logging::Logging;
-extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::platform::java::seam2::scripts::Stereotypes;
 extension org::genesez::platform::java::seam2::scripts::Naming;
-extension org::genesez::platform::java::scripts::Naming;
-extension org::genesez::platform::common::m2m::CreateTemplate;
+extension org::genesez::platform::java::util::Naming;
+extension org::genesez::metamodel::core::util::CreateElement;
 
 /**
   *	if operation name starts with "initiate", the following characters are the name of a instance attribute
@@ -15,7 +15,7 @@ extension org::genesez::platform::common::m2m::CreateTemplate;
 Void addFactoryValue(MOperation this) :
 	this.name.length > 8
 		? (
-			this.hasStereotype("seam2Factory") && !this.hasUtilizableValue("seam2Factory", "value") &&
+			this.emHasStereotypeAssignment("seam2Factory") && !this.emHasUtilizableTaggedValue("seam2Factory", "value") &&
 			this.name.asTypeName().subString(0,8).matches("initiate") &&
 			this.classifier.property.exists(e|e.name == this.name.subString(8,this.name.length).toFirstLower())
 				? this.setTaggedValue("seam2Factory", "value", this.name.subString(8,this.name.length).toFirstLower())

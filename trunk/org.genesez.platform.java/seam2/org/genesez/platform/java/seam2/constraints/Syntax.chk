@@ -8,10 +8,10 @@
 //	based genesez meta model
 import gcore;
 
-extension org::genesez::platform::common::AccessHelper;
-extension org::genesez::platform::common::Conversion;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::Conversion;
 extension org::genesez::util::logging::Logging;
-extension org::genesez::platform::common::m2t::Helper;
+extension org::genesez::metamodel::core::util::Helper;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -23,9 +23,9 @@ extension org::genesez::platform::common::m2t::Helper;
  * checks the correct usage of scope value for stereotype seam2DataModel
  * @return	false generates an error, if other scope than UNSPECIFIED or PAGE is used
  */
-context MAttribute ERROR "GeneSEZ: Annotation @DataModel does only allow scope type UNSPECIFIED and PAGE." + fqn() : 
-	hasStereotype("seam2DataModel") && 
-	!(getTaggedValue("seam2DataModel", "scope").matches("UNSPECIFIED") 
-	|| getTaggedValue("seam2DataModel", "scope").matches("SCOPE"))
+context MAttribute ERROR "GeneSEZ: Annotation @DataModel does only allow scope type UNSPECIFIED and PAGE." + fqmn() : 
+	emHasStereotypeAssignment("seam2DataModel") && 
+	!(emGetTaggedValue("seam2DataModel", "scope").matches("UNSPECIFIED") 
+	|| emGetTaggedValue("seam2DataModel", "scope").matches("SCOPE"))
 		? false
 		: true;

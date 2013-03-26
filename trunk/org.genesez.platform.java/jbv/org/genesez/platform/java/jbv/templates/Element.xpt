@@ -10,10 +10,10 @@
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
 
-«EXTENSION org::genesez::platform::java::scripts::Naming»
+«EXTENSION org::genesez::platform::java::util::Naming»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -25,15 +25,15 @@
 	evaluate stereotype "jhvType"
 «ENDREM»
 «DEFINE Type FOR MElement-»
-	«IF hasStereotype("jhvType")-»
-		@Type«IF hasUtilizableValue("jhvType", "type") || (hasUtilizableValue("jhvType", "parameterNames") && hasUtilizableValue("jhvType", "parameterValues"))-»(
-			«IF hasUtilizableValue("jhvType", "type")-»
-				type="«getTaggedValue("jhvType", "type")-»"«IF hasUtilizableValue("jhvType", "parameterNames") && hasUtilizableValue("jhvType", "parameterValues")-»,«ENDIF-»
+	«IF emHasStereotypeAssignment("jhvType")-»
+		@Type«IF emHasUtilizableTaggedValue("jhvType", "type") || (emHasUtilizableTaggedValue("jhvType", "parameterNames") && emHasUtilizableTaggedValue("jhvType", "parameterValues"))-»(
+			«IF emHasUtilizableTaggedValue("jhvType", "type")-»
+				type="«emGetTaggedValue("jhvType", "type")-»"«IF emHasUtilizableTaggedValue("jhvType", "parameterNames") && emHasUtilizableTaggedValue("jhvType", "parameterValues")-»,«ENDIF-»
 			«ENDIF-»
-			«IF hasUtilizableValue("jhvType", "parameterNames") && hasUtilizableValue("jhvType", "parameterValues")-»
+			«IF emHasUtilizableTaggedValue("jhvType", "parameterNames") && emHasUtilizableTaggedValue("jhvType", "parameterValues")-»
 				parameters={			
-				«FOREACH getTaggedValueList("jhvType", "parameterNames") AS name SEPARATOR ", "-»
-					@Parameter(name="«name-»", value="«getTaggedValueList("jhvType", "parameterValues").get(getTaggedValueList("jhvType", "parameterNames").indexOf(name))-»")
+				«FOREACH emAllTaggedValues("jhvType", "parameterNames") AS name SEPARATOR ", "-»
+					@Parameter(name="«name-»", value="«emAllTaggedValues("jhvType", "parameterValues").get(emAllTaggedValues("jhvType", "parameterNames").indexOf(name))-»")
 				«ENDFOREACH-»}
 			«ENDIF-»
 		)«ENDIF-»
@@ -44,18 +44,18 @@
 	evaluate stereotype "jhvTypeDef"
 «ENDREM»
 «DEFINE TypeDef FOR MElement-»
-	«IF hasStereotype("jhvTypeDef")-»
-		@TypeDef«IF hasUtilizableValue("jhvTypeDef", "name") || hasUtilizableValue("jhvTypeDef", "typeClass") || (hasUtilizableValue("jhvTypeDef", "parameterNames") && hasUtilizableValue("jhvTypeDef", "parameterValues")) -»(
-			«IF hasUtilizableValue("jhvTypeDef", "name")-»
-				name="«getTaggedValue("jhvTypeDef", "name")-»"«IF hasUtilizableValue("jhvTypeDef", "typeClass") || (hasUtilizableValue("jhvTypeDef", "parameterNames") && hasUtilizableValue("jhvTypeDef", "parameterValues"))-»,«ENDIF-»
+	«IF emHasStereotypeAssignment("jhvTypeDef")-»
+		@TypeDef«IF emHasUtilizableTaggedValue("jhvTypeDef", "name") || emHasUtilizableTaggedValue("jhvTypeDef", "typeClass") || (emHasUtilizableTaggedValue("jhvTypeDef", "parameterNames") && emHasUtilizableTaggedValue("jhvTypeDef", "parameterValues")) -»(
+			«IF emHasUtilizableTaggedValue("jhvTypeDef", "name")-»
+				name="«emGetTaggedValue("jhvTypeDef", "name")-»"«IF emHasUtilizableTaggedValue("jhvTypeDef", "typeClass") || (emHasUtilizableTaggedValue("jhvTypeDef", "parameterNames") && emHasUtilizableTaggedValue("jhvTypeDef", "parameterValues"))-»,«ENDIF-»
 			«ENDIF-»		
-			«IF hasUtilizableValue("jhvTypeDef", "typeClass")-»
-				typeClass=«getTaggedValue("jhvTypeDef", "typeClass")-»«IF !getTaggedValue("jhvTypeDef", "typeClass").contains(".class")-».class«ENDIF-»«IF (hasUtilizableValue("jhvTypeDef", "parameterNames") && hasUtilizableValue("jhvTypeDef", "parameterValues"))-»,«ENDIF-»
+			«IF emHasUtilizableTaggedValue("jhvTypeDef", "typeClass")-»
+				typeClass=«emGetTaggedValue("jhvTypeDef", "typeClass")-»«IF !emGetTaggedValue("jhvTypeDef", "typeClass").contains(".class")-».class«ENDIF-»«IF (emHasUtilizableTaggedValue("jhvTypeDef", "parameterNames") && emHasUtilizableTaggedValue("jhvTypeDef", "parameterValues"))-»,«ENDIF-»
 			«ENDIF-»		
-			«IF hasUtilizableValue("jhvTypeDef", "parameterNames") && hasUtilizableValue("jhvTypeDef", "parameterValues")-»
+			«IF emHasUtilizableTaggedValue("jhvTypeDef", "parameterNames") && emHasUtilizableTaggedValue("jhvTypeDef", "parameterValues")-»
 				parameters={
-				«FOREACH getTaggedValueList("jhvTypeDef", "parameterNames") AS name SEPARATOR ", "-»
-					@Parameter(name="«name-»", value="«getTaggedValueList("jhvTypeDef", "parameterValues").get(getTaggedValueList("jhvTypeDef", "parameterNames").indexOf(name))-»")
+				«FOREACH emAllTaggedValues("jhvTypeDef", "parameterNames") AS name SEPARATOR ", "-»
+					@Parameter(name="«name-»", value="«emAllTaggedValues("jhvTypeDef", "parameterValues").get(emAllTaggedValues("jhvTypeDef", "parameterNames").indexOf(name))-»")
 				«ENDFOREACH-»}
 			«ENDIF-»
 		)«ENDIF-»
@@ -66,12 +66,12 @@
 	evaluate stereotype "jbvDate"
 «ENDREM»
 «DEFINE Date FOR MElement-»
-	«IF hasStereotype("jbvDate")-»
-		«IF getTaggedBooleanValue("jbvDate", "past")-»@Past«IF hasUtilizableValue("jbvDate", "message")-»(
-			message="«getTaggedValue("jbvDate", "message")-»")«ENDIF-»
+	«IF emHasStereotypeAssignment("jbvDate")-»
+		«IF emGetTaggedBooleanValue("jbvDate", "past")-»@Past«IF emHasUtilizableTaggedValue("jbvDate", "message")-»(
+			message="«emGetTaggedValue("jbvDate", "message")-»")«ENDIF-»
 		«ENDIF-»			
-		«IF getTaggedBooleanValue("jbvDate", "future")-»@Future«IF hasUtilizableValue("jbvDate", "message")-»(
-			message="«getTaggedValue("jbvDate", "message")-»")«ENDIF-»
+		«IF emGetTaggedBooleanValue("jbvDate", "future")-»@Future«IF emHasUtilizableTaggedValue("jbvDate", "message")-»(
+			message="«emGetTaggedValue("jbvDate", "message")-»")«ENDIF-»
 		«ENDIF-»	
 	«ENDIF-»
 «ENDDEFINE»
@@ -80,9 +80,9 @@
 	evaluate stereotype "jhvEmail"
 «ENDREM»
 «DEFINE Email FOR MElement-»
-	«IF hasStereotype("jhvEmail")-»
-		@Email«IF hasUtilizableValue("jhvEmail", "message")-»(
-			message="«getTaggedValue("jhvEmail", "message")-»")
+	«IF emHasStereotypeAssignment("jhvEmail")-»
+		@Email«IF emHasUtilizableTaggedValue("jhvEmail", "message")-»(
+			message="«emGetTaggedValue("jhvEmail", "message")-»")
 		«ENDIF»		
 	«ENDIF-»
 «ENDDEFINE»
@@ -91,9 +91,9 @@
 	evaluate stereotype "jhvCreditCardNumber"
 «ENDREM»
 «DEFINE CreditCardNumber FOR MElement-»
-	«IF hasStereotype("jhvCreditCardNumber")-»
-		@CreditCardNumber«IF hasUtilizableValue("jhvCreditCardNumber", "message")-»(
-			message="«getTaggedValue("jhvCreditCardNumber", "message")-»")
+	«IF emHasStereotypeAssignment("jhvCreditCardNumber")-»
+		@CreditCardNumber«IF emHasUtilizableTaggedValue("jhvCreditCardNumber", "message")-»(
+			message="«emGetTaggedValue("jhvCreditCardNumber", "message")-»")
 		«ENDIF»		
 	«ENDIF-»
 «ENDDEFINE»
@@ -102,16 +102,16 @@
 	evaluate stereotype "jhvRange"
 «ENDREM»
 «DEFINE Range FOR MElement-»
-	«IF hasStereotype("jhvRange")-»
-		@Range«IF hasUtilizableValue("jhvRange", "message") || hasUtilizableValue("jhvRange", "min") || hasUtilizableValue("jhvRange", "max")-»(
-			«IF hasUtilizableValue("jhvRange", "message")-»
-				message="«getTaggedValue("jhvRange", "message")-»"«IF hasUtilizableValue("jhvRange", "min") || hasUtilizableValue("jhvRange", "max")-»,«ENDIF-»
+	«IF emHasStereotypeAssignment("jhvRange")-»
+		@Range«IF emHasUtilizableTaggedValue("jhvRange", "message") || emHasUtilizableTaggedValue("jhvRange", "min") || emHasUtilizableTaggedValue("jhvRange", "max")-»(
+			«IF emHasUtilizableTaggedValue("jhvRange", "message")-»
+				message="«emGetTaggedValue("jhvRange", "message")-»"«IF emHasUtilizableTaggedValue("jhvRange", "min") || emHasUtilizableTaggedValue("jhvRange", "max")-»,«ENDIF-»
 			«ENDIF-»
-			«IF hasUtilizableValue("jhvRange", "min")-»
-				min=«getTaggedValue("jhvRange", "min")-»«IF hasUtilizableValue("jhvRange", "max")-»,«ENDIF-»
+			«IF emHasUtilizableTaggedValue("jhvRange", "min")-»
+				min=«emGetTaggedValue("jhvRange", "min")-»«IF emHasUtilizableTaggedValue("jhvRange", "max")-»,«ENDIF-»
 			«ENDIF-»
-			«IF hasUtilizableValue("jhvRange", "max")-»
-				max=«getTaggedValue("jhvRange", "max")-»
+			«IF emHasUtilizableTaggedValue("jhvRange", "max")-»
+				max=«emGetTaggedValue("jhvRange", "max")-»
 			«ENDIF-»
 		)
 		«ENDIF»		
@@ -122,16 +122,16 @@
 	evaluate stereotype "jhvLength"
 «ENDREM»
 «DEFINE Length FOR MElement-»
-	«IF hasStereotype("jhvLength")-»
-		@Length«IF hasUtilizableValue("jhvLength", "message") || hasUtilizableValue("jhvLength", "min") || hasUtilizableValue("jhvLength", "max")-»(
-			«IF hasUtilizableValue("jhvLength", "message")-»
-				message="«getTaggedValue("jhvLength", "message")-»"«IF hasUtilizableValue("jhvLength", "min") || hasUtilizableValue("jhvLength", "max")-»,«ENDIF-»
+	«IF emHasStereotypeAssignment("jhvLength")-»
+		@Length«IF emHasUtilizableTaggedValue("jhvLength", "message") || emHasUtilizableTaggedValue("jhvLength", "min") || emHasUtilizableTaggedValue("jhvLength", "max")-»(
+			«IF emHasUtilizableTaggedValue("jhvLength", "message")-»
+				message="«emGetTaggedValue("jhvLength", "message")-»"«IF emHasUtilizableTaggedValue("jhvLength", "min") || emHasUtilizableTaggedValue("jhvLength", "max")-»,«ENDIF-»
 			«ENDIF-»
-			«IF hasUtilizableValue("jhvLength", "min")-»
-				min=«getTaggedValue("jhvLength", "min")-»«IF hasUtilizableValue("jhvLength", "max")-»,«ENDIF-»
+			«IF emHasUtilizableTaggedValue("jhvLength", "min")-»
+				min=«emGetTaggedValue("jhvLength", "min")-»«IF emHasUtilizableTaggedValue("jhvLength", "max")-»,«ENDIF-»
 			«ENDIF-»
-			«IF hasUtilizableValue("jhvLength", "max")-»
-				max=«getTaggedValue("jhvLength", "max")-»
+			«IF emHasUtilizableTaggedValue("jhvLength", "max")-»
+				max=«emGetTaggedValue("jhvLength", "max")-»
 			«ENDIF-»
 		)
 		«ENDIF»		
@@ -142,16 +142,16 @@
 	evaluate stereotype "jbvSize"
 «ENDREM»
 «DEFINE Size FOR MElement-»
-	«IF hasStereotype("jbvSize")-»
-		@Size«IF hasUtilizableValue("jbvSize", "min") || hasUtilizableValue("jbvSize", "max") || hasUtilizableValue("jbvSize", "message")-»(
-			«IF hasUtilizableValue("jbvSize", "min")-»
-				min=«getTaggedValue("jbvSize", "min").asInteger()-»«IF hasUtilizableValue("jbvSize", "max") || hasUtilizableValue("jbvSize", "message")-»,«ENDIF-»
+	«IF emHasStereotypeAssignment("jbvSize")-»
+		@Size«IF emHasUtilizableTaggedValue("jbvSize", "min") || emHasUtilizableTaggedValue("jbvSize", "max") || emHasUtilizableTaggedValue("jbvSize", "message")-»(
+			«IF emHasUtilizableTaggedValue("jbvSize", "min")-»
+				min=«emGetTaggedValue("jbvSize", "min").asInteger()-»«IF emHasUtilizableTaggedValue("jbvSize", "max") || emHasUtilizableTaggedValue("jbvSize", "message")-»,«ENDIF-»
 			«ENDIF-»
-			«IF hasUtilizableValue("jbvSize", "max")-»
-				max=«getTaggedValue("jbvSize", "max").asInteger()-»«IF hasUtilizableValue("jbvSize", "message")-»,«ENDIF-»
+			«IF emHasUtilizableTaggedValue("jbvSize", "max")-»
+				max=«emGetTaggedValue("jbvSize", "max").asInteger()-»«IF emHasUtilizableTaggedValue("jbvSize", "message")-»,«ENDIF-»
 			«ENDIF-»
-			«IF hasUtilizableValue("jbvSize", "message")-»
-				message="«getTaggedValue("jbvSize", "message")-»"
+			«IF emHasUtilizableTaggedValue("jbvSize", "message")-»
+				message="«emGetTaggedValue("jbvSize", "message")-»"
 			«ENDIF-»)
 		«ENDIF»		
 	«ENDIF-»
@@ -161,13 +161,13 @@
 	evaluate stereotype "jbvPattern"
 «ENDREM»
 «DEFINE Pattern FOR MElement-»
-	«IF hasStereotype("jbvPattern")-»
-		@Pattern«IF hasUtilizableValue("jbvPattern", "regex") || hasUtilizableValue("jbvPattern", "message")-»(
-			«IF hasUtilizableValue("jbvPattern", "regex")-»
-				regex="«getTaggedValue("jbvPattern", "regex")-»"«IF hasUtilizableValue("jbvPattern", "message")-»,«ENDIF-»
+	«IF emHasStereotypeAssignment("jbvPattern")-»
+		@Pattern«IF emHasUtilizableTaggedValue("jbvPattern", "regex") || emHasUtilizableTaggedValue("jbvPattern", "message")-»(
+			«IF emHasUtilizableTaggedValue("jbvPattern", "regex")-»
+				regex="«emGetTaggedValue("jbvPattern", "regex")-»"«IF emHasUtilizableTaggedValue("jbvPattern", "message")-»,«ENDIF-»
 			«ENDIF-»
-			«IF hasUtilizableValue("jbvPattern", "message")-»
-				message="«getTaggedValue("jbvPattern", "message")-»"
+			«IF emHasUtilizableTaggedValue("jbvPattern", "message")-»
+				message="«emGetTaggedValue("jbvPattern", "message")-»"
 			«ENDIF-»)
 		«ENDIF»		
 	«ENDIF-»

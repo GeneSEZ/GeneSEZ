@@ -10,8 +10,8 @@
 
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::platform::java::util::Conversion»
 «EXTENSION org::genesez::platform::java::jpa::scripts::Stereotypes»
 «EXTENSION org::genesez::platform::java::jpa::scripts::Naming»
 
@@ -35,9 +35,9 @@
 	evaluates the stereotype jpaAssociation
 «ENDREM»
 «DEFINE _EvaluateAssociationStereotype FOR MAssociationRole-»
-	«IF hasStereotype("jpaAssociation") && !hasTaggedValue("jpaAssociation", "type", "AutoDetect") && hasUtilizableValue("jpaAssociation", "type")-»
-		@«getTaggedValue("jpaAssociation", "type")-»«EXPAND _EvaluateAssociationTaggedValues-»
-		«IF !hasTaggedValue("jpaAssociation", "type", "OneToOne")-»
+	«IF emHasStereotypeAssignment("jpaAssociation") && !emHasTaggedValue("jpaAssociation", "type", "AutoDetect") && emHasUtilizableTaggedValue("jpaAssociation", "type")-»
+		@«emGetTaggedValue("jpaAssociation", "type")-»«EXPAND _EvaluateAssociationTaggedValues-»
+		«IF !emHasTaggedValue("jpaAssociation", "type", "OneToOne")-»
 			«EXPAND _JoinTable-»
 		«ENDIF-»
 	«ENDIF-»
@@ -48,22 +48,22 @@
 «ENDREM»
 «DEFINE _EvaluateAssociationTaggedValues FOR MAssociationRole-»	
 	(cascade={
-	«IF hasUtilizableValue("jpaAssociation", "cascade")-»
-		«FOREACH getTaggedValueList("jpaAssociation", "cascade") AS cascades SEPARATOR ", "-»
+	«IF emHasUtilizableTaggedValue("jpaAssociation", "cascade")-»
+		«FOREACH emAllTaggedValues("jpaAssociation", "cascade") AS cascades SEPARATOR ", "-»
 			CascadeType.«cascades-»
 		«ENDFOREACH-»
 	«ENDIF-»}
-	«IF hasUtilizableValue("jpaAssociation", "targetEntity")-»
-		, targetEntity="«getTaggedValue("jpaAssociation", "targetEntity")-»"
+	«IF emHasUtilizableTaggedValue("jpaAssociation", "targetEntity")-»
+		, targetEntity="«emGetTaggedValue("jpaAssociation", "targetEntity")-»"
 	«ENDIF-»
-	«IF !hasTaggedValue("jpaAssociation", "fetch", "DEFAULT") && hasUtilizableValue("jpaAssociation", "fetch")-»
-		, fetch=FetchType.«getTaggedValue("jpaAssociation", "fetch")-»
+	«IF !emHasTaggedValue("jpaAssociation", "fetch", "DEFAULT") && emHasUtilizableTaggedValue("jpaAssociation", "fetch")-»
+		, fetch=FetchType.«emGetTaggedValue("jpaAssociation", "fetch")-»
 	«ENDIF-»
-	«IF ( hasTaggedValue("jpaAssociation", "type", "OneToOne") && hasTaggedValue("jpaAssociation", "optional", "false") )-»
+	«IF ( emHasTaggedValue("jpaAssociation", "type", "OneToOne") && emHasTaggedValue("jpaAssociation", "optional", "false") )-»
 		, optional=false
 	«ENDIF-»
-	«IF !hasTaggedValue("jpaAssociation", "type", "ManyToOne")-»
-		«IF hasTaggedValue("jpaAssociation", "mappedBy", "true")-»
+	«IF !emHasTaggedValue("jpaAssociation", "type", "ManyToOne")-»
+		«IF emHasTaggedValue("jpaAssociation", "mappedBy", "true")-»
 			, mappedBy="«this.opposite.name-»"
 		«ENDIF-»
 	«ENDIF-»)
@@ -73,28 +73,28 @@
 	evaluates the stereotype jpaJoinColumn 
 «ENDREM»
 «DEFINE _JoinColumn FOR MAssociationRole-»
-	«IF hasStereotype("jpaJoinColumn")-»
-		«IF hasUtilizableValue("jpaJoinColumn", "name")-»
-			@JoinColumn(name="«getTaggedValue("jpaJoinColumn", "name")-»"
-			«IF hasUtilizableValue("jpaJoinColumn", "referencedName")-»
-				, referencedColumnName="«getTaggedValue("jpaJoinColumn", "referencedName")-»"
+	«IF emHasStereotypeAssignment("jpaJoinColumn")-»
+		«IF emHasUtilizableTaggedValue("jpaJoinColumn", "name")-»
+			@JoinColumn(name="«emGetTaggedValue("jpaJoinColumn", "name")-»"
+			«IF emHasUtilizableTaggedValue("jpaJoinColumn", "referencedName")-»
+				, referencedColumnName="«emGetTaggedValue("jpaJoinColumn", "referencedName")-»"
 			«ENDIF-»
-			«IF hasUtilizableValue("jpaJoinColumn", "table")-»
-				, table="«getTaggedValue("jpaJoinColumn", "table")-»"
+			«IF emHasUtilizableTaggedValue("jpaJoinColumn", "table")-»
+				, table="«emGetTaggedValue("jpaJoinColumn", "table")-»"
 			«ENDIF-»
-			«IF hasUtilizableValue("jpaJoinColumn", "columnDefinition")-»
-				, columnDefinition="«getTaggedValue("jpaJoinColumn", "columnDefinition")-»"
+			«IF emHasUtilizableTaggedValue("jpaJoinColumn", "columnDefinition")-»
+				, columnDefinition="«emGetTaggedValue("jpaJoinColumn", "columnDefinition")-»"
 			«ENDIF-»
-			«IF hasTaggedValue("jpaJoinColumn", "nullable", "false") && !hasTaggedValue("jpaJoinColumn", "unique", "true")-»
-				, nullable=«getTaggedValue("jpaJoinColumn", "nullable")-»
+			«IF emHasTaggedValue("jpaJoinColumn", "nullable", "false") && !emHasTaggedValue("jpaJoinColumn", "unique", "true")-»
+				, nullable=«emGetTaggedValue("jpaJoinColumn", "nullable")-»
 			«ENDIF-»
-			«IF hasTaggedValue("jpaJoinColumn", "insertable", "false")-»
+			«IF emHasTaggedValue("jpaJoinColumn", "insertable", "false")-»
 				, insertable=false
 			«ENDIF-»
-			«IF hasTaggedValue("jpaJoinColumn", "updatable", "false")-»
+			«IF emHasTaggedValue("jpaJoinColumn", "updatable", "false")-»
 				, updatable=false
 			«ENDIF-»
-			«IF hasTaggedValue("jpaJoinColumn", "unique", "true")-»
+			«IF emHasTaggedValue("jpaJoinColumn", "unique", "true")-»
 				, unique=true, nullable=false
 			«ENDIF-»
 			)
@@ -106,28 +106,28 @@
 	evaluates the stereotype jpaIJoinColumn 
 «ENDREM»
 «DEFINE _IJoinColumn FOR MAssociationRole-»
-	«IF hasStereotype("jpaIJoinColumn")-»
-		«IF hasUtilizableValue("jpaIJoinColumn", "name")-»
-			@JoinColumn(name="«getTaggedValue("jpaIJoinColumn", "name")-»"
-			«IF hasUtilizableValue("jpaIJoinColumn", "referencedName")-»
-				, referencedColumnName="«getTaggedValue("jpaIJoinColumn", "referencedName")-»"
+	«IF emHasStereotypeAssignment("jpaIJoinColumn")-»
+		«IF emHasUtilizableTaggedValue("jpaIJoinColumn", "name")-»
+			@JoinColumn(name="«emGetTaggedValue("jpaIJoinColumn", "name")-»"
+			«IF emHasUtilizableTaggedValue("jpaIJoinColumn", "referencedName")-»
+				, referencedColumnName="«emGetTaggedValue("jpaIJoinColumn", "referencedName")-»"
 			«ENDIF-»
-			«IF hasUtilizableValue("jpaIJoinColumn", "table")-»
-				, table="«getTaggedValue("jpaIJoinColumn", "table")-»"
+			«IF emHasUtilizableTaggedValue("jpaIJoinColumn", "table")-»
+				, table="«emGetTaggedValue("jpaIJoinColumn", "table")-»"
 			«ENDIF-»
-			«IF hasUtilizableValue("jpaJoinColumn", "columnDefinition")-»
-				, columnDefinition="«getTaggedValue("jpaIJoinColumn", "columnDefinition")-»"
+			«IF emHasUtilizableTaggedValue("jpaJoinColumn", "columnDefinition")-»
+				, columnDefinition="«emGetTaggedValue("jpaIJoinColumn", "columnDefinition")-»"
 			«ENDIF-»
-			«IF hasTaggedValue("jpaIJoinColumn", "nullable", "false") && !hasTaggedValue("jpaIJoinColumn", "unique", "true")-»
-				, nullable=«getTaggedValue("jpaIJoinColumn", "nullable")-»
+			«IF emHasTaggedValue("jpaIJoinColumn", "nullable", "false") && !emHasTaggedValue("jpaIJoinColumn", "unique", "true")-»
+				, nullable=«emGetTaggedValue("jpaIJoinColumn", "nullable")-»
 			«ENDIF-»
-			«IF hasTaggedValue("jpaIJoinColumn", "insertable", "false")-»
+			«IF emHasTaggedValue("jpaIJoinColumn", "insertable", "false")-»
 				, insertable=false
 			«ENDIF-»
-			«IF hasTaggedValue("jpaIJoinColumn", "updatable", "false")-»
+			«IF emHasTaggedValue("jpaIJoinColumn", "updatable", "false")-»
 				, updatable=false
 			«ENDIF-»
-			«IF hasTaggedValue("jpaIJoinColumn", "unique", "true")-»
+			«IF emHasTaggedValue("jpaIJoinColumn", "unique", "true")-»
 				, unique=true, nullable=false
 			«ENDIF-»
 			)
@@ -139,13 +139,13 @@
 	evaluates the stereotype jpaJoinTable 
 «ENDREM»
 «DEFINE _JoinTable FOR MAssociationRole-»
-	«IF hasStereotype("jpaJoinTable")-»
-		@JoinTable(name="«getTaggedValue("jpaJoinTable", "name")-»"
-		«IF hasStereotype("jpaJoinColumn")-»
+	«IF emHasStereotypeAssignment("jpaJoinTable")-»
+		@JoinTable(name="«emGetTaggedValue("jpaJoinTable", "name")-»"
+		«IF emHasStereotypeAssignment("jpaJoinColumn")-»
 			, joinColumns=
 			«EXPAND _JoinColumn-»
 		«ENDIF-»
-		«IF hasStereotype("jpaIJoinColumn")-»
+		«IF emHasStereotypeAssignment("jpaIJoinColumn")-»
 			, inverseJoinColumns=
 			«EXPAND _IJoinColumn-»
 		«ENDIF-»

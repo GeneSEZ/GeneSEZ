@@ -10,13 +10,13 @@
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::Conversion»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
-«EXTENSION org::genesez::platform::java::scripts::Type»
-«EXTENSION org::genesez::platform::java::scripts::Naming»
-«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
 «EXTENSION org::genesez::platform::java::jpa::scripts::Stereotypes»
 
 «REM»
@@ -27,7 +27,7 @@
 	evaluates the stereotype jpaOptimisticLocking
  «ENDREM»
 «DEFINE OptimisticLocking FOR MElement-»
-	«IF hasStereotype("jpaOptimisticLocking")-»
+	«IF emHasStereotypeAssignment("jpaOptimisticLocking")-»
 		@Version
 	«ENDIF-»
 «ENDDEFINE»
@@ -36,19 +36,19 @@
 	evaluates the stereotype jpaPrimaryKey
  «ENDREM»
 «DEFINE PrimaryKey FOR MElement-»
-	«IF hasStereotype("jpaPrimaryKey") && hasTaggedValue("jpaPrimaryKey", "embeddedId", "false")-»
+	«IF emHasStereotypeAssignment("jpaPrimaryKey") && emHasTaggedValue("jpaPrimaryKey", "embeddedId", "false")-»
 		@Id
 	«ENDIF-»
-	«IF hasTaggedValue("jpaPrimaryKey", "embeddedId", "true")-»
+	«IF emHasTaggedValue("jpaPrimaryKey", "embeddedId", "true")-»
 		@EmbeddedId
 	«ENDIF-»	
 	«EXPAND _TableGenerator-»
 	«EXPAND _SequenceGenerator-»
-	«IF hasTaggedValue("jpaPrimaryKey", "generatedValue", "true")-»
-		@GeneratedValue(strategy=GenerationType.«getTaggedValue("jpaPrimaryKey", "strategy")-»
-		«IF hasTaggedValue("jpaPrimaryKey", "strategy", "TABLE") || hasTaggedValue("jpaPrimaryKey", "strategy", "SEQUENCE")-»
-			«IF hasUtilizableValue("jpaPrimaryKey", "generatorName")-»
-				, generator="«getTaggedValue("jpaPrimaryKey", "generatorName")-»"
+	«IF emHasTaggedValue("jpaPrimaryKey", "generatedValue", "true")-»
+		@GeneratedValue(strategy=GenerationType.«emGetTaggedValue("jpaPrimaryKey", "strategy")-»
+		«IF emHasTaggedValue("jpaPrimaryKey", "strategy", "TABLE") || emHasTaggedValue("jpaPrimaryKey", "strategy", "SEQUENCE")-»
+			«IF emHasUtilizableTaggedValue("jpaPrimaryKey", "generatorName")-»
+				, generator="«emGetTaggedValue("jpaPrimaryKey", "generatorName")-»"
 			«ENDIF-»
 		«ENDIF-»	
 		)
@@ -59,38 +59,38 @@
 	evaluates the stereotype jpaColumn
  «ENDREM»
 «DEFINE Column FOR MElement»
-	«IF hasStereotype("jpaColumn")-»
+	«IF emHasStereotypeAssignment("jpaColumn")-»
 		@Column(
-		«IF hasUtilizableValue("jpaColumn", "name")-»
-			name="«getTaggedValue("jpaColumn", "name")-»"
+		«IF emHasUtilizableTaggedValue("jpaColumn", "name")-»
+			name="«emGetTaggedValue("jpaColumn", "name")-»"
 		«ELSE-»
 			name="«name.asTypeName()-»"
 		«ENDIF-»
-		«IF hasTaggedValue("jpaColumn", "unique", "true")-»
+		«IF emHasTaggedValue("jpaColumn", "unique", "true")-»
 			, unique=true, nullable=false
 		«ENDIF-»
-		«IF hasTaggedValue("jpaColumn", "nullable", "false") && !hasTaggedValue("jpaColumn", "unique", "true")-»
+		«IF emHasTaggedValue("jpaColumn", "nullable", "false") && !emHasTaggedValue("jpaColumn", "unique", "true")-»
 			, nullable=false
 		«ENDIF-»
-		«IF hasTaggedValue("jpaColumn", "insertable", "false")-»
+		«IF emHasTaggedValue("jpaColumn", "insertable", "false")-»
 			, insertable=false
 		«ENDIF-»
-		«IF hasTaggedValue("jpaColumn", "updatable", "false")-»
+		«IF emHasTaggedValue("jpaColumn", "updatable", "false")-»
 			, updatable=false
 		«ENDIF-»
-		«IF hasUtilizableValue("jpaColumn", "columnDefinition")-»
-			, columnDefinition="«getTaggedValue("jpaColumn", "columnDefinition")-»"
+		«IF emHasUtilizableTaggedValue("jpaColumn", "columnDefinition")-»
+			, columnDefinition="«emGetTaggedValue("jpaColumn", "columnDefinition")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("jpaColumn", "table")-»
-			, table="«getTaggedValue("jpaColumn", "table")-»"
+		«IF emHasUtilizableTaggedValue("jpaColumn", "table")-»
+			, table="«emGetTaggedValue("jpaColumn", "table")-»"
 		«ENDIF-»
-		«IF !hasTaggedValue("jpaColumn", "length", "255")-»
+		«IF !emHasTaggedValue("jpaColumn", "length", "255")-»
 			, length=«taggedValue.selectFirst(e|e.tag.name == "length").value-»
 		«ENDIF-»
-		«IF !hasTaggedValue("jpaColumn", "precision", "0")-»
+		«IF !emHasTaggedValue("jpaColumn", "precision", "0")-»
 			, precision=«taggedValue.selectFirst(e|e.tag.name == "precision").value-»
 		«ENDIF-»
-		«IF !hasTaggedValue("jpaColumn", "scale", "0")-»
+		«IF !emHasTaggedValue("jpaColumn", "scale", "0")-»
 			, scale=«taggedValue.selectFirst(e|e.tag.name == "scale").value-»
 		«ENDIF-»
 		)		
@@ -101,34 +101,34 @@
 	evaluates the stereotype jpaDatatypeMapping
  «ENDREM»
 «DEFINE DatatypeMapping FOR MElement-»
-	«IF hasStereotype("jpaDatatypeMapping")-»
-		«IF hasTaggedValue("jpaDatatypeMapping", "type", "Basic")-»
-			@Basic(optional=«getTaggedValue("jpaDatatypeMapping", "optional")-»
-			«IF hasUtilizableValue("jpaDatatypeMapping", "fetch") && 
-				!hasTaggedValue("jpaDatatypeMapping", "fetch", "DEFAULT")-»
-				, fetch=FetchType.«getTaggedValue("jpaDatatypeMapping", "fetch")-»
+	«IF emHasStereotypeAssignment("jpaDatatypeMapping")-»
+		«IF emHasTaggedValue("jpaDatatypeMapping", "type", "Basic")-»
+			@Basic(optional=«emGetTaggedValue("jpaDatatypeMapping", "optional")-»
+			«IF emHasUtilizableTaggedValue("jpaDatatypeMapping", "fetch") && 
+				!emHasTaggedValue("jpaDatatypeMapping", "fetch", "DEFAULT")-»
+				, fetch=FetchType.«emGetTaggedValue("jpaDatatypeMapping", "fetch")-»
 			«ENDIF-»)
 		«ENDIF-»
-		«IF hasTaggedValue("jpaDatatypeMapping", "type", "Lob")-»
+		«IF emHasTaggedValue("jpaDatatypeMapping", "type", "Lob")-»
 			@Lob
 		«ENDIF-»
-		«IF hasTaggedValue("jpaDatatypeMapping", "type", "Temporal")-»
+		«IF emHasTaggedValue("jpaDatatypeMapping", "type", "Temporal")-»
 			@Temporal
-			«IF !hasTaggedValue("jpaDatatypeMapping", "temporalType", "null")-»
-				(TemporalType.«getTaggedValue("jpaDatatypeMapping", "temporalType")-»)
+			«IF !emHasTaggedValue("jpaDatatypeMapping", "temporalType", "null")-»
+				(TemporalType.«emGetTaggedValue("jpaDatatypeMapping", "temporalType")-»)
 			«ENDIF-»
 		«ENDIF-»
-		«IF hasTaggedValue("jpaDatatypeMapping", "type", "Enumerated")-»
+		«IF emHasTaggedValue("jpaDatatypeMapping", "type", "Enumerated")-»
 			@Enumerated
-			«IF hasUtilizableValue("jpaDatatypeMapping", "enumType") && 
-				!hasTaggedValue("jpaDatatypeMapping", "enumType", "ORDINAL")-»
-				(«getTaggedValue("jpaDatatypeMapping", "enumType")-»)
+			«IF emHasUtilizableTaggedValue("jpaDatatypeMapping", "enumType") && 
+				!emHasTaggedValue("jpaDatatypeMapping", "enumType", "ORDINAL")-»
+				(«emGetTaggedValue("jpaDatatypeMapping", "enumType")-»)
 			«ENDIF-»
 		«ENDIF-»
-		«IF hasTaggedValue("jpaDatatypeMapping", "transient", "true")-»
+		«IF emHasTaggedValue("jpaDatatypeMapping", "transient", "true")-»
 			@Transient
 		«ENDIF-»
-		«IF hasTaggedValue("jpaDatatypeMapping", "type", "Embedded")-»
+		«IF emHasTaggedValue("jpaDatatypeMapping", "type", "Embedded")-»
 			@Embedded
 		«ENDIF-»
 	«ENDIF-»
@@ -142,25 +142,25 @@
 	evaluates the stereotype jpaTableGenerator
  «ENDREM»
 «DEFINE _TableGenerator FOR MElement-»
-	«IF hasStereotype("jpaTableGenerator") && hasUtilizableValue("jpaTableGenerator", "name")-»
-		@TableGenerator(name="«getTaggedValue("jpaTableGenerator", "name")-»"
-		«IF hasUtilizableValue("jpaTableGenerator", "table")-»
-			, table="«getTaggedValue("jpaTableGenerator", "table")-»"
+	«IF emHasStereotypeAssignment("jpaTableGenerator") && emHasUtilizableTaggedValue("jpaTableGenerator", "name")-»
+		@TableGenerator(name="«emGetTaggedValue("jpaTableGenerator", "name")-»"
+		«IF emHasUtilizableTaggedValue("jpaTableGenerator", "table")-»
+			, table="«emGetTaggedValue("jpaTableGenerator", "table")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("jpaTableGenerator", "pkColumnName")-»
-			, pkColumnName="«getTaggedValue("jpaTableGenerator", "pkColumnName")-»"
+		«IF emHasUtilizableTaggedValue("jpaTableGenerator", "pkColumnName")-»
+			, pkColumnName="«emGetTaggedValue("jpaTableGenerator", "pkColumnName")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("jpaTableGenerator", "valueColumnName")-»
-			, valueColumnName="«getTaggedValue("jpaTableGenerator", "valueColumnName")-»"
+		«IF emHasUtilizableTaggedValue("jpaTableGenerator", "valueColumnName")-»
+			, valueColumnName="«emGetTaggedValue("jpaTableGenerator", "valueColumnName")-»"
 		«ENDIF-»	
-		«IF hasUtilizableValue("jpaTableGenerator", "pkColumnValue")-»
-			, pkColumnValue="«getTaggedValue("jpaTableGenerator", "pkColumnValue")-»"
+		«IF emHasUtilizableTaggedValue("jpaTableGenerator", "pkColumnValue")-»
+			, pkColumnValue="«emGetTaggedValue("jpaTableGenerator", "pkColumnValue")-»"
 		«ENDIF-»	
-		«IF hasUtilizableValue("jpaTableGenerator", "initialValue")-»
-			, initialValue = «getTaggedValue("jpaTableGenerator", "initialValue")-»
+		«IF emHasUtilizableTaggedValue("jpaTableGenerator", "initialValue")-»
+			, initialValue = «emGetTaggedValue("jpaTableGenerator", "initialValue")-»
 		«ENDIF-»
-		«IF hasUtilizableValue("jpaTableGenerator", "allocationSize")-»
-			, allocationSize = «getTaggedValue("jpaTableGenerator", "allocationSize")-»
+		«IF emHasUtilizableTaggedValue("jpaTableGenerator", "allocationSize")-»
+			, allocationSize = «emGetTaggedValue("jpaTableGenerator", "allocationSize")-»
 		«ENDIF-»
 		)	
 	«ENDIF-»
@@ -170,16 +170,16 @@
 	evaluates the stereotype jpaSequenceGenerator
  «ENDREM»
 «DEFINE _SequenceGenerator FOR MElement-»
-	«IF hasStereotype("jpaSequenceGenerator") && hasUtilizableValue("jpaSequenceGenerator", "name")-»
-		@SequenceGenerator(name="«getTaggedValue("jpaSequenceGenerator", "name")-»"
-		«IF hasUtilizableValue("jpaSequenceGenerator", "sequenceName")-»
-			, sequenceName="«getTaggedValue("jpaSequenceGenerator", "sequenceName")-»"
+	«IF emHasStereotypeAssignment("jpaSequenceGenerator") && emHasUtilizableTaggedValue("jpaSequenceGenerator", "name")-»
+		@SequenceGenerator(name="«emGetTaggedValue("jpaSequenceGenerator", "name")-»"
+		«IF emHasUtilizableTaggedValue("jpaSequenceGenerator", "sequenceName")-»
+			, sequenceName="«emGetTaggedValue("jpaSequenceGenerator", "sequenceName")-»"
 		«ENDIF-»	
-		«IF hasUtilizableValue("jpaSequenceGenerator", "initialValue")-»
-			, initialValue = «getTaggedValue("jpaSequenceGenerator", "initialValue")-»
+		«IF emHasUtilizableTaggedValue("jpaSequenceGenerator", "initialValue")-»
+			, initialValue = «emGetTaggedValue("jpaSequenceGenerator", "initialValue")-»
 		«ENDIF-»
-		«IF hasUtilizableValue("jpaSequenceGenerator", "allocationSize")-»
-			, allocationSize = «getTaggedValue("jpaSequenceGenerator", "allocationSize")-»
+		«IF emHasUtilizableTaggedValue("jpaSequenceGenerator", "allocationSize")-»
+			, allocationSize = «emGetTaggedValue("jpaSequenceGenerator", "allocationSize")-»
 		«ENDIF-»)
 	«ENDIF-»
 «ENDDEFINE»

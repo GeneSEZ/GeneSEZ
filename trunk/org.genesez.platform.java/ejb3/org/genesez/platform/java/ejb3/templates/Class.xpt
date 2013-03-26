@@ -11,13 +11,13 @@
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::Conversion»
-«EXTENSION org::genesez::platform::common::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
 
-«EXTENSION org::genesez::platform::java::scripts::Type»
-«EXTENSION org::genesez::platform::java::scripts::Naming»
-«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
 
 
 
@@ -31,30 +31,30 @@
 	evaluates the stereotypes "ejb3Remote" and "ejb3Local"
 «ENDREM»
 «DEFINE RemoteLocal FOR MClassifier-»
-	«IF hasStereotype("ejb3SessionBean")-»
-		«IF hasStereotype("ejb3Remote")»
-			«IF hasUtilizableValue("ejb3Remote", "name")-»
+	«IF emHasStereotypeAssignment("ejb3SessionBean")-»
+		«IF emHasStereotypeAssignment("ejb3Remote")»
+			«IF emHasUtilizableTaggedValue("ejb3Remote", "name")-»
 				«REM»erzeuge remote interface mit angegebenem namen«ENDREM»
-				@Remote(I«getTaggedValue("ejb3Remote", "name")-».class)
-				«REM»«EXPAND _Interface(getTaggedValue("ejb3Remote", "name"), "")-»«ENDREM»
+				@Remote(I«emGetTaggedValue("ejb3Remote", "name")-».class)
+				«REM»«EXPAND _Interface(emGetTaggedValue("ejb3Remote", "name"), "")-»«ENDREM»
 			«ELSE»
 				«REM»erzeuge remote interface mit standardnamen«ENDREM»
 				«REM»«EXPAND _Interface(asTypeName(), "Remote")-»«ENDREM»
 			«ENDIF»
 		«ENDIF»
-		«IF hasStereotype("ejb3Local")-»
-			«IF hasUtilizableValue("ejb3Local", "name")-»
+		«IF emHasStereotypeAssignment("ejb3Local")-»
+			«IF emHasUtilizableTaggedValue("ejb3Local", "name")-»
 				«REM»erzeuge local interface mit angegebenem namen«ENDREM»
-				@Local(I«getTaggedValue("ejb3Local", "name")-».class)
-				«REM»«EXPAND _Interface(getTaggedValue("ejb3Local", "name"), "")-»«ENDREM»
+				@Local(I«emGetTaggedValue("ejb3Local", "name")-».class)
+				«REM»«EXPAND _Interface(emGetTaggedValue("ejb3Local", "name"), "")-»«ENDREM»
 			«ELSE»
 				«REM»erzeuge local interface mit standardnamen«ENDREM»
 				«REM»«EXPAND _Interface(asTypeName(), "Local")-»«ENDREM»
 			«ENDIF»
 		«ENDIF»
-	«ELSEIF hasStereotype("ejb3Remote")»
+	«ELSEIF emHasStereotypeAssignment("ejb3Remote")»
 		@Remote
-	«ELSEIF hasStereotype("ejb3Local")»
+	«ELSEIF emHasStereotypeAssignment("ejb3Local")»
 		@Local	
 	«ENDIF»
 «ENDDEFINE»
@@ -81,23 +81,23 @@
 	evaluates the stereotype "ejb3SessionBean"
 «ENDREM»
 «DEFINE _SessionBean FOR MClass-»
-	«IF hasStereotype("ejb3SessionBean")-»
+	«IF emHasStereotypeAssignment("ejb3SessionBean")-»
 		«EXPAND RemoteLocal-»	
-		«IF hasTaggedValue("ejb3SessionBean", "stateful", "true")»
+		«IF emHasTaggedValue("ejb3SessionBean", "stateful", "true")»
 			@Stateful(
-		«ELSEIF hasTaggedValue("ejb3SessionBean", "stateful", "false")-»
+		«ELSEIF emHasTaggedValue("ejb3SessionBean", "stateful", "false")-»
 			@Stateless(
 		«ENDIF-»
-		«IF hasUtilizableValue("ejb3SessionBean", "name")-»
-			name = "«getTaggedValue("ejb3SessionBean", "name")-»"
+		«IF emHasUtilizableTaggedValue("ejb3SessionBean", "name")-»
+			name = "«emGetTaggedValue("ejb3SessionBean", "name")-»"
 		«ELSE-»
 			name = "«asTypeName()-»"
 		«ENDIF-» 
- 		«IF hasUtilizableValue("ejb3SessionBean", "mappedName")-»
- 			, mappedName = "«getTaggedValue("ejb3SessionBean", "mappedName")-»"
+ 		«IF emHasUtilizableTaggedValue("ejb3SessionBean", "mappedName")-»
+ 			, mappedName = "«emGetTaggedValue("ejb3SessionBean", "mappedName")-»"
  		«ENDIF-»
- 		«IF hasUtilizableValue("ejb3SessionBean", "description")-»
- 			, description = "«getTaggedValue("ejb3SessionBean", "description")-»"
+ 		«IF emHasUtilizableTaggedValue("ejb3SessionBean", "description")-»
+ 			, description = "«emGetTaggedValue("ejb3SessionBean", "description")-»"
  		«ENDIF-»)
 		«EXPAND _Interceptor-»
 	«ENDIF-»
@@ -107,28 +107,28 @@
 	evaluates the stereotype "ejb3MessageDriven"
 «ENDREM»
 «DEFINE _MessageDriven FOR MClass-»
-	«IF hasStereotype("ejb3MessageDrivenBean")»
+	«IF emHasStereotypeAssignment("ejb3MessageDrivenBean")»
 		@MessageDriven(
-		«IF hasUtilizableValue("ejb3MessageDrivenBean", "name")-»
-			name = "«getTaggedValue("ejb3MessageDrivenBean", "name")-»"
+		«IF emHasUtilizableTaggedValue("ejb3MessageDrivenBean", "name")-»
+			name = "«emGetTaggedValue("ejb3MessageDrivenBean", "name")-»"
 		«ELSE-»
 			name = "«asTypeName()-»"
 		«ENDIF-» 
- 		«IF hasUtilizableValue("ejb3MessageDrivenBean", "mappedName")-»
- 			, mappedName = "«getTaggedValue("ejb3MessageDrivenBean", "mappedName")-»"
+ 		«IF emHasUtilizableTaggedValue("ejb3MessageDrivenBean", "mappedName")-»
+ 			, mappedName = "«emGetTaggedValue("ejb3MessageDrivenBean", "mappedName")-»"
  		«ENDIF-»
- 		«IF hasUtilizableValue("ejb3MessageDrivenBean", "description")-»
- 			, description = "«getTaggedValue("ejb3MessageDrivenBean", "description")-»"
+ 		«IF emHasUtilizableTaggedValue("ejb3MessageDrivenBean", "description")-»
+ 			, description = "«emGetTaggedValue("ejb3MessageDrivenBean", "description")-»"
  		«ENDIF-»
- 		«IF hasStereotype("ejb3ActivationConfigProperty")-»
- 			«IF hasUtilizableValue("ejb3ActivationConfigProperty", "propertyName") && 
- 				hasUtilizableValue("ejb3ActivationConfigProperty", "propertyValue")-»
+ 		«IF emHasStereotypeAssignment("ejb3ActivationConfigProperty")-»
+ 			«IF emHasUtilizableTaggedValue("ejb3ActivationConfigProperty", "propertyName") && 
+ 				emHasUtilizableTaggedValue("ejb3ActivationConfigProperty", "propertyValue")-»
  				, activationConfig = {
- 				«FOREACH getTaggedValueList("ejb3ActivationConfigProperty", "propertyName") AS name SEPARATOR ","»
+ 				«FOREACH emAllTaggedValues("ejb3ActivationConfigProperty", "propertyName") AS name SEPARATOR ","»
  					@ActivationConfigProperty(
  						propertyName = "«name-»",  						
- 						«LET getTaggedValueList("ejb3ActivationConfigProperty", "propertyName").indexOf(name) AS index-»
- 							propertyValue = "«getTaggedValueList("ejb3ActivationConfigProperty", "propertyValue").get(index)-»")
+ 						«LET emAllTaggedValues("ejb3ActivationConfigProperty", "propertyName").indexOf(name) AS index-»
+ 							propertyValue = "«emAllTaggedValues("ejb3ActivationConfigProperty", "propertyValue").get(index)-»")
  						«ENDLET»
  				«ENDFOREACH»
  				}
@@ -142,25 +142,25 @@
 	evaluates the stereotype "ejb3EntityListener"
 «ENDREM»
 «DEFINE _EntityListener FOR MClass-»
-	«IF hasStereotype("ejb3EntityListener")»
-		«IF hasUtilizableValue("ejb3EntityListener", "listeners")-»
-			@EntityListeners(«FOREACH getTaggedValueList("ejb3EntityListener", "listeners") AS listeners SEPARATOR ", "»
+	«IF emHasStereotypeAssignment("ejb3EntityListener")»
+		«IF emHasUtilizableTaggedValue("ejb3EntityListener", "listeners")-»
+			@EntityListeners(«FOREACH emAllTaggedValues("ejb3EntityListener", "listeners") AS listeners SEPARATOR ", "»
 				«listeners-».class
 			«ENDFOREACH-»
-			«IF hasTaggedValue("ejb3EntityListener", "generateDefault", "true") && 
-				operation.exists(e|e.hasTaggedValue("ejb3Callback", "external", "true"))-»
+			«IF emHasTaggedValue("ejb3EntityListener", "generateDefault", "true") && 
+				operation.exists(e|e.emHasTaggedValue("ejb3Callback", "external", "true"))-»
 				, «asTypeName()+"Listener.class"-»
 				«EXPAND _EntityListenerClass(asTypeName()+"Listener")-»
 			«ENDIF-»)
-		«ELSEIF hasTaggedValue("ejb3EntityListener", "generateDefault", "true") && 
-				operation.exists(e|e.hasTaggedValue("ejb3Callback", "external", "true"))-»
+		«ELSEIF emHasTaggedValue("ejb3EntityListener", "generateDefault", "true") && 
+				operation.exists(e|e.emHasTaggedValue("ejb3Callback", "external", "true"))-»
 			@EntityListeners(«asTypeName()-»Listener.class)
 			«EXPAND _EntityListenerClass(asTypeName()+"Listener")-»
 		«ENDIF»
-		«IF hasTaggedValue("ejb3EntityListener", "excludeDefaultListeners", "true")»
+		«IF emHasTaggedValue("ejb3EntityListener", "excludeDefaultListeners", "true")»
 			@ExcludeDefaultListeners
 		«ENDIF»
-		«IF hasTaggedValue("ejb3EntityListener", "excludeSuperclassListeners", "true")»
+		«IF emHasTaggedValue("ejb3EntityListener", "excludeSuperclassListeners", "true")»
 			@ExcludeSuperclassListeners
 		«ENDIF»				
 	«ENDIF»
@@ -203,26 +203,26 @@
 	evaluates the stereotype "ejb3ClassInterceptor"
 «ENDREM»
 «DEFINE _Interceptor FOR MClass-»
-	«IF hasStereotype("ejb3ClassInterceptor")-»
-		«IF hasUtilizableValue("ejb3ClassInterceptor", "interceptors")-»
-			@Interceptors(value={«FOREACH getTaggedValueList("ejb3ClassInterceptor", "interceptors") AS interceptor SEPARATOR ", "-»
+	«IF emHasStereotypeAssignment("ejb3ClassInterceptor")-»
+		«IF emHasUtilizableTaggedValue("ejb3ClassInterceptor", "interceptors")-»
+			@Interceptors(value={«FOREACH emAllTaggedValues("ejb3ClassInterceptor", "interceptors") AS interceptor SEPARATOR ", "-»
 				«interceptor-».class
 			«ENDFOREACH-»
-			«IF hasTaggedValue("ejb3ClassInterceptor", "generateDefault", "true") &&
-				( operation.exists(e|e.hasTaggedValue("ejb3Callback", "external", "true")) ||
-				hasUtilizableValue("ejb3ClassInterceptor", "methods") )-»
+			«IF emHasTaggedValue("ejb3ClassInterceptor", "generateDefault", "true") &&
+				( operation.exists(e|e.emHasTaggedValue("ejb3Callback", "external", "true")) ||
+				emHasUtilizableTaggedValue("ejb3ClassInterceptor", "methods") )-»
 				«EXPAND _InterceptorClass(asTypeName()+"Interceptor")-»
 				, «asTypeName()-»Interceptor.class
 			«ENDIF-»})
-		«ELSEIF hasTaggedValue("ejb3ClassInterceptor", "generateDefault", "true") &&
-				( operation.exists(e|e.hasTaggedValue("ejb3Callback", "external", "true")) ||
-				hasUtilizableValue("ejb3ClassInterceptor", "methods") )-»
+		«ELSEIF emHasTaggedValue("ejb3ClassInterceptor", "generateDefault", "true") &&
+				( operation.exists(e|e.emHasTaggedValue("ejb3Callback", "external", "true")) ||
+				emHasUtilizableTaggedValue("ejb3ClassInterceptor", "methods") )-»
 			@Interceptors(«asTypeName()»Interceptor.class)
 			«EXPAND _InterceptorClass(asTypeName()+"Interceptor")-»
 		«ELSE -»
 		  @Interceptor
 		«ENDIF-»
-		«IF hasTaggedValue("ejb3ClassInterceptor", "excludeDefaultInterceptors", "true")-»
+		«IF emHasTaggedValue("ejb3ClassInterceptor", "excludeDefaultInterceptors", "true")-»
 			@ExcludeDefaultInterceptors
 		«ENDIF»
 	«ENDIF-»
@@ -278,67 +278,67 @@
 	downwards compability shoud be done by check language before generation starts 
 «ENDREM»
 «DEFINE _CallbackMethods FOR MClass-»
-	«FOREACH operation.select(e|e.hasTaggedValue("jpaCallback", "external", "true")) AS methods»
-		«IF hasStereotype("ejb3ClassInterceptor")
+	«FOREACH operation.select(e|e.emHasTaggedValue("jpaCallback", "external", "true")) AS methods»
+		«IF emHasStereotypeAssignment("ejb3ClassInterceptor")
 			&& !(methods.name == "ejbCreate" 
-				&& methods.hasTaggedValue("jpaCallback", "postConstruct", "true"))
+				&& methods.emHasTaggedValue("jpaCallback", "postConstruct", "true"))
 			|| !(methods.name == "ejbRemove" 
-				&& methods.hasTaggedValue("jpaCallback", "preDestroy", "true"))
+				&& methods.emHasTaggedValue("jpaCallback", "preDestroy", "true"))
 			|| !(methods.name == "ejbActivate" 
-				&& methods.hasTaggedValue("jpaCallback", "postActivate", "true"))
+				&& methods.emHasTaggedValue("jpaCallback", "postActivate", "true"))
 			|| !(methods.name == "ejbPassivate" 
-				&& methods.hasTaggedValue("jpaCallback", "prePassivate", "true"))
+				&& methods.emHasTaggedValue("jpaCallback", "prePassivate", "true"))
 		-»
 			/**
 			  *	generated callback method for class "«asTypeName()»"
 			  * method has been annotated in "«asTypeName()»"
 			  *
 			  */
-			«IF methods.hasTaggedValue("jpaCallback", "external", "true")-»
-				«IF methods.classifier.hasStereotype("ejb3SessionBean") || methods.classifier.hasStereotype("ejb3MessageDrivenBean")-»
-					«IF methods.hasTaggedValue("jpaCallback", "postConstruct", "true")-»
+			«IF methods.emHasTaggedValue("jpaCallback", "external", "true")-»
+				«IF methods.classifier.emHasStereotypeAssignment("ejb3SessionBean") || methods.classifier.emHasStereotypeAssignment("ejb3MessageDrivenBean")-»
+					«IF methods.emHasTaggedValue("jpaCallback", "postConstruct", "true")-»
 						@PostConstruct
 					«ENDIF-»
-					«IF methods.hasTaggedValue("jpaCallback", "preDestroy", "true")-»
+					«IF methods.emHasTaggedValue("jpaCallback", "preDestroy", "true")-»
 						@PreDestroy
 					«ENDIF-»
 				«ENDIF-»
-				«IF methods.classifier.hasTaggedValue("ejb3SessionBean", "stateful", "true")-»
-					«IF methods.hasTaggedValue("jpaCallback", "postActivate", "true")-»
+				«IF methods.classifier.emHasTaggedValue("ejb3SessionBean", "stateful", "true")-»
+					«IF methods.emHasTaggedValue("jpaCallback", "postActivate", "true")-»
 						@PostActivate
 					«ENDIF-»
-					«IF methods.hasTaggedValue("jpaCallback", "prePassivate", "true")-»
+					«IF methods.emHasTaggedValue("jpaCallback", "prePassivate", "true")-»
 						@PrePassivate
 					«ENDIF-»
 				«ENDIF-»
-				«IF methods.classifier.hasStereotype("ejb3PersistentEntity")-»
-					«IF methods.hasTaggedValue("jpaCallback", "postPersist", "true")-»
+				«IF methods.classifier.emHasStereotypeAssignment("ejb3PersistentEntity")-»
+					«IF methods.emHasTaggedValue("jpaCallback", "postPersist", "true")-»
 						@PostPersist
 					«ENDIF-»
-					«IF methods.hasTaggedValue("jpaCallback", "prePersist", "true")-»
+					«IF methods.emHasTaggedValue("jpaCallback", "prePersist", "true")-»
 						@PrePersist
 					«ENDIF-»
-					«IF methods.hasTaggedValue("jpaCallback", "postUpdate", "true")-»
+					«IF methods.emHasTaggedValue("jpaCallback", "postUpdate", "true")-»
 						@PostUpdate
 					«ENDIF-»
-					«IF methods.hasTaggedValue("jpaCallback", "preUpdate", "true")-»
+					«IF methods.emHasTaggedValue("jpaCallback", "preUpdate", "true")-»
 						@PreUpdate
 					«ENDIF-»	
-					«IF methods.hasTaggedValue("jpaCallback", "postRemove", "true")-»
+					«IF methods.emHasTaggedValue("jpaCallback", "postRemove", "true")-»
 						@PostRemove
 					«ENDIF-»
-					«IF methods.hasTaggedValue("jpaCallback", "preRemove", "true")-»
+					«IF methods.emHasTaggedValue("jpaCallback", "preRemove", "true")-»
 						@PreRemove
 					«ENDIF-»
-					«IF methods.hasTaggedValue("jpaCallback", "postLoad", "true")-»
+					«IF methods.emHasTaggedValue("jpaCallback", "postLoad", "true")-»
 						@PostLoad
 					«ENDIF-»
 				«ENDIF-»
 			«ENDIF-»
-			public void «methods.name-»(«IF hasStereotype("ejb3EntityListener")-»
+			public void «methods.name-»(«IF emHasStereotypeAssignment("ejb3EntityListener")-»
 				Object obj){
 					«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + methods.name + "Listener")-»
-			«ELSEIF hasStereotype("ejb3ClassInterceptor")-»
+			«ELSEIF emHasStereotypeAssignment("ejb3ClassInterceptor")-»
 				InvocationContext ctx){
 					«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + methods.name + "Interceptor")-»
 			«ENDIF-»
@@ -352,8 +352,8 @@
 	associated business methods
 «ENDREM»
 «DEFINE _BusinessMethods FOR MClass-»
-	«IF hasUtilizableValue("ejb3ClassInterceptor", "methods")-»
-		«FOREACH getTaggedValueList("ejb3ClassInterceptor", "methods") AS methods SEPARATOR ", "-»
+	«IF emHasUtilizableTaggedValue("ejb3ClassInterceptor", "methods")-»
+		«FOREACH emAllTaggedValues("ejb3ClassInterceptor", "methods") AS methods SEPARATOR ", "-»
 			/**
 			  *	generated business method for class "«asTypeName()»"
 			  * method has been mentioned in "ejb3Interceptor"-annotation 
@@ -384,7 +384,7 @@
 	add public operations from session bean interface (except getter and setter)
 «ENDREM»
 «DEFINE AddPublicOperations FOR MClass-»
-	«IF hasStereotype("ejb3SessionBean")-»
+	«IF emHasStereotypeAssignment("ejb3SessionBean")-»
 		/**
 		  * generated methods from the implementing interface(s)
 		  * «FOREACH realization.typeSelect(MInterface).asTypeName() AS name SEPARATOR ", "-»«IF !((name == "I"+asTypeName()+"Local") || (name == "I"+asTypeName()+"Remote"))-»«name-»«ENDIF-»«ENDFOREACH»
@@ -395,7 +395,7 @@
 		«ENDREM»
 		«FOREACH realization.typeSelect(MInterface) AS interface»
 		  	«IF !((interface.asTypeName() == "I"+asTypeName()+"Local") || (interface.asTypeName() == "I"+asTypeName()+"Remote"))»
-		  		«EXPAND org::genesez::platform::java::java5::templates::Operation::Implementation FOR interface -»
+		  		«EXPAND org::genesez::platform::java::m2t::Operation::Implementation FOR interface -»
 		  	«ENDIF»
 		«ENDFOREACH»
 	«ENDIF-»
@@ -405,12 +405,12 @@
     evaluates the stereotype ejb3Startup
 «ENDREM»
 «DEFINE _Startup FOR MClass-»
-    «IF hasStereotype("ejb3Startup")-»
+    «IF emHasStereotypeAssignment("ejb3Startup")-»
         @Startup 
-        «IF hasTaggedValue("ejb3Startup", "depends", "true")-»
-            «IF hasUtilizableValue("ejb3Startup", "depends")-»
+        «IF emHasTaggedValue("ejb3Startup", "depends", "true")-»
+            «IF emHasUtilizableTaggedValue("ejb3Startup", "depends")-»
                 (depends={
-                «FOREACH getTaggedValueList("ejb3Startup", "depends") AS value SEPARATOR ", "-»
+                «FOREACH emAllTaggedValues("ejb3Startup", "depends") AS value SEPARATOR ", "-»
                     "«value-»"
                 «ENDFOREACH-»})
             «ENDIF-»

@@ -8,7 +8,8 @@
 // based on genesez meta model
 import gcore;
 
-extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
 extension org::genesez::platform::java::seam2::scripts::Stereotypes;
 extension org::genesez::util::logging::Logging;
 
@@ -19,11 +20,11 @@ extension org::genesez::util::logging::Logging;
   *	
   */
 Void addNamespace(MPackage this) :
-	//warn("Package: "+this.name+", seam2Packaging: "+hasStereotype("seam2Packaging")) ->
-	this.model().hasStereotype("seam2Packaging")
+	//warn("Package: "+this.name+", seam2Packaging: "+emHasStereotypeAssignment("seam2Packaging")) ->
+	this.navModel().emHasStereotypeAssignment("seam2Packaging")
 		? (
-			!this.hasStereotype("seam2Packaging")
-				? this.addPackagingStereotype(this.model().getTaggedValue("seam2Packaging", "value"), this.model().getTaggedValue("seam2Packaging", "prefix")) 
+			!this.emHasStereotypeAssignment("seam2Packaging")
+				? this.addPackagingStereotype(this.navModel().emGetTaggedValue("seam2Packaging", "value"), this.navModel().emGetTaggedValue("seam2Packaging", "prefix")) 
 				: "" //do nothing
 		)
 		: ""; //do nothing

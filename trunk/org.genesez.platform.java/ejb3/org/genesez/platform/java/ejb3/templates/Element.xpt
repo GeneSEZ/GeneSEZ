@@ -10,11 +10,11 @@
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
-«EXTENSION org::genesez::platform::java::scripts::Type»
-«EXTENSION org::genesez::platform::java::scripts::Naming»
-«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -27,9 +27,9 @@
 	for operations and classes
 «ENDREM»
 «DEFINE CMTransactionality FOR MElement-»
-	«IF hasStereotype("ejb3TransactionAttribute")»
-		«IF hasUtilizableValue("ejb3TransactionAttribute", "type") || !hasTaggedValue("ejb3TransactionAttribute", "type", "REQUIRED")»
-			@TransactionAttribute(TransactionAttributeType.«getTaggedValue("ejb3TransactionAttributeType", "type")-»)
+	«IF emHasStereotypeAssignment("ejb3TransactionAttribute")»
+		«IF emHasUtilizableTaggedValue("ejb3TransactionAttribute", "type") || !emHasTaggedValue("ejb3TransactionAttribute", "type", "REQUIRED")»
+			@TransactionAttribute(TransactionAttributeType.«emGetTaggedValue("ejb3TransactionAttributeType", "type")-»)
 		«ENDIF»
 	«ENDIF»
 «ENDDEFINE»
@@ -38,10 +38,10 @@
 	evaluates the stereotype "ejb3EJB" for classes, attributes and setter operations
 «ENDREM»
 «DEFINE EJB FOR MElement»
-	«IF hasStereotype("ejb3EJB")-»
-		«IF hasTaggedValue("ejb3EJB", "name", "") && hasTaggedValue("ejb3EJB", "beanInterface", "") &&
-			hasTaggedValue("ejb3EJB", "beanName", "") && hasTaggedValue("ejb3EJB", "description", "") &&
-			hasTaggedValue("ejb3EJB", "mappedName", "")-»
+	«IF emHasStereotypeAssignment("ejb3EJB")-»
+		«IF emHasTaggedValue("ejb3EJB", "name", "") && emHasTaggedValue("ejb3EJB", "beanInterface", "") &&
+			emHasTaggedValue("ejb3EJB", "beanName", "") && emHasTaggedValue("ejb3EJB", "description", "") &&
+			emHasTaggedValue("ejb3EJB", "mappedName", "")-»
 			«REM»
 				there are no information, so just ejb3 default values from configuration by exception
 				this case occurs if stereotype was added automatically by the cartridge
@@ -49,22 +49,22 @@
 			@EJB
 		«ELSE-»
 			@EJB(name=
-			«IF hasUtilizableValue("ejb3EJB", "name")-»
-				"«getTaggedValue("ejb3EJB", "name")-»"
+			«IF emHasUtilizableTaggedValue("ejb3EJB", "name")-»
+				"«emGetTaggedValue("ejb3EJB", "name")-»"
 			«ELSE-»
 				"ejb/«name.toFirstUpper()-»"
 			«ENDIF-»
-			«IF hasUtilizableValue("ejb3EJB", "beanInterface")-»
-				, beanInterface=«getTaggedValue("ejb3EJB", "beanInterface")-».class
+			«IF emHasUtilizableTaggedValue("ejb3EJB", "beanInterface")-»
+				, beanInterface=«emGetTaggedValue("ejb3EJB", "beanInterface")-».class
 			«ENDIF-»
-			«IF hasUtilizableValue("ejb3EJB", "beanName")-»
-				, beanName="«getTaggedValue("ejb3EJB", "beanName")-»"
+			«IF emHasUtilizableTaggedValue("ejb3EJB", "beanName")-»
+				, beanName="«emGetTaggedValue("ejb3EJB", "beanName")-»"
 			«ENDIF-»
-			«IF hasUtilizableValue("ejb3EJB", "description")-»
-				, description="«getTaggedValue("ejb3EJB", "description")-»"
+			«IF emHasUtilizableTaggedValue("ejb3EJB", "description")-»
+				, description="«emGetTaggedValue("ejb3EJB", "description")-»"
 			«ENDIF-»
-			«IF hasUtilizableValue("ejb3EJB", "mappedName")-»
-				, mappedName="«getTaggedValue("ejb3EJB", "mappedName")-»"
+			«IF emHasUtilizableTaggedValue("ejb3EJB", "mappedName")-»
+				, mappedName="«emGetTaggedValue("ejb3EJB", "mappedName")-»"
 			«ENDIF-»)
 		«ENDIF-»
 	«ENDIF-»

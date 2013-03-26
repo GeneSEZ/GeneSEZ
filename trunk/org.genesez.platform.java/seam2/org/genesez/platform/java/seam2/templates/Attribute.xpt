@@ -17,12 +17,12 @@
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::Conversion»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
-«EXTENSION org::genesez::platform::common::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
 
-«EXTENSION org::genesez::platform::java::scripts::Naming»
+«EXTENSION org::genesez::platform::java::util::Naming»
 
 «REM»
 	evaluates the stereotypes for attributes only 
@@ -31,15 +31,15 @@
 	«EXPAND Element::Bijection-»
 	«EXPAND Element::DataTable-»
 	«EXPAND Element::Restrict-»
-	«IF hasStereotype("seam2Logger")»
-		@Logger«IF hasUtilizableValue("seam2Logger", "value")-»
-			("«getTaggedValue("seam2Logger", "value")-»")
+	«IF emHasStereotypeAssignment("seam2Logger")»
+		@Logger«IF emHasUtilizableTaggedValue("seam2Logger", "value")-»
+			("«emGetTaggedValue("seam2Logger", "value")-»")
 		«ENDIF»
 	«ENDIF»
-	«IF hasStereotype("seam2RequestParameter")»
+	«IF emHasStereotypeAssignment("seam2RequestParameter")»
 		@RequestParameter
-		«IF hasUtilizableValue("seam2RequestParamter", "name")»
-			("«getTaggedValue("seam2RequestParameter", "name")-»")
+		«IF emHasUtilizableTaggedValue("seam2RequestParamter", "name")»
+			("«emGetTaggedValue("seam2RequestParameter", "name")-»")
 		«ENDIF»
 	«ENDIF»
 	«EXPAND Element::EntityPermission-»
@@ -51,10 +51,10 @@
 	generate setter-method declaration
 «ENDREM»
 «DEFINE _SetterDeclaration FOR MAttribute-»
-	«EXPAND org::genesez::platform::java::java5::templates::Comment::Setter -»
-	«IF isSingleValuedType() -»
+	«EXPAND org::genesez::platform::java::m2t::Comment::Setter -»
+	«IF multiplicity.isSingleValued() -»
 		public void «asSetter()-»(«type.mapName().asTypeName()-» «this.name-»);
 	«ELSE -»
-		public void «asSetter()-»(«EXPAND org::genesez::platform::java::java5::templates::Type::MultiValuedType -» «this.name-»);
+		public void «asSetter()-»(«EXPAND org::genesez::platform::java::m2t::Type::MultiValuedType(multiplicity, type) -» «this.name-»);
 	«ENDIF -»
 «ENDDEFINE»

@@ -1,11 +1,13 @@
 import gcore;
 
 extension org::genesez::util::logging::Logging;
-extension org::genesez::platform::common::AccessHelper;
-extension org::genesez::platform::common::m2m::CreateTemplate;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
 extension org::genesez::platform::common::m2m::MakeElement;
 extension org::genesez::platform::common::m2m::CreateBasics;
-extension org::genesez::platform::java::scripts::Naming;
+extension org::genesez::platform::java::util::Naming;
+extension org::genesez::platform::java::util::JavaTypes;
 extension org::genesez::platform::java::java5::scripts::Class;
 extension org::genesez::platform::java::jpa::scripts::Stereotypes;
 extension org::genesez::platform::java::java5::scripts::Stereotypes;
@@ -15,7 +17,7 @@ extension org::genesez::platform::java::jpa::scripts::Naming;
  *	transforms the Jacobson stereotype "entity" to "jpaPersistentEntity"
  */
 Void transformJacobsonStereotypes(MClass this) :
-	this.hasStereotype("entity")
+	this.emHasStereotypeAssignment("entity")
 		? this.addPersistentEntityStereotype("", true, "", "", "", true)
 		: "";
 		
@@ -23,7 +25,7 @@ Void transformJacobsonStereotypes(MClass this) :
  *	transforms the WAM stereotype "material" to "jpaPersistentEntity"
  */
 Void transformWAMStereotypes(MClass this) :
-	this.hasStereotype("material")
+	this.emHasStereotypeAssignment("material")
 		? this.addPersistentEntityStereotype("", true, "", "", "", true)
 		: "";
 
@@ -32,7 +34,7 @@ Void transformWAMStereotypes(MClass this) :
   *	if there is not already one
   */	
 MClassifier addStandardConstructor(MClass this) :
-	this.hasStereotype("jpaPersistentEntity") &&
+	this.emHasStereotypeAssignment("jpaPersistentEntity") &&
 	!operation.exists(e|e.isConstructor() && e.parameter.isEmpty)
 		? makeStandardConstructor("public")
 		: "";
@@ -56,8 +58,8 @@ Void checkInheritance(MClass this) :
   *	if "tableName" contains a utilizable value, a prefix is added
   */
 Void checkTableName(MClass this) :
-	hasUtilizableValue("jpaPersistentEntity", "tableName")
-		? this.setTaggedValue("jpaPersistentEntity", "tableName", tableNamePrefix() + getTaggedValue("jpaPersistentEntity", "tableName"))
+	emHasUtilizableTaggedValue("jpaPersistentEntity", "tableName")
+		? this.setTaggedValue("jpaPersistentEntity", "tableName", tableNamePrefix() + emGetTaggedValue("jpaPersistentEntity", "tableName"))
 		: this.setTaggedValue("jpaPersistentEntity", "tableName", tableNamePrefix() + this.asTypeName());
 			
 /**
@@ -69,9 +71,9 @@ Void checkTableName(MClass this) :
 Boolean checkAnnotationTableUsage(MClass this) :
 	let parent = this.generalization.typeSelect(MClass).selectFirst(e|e.name != "") :
 	(
-		parent.hasStereotype("jpaInheritance") 
+		parent.emHasStereotypeAssignment("jpaInheritance") 
 			? (
-				parent.hasTaggedValue("jpaInheritance", "strategy", "SINGLE_TABLE") 
+				parent.emHasTaggedValue("jpaInheritance", "strategy", "SINGLE_TABLE") 
 					? false
 					: true 
 			)
@@ -99,11 +101,11 @@ Boolean checkAnnotationTableUsage(MClass this) :
   *	@param		this		instance of MClass
   */
 Void addAccessorStereotype(MClass this) :
-	this.hasStereotype("jpaPersistentEntity")
+	this.emHasStereotypeAssignment("jpaPersistentEntity")
 		? (
 			//add an accessor for get and set methods if no accessor 
 			//stereotype exists
-			!this.hasStereotype("accessor")
+			!this.emHasStereotypeAssignment("accessor")
 				? createAccessor("true", "true")
 				: ""
 		)
@@ -117,8 +119,8 @@ Void addAccessorStereotype(MClass this) :
   */
 Void addOptimisticLocking(MClass this) :
 	generalization.isEmpty && 
-	property.exists(e|e.hasStereotype("jpaPrimaryKey")) && 
-	hasTaggedValue("jpaPersistentEntity", "optimisticLocking", "true") &&
+	property.exists(e|e.emHasStereotypeAssignment("jpaPrimaryKey")) && 
+	emHasTaggedValue("jpaPersistentEntity", "optimisticLocking", "true") &&
 	property.notExists(e|e.name == "version" && e.type.name() == "int")
 		? (
 			this.addVersionAttribute() ->
@@ -128,18 +130,18 @@ Void addOptimisticLocking(MClass this) :
 
 Void checkPrimaryKeyAttributeAndOrStereotype(MClass this) :
 	//add default primaryKey-attribute "id" if necessary and not existing
-	generalization.isEmpty && hasStereotype("jpaPersistentEntity") && 
-	property.notExists(e|e.hasStereotype("jpaPrimaryKey")) && 
+	generalization.isEmpty && emHasStereotypeAssignment("jpaPersistentEntity") && 
+	property.notExists(e|e.emHasStereotypeAssignment("jpaPrimaryKey")) && 
 	property.notExists(e|e.name == "id" && e.type.name() == "int")
 		? this.addDefaultPrimaryKeyAttribute() 
 		: "" ->
 	//add "jpaPrimaryKey"-stereotype if necessary and not existing and class is not @Embedabble (pk class)«ENDREM»
 	property.exists(e|e.name == "id" && e.type.name() == "int") && 
-	generalization.isEmpty && hasStereotype("jpaPersistentEntity") && 
-	!(hasStereotype("jpaPrimaryKeyClass") && hasTaggedValue("jpaPrimaryKeyClass", "embeddable", "true")) && 
-	!property.selectFirst(e|e.name == "id" && e.type.name() == "int").hasStereotype("jpaPrimaryKey")
+	generalization.isEmpty && emHasStereotypeAssignment("jpaPersistentEntity") && 
+	!(emHasStereotypeAssignment("jpaPrimaryKeyClass") && emHasTaggedValue("jpaPrimaryKeyClass", "embeddable", "true")) && 
+	!property.selectFirst(e|e.name == "id" && e.type.name() == "int").emHasStereotypeAssignment("jpaPrimaryKey")
 		? (
-			this.hasTaggedValue("jpaInheritance", "strategy", "TABLE_PER_CLASS")
+			this.emHasTaggedValue("jpaInheritance", "strategy", "TABLE_PER_CLASS")
 				? property.selectFirst(e|e.name == "id" && e.type.name() == "int").addPrimaryKeyStereotype("true", "false", "TABLE", "")
 				: property.selectFirst(e|e.name == "id" && e.type.name() == "int").addPrimaryKeyStereotype("true", "false", "AUTO", "")
 		)
@@ -149,19 +151,19 @@ Void checkPrimaryKeyAttributeAndOrStereotype(MClass this) :
   * add serializable interface to an entity bean
   */
 MClassifier addSerializable(MClassifier this) :
-	(this.hasStereotype("jpaPersistentEntity") || this.hasTaggedValue("jpaPrimaryKeyClass", "embeddable", "true")) 
-	&& !generalization.typeSelect(MClass).exists(e | e.hasStereotype("jpaPersistentEntity")) 
-		? realization.add(createExternal(this.getModel(), "Serializable"))
+	(this.emHasStereotypeAssignment("jpaPersistentEntity") || this.emHasTaggedValue("jpaPrimaryKeyClass", "embeddable", "true")) 
+	&& !generalization.typeSelect(MClass).exists(e | e.emHasStereotypeAssignment("jpaPersistentEntity")) 
+		? realization.add( this.navModel().typeSerializable() )
 		: "";
 
 /**
 	add inheritance stereotype if necassary (incompleted)
 */
 Void checkInheritanceStereotype(MClass this) :
-	!hasStereotype("jpaDiscriminatorValue") && !hasStereotype("jpaPrimaryKeyJoinColumn")
+	!emHasStereotypeAssignment("jpaDiscriminatorValue") && !emHasStereotypeAssignment("jpaPrimaryKeyJoinColumn")
 		? ( !this.generalization.isEmpty
 			? generalization.typeSelect(MClass).isDerivedClass(this)
-			: this.package().classifier.typeSelect(MClass).isSuperClass(this)
+			: this.navPackage().classifier.typeSelect(MClass).isSuperClass(this)
 		)
 		: "";
 		
@@ -170,24 +172,24 @@ Void checkInheritanceStereotype(MClass this) :
   *	class is a derived class
   */
 Void isDerivedClass(MClass superClass, MClass derivedClass) :
-	(superClass.hasStereotype("jpaInheritance") || superClass.hasStereotype("jpaDiscriminatorColumn")) &&
+	(superClass.emHasStereotypeAssignment("jpaInheritance") || superClass.emHasStereotypeAssignment("jpaDiscriminatorColumn")) &&
 	superClass.generalization.isEmpty
-		? ( derivedClass.hasStereotype("jpaInheritance")
+		? ( derivedClass.emHasStereotypeAssignment("jpaInheritance")
 			? ( /* 	logically there is no discriminator column stereotype in super class
 					it cannot be annotated to class if @Inheritance is not available */
-				superClass.getTaggedValue("jpaInheritance", "strategy") == "SINGLE_TABLE"
-					? (	superClass.getTaggedValue("jpaInheritance", "discriminatorType") == "STRING"
+				superClass.emGetTaggedValue("jpaInheritance", "strategy") == "SINGLE_TABLE"
+					? (	superClass.emGetTaggedValue("jpaInheritance", "discriminatorType") == "STRING"
 						? ( superClass.addDiscriminatorColumnStereotype("", "STRING", "31", "DTYPE")
 							/*	jpaDiscriminatorValue is not needed here because class name
 								is choosen by default as identifier of the discriminator column
 								if "@DiscriminatorValue" is missing */
 						)
-						: ( superClass.getTaggedValue("jpaInheritance", "discriminatorType") == "INT"
+						: ( superClass.emGetTaggedValue("jpaInheritance", "discriminatorType") == "INT"
 								? ( superClass.addDiscriminatorColumnStereotype("", "INT", "31", "DTYPE") ->
 									superClass.addDiscriminatorValueStereotype(superClass.name.asTypeName().length.toString()) ->
 									derivedClass.addDiscriminatorValueStereotype(derivedClass.asTypeName().length.toString())
 								)
-								: (superClass.getTaggedValue("jpaInheritance", "discriminatorType") == "CHAR"
+								: (superClass.emGetTaggedValue("jpaInheritance", "discriminatorType") == "CHAR"
 									? (	superClass.addDiscriminatorColumnStereotype("", "CHAR", "31", "DTYPE") ->
 										superClass.addDiscriminatorValueStereotype(superClass.name.asTypeName().subString(0, 1)) ->
 										derivedClass.addDiscriminatorValueStereotype(derivedClass.asTypeName().subString(0, 1).toString())
@@ -221,7 +223,7 @@ Void isDerivedClass(MClass superClass, MClass derivedClass) :
   *	look for this class in generalizations of other classes
   */
 Void isSuperClass(MClass derivedClass, MClass superClass) :
-	!superClass.hasStereotype("jpaInheritance") && !derivedClass.generalization.isEmpty && 
+	!superClass.emHasStereotypeAssignment("jpaInheritance") && !derivedClass.generalization.isEmpty && 
 	derivedClass.generalization.typeSelect(MClass).name.exists(e|e == derivedClass.name)
 		? (
 			superClass.addInheritanceStereotype("SINGLE_TABLE") ->
@@ -259,11 +261,11 @@ Void addVersionAttribute(MClass this) :
   *	"java5EqualsOperation"
   */
 Void checkEqualsProperties(MClass this) :
-	hasStereotype("java5EqualsOperation") && 
-	this.hasTaggedValue("jpaPersistentEntity", "usePKAsEqualsProperty", "true")
+	emHasStereotypeAssignment("java5EqualsOperation") && 
+	this.emHasTaggedValue("jpaPersistentEntity", "usePKAsEqualsProperty", "true")
 		? (
-			this.property.exists(e|e.hasStereotype("jpaPrimaryKey"))
-				? this.property.selectFirst(e|e.hasStereotype("jpaPrimaryKey")).addInternalStereotype("java5EqualsProperty")
+			this.property.exists(e|e.emHasStereotypeAssignment("jpaPrimaryKey"))
+				? this.property.selectFirst(e|e.emHasStereotypeAssignment("jpaPrimaryKey")).addInternalStereotype("java5EqualsProperty")
 				: ""
 		)
 		: "";
