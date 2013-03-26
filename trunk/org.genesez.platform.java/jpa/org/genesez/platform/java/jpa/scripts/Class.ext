@@ -275,7 +275,12 @@ Void checkEqualsProperties(MClass this) :
 	this.emHasTaggedValue("jpaPersistentEntity", "usePKAsEqualsProperty", "true")
 		? (
 			this.property.exists(e|e.emHasStereotypeAssignment("jpaPrimaryKey"))
-				? this.property.selectFirst(e|e.emHasStereotypeAssignment("jpaPrimaryKey")).addInternalStereotype("java5EqualsProperty")
+				? this.property.selectFirst(e|e.emHasStereotypeAssignment("jpaPrimaryKey"))
+					.ensureStereotypeAssignment( 
+						navModel().ensureStereotypeExistence( "java5EqualsProperty", "java5EqualsProperty" )
+					)
+//	old impl:
+//					.addInternalStereotype("java5EqualsProperty")
 				: ""
 		)
 		: "";
