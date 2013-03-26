@@ -6,6 +6,7 @@ extension org::genesez::metamodel::core::util::CreateElement;
 extension org::genesez::metamodel::core::util::NavigateElement;
 extension org::genesez::platform::common::m2m::MakeElement;
 extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
+extension org::genesez::platform::java::m2m::Constructor;
 extension org::genesez::platform::java::util::Naming;
 extension org::genesez::platform::java::util::JavaTypes;
 extension org::genesez::platform::java::java5::scripts::Class;
@@ -36,7 +37,7 @@ Void transformWAMStereotypes(MClass this) :
 MClassifier addStandardConstructor(MClass this) :
 	this.emHasStereotypeAssignment("jpaPersistentEntity") &&
 	!operation.exists(e|e.isConstructor() && e.parameter.isEmpty)
-		? makeStandardConstructor("public")
+		? ensureDefaultConstructor("public")
 		: "";
 
 /**
