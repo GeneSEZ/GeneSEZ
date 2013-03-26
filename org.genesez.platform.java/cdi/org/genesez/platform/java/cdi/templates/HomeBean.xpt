@@ -11,13 +11,15 @@
 
 «REM» useful support fuctions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::m2t::Helper»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::NavigateElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
-«EXTENSION org::genesez::platform::java::scripts::Type»
-«EXTENSION org::genesez::platform::java::scripts::Naming»
-«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -27,8 +29,8 @@
 
 
 «DEFINE MakeEntityHome FOR MClass»
-    «IF this.hasStereotype("cdiExtEntityHome")»
-	    «IF this.package().allClassifiers().select(e|e.hasStereotype("cdiExtEntityHome")).size > 0»
+    «IF this.emHasStereotypeAssignment("cdiExtEntityHome")»
+	    «IF this.navPackage().allNestedClassifiers().select(e|e.emHasStereotypeAssignment("cdiExtEntityHome")).size > 0»
 	        «EXPAND _CreateEntityHomeInterface-»
 	        «EXPAND _CreateEntityHomeBaseClass-»
 	        «EXPAND _CreateConversationAdminClass-»

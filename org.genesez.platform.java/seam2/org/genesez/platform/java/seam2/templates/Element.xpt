@@ -17,38 +17,38 @@
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::Conversion»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
-«EXTENSION org::genesez::platform::common::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
 
 «EXTENSION org::genesez::platform::java::seam2::scripts::Naming»
-«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::platform::java::util::Conversion»
 
 «REM»
 	evaluates the stereotype seam2Bijection
 	annotations for operations and attributes
 «ENDREM»
 «DEFINE Bijection FOR MElement-»
-	«IF hasStereotype("seam2Injection")-»
-		@In(create=«getTaggedValue("seam2Injection", "create")-»
-		«IF hasTaggedValue("seam2Injection", "required", "false")-»
+	«IF emHasStereotypeAssignment("seam2Injection")-»
+		@In(create=«emGetTaggedValue("seam2Injection", "create")-»
+		«IF emHasTaggedValue("seam2Injection", "required", "false")-»
 			, required=false
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2Injection", "value")-»
-			, value="«getTaggedValue("seam2Injection", "value")-»"
+		«IF emHasUtilizableTaggedValue("seam2Injection", "value")-»
+			, value="«emGetTaggedValue("seam2Injection", "value")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2Injection", "scope") && !hasTaggedValue("seam2Injection", "scope", "UNSPECIFIED")-»
-			, scope=ScopeType.«getTaggedValue("seam2Injection", "scope")-»
+		«IF emHasUtilizableTaggedValue("seam2Injection", "scope") && !emHasTaggedValue("seam2Injection", "scope", "UNSPECIFIED")-»
+			, scope=ScopeType.«emGetTaggedValue("seam2Injection", "scope")-»
 		«ENDIF-»)
 	«ENDIF»
-	«IF hasStereotype("seam2Outjection")»
-		@Out(required=«getTaggedValue("seam2Outjection", "required")-»
-		«IF hasUtilizableValue("seam2Outjection", "scope") && !hasTaggedValue("seam2Outjection", "scope", "UNSPECIFIED")-»
-			, scope=ScopeType.«getTaggedValue("seam2Outjection", "scope")-»
+	«IF emHasStereotypeAssignment("seam2Outjection")»
+		@Out(required=«emGetTaggedValue("seam2Outjection", "required")-»
+		«IF emHasUtilizableTaggedValue("seam2Outjection", "scope") && !emHasTaggedValue("seam2Outjection", "scope", "UNSPECIFIED")-»
+			, scope=ScopeType.«emGetTaggedValue("seam2Outjection", "scope")-»
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2Outjection", "value")-»
-			, value="«getTaggedValue("seam2Outjection", "value")-»"
+		«IF emHasUtilizableTaggedValue("seam2Outjection", "value")-»
+			, value="«emGetTaggedValue("seam2Outjection", "value")-»"
 		«ENDIF-»)
 	«ENDIF-»
 «ENDDEFINE»
@@ -57,22 +57,22 @@
 	evaluates the dataTable and databinding stereotypes 
 «ENDREM»
 «DEFINE DataTable FOR MElement-»
-	«IF hasStereotype("seam2DataModel")-»
-		«IF (hasTaggedValue("seam2DataModel", "value", "null") || hasTaggedValue("seam2DataModel", "value", ""))-»
+	«IF emHasStereotypeAssignment("seam2DataModel")-»
+		«IF (emHasTaggedValue("seam2DataModel", "value", "null") || emHasTaggedValue("seam2DataModel", "value", ""))-»
 			@DataModel
-			«IF (hasTaggedValue("seam2DataModel", "scope", "null") || hasTaggedValue("seam2DataModel", "scope", ""))  && !hasTaggedValue("seam2DataModel", "scope", "UNSPECIFIED")-»
-				(scope=ScopeType.«getTaggedValue("seam2DataModel", "scope")-»)
+			«IF (emHasTaggedValue("seam2DataModel", "scope", "null") || emHasTaggedValue("seam2DataModel", "scope", ""))  && !emHasTaggedValue("seam2DataModel", "scope", "UNSPECIFIED")-»
+				(scope=ScopeType.«emGetTaggedValue("seam2DataModel", "scope")-»)
 			«ENDIF-»
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2DataModel", "value")-»
-			@DataModel(value="«projectNamespace()-»«getTaggedValue("seam2DataModel", "value")-»"
-			«IF hasUtilizableValue("seam2DataModel", "scope") && !hasTaggedValue("seam2DataModel", "scope", "UNSPECIFIED")-»
-				, scope=ScopeType.«getTaggedValue("seam2DataModel", "scope")-»
+		«IF emHasUtilizableTaggedValue("seam2DataModel", "value")-»
+			@DataModel(value="«projectNamespace()-»«emGetTaggedValue("seam2DataModel", "value")-»"
+			«IF emHasUtilizableTaggedValue("seam2DataModel", "scope") && !emHasTaggedValue("seam2DataModel", "scope", "UNSPECIFIED")-»
+				, scope=ScopeType.«emGetTaggedValue("seam2DataModel", "scope")-»
 			«ENDIF-»)
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2DataBinding", "dataBinderClass")-»
-			@DataBinderClass(«getTaggedValue("seam2DataBinding", "dataBinderClass")-»
-			«IF getTaggedValue("seam2DataBinding", "dataBinderClass").contains("class")-»
+		«IF emHasUtilizableTaggedValue("seam2DataBinding", "dataBinderClass")-»
+			@DataBinderClass(«emGetTaggedValue("seam2DataBinding", "dataBinderClass")-»
+			«IF emGetTaggedValue("seam2DataBinding", "dataBinderClass").contains("class")-»
 				.class
 			«ENDIF-»)
 		«ENDIF-»
@@ -85,14 +85,14 @@
 	evaluates the stereotype seam2Selection (including seam2DataBinding)
 «ENDREM»
 «DEFINE _Selection FOR MElement-»
-	«IF hasStereotype("seam2Selection")-»
+	«IF emHasStereotypeAssignment("seam2Selection")-»
 		@DataModelSelection
-		«IF hasUtilizableValue("seam2Selection", "value")-»
-			(value="«projectNamespace()-»«getTaggedValue("seam2Selection", "value")-»")
+		«IF emHasUtilizableTaggedValue("seam2Selection", "value")-»
+			(value="«projectNamespace()-»«emGetTaggedValue("seam2Selection", "value")-»")
 		«ENDIF-»	
-		«IF hasUtilizableValue("seam2DataBinding", "dataSelectorClass")-»
-			@DataSelectorClass(«getTaggedValue("seam2DataBinding", "dataSelectorClass")-»
-			«IF getTaggedValue("seam2DataBinding", "dataSelectorClass").contains("class")-»
+		«IF emHasUtilizableTaggedValue("seam2DataBinding", "dataSelectorClass")-»
+			@DataSelectorClass(«emGetTaggedValue("seam2DataBinding", "dataSelectorClass")-»
+			«IF emGetTaggedValue("seam2DataBinding", "dataSelectorClass").contains("class")-»
 				.class
 			«ENDIF-»)
 		«ENDIF-»
@@ -103,10 +103,10 @@
 	evaluates the stereotype seam2SelectionIndex
 «ENDREM»
 «DEFINE _SelectionIndex FOR MElement-»
-	«IF hasStereotype("seam2SelectionIndex")-»
+	«IF emHasStereotypeAssignment("seam2SelectionIndex")-»
 		@DataModelSelectionIndex
-		«IF hasUtilizableValue("seam2SelectionIndex", "value")-»
-			(value="«projectNamespace()-»«getTaggedValue("seam2SelectionIndex", "value")-»")
+		«IF emHasUtilizableTaggedValue("seam2SelectionIndex", "value")-»
+			(value="«projectNamespace()-»«emGetTaggedValue("seam2SelectionIndex", "value")-»")
 		«ENDIF-»
 	«ENDIF-»
 «ENDDEFINE»
@@ -115,10 +115,10 @@
 	evaluates the stereotype seam2Remoting
 «ENDREM»
 «DEFINE Remoting FOR MElement-»
-	«IF hasStereotype("seam2Remoting")-»
+	«IF emHasStereotypeAssignment("seam2Remoting")-»
 		@WebRemote
-		«IF hasUtilizableValue("seam2Remoting", "exclude")-»
-			{«FOREACH getTaggedValueList("seam2Remoting", "exclude") AS values SEPARATOR ", "-»
+		«IF emHasUtilizableTaggedValue("seam2Remoting", "exclude")-»
+			{«FOREACH emAllTaggedValues("seam2Remoting", "exclude") AS values SEPARATOR ", "-»
 				"«values-»"
 			«ENDFOREACH-»}	
 		«ENDIF-»
@@ -129,23 +129,23 @@
 	evaluates the stereotype seam2Asynchronity
 «ENDREM»
 «DEFINE Asynchronity FOR MElement-»
-	«IF hasStereotype("seam2Asynchronity")-»
-		«IF hasTaggedValue("seam2Asynchronity", "asynchronous", "true")-»
+	«IF emHasStereotypeAssignment("seam2Asynchronity")-»
+		«IF emHasTaggedValue("seam2Asynchronity", "asynchronous", "true")-»
 			@Asynchronous
 		«ENDIF-»
-		«IF hasTaggedValue("seam2Asynchronity", "duration", "true")-»
+		«IF emHasTaggedValue("seam2Asynchronity", "duration", "true")-»
 			@Duration
 		«ENDIF-»
-		«IF hasTaggedValue("seam2Asynchronity", "expiration", "true")-»
+		«IF emHasTaggedValue("seam2Asynchronity", "expiration", "true")-»
 			@Expiration
 		«ENDIF-»
-		«IF hasTaggedValue("seam2Asynchronity", "intervalDuration", "true")-»
+		«IF emHasTaggedValue("seam2Asynchronity", "intervalDuration", "true")-»
 			@IntervalDuration
 		«ENDIF-»
-		«IF hasTaggedValue("seam2Asynchronity", "finalExpiration", "true")-»
+		«IF emHasTaggedValue("seam2Asynchronity", "finalExpiration", "true")-»
 			@FinalExpiration
 		«ENDIF-»
-		«IF hasTaggedValue("seam2Asynchronity", "intervalCron", "true")-»
+		«IF emHasTaggedValue("seam2Asynchronity", "intervalCron", "true")-»
 			@IntervalCron
 		«ENDIF-»
 	«ENDIF-»
@@ -155,7 +155,7 @@
 	evaluates the stereotype seam2Transactional
 «ENDREM»
 «DEFINE Transactional FOR MElement-»
-	«IF hasStereotype("seam2Transactional")-»
+	«IF emHasStereotypeAssignment("seam2Transactional")-»
 		@Transactional
 	«ENDIF-»
 «ENDDEFINE»
@@ -164,7 +164,7 @@
 	evaluates the stereotype seam2ReadOnly
 «ENDREM»
 «DEFINE ReadOnly FOR MElement-»
-	«IF hasStereotype("seam2ReadOnly")-»
+	«IF emHasStereotypeAssignment("seam2ReadOnly")-»
 		@ReadOnly
 	«ENDIF-»	
 «ENDDEFINE»
@@ -173,8 +173,8 @@
 	evaluates the stereotype seam2Restrict
 «ENDREM»
 «DEFINE Restrict FOR MElement-»
-	«IF hasStereotype("seam2Restrict")-»
-		@Restrict(value="«hasTaggedValue("seam2Restrict", "value")-»")
+	«IF emHasStereotypeAssignment("seam2Restrict")-»
+		@Restrict(value="«emGetTaggedBooleanValue("seam2Restrict", "value")-»")
 	«ENDIF»
 «ENDDEFINE»
 
@@ -182,23 +182,23 @@
 	evaluates the entity permission stereotypes
 «ENDREM»
 «DEFINE EntityPermission FOR MElement-»
-	«IF hasTaggedValue("seam2EntityPermission", "target", "true")-»
+	«IF emHasTaggedValue("seam2EntityPermission", "target", "true")-»
 		@PermissionTarget
 	«ENDIF-»
-	«IF hasTaggedValue("seam2EntityPermission", "action", "true")-»
+	«IF emHasTaggedValue("seam2EntityPermission", "action", "true")-»
 		@PermissionAction
 	«ENDIF-»
-	«IF hasTaggedValue("seam2EntityPermission", "user", "true")-»
+	«IF emHasTaggedValue("seam2EntityPermission", "user", "true")-»
 		@PermissionUser
 	«ENDIF-»
-	«IF hasTaggedValue("seam2EntityPermission", "role", "true")-»
+	«IF emHasTaggedValue("seam2EntityPermission", "role", "true")-»
 		@PermissionRole
 	«ENDIF-»
-	«IF hasTaggedValue("seam2EntityPermission", "discriminator", "true")-»
-		@PermissionDiscriminator«IF !hasTaggedValue("seam2EntityPermission", "userDiscriminator", "user")
-				|| !hasTaggedValue("seam2EntityPermission", "roleDiscriminator", "role")-»
-				(userValue="«getTaggedValue("seam2EntityPermission", "userDiscriminator")-»",
-				roleValue="«getTaggedValue("seam2EntityPermission", "roleDiscriminator")-»")
+	«IF emHasTaggedValue("seam2EntityPermission", "discriminator", "true")-»
+		@PermissionDiscriminator«IF !emHasTaggedValue("seam2EntityPermission", "userDiscriminator", "user")
+				|| !emHasTaggedValue("seam2EntityPermission", "roleDiscriminator", "role")-»
+				(userValue="«emGetTaggedValue("seam2EntityPermission", "userDiscriminator")-»",
+				roleValue="«emGetTaggedValue("seam2EntityPermission", "roleDiscriminator")-»")
 			«ENDIF-»
 	«ENDIF-»
 «ENDDEFINE»
@@ -207,36 +207,36 @@
 	evaluates the user security stereotypes
 «ENDREM»
 «DEFINE UserSecurity FOR MElement-»
-	«IF hasTaggedValue("seam2UserSecurity", "userFirstName", "true")-»
+	«IF emHasTaggedValue("seam2UserSecurity", "userFirstName", "true")-»
 		@UserFirstName
 	«ENDIF-»
-	«IF hasTaggedValue("seam2UserSecurity", "userLastName", "true")-»
+	«IF emHasTaggedValue("seam2UserSecurity", "userLastName", "true")-»
 		@UserLastName
 	«ENDIF-»
-	«IF hasTaggedValue("seam2UserSecurity", "userPrincipal", "true")-»
+	«IF emHasTaggedValue("seam2UserSecurity", "userPrincipal", "true")-»
 		@UserPrincipal
 	«ENDIF-»
-	«IF hasTaggedValue("seam2UserSecurity", "userEnabled", "true")-»
+	«IF emHasTaggedValue("seam2UserSecurity", "userEnabled", "true")-»
 		@UserEnabled
 	«ENDIF-»
-	«IF hasTaggedValue("seam2UserSecurity", "userRoles", "true")-»
+	«IF emHasTaggedValue("seam2UserSecurity", "userRoles", "true")-»
 		@UserRoles
 	«ENDIF-»
-	«IF hasTaggedValue("seam2UserSecurity", "passwordPrincipal", "true")-»
-		@UserPassword«IF hasUtilizableValue("seam2UserSecurity", "passwordIterations")
-				&& !hasTaggedValue("seam2UserSecurity", "passwordIterations", "1000")
-				&& hasUtilizableValue("seam2UserSecurity", "passwordHash")-»
-				(hash="«getTaggedValue("seam2UserSecurity", "passwordHash")-»",
-				iterations=«getTaggedValue("seam2UserSecurity", "passwordIterations")-»)
+	«IF emHasTaggedValue("seam2UserSecurity", "passwordPrincipal", "true")-»
+		@UserPassword«IF emHasUtilizableTaggedValue("seam2UserSecurity", "passwordIterations")
+				&& !emHasTaggedValue("seam2UserSecurity", "passwordIterations", "1000")
+				&& emHasUtilizableTaggedValue("seam2UserSecurity", "passwordHash")-»
+				(hash="«emGetTaggedValue("seam2UserSecurity", "passwordHash")-»",
+				iterations=«emGetTaggedValue("seam2UserSecurity", "passwordIterations")-»)
 			«ENDIF-»
-			«IF !hasUtilizableValue("seam2UserSecurity", "passwordIterations")
-				&& hasUtilizableValue("seam2UserSecurity", "passwordHash")-»
-				(hash="«getTaggedValue("seam2UserSecurity", "passwordHash")-»")
+			«IF !emHasUtilizableTaggedValue("seam2UserSecurity", "passwordIterations")
+				&& emHasUtilizableTaggedValue("seam2UserSecurity", "passwordHash")-»
+				(hash="«emGetTaggedValue("seam2UserSecurity", "passwordHash")-»")
 			«ENDIF-»
-			«IF hasUtilizableValue("seam2UserSecurity", "passwordIterations")
-				&& !hasTaggedValue("seam2UserSecurity", "passwordIterations", "1000")
-				&& !hasUtilizableValue("seam2UserSecurity", "passwordHash")-»
-				(iterations=«getTaggedValue("seam2UserSecurity", "passwordIterations")-»)
+			«IF emHasUtilizableTaggedValue("seam2UserSecurity", "passwordIterations")
+				&& !emHasTaggedValue("seam2UserSecurity", "passwordIterations", "1000")
+				&& !emHasUtilizableTaggedValue("seam2UserSecurity", "passwordHash")-»
+				(iterations=«emGetTaggedValue("seam2UserSecurity", "passwordIterations")-»)
 			«ENDIF-»
 	«ENDIF-»
 «ENDDEFINE»
@@ -245,13 +245,13 @@
 	evaluates the role security stereotypes
 «ENDREM»
 «DEFINE RoleSecurity FOR MElement-»
-	«IF hasTaggedValue("seam2RoleSecurity", "name", "true")-»
+	«IF emHasTaggedValue("seam2RoleSecurity", "name", "true")-»
 		@RoleName
 	«ENDIF-»
-	«IF hasTaggedValue("seam2RoleSecurity", "groups", "true")-»
+	«IF emHasTaggedValue("seam2RoleSecurity", "groups", "true")-»
 		@RoleGroups
 	«ENDIF-»
-	«IF hasTaggedValue("seam2RoleSecurity", "conditional", "true")-»
+	«IF emHasTaggedValue("seam2RoleSecurity", "conditional", "true")-»
 		@RoleConditional
 	«ENDIF-»
 «ENDDEFINE»
@@ -260,8 +260,8 @@
 	evaluates the stereotype seam2Permission
 «ENDREM»
 «DEFINE _Permission FOR MElement-»
-	«IF hasUtilizableValue("seam2Permission", "permissions")-»
-		@Permissions({«FOREACH getTaggedValueList("seam2Permission", "permissions") AS values SEPARATOR ", "-»
+	«IF emHasUtilizableTaggedValue("seam2Permission", "permissions")-»
+		@Permissions({«FOREACH emAllTaggedValues("seam2Permission", "permissions") AS values SEPARATOR ", "-»
 			@Permission(action="«values-»")
 		«ENDFOREACH-»})	
 	«ENDIF-»

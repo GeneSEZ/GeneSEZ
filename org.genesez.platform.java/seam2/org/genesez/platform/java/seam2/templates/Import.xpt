@@ -17,50 +17,50 @@
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::Conversion»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
-«EXTENSION org::genesez::platform::common::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
 
 «REM»
 	create import statements
 «ENDREM»
 «DEFINE ImportStatements FOR MClassifier-»
-	«IF hasStereotype("seam2ApplicationException") && hasStereotype("seam2JavaBeanInterceptors")-»
+	«IF emHasStereotypeAssignment("seam2ApplicationException") && emHasStereotypeAssignment("seam2JavaBeanInterceptors")-»
 		import org.jboss.seam.annotations.ApplicationException;
 	«ENDIF-»
-	«IF hasStereotype("seam2ApplicationException")-»
+	«IF emHasStereotypeAssignment("seam2ApplicationException")-»
 		import javax.ejb.ApplicationException;
 	«ENDIF-»
-	«IF isClass() && operation.exists(e|e.hasStereotype("seam2Observer"))-»
+	«IF isClass() && operation.exists(e|e.emHasStereotypeAssignment("seam2Observer"))-»
 		import org.jboss.seam.annotations.Observer;
 	«ENDIF»
-	«IF hasStereotype("seam2Logger")-»
+	«IF emHasStereotypeAssignment("seam2Logger")-»
 		import org.jboss.seam.log.Log;
 		import org.jboss.seam.annotations.Logger;
 	«ENDIF»
-	«IF property.exists(e|e.hasStereotype("seam2DataModel"))-»
+	«IF property.exists(e|e.emHasStereotypeAssignment("seam2DataModel"))-»
 		import org.jboss.seam.annotations.datamodel.DataModel;
 	«ENDIF-»
-	«IF property.exists(e|e.hasStereotype("seam2Selection"))-»
+	«IF property.exists(e|e.emHasStereotypeAssignment("seam2Selection"))-»
 		import org.jboss.seam.annotations.datamodel.DataModelSelection;
 	«ENDIF-»
-	«IF property.exists(e|e.hasStereotype("seam2SelectionIndex"))-»
+	«IF property.exists(e|e.emHasStereotypeAssignment("seam2SelectionIndex"))-»
 		import org.jboss.seam.annotations.datamodel.DataModelSelectionIndex;
 	«ENDIF»
-	«IF hasStereotype("seam2ServletContainerIntegration")»
+	«IF emHasStereotypeAssignment("seam2ServletContainerIntegration")»
 		import javax.servlet.Filter;
 	«ENDIF»
-	«IF hasStereotype("seam2Validator")-»
+	«IF emHasStereotypeAssignment("seam2Validator")-»
 		import javax.faces.validator.Validator;
 	«ENDIF»
-	«IF hasStereotype("seam2Component")-»
+	«IF emHasStereotypeAssignment("seam2Component")-»
 		import org.jboss.seam.annotations.Name;
-		«IF !hasTaggedValue("seam2Component", "scope", "UNSPECIFIED")-»
+		«IF !emHasTaggedValue("seam2Component", "scope", "UNSPECIFIED")-»
 			import org.jboss.seam.annotations.Scope;
 		«ENDIF-»
 	«ENDIF»
-	«IF hasStereotype("seam2Converter")-»
+	«IF emHasStereotypeAssignment("seam2Converter")-»
 		import javax.faces.converter.Converter;
 	«ENDIF»
 «ENDDEFINE»

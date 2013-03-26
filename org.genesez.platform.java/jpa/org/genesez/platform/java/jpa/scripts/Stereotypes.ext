@@ -8,8 +8,9 @@ import gcore;
  * @date	2008-09-05
  */
 
-extension org::genesez::platform::common::AccessHelper;
-extension org::genesez::platform::common::m2m::CreateTemplate;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
 
 
 /**
@@ -78,7 +79,7 @@ MElement addColumnStereotype(MAttribute this, String updatable, String insertabl
  *
  */
 MStereotype makeColumnStereotype(MProperty container) :
-	let s = createStereotype(container.classifier.package().getModel(), "jpaColumn", "jpaColumn") :
+	let s = createStereotype(container.classifier.navPackage().navModel(), "jpaColumn", "jpaColumn") :
 		s.property.add(createTag(s, "updatable", "String")) ->
 		s.property.add(createTag(s, "insertable", "String")) ->
 		s.property.add(createTag(s, "name", "String")) ->
@@ -128,7 +129,7 @@ Void addAssociationStereotype(MProperty this, String associationType, String tar
  *
  */
 MStereotype makeAssociationStereotype(MProperty container) :
-	let s = createStereotype(container.classifier.package().getModel(), "jpaAssociation", "jpaAssociation") :
+	let s = createStereotype(container.classifier.navPackage().navModel(), "jpaAssociation", "jpaAssociation") :
 		s.property.add(createTag(s, "type", "jpaAssociationType")) ->
 		s.property.add(createTag(s, "cascade", "jpaCascadeType")) ->
 		s.property.add(createTag(s, "fetch", "jpaFetchType")) ->
@@ -158,7 +159,7 @@ Void addOptimisticLockingStereotype(MProperty this) :
  *
  */
 MStereotype makeOptimisticLockingStereotype(MProperty container) :
-	let s = createStereotype(container.classifier.package().getModel(), "jpaOptimisticLocking", "jpaOptimisticLocking") :
+	let s = createStereotype(container.classifier.navPackage().navModel(), "jpaOptimisticLocking", "jpaOptimisticLocking") :
 		s;
 
 /**
@@ -190,7 +191,7 @@ Void addPrimaryKeyStereotype(MProperty this, String generatedValue, String embed
  *
  */
 MStereotype makePrimaryKeyStereotype(MProperty container) :
-	let s = createStereotype(container.classifier.package().getModel(), "jpaPrimaryKey", "jpaPrimaryKey") :
+	let s = createStereotype(container.classifier.navPackage().navModel(), "jpaPrimaryKey", "jpaPrimaryKey") :
 		s.property.add(createTag(s, "generatedValue", "Boolean")) ->
 		s.property.add(createTag(s, "embeddedId", "Boolean")) ->
 		s.property.add(createTag(s, "strategy", "String")) ->
@@ -219,7 +220,7 @@ Void addInheritanceStereotype(MClass this, String strategy) :
  *
  */
 MStereotype makeInheritanceStereotype(MClass container) :
-	let s = createStereotype(container.package().getModel(), "jpaInheritance", "jpaInheritance") :
+	let s = createStereotype(container.navPackage().navModel(), "jpaInheritance", "jpaInheritance") :
 		s.property.add(createTag(s, "strategy", "jpaInheritanceType")) ->
 		s;
 	
@@ -251,7 +252,7 @@ Void addDiscriminatorColumnStereotype(MClass this, String columnDefinition, Stri
  *
  */
 MStereotype makeDiscriminatorColumnStereotype(MClass container) :
-	let s = createStereotype(container.package().getModel(), "jpaDiscriminatorColumn", "jpaDiscriminatorColumn") :
+	let s = createStereotype(container.navPackage().navModel(), "jpaDiscriminatorColumn", "jpaDiscriminatorColumn") :
 		s.property.add(createTag(s, "columnDefinition", "String")) ->
 		s.property.add(createTag(s, "discriminatorType", "jpaDiscriminatorType")) ->
 		s.property.add(createTag(s, "length", "String")) ->
@@ -280,7 +281,7 @@ Void addDiscriminatorValueStereotype(MClass this, String value) :
  *
  */
 MStereotype makeDiscriminatorValueStereotype(MClass container) :
-	let s = createStereotype(container.package().getModel(), "jpaDiscriminatorValue", "jpaDiscriminatorValue") :
+	let s = createStereotype(container.navPackage().navModel(), "jpaDiscriminatorValue", "jpaDiscriminatorValue") :
 		s.property.add(createTag(s, "columnDefinition", "String"));
 
 /**
@@ -310,7 +311,7 @@ Void addPersistenceUnitStereotype(MAttribute this, String name, String unitName)
  *
  */
 MStereotype makePersistenceUnitStereotype(MAttribute container) :
-	let s = createStereotype(container.classifier.package().getModel(), "jpaPersistenceUnit", "jpaPersistenceUnit") :
+	let s = createStereotype(container.classifier.navPackage().navModel(), "jpaPersistenceUnit", "jpaPersistenceUnit") :
 		s.property.add(createTag(s, "unitName", "String")) ->
 		s.property.add(createTag(s, "name", "String")) ->
 		s;
@@ -345,7 +346,7 @@ Void addPersistenceContextStereotype(MAttribute this, String type, String name, 
  *
  */
 MStereotype makePersistenceContextStereotype(MAttribute container) :
-	let s = createStereotype(container.classifier.package().getModel(), "jpaPersistenceContext", "jpaPersistenceContext") :
+	let s = createStereotype(container.classifier.navPackage().navModel(), "jpaPersistenceContext", "jpaPersistenceContext") :
 		s.property.add(createTag(s, "type", "jpaPersistenceContextType")) ->
 		s.property.add(createTag(s, "unitName", "String")) ->
 		s.property.add(createTag(s, "name", "String")) ->
@@ -384,7 +385,7 @@ Void addPersistentEntityStereotype(MClass this, String name, Boolean optimisticL
  *
  */
 MStereotype makePersistentEntityStereotype(MClass container) :
-	let s = createStereotype(container.package().getModel(), "jpaPersistentEntity", "jpaPersistentEntity") :
+	let s = createStereotype(container.navPackage().navModel(), "jpaPersistentEntity", "jpaPersistentEntity") :
 		s.property.add(createTag(s, "name", "String")) ->
 		s.property.add(createTag(s, "optimisticLocking", "boolean")) ->
 		s.property.add(createTag(s, "tableName", "String")) ->

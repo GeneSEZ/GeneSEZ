@@ -1,7 +1,7 @@
 import gcore;
 
 extension org::genesez::util::logging::Logging;
-extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::platform::common::m2m::CreateBasics;
 	
 /**
@@ -14,7 +14,7 @@ extension org::genesez::platform::common::m2m::CreateBasics;
   *
   */
 Void checkAccessorForJWSStereotypes(MAttribute this) :
-	!this.hasStereotype("accessor") && 
-	this.hasStereotype("jwsWebServiceRef")
+	!this.emHasStereotypeAssignment("accessor") && 
+	this.emHasStereotypeAssignment("jwsWebServiceRef")
 		? createAccessor("false", "false")
 		: "";

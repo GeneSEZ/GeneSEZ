@@ -9,10 +9,13 @@
 import gcore;
 
 extension org::genesez::util::logging::Logging;
-extension org::genesez::platform::common::AccessHelper;
-extension org::genesez::platform::common::m2m::CreateTemplate;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::CloneElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
 extension org::genesez::platform::common::m2m::MakeElement;
-extension org::genesez::platform::java::scripts::Naming;
+extension org::genesez::platform::java::util::Naming;
+extension org::genesez::platform::java::util::JavaTypes;
 extension org::genesez::platform::java::cdi::scripts::Functionality;
 
 Void cdiClassModifications(MClass this) :
@@ -26,14 +29,14 @@ Void cdiClassModifications(MClass this) :
 Void addClassIsSerializable(MClass this) :
     (this.realization.select(e| e != null && e.name().matches("Serializable")).isEmpty)
     && (   
-           this.hasStereotype("cdiApplicationScoped")
-        || this.hasStereotype("cdiSessionScoped")
-        || this.hasStereotype("cdiRequestScoped")
-        || this.hasStereotype("cdiConversationScoped")
-        || this.hasStereotype("cdiDecorator")
+           this.emHasStereotypeAssignment("cdiApplicationScoped")
+        || this.emHasStereotypeAssignment("cdiSessionScoped")
+        || this.emHasStereotypeAssignment("cdiRequestScoped")
+        || this.emHasStereotypeAssignment("cdiConversationScoped")
+        || this.emHasStereotypeAssignment("cdiDecorator")
         )
     ? (
-        this.realization.add(createExternal(this.model(), "Serializable"))
+        this.realization.add( this.navModel().typeSerializable() )
       )
     : Void;
 
@@ -42,7 +45,7 @@ Void addClassIsSerializable(MClass this) :
  * Create the Home Class and the Home Interface
  */
 Void addEntityHomeClass(MClass this) :
-    this.hasStereotype("cdiExtEntityHome")
+    this.emHasStereotypeAssignment("cdiExtEntityHome")
     ? (
         //this.createEntityHomeClass(this.createEntityHomeInterface())
         this.createEntityHomeClass()
@@ -57,11 +60,11 @@ Void addEntityHomeClass(MClass this) :
  * @param entityClass the entity class as base class for the home class
  */
 MInterface createEntityHomeInterface(MClass entityClass) :
-    let homeInterface = createInterface(entityClass.package(), entityClass.xmiGuid+"_Interface_"+entityClass.name+"Home", entityClass.name+"Home") :
+    let homeInterface = createInterface(entityClass.navPackage(), entityClass.xmiGuid+"_Interface_"+entityClass.name+"Home", entityClass.name+"Home") :
     (
         entityClass.operation.select(e|e.isConstructor() == false).cloneOperation(homeInterface) ->
         // extends IHomeBean<..., EntityManager>
-        homeInterface.generalization.add(createExternal(entityClass.model(), "IHomeBean<"+entityClass.name+", EntityManager>")) ->
+        homeInterface.generalization.add( entityClass.navModel().ensureExternalTypeExistence("IHomeBean<"+entityClass.name+", EntityManager>", "IHomeBean<"+entityClass.name+", EntityManager>") ) ->
         homeInterface
     );
    
@@ -72,19 +75,19 @@ MInterface createEntityHomeInterface(MClass entityClass) :
  * @param entityClass the entity class as base class for the home class
  */
 create MClass createEntityHomeClass(MClass entityClass) :
-    let homeClass = createClass(entityClass.package(), entityClass.xmiGuid+"_"+entityClass.name+"Home", entityClass.name+"Home") :
+    let homeClass = createClass(entityClass.navPackage(), entityClass.xmiGuid+"_"+entityClass.name+"Home", entityClass.name+"Home") :
     (
         // Public
         homeClass.setVisibility("public") ->
         // extends HomeBean
-        homeClass.generalization.add(createExternal(entityClass.model(), "HomeBean<"+entityClass.name+", EntityManager>")) ->
+        homeClass.generalization.add( entityClass.navModel().ensureExternalTypeExistence("HomeBean<"+entityClass.name+", EntityManager>", "HomeBean<"+entityClass.name+", EntityManager>") ) ->
         
         // Is conversation scoped and needs @Named annotation
-        homeClass.stereotype.add(createStereotype(entityClass.model(), "cdiConversationScoped", "cdiConversationScoped")) ->
-        homeClass.stereotype.add(createStereotype(entityClass.model(), "di4javaNamed", "di4javaNamed")) ->
+        homeClass.stereotype.add(createStereotype(entityClass.navModel(), "cdiConversationScoped", "cdiConversationScoped")) ->
+        homeClass.stereotype.add(createStereotype(entityClass.navModel(), "di4javaNamed", "di4javaNamed")) ->
         
         // also needs to be a session bean to use em and managed transactions etc.
-        homeClass.addSessionBeanStereotype(entityClass.model()) ->
+        homeClass.addSessionBeanStereotype(entityClass.navModel()) ->
         homeClass.addEntityManager(entityClass) ->
         
         // associations will be generated as injected fields for other home classes
@@ -93,7 +96,7 @@ create MClass createEntityHomeClass(MClass entityClass) :
         // need some general operations
         homeClass.addListOperations(entityClass) ->
         ( let 	o = homeClass.makeOperation("getEntityManager", homeClass.name + ".getEntityManager", "public") :
-        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", createExternal( o.model(), "EntityManager" ) ) )
+        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", o.navModel().typeEntityManager() ) )
 		) ->
 		homeClass.makeOperation("wire", "public") ->
         homeClass.addEjbRemoveOperation()
@@ -112,9 +115,9 @@ create MClass createEntityHomeClass(MClass entityClass) :
  *  @param  container    instance of MClassifier
 
 Void addEntityHomeRealizationList(MClassifier this, MClassifier entityClass): 
-    (entityClass.getTaggedValue("cdiExtEntityHome", "realizations").length > 0)
+    (entityClass.emGetTaggedValue("cdiExtEntityHome", "realizations").length > 0)
     ? (   
-        entityClass.getTaggedValue("cdiExtEntityHome", "realizations").split(",").addEntityHomeRealization(this, entityClass)
+        entityClass.emGetTaggedValue("cdiExtEntityHome", "realizations").split(",").addEntityHomeRealization(this, entityClass)
       )
     : Void;
  */
@@ -126,7 +129,7 @@ Void addEntityHomeRealizationList(MClassifier this, MClassifier entityClass):
  *  @param  container    instance of MClassifier
  
 Void addEntityHomeRealization(String this, MClassifier homeClass, MClassifier entityClass): 
-    (let i = entityClass.model().allClassifiers().selectFirst(e|e.metaType == MInterface && e.name().matches(this.trim())) :
+    (let i = entityClass.navModel().allNestedClassifiers().selectFirst(e|e.metaType == MInterface && e.name().matches(this.trim())) :
     (
         (i != null)
         ? ( 
@@ -149,7 +152,7 @@ Void addSessionBeanStereotype(MClassifier this, MModel container) :
         createTaggedValue(this, createTag(s, "stateful", "boolean"), "true");
 
 MStereotype makeSessionBeanStereotype(MClassifier container) :
-    let s = createStereotype(container.package().getModel(), "ejb3SessionBean", "ejb3SessionBean") :
+    let s = createStereotype(container.navPackage().navModel(), "ejb3SessionBean", "ejb3SessionBean") :
         s.property.add(createTag(s, "stateful", "boolean")) ->
         s;
     
@@ -159,11 +162,11 @@ MStereotype makeSessionBeanStereotype(MClassifier container) :
  *  @param  entityClass  instance of MClassifier
  */    
 Void addEntityManager(MClassifier this, MClassifier entityClass): 
-    entityClass.hasTaggedValue("cdiExtEntityHome", "createDefaultEntityManager", "true") 
+    entityClass.emHasTaggedValue("cdiExtEntityHome", "createDefaultEntityManager", "true") 
     ? (
         let a = this.addAttribute("entityManager", "EntityManager", "private", 1) :
-            a.stereotype.add(createStereotype(entityClass.model(), "di4javaInject", "di4javaInject")) -> 
-            a.stereotype.add(createStereotype(entityClass.model(), "jpaPersistenceContext", "jpaPersistenceContext"))
+            a.stereotype.add(createStereotype(entityClass.navModel(), "di4javaInject", "di4javaInject")) -> 
+            a.stereotype.add(createStereotype(entityClass.navModel(), "jpaPersistenceContext", "jpaPersistenceContext"))
       )  
     : Void;
     
@@ -174,10 +177,10 @@ Void addEntityManager(MClassifier this, MClassifier entityClass):
  */    
 Void addListOperations(MClassifier this, MClassifier entityClass):
 	( let 	o = makeOperation("get"+entityClass.name+"List", entityClass.name+".get"+entityClass.name+"List", "public") :
-        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", createExternal( o.model(), "List<" + entityClass.name + ">" ) ) )
+        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", this.navModel().typeListFor(entityClass.name) ) )
 	) -> 
 	( let 	o = makeOperation("get"+entityClass.name+"ListCount", entityClass.name + ".get"+entityClass.name+"ListCount", "public") :
-        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", createPrimitiveType( o.model(), "long" ) ) )
+        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", createPrimitiveType( o.navModel(), "long" ) ) )
 	);    
 
 /**
@@ -188,7 +191,7 @@ Void addListOperations(MClassifier this, MClassifier entityClass):
  */    
 Void addEjbRemoveOperation(MClassifier this): 
     let o = makeOperation(this, "removeEjb", "public"): (
-        o.stereotype.add(createStereotype(this.model(), "ejb3Remove", "ejb3Remove"))    
+        o.stereotype.add(createStereotype(this.navModel(), "ejb3Remove", "ejb3Remove"))    
     );
         
 /**
@@ -199,13 +202,13 @@ Void addEjbRemoveOperation(MClassifier this):
  */
 Void createAssociationInjectionProperty(MAssociationRole role, MClass homeClass) :
 
-    let a = addAttribute(homeClass, role.type().name().toLowerCase()+"Home", role.type().name()+"Home", "private", 1):
+    let a = addAttribute(homeClass, role.type.name().toLowerCase()+"Home", role.type.name()+"Home", "private", 1):
         a.setType(role.type) ->
-        a.stereotype.add(createStereotype(homeClass.model(), "di4javaInject", "di4javaInject")) ->
-        a.stereotype.add(createStereotype(homeClass.model(), "cdiExtEntityHome", "cdiExtEntityHome")) ->
+        a.stereotype.add(createStereotype(homeClass.navModel(), "di4javaInject", "di4javaInject")) ->
+        a.stereotype.add(createStereotype(homeClass.navModel(), "cdiExtEntityHome", "cdiExtEntityHome")) ->
     (role.multiplicity != 1) 
-        ? ( let	o = homeClass.makeOperation("get"+role.type().name()+"List", homeClass.name+".get"+role.type().name()+"List", "public") :
-        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", createExternal( o.model(), "List<"+role.type().name()+">" ) ) ) )
+        ? ( let	o = homeClass.makeOperation("get"+role.type.name()+"List", homeClass.name+".get"+role.type.name()+"List", "public") :
+        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", o.navModel().typeListFor(role.type().name()) ) ) )
         : Void;
     
 /**
@@ -220,9 +223,7 @@ Void createAssociationInjectionProperty(MAssociationRole role, MClass homeClass)
 MAttribute addAttribute(MClassifier container, String name, String type, String visibility, int multiplicity) :
     let a = createAttribute(container, container.xmiGuid+"_"+name, name) :
         a.processAttribute("", false, false) ->
-        a.setMultiplicity(multiplicity) ->
-        a.setLowerBoundMultiplicity(0) ->
-        a.setUpperBoundMultiplicity(multiplicity) ->
+        a.setMultiplicity( createMultiplicity( 0, multiplicity ) ) ->
         a.setVisibility(visibility) ->
-        a.setType(createExternal(container.model(), type)) ->        
+        a.setType( createExternal(container.navModel(), type) ) ->        
         a;

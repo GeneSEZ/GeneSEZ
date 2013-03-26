@@ -1,7 +1,9 @@
 import gcore;
 
-extension org::genesez::platform::common::AccessHelper;
-extension org::genesez::platform::common::m2m::CreateTemplate;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
+extension org::genesez::platform::java::util::JavaTypes;
 extension org::genesez::platform::java::java5::scripts::Attribute;
 
 	
@@ -15,24 +17,24 @@ Void addGetterAndSetterOperations(MInterface this) :
 			: "";
 		
 MClass getSessionBeanSeamComponent(MInterface this) :
-	this.hasStereotype("ejb3Local") || this.hasStereotype("ejb3Remote")
-		? allClassifiers(this.model()).typeSelect(MClass).selectFirst(e|e.hasStereotype("ejb3SessionBean") && e.hasStereotype("seam2Component") && e.realization.contains(this))
+	this.emHasStereotypeAssignment("ejb3Local") || this.emHasStereotypeAssignment("ejb3Remote")
+		? allNestedClassifiers(this.navModel()).typeSelect(MClass).selectFirst(e|e.emHasStereotypeAssignment("ejb3SessionBean") && e.emHasStereotypeAssignment("seam2Component") && e.realization.contains(this))
 		: null;
 
 MClassifier addConverter(MClassifier this) :
-	this.hasStereotype("seam2Converter")  
-	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.specification == "Converter") 
-		? createExternal(this.model(), "Converter")
+	this.emHasStereotypeAssignment("seam2Converter")  
+	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.name == "Converter") 
+		? this.navModel().typeConverter()
 		: "";
 		
 MClassifier addValidator(MClassifier this) :
-	this.hasStereotype("seam2Validator")  
-	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.specification == "Validator") 
-		? createExternal(this.model(), "Validator")
+	this.emHasStereotypeAssignment("seam2Validator")  
+	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.name == "Validator") 
+		? this.navModel().typeValidator()
 		: "";
 		
 MClassifier addFilter(MClassifier this) :
-	this.hasStereotype("seam2ServletContainerIntegration")  
-	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.specification == "Filter") 
-		? createExternal(this.model(), "Filter")
+	this.emHasStereotypeAssignment("seam2ServletContainerIntegration")  
+	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.name == "Filter") 
+		? this.navModel().typeFilter()
 		: "";

@@ -10,8 +10,9 @@
 // based on genesez meta model
 import gcore;
 
-extension org::genesez::platform::common::AccessHelper;
-extension org::genesez::platform::common::m2m::CreateTemplate;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
 
 /**
  *	function to add an "seam2Packaging" stereotype to a MPackage
@@ -37,7 +38,7 @@ Void addPackagingStereotype(MPackage this, String value, String prefix) :
  *
  */
 MStereotype makePackagingStereotype(MPackage container) :
-	let s = createStereotype(container.model(), "seam2Packaging", "seam2Packaging") :
+	let s = createStereotype(container.navModel(), "seam2Packaging", "seam2Packaging") :
 		s.property.add(createTag(s, "value", "String")) ->
 		s.property.add(createTag(s, "prefix", "String")) ->
 		s;
@@ -68,7 +69,7 @@ Void addFactoryStereotype(MOperation this, String a, String scope, String v) :
  *
  */
 MStereotype makeFactoryStereotype(MOperation container) :
-	let s = createStereotype(container.classifier.model(), "seam2Factory", "seam2Factory") :
+	let s = createStereotype(container.classifier.navModel(), "seam2Factory", "seam2Factory") :
 		s.property.add(createTag(s, "autoCreate", "Boolean")) ->
 		s.property.add(createTag(s, "scope", "seam2ScopeType")) ->
 		s.property.add(createTag(s, "value", "String")) ->
@@ -102,7 +103,7 @@ Void addInjectionStereotype(MAttribute this, String c, String r, String scope, S
  *
  */
 MStereotype makeInjectionStereotype(MAttribute container) :
-	let s = createStereotype(container.classifier.model(), "seam2Injection", "seam2Injection") :
+	let s = createStereotype(container.classifier.navModel(), "seam2Injection", "seam2Injection") :
 		s.property.add(createTag(s, "create", "Boolean")) ->
 		s.property.add(createTag(s, "required", "Boolean")) ->
 		s.property.add(createTag(s, "scope", "seam2ScopeType")) ->
@@ -132,7 +133,7 @@ Void addLoggerStereotype(MAttribute this, String v) :
  *
  */
 MStereotype makeLoggerStereotype(MAttribute container) :
-	let s = createStereotype(container.classifier.model(), "seam2Logger", "seam2Logger") :
+	let s = createStereotype(container.classifier.navModel(), "seam2Logger", "seam2Logger") :
 		s.property.add(createTag(s, "value", "String")) ->
 		s;
 
@@ -161,7 +162,7 @@ Void addLifecycleStereotype(MOperation this, String c, String d) :
  *
  */
 MStereotype makeLifecycleStereotype(MOperation container) :
-	let s = createStereotype(container.classifier.model(), "seam2Lifecycle", "seam2Lifecycle") :
+	let s = createStereotype(container.classifier.navModel(), "seam2Lifecycle", "seam2Lifecycle") :
 		s.property.add(createTag(s, "create", "Boolean")) ->
 		s.property.add(createTag(s, "destroy", "Boolean")) ->
 		s;
@@ -201,7 +202,7 @@ Void addComponentStereotype(MClass this, String name, String home, String query)
  *
  */
 MStereotype makeComponentStereotype(MClass container) :
-	let s = createStereotype(container.model(), "seam2Component", "seam2Component") :
+	let s = createStereotype(container.navModel(), "seam2Component", "seam2Component") :
 		s.property.add(createTag(s, "autoCreate", "Boolean")) ->
 		s.property.add(createTag(s, "byPassInterceptor", "Boolean")) ->
 		s.property.add(createTag(s, "conevrsational", "Boolean")) ->

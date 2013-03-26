@@ -9,8 +9,9 @@ import gcore;
  * @date	2008-09-05
  */
 
-extension org::genesez::platform::common::AccessHelper;
-extension org::genesez::platform::common::m2m::CreateTemplate;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
 extension org::genesez::platform::common::m2m::MakeElement;
 
 /**
@@ -45,7 +46,7 @@ Void addSessionBeanStereotype(MClassifier this, String name, String description,
  *
  */
 MStereotype makeSessionBeanStereotype(MClassifier container) :
-	let s = createStereotype(container.package().getModel(), "ejb3SessionBean", "ejb3SessionBean") :
+	let s = createStereotype(container.navPackage().navModel(), "ejb3SessionBean", "ejb3SessionBean") :
 		s.property.add(createTag(s, "name", "String")) ->
 		s.property.add(createTag(s, "description", "String")) ->
 		s.property.add(createTag(s, "mappedName", "String")) ->
@@ -76,7 +77,7 @@ Void addRemoteStereotype(MClassifier this, String name) :
  *
  */
 MStereotype makeRemoteStereotype(MClassifier container) :
-	let s = createStereotype(container.package().getModel(), "ejb3Remote", "ejb3Remote") :
+	let s = createStereotype(container.navPackage().navModel(), "ejb3Remote", "ejb3Remote") :
 		s.property.add(createTag(s, "name", "String")) ->
 		s;
 
@@ -102,7 +103,7 @@ Void addLocalStereotype(MClassifier this, String name) :
  *
  */
 MStereotype makeLocalStereotype(MClassifier container) :
-	let s = createStereotype(container.package().getModel(), "ejb3Local", "ejb3Local") :
+	let s = createStereotype(container.navPackage().navModel(), "ejb3Local", "ejb3Local") :
 		s.property.add(createTag(s, "name", "String")) ->
 		s;
 
@@ -127,7 +128,7 @@ Void addTimerStereotype(MOperation this) :
  *
  */
 MStereotype makeTimerStereotype(MOperation container) :
-	makeStereotype(container.classifier.package().getModel(), "ejb3Timer", "ejb3Timer");
+	makeStereotype(container.classifier.navPackage().navModel(), "ejb3Timer", "ejb3Timer");
 
 /**
  *	function to add an "ejb3ActivationConfigProperty" stereotype to a MClass
@@ -153,7 +154,7 @@ Void addActivationConfigPropertyStereotype(MClass this, List[String] names, List
  *
  */
 MStereotype makeActivationConfigPropertyStereotype(MClass container) :
-	let s = createStereotype(container.package().getModel(), "ejb3ActivationConfigProperty", "ejb3ActivationConfigProperty") :
+	let s = createStereotype(container.navPackage().navModel(), "ejb3ActivationConfigProperty", "ejb3ActivationConfigProperty") :
 		s.property.add(createTag(s, "propertyName", "String")) ->
 		s.property.add(createTag(s, "propertyValue", "String"))->
 		s;
@@ -186,7 +187,7 @@ Void addResourceStereotype(MAttribute this, String name, String mappedName, Stri
  *
  */
 MStereotype makeResourceStereotype(MAttribute container) :
-	let s = createStereotype(container.classifier.package().getModel(), "ejb3Resource", "ejb3Resource") :
+	let s = createStereotype(container.classifier.navPackage().navModel(), "ejb3Resource", "ejb3Resource") :
 		s.property.add(createTag(s, "name", "String")) ->
 		s.property.add(createTag(s, "description", "String")) ->
 		s.property.add(createTag(s, "mappedName", "String")) ->
@@ -221,7 +222,7 @@ Void addEJBStereotype(MAttribute this, String name, String beanInterface, String
  *
  */
 MStereotype makeEJBStereotype(MAttribute container) :
-	let s = createStereotype(container.classifier.package().getModel(), "ejb3EJB", "ejb3EJB") :
+	let s = createStereotype(container.classifier.navPackage().navModel(), "ejb3EJB", "ejb3EJB") :
 		s.property.add(createTag(s, "name", "String")) ->
 		s.property.add(createTag(s, "beanInterface", "String")) ->
 		s.property.add(createTag(s, "beanName", "String")) ->

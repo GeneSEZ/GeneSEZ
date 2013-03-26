@@ -16,14 +16,14 @@
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::Conversion»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
-«EXTENSION org::genesez::platform::common::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
 
-«EXTENSION org::genesez::platform::java::scripts::Type»
-«EXTENSION org::genesez::platform::java::scripts::Naming»
-«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
 «EXTENSION org::genesez::platform::java::seam2::scripts::Operation»
 «EXTENSION org::genesez::platform::java::seam2::scripts::Interface»
 «EXTENSION org::genesez::platform::java::seam2::scripts::Naming»
@@ -38,7 +38,7 @@
 «REM»
 	annotations for classes
 «ENDREM»
-«AROUND org::genesez::platform::java::java5::templates::Class::_Annotation FOR MClass-»
+«AROUND org::genesez::platform::java::m2t::Class::_Annotation FOR MClass-»
 	«EXPAND Class::Annotation-»
 	«targetDef.proceed()-»
 «ENDAROUND»
@@ -46,7 +46,7 @@
 «REM»
 	annotations for operations
 «ENDREM»
-«AROUND org::genesez::platform::java::java5::templates::Operation::_Annotation FOR MOperation-»
+«AROUND org::genesez::platform::java::m2t::Operation::_Annotation FOR MOperation-»
 	«EXPAND Operation::Annotation-»
 	«targetDef.proceed()-»
 «ENDAROUND»
@@ -55,11 +55,11 @@
 	do not generate TODO marker and UnsupportedOperationException
 	inside of protected regions of create and destroy operations
 «ENDREM»
-«AROUND org::genesez::platform::java::java5::templates::Operation::_ImplementationBody FOR MOperation -»
-	«IF hasStereotype("http://www.genesez.org/java/seam2/CreateOperation") -»
+«AROUND org::genesez::platform::java::m2t::Operation::_ImplementationBody FOR MOperation -»
+	«IF emHasStereotypeAssignment("http://www.genesez.org/java/seam2/CreateOperation") -»
 		«PROTECT CSTART '/* ' CEND ' */' ID ("java.implementation." + xmiGuid)»
 		«ENDPROTECT»
-	«ELSEIF hasStereotype("http://www.genesez.org/java/seam2/DestroyOperation")-»
+	«ELSEIF emHasStereotypeAssignment("http://www.genesez.org/java/seam2/DestroyOperation")-»
 		«PROTECT CSTART '/* ' CEND ' */' ID ("java.implementation." + xmiGuid)»
 		«ENDPROTECT»
 	«ELSE-»
@@ -70,7 +70,7 @@
 «REM»
 	annotations for attributes
 «ENDREM»
-«AROUND org::genesez::platform::java::java5::templates::Attribute::_Annotation FOR MAttribute-»
+«AROUND org::genesez::platform::java::m2t::Attribute::_Annotation FOR MAttribute-»
 	«EXPAND Attribute::Annotation-»
 	«targetDef.proceed()-»
 «ENDAROUND»
@@ -78,7 +78,7 @@
 «REM»
 	annotations for interfaces
 «ENDREM»
-«AROUND org::genesez::platform::java::java5::templates::Interface::_Annotation FOR MInterface-»
+«AROUND org::genesez::platform::java::m2t::Interface::_Annotation FOR MInterface-»
 	«EXPAND Interface::Annotation-»
 	«targetDef.proceed()-»
 «ENDAROUND»
@@ -86,7 +86,7 @@
 «REM»
 	annotations for association roles
 «ENDREM»
-«AROUND org::genesez::platform::java::java5::templates::Association::_Annotation FOR MAssociationRole-»
+«AROUND org::genesez::platform::java::m2t::Association::_Annotation FOR MAssociationRole-»
 	«EXPAND Association::Annotation-»
 	«targetDef.proceed()-»
 «ENDAROUND»
@@ -94,7 +94,7 @@
 «REM»
 	import statements
 «ENDREM»
-«AROUND org::genesez::platform::java::java5::templates::Import::_OtherImports FOR MClassifier-»
+«AROUND org::genesez::platform::java::m2t::Import::_OtherImports FOR MClassifier-»
 	«EXPAND Import::ImportStatements-»
 	«targetDef.proceed()-»
 «ENDAROUND»
@@ -102,7 +102,7 @@
 «REM»
 	evaluates the role security stereotypes
 «ENDREM»
-«AROUND org::genesez::platform::java::java5::templates::Interface::_Extension FOR MInterface-»
+«AROUND org::genesez::platform::java::m2t::Interface::_Extension FOR MInterface-»
 	«EXPAND Interface::GetterSetterForSessionBeans-»
 	«targetDef.proceed()-»
 «ENDAROUND» 

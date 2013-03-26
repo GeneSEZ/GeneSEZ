@@ -1,10 +1,12 @@
 import gcore;
 
 extension org::genesez::util::logging::Logging;
-extension org::genesez::platform::common::AccessHelper;
-extension org::genesez::platform::common::m2m::CreateTemplate;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
 extension org::genesez::platform::common::m2m::MakeElement;
-extension org::genesez::platform::java::scripts::Naming;
+extension org::genesez::platform::java::util::Naming;
+extension org::genesez::platform::java::util::JavaTypes;
 extension org::genesez::platform::java::jws::scripts::Stereotypes;
 
 /**
@@ -15,9 +17,9 @@ extension org::genesez::platform::java::jws::scripts::Stereotypes;
  *	@param	this		instance of MClass
  */
 Void checkWebServiceClientSuperClass(MClass this) :
-	hasStereotype("jwsWebServiceClient") 
+	emHasStereotypeAssignment("jwsWebServiceClient") 
 	&& generalization.isEmpty
-		? generalization.add(createExternal(this.model(), "javax.xml.ws.Service")) 
+		? generalization.add( this.navModel().typeService() ) 
 		: "";
 
 /**
@@ -29,14 +31,14 @@ Void checkWebServiceClientSuperClass(MClass this) :
   *
   */
 Void checkWebServiceInterface(MClass this) :
-	hasStereotype("jwsWebService")
+	emHasStereotypeAssignment("jwsWebService")
 		? (
-			let i = realization.typeSelect(MInterface).selectFirst(e|e.hasStereotype("ejb3Remote")) :
+			let i = realization.typeSelect(MInterface).selectFirst(e|e.emHasStereotypeAssignment("ejb3Remote")) :
 			 	i.addWebServiceStereotype(this) ->
-			 	hasStereotype("jwsSOAPBinding") 
+			 	emHasStereotypeAssignment("jwsSOAPBinding") 
 			 		? i.addSOAPBindingStereotype(this)
 			 		: "" ->
-			 	hasStereotype("jwsHandlerChain")
+			 	emHasStereotypeAssignment("jwsHandlerChain")
 			 		? i.addHandlerChainStereotype(this)
 			 		: ""
 		)
@@ -49,7 +51,7 @@ Void checkWebServiceInterface(MClass this) :
   *	@param	this	instance of MClass
   */
 Void checkWebServiceName(MClass this) :
-	!hasUtilizableValue("jwsWebService", "name")
+	!emHasUtilizableTaggedValue("jwsWebService", "name")
 		? setTaggedValue("jwsWebService", "name", this.asTypeName())
 		: "";
 		
@@ -60,7 +62,7 @@ Void checkWebServiceName(MClass this) :
   *	@param	this	instance of MClass
   */
 Void checkWebServiceClientName(MClass this) :
-	!hasUtilizableValue("jwsWebServiceClient", "name")
+	!emHasUtilizableTaggedValue("jwsWebServiceClient", "name")
 		? setTaggedValue("jwsWebServiceClient", "name", this.asTypeName())
 		: "";
 		
@@ -71,35 +73,35 @@ Void checkWebServiceClientName(MClass this) :
   *	@param	this	instance of MClass
   */
 Void checkSOAPHandler(MClass this) :
-	hasStereotype("jwsSOAPHandler")
+	emHasStereotypeAssignment("jwsSOAPHandler")
 		? (
 			!realization.exists(e|e.name().contains("SOAPHandler"))
-				? realization.add(this.model().createExternal("SOAPHandler<SOAPMessageContext>"))
+				? realization.add(this.navModel().typeSOAPHandlerSOAPMessageContext() )
 				: "" ->
 			!operation.exists(e|e.name.matches("handleMessage"))
 				? (
 					let o = makeOperation("handleMessage", "public") :
-						o.parameter.add(o.makeParameter("context", "in", this.model().createExternal("SOAPMessageContext"))) ->
-						o.setReturn(o.makeReturnParameter(createPrimitiveTypeBoolean(this.model())))
+						o.parameter.add(o.makeParameter("context", "in", this.navModel().typeSOAPMessageContext() ) ) ->
+						o.setReturn(o.makeReturnParameter(createPrimitiveTypeBoolean(this.navModel())))
 				)
 				: "" ->
 			!operation.exists(e|e.name.matches("handleFault"))
 				? (
 					let o = makeOperation("handleFault", "public") :
-						o.parameter.add(o.makeParameter("context", "in", this.model().createExternal("SOAPMessageContext"))) ->
-						o.setReturn(o.makeReturnParameter(createPrimitiveTypeBoolean(this.model())))
+						o.parameter.add(o.makeParameter("context", "in", this.navModel().typeSOAPMessageContext() ) ) ->
+						o.setReturn(o.makeReturnParameter(createPrimitiveTypeBoolean(this.navModel())))
 				)
 				: "" ->
 			!operation.exists(e|e.name.matches("getHeaders"))
 				? (
 					let o = makeOperation("getHeaders", "public") :
-						o.setReturn(o.makeReturnParameter(1, -1, true, false, this.model().createExternal("QName")))
+						o.setReturn(o.makeReturnParameter(1, -1, true, false, this.navModel().typeQName() ))
 				)
 				: "" ->
 			!operation.exists(e|e.name.matches("close"))
 				? (
 					let o = makeOperation("close", "public")  :
-						o.parameter.add(o.makeParameter("context", "in", this.model().createExternal("MessageContext")))
+						o.parameter.add(o.makeParameter("context", "in", this.navModel().typeMessageContext() ))
 				)
 				: ""
 		)

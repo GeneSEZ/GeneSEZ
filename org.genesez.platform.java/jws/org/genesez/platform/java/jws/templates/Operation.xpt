@@ -10,13 +10,13 @@
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::Conversion»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
-«EXTENSION org::genesez::platform::java::scripts::Type»
-«EXTENSION org::genesez::platform::java::scripts::Naming»
-«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
 
 «REM»
 	generates annotations for java web services (jws)
@@ -27,20 +27,20 @@
 	and jwsWebParam (only for parameter) necessary
 «ENDREM»
 «DEFINE WebMethod FOR MOperation-»
-	«IF classifier.hasTaggedValue("ejb3SessionBean", "stateful", "false")-»
-		«IF hasStereotype("jwsWebMethod")-»
-			@WebMethod(exclude=«getTaggedValue("jwsWebMethod", "exclude")-»
-			«IF hasUtilizableValue("jwsWebMethod", "operationName")-»
-				, operationName="«getTaggedValue("jwsWebMethod", "operationName")-»"
+	«IF classifier.emHasTaggedValue("ejb3SessionBean", "stateful", "false")-»
+		«IF emHasStereotypeAssignment("jwsWebMethod")-»
+			@WebMethod(exclude=«emGetTaggedValue("jwsWebMethod", "exclude")-»
+			«IF emHasUtilizableTaggedValue("jwsWebMethod", "operationName")-»
+				, operationName="«emGetTaggedValue("jwsWebMethod", "operationName")-»"
 			«ENDIF-»
-			«IF hasUtilizableValue("jwsWebMethod", "action")-»
-				, action="«getTaggedValue("jwsWebMethod", "action")-»"
+			«IF emHasUtilizableTaggedValue("jwsWebMethod", "action")-»
+				, action="«emGetTaggedValue("jwsWebMethod", "action")-»"
 			«ENDIF-»)
 		«ENDIF-»
-		«IF hasTaggedValue("jwsWebMethod", "oneway", "true")-»
+		«IF emHasTaggedValue("jwsWebMethod", "oneway", "true")-»
 			@Oneway
 		«ENDIF-» 			
-		«IF hasStereotype("jwsWebEndpoint")-»
+		«IF emHasStereotypeAssignment("jwsWebEndpoint")-»
 			@WebEndpoint(name="«this.classifier.name-»Port")
 		«ENDIF-»
 	«ENDIF-»
@@ -51,19 +51,19 @@
 	should be seperated in own cartridge
 «ENDREM»
 «DEFINE WebParam FOR MElement-»
-	«IF hasStereotype("jwsWebParam")-»
-		@WebParam(header=«getTaggedValue("jwsWebParam", "header")-»
-		«IF hasUtilizableValue("jwsWebParam", "name")-»
-			, name="«getTaggedValue("jwsWebParam", "name")-»"
+	«IF emHasStereotypeAssignment("jwsWebParam")-»
+		@WebParam(header=«emGetTaggedValue("jwsWebParam", "header")-»
+		«IF emHasUtilizableTaggedValue("jwsWebParam", "name")-»
+			, name="«emGetTaggedValue("jwsWebParam", "name")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("jwsWebParam", "partName")-»
-			, partName="«getTaggedValue("jwsWebParam", "partName")-»"
+		«IF emHasUtilizableTaggedValue("jwsWebParam", "partName")-»
+			, partName="«emGetTaggedValue("jwsWebParam", "partName")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("jwsWebParam", "targetNamespace")-»
-			, targetNamespace="«getTaggedValue("jwsWebParam", "targetNamespace")-»"
+		«IF emHasUtilizableTaggedValue("jwsWebParam", "targetNamespace")-»
+			, targetNamespace="«emGetTaggedValue("jwsWebParam", "targetNamespace")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("jwsWebParam", "mode")-»
-			, mode=WebParam.Mode.«getTaggedValue("jwsWebParam", "mode")-»
+		«IF emHasUtilizableTaggedValue("jwsWebParam", "mode")-»
+			, mode=WebParam.Mode.«emGetTaggedValue("jwsWebParam", "mode")-»
 		«ENDIF-»)
 	«ENDIF-»
 «ENDDEFINE»
@@ -73,16 +73,16 @@
 	should be seperated in own cartridge
 «ENDREM»
 «DEFINE WebResult FOR MOperation-»
-	«IF classifier.hasTaggedValue("ejb3SessionBean", "stateful", "false") && hasStereotype("jwsWebResult")-»
-		@WebResult(header=«getTaggedValue("jwsWebResult", "header")-»
-		«IF hasUtilizableValue("jwsWebResult", "name")-»
-			name="«getTaggedValue("jwsWebResult", "name")-»"
+	«IF classifier.emHasTaggedValue("ejb3SessionBean", "stateful", "false") && emHasStereotypeAssignment("jwsWebResult")-»
+		@WebResult(header=«emGetTaggedValue("jwsWebResult", "header")-»
+		«IF emHasUtilizableTaggedValue("jwsWebResult", "name")-»
+			name="«emGetTaggedValue("jwsWebResult", "name")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("jwsWebResult", "partName")-»
-			partName="«getTaggedValue("jwsWebResult", "partName")-»"
+		«IF emHasUtilizableTaggedValue("jwsWebResult", "partName")-»
+			partName="«emGetTaggedValue("jwsWebResult", "partName")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("jwsWebResult", "targetNamespace")-»
-			targetNamespace="«getTaggedValue("jwsWebResult", "targetNamespace")-»"
+		«IF emHasUtilizableTaggedValue("jwsWebResult", "targetNamespace")-»
+			targetNamespace="«emGetTaggedValue("jwsWebResult", "targetNamespace")-»"
 		«ENDIF-»)
 	«ENDIF»
 «ENDDEFINE»

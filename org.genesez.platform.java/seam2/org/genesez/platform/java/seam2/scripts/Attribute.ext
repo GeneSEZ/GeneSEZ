@@ -1,14 +1,14 @@
 import gcore;
 
 extension org::genesez::util::logging::Logging;
-extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::platform::common::m2m::CreateBasics;
-extension org::genesez::platform::common::m2m::RemoveElement;
+extension org::genesez::metamodel::core::util::RemoveElement;
 extension org::genesez::platform::java::seam2::scripts::Stereotypes;
 extension org::genesez::platform::java::jbv::scripts::Stereotypes;
 extension org::genesez::platform::java::seam2::scripts::Class;
 extension org::genesez::platform::java::seam2::scripts::Naming;
-extension org::genesez::platform::java::scripts::Naming;
+extension org::genesez::platform::java::util::Naming;
 
 /**
   *	if there is a stereotype seam2JasyptEncryption add stereotype
@@ -17,11 +17,11 @@ extension org::genesez::platform::java::scripts::Naming;
   * be done before calling this method)
   */
 Void checkJasyptEncryptionStereotype(MAttribute this) :
-	this.hasStereotype("seam2JasyptEncryption") &&
-	!this.hasStereotype("jhvType")
+	this.emHasStereotypeAssignment("seam2JasyptEncryption") &&
+	!this.emHasStereotypeAssignment("jhvType")
 		? (
 			this.addTypeStereotype("encryptedString", {}, {}) ->
-			this.removeStereotype(this.getStereotype("seam2JasyptEncryption"))
+			this.emRemoveStereotypeAssignment(this.emGetStereotypeAssignment("seam2JasyptEncryption"))
 		)
 		: "";
 
@@ -33,11 +33,11 @@ Void checkJasyptEncryptionStereotype(MAttribute this) :
   *	@param		this		instance of MClass
   */
 Void addAccessorStereotype(MAttribute this) :
-	this.classifier.hasStereotype("seam2Component")
+	this.classifier.emHasStereotypeAssignment("seam2Component")
 		? (
 			//add an accessor for get and set methods if no accessor 
 			//stereotype exists
-			!this.hasStereotype("accessor")
+			!this.emHasStereotypeAssignment("accessor")
 				? createAccessor("true", "true")
 				: ""
 		)
@@ -48,9 +48,9 @@ Void addAccessorStereotype(MAttribute this) :
  *	these stereotypes can create a conflict and "ejb3EJB" will be removed
  */
 Void checkAttributesWithInjectionStereotype(MAttribute this) :
-	this.hasStereotype("seam2Injection")
+	this.emHasStereotypeAssignment("seam2Injection")
 		? (
-			this.hasStereotype("ejb3EJB")
+			this.emHasStereotypeAssignment("ejb3EJB")
 				? this.stereotype.remove(this.stereotype.selectFirst(e|e.name == "ejb3EJB"))
 				: ""
 		)
@@ -63,16 +63,16 @@ Void checkAttributesWithInjectionStereotype(MAttribute this) :
   */
 Void checkAccessStereotypeOfSeamStereotypedAttributes(MAttribute this) : 
 	//check if the attribute has one of the named stereotypes
-	this.hasStereotype("seam2Logger") ||
-	this.hasStereotype("seam2Injection") ||
-	this.hasStereotype("seam2Outjection") ||
-	this.hasStereotype("seam2DataModel") ||
-	this.hasStereotype("seam2Selection") ||
-	this.hasStereotype("seam2SelectionIndex") 
+	this.emHasStereotypeAssignment("seam2Logger") ||
+	this.emHasStereotypeAssignment("seam2Injection") ||
+	this.emHasStereotypeAssignment("seam2Outjection") ||
+	this.emHasStereotypeAssignment("seam2DataModel") ||
+	this.emHasStereotypeAssignment("seam2Selection") ||
+	this.emHasStereotypeAssignment("seam2SelectionIndex") 
 		? (
 			//add an accessor for no get and set methods if no accessor 
 			//stereotype exists
-			!this.hasStereotype("accessor")
+			!this.emHasStereotypeAssignment("accessor")
 				? createAccessor("false", "false")
 				: ""
 		)
@@ -83,10 +83,10 @@ Void checkAccessStereotypeOfSeamStereotypedAttributes(MAttribute this) :
   *	if no such method exists
   */
 Void addFactoryMethodForDataModelAttributes(MAttribute this) :
-	this.hasStereotype("seam2DataModel") && this.hasStereotype("seam2Factory") 
+	this.emHasStereotypeAssignment("seam2DataModel") && this.emHasStereotypeAssignment("seam2Factory") 
 		? (
 			!this.hasFactoryMethodForAttribute()
-				? this.classifier.addFactoryMethod(this.getTaggedValue("seam2Factory", "autoCreate"), this.getTaggedValue("seam2Factory", "scope"), !this.hasUtilizableValue("seam2Factory", "value") ? this.name : this.getTaggedValue("seam2Factory", "value"))
+				? this.classifier.addFactoryMethod(this.emGetTaggedValue("seam2Factory", "autoCreate"), this.emGetTaggedValue("seam2Factory", "scope"), !this.emHasUtilizableTaggedValue("seam2Factory", "value") ? this.name : this.emGetTaggedValue("seam2Factory", "value"))
 				: logInfo("There is already a factory method for the attribute "+this.name.asTypeName()+" in class "+this.classifier.name.asTypeName()+". Stereotype 'seam2Factory' will be ignored.")
 		)
 		: "";
@@ -96,7 +96,7 @@ Void addFactoryMethodForDataModelAttributes(MAttribute this) :
   * check if there is a factory method for this attribute
   */
 Boolean hasFactoryMethodForAttribute(MAttribute this) :
-	this.classifier.operation.exists(e|e.hasTaggedValue("seam2Factory", "value", this.name))
+	this.classifier.operation.exists(e|e.emHasTaggedValue("seam2Factory", "value", this.name))
 		? true
 		: false;
 
@@ -107,21 +107,21 @@ Boolean hasFactoryMethodForAttribute(MAttribute this) :
   */
 Void addDataModelValue(MAttribute this) :
 	/*warn(this.name.asTypeName()+":") ->
-	warn("DataModel-Value (vorher): "+this.getTaggedValue("seam2DataModel", "value")) ->
-	warn("Boolscher Wert: "+this.hasStereotype("seam2DataModel")+", "+!this.hasUtilizableValue("seam2DataModel", "value")+": "+(this.hasStereotype("seam2DataModel") && !this.hasUtilizableValue("seam2DataModel", "value"))) ->*/
-	this.hasStereotype("seam2DataModel") && !this.hasUtilizableValue("seam2DataModel", "value") 
+	warn("DataModel-Value (vorher): "+this.emGetTaggedValue("seam2DataModel", "value")) ->
+	warn("Boolscher Wert: "+this.emHasStereotypeAssignment("seam2DataModel")+", "+!this.emHasUtilizableTaggedValue("seam2DataModel", "value")+": "+(this.emHasStereotypeAssignment("seam2DataModel") && !this.emHasUtilizableTaggedValue("seam2DataModel", "value"))) ->*/
+	this.emHasStereotypeAssignment("seam2DataModel") && !this.emHasUtilizableTaggedValue("seam2DataModel", "value") 
 		? ( 
 			this.setTaggedValue("seam2DataModel", "value", this.name.asTypeName())
 		)
 		: "" ;/*->
-	warn("DataModel-Value (nachher): "+this.getTaggedValue("seam2DataModel", "value"));*/
+	warn("DataModel-Value (nachher): "+this.emGetTaggedValue("seam2DataModel", "value"));*/
 
 /**
   *	use attribute name for value of tagged value "value" of stereotype "seam2Selection" if no value is available
   *	attribute name has to have the format: selected<NameOfDataModelAttributeInSingular>
   */
 Void addDataModelSelectionValue(MAttribute this) : 
-	this.hasStereotype("seam2Selection") && !this.hasUtilizableValue("seam2Selection", "value") 
+	this.emHasStereotypeAssignment("seam2Selection") && !this.emHasUtilizableTaggedValue("seam2Selection", "value") 
 		? this.setTaggedValue("seam2Selection", "value", this.name.asTypeName().subString(8, this.name.length).toFirstLower()+"s")
 		: "";
 
@@ -130,7 +130,7 @@ Void addDataModelSelectionValue(MAttribute this) :
   *	attribute name has to have the format: selected<NameOfDataModelAttributeInSingular>Index
   */
 Void addDataModelSelectionIndexValue(MAttribute this) :
-	this.hasStereotype("seam2SelectionIndex") && !this.hasUtilizableValue("seam2SelectionIndex", "value") 
+	this.emHasStereotypeAssignment("seam2SelectionIndex") && !this.emHasUtilizableTaggedValue("seam2SelectionIndex", "value") 
 		? this.setTaggedValue("seam2SelectionIndex", "value", this.name.asTypeName().subString(8, this.name.length-5).toFirstLower()+"s")
 		: "";
 	
@@ -143,13 +143,13 @@ Void addDataModelSelectionIndexValue(MAttribute this) :
   *	
   */
 Void setupSeamManagedPersistence(MAttribute this) :
-	this.hasStereotype("jpaPersistenceContext") && 
-	this.classifier.hasTaggedValue("seam2Component", "seamPersistence", "true") &&
-	!this.hasStereotype("seam2Injection")
+	this.emHasStereotypeAssignment("jpaPersistenceContext") && 
+	this.classifier.emHasTaggedValue("seam2Component", "seamPersistence", "true") &&
+	!this.emHasStereotypeAssignment("seam2Injection")
 	? (
 		this.addInjectionStereotype("false", "true", "UNSPECIFIED", "") ->
-		removeStereotype(getStereotype("jpaPersistenceContext")) ->
-		!this.hasStereotype("accessor")
+		emRemoveStereotypeAssignment(emGetStereotypeAssignment("jpaPersistenceContext")) ->
+		!this.emHasStereotypeAssignment("accessor")
 			? this.createAccessor("false", "false")
 			: ""
 	)
@@ -163,7 +163,7 @@ Void checkLogger(MAttribute this) :
 	(this.type.asTypeName().matches("Log") 
 	|| this.type.asTypeName().matches("org.jboss.seam.log.Log")) 
 	&& this.name.matches("logger") &&
-	!this.hasStereotype("seam2Logger")
+	!this.emHasStereotypeAssignment("seam2Logger")
 		? this.addLoggerStereotype("")
 		: "";
 		
@@ -173,7 +173,7 @@ Void checkLogger(MAttribute this) :
   */
 Void checkIdentity(MAttribute this) :
 	this.type.asTypeName().matches("Identity") && this.name.matches("identity") &&
-	!this.hasStereotype("seam2Injection")
+	!this.emHasStereotypeAssignment("seam2Injection")
 		? this.addInjectionStereotype("false", "true", "UNSPECIFIED", "")
 		: "";
 		
@@ -183,7 +183,7 @@ Void checkIdentity(MAttribute this) :
   */
 Void checkFacesMessages(MAttribute this) :
 	this.type.asTypeName().matches("FacesMessages") && this.name.matches("facesMessages") &&
-	!this.hasStereotype("seam2Injection")
+	!this.emHasStereotypeAssignment("seam2Injection")
 		? this.addInjectionStereotype("false", "true", "UNSPECIFIED", "")
 		: "";
 		
@@ -193,7 +193,7 @@ Void checkFacesMessages(MAttribute this) :
   */
 Void checkEvents(MAttribute this) :
 	this.type.asTypeName().matches("Events") && this.name.matches("events") &&
-	!this.hasStereotype("seam2Injection")
+	!this.emHasStereotypeAssignment("seam2Injection")
 		? this.addInjectionStereotype("false", "true", "UNSPECIFIED", "")
 		: "";
 		
@@ -203,6 +203,6 @@ Void checkEvents(MAttribute this) :
   */
 Void checkCredentials(MAttribute this) :
 	this.type.asTypeName().matches("Credentials") && this.name.matches("credentials") &&
-	!this.hasStereotype("seam2Injection")
+	!this.emHasStereotypeAssignment("seam2Injection")
 		? this.addInjectionStereotype("false", "true", "UNSPECIFIED", "")
 		: "";

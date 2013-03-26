@@ -1,10 +1,9 @@
 import gcore;
 
 extension org::genesez::util::logging::Logging;
-extension org::genesez::platform::common::AccessHelper;
-extension org::genesez::platform::common::m2m::CreateTemplate;
-extension org::genesez::platform::common::m2m::CreateBasics;
-extension org::genesez::platform::java::scripts::Naming;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::platform::java::util::Naming;
 extension org::genesez::platform::java::jpa::scripts::Stereotypes;
 
 /**
@@ -19,7 +18,7 @@ extension org::genesez::platform::java::jpa::scripts::Stereotypes;
  *	toDo:	make name prefix customizable 
  */
 Void checkAttributeName(MAttribute this) :
-	this.classifier.hasStereotype("jpaPersistentEntity")
+	this.classifier.emHasStereotypeAssignment("jpaPersistentEntity")
 		? (
 			switch(name.asTypeName()) {
 				case "index" : checkColumnStereotype()
@@ -41,11 +40,19 @@ Void checkAttributeName(MAttribute this) :
   *	@param		this		instance of MElement
   */
 Void checkPrimaryKey(MElement this) :
-	this.getClassifier() != null && 
-	getClassifier().generalization.typeSelect(MClassifier).property.exists(e|e.name == name && e.hasStereotype("jpaPrimaryKey")) 
+	let classifier = (
+		switch (metaType) {
+			case MOperation : ((MOperation)this).classifier
+			case MAttribute : ((MAttribute)this).classifier
+			case MAssociationRole : ((MAssociationRole)this).classifier
+			default : null
+		}
+	) :
+	classifier != null && 
+	classifier.generalization.typeSelect(MClassifier).property.exists(e|e.name == name && e.emHasStereotypeAssignment("jpaPrimaryKey")) 
 		? (
-			!hasStereotype("jpaColumn")
-				? addColumnForPrimaryKeyInheritance(this.getClassifier())
+			!emHasStereotypeAssignment("jpaColumn")
+				? addColumnForPrimaryKeyInheritance( classifier )
 				: (
 					stereotype.selectFirst(e|e == "jpaColumn").taggedValue.selectFirst(e|e == "insertable").setValue("false") ->
 					stereotype.selectFirst(e|e == "jpaColumn").taggedValue.selectFirst(e|e == "updatable").setValue("false")
@@ -59,8 +66,8 @@ Void checkPrimaryKey(MElement this) :
   *	@param		this		instance of MAttribute
  */
 private Void checkColumnStereotype(MAttribute this) :
-	this.hasUtilizableValue("jpaColumn", "value") && 
-	(this.getTaggedValue("jpaColumn", "value") == name.asTypeName())
+	this.emHasUtilizableTaggedValue("jpaColumn", "value") && 
+	(this.emGetTaggedValue("jpaColumn", "value") == name.asTypeName())
 		?  (
 			//replace the critical column name
 			this.setTaggedValue("jpaColumn", "value", this.classifier.name.toLowerCase()+"_"+name)
@@ -79,13 +86,13 @@ private Void checkColumnStereotype(MAttribute this) :
   *	@param		this		instance of MAttribute
   */
 Void checkPersistenceStereotypes(MAttribute this) :
-	( !this.classifier.hasTaggedValue("ejb3SessionBean","entityManager", "None") && 
+	( !this.classifier.emHasTaggedValue("ejb3SessionBean","entityManager", "None") && 
 	  (this.type.asTypeName().matches("EntityManager") || this.type.asTypeName().matches("Session")) &&
-	  !this.classifier.property.exists(e|e.hasStereotype("jpaPersistenceContext")))
+	  !this.classifier.property.exists(e|e.emHasStereotypeAssignment("jpaPersistenceContext")))
 		? this.addPersistenceContextStereotype("[]", "[]", "[]") 
 		: "" ->
 	(this.type.asTypeName().matches("EntityManagerFactory") || this.type.asTypeName().matches("SessionFactory")) &&
-	 !this.classifier.property.exists(e|e.hasStereotype("jpaPersistenceUnit"))
+	 !this.classifier.property.exists(e|e.emHasStereotypeAssignment("jpaPersistenceUnit"))
 		? this.addPersistenceUnitStereotype("[]", "[]")
 		: "";
 
@@ -96,8 +103,8 @@ Void checkPersistenceStereotypes(MAttribute this) :
   *	@param		this		instance of MAttribute
   */		
 Void checkOptimisticLockingStereotype(MAttribute this) :
-	 this.classifier.hasStereotype("jpaPersistentEntity") &&
+	 this.classifier.emHasStereotypeAssignment("jpaPersistentEntity") &&
 	 ((this.name.asTypeName() == "version" && this.type.asTypeName() == "int") ||
-	 this.classifier.property.exists(e|e.hasTaggedValue("jpaPersistentEntity", "optimisticLocking", "true")))
+	 this.classifier.property.exists(e|e.emHasTaggedValue("jpaPersistentEntity", "optimisticLocking", "true")))
 	 	? addOptimisticLockingStereotype()
 	 	: "";

@@ -11,14 +11,14 @@
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::Conversion»
-«EXTENSION org::genesez::platform::common::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
 
-«EXTENSION org::genesez::platform::java::scripts::Type»
-«EXTENSION org::genesez::platform::java::scripts::Naming»
-«EXTENSION org::genesez::platform::java::scripts::Conversion»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
 «REM» 
 	generates import proReg and statements for ejb classes
@@ -26,37 +26,37 @@
 «ENDREM»
 «DEFINE ImportStatements FOR MClassifier-»
 	«EXPAND CallbackImport»
-	«IF isClass() && (operation.exists(e|e.hasUtilizableValue("ejb3OperationInterceptor", "interceptors")) || hasUtilizableValue("ejb3ClassInterceptor", "interceptors"))-»
+	«IF isClass() && (operation.exists(e|e.emHasUtilizableTaggedValue("ejb3OperationInterceptor", "interceptors")) || emHasUtilizableTaggedValue("ejb3ClassInterceptor", "interceptors"))-»
 		import javax.interceptor.Interceptors;
 	«ENDIF-»
-	«IF isClass() && (operation.exists(e|e.hasTaggedValue("ejb3OperationInterceptor", "aroundInvoke", "true")))-»
+	«IF isClass() && (operation.exists(e|e.emHasTaggedValue("ejb3OperationInterceptor", "aroundInvoke", "true")))-»
 		import javax.interceptor.AroundInvoke;
 		import javax.interceptor.InvocationContext;
 	«ENDIF-»
-	«IF operation.exists(e|e.hasStereotype("ejb3Timer"))-»
+	«IF operation.exists(e|e.emHasStereotypeAssignment("ejb3Timer"))-»
 		import javax.ejb.Timer;
 		import javax.ejb.Timeout;
 	«ENDIF»
-	«IF property.exists(e|e.hasStereotype("ejb3Resource")) || operation.exists(e|e.hasStereotype("ejb3Resource"))-»
+	«IF property.exists(e|e.emHasStereotypeAssignment("ejb3Resource")) || operation.exists(e|e.emHasStereotypeAssignment("ejb3Resource"))-»
 		import javax.annotation.Resource;
 	«ENDIF-»
-	«IF property.exists(e|e.hasStereotype("ejb3EJB")) || operation.exists(e|e.hasStereotype("ejb3EJB"))-»
+	«IF property.exists(e|e.emHasStereotypeAssignment("ejb3EJB")) || operation.exists(e|e.emHasStereotypeAssignment("ejb3EJB"))-»
 		import javax.ejb.EJB;
 	«ENDIF-»
-	«IF hasStereotype("ejb3SessionBean")-»
-		«IF hasTaggedValue("ejb3SessionBean", "stateful", "false")-»
+	«IF emHasStereotypeAssignment("ejb3SessionBean")-»
+		«IF emHasTaggedValue("ejb3SessionBean", "stateful", "false")-»
 			import javax.ejb.Stateless;
-		«ELSEIF hasTaggedValue("ejb3SessionBean", "stateful", "true")»
+		«ELSEIF emHasTaggedValue("ejb3SessionBean", "stateful", "true")»
 			import javax.ejb.Stateful;
 		«ENDIF-»
 	«ENDIF»
-	«IF hasStereotype("ejb3Remote")-»
+	«IF emHasStereotypeAssignment("ejb3Remote")-»
 		import javax.ejb.Remote;
 	«ENDIF-»
-	«IF hasStereotype("ejb3Local")-»
+	«IF emHasStereotypeAssignment("ejb3Local")-»
 		import javax.ejb.Local;
 	«ENDIF-»
-	«IF hasStereotype("ejb3MessageDrivenBean")-»
+	«IF emHasStereotypeAssignment("ejb3MessageDrivenBean")-»
 		import javax.ejb.MessageDriven;	
 		import javax.jms.MessageListener;
 		import javax.ejb.ActivationConfigProperty;		
@@ -80,48 +80,48 @@
 	downwards compability shoud be done by check language before generation starts 
 «ENDREM»
 «DEFINE CallbackImport FOR MClassifier-»
-	«FOREACH operation.select(e|e.hasStereotype("ejb3Callback")) AS methods»
-		«IF methods.hasStereotype("ejb3OperationInterceptor")
+	«FOREACH operation.select(e|e.emHasStereotypeAssignment("ejb3Callback")) AS methods»
+		«IF methods.emHasStereotypeAssignment("ejb3OperationInterceptor")
 			&& !(methods.name == "ejbCreate" 
-				&& methods.hasTaggedValue("ejb3Callback", "postConstruct", "true"))
+				&& methods.emHasTaggedValue("ejb3Callback", "postConstruct", "true"))
 			|| !(methods.name == "ejbRemove" 
-				&& methods.hasTaggedValue("ejb3Callback", "preDestroy", "true"))
+				&& methods.emHasTaggedValue("ejb3Callback", "preDestroy", "true"))
 			|| !(methods.name == "ejbActivate" 
-				&& methods.hasTaggedValue("ejb3Callback", "postActivate", "true"))
+				&& methods.emHasTaggedValue("ejb3Callback", "postActivate", "true"))
 			|| !(methods.name == "ejbPassivate" 
-				&& methods.hasTaggedValue("ejb3Callback", "prePassivate", "true"))
+				&& methods.emHasTaggedValue("ejb3Callback", "prePassivate", "true"))
 		-»
-			«IF methods.hasTaggedValue("ejb3Callback", "preConstruct", "true")»
+			«IF methods.emHasTaggedValue("ejb3Callback", "preConstruct", "true")»
 				import javax.annotation.PostConstruct;
 			«ENDIF»
-			«IF methods.hasTaggedValue("ejb3Callback", "preDestroy", "true")»
+			«IF methods.emHasTaggedValue("ejb3Callback", "preDestroy", "true")»
 				import javax.annotation.PreDestroy;
 			«ENDIF»
-			«IF methods.hasTaggedValue("ejb3Callback", "postActivate", "true")»
+			«IF methods.emHasTaggedValue("ejb3Callback", "postActivate", "true")»
 				import javax.ejb.PostActivate;
 			«ENDIF»
-			«IF methods.hasTaggedValue("ejb3Callback", "prePassivate", "true")»
+			«IF methods.emHasTaggedValue("ejb3Callback", "prePassivate", "true")»
 				import javax.ejb.PrePassivate;
 			«ENDIF»
-			«IF methods.hasTaggedValue("ejb3Callback", "postPersist", "true")»
+			«IF methods.emHasTaggedValue("ejb3Callback", "postPersist", "true")»
 				import javax.persistence.PostPersist;
 			«ENDIF»
-			«IF methods.hasTaggedValue("ejb3Callback", "prePersist", "true")»
+			«IF methods.emHasTaggedValue("ejb3Callback", "prePersist", "true")»
 				import javax.persistence.PrePersist;
 			«ENDIF»
-			«IF methods.hasTaggedValue("ejb3Callback", "postUpdate", "true")»
+			«IF methods.emHasTaggedValue("ejb3Callback", "postUpdate", "true")»
 				import javax.persistence.PostUpdate;
 			«ENDIF»
-			«IF methods.hasTaggedValue("ejb3Callback", "preUpdate", "true")»
+			«IF methods.emHasTaggedValue("ejb3Callback", "preUpdate", "true")»
 				import javax.persistence.PreUpdate;
 			«ENDIF»	
-			«IF methods.hasTaggedValue("ejb3Callback", "postRemove", "true")»
+			«IF methods.emHasTaggedValue("ejb3Callback", "postRemove", "true")»
 				import javax.persistence.PostRemove;
 			«ENDIF»
-			«IF methods.hasTaggedValue("ejb3Callback", "preRemove", "true")»
+			«IF methods.emHasTaggedValue("ejb3Callback", "preRemove", "true")»
 				import javax.persistence.PreRemove;
 			«ENDIF»
-			«IF methods.hasTaggedValue("ejb3Callback", "postLoad", "true")»
+			«IF methods.emHasTaggedValue("ejb3Callback", "postLoad", "true")»
 				import javax.persistence.PostLoad;
 			«ENDIF»
 		«ENDIF-»

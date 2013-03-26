@@ -10,28 +10,28 @@
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::Conversion»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
-«EXTENSION org::genesez::platform::java::scripts::Type»
-«EXTENSION org::genesez::platform::java::scripts::Naming»
-«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
 
 «DEFINE Attribute FOR MAttribute-»
-	«IF hasStereotype("jwsWebServiceRef")-»
-		@WebServiceRef(«getTaggedValue("jwsWebServiceRef", "value")-».class			
-		«IF hasUtilizableValue("jwsWebServiceRef", "name")-»
-			, name="«getTaggedValue("jwsWebServiceRef", "name")-»"
+	«IF emHasStereotypeAssignment("jwsWebServiceRef")-»
+		@WebServiceRef(«emGetTaggedValue("jwsWebServiceRef", "value")-».class			
+		«IF emHasUtilizableTaggedValue("jwsWebServiceRef", "name")-»
+			, name="«emGetTaggedValue("jwsWebServiceRef", "name")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("jwsWebServiceRef", "mappedName")-»
-			, mappedName="«getTaggedValue("jwsWebServiceRef", "mappedName")-»"
+		«IF emHasUtilizableTaggedValue("jwsWebServiceRef", "mappedName")-»
+			, mappedName="«emGetTaggedValue("jwsWebServiceRef", "mappedName")-»"
 		«ENDIF-»			
-		«IF hasUtilizableValue("jwsWebServiceRef", "type")-»
-			, type="«getTaggedValue("jwsWebServiceRef", "type")-»"
+		«IF emHasUtilizableTaggedValue("jwsWebServiceRef", "type")-»
+			, type="«emGetTaggedValue("jwsWebServiceRef", "type")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("jwsWebServiceRef", "wsdlLocation")-»
-			, wsdlLocation="«getTaggedValue("jwsWebServiceRef", "wsdlLocation")-»"
+		«IF emHasUtilizableTaggedValue("jwsWebServiceRef", "wsdlLocation")-»
+			, wsdlLocation="«emGetTaggedValue("jwsWebServiceRef", "wsdlLocation")-»"
 		«ENDIF-»)
 	«ENDIF-»
 «ENDDEFINE»

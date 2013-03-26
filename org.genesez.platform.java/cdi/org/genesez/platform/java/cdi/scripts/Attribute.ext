@@ -9,8 +9,9 @@
 import gcore;
 
 extension org::genesez::util::logging::Logging;
-extension org::genesez::platform::common::AccessHelper;
-extension org::genesez::platform::java::scripts::Naming;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
+extension org::genesez::platform::java::util::Naming;
 
 
 Void cdiAttributeModifications(MAttribute this) :
@@ -21,10 +22,10 @@ Void cdiAttributeModifications(MAttribute this) :
  * Search for the entity Home class that matches the name of the Attribute + Home.
  */
 Void adaptEntityHomeAttribute(MAttribute this) :
-    this.hasStereotype("cdiExtEntityHome")
+    this.emHasStereotypeAssignment("cdiExtEntityHome")
     ? (
             // Search interface for corresponding entity home class
-		    let t = this.getClassifier().getModel().allClassifiers().selectFirst(
+		    let t = this.classifier.navModel().allNestedClassifiers().selectFirst(
 		      e|e.name().matches(this.type.name() + "Home"
 		      // && e.metaType == MInterface 
 		      )):

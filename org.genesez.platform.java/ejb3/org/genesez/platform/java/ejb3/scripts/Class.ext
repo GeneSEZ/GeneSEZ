@@ -1,14 +1,16 @@
 import gcore;
 
 extension org::genesez::util::logging::Logging;
-extension org::genesez::platform::common::AccessHelper;
-extension org::genesez::platform::java::scripts::Naming;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
+extension org::genesez::platform::java::util::Naming;
+extension org::genesez::platform::java::util::JavaTypes;
 extension org::genesez::platform::java::java5::scripts::Class;
 extension org::genesez::platform::java::ejb3::scripts::Stereotypes;
 extension org::genesez::platform::common::m2m::MakeElement;
 extension org::genesez::platform::common::m2m::RemoveElement;
 extension org::genesez::platform::common::m2m::CreateBasics;
-extension org::genesez::platform::common::m2m::CreateTemplate;
 /* remove this import to be independent from jpa cartridge */
 extension org::genesez::platform::java::jpa::scripts::Stereotypes;
 
@@ -19,13 +21,13 @@ extension org::genesez::platform::java::jpa::scripts::Stereotypes;
  *	with remote business interface
  */
 Void transformJacobsonStereotypes(MClass this) :
-	this.hasStereotype("control")
+	this.emHasStereotypeAssignment("control")
 		? (
 			this.addSessionBeanStereotype(this.name, "", "", false, "EntityManager", "None") ->
 			this.addLocalStereotype("")
 		)
 		: "" ->
-	this.hasStereotype("boundary")
+	this.emHasStereotypeAssignment("boundary")
 		? (
 			this.addSessionBeanStereotype(this.name, "", "", false, "EntityManager", "None") ->
 			this.addRemoteStereotype("")
@@ -38,20 +40,20 @@ Void transformJacobsonStereotypes(MClass this) :
  *	and an timer operation
  */
 Void transformWAMStereotypes(MClass this) :
-	this.hasStereotype("tool")
+	this.emHasStereotypeAssignment("tool")
 		? (
 			this.addSessionBeanStereotype(this.name, "", "", false, "EntityManager", "None") ->
 			this.addLocalStereotype("")
 		)
 		: "" ->
-	this.hasStereotype("automaton")
+	this.emHasStereotypeAssignment("automaton")
 		? (
 			this.addSessionBeanStereotype(this.name, "", "", false, "EntityManager", "None") ->
 			this.addLocalStereotype("") ->
 			this.makeAttribute("timerService", "TimerService", "public") ->
 			(
 				let op = this.makeOperation("executeTask", "public", false, false, false) :				
-					op.parameter.add(op.makeParameter("timer", "", "in", this.model().createExternal("Timer")))
+					op.parameter.add(op.makeParameter("timer", "", "in", this.navModel().typeTimer) ))
 			)
 		)
 		: "" ;
@@ -65,10 +67,10 @@ Void transformWAMStereotypes(MClass this) :
  *	this		instance of MClassifier	
  */
 Void addRemoteBusinessInterface(MClassifier this) :
-	hasStereotype("ejb3SessionBean") &&
-	hasStereotype("jwsWebService") &&
+	emHasStereotypeAssignment("ejb3SessionBean") &&
+	emHasStereotypeAssignment("jwsWebService") &&
 	realization.isEmpty && 
-	!(hasStereotype("ejb3Local") || hasStereotype("ejb3Remote"))
+	!(emHasStereotypeAssignment("ejb3Local") || emHasStereotypeAssignment("ejb3Remote"))
 		? addRemoteStereotype("")
 		: "";
 
@@ -81,15 +83,15 @@ Void addRemoteBusinessInterface(MClassifier this) :
  *	@param		this		instance of MClass
  */
 MClassifier addMessageListener(MClass this) :
-	hasStereotype("ejb3MessageDrivenBean")
+	emHasStereotypeAssignment("ejb3MessageDrivenBean")
 		? ( 
 			!realization.exists(e|e.name().matches("MessageListener") || e.name().matches("javax.jms.MessageListener"))
-				? realization.add(createExternal(this.model(), "javax.jms.MessageListener"))
+				? realization.add( this.navModel().typeMessageListener() )
 				: "" ->
 			!this.operation.exists(e|e.name.matches("onMessage"))
 				? (
 					let o = makeOperation("onMessage", "public") :
-						o.parameter.add(o.makeParameter("message", "in", this.model().createExternal("javax.jms.Message")))
+						o.parameter.add(o.makeParameter("message", "in", this.navModel().typeMessage() ))
 				)
 				: ""
 		)
@@ -104,9 +106,9 @@ MClassifier addMessageListener(MClass this) :
  *	this		instance of MClassifier	
  */
 addLocalBusinessInterface(MClassifier this) :
-	hasStereotype("ejb3SessionBean") &&
+	emHasStereotypeAssignment("ejb3SessionBean") &&
 	realization.isEmpty && 
-	!(hasStereotype("ejb3Local") || hasStereotype("ejb3Remote"))
+	!(emHasStereotypeAssignment("ejb3Local") || emHasStereotypeAssignment("ejb3Remote"))
 		? addLocalStereotype("")
 		: "";
 
@@ -115,7 +117,7 @@ addLocalBusinessInterface(MClassifier this) :
   *	driven bean if there is not already one
   */	
 MClassifier addStandardConstructor(MClass this) :
-	(this.hasStereotype("ejb3SessionBean") || this.hasStereotype("ejb3MessageDrivenBean")) &&
+	(this.emHasStereotypeAssignment("ejb3SessionBean") || this.emHasStereotypeAssignment("ejb3MessageDrivenBean")) &&
 	!(operation.exists(e|e.name == name && e.parameter.isEmpty))
 		? makeStandardConstructor("public")
 		: "";
@@ -130,15 +132,15 @@ MClassifier addStandardConstructor(MClass this) :
   *
   **/
 Void checkUseOfEntityManager(MClass this) :
-	!hasTaggedValue("ejb3SessionBean", "entityManager", "None")
-		? (	hasTaggedValue("ejb3SessionBean", "entityManager", "EntityManager")
+	!emHasTaggedValue("ejb3SessionBean", "entityManager", "None")
+		? (	emHasTaggedValue("ejb3SessionBean", "entityManager", "EntityManager")
 			? (	addEntityManager("EntityManager") ->
 				addStereotypesForEntityManager("entityManager", "[]")
 			)
 			:(
-			hasTaggedValue("ejb3SessionBean", "entityManager", "EntityManager_Extended")
+			emHasTaggedValue("ejb3SessionBean", "entityManager", "EntityManager_Extended")
 				? (	addEntityManager("EntityManager_Extended") ->
-					this.hasTaggedValue("ejb3SessionBean", "stateful", "true")
+					this.emHasTaggedValue("ejb3SessionBean", "stateful", "true")
 						? addStereotypesForEntityManager("entityManager", "[EXTENDED]")
 						: (
 							addStereotypesForEntityManager("entityManager", "[]") ->
@@ -147,14 +149,14 @@ Void checkUseOfEntityManager(MClass this) :
 
 				)
 				:(
-				hasTaggedValue("ejb3SessionBean", "entityManager", "Session")
+				emHasTaggedValue("ejb3SessionBean", "entityManager", "Session")
 					? (	addEntityManager("Session") ->
 						addStereotypesForEntityManager("session", "[]")
 					)
 					: (
-					hasTaggedValue("ejb3SessionBean", "entityManager", "Session_Extended")
+					emHasTaggedValue("ejb3SessionBean", "entityManager", "Session_Extended")
 						? (	addEntityManager("Session_Extended") ->
-							this.hasTaggedValue("ejb3SessionBean", "stateful", "true")
+							this.emHasTaggedValue("ejb3SessionBean", "stateful", "true")
 								? addStereotypesForEntityManager("session", "[EXTENDED]")
 								: (
 									addStereotypesForEntityManager("session", "[]") ->
@@ -184,12 +186,12 @@ Void addStereotypesForEntityManager(MClass this, String attributeName, String fe
 			: "";
 	
 Void createAccessorForEntityManager(MProperty this) :
-	!this.classifier.hasTaggedValue("ejb3SessionBean", "entityManagerAccess", "None")
-		? (	this.classifier.hasTaggedValue("ejb3SessionBean", "entityManagerAccess", "Both")
+	!this.classifier.emHasTaggedValue("ejb3SessionBean", "entityManagerAccess", "None")
+		? (	this.classifier.emHasTaggedValue("ejb3SessionBean", "entityManagerAccess", "Both")
 			? createAccessor(this, "true", "true")
-			: (	this.classifier.hasTaggedValue("ejb3SessionBean", "entityManagerAccess", "Getter")
+			: (	this.classifier.emHasTaggedValue("ejb3SessionBean", "entityManagerAccess", "Getter")
 				? createAccessor(this, "true", "false")
-				: (	this.classifier.hasTaggedValue("ejb3SessionBean", "entityManagerAccess", "Setter")
+				: (	this.classifier.emHasTaggedValue("ejb3SessionBean", "entityManagerAccess", "Setter")
 					? createAccessor(this, "false", "true")
 					: ""
 				) 

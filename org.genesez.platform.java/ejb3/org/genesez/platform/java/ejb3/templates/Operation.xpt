@@ -10,11 +10,11 @@
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
-«EXTENSION org::genesez::platform::java::scripts::Type»
-«EXTENSION org::genesez::platform::java::scripts::Naming»
-«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -45,8 +45,8 @@
 	constraints should be realized by check language
 «ENDREM»
 «DEFINE _Timer FOR MOperation-»
-	«IF (hasStereotype("ejb3Timer") && (parameter.exists(e|e.type.mapName().asTypeName() == "Timer") && parameter.size == 1)) && 
-		(classifier.hasStereotype("ejb3MessageDrivenBean") || classifier.hasTaggedValue("ejb3SessionBean", "stateful", "false"))-»
+	«IF (emHasStereotypeAssignment("ejb3Timer") && (parameter.exists(e|e.type.mapName().asTypeName() == "Timer") && parameter.size == 1)) && 
+		(classifier.emHasStereotypeAssignment("ejb3MessageDrivenBean") || classifier.emHasTaggedValue("ejb3SessionBean", "stateful", "false"))-»
 		@Timeout
 	«ENDIF-»
 «ENDDEFINE»
@@ -69,7 +69,7 @@
 «ENDREM»
 
 «DEFINE _Remove FOR MOperation-»
-    «IF hasStereotype("ejb3Remove")-»
+    «IF emHasStereotypeAssignment("ejb3Remove")-»
         @Remove
     «ENDIF-»    
 «ENDDEFINE»
@@ -78,12 +78,12 @@
 	evaluates callback annotations for session beans and message driven beans
 «ENDREM»
 «DEFINE _SBAndMDBCallback FOR MOperation-»
-	«IF hasTaggedValue("jpaCallback", "external", "false") && 
-		(classifier.hasStereotype("ejb3SessionBean") || classifier.hasStereotype("ejb3MessageDrivenBean"))-»
-		«IF hasTaggedValue("jpaCallback", "postConstruct", "true")-»
+	«IF emHasTaggedValue("jpaCallback", "external", "false") && 
+		(classifier.emHasStereotypeAssignment("ejb3SessionBean") || classifier.emHasStereotypeAssignment("ejb3MessageDrivenBean"))-»
+		«IF emHasTaggedValue("jpaCallback", "postConstruct", "true")-»
 			@PostConstruct
 		«ENDIF-»
-		«IF hasTaggedValue("jpaCallback", "preDestroy", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "preDestroy", "true")-»
 			@PreDestroy
 		«ENDIF-»
 	«ENDIF-»
@@ -93,12 +93,12 @@
 	evaluates callback annotations for stateful session beans
 «ENDREM»
 «DEFINE _StatefulSBCallback FOR MOperation-»
-	«IF hasTaggedValue("jpaCallback", "external", "false") && 
-		classifier.hasTaggedValue("ejb3SessionBean", "stateful", "true")-»
-		«IF hasTaggedValue("jpaCallback", "postActivate", "true")-»
+	«IF emHasTaggedValue("jpaCallback", "external", "false") && 
+		classifier.emHasTaggedValue("ejb3SessionBean", "stateful", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "postActivate", "true")-»
 			@PostActivate
 		«ENDIF-»
-		«IF hasTaggedValue("jpaCallback", "prePassivate", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "prePassivate", "true")-»
 			@PrePassivate
 		«ENDIF-»
 	«ENDIF-»
@@ -108,41 +108,41 @@
 	evaluates callback annotations in entity listeners
 «ENDREM»
 «DEFINE _OtherCallback FOR MOperation-»
-	«IF hasTaggedValue("jpaCallback", "external", "false") && 
-		!classifier.hasStereotype("ejb3PersistentEntity") &&
-		!classifier.hasStereotype("ejb3SessionBean") && 
-		!classifier.hasStereotype("ejb3MessageDrivenBean")-»
-		«IF hasTaggedValue("jpaCallback", "postPersist", "true")-»
+	«IF emHasTaggedValue("jpaCallback", "external", "false") && 
+		!classifier.emHasStereotypeAssignment("ejb3PersistentEntity") &&
+		!classifier.emHasStereotypeAssignment("ejb3SessionBean") && 
+		!classifier.emHasStereotypeAssignment("ejb3MessageDrivenBean")-»
+		«IF emHasTaggedValue("jpaCallback", "postPersist", "true")-»
 			@PostPersist
 		«ENDIF-»
-		«IF hasTaggedValue("jpaCallback", "prePersist", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "prePersist", "true")-»
 			@PrePersist
 		«ENDIF-»
-		«IF hasTaggedValue("jpaCallback", "postUpdate", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "postUpdate", "true")-»
 			@PostUpdate
 		«ENDIF-»
-		«IF hasTaggedValue("jpaCallback", "preUpdate", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "preUpdate", "true")-»
 			@PreUpdate
 		«ENDIF-»	
-		«IF hasTaggedValue("jpaCallback", "postRemove", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "postRemove", "true")-»
 			@PostRemove
 		«ENDIF-»
-		«IF hasTaggedValue("jpaCallback", "preRemove", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "preRemove", "true")-»
 			@PreRemove
 		«ENDIF-»
-		«IF hasTaggedValue("jpaCallback", "postLoad", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "postLoad", "true")-»
 			@PostLoad
 		«ENDIF-»
-		«IF hasTaggedValue("jpaCallback", "postActivate", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "postActivate", "true")-»
 			@PostActivate
 		«ENDIF-»
-		«IF hasTaggedValue("jpaCallback", "prePassivate", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "prePassivate", "true")-»
 			@PrePassivate
 		«ENDIF-»
-		«IF hasTaggedValue("jpaCallback", "postConstruct", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "postConstruct", "true")-»
 			@PostConstruct
 		«ENDIF-»
-		«IF hasTaggedValue("jpaCallback", "preDestroy", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "preDestroy", "true")-»
 			@PreDestroy
 		«ENDIF-»
 	«ENDIF-»
@@ -152,27 +152,27 @@
 	evaluates callback annotations for session beans and message driven beans
 «ENDREM»
 «DEFINE _PersistentEntityCallback FOR MOperation-»
-	«IF hasTaggedValue("jpaCallback", "external", "false") && 
-		classifier.hasStereotype("ejb3PersistentEntity")»
-		«IF hasTaggedValue("jpaCallback", "postPersist", "true")-»
+	«IF emHasTaggedValue("jpaCallback", "external", "false") && 
+		classifier.emHasStereotypeAssignment("ejb3PersistentEntity")»
+		«IF emHasTaggedValue("jpaCallback", "postPersist", "true")-»
 			@PostPersist
 		«ENDIF-»
-		«IF hasTaggedValue("jpaCallback", "prePersist", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "prePersist", "true")-»
 			@PrePersist
 		«ENDIF-»
-		«IF hasTaggedValue("jpaCallback", "postUpdate", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "postUpdate", "true")-»
 			@PostUpdate
 		«ENDIF-»
-		«IF hasTaggedValue("jpaCallback", "preUpdate", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "preUpdate", "true")-»
 			@PreUpdate
 		«ENDIF-»	
-		«IF hasTaggedValue("jpaCallback", "postRemove", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "postRemove", "true")-»
 			@PostRemove
 		«ENDIF-»
-		«IF hasTaggedValue("jpaCallback", "preRemove", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "preRemove", "true")-»
 			@PreRemove
 		«ENDIF-»
-		«IF hasTaggedValue("jpaCallback", "postLoad", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "postLoad", "true")-»
 			@PostLoad
 		«ENDIF-»
 	«ENDIF-»
@@ -182,16 +182,16 @@
 	evaluate the stereotype ejb3OperationInterceptor 
 «ENDREM»
 «DEFINE _Interceptor FOR MOperation-»
-	«IF hasStereotype("ejb3OperationInterceptor")-»
-		«IF hasUtilizableValue("ejb3OperationInterceptor", "interceptors")-»
-			@Interceptors(value={«FOREACH getTaggedValueList("ejb3OperationInterceptor", "interceptors") AS interceptor SEPARATOR ", "-»
+	«IF emHasStereotypeAssignment("ejb3OperationInterceptor")-»
+		«IF emHasUtilizableTaggedValue("ejb3OperationInterceptor", "interceptors")-»
+			@Interceptors(value={«FOREACH emAllTaggedValues("ejb3OperationInterceptor", "interceptors") AS interceptor SEPARATOR ", "-»
 					«interceptor-».class
 			«ENDFOREACH-»})
 		«ENDIF»
-		«IF hasTaggedValue("ejb3OperationInterceptor", "aroundInvoke", "true")-»
+		«IF emHasTaggedValue("ejb3OperationInterceptor", "aroundInvoke", "true")-»
 			@AroundInvoke
 		«ENDIF-»	
-		«IF hasTaggedValue("ejb3OperationInterceptor", "excludeClassInterceptors", "true")-»
+		«IF emHasTaggedValue("ejb3OperationInterceptor", "excludeClassInterceptors", "true")-»
 			@ExcludeClassInterceptors
 		«ENDIF-»	
 	«ENDIF-»

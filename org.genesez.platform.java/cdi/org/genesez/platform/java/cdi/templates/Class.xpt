@@ -11,14 +11,14 @@
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::Conversion»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
-«EXTENSION org::genesez::platform::common::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
 
-«EXTENSION org::genesez::platform::java::scripts::Type»
-«EXTENSION org::genesez::platform::java::scripts::Naming»
-«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -48,104 +48,104 @@
 	generates imports
 «ENDREM»
 «DEFINE ImportStatements FOR MClassifier-»
-	«IF hasStereotype("cdiApplicationScoped")
-		|| property.exists(e|e.hasStereotype("cdiApplicationScoped"))
-		|| operation.exists(e|e.hasStereotype("cdiApplicationScoped"))»
+	«IF emHasStereotypeAssignment("cdiApplicationScoped")
+		|| property.exists(e|e.emHasStereotypeAssignment("cdiApplicationScoped"))
+		|| operation.exists(e|e.emHasStereotypeAssignment("cdiApplicationScoped"))»
 		import javax.enterprise.context.ApplicationScoped;
 	«ENDIF»
-	«IF hasStereotype("cdiSessionScoped")
-		|| property.exists(e|e.hasStereotype("cdiSessionScoped"))
-		|| operation.exists(e|e.hasStereotype("cdiSessionScoped"))»
+	«IF emHasStereotypeAssignment("cdiSessionScoped")
+		|| property.exists(e|e.emHasStereotypeAssignment("cdiSessionScoped"))
+		|| operation.exists(e|e.emHasStereotypeAssignment("cdiSessionScoped"))»
 		import javax.enterprise.context.SessionScoped;
 	«ENDIF»
-	«IF hasStereotype("cdiRequestScoped")
-		|| property.exists(e|e.hasStereotype("cdiRequestScoped"))
-		|| operation.exists(e|e.hasStereotype("cdiRequestScoped"))»
+	«IF emHasStereotypeAssignment("cdiRequestScoped")
+		|| property.exists(e|e.emHasStereotypeAssignment("cdiRequestScoped"))
+		|| operation.exists(e|e.emHasStereotypeAssignment("cdiRequestScoped"))»
 		import javax.enterprise.context.RequestScoped;
 	«ENDIF»
-	«IF hasStereotype("cdiConversationScoped")
-		|| property.exists(e|e.hasStereotype("cdiConversationScoped"))
-		|| operation.exists(e|e.hasStereotype("cdiConversationScoped"))»
+	«IF emHasStereotypeAssignment("cdiConversationScoped")
+		|| property.exists(e|e.emHasStereotypeAssignment("cdiConversationScoped"))
+		|| operation.exists(e|e.emHasStereotypeAssignment("cdiConversationScoped"))»
 		import javax.enterprise.context.Conversation;
 		import javax.enterprise.context.ConversationScoped;
 	«ENDIF»
-	«IF hasStereotype("cdiTyped")
-		|| property.exists(e|e.hasStereotype("cdiTyped"))
-		|| operation.exists(e|e.hasStereotype("cdiTyped"))»
+	«IF emHasStereotypeAssignment("cdiTyped")
+		|| property.exists(e|e.emHasStereotypeAssignment("cdiTyped"))
+		|| operation.exists(e|e.emHasStereotypeAssignment("cdiTyped"))»
 		import javax.enterprise.inject.Typed;
 	«ENDIF»	
-	«IF property.exists(e|e.hasStereotype("cdiProduces"))
-		|| operation.exists(e|e.hasStereotype("cdiProduces"))»
+	«IF property.exists(e|e.emHasStereotypeAssignment("cdiProduces"))
+		|| operation.exists(e|e.emHasStereotypeAssignment("cdiProduces"))»
 		import javax.enterprise.inject.Produces;
 	«ENDIF»		
 	«REM»For Stereotypes only«ENDREM»
-	«IF hasStereotype("cdiNormalScope")»
+	«IF emHasStereotypeAssignment("cdiNormalScope")»
 		import javax.enterprise.context.NormalScope;
 	«ENDIF»		
 	«REM»For Stereotypes only«ENDREM»
-	«IF hasStereotype("cdiStereotype")»
+	«IF emHasStereotypeAssignment("cdiStereotype")»
 		import javax.enterprise.inject.Stereotype;
 	«ENDIF»				
-	«IF operation.exists(e|e.hasStereotype("cdiNonbinding"))»
+	«IF operation.exists(e|e.emHasStereotypeAssignment("cdiNonbinding"))»
 		import javax.enterprise.inject.Nonbinding;
 	«ENDIF»		
-	«IF hasStereotype("cdiAlternative")
-		|| property.exists(e|e.hasStereotype("cdiAlternative"))
-		|| operation.exists(e|e.hasStereotype("cdiAlternative"))»
+	«IF emHasStereotypeAssignment("cdiAlternative")
+		|| property.exists(e|e.emHasStereotypeAssignment("cdiAlternative"))
+		|| operation.exists(e|e.emHasStereotypeAssignment("cdiAlternative"))»
 		import javax.enterprise.inject.Alternative;
 	«ENDIF»		
-	«IF hasStereotype("cdiAny")
-		|| property.exists(e|e.hasStereotype("cdiAny"))
-		|| operation.exists(e|e.hasStereotype("cdiAny"))
-		|| operation.exists(e|e.parameter.exists(p|p.hasStereotype("cdiAny")))»
+	«IF emHasStereotypeAssignment("cdiAny")
+		|| property.exists(e|e.emHasStereotypeAssignment("cdiAny"))
+		|| operation.exists(e|e.emHasStereotypeAssignment("cdiAny"))
+		|| operation.exists(e|e.parameter.exists(p|p.emHasStereotypeAssignment("cdiAny")))»
 		import javax.enterprise.inject.Any;
 	«ENDIF»		
-	«IF hasStereotype("cdiDefault")
-		|| property.exists(e|e.hasStereotype("cdiDefault"))
-		|| operation.exists(e|e.hasStereotype("cdiDefault"))
-		|| operation.exists(e|e.parameter.exists(p|p.hasStereotype("cdiDefault")))»
+	«IF emHasStereotypeAssignment("cdiDefault")
+		|| property.exists(e|e.emHasStereotypeAssignment("cdiDefault"))
+		|| operation.exists(e|e.emHasStereotypeAssignment("cdiDefault"))
+		|| operation.exists(e|e.parameter.exists(p|p.emHasStereotypeAssignment("cdiDefault")))»
 		import javax.enterprise.inject.Default;
 	«ENDIF»		
-	«IF operation.exists(e|e.parameter.exists(p|p.hasStereotype("cdiDisposes")))»
+	«IF operation.exists(e|e.parameter.exists(p|p.emHasStereotypeAssignment("cdiDisposes")))»
 		import javax.enterprise.inject.Disposes;
 	«ENDIF»		
-	«IF hasStereotype("cdiDependend")
-		|| property.exists(e|e.hasStereotype("cdiDependend"))
-		|| operation.exists(e|e.hasStereotype("cdiDependend"))»
+	«IF emHasStereotypeAssignment("cdiDependend")
+		|| property.exists(e|e.emHasStereotypeAssignment("cdiDependend"))
+		|| operation.exists(e|e.emHasStereotypeAssignment("cdiDependend"))»
 		import javax.enterprise.inject.Dependend;
 	«ENDIF»
-	«IF hasStereotype("cdiModel")
-		|| property.exists(e|e.hasStereotype("cdiModel"))
-		|| operation.exists(e|e.hasStereotype("cdiModel"))»
+	«IF emHasStereotypeAssignment("cdiModel")
+		|| property.exists(e|e.emHasStereotypeAssignment("cdiModel"))
+		|| operation.exists(e|e.emHasStereotypeAssignment("cdiModel"))»
 		import javax.enterprise.inject.Model;
 	«ENDIF»	
-	«IF hasStereotype("cdiSpecializes")
-		|| operation.exists(e|e.hasStereotype("cdiSpecializes"))»
+	«IF emHasStereotypeAssignment("cdiSpecializes")
+		|| operation.exists(e|e.emHasStereotypeAssignment("cdiSpecializes"))»
 		import javax.enterprise.inject.Specializes;
 	«ENDIF»		
-	«IF hasStereotype("cdiNew")
-		|| property.exists(e|e.hasStereotype("cdiNew"))
-		|| operation.exists(e|e.hasStereotype("cdiNew"))
-		|| operation.exists(e|e.parameter.exists(p|p.hasStereotype("cdiNew")))»
+	«IF emHasStereotypeAssignment("cdiNew")
+		|| property.exists(e|e.emHasStereotypeAssignment("cdiNew"))
+		|| operation.exists(e|e.emHasStereotypeAssignment("cdiNew"))
+		|| operation.exists(e|e.parameter.exists(p|p.emHasStereotypeAssignment("cdiNew")))»
 		import javax.enterprise.inject.New;		
 	«ENDIF»	
-	«IF property.exists(e|e.hasStereotype("cdiDecoratorDelegate"))
-		|| operation.exists(e|e.parameter.exists(p|p.hasStereotype("cdiDecoratorDelegate")))»
+	«IF property.exists(e|e.emHasStereotypeAssignment("cdiDecoratorDelegate"))
+		|| operation.exists(e|e.parameter.exists(p|p.emHasStereotypeAssignment("cdiDecoratorDelegate")))»
 		import javax.decorator.Delegate;		
 	«ENDIF»		
-	«IF hasStereotype("cdiDecorator")»
+	«IF emHasStereotypeAssignment("cdiDecorator")»
 		import javax.decorator.Decorator;		
 	«ENDIF»
-	«IF operation.exists(e|e.parameter.exists(p|p.hasStereotype("cdiObserves")))»
+	«IF operation.exists(e|e.parameter.exists(p|p.emHasStereotypeAssignment("cdiObserves")))»
 		import javax.enterprise.event.Observes;
-		«IF operation.exists(e|e.parameter.exists(p|p.hasUtilizableValue("cdiObserves", "during")))-»	
+		«IF operation.exists(e|e.parameter.exists(p|p.emHasUtilizableTaggedValue("cdiObserves", "during")))-»	
             import static javax.enterprise.event.TransactionPhase.AFTER_COMPLETION;
             import static javax.enterprise.event.TransactionPhase.AFTER_FAILURE;
             import static javax.enterprise.event.TransactionPhase.AFTER_SUCCESS;
             import static javax.enterprise.event.TransactionPhase.BEFORE_COMPLETION;
             import static javax.enterprise.event.TransactionPhase.IN_PROGRESS;    
         «ENDIF-»
-        «IF operation.exists(e|e.parameter.exists(p|p.hasUtilizableValue("cdiObserves", "notifyObserver")))-»
+        «IF operation.exists(e|e.parameter.exists(p|p.emHasUtilizableTaggedValue("cdiObserves", "notifyObserver")))-»
             import static javax.enterprise.event.Reception.ALWAYS;
             import static javax.enterprise.event.Reception.IF_EXISTS;
         «ENDIF-»      			

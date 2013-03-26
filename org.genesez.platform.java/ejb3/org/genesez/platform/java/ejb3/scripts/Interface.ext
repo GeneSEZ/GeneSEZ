@@ -1,11 +1,13 @@
 import gcore;
 
-extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
+extension org::genesez::metamodel::core::util::CloneElement;
+extension org::genesez::metamodel::core::util::RemoveElement;
 extension org::genesez::platform::java::ejb3::scripts::Stereotypes;
-extension org::genesez::platform::java::scripts::Naming;
-extension org::genesez::platform::common::m2m::CreateTemplate;
+extension org::genesez::platform::java::util::Naming;
 extension org::genesez::util::logging::Logging;
-extension org::genesez::platform::common::m2m::RemoveElement;
 
 
 /**
@@ -20,49 +22,49 @@ extension org::genesez::platform::common::m2m::RemoveElement;
 Void addSessionBeanInterfaces(MClassifier this) :
 	isRemoteInterfaceNeeded()
 		? ( 
-			this.hasUtilizableValue("ejb3Remote", "name")
+			this.emHasUtilizableTaggedValue("ejb3Remote", "name")
 				? (
-					!allClassifiers(this.model()).typeSelect(MInterface).exists(e|e.name == this.getTaggedValue("ejb3Remote", "name"))
+					!allNestedClassifiers(this.navModel()).typeSelect(MInterface).exists(e|e.name == this.emGetTaggedValue("ejb3Remote", "name"))
 						? (	
-							let interface = createInterface(this.package(), this.getTaggedValue("ejb3Remote", "name"), this.getTaggedValue("ejb3Remote", "name")) : 
+							let interface = createInterface(this.navPackage(), this.emGetTaggedValue("ejb3Remote", "name"), this.emGetTaggedValue("ejb3Remote", "name")) : 
 								this.realization.add(interface) ->
 								interface.addRemoteStereotype("") ->
 								this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor() && !(e.isSetter() && e.static) ).cloneOperation(interface) ->
-								this.removeStereotype(this.getStereotype("ejb3Remote"))
+								this.emRemoveStereotypeAssignment(this.emGetStereotypeAssignment("ejb3Remote"))
 						)
 						: ""
 				)
 				: (
-					let interface = createInterface(this.package(), asTypeName()+"Remote", asTypeName()+"Remote") : 
+					let interface = createInterface(this.navPackage(), asTypeName()+"Remote", asTypeName()+"Remote") : 
 						this.realization.add(interface) ->
 						interface.addRemoteStereotype("") ->
-						interface.model().externalTypes.remove("I"+asTypeName()+"Remote") ->
+						interface.navModel().externalTypes.remove("I"+asTypeName()+"Remote") ->
 						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor() && !(e.isSetter() && e.static) ).cloneOperation(interface) ->
-						this.removeStereotype(this.getStereotype("ejb3Remote"))
+						this.emRemoveStereotypeAssignment(this.emGetStereotypeAssignment("ejb3Remote"))
 				)
 		) 
 		: "" ->
 	isLocalInterfaceNeeded()
 		? (
-			this.hasUtilizableValue("ejb3Local", "name")
+			this.emHasUtilizableTaggedValue("ejb3Local", "name")
 				? (	
-					!allClassifiers(this.model()).typeSelect(MInterface).exists(e|e.name == this.getTaggedValue("ejb3Local", "name"))
+					!allNestedClassifiers(this.navModel()).typeSelect(MInterface).exists(e|e.name == this.emGetTaggedValue("ejb3Local", "name"))
 						? (	
-							let interface = createInterface(this.package(), this.getTaggedValue("ejb3Local", "name"), this.getTaggedValue("ejb3Local", "name")) : 
+							let interface = createInterface(this.navPackage(), this.emGetTaggedValue("ejb3Local", "name"), this.emGetTaggedValue("ejb3Local", "name")) : 
 								this.realization.add(interface) ->
 								interface.addLocalStereotype("") ->
 								this.operation.select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface) ->
-								this.removeStereotype(this.getStereotype("ejb3Local"))
+								this.emRemoveStereotypeAssignment(this.emGetStereotypeAssignment("ejb3Local"))
 						)
 						: ""
 				)
 				: (
-					let interface = createInterface(this.package(), asTypeName()+"Local", asTypeName()+"Local") : 
+					let interface = createInterface(this.navPackage(), asTypeName()+"Local", asTypeName()+"Local") : 
 						this.realization.add(interface) ->
 						interface.addLocalStereotype("") ->
-						interface.model().externalTypes.remove("I"+asTypeName()+"Local") ->
+						interface.navModel().externalTypes.remove("I"+asTypeName()+"Local") ->
 						this.operation.select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface) ->
-						this.removeStereotype(this.getStereotype("ejb3Local"))
+						this.emRemoveStereotypeAssignment(this.emGetStereotypeAssignment("ejb3Local"))
 				)
 		)
 		: "";
@@ -71,7 +73,7 @@ Void addSessionBeanInterfaces(MClassifier this) :
  *	checks whether a remote session bean interface should be created
  */		
 boolean isRemoteInterfaceNeeded(MClassifier this) :
-	this.hasStereotype("ejb3SessionBean") && this.hasStereotype("ejb3Remote")
+	this.emHasStereotypeAssignment("ejb3SessionBean") && this.emHasStereotypeAssignment("ejb3Remote")
 		? true
 		: false;
 
@@ -79,6 +81,6 @@ boolean isRemoteInterfaceNeeded(MClassifier this) :
  *	checks whether a local session bean interface should be created
  */	
 boolean isLocalInterfaceNeeded(MClassifier this) :
-	this.hasStereotype("ejb3SessionBean") && this.hasStereotype("ejb3Local")
+	this.emHasStereotypeAssignment("ejb3SessionBean") && this.emHasStereotypeAssignment("ejb3Local")
 		? true
 		: false;
