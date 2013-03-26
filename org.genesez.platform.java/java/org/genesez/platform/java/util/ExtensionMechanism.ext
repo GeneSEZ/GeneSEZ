@@ -12,7 +12,9 @@ import gcore;
  * @author	andre pflueger
  * @author	tobias haubold <toh@fh-zwickau.de>
  */
+extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
 
 /**
  * Moves all stereotype assignments and tagged values from one element to the other.
@@ -32,3 +34,17 @@ MOperation emMoveExtensionsTo(MElement this, MElement target) :
 			target.taggedValue.addAll( taggedValue )
 		) : this ->
 	this;
+
+/**
+ * Sets the tagged value.
+ * 
+ * @deprecated	just introduced for easier migration
+ */
+MTaggedValue setTaggedValue(MElement this, String stereotype, String tag, String value) :
+	ensureTaggedValueExistence(
+		navModel()
+			.ensureStereotypeExistence( stereotype, stereotype )
+			.ensureTagExistence( tag, "String" )
+		, value
+	);
+
