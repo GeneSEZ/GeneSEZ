@@ -3,16 +3,16 @@ import gcore;
 extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::metamodel::core::util::CreateElement;
 extension org::genesez::metamodel::core::util::NavigateElement;
+extension org::genesez::platform::java::m2m::AccessOperation;
 extension org::genesez::platform::java::util::JavaTypes;
-extension org::genesez::platform::java::java5::scripts::Attribute;
 
-	
+
 Void addGetterAndSetterOperations(MInterface this) :
 	let c = getSessionBeanSeamComponent() :
 		c != null
 			? (
-				c.property.typeSelect(MAttribute).createGetterOperation(this) ->
-				c.property.typeSelect(MAttribute).createSetterOperation(this)
+				c.property.typeSelect(MAttribute).emProcessGetAccessOperation() ->
+				c.property.typeSelect(MAttribute).emProcessSetAccessOperation()
 			)
 			: "";
 		
