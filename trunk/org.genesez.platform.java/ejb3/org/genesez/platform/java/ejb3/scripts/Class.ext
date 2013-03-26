@@ -10,7 +10,7 @@ extension org::genesez::platform::java::java5::scripts::Class;
 extension org::genesez::platform::java::ejb3::scripts::Stereotypes;
 extension org::genesez::platform::common::m2m::MakeElement;
 extension org::genesez::platform::common::m2m::RemoveElement;
-extension org::genesez::platform::common::m2m::CreateBasics;
+extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
 /* remove this import to be independent from jpa cartridge */
 extension org::genesez::platform::java::jpa::scripts::Stereotypes;
 
@@ -188,16 +188,16 @@ Void addStereotypesForEntityManager(MClass this, String attributeName, String fe
 Void createAccessorForEntityManager(MProperty this) :
 	!this.classifier.emHasTaggedValue("ejb3SessionBean", "entityManagerAccess", "None")
 		? (	this.classifier.emHasTaggedValue("ejb3SessionBean", "entityManagerAccess", "Both")
-			? createAccessor(this, "true", "true")
+			? emAssignGeneSezAccessorStereotype(this, true, true, false, false)
 			: (	this.classifier.emHasTaggedValue("ejb3SessionBean", "entityManagerAccess", "Getter")
-				? createAccessor(this, "true", "false")
+				? emAssignGeneSezAccessorStereotype(this, true, false, false, false)
 				: (	this.classifier.emHasTaggedValue("ejb3SessionBean", "entityManagerAccess", "Setter")
-					? createAccessor(this, "false", "true")
+					? emAssignGeneSezAccessorStereotype(this, false, true, false, false)
 					: ""
 				) 
 			) 
 		)
-		: createAccessor(this, "false", "false") ->
+		: emAssignGeneSezAccessorStereotype(this, false, false, false, false) ->
 	"";
 
 /**

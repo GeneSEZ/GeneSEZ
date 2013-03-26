@@ -2,7 +2,7 @@ import gcore;
 
 extension org::genesez::util::logging::Logging;
 extension org::genesez::metamodel::core::util::AccessElement;
-extension org::genesez::platform::common::m2m::CreateBasics;
+extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
 	
 /**
   *	adds the stereotype "accessor" to an attribute with stereotype
@@ -16,5 +16,5 @@ extension org::genesez::platform::common::m2m::CreateBasics;
 Void checkAccessorForJWSStereotypes(MAttribute this) :
 	!this.emHasStereotypeAssignment("accessor") && 
 	this.emHasStereotypeAssignment("jwsWebServiceRef")
-		? createAccessor("false", "false")
+		? emAssignGeneSezAccessorStereotype(false, false, false, false)
 		: "";

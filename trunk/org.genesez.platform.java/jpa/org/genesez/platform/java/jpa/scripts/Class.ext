@@ -5,7 +5,7 @@ extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::metamodel::core::util::CreateElement;
 extension org::genesez::metamodel::core::util::NavigateElement;
 extension org::genesez::platform::common::m2m::MakeElement;
-extension org::genesez::platform::common::m2m::CreateBasics;
+extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
 extension org::genesez::platform::java::util::Naming;
 extension org::genesez::platform::java::util::JavaTypes;
 extension org::genesez::platform::java::java5::scripts::Class;
@@ -106,7 +106,7 @@ Void addAccessorStereotype(MClass this) :
 			//add an accessor for get and set methods if no accessor 
 			//stereotype exists
 			!this.emHasStereotypeAssignment("accessor")
-				? createAccessor("true", "true")
+				? emAssignGeneSezAccessorStereotype(true, true, false, false)
 				: ""
 		)
 		: "";
@@ -124,7 +124,7 @@ Void addOptimisticLocking(MClass this) :
 	property.notExists(e|e.name == "version" && e.type.name() == "int")
 		? (
 			this.addVersionAttribute() ->
-			property.selectFirst(e|e.name == "version" && e.type.name() == "int").createAccessor("true", "true")
+			property.selectFirst(e|e.name == "version" && e.type.name() == "int").emAssignGeneSezAccessorStereotype(true, true, false, false)
 		)
 		: "";
 
