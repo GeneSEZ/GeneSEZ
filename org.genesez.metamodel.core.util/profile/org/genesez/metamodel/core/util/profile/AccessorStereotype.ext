@@ -77,45 +77,45 @@ boolean emGenerateAccessOperation(MProperty this, String accessOperationType):
  * 
  * @return	The property owning the tagged values.
  */
-MProperty prAssignGeneSezAccessorStereotype(MProperty this, boolean get, boolean set, boolean add, boolean remove) :
-	prDoAssignGeneSezAccessorStereotype( get, set, add, remove );
+MProperty emAssignGeneSezAccessorStereotype(MProperty this, boolean get, boolean set, boolean add, boolean remove) :
+	emDoAssignGeneSezAccessorStereotype( get, set, add, remove );
 
 /**
  * Assigns the «accessor» stereotype and creates the specified tagged values.
  * 
  * @return	The classifier owning the tagged values.
  */
-MClassifier prAssignGeneSezAccessorStereotype(MClassifier this, boolean get, boolean set, boolean add, boolean remove) :
-	prDoAssignGeneSezAccessorStereotype( get, set, add, remove );
+MClassifier emAssignGeneSezAccessorStereotype(MClassifier this, boolean get, boolean set, boolean add, boolean remove) :
+	emDoAssignGeneSezAccessorStereotype( get, set, add, remove );
 
 /**
  * Assigns the specified values to the tags of the «accessor» stereotype.
  * 
  * @return	The element owning the tagged values.
  */
-private MElement prDoAssignGeneSezAccessorStereotype(MElement this, boolean get, boolean set, boolean add, boolean remove) :
+private MElement emDoAssignGeneSezAccessorStereotype(MElement this, boolean get, boolean set, boolean add, boolean remove) :
 	ensureTaggedValueExistence(
-		navModel().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorGetter() ), get.toString()
+		navModel().emEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorGetter() ), get.toString()
 	).owningElement
 	.ensureTaggedValueExistence(
-		navModel().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorSetter() ), set.toString()
+		navModel().emEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorSetter() ), set.toString()
 	).owningElement
 	.ensureTaggedValueExistence(
-		navModel().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorAdd() ), add.toString()
+		navModel().emEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorAdd() ), add.toString()
 	).owningElement
 	.ensureTaggedValueExistence(
-		navModel().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorRemove() ), remove.toString()
+		navModel().emEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorRemove() ), remove.toString()
 	).owningElement;
 
 /**
  * Returns the «accessor» stereotype of the GeneSEZ profile with all of its tags.
  * It checks if the stereotype already exists and creates it if needed.
  */
-MStereotype prEnsureGeneSezAccessorStereotype(MModel this) :
+MStereotype emEnsureGeneSezAccessorStereotype(MModel this) :
 	anyStereotype.exists( s|s.name == prAccessor() )
-		? anyStereotype.selectFirst( s|s.name == prAccessor() ).prEnsureGeneSezAccessorTags()
-		: prEnsureGeneSezAccessorTags(
-			ensureStereotypeExistence( accessorXmiGuid(), prAccessor() )
+		? anyStereotype.selectFirst( s|s.name == prAccessor() ).emEnsureGeneSezAccessorTags()
+		: emEnsureGeneSezAccessorTags(
+			ensureStereotypeExistence( prAccessorXmiGuid(), prAccessor() )
 		);
 
 /**
@@ -123,7 +123,7 @@ MStereotype prEnsureGeneSezAccessorStereotype(MModel this) :
  * 
  * @return	The «accessor» stereotype.
  */
-private MStereotype prEnsureGeneSezAccessorTags(MStereotype this) :
+private MStereotype emEnsureGeneSezAccessorTags(MStereotype this) :
 	ensureTagExistence( prAccessorGetter(), "Boolean" ).stereotype
 		.ensureTagExistence( prAccessorSetter(), "Boolean" ).stereotype
 		.ensureTagExistence( prAccessorAdd(), "Boolean" ).stereotype
@@ -132,5 +132,5 @@ private MStereotype prEnsureGeneSezAccessorTags(MStereotype this) :
 /**
  * Returns the xmi guid of the «accessor» stereotype.
  */
-private String accessorXmiGuid() : "org.genesez.adapter.uml2.profile.accessor";
+private String prAccessorXmiGuid() : "org.genesez.adapter.uml2.profile.accessor";
 
