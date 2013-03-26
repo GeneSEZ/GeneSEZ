@@ -52,8 +52,14 @@ Void transformWAMStereotypes(MClass this) :
 			this.addLocalStereotype("") ->
 			this.makeAttribute("timerService", "TimerService", "public") ->
 			(
-				let op = this.makeOperation("executeTask", "public", false, false, false) :				
-					op.parameter.add(op.makeParameter("timer", "", "in", this.navModel().typeTimer) )
+				this.ensureOperationExistence( this.xmiGuid + ".executeTask", "executeTask" )
+					.processOperation( "public", false, false, false )
+					.ensureParameterExistence( this.xmiGuid + ".executeTask.timer", "timer" )
+						.processParameter( "", "in", createMultiplicity(0, 1) )
+						.wireType( this.navModel().typeTimer() )
+//	old impl:
+//				let op = this.makeOperation("executeTask", "public", false, false, false) :				
+//					op.parameter.add(op.makeParameter("timer", "", "in", this.navModel().typeTimer) )
 			)
 		)
 		: "" ;
@@ -90,8 +96,14 @@ MClassifier addMessageListener(MClass this) :
 				: "" ->
 			!this.operation.exists(e|e.name.matches("onMessage"))
 				? (
-					let o = makeOperation("onMessage", "public") :
-						o.parameter.add(o.makeParameter("message", "in", this.navModel().typeMessage() ))
+					ensureOperationExistence( xmiGuid + ".onMessage", "onMessage" )
+						.processOperation( "public", false, false, false )
+						.ensureParameterExistence( xmiGuid + ".onMessage.message", "message" )
+							.processParameter( "", "in", createMultiplicity(0, 1) )
+							.wireType( this.navModel().typeMessage() )
+//	old impl:
+//					let o = makeOperation("onMessage", "public") :
+//						o.parameter.add(o.makeParameter("message", "in", this.navModel().typeMessage() ))
 				)
 				: ""
 		)

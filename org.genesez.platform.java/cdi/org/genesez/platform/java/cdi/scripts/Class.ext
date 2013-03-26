@@ -13,7 +13,6 @@ extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::metamodel::core::util::CreateElement;
 extension org::genesez::metamodel::core::util::CloneElement;
 extension org::genesez::metamodel::core::util::NavigateElement;
-extension org::genesez::platform::common::m2m::MakeElement;
 extension org::genesez::platform::java::util::Naming;
 extension org::genesez::platform::java::util::JavaTypes;
 extension org::genesez::platform::java::cdi::scripts::Functionality;
@@ -95,10 +94,21 @@ create MClass createEntityHomeClass(MClass entityClass) :
         
         // need some general operations
         homeClass.addListOperations(entityClass) ->
-        ( let 	o = homeClass.makeOperation("getEntityManager", homeClass.name + ".getEntityManager", "public") :
-        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", o.navModel().typeEntityManager() ) )
-		) ->
-		homeClass.makeOperation("wire", "public") ->
+        
+        homeClass.ensureOperationExistence( homeClass.name + ".getEntityManager", "getEntityManager" )
+        	.processOperation( "public", false, false, false )
+        	.ensureReturnParameterExistence( homeClass.name + ".getEntityManager.return", "" )
+        		.processParameter("", "return", createMultiplicity(0, 1))
+        		.wireType( navModel().typeEntityManager() ) ->
+//		old impl:
+//        ( let  o = homeClass.makeOperation("getEntityManager", homeClass.name + ".getEntityManager", "public") :
+//                       o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", o.navModel().typeEntityManager() ) )
+//        ) ->
+		homeClass.ensureOperationExistence( homeClass.xmiGuid + ".wire", "wire" )
+			.processOperation( "public", false, false, false ) ->
+//      old impl:  
+//        homeClass.makeOperation("wire", "public") ->
+        
         homeClass.addEjbRemoveOperation()
         
         // implements Home Interface
@@ -176,12 +186,24 @@ Void addEntityManager(MClassifier this, MClassifier entityClass):
  *  @param  entityClass  instance of MClassifier
  */    
 Void addListOperations(MClassifier this, MClassifier entityClass):
-	( let 	o = makeOperation("get"+entityClass.name+"List", entityClass.name+".get"+entityClass.name+"List", "public") :
-        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", this.navModel().typeListFor(entityClass.name) ) )
-	) -> 
-	( let 	o = makeOperation("get"+entityClass.name+"ListCount", entityClass.name + ".get"+entityClass.name+"ListCount", "public") :
-        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", createPrimitiveType( o.navModel(), "long" ) ) )
-	);    
+	ensureOperationExistence( entityClass.xmiGuid+".get"+entityClass.name+"List", "get"+entityClass.name+"List" )
+		.processOperation( "public", false, false, false )
+		.ensureReturnParameterExistence( entityClass.xmiGuid+".get"+entityClass.name+"List.return", "" )
+			.processParameter( "", "return", createMultiplicity(0, 1) )
+			.wireType( this.navModel().typeListFor(entityClass.name) ) ->
+//	Note: xmi guid of operation changed, based on operation name in old impl!
+//	( let 	o = makeOperation("get"+entityClass.name+"List", entityClass.name+".get"+entityClass.name+"List", "public") :
+//        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", this.navModel().typeListFor(entityClass.name) ) )
+//	) -> 
+	ensureOperationExistence( entityClass.xmiGuid + ".get"+entityClass.name+"ListCount", "get"+entityClass.name+"ListCount" )
+		.processOperation( "public", false, false, false )
+		.ensureReturnParameterExistence( entityClass.xmiGuid + ".get"+entityClass.name+"ListCount.return", "" )
+			.processParameter( "", "return", createMultiplicity(0, 1) )
+			.wireType( this.navModel().typeLongPrimitive() );
+//	Note: xmi guid of operation changed, based on operation name in old impl!
+//	( let 	o = makeOperation("get"+entityClass.name+"ListCount", entityClass.name + ".get"+entityClass.name+"ListCount", "public") :
+//        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", createPrimitiveType( o.navModel(), "long" ) ) )
+//	);
 
 /**
  * Adds a operation annotated with @Remove, necessary when removing EJB
@@ -190,10 +212,15 @@ Void addListOperations(MClassifier this, MClassifier entityClass):
  *  @param  entityClass  instance of MClassifier
  */    
 Void addEjbRemoveOperation(MClassifier this): 
-    let o = makeOperation(this, "removeEjb", "public"): (
-        o.stereotype.add(createStereotype(this.navModel(), "ejb3Remove", "ejb3Remove"))    
-    );
-        
+	ensureOperationExistence( xmiGuid + ".removeEjb", "removeEjb" )
+		.processOperation( "public", false, false, false )
+		.ensureStereotypeAssignment(
+			navModel().ensureStereotypeExistence( "ejb3Remove", "ejb3Remove" )
+		);
+//    let o = makeOperation(this, "removeEjb", "public"): (
+//        o.stereotype.add(createStereotype(this.navModel(), "ejb3Remove", "ejb3Remove"))    
+//    );
+
 /**
  * Takes an Association Role, transforms it into an attribute and adds it to the homeClass.
  *
@@ -206,9 +233,17 @@ Void createAssociationInjectionProperty(MAssociationRole role, MClass homeClass)
         a.setType(role.type) ->
         a.stereotype.add(createStereotype(homeClass.navModel(), "di4javaInject", "di4javaInject")) ->
         a.stereotype.add(createStereotype(homeClass.navModel(), "cdiExtEntityHome", "cdiExtEntityHome")) ->
-    (role.multiplicity != 1) 
-        ? ( let	o = homeClass.makeOperation("get"+role.type.name()+"List", homeClass.name+".get"+role.type.name()+"List", "public") :
-        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", o.navModel().typeListFor(role.type().name()) ) ) )
+    (role.multiplicity != 1)
+        ? (
+			homeClass.ensureOperationExistence( homeClass.xmiGuid+".get"+role.type.name()+"List", "get"+role.type.name()+"List" )
+				.processOperation( "public", false, false, false )
+				.ensureReturnParameterExistence( homeClass.xmiGuid+".get"+role.type.name()+"List.return", "" )
+					.processParameter( "", "return", createMultiplicity(0, 1) )
+					.wireType( homeClass.navModel().typeListFor(role.type.name()) )
+//	Note: xmi guid of operation changed, based on operation name in old impl!
+//        	let	o = homeClass.makeOperation("get"+role.type.name()+"List", homeClass.name+".get"+role.type.name()+"List", "public") :
+//        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", o.navModel().typeListFor(role.type().name()) ) ) 
+        )
         : Void;
     
 /**
@@ -225,5 +260,5 @@ MAttribute addAttribute(MClassifier container, String name, String type, String 
         a.processAttribute("", false, false) ->
         a.setMultiplicity( createMultiplicity( 0, multiplicity ) ) ->
         a.setVisibility(visibility) ->
-        a.setType( createExternal(container.navModel(), type) ) ->        
+        a.setType( createExternalType(container.navModel(), type, type) ) ->        
         a;
