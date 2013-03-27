@@ -563,6 +563,34 @@ create MTag createTag(MStereotype container, String name, String type) :
 
 /**
  * Returns the tagged value instance with the specified properties.
+ * It checks if the tagged value is already present and changes its value if needed.
+ * It checks the stereotype assignment to the model element too and assigns it if needed.
+ */
+MTaggedValue ensureSingleTaggedValueExistence(MElement container, MTag tag, String value) :
+	// check stereotype assignment
+	container.ensureStereotypeAssignment( tag.stereotype ) ->
+	// check tagged value assignment
+	container.taggedValue.exists( tv | tv.tag == tag )
+		? container.taggedValue.selectFirst( tv | tv.tag == tag ).setValue( value )
+		: createTaggedValue( container, tag, value );
+
+
+/**
+ * Returns the tagged value instance with the specified properties.
+ * It checks if the tagged value is already present and changes its value if needed.
+ * It checks the stereotype assignment to the model element too and assigns it if needed.
+ */
+MTaggedValue ensureSingleTaggedValueExistence(MElement container, MTag tag, MElement valueReference) :
+	// check stereotype assignment
+	container.ensureStereotypeAssignment( tag.stereotype ) ->
+	// check tagged value assignment
+	container.taggedValue.exists( tv | tv.tag == tag )
+		? container.taggedValue.selectFirst( tv | tv.tag == tag ).setValueReference( valueReference )
+		: createTaggedValue( container, tag, valueReference );
+
+
+/**
+ * Returns the tagged value instance with the specified properties.
  * It checks if the tagged value is already present and creates it if needed.
  * It checks the stereotype assignment to the model element too and assigns it if needed.
  */
