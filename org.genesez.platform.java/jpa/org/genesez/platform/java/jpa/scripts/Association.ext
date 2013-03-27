@@ -25,9 +25,9 @@ Void checkAssociationStereotype(MAssociationRole this) :
 								evaluation of the opposite association later in the generation process. 
 								Cannot create stereotype on opposite because it does not work for some reason!!! (eins zu n)
 								*/
-								multiplicity == 1
+								multiplicity.upperBound == 1
 									? (
-										opposite.multiplicity == 1
+										opposite.multiplicity.upperBound == 1
 											? (
 												setTaggedValue("jpaAssociation", "type", "OneToOne") ->
 												setTaggedValue("jpaAssociation", "mappedBy", "true")
@@ -38,7 +38,7 @@ Void checkAssociationStereotype(MAssociationRole this) :
 											)
 									)
 									: (
-										opposite.multiplicity == 1
+										opposite.multiplicity.upperBound == 1
 											? (
 												setTaggedValue("jpaAssociation", "type", "OneToMany") ->
 												setTaggedValue("jpaAssociation", "mappedBy", "true")
@@ -81,9 +81,9 @@ Void checkAssociationStereotype(MAssociationRole this) :
 									site would have had a stereotype. Tagged value "mappedBy" is set on this 
 									site thus no "mappedBy" is set to the new stereotype (exception: @ManyToOne)
 								*/
-								multiplicity == 1
+								multiplicity.upperBound == 1
 									? (
-										opposite.multiplicity == 1
+										opposite.multiplicity.upperBound == 1
 											? (
 												addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", "true") ->
 												addAssociationStereotype(opposite, "OneToOne", "null", "[]", "DEFAULT", "true", "false")
@@ -94,7 +94,7 @@ Void checkAssociationStereotype(MAssociationRole this) :
 											)
 									)
 									: (
-										opposite.multiplicity == 1
+										opposite.multiplicity.upperBound == 1
 											? (
 												addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", "true") ->
 												addAssociationStereotype(opposite, "ManyToOne", "null", "[]", "DEFAULT", "true", "false")
@@ -128,9 +128,9 @@ Void evaluateOppositeStereotype(MAssociationRole this, MAssociationRole op) :
 	op.emHasTaggedValue("jpaAssociation", "type", "AutoDetect") || 
 	!op.emHasUtilizableTaggedValue("jpaAssociation", "type")
 		? (
-			multiplicity == 1
+			multiplicity.upperBound == 1
 				? (
-					op.multiplicity == 1
+					op.multiplicity.upperBound == 1
 						? (
 							!op.emHasTaggedValue("jpaAssociation", "mappedBy", "true")
 								? (
@@ -163,7 +163,7 @@ Void evaluateOppositeStereotype(MAssociationRole this, MAssociationRole op) :
 						)						
 				)
 				: (
-					op.multiplicity == 1
+					op.multiplicity.upperBound == 1
 						? (
 							emHasStereotypeAssignment("jpaAssociation")
 								? (
@@ -282,14 +282,14 @@ Void evaluateUnidirectionalAssociation(MAssociationRole this) :
 			emHasTaggedValue("jpaAssociation", "type", "AutoDetect") || 
 			!emHasUtilizableTaggedValue("jpaAssociation", "type")
 				? (
-					multiplicity == 1
+					multiplicity.upperBound == 1
 						? (
-							oppositeMultiplicity == 1
+							oppositeMultiplicity.upperBound == 1
 								? setTaggedValue("jpaAssociation", "type", "OneToOne")
 								: setTaggedValue("jpaAssociation", "type", "ManyToOne")
 						)
 						: (
-							oppositeMultiplicity == 1
+							oppositeMultiplicity.upperBound == 1
 								? setTaggedValue("jpaAssociation", "type", "OneToMany")
 								: setTaggedValue("jpaAssociation", "type", "ManyToMany")
 						)
@@ -300,14 +300,14 @@ Void evaluateUnidirectionalAssociation(MAssociationRole this) :
 			/**
 				evaluate new attribute oppositeMultiplicity
 			*/
-			multiplicity == 1
+			multiplicity.upperBound == 1
 				? (
-					oppositeMultiplicity == 1
+					oppositeMultiplicity.upperBound == 1
 						? addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", "false")
 						: addAssociationStereotype(this, "ManyToOne", "null", "[]", "DEFAULT", "true", "false")
 				)
 				: (
-					oppositeMultiplicity == 1
+					oppositeMultiplicity.upperBound == 1
 						? addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", "false")
 						: addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", "false")
 				) 
