@@ -1,0 +1,115 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+
+import gcore;
+
+
+/**
+ * Helper scripts to remove GeneSEZ Core meta model elements.
+ * 
+ * HINT: All scripts for extension mechanism are available under the prefix 'em'.
+ * 
+ * @author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ */
+
+ 
+ // -- Package -----------------------------------------------------------------------------------------------
+
+
+// -- Type and Literal --------------------------------------------------------------------------------------
+
+
+// -- Property ----------------------------------------------------------------------------------------------
+
+
+// -- Operation and Parameter -------------------------------------------------------------------------------
+
+
+// -- Comment -----------------------------------------------------------------------------------------------
+
+
+// -- Extension Mechanism - Stereotype Assignments ----------------------------------------------------------
+
+
+/**
+ * Removes all assigned stereotypes from an element amd ensures the deletion of its tagged values.
+ * 
+ * @return	The specified element.
+ * @api
+ */
+MElement emRemoveStereotypeAssignments(MElement this) :
+	// remove all assigned stereotypes
+	stereotype.collect( s | this.emRemoveStereotypeAssignment( s ) ) ->
+	this;
+
+
+/**
+ * Removes the specified assigned stereotype from an element and ensures the deletion of its tagged values.
+ * 
+ * @return	The specified element.
+ * @api
+ */
+MElement emRemoveStereotypeAssignment(MElement this, MStereotype stereotype) :
+	// remove all tagged values of the specified stereotype
+	stereotype.property.collect( p | this.emRemoveTaggedValues( p ) ) ->
+	// remove the specified assigned stereotype
+	this.stereotype.remove( stereotype ) ->
+	this;
+
+
+// -- Extension Mechanism - Tagged Values -------------------------------------------------------------------
+
+
+/**
+ * Removes all tagged values from an element.
+ * 
+ * @return	The specified element.
+ * @api
+ */
+MElement emRemoveTaggedValues(MElement this) :
+	taggedValue.removeAll( taggedValue ) ->
+	this;
+
+
+/**
+ * Removes all tagged values of the specified tag from an element.
+ * 
+ * @return	The specified element.
+ * @api
+ */
+MElement emRemoveTaggedValues(MElement this, MTag tag) :
+	// remove all assigned tagged values of the specified tag
+	taggedValue.remove( taggedValue.select( tv | tv.tag == tag ) ) ->
+	this;
+
+
+/**
+ * Removes the specified tagged value of a tag from an element.
+ * 
+ * @return	The specified element.
+ * @todo: 	Revise documentation.
+ * @api
+ */
+MElement emRemoveTaggedValue(MElement this, MTag tag, String value) :
+	taggedValue.remove( taggedValue.select( tv | tv.tag == tag && tv.value == value ) ) ->
+	this;
+
+
+/**
+ * Removes the specified tagged value reference of a tag from an element.
+ * 
+ * @return	The specified element.
+ * @todo: 	Revise documentation.
+ * @api
+ */
+MElement emRemoveTaggedValueReference(MElement this, MTag tag, MElement valueReference) :
+	taggedValue.remove( taggedValue.select( tv | tv.tag == tag && tv.valueReference == valueReference ) ) ->
+	this;
+
+
+// -- Private Functionality ---------------------------------------------------------------------------------
