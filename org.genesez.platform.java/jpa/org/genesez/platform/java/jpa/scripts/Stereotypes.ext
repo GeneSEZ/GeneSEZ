@@ -12,6 +12,9 @@ extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::metamodel::core::util::CreateElement;
 extension org::genesez::metamodel::core::util::NavigateElement;
 
+extension org::genesez::platform::java::util::Conversion;
+extension org::genesez::util::Conversion;
+
 
 /**
  *	function to add the stereotype "jpaColumn" to an existing (in the classifier) MElement
@@ -108,7 +111,10 @@ Void addAssociationStereotype(MProperty this, String associationType, String tar
 	let s = makeAssociationStereotype(this) :
 		this.stereotype.add(s) ->
 		createTaggedValue(this, createTag(s, "type", "jpaAssociationType"), associationType) ->
-		createTaggedValue(this, createTag(s, "cascade", "jpaCascadeType"), cascade) ->
+		// migration from single-valued to multi-valued tags
+		cascade.convertStringArrayToList().forAll(
+			c|createTaggedValue(this, createTag(s, "cascade", "jpaCascadeType"), c) != null
+		) ->
 		createTaggedValue(this, createTag(s, "fetch", "jpaFetchType"), fetch) ->
 		createTaggedValue(this, createTag(s, "optional", "Boolean"), optional) ->
 		createTaggedValue(this, createTag(s, "mappedBy", "String"), mappedBy) ->
