@@ -14,6 +14,7 @@ import gcore;
  */
 extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
 
 
 /**
@@ -28,5 +29,10 @@ MClass ensureDefaultConstructor(MClass this, String visibility) :
 	hasConstructors() && operation.select( o|o.isConstructor() ).exists( o|o.parameter.isEmpty )
 		? this
 		: ensureOperationExistence( xmiGuid + "_StandardConstructor", name )
-			.processOperation( visibility, false, false, false ) ->
+			.processOperation( visibility, false, false, false )
+			.ensureStereotypeAssignment(
+				navModel().ensureStereotypeExistence(
+					"http://www.genesez.org/StandardConstructor", "http://www.genesez.org/StandardConstructor"
+				)
+			) ->
 	this;
