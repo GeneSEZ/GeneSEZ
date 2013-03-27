@@ -196,7 +196,7 @@
 	generates the parameter list for the initializing constructor
 «ENDREM»
 «DEFINE _Params FOR MAttribute-»
-	«EXPAND _Annotation-»
+	«EXPAND Annotation-»
 	«IF multiplicity.isSingleValued()-»
 		«type.mapName().asTypeName()-»«EXPAND Type::GenericUse» «asAttribute()-»
 	«ELSE-»
@@ -229,7 +229,7 @@
 «ENDREM»
 «DEFINE _Constructor FOR MOperation-»
 	«EXPAND Comment::Constructor-»
-	«EXPAND _Annotation-»
+	«EXPAND Annotation-»
 	«modifier()-» «classifier.asTypeName()-»(«EXPAND _Params-») «EXPAND _Exception-» {
 		«EXPAND _ConstructorBody-»
 	}
@@ -241,7 +241,7 @@
 «ENDREM»
 «DEFINE _Declaration FOR MOperation-»
 	«EXPAND Comment::Operation-»
-	«EXPAND _Annotation-»
+	«EXPAND Annotation-»
 	«IF hasReturn() -»
 		«IF return.multiplicity.isSingleValued() && return.type.mapName() != null-»
 			«EXPAND _Modifier» «EXPAND _SingleValueReturn-»«EXPAND Type::GenericUse FOR return» «asOperation()»(«EXPAND _Params») «EXPAND _Exception -»;
@@ -259,7 +259,7 @@
 «ENDREM»
 «DEFINE _Implementation FOR MOperation-»
 	«EXPAND Comment::Operation-»
-	«EXPAND _Annotation-»
+	«EXPAND Annotation-»
 	«IF hasReturn() -»
 		«IF return.multiplicity.isSingleValued() && return.type.mapName() != null-»
 			«EXPAND _Modifier-» «EXPAND _SingleValueReturn-»«EXPAND Type::GenericUse FOR return» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-» {
@@ -297,7 +297,7 @@
 «ENDREM»
 «DEFINE _Params FOR MOperation -»
 	«FOREACH parameter AS p SEPARATOR ", "-»
-		«EXPAND _Annotation FOR p-» «IF p.multiplicity.isSingleValued()-»
+		«EXPAND Annotation FOR p-» «IF p.multiplicity.isSingleValued()-»
 			«p.type.mapName().asTypeName() -» «p.asParameter()» «IF p.hasDefaultValue()-» = «p.defaultvalue-»«ENDIF-»
 		«ELSE-»
 			«EXPAND Type::MultiValuedType(p.multiplicity, p.type) FOR p-» «p.asParameter()-» «IF p.hasDefaultValue()-» = «p.defaultvalue-»«ENDIF-»
@@ -383,20 +383,20 @@
 «REM»
 	will be overriden by other cartridges to generate annotations by using aspects
 «ENDREM»
-«DEFINE _Annotation FOR MOperation-»
+«DEFINE Annotation FOR MOperation-»
 	«EXPAND Element::JavaAnnotation -»
 «ENDDEFINE»
 
 «REM»
 	will be overriden by other cartridges to generate annotations by using aspects
 «ENDREM»
-«DEFINE _Annotation FOR MParameter-»
+«DEFINE Annotation FOR MParameter-»
 	«EXPAND Element::JavaAnnotation -»
 «ENDDEFINE»
 
 «REM»
 	will be overriden by other cartridges to generate annotations by using aspects
 «ENDREM»
-«DEFINE _Annotation FOR MAttribute-»
+«DEFINE Annotation FOR MAttribute-»
 	«EXPAND Element::JavaAnnotation -»
 «ENDDEFINE»
