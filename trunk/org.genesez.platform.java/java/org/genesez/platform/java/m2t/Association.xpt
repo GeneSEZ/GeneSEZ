@@ -235,7 +235,7 @@
 					if (this.«asAttribute()-» == «asAttribute()-») {
 						return;
 					}
-					«IF opposite != null && opposite.multiplicity != 1-»
+					«IF opposite != null && opposite.multiplicity.upperBound != 1-»
 						if (this.«asAttribute()-» != null) {
 							this.«asAttribute()-».«opposite.asRemoveFrom()-»(this);
 						}
@@ -307,7 +307,7 @@
 					}
 					this.«asAttribute()-».remove(«asAttribute()-»);
 				«ENDIF-»
-				«IF opposite != null && opposite.multiplicity != 1 
+				«IF opposite != null && opposite.multiplicity.upperBound != 1 
 					&& opposite.emGenerateSetAccess()-»
 					if («asAttribute()-».«opposite.asGetter()-»().contains(this)) {
 						«asAttribute()-».«opposite.asRemoveFrom()-»(this);
