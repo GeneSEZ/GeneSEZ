@@ -29,6 +29,9 @@ import org.eclipse.internal.xtend.expression.ast.FeatureCall;
 import org.eclipse.internal.xtend.expression.ast.GlobalVarExpression;
 import org.eclipse.internal.xtend.expression.ast.SyntaxElement;
 
+/**
+ * @deprecated currently not needed, check if its useful
+ */
 public class GeneSEZXpandParser extends XpandParser {
 	
 	public GeneSEZXpandParser(final TokenStream stream) {

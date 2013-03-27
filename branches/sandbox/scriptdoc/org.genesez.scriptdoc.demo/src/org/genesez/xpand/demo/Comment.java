@@ -10,6 +10,9 @@ import org.eclipse.internal.xtend.expression.ast.DeclaredParameter;
 import org.eclipse.internal.xtend.expression.ast.Identifier;
 import org.eclipse.internal.xtend.expression.ast.SyntaxElement;
 
+/**
+ * @deprecated currently not needed, check if its useful
+ */
 public class Comment extends SyntaxElement {
 
 	private Template owner = null;
