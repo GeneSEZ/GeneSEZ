@@ -1,0 +1,219 @@
+
+«IMPORT gcore»
+
+«REM»
+	Helper for the generation of java type definitions and type usages.
+	
+	@author	tobias haubold
+«ENDREM»
+
+«REM» useful support functions «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
+«EXTENSION org::genesez::metamodel::core::util::profile::GeneSEZProfileAccessElement»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+
+«EXTENSION org::genesez::platform::java::m2m::Annotation»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
+«EXTENSION org::genesez::platform::java::util::Helper»
+«EXTENSION org::genesez::util::logging::Logging»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Generates the inner type definition.
+	Note: we don't use '-' within the define block to generate a new line.
+«ENDREM»
+«DEFINE Inner FOR MClass»
+	«EXPAND Class::Inner -»
+«ENDDEFINE»
+
+«DEFINE Inner FOR MInterface»
+	«IF emHasStereotypeAssignment(prJavaAnnotationStereotype()) -»
+		«EXPAND Annotation::Inner -»
+	«ELSE -»
+		«EXPAND Interface::Inner -»
+	«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE Inner FOR MEnumeration»
+	«EXPAND Enumeration::Inner -»
+«ENDDEFINE»
+
+«DEFINE Inner FOR MClassifier -»
+	«logFatal("MDataType instances are not allowed for inner type!") -»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates the multi-valued type statement of an attribute, operation or parameter
+	distinction is as follows:
+	* feature 'usePrimitiveTyp' to use arrays instead of collections
+	* if type is a primitive type, the wrapper type must be used as generic type for collections
+«ENDREM»
+«DEFINE MultiValuedType(MMultiplicity multiplicity, MType type) FOR MElement -»
+	«logTrace("", "Generate multi valued type for [" + multiplicity + ", " + type.name() + "] " + this) -»
+	«IF prHasPrimitiveStereotype() -»
+		«type.mapName().asTypeName() -»«EXPAND GenericUse»[]
+	«ELSE -»
+		«multiplicity.mapCollection() -»<«type.mapName("Wrapper").asTypeName()»«EXPAND GenericUse»>
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates modifiers
+	either 'final' or 'abstract' is permitted
+«ENDREM»
+«DEFINE Modifier FOR MClassifier -»
+	«modifier()» «IF final»final «ELSEIF abstract»abstract «ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the generalizations
+	only single inheritance is allowed!
+«ENDREM»
+«DEFINE Generalization FOR MClassifier -»
+«IF !generalization.isEmpty -»
+	extends «generalization.first().mapName().asTypeName()-»«EXPAND GenericUse(genericParameter) FOR generalization.first()-»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the generalizations for interfaces
+	multiplie inheritance is allowed!
+«ENDREM»
+«DEFINE Generalization FOR MInterface -»
+«IF !generalization.isEmpty -»
+	extends «FOREACH generalization AS g SEPARATOR ", "»«g.mapName().asTypeName()»«EXPAND GenericUse(genericParameter) FOR g»«ENDFOREACH»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the realizations
+«ENDREM»
+«DEFINE Realization FOR MClassifier-»
+«IF !realization.isEmpty-»
+	implements «FOREACH realization AS c SEPARATOR ", " -»«c.mapName().asTypeName()»«EXPAND GenericUse(genericParameter) FOR c»«ENDFOREACH -»
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generates a region for own code implementations
+	@param	id	the globally unique protected region id
+«ENDREM»
+«DEFINE OwnCodeImpl(String id) FOR MClassifier -»
+	«PROTECT CSTART "/* " CEND " */" ID (id)»
+	// TODO: put your own implementation code here
+	«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	generics
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Generates the type parameters / generics if any.
+«ENDREM»
+«DEFINE GenericDefinition FOR MClassifier -»
+«IF !genericParameter.isEmpty -»
+<«EXPAND GenericDefinition FOREACH genericParameter SEPARATOR ", " -»>
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	Generates the type parameters / generics if any.
+«ENDREM»
+«DEFINE GenericDefinition FOR MExternal -»
+«IF !genericParameter.isEmpty -»
+<«EXPAND GenericDefinition FOREACH genericParameter SEPARATOR ", " -»>
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	Generates the specified type parameter / generic optionally with the 'extends' restriction of the first constraining type if any.
+«ENDREM»
+«DEFINE GenericDefinition FOR MGeneric -»
+«specification»«IF !constraint.isEmpty» extends «constraint.first().name()»«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	does nothing, just there for error free templates ;-)
+«ENDREM»
+«DEFINE GenericDefinition FOR MType-»
+«ENDDEFINE»
+
+«REM»
+	Generates the use of generics within generalizations and realizations.
+	@param	generics	the generic parameters of the classifier
+	@param	this		the classifier on which generic parameters may be used
+«ENDREM»
+«DEFINE GenericUse(List[MGeneric] generics) FOR MClassifier -»
+«IF !genericParameter.isEmpty -»
+<«EXPAND GenericUse(generics) FOREACH genericParameter SEPARATOR ", "»>
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	Generates the use of generics within generalizations + realizations.
+«ENDREM»
+«DEFINE GenericUse(List[MGeneric] generics) FOR MExternal -»
+«IF !genericParameter.isEmpty -»
+<«EXPAND GenericUse(generics) FOREACH genericParameter SEPARATOR ", "»>
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	Generates the generic parameter specifications.
+	Note [toh]: here we need to evaluate uml template bindings which are not available in gcore models
+«ENDREM»
+«DEFINE GenericUse(List[MGeneric] generics) FOR MGeneric -»
+«specification -»
+«ENDDEFINE»
+
+«REM» Just here for error free templates «ENDREM»
+«DEFINE GenericUse(List[MGeneric] generics) FOR MType -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the type parameters / generics used by an attribute.
+«ENDREM»
+«DEFINE GenericUse FOR MAttribute -»
+«IF !genericRealization.isEmpty -»
+	<«genericRealization.convertToString() -»>
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	Generates the type parameters / generics used by a parameter.
+«ENDREM»
+«DEFINE GenericUse FOR MParameter -»
+«IF !genericRealization.isEmpty -»
+	<«genericRealization.convertToString() -»>
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	Does nothing, just here for error free templates.
+«ENDREM»
+«DEFINE GenericUse FOR MElement -»
+«ENDDEFINE»
