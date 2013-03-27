@@ -151,7 +151,7 @@ Void checkPrimaryKeyAttributeAndOrStereotype(MClass this) :
   */
 MClassifier addSerializable(MClassifier this) :
 	(this.emHasStereotypeAssignment("jpaPersistentEntity") || this.emHasTaggedValue("jpaPrimaryKeyClass", "embeddable", "true")) 
-	&& !generalization.typeSelect(MClass).exists(e | e.emHasStereotypeAssignment("jpaPersistentEntity")) 
+	&& !allGeneralizations().typeSelect(MClass).exists(e | e.emHasStereotypeAssignment("jpaPersistentEntity")) 
 		? realization.add( this.navModel().typeSerializable() )
 		: "";
 
