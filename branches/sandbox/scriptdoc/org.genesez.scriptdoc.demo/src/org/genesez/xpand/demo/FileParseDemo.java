@@ -61,10 +61,12 @@ public class FileParseDemo {
 		if (r instanceof Template) {
 			dump((Template)r);
 		}
+		System.out.println();
 		Resource r2 = resourceManager.loadResource("org::genesez::metamodel::core::util::CloneElement", XtendFile.FILE_EXTENSION);
 		if (r2 instanceof ExtensionFile) {
 			dump((ExtensionFile)r2);
 		}
+		System.out.println();
 		Resource r3 = resourceManager.loadResource("org::genesez::platform::java::validation::Syntax", CheckUtils.FILE_EXTENSION);
 		if (r3 instanceof ExtensionFile) {
 			dump((ExtensionFile)r3);
