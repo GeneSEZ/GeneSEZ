@@ -335,9 +335,16 @@ MStereotype makePersistenceUnitStereotype(MAttribute container) :
 Void addPersistenceContextStereotype(MAttribute this, String type, String name, String unitName) :
 	let s = makePersistenceContextStereotype(this) :
 		this.stereotype.add(s) ->
-		createTaggedValue(this, createTag(s, "type", "jpaPersistenceContextType"), type) ->
-		createTaggedValue(this, createTag(s, "name", "String"), name) ->
-		createTaggedValue(this, createTag(s, "unitName", "String"), unitName);
+		// migration from single-valued to multi-valued tags
+		type.convertStringArrayToList().forAll(
+			e|createTaggedValue(this, createTag(s, "type", "jpaPersistenceContextType"), e) != null
+		) ->
+		name.convertStringArrayToList().forAll(
+			e|createTaggedValue(this, createTag(s, "name", "String"), e) != null
+		) ->
+		unitName.convertStringArrayToList().forAll(
+			e|createTaggedValue(this, createTag(s, "unitName", "String"), e) != null
+		);
 
 /**
  *	function to create an "jpaPersistenceContext" stereotype
