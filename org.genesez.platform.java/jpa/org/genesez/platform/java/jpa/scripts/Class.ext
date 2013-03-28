@@ -44,13 +44,15 @@ MClassifier addStandardConstructor(MClass this) :
   *	strategy SINGLE_TABLE does not allow a @Table in a derived class! (Hibernate)
   */
 Void checkInheritance(MClass this) :
-	this.generalization.size == 0
-		? checkTableName() //no inheritance at all or parent class
-		: (	//check inheritance strategy of parent class
-			checkAnnotationTableUsage() 
-				? checkTableName()
-				: this.setTaggedValue("jpaPersistentEntity", "tableName", "")
-		);
+	this.emHasStereotypeAssignment("jpaPersistentEntity")
+		? (this.generalization.size == 0
+			? checkTableName() //no inheritance at all or parent class
+			: (	//check inheritance strategy of parent class
+				checkAnnotationTableUsage() 
+					? checkTableName()
+					: this.setTaggedValue("jpaPersistentEntity", "tableName", "")
+			)
+		) : this;
 
 /**
   *	sets the attribute "tableName" of stereotype "jpaPersistentEntity"
