@@ -24,6 +24,7 @@
 «EXTENSION org::genesez::platform::java::util::Conversion»
 
 «EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::util::logging::Logging»
 
 
 «REM»
@@ -88,35 +89,42 @@
 
 «REM»
 	Generates the declaration of association attributes.
+	
+	@deprecated	use AccessOperationImpl instead with AccessOperation
 «ENDREM»
 «DEFINE AccessorDeclaration FOR MInterface-»
-	«FOREACH property.typeSelect(MAssociationRole) AS a-»
+	«REM»«FOREACH property.typeSelect(MAssociationRole) AS a-»
 		«IF a.emGenerateGetAccess()-»«EXPAND _GetterDecl FOR a-»«ENDIF»
 		«IF a.emGenerateSetAccess()-»
 			«EXPAND _InsertInDecl FOR a-»
 			«EXPAND _RemoveFromDecl FOR a-»
 		«ENDIF»
-	«ENDFOREACH-»
+	«ENDFOREACH-»«ENDREM»
 «ENDDEFINE»
 
 «REM»
 	Generates the implementation of association attributes.
+	
+	@deprecated	use AccessOperationImpl instead with AccessOperation
 «ENDREM»
 «DEFINE AccessorImplementation FOR MClass -»
 	«REM»«EXPAND _AssocClassReferenceGetters FOR ownedAssociation-»«ENDREM»
-	«FOREACH property.typeSelect(MAssociationRole) AS a -»
+	«REM»«FOREACH property.typeSelect(MAssociationRole) AS a -»
 		«IF a.emGenerateGetAccess() -»«EXPAND _GetterImpl FOR a -»«ENDIF»
 		«IF a.emGenerateSetAccess() -»
 			«EXPAND _InsertInImpl FOR a -»
 			«EXPAND _RemoveFromImpl FOR a -»
 		«ENDIF»
-	«ENDFOREACH -»
+	«ENDFOREACH -»«ENDREM»
 «ENDDEFINE»
 
 «REM»
 	Generates a get access method declaration.
+	
+	@deprecated	use AccessOperationImpl instead with AccessOperation
 «ENDREM»
 «DEFINE _GetterDecl FOR MAssociationRole -»
+	«logWarn("Generation of get access operation declaration using Association template is deprecated! " + fqmn()) -> "" -»
 	«IF hasAssociationClass() -»
 		«EXPAND _CommentGetter-»
 		public «mapCollection()»<«type.asTypeName()»> «asGetter()»();
@@ -131,8 +139,11 @@
 
 «REM»
 	Generates a get access method implementation.
+	
+	@deprecated	use AccessOperationImpl instead with AccessOperation
 «ENDREM»
 «DEFINE _GetterImpl FOR MAssociationRole-»
+	«logWarn("Generation of get access operations using Association template is deprecated! " + fqmn()) -> "" -»
 	«IF hasAssociationClass() -»
 		«REM»public «mapType()»<«type.asTypeName()»> «asGetter()»() {
 			«mapType("Implementation")»<«type.asTypeName()»> _result = new «mapType("Implementation")»<«type.asTypeName()»>();
@@ -176,8 +187,11 @@
 
 «REM»
 	Generates an insert in (add) access method declaration.
+	
+	@deprecated	use AccessOperationImpl instead with AccessOperation
 «ENDREM»
 «DEFINE _InsertInDecl FOR MAssociationRole-»
+	«logWarn("Generation of add access operation declaration using Association template is deprecated! " + fqmn()) -> "" -»
 	«IF hasAssociationClass() -»
 		«REM»public void «asInsertIn()»(«type.asTypeName()» _in, «type.asTypeName()» _at);«ENDREM»
 	«ELSE-»
@@ -192,8 +206,11 @@
 
 «REM»
 	Generates an insert in (add) access method implementation.
+	
+	@deprecated	use AccessOperationImpl instead with AccessOperation
 «ENDREM»
 «DEFINE _InsertInImpl FOR MAssociationRole-»
+	«logWarn("Generation of add access operations using Association template is deprecated! " + fqmn()) -> "" -»
 	«IF hasAssociationClass() -»
 		«REM»/**
 		  * insert into association, generate linked association class object
@@ -269,6 +286,7 @@
 	Generates a remove from (remove) access method declaration.
 «ENDREM»
 «DEFINE _RemoveFromDecl FOR MAssociationRole-»
+	«logWarn("Generation of remove access operation declaration using Association template is deprecated! " + fqmn()) -> "" -»
 	«IF multiplicity.isMultiValued() -»
 		«EXPAND _CommentAccessor-»
 		public void «asRemoveFrom()-»(«type.asTypeName()-» «asAttribute()-»);
@@ -277,8 +295,11 @@
 
 «REM»
 	Generates a remove from (remove) access method implementation.
+	
+	@deprecated	use AccessOperationImpl instead with AccessOperation
 «ENDREM»
 «DEFINE _RemoveFromImpl FOR MAssociationRole-»
+	«logWarn("Generation of remove access operations using Association template is deprecated! " + fqmn()) -> "" -»
 	«IF hasAssociationClass() -»
 		«REM»/**
 		  * remove entry from association indexed by its association class object

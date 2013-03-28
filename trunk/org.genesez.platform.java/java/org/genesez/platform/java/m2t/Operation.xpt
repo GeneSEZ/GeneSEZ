@@ -334,23 +334,37 @@
 	an implementation which throws an exception that this method is not yet supported
 «ENDREM»
 «DEFINE _ImplementationBody FOR MOperation -»
-	«IF emHasStereotypeAssignment( emGetAccessOperationIdentifier() ) -»
-		«EXPAND AccessOperationImpl::GetOperationImpl -»
-	«ELSEIF emHasStereotypeAssignment( emSetAccessOperationIdentifier() ) -»
-		«EXPAND AccessOperationImpl::SetOperationImpl -»
-	«ELSEIF emHasStereotypeAssignment( emAddAccessOperationIdentifier() ) -»
-		«EXPAND AccessOperationImpl::AddOperationImpl -»
-	«ELSEIF emHasStereotypeAssignment( emRemoveAccessOperationIdentifier() ) -»
-		«EXPAND AccessOperationImpl::RemoveOperationImpl -»
+	«IF emHasStereotypeAssignment( prGetAccessOperationIdentifier() ) -»
+		«EXPAND AccessOperationImpl::GetOperationImpl(
+			emGetTaggedValueReference( prGetAccessOperationIdentifier(), prAccessForPropertyTagName() )
+		) -»
+	«ELSEIF emHasStereotypeAssignment( prSetAccessOperationIdentifier() ) -»
+		«EXPAND AccessOperationImpl::SetOperationImpl(
+			emGetTaggedValueReference( prSetAccessOperationIdentifier(), prAccessForPropertyTagName() )
+		) -»
+	«ELSEIF emHasStereotypeAssignment( prAddAccessOperationIdentifier() ) -»
+		«EXPAND AccessOperationImpl::AddOperationImpl(
+			emGetTaggedValueReference( prAddAccessOperationIdentifier(), prAccessForPropertyTagName() )
+		) -»
+	«ELSEIF emHasStereotypeAssignment( prRemoveAccessOperationIdentifier() ) -»
+		«EXPAND AccessOperationImpl::RemoveOperationImpl(
+			emGetTaggedValueReference( prRemoveAccessOperationIdentifier(), prAccessForPropertyTagName() )
+		) -»
 	«ELSEIF hasReturn() && return.hasDefaultValue() -»
 		«EXPAND DefaultReturn FOR return -»
 	«ELSE -»
+		«EXPAND ProtectedRegion -»
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	Generates a protected region.
+«ENDREM»
+«DEFINE ProtectedRegion FOR MOperation -»
 		«PROTECT CSTART '/* ' CEND ' */' ID ("java.implementation." + xmiGuid)»
 		// TODO: implementation of method '«classifier.asTypeName()».«asOperation()»(...)'
-		throw new UnsupportedOperationException(
-				"The implementation of this generated method stub is missing!");
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
 		«ENDPROTECT»
-	«ENDIF -»
 «ENDDEFINE»
 
 «REM»
