@@ -17,6 +17,10 @@ import gcore;
  * @author	tobias haubold <toh@fh-zwickau.de>
  */
 extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
+extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
+extension org::genesez::metamodel::core::util::Conversion;
+extension org::genesez::util::logging::Logging;
 
 
 /**
@@ -27,4 +31,29 @@ MAttribute optimize(MAttribute this) :
 	multiplicity.isSingleValued() && final && hasDefaultValue()
 		? setStatic(true)
 		: this ->
+	this;
+
+
+/**
+ * Checks the stereotype accessor on static final attributes.
+ * If the stereotype is assigned and the generation of a set access operation is enabled,
+ * a warning is issued.
+ * If the stereotype is not assigned, the generation of a set access operation is suppressed
+ * by setting the appropriate tagged value to false.
+ * 
+ * @TODO	the warning log message should be put into a model validation script
+ * @TODO	[toh] i was unable to grasp the whole semantical meaning, maybe a refactoring is appropriate
+ * 			(non static attributes, if gen setter is true, it is not set to false)
+ * @api
+ */
+MAttribute emAccessorForStaticFinalAttribute(MAttribute this) :
+	final && static
+		? (
+			emHasStereotypeAssignment( prAccessor() )
+				? (
+					emHasTaggedValue( prAccessor(), prAccessorSetter(), "true" )
+						? logWarn("Generation of a set access operation for a static final attribute makes no sense!" + fqmn())
+						: this
+				) : emAssignGeneSezAccessorStereotype( emGenerateGetAccess(), false, false, false )
+		) : this ->
 	this;
