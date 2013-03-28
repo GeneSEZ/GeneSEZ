@@ -37,10 +37,17 @@ Workflow {
 	component = org.genesez.workflow.xpand.ModelModificationComponent {
 		metaModel = gcore
 		
-		// cares about property access operations, annotation definition and usage, 
-		// singleton design pattern and hashCode + equals operations
+		// annotation definition and usage, singleton design pattern and hashCode + equals operations
 		model2model = org.genesez.workflow.SimpleScript {
 			script = "org::genesez::platform::java::m2m::Prepare::prepare"
+		}
+		// implement associations using the association library
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::platform::java::m2m::aop::AssociationLibrary::prepare"
+		}
+		// cares about property access operations
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::platform::java::m2m::AccessOperation::prepare"
 		}
 		// automatically implement abstract and interface operations in classes
 		model2model = org.genesez.workflow.SimpleScript {
@@ -49,10 +56,6 @@ Workflow {
 		// add necessary use dependencies for import generation
 		model2model = org.genesez.workflow.SimpleScript {
 			script = "org::genesez::metamodel::core::util::m2m::UseDependencies::addUseDependencies"
-		}
-		// implement associations using the association library
-		model2model = org.genesez.workflow.SimpleScript {
-			script = "org::genesez::platform::java::m2m::aop::AssociationLibrary::prepare"
 		}
 	}
 	// serialize the GeneSEZ model - just for info if you want to have a look at it
