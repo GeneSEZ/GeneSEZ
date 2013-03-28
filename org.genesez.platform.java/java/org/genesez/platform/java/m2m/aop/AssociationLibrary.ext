@@ -48,13 +48,18 @@ private MClassifier process(MClassifier this) :
 
 
 /**
- * Adds the interface realization of 'AssociationRole'.
+ * Adds the interface realization of 'AssociationRole' and suppresses generation 
+ * of association access operations using accessor stereotype.
  */
 MClassifier prepareClass(MClassifier this) :
 	logDebug(this, "Prepare classifier: ") ->
 	(let i = navModel().makeAssociationRole() :
 		realization.add(i) ->
-		this);
+		this) ->
+	// suppress association access operations (default association handling)
+	property.typeSelect(MAssociationRole).emAssignGeneSezAccessorStereotype(
+		false, false, false, false
+	);
 
 /**
  * Adds the interface realization of 'AssociationClass' and an attribute to

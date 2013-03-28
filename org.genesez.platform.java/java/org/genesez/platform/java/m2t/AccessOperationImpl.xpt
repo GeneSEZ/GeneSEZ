@@ -16,6 +16,7 @@
 	@author	tobias haubold <toh@fh-zwickau.de>
 «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::profile::AccessorStereotype»
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 «EXTENSION org::genesez::platform::java::util::Naming»
 «EXTENSION org::genesez::platform::java::util::Helper»
@@ -24,7 +25,7 @@
 «REM»
 	Generates the implementation of a get access operation.
 «ENDREM»
-«DEFINE GetOperationImpl FOR MOperation -»
+«DEFINE GetOperationImpl(MAttribute attr) FOR MOperation -»
 	«IF return.multiplicity.isSingleValued() -»
 		«IF return.type.mapName().asTypeName().matches("Date") -»
 			return new Date(«return.name -».getTime());
@@ -39,7 +40,7 @@
 «REM»
 	Generates the implementation of a set access operation.
 «ENDREM»
-«DEFINE SetOperationImpl FOR MOperation -»
+«DEFINE SetOperationImpl(MAttribute attr) FOR MOperation -»
 	«LET parameter.first() AS param -»
 	«IF param.multiplicity.isSingleValued() -»
 		«IF !static-»this.«ENDIF-»«param.name» = «IF static-»_«ENDIF-»«param.name»;
@@ -59,7 +60,7 @@
 «REM»
 	Generates the implementation of an add access operation.
 «ENDREM»
-«DEFINE AddOperationImpl FOR MOperation -»
+«DEFINE AddOperationImpl(MAttribute attr) FOR MOperation -»
 	«LET parameter.first() AS param -»
 		«IF emHasStereotypeAssignment("primitive") -»
 			«PROTECT CSTART "/* " CEND " */" ID ("add.property.access_" + xmiGuid)»
@@ -76,7 +77,7 @@
 «REM»
 	Generates the implementation of a remove access operation.
 «ENDREM»
-«DEFINE RemoveOperationImpl FOR MOperation -»
+«DEFINE RemoveOperationImpl(MAttribute attr) FOR MOperation -»
 	«LET parameter.first() AS param -»
 		«IF emHasStereotypeAssignment("primitive") -»
 			«PROTECT CSTART "/* " CEND " */" ID ("remove.property.access_" + xmiGuid)»
@@ -89,3 +90,138 @@
 		«ENDIF -»
 	«ENDLET -»
 «ENDDEFINE»
+
+
+«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«REM»
+	Generates the implementation of a get access operation.
+«ENDREM»
+«DEFINE GetOperationImpl(MAssociationRole end) FOR MOperation -»
+	«IF return.multiplicity.isSingleValued() -»
+		«IF return.type.mapName().asTypeName().matches("Date") -»
+			return new Date(«return.name -».getTime());
+		«ELSE -»
+			return «return.name»;
+		«ENDIF -»
+	«ELSE -»
+		return «return.name»;
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	Generates the implementation of a set access operation.
+	
+	@TODO: it's just a simple setter, no association handling!
+	@TODO: check if parameter is the same instance as attribute
+«ENDREM»
+«DEFINE SetOperationImpl(MAssociationRole end) FOR MOperation -»
+	«LET parameter.first() AS param -»
+	«IF param.multiplicity.isSingleValued() -»
+		«IF !static-»this.«ENDIF-»«param.name» = «IF static-»_«ENDIF-»«param.name»;
+	«ELSE -»
+		«IF emHasStereotypeAssignment("primitive") -»
+			«IF !static-»this.«ENDIF-»«param.name» = new «param.type.mapName().asTypeName() -»[«IF static-»_«ENDIF-»«param.name».length];
+			for (int counter = 0; counter < «IF static-»_«ENDIF-»«param.name».length; counter++) {
+				«IF !static-»this.«ENDIF-»«param.name»[counter] = «IF static-»_«ENDIF-»«param.name»[counter];
+			}
+		«ELSE -»
+			«IF !static-»this.«ENDIF-»«param.name» = «IF static-»_«ENDIF-»«param.name»;
+		«ENDIF-»
+	«ENDIF -»
+	«ENDLET -»
+«ENDDEFINE»
+
+«REM»
+	Generates the implementation of an add access operation.
+	Only for multi-valued properties.
+	
+	TODO: verify + ensure: bidirectionality, association classes, qualified associations
+«ENDREM»
+«DEFINE AddOperationImpl(MAssociationRole end) FOR MOperation -»
+	«IF end.multiplicity.isMultiValued() -»
+	«LET parameter.first() AS param -»
+		«IF end.hasAssociationClass() -»
+			«EXPAND Operation::ProtectedRegion -»
+		«ELSE -»
+		if (this.«end.asAttribute()».contains(«param.asParameter()»)) {
+			return;
+		}
+		this.«end.asAttribute()».add(«param.asParameter()»);
+			«IF end.hasOpposite() -»
+				«IF end.oppositeMultiplicity.isSingleValued() && end.opposite.emGenerateAddAccess() && end.opposite.emGenerateGetAccess() -»
+		if (!«end.asAttribute()».«end.opposite.asGetter()-»().contains(this)) {
+			«end.asAttribute()».«end.opposite.asAddPropertyAccessOperation()»(this);
+		}
+				«ENDIF -»
+				«IF end.oppositeMultiplicity.isMultiValued() && end.opposite.emGenerateSetAccess() -»
+		this.«end.asAttribute()».«end.opposite.asSetter()-»(this);
+				«ENDIF -»
+			«ENDIF -»
+		«ENDIF -»
+	«ENDLET -»
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	Generates the implementation of a remove access operation.
+	Only for multi-valued properties.
+	
+	TODO: verify + ensure: bidirectionality, association classes, qualified associations
+«ENDREM»
+«DEFINE RemoveOperationImpl(MAssociationRole end) FOR MOperation -»
+	«IF end.multiplicity.isMultiValued() -»
+	«LET parameter.first() AS param -»
+		«IF end.hasAssociationClass() -»
+			«EXPAND Operation::ProtectedRegion -»
+		«ELSE -»
+		if (!this.«end.asAttribute()».contains(«param.asParameter()»)) {
+			return;
+		}
+		this.«end.asAttribute()».remove(«param.asParameter()»);
+			«IF end.hasOpposite() -»
+				«IF end.oppositeMultiplicity.isSingleValued() && end.opposite.emGenerateRemoveAccess() && end.opposite.emGenerateGetAccess() -»
+		if («end.asAttribute()».«end.opposite.asGetter()»().contains(this)) {
+			«end.asAttribute()».«end.opposite.asRemovePropertyAccessOperation()»(this);
+		}
+				«ENDIF -»
+				«IF end.oppositeMultiplicity.isMultiValued() && end.opposite.emGenerateSetAccess() -»
+		this.«end.asAttribute()».«end.opposite.asSetter()-»(null);
+				«ENDIF -»
+			«ENDIF -»
+		«ENDIF -»
+	«ENDLET -»
+	«ENDIF -»
+«ENDDEFINE»
+
+
+«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«REM»
+	Does nothing, just here for error free template.
+«ENDREM»
+«DEFINE GetOperationImpl(MElement e) FOR MOperation -»
+	// TODO
+«ENDDEFINE»
+
+«REM»
+	Does nothing, just here for error free template.
+«ENDREM»
+«DEFINE SetOperationImpl(MElement e) FOR MOperation -»
+	// TODO
+«ENDDEFINE»
+
+«REM»
+	Does nothing, just here for error free template.
+«ENDREM»
+«DEFINE AddOperationImpl(MElement e) FOR MOperation -»
+	// TODO
+«ENDDEFINE»
+
+«REM»
+	Does nothing, just here for error free template.
+«ENDREM»
+«DEFINE RemoveOperationImpl(MElement e) FOR MOperation -»
+	// TODO
+«ENDDEFINE»
+
