@@ -25,26 +25,80 @@ extension org::genesez::util::logging::Logging;
 /**
  * Returns true if a get access operation should be generated, otherwise false
  */
-boolean emGenerateGetAccess(MProperty this) :
+boolean emGenerateGetAccess(MAttribute this) :
 	emGenerateAccessOperation( prAccessorGetter() );
 
 /**
  * Returns true if a set access operations should be generated, otherwise false
  */
-boolean emGenerateSetAccess(MProperty this) :
+boolean emGenerateSetAccess(MAttribute this) :
 	emGenerateAccessOperation( prAccessorSetter() );
 
 /**
  * Returns true if a add access operation should be generated, otherwise false.
  */
-boolean emGenerateAddAccess(MProperty this) :
+boolean emGenerateAddAccess(MAttribute this) :
 	emGenerateAccessOperation( prAccessorAdd() );
 
 /**
  * Returns true if the property access operation remove should be generated for the specified property, otherwise false.
  */
-boolean emGenerateRemoveAccess(MProperty this) :
+boolean emGenerateRemoveAccess(MAttribute this) :
 	emGenerateAccessOperation( prAccessorRemove() );
+
+/**
+ * Returns true if a get access operation should be generated, otherwise false
+ */
+boolean emGenerateGetAccess(MAssociationRole this) :
+	!emHasStereotypeAssignment( prAccessor() ) || emGetTaggedBooleanValue( prAccessor(), prAccessorGetter() );
+
+/**
+ * Returns true if a set access operations should be generated, otherwise false
+ */
+boolean emGenerateSetAccess(MAssociationRole this) :
+	multiplicity.isSingleValued()
+		? !emHasStereotypeAssignment( prAccessor() ) || emGetTaggedBooleanValue( prAccessor(), prAccessorSetter() )
+		: emGetTaggedBooleanValue( prAccessor(), prAccessorSetter() );
+
+/**
+ * Returns true if a add access operation should be generated, otherwise false.
+ */
+boolean emGenerateAddAccess(MAssociationRole this) :
+	multiplicity.isMultiValued()
+		? !emHasStereotypeAssignment( prAccessor() ) || emGetTaggedBooleanValue( prAccessor(), prAccessorAdd() )
+		: false;
+
+/**
+ * Returns true if the property access operation remove should be generated for the specified property, otherwise false.
+ */
+boolean emGenerateRemoveAccess(MAssociationRole this) :
+	multiplicity.isMultiValued()
+		? !emHasStereotypeAssignment( prAccessor() ) || emGetTaggedBooleanValue( prAccessor(), prAccessorRemove() )
+		: false;
+
+/**
+ * Returns false, just here for error free caller script.
+ */
+boolean emGenerateGetAccess(MProperty this) :
+	false;
+
+/**
+ * Returns false, just here for error free caller script.
+ */
+boolean emGenerateSetAccess(MProperty this) :
+	false;
+
+/**
+ * Returns false, just here for error free caller script.
+ */
+boolean emGenerateAddAccess(MProperty this) :
+	false;
+
+/**
+ * Returns false, just here for error free caller script.
+ */
+boolean emGenerateRemoveAccess(MProperty this) :
+	false;
 
 /**
  * Checks if the specified access operation type should be generated for the specified property.
