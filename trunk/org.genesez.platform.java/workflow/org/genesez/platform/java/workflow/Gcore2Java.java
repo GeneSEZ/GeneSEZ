@@ -32,7 +32,7 @@ public class Gcore2Java extends SimpleModel2Text {
 	private String basePackage = "";
 	
 	@WfParameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
-	private java.util.Set<String> accessorForStereotypes = new java.util.HashSet<String>();
+	private java.util.Set<String> accessorsForStereotypes = new java.util.HashSet<String>();
 	
 	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String accessorStereotype = "accessor";
@@ -51,8 +51,8 @@ public class Gcore2Java extends SimpleModel2Text {
 		if (basePackage == null) {
 			basePackage = getDefaultBasePackage();
 		}
-		if (accessorForStereotypes.isEmpty()) {
-			accessorForStereotypes = getDefaultAccessorForStereotypes();
+		if (accessorsForStereotypes.isEmpty()) {
+			accessorsForStereotypes = getDefaultAccessorsForStereotypes();
 		}
 		if (accessorStereotype == null) {
 			accessorStereotype = getDefaultAccessorStereotype();
@@ -83,11 +83,11 @@ public class Gcore2Java extends SimpleModel2Text {
 		result.add(new Parameter("fieldAccess", fieldAccess));
 		result.add(new Parameter("useModelNameAsBasePackage", useModelNameAsBasePackage));
 		result.add(new Parameter("basePackage", basePackage));
-		if (accessorForStereotypes.isEmpty()) {
-			result.add(new Parameter("accessorForStereotypes", ""));
+		if (accessorsForStereotypes.isEmpty()) {
+			result.add(new Parameter("accessorsForStereotypes", ""));
 		} else {
-			for (String it : accessorForStereotypes) {
-				result.add(new Parameter("accessorForStereotypes", it));
+			for (String it : accessorsForStereotypes) {
+				result.add(new Parameter("accessorsForStereotypes", it));
 			}
 		}
 		result.add(new Parameter("accessorStereotype", accessorStereotype));
@@ -122,8 +122,8 @@ public class Gcore2Java extends SimpleModel2Text {
 	/**
 	 * Method stub for further implementation.
 	 */
-	@WfDefault(parameter = "accessorForStereotypes")
-	public java.util.Set<String> getDefaultAccessorForStereotypes() {
+	@WfDefault(parameter = "accessorsForStereotypes")
+	public java.util.Set<String> getDefaultAccessorsForStereotypes() {
 		java.util.Set<String> result = new java.util.HashSet<String>();
 		result.add("entity");
 		return result;
@@ -245,26 +245,26 @@ public class Gcore2Java extends SimpleModel2Text {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>accessorForStereotypes</b></em>'.
+	 * Returns the value of attribute '<em><b>accessorsForStereotypes</b></em>'.
 	 */
-	public java.util.Set<String> getAccessorForStereotypes() {
-		return accessorForStereotypes;
+	public java.util.Set<String> getAccessorsForStereotypes() {
+		return accessorsForStereotypes;
 	}
 	
 	/**
-	 * Adds the specified value to the attribute '<em><b>accessorForStereotypes</b></em>'.
-	 * @param	accessorForStereotypes	the value to add.
+	 * Adds the specified value to the attribute '<em><b>accessorsForStereotypes</b></em>'.
+	 * @param	accessorsForStereotypes	the value to add.
 	 */
-	public void addAccessorForStereotypes(String accessorForStereotypes) {
-		this.accessorForStereotypes.add(accessorForStereotypes);
+	public void addAccessorsForStereotypes(String accessorsForStereotypes) {
+		this.accessorsForStereotypes.add(accessorsForStereotypes);
 	}
 	
 	/**
-	 * Removes the specified value from the attribute '<em><b>accessorForStereotypes</b></em>'.
-	 * @param	accessorForStereotypes	the value to remove.
+	 * Removes the specified value from the attribute '<em><b>accessorsForStereotypes</b></em>'.
+	 * @param	accessorsForStereotypes	the value to remove.
 	 */
-	public void removeAccessorForStereotypes(String accessorForStereotypes) {
-		this.accessorForStereotypes.remove(accessorForStereotypes);
+	public void removeAccessorsForStereotypes(String accessorsForStereotypes) {
+		this.accessorsForStereotypes.remove(accessorsForStereotypes);
 	}
 	
 	/**
