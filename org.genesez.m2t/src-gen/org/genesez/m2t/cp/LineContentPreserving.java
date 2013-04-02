@@ -38,7 +38,7 @@ public class LineContentPreserving extends FileTreeObserverAdapter implements As
 	/** Stores the association management objects */
 	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object, ? extends Object>>();
 	
-	/** Stores associated objects of association PRESERVABLE to LineContentPreservable */
+	/** Stores all linked objects of association '<em><b>preservable</b></em>' */
 	public java.util.Set<LineContentPreservable> preservable = new java.util.LinkedHashSet<LineContentPreservable>();
 	
 	public final Log logger = LogFactory.getLog(getClass());
