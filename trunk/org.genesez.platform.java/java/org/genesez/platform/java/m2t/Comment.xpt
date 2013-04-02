@@ -214,41 +214,16 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 «DEFINE Association FOR MAssociationRole -»
 	«IF multiplicity.isSingleValued() -»
-		/** Stores the associated object of association «asEnumLiteral() -» to «this.type.asTypeName()» */
+		/** Stores the linked object of association '<em><b>«asAttribute()»</b></em>' */
 	«ELSEIF hasAssociationClass() -»
-		/** Stores associated objects of association «asEnumLiteral() -» to «this.type.asTypeName()» as keys and the association class objects as values */
+		/** Stores all linked objects of association '<em><b>«asAttribute()»</b></em>' as keys and the association class objects as values */
 	«ELSE -»
-		/** Stores associated objects of association «asEnumLiteral() -» to «this.type.asTypeName()» */
+		/** Stores all linked objects of association '<em><b>«asAttribute()»</b></em>' */
 	«ENDIF -»
 «ENDDEFINE»
 
 «DEFINE AssociationClass FOR MAssociationRole -»
-	/** Stores the association class object of association «asEnumLiteral() -» to «this.type.asTypeName()» */
-«ENDDEFINE»
-
-«REM»
-	generates the comment of the 'getter' method accessor
-«ENDREM»
-«DEFINE Accessor FOR MAssociationRole -»
-	/**
-	«EXPAND Comment -»
-	 */
-«ENDDEFINE»
-
-«DEFINE Comment FOR MAssociationRole -»
-	«EXPAND CommentText -»
-«ENDDEFINE»
-
-«DEFINE CommentText FOR MAssociationRole -»
-	«IF hasComment() -»
-	«comment().formatCommentAsterix() -»
-	«ELSE -»
-	«EXPAND DefaultCommentText -»
-	«ENDIF -»
-«ENDDEFINE»
-
-«DEFINE DefaultCommentText FOR MAssociationRole -»
-	 * Provides access to the association '<em><b>«asAttribute()»</b></em>' to {@link «type.mapName().asTypeName()»}.
+	/** Stores the association class object of association '<em><b>«asAttribute()»</b></em>' */
 «ENDDEFINE»
 
 
