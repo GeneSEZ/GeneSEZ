@@ -1,5 +1,10 @@
 package org.genesez.xpand.demo;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -55,6 +60,61 @@ public class FileParseDemo {
 	
 	public static void main(String[] args) {
 		doFancySetup();
+		
+		/**
+		 * Read comments, beginning and ending
+		 */
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(FileParseDemo.class.getClassLoader().getResourceAsStream("org/genesez/metamodel/core/util/CloneElement.ext")));
+		try {
+			String search;
+			int start = -1;
+			int end = -1;
+			String comment = "";
+			ArrayList<CommentPair> comments = new ArrayList<CommentPair>();
+			int line = 0;
+			
+			while(br.ready()){
+				search = br.readLine();
+				line++;
+				
+				if (search.equals("/**")){
+				start = line;
+				comment = "";
+				
+					while(br.ready()){
+						search = br.readLine();
+						line++;
+						
+						if (search.equals(" */")){
+							end = line;
+							comments.add(new CommentPair(start, end, comment));
+							break;						
+						}
+						
+						comment += "\n" + search;						
+					}
+				}
+			}
+			
+			for (CommentPair k : comments) {
+				System.out.print(k.start);
+				System.out.print(" ");
+				System.out.print(k.end);
+				System.out.print(" ");
+				System.out.print(k.comment);
+				System.out.println();
+			}
+			
+			br.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+			
+
+				
+		
 		
 		// xpand way reading from classpath
 		Resource r = resourceManager.loadResource("Test2", XpandUtil.TEMPLATE_EXTENSION);
@@ -239,5 +299,18 @@ public class FileParseDemo {
 			sb.append(" with separator " + es.getSeparator());
 		}
 		return sb.toString();
+	}
+	
+	public static class CommentPair {
+		
+		private int start;
+		private int end;
+		private String comment;
+
+		public CommentPair(int start, int end, String comment){
+			this.start = start;
+			this.end = end;
+			this.comment = comment;
+		}
 	}
 }
