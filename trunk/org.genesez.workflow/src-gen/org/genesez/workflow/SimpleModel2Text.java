@@ -13,7 +13,7 @@ import org.genesez.workflow.profile.WfParameter;
 /**
  * Please describe the responsibility of your class in your modeling tool.
  */
-public class SimpleModel2Text implements Model2Text {
+public class SimpleModel2Text extends AbstractTransformable implements Model2Text {
 	
 	public final Log logger = LogFactory.getLog(getClass());
 	
@@ -29,6 +29,7 @@ public class SimpleModel2Text implements Model2Text {
 			logger.error("Mandatory parameter 'template' not set!");
 			result = false;
 		}
+		result = result && super.validate();
 		return result;
 	}
 	
@@ -36,7 +37,7 @@ public class SimpleModel2Text implements Model2Text {
 	 * Method stub for further implementation.
 	 */
 	public java.util.Set<Parameter> getParameter() {
-		java.util.Set<Parameter> result = new java.util.LinkedHashSet<Parameter>();
+		java.util.Set<Parameter> result = super.getParameter();
 		return result;
 	}
 	

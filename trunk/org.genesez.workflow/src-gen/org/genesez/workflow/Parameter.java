@@ -25,6 +25,15 @@ public class Parameter {
 	}
 	
 	/**
+	 * Constructor for class '<em><b>Parameter</b></em>'.
+	 */
+	public Parameter() {
+		/* PROTECTED REGION ID(java.constructor._T9M9oJsCEeKHbs5kPL3C6w) ENABLED START */
+		// just leave the fields uninitialized
+		/* PROTECTED REGION END */
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>name</b></em>'.
 	 */
 	public String getName() {
