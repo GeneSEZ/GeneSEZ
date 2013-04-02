@@ -21,7 +21,7 @@ import javax.persistence.GenerationType;
 @Table(name = "tbl_Contact")
 public class Contact implements Serializable {
 	
-	/** Stores the associated object of association ADDRESS to Address */
+	/** Stores the linked object of association '<em><b>address</b></em>' */
 	@OneToOne(cascade = { CascadeType.ALL }, mappedBy = "contact")
 	private Address address;
 	
@@ -45,6 +45,33 @@ public class Contact implements Serializable {
 	 */
 	
 	public Contact() {
+	}
+	
+	/**
+	 * Returns the linked object of association '<em><b>address</b></em>'.
+	 */
+	
+	public Address getAddress() {
+		return address;
+	}
+	
+	/**
+	 * Establishes a link to the specified object for association '<em><b>address</b></em>'.
+	 * @param	address	the object to associate.
+	 */
+	
+	public void setAddress(Address address) {
+		if (this.address == address) {
+			return;
+		}
+		Address former = this.address;
+		this.address = address;
+		if (former != null) {
+			former.setContact(null);
+		}
+		if (address != null) {
+			address.setContact(this);
+		}
 	}
 	
 	/**
@@ -113,24 +140,6 @@ public class Contact implements Serializable {
 	
 	public void setEmail(String email) {
 		this.email = email;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>address</b></em>'.
-	 */
-	
-	public Address getAddress() {
-		return address;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>address</b></em>'.
-	 * @param	address	the value to set.
-	 */
-	
-	public void setAddress(Address address) {
-		
-		this.address = address;
 	}
 	
 	/**

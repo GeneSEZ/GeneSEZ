@@ -20,7 +20,7 @@ import javax.persistence.GenerationType;
 @Table(name = "tbl_Address")
 public class Address implements Serializable {
 	
-	/** Stores the associated object of association CONTACT to Contact */
+	/** Stores the linked object of association '<em><b>contact</b></em>' */
 	@OneToOne(cascade = {})
 	private Contact contact;
 	
@@ -44,6 +44,33 @@ public class Address implements Serializable {
 	 */
 	
 	public Address() {
+	}
+	
+	/**
+	 * Returns the linked object of association '<em><b>contact</b></em>'.
+	 */
+	
+	public Contact getContact() {
+		return contact;
+	}
+	
+	/**
+	 * Establishes a link to the specified object for association '<em><b>contact</b></em>'.
+	 * @param	contact	the object to associate.
+	 */
+	
+	public void setContact(Contact contact) {
+		if (this.contact == contact) {
+			return;
+		}
+		Contact former = this.contact;
+		this.contact = contact;
+		if (former != null) {
+			former.setAddress(null);
+		}
+		if (contact != null) {
+			contact.setAddress(this);
+		}
 	}
 	
 	/**
@@ -112,24 +139,6 @@ public class Address implements Serializable {
 	
 	public void setCity(String city) {
 		this.city = city;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>contact</b></em>'.
-	 */
-	
-	public Contact getContact() {
-		return contact;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>contact</b></em>'.
-	 * @param	contact	the value to set.
-	 */
-	
-	public void setContact(Contact contact) {
-		
-		this.contact = contact;
 	}
 	
 	/**

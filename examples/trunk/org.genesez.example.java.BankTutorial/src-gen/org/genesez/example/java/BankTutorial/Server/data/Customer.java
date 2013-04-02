@@ -23,15 +23,15 @@ import javax.persistence.GenerationType;
 @Table(name = "tbl_Customer")
 public class Customer implements Serializable {
 	
-	/** Stores the associated object of association CONTACT to Contact */
+	/** Stores the linked object of association '<em><b>contact</b></em>' */
 	@OneToOne(cascade = { CascadeType.ALL })
 	private Contact contact;
 	
-	/** Stores associated objects of association ACCOUNTS to Account */
+	/** Stores all linked objects of association '<em><b>accounts</b></em>' */
 	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "owner")
 	private java.util.Set<Account> accounts = new java.util.HashSet<Account>();
 	
-	/** Stores associated objects of association BANKS to Bank */
+	/** Stores all linked objects of association '<em><b>banks</b></em>' */
 	@ManyToMany(cascade = {})
 	private java.util.Set<Bank> banks = new java.util.HashSet<Bank>();
 	
@@ -51,6 +51,94 @@ public class Customer implements Serializable {
 	 */
 	
 	public Customer() {
+	}
+	
+	/**
+	 * Returns the linked object of association '<em><b>contact</b></em>'.
+	 */
+	
+	public Contact getContact() {
+		return contact;
+	}
+	
+	/**
+	 * Establishes a link to the specified object for association '<em><b>contact</b></em>'.
+	 * @param	contact	the object to associate.
+	 */
+	
+	public void setContact(Contact contact) {
+		if (this.contact == contact) {
+			return;
+		}
+		this.contact = contact;
+	}
+	
+	/**
+	 * Returns all linked objects of association '<em><b>accounts</b></em>'.
+	 */
+	
+	public java.util.Set<Account> getAccounts() {
+		return accounts;
+	}
+	
+	/**
+	 * Establishes a link to the specified object for association '<em><b>accounts</b></em>'.
+	 * @param	accounts	the object to associate.
+	 */
+	
+	public void addAccounts(Account accounts) {
+		if (accounts == null || this.accounts.contains(accounts)) {
+			return;
+		}
+		this.accounts.add(accounts);
+		accounts.setOwner(this);
+	}
+	
+	/**
+	 * Removes the link to the specified specified object from association '<em><b>accounts</b></em>'.
+	 * @param	accounts	the object to remove.
+	 */
+	
+	public void removeAccounts(Account accounts) {
+		if (accounts == null || !this.accounts.contains(accounts)) {
+			return;
+		}
+		this.accounts.remove(accounts);
+		accounts.setOwner(null);
+	}
+	
+	/**
+	 * Returns all linked objects of association '<em><b>banks</b></em>'.
+	 */
+	
+	public java.util.Set<Bank> getBanks() {
+		return banks;
+	}
+	
+	/**
+	 * Establishes a link to the specified object for association '<em><b>banks</b></em>'.
+	 * @param	banks	the object to associate.
+	 */
+	
+	public void addBanks(Bank banks) {
+		if (banks == null || this.banks.contains(banks)) {
+			return;
+		}
+		this.banks.add(banks);
+		banks.addCustomers(this);
+	}
+	
+	/**
+	 * Removes the link to the specified specified object from association '<em><b>banks</b></em>'.
+	 * @param	banks	the object to remove.
+	 */
+	
+	public void removeBanks(Bank banks) {
+		if (banks == null || !this.banks.contains(banks)) {
+			return;
+		}
+		this.banks.remove(banks);
+		banks.removeCustomers(this);
 	}
 	
 	/**
@@ -85,88 +173,6 @@ public class Customer implements Serializable {
 	
 	public void setSurname(String surname) {
 		this.surname = surname;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>contact</b></em>'.
-	 */
-	
-	public Contact getContact() {
-		return contact;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>contact</b></em>'.
-	 * @param	contact	the value to set.
-	 */
-	
-	public void setContact(Contact contact) {
-		
-		this.contact = contact;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>accounts</b></em>'.
-	 */
-	
-	public java.util.Set<Account> getAccounts() {
-		return accounts;
-	}
-	
-	/**
-	 * Adds the specified value to the attribute '<em><b>accounts</b></em>'.
-	 * @param	accounts	the value to add.
-	 */
-	
-	public void addAccounts(Account accounts) {
-		if (this.accounts.contains(accounts)) {
-			return;
-		}
-		this.accounts.add(accounts);
-	}
-	
-	/**
-	 * Removes the specified value from the attribute '<em><b>accounts</b></em>'.
-	 * @param	accounts	the value to remove.
-	 */
-	
-	public void removeAccounts(Account accounts) {
-		if (!this.accounts.contains(accounts)) {
-			return;
-		}
-		this.accounts.remove(accounts);
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>banks</b></em>'.
-	 */
-	
-	public java.util.Set<Bank> getBanks() {
-		return banks;
-	}
-	
-	/**
-	 * Adds the specified value to the attribute '<em><b>banks</b></em>'.
-	 * @param	banks	the value to add.
-	 */
-	
-	public void addBanks(Bank banks) {
-		if (this.banks.contains(banks)) {
-			return;
-		}
-		this.banks.add(banks);
-	}
-	
-	/**
-	 * Removes the specified value from the attribute '<em><b>banks</b></em>'.
-	 * @param	banks	the value to remove.
-	 */
-	
-	public void removeBanks(Bank banks) {
-		if (!this.banks.contains(banks)) {
-			return;
-		}
-		this.banks.remove(banks);
 	}
 	
 	/**

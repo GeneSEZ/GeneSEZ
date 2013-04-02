@@ -22,11 +22,11 @@ import javax.persistence.GenerationType;
 @Table(name = "tbl_Bank")
 public class Bank implements Serializable {
 	
-	/** Stores associated objects of association CONTACT to Contact */
+	/** Stores all linked objects of association '<em><b>contact</b></em>' */
 	@ManyToMany(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
 	private java.util.Set<Contact> contact = new java.util.HashSet<Contact>();
 	
-	/** Stores associated objects of association CUSTOMERS to Customer */
+	/** Stores all linked objects of association '<em><b>customers</b></em>' */
 	@ManyToMany(cascade = { CascadeType.ALL }, mappedBy = "banks")
 	private java.util.Set<Customer> customers = new java.util.HashSet<Customer>();
 	
@@ -48,6 +48,72 @@ public class Bank implements Serializable {
 	 */
 	
 	public Bank() {
+	}
+	
+	/**
+	 * Returns all linked objects of association '<em><b>contact</b></em>'.
+	 */
+	
+	public java.util.Set<Contact> getContact() {
+		return contact;
+	}
+	
+	/**
+	 * Establishes a link to the specified object for association '<em><b>contact</b></em>'.
+	 * @param	contact	the object to associate.
+	 */
+	
+	public void addContact(Contact contact) {
+		if (contact == null || this.contact.contains(contact)) {
+			return;
+		}
+		this.contact.add(contact);
+	}
+	
+	/**
+	 * Removes the link to the specified specified object from association '<em><b>contact</b></em>'.
+	 * @param	contact	the object to remove.
+	 */
+	
+	public void removeContact(Contact contact) {
+		if (contact == null || !this.contact.contains(contact)) {
+			return;
+		}
+		this.contact.remove(contact);
+	}
+	
+	/**
+	 * Returns all linked objects of association '<em><b>customers</b></em>'.
+	 */
+	
+	public java.util.Set<Customer> getCustomers() {
+		return customers;
+	}
+	
+	/**
+	 * Establishes a link to the specified object for association '<em><b>customers</b></em>'.
+	 * @param	customers	the object to associate.
+	 */
+	
+	public void addCustomers(Customer customers) {
+		if (customers == null || this.customers.contains(customers)) {
+			return;
+		}
+		this.customers.add(customers);
+		customers.addBanks(this);
+	}
+	
+	/**
+	 * Removes the link to the specified specified object from association '<em><b>customers</b></em>'.
+	 * @param	customers	the object to remove.
+	 */
+	
+	public void removeCustomers(Customer customers) {
+		if (customers == null || !this.customers.contains(customers)) {
+			return;
+		}
+		this.customers.remove(customers);
+		customers.removeBanks(this);
 	}
 	
 	/**
@@ -82,70 +148,6 @@ public class Bank implements Serializable {
 	
 	public void setSortCode(int sortCode) {
 		this.sortCode = sortCode;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>contact</b></em>'.
-	 */
-	
-	public java.util.Set<Contact> getContact() {
-		return contact;
-	}
-	
-	/**
-	 * Adds the specified value to the attribute '<em><b>contact</b></em>'.
-	 * @param	contact	the value to add.
-	 */
-	
-	public void addContact(Contact contact) {
-		if (this.contact.contains(contact)) {
-			return;
-		}
-		this.contact.add(contact);
-	}
-	
-	/**
-	 * Removes the specified value from the attribute '<em><b>contact</b></em>'.
-	 * @param	contact	the value to remove.
-	 */
-	
-	public void removeContact(Contact contact) {
-		if (!this.contact.contains(contact)) {
-			return;
-		}
-		this.contact.remove(contact);
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>customers</b></em>'.
-	 */
-	
-	public java.util.Set<Customer> getCustomers() {
-		return customers;
-	}
-	
-	/**
-	 * Adds the specified value to the attribute '<em><b>customers</b></em>'.
-	 * @param	customers	the value to add.
-	 */
-	
-	public void addCustomers(Customer customers) {
-		if (this.customers.contains(customers)) {
-			return;
-		}
-		this.customers.add(customers);
-	}
-	
-	/**
-	 * Removes the specified value from the attribute '<em><b>customers</b></em>'.
-	 * @param	customers	the value to remove.
-	 */
-	
-	public void removeCustomers(Customer customers) {
-		if (!this.customers.contains(customers)) {
-			return;
-		}
-		this.customers.remove(customers);
 	}
 	
 	/**

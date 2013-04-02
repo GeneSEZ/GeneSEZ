@@ -24,15 +24,15 @@ import javax.persistence.GenerationType;
 @Table(name = "tbl_Account")
 public abstract class Account implements Serializable {
 	
-	/** Stores the associated object of association BANK to Bank */
+	/** Stores the linked object of association '<em><b>bank</b></em>' */
 	@ManyToOne(cascade = {})
 	private Bank bank;
 	
-	/** Stores the associated object of association OWNER to Customer */
+	/** Stores the linked object of association '<em><b>owner</b></em>' */
 	@ManyToOne(cascade = {})
 	private Customer owner;
 	
-	/** Stores associated objects of association STATEMENTS to Statement */
+	/** Stores all linked objects of association '<em><b>statements</b></em>' */
 	@OneToMany(cascade = { CascadeType.REMOVE })
 	private java.util.Set<Statement> statements = new java.util.HashSet<Statement>();
 	
@@ -66,6 +66,85 @@ public abstract class Account implements Serializable {
 	 */
 	
 	public Account() {
+	}
+	
+	/**
+	 * Returns the linked object of association '<em><b>bank</b></em>'.
+	 */
+	
+	public Bank getBank() {
+		return bank;
+	}
+	
+	/**
+	 * Establishes a link to the specified object for association '<em><b>bank</b></em>'.
+	 * @param	bank	the object to associate.
+	 */
+	
+	public void setBank(Bank bank) {
+		if (this.bank == bank) {
+			return;
+		}
+		this.bank = bank;
+	}
+	
+	/**
+	 * Returns the linked object of association '<em><b>owner</b></em>'.
+	 */
+	
+	public Customer getOwner() {
+		return owner;
+	}
+	
+	/**
+	 * Establishes a link to the specified object for association '<em><b>owner</b></em>'.
+	 * @param	owner	the object to associate.
+	 */
+	
+	public void setOwner(Customer owner) {
+		if (this.owner == owner) {
+			return;
+		}
+		Customer former = this.owner;
+		this.owner = owner;
+		if (former != null) {
+			former.removeAccounts(this);
+		}
+		if (owner != null) {
+			owner.addAccounts(this);
+		}
+	}
+	
+	/**
+	 * Returns all linked objects of association '<em><b>statements</b></em>'.
+	 */
+	
+	public java.util.Set<Statement> getStatements() {
+		return statements;
+	}
+	
+	/**
+	 * Establishes a link to the specified object for association '<em><b>statements</b></em>'.
+	 * @param	statements	the object to associate.
+	 */
+	
+	public void addStatements(Statement statements) {
+		if (statements == null || this.statements.contains(statements)) {
+			return;
+		}
+		this.statements.add(statements);
+	}
+	
+	/**
+	 * Removes the link to the specified specified object from association '<em><b>statements</b></em>'.
+	 * @param	statements	the object to remove.
+	 */
+	
+	public void removeStatements(Statement statements) {
+		if (statements == null || !this.statements.contains(statements)) {
+			return;
+		}
+		this.statements.remove(statements);
 	}
 	
 	/**
@@ -117,74 +196,6 @@ public abstract class Account implements Serializable {
 	
 	public void setInterestPeriod(long interestPeriod) {
 		this.interestPeriod = interestPeriod;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>bank</b></em>'.
-	 */
-	
-	public Bank getBank() {
-		return bank;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>bank</b></em>'.
-	 * @param	bank	the value to set.
-	 */
-	
-	public void setBank(Bank bank) {
-		
-		this.bank = bank;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>owner</b></em>'.
-	 */
-	
-	public Customer getOwner() {
-		return owner;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>owner</b></em>'.
-	 * @param	owner	the value to set.
-	 */
-	
-	public void setOwner(Customer owner) {
-		
-		this.owner = owner;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>statements</b></em>'.
-	 */
-	
-	public java.util.Set<Statement> getStatements() {
-		return statements;
-	}
-	
-	/**
-	 * Adds the specified value to the attribute '<em><b>statements</b></em>'.
-	 * @param	statements	the value to add.
-	 */
-	
-	public void addStatements(Statement statements) {
-		if (this.statements.contains(statements)) {
-			return;
-		}
-		this.statements.add(statements);
-	}
-	
-	/**
-	 * Removes the specified value from the attribute '<em><b>statements</b></em>'.
-	 * @param	statements	the value to remove.
-	 */
-	
-	public void removeStatements(Statement statements) {
-		if (!this.statements.contains(statements)) {
-			return;
-		}
-		this.statements.remove(statements);
 	}
 	
 	/**
