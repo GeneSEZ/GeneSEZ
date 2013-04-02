@@ -29,7 +29,6 @@ public class SimpleScript extends AbstractTransformable implements Model2Model {
 			logger.error("Mandatory parameter 'script' not set!");
 			result = false;
 		}
-		result = result && super.validate();
 		return result;
 	}
 	
