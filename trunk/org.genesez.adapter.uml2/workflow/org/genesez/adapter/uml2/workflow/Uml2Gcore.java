@@ -105,6 +105,60 @@ public class Uml2Gcore extends SimpleScript {
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "mapClassesInModelToExternal")
+	public boolean getDefaultMapClassesInModelToExternal() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "allowGeneratedXmiGuid")
+	public boolean getDefaultAllowGeneratedXmiGuid() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "externalStereotypes")
+	public java.util.Set<String> getDefaultExternalStereotypes() {
+		java.util.Set<String> result = new java.util.HashSet<String>();
+		result.add("external");
+		return result;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "excludeStereotypes")
+	public java.util.Set<String> getDefaultExcludeStereotypes() {
+		java.util.Set<String> result = new java.util.HashSet<String>();
+		result.add("exclude");
+		return result;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "excludePackages")
+	public java.util.Set<String> getDefaultExcludePackages() {
+		java.util.Set<String> result = new java.util.HashSet<String>();
+		result.add("UML Standard Profile");
+		return result;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "script")
+	public String getDefaultScript() {
+		return "org::genesez::adapter::uml2::gcore::UML2Gcore::transform";
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>mapClassesInModelToExternal</b></em>'.
 	 */
 	public boolean getMapClassesInModelToExternal() {
@@ -247,60 +301,6 @@ public class Uml2Gcore extends SimpleScript {
 	 */
 	public void removeIncludeProfiles(String includeProfiles) {
 		this.includeProfiles.remove(includeProfiles);
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "mapClassesInModelToExternal")
-	public boolean getDefaultMapClassesInModelToExternal() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "allowGeneratedXmiGuid")
-	public boolean getDefaultAllowGeneratedXmiGuid() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "externalStereotypes")
-	public java.util.Set<String> getDefaultExternalStereotypes() {
-		java.util.Set<String> result = new java.util.HashSet<String>();
-		result.add("external");
-		return result;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "excludeStereotypes")
-	public java.util.Set<String> getDefaultExcludeStereotypes() {
-		java.util.Set<String> result = new java.util.HashSet<String>();
-		result.add("exclude");
-		return result;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "excludePackages")
-	public java.util.Set<String> getDefaultExcludePackages() {
-		java.util.Set<String> result = new java.util.HashSet<String>();
-		result.add("UML Standard Profile");
-		return result;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "script")
-	public String getDefaultScript() {
-		return "org::genesez::adapter::uml2::gcore::UML2Gcore::transform";
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._F6MosP3MEeGcKvbUXThvRw) ENABLED START */

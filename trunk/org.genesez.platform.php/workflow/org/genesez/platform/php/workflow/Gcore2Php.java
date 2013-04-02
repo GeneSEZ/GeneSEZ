@@ -66,6 +66,54 @@ public class Gcore2Php extends SimpleModel2Text {
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "generateIncludes")
+	public boolean getDefaultGenerateIncludes() {
+		return true;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "relativeIncludes")
+	public boolean getDefaultRelativeIncludes() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "includeBase")
+	public String getDefaultIncludeBase() {
+		return "";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "propertyAccess")
+	public String getDefaultPropertyAccess() {
+		return "setter";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "accessorStyle")
+	public String getDefaultAccessorStyle() {
+		return "magic";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "template")
+	public String getDefaultTemplate() {
+		return "org::genesez::platform::php5::templates::Root::Root";
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>generateIncludes</b></em>'.
 	 */
 	public boolean getGenerateIncludes() {
@@ -138,54 +186,6 @@ public class Gcore2Php extends SimpleModel2Text {
 	 */
 	public void setAccessorStyle(String accessorStyle) {
 		this.accessorStyle = accessorStyle;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "generateIncludes")
-	public boolean getDefaultGenerateIncludes() {
-		return true;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "relativeIncludes")
-	public boolean getDefaultRelativeIncludes() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "includeBase")
-	public String getDefaultIncludeBase() {
-		return "";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "propertyAccess")
-	public String getDefaultPropertyAccess() {
-		return "setter";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "accessorStyle")
-	public String getDefaultAccessorStyle() {
-		return "magic";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "template")
-	public String getDefaultTemplate() {
-		return "org::genesez::platform::php5::templates::Root::Root";
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._oDsWYAopEeKxusbn3Pe47g) ENABLED START */

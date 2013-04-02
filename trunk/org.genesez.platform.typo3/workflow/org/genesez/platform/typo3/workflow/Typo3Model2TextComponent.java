@@ -100,6 +100,48 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "isT3MvcCompliant")
+	public boolean getDefaultIsT3MvcCompliant() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "xtendNamingFile")
+	public String getDefaultXtendNamingFile() {
+		return "org::genesez::platform::typo3v4::mvc::convention::Naming";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "useModelNameAsExtensionKey")
+	public boolean getDefaultUseModelNameAsExtensionKey() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "scaffolding")
+	public boolean getDefaultScaffolding() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "typeMappingFile")
+	public java.util.Set<String> getDefaultTypeMappingFile() {
+		java.util.Set<String> result = new java.util.LinkedHashSet<String>();
+		result.add("org/genesez/platform/typo3v4/mvc/typemapping/typemapping.xml");
+		return result;
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>isT3MvcCompliant</b></em>'.
 	 */
 	public boolean getIsT3MvcCompliant() {
@@ -157,48 +199,6 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 	 */
 	public void setScaffolding(boolean scaffolding) {
 		this.scaffolding = scaffolding;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "isT3MvcCompliant")
-	public boolean getDefaultIsT3MvcCompliant() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "xtendNamingFile")
-	public String getDefaultXtendNamingFile() {
-		return "org::genesez::platform::typo3v4::mvc::convention::Naming";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "useModelNameAsExtensionKey")
-	public boolean getDefaultUseModelNameAsExtensionKey() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "scaffolding")
-	public boolean getDefaultScaffolding() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "typeMappingFile")
-	public java.util.Set<String> getDefaultTypeMappingFile() {
-		java.util.Set<String> result = new java.util.LinkedHashSet<String>();
-		result.add("org/genesez/platform/typo3v4/mvc/typemapping/typemapping.xml");
-		return result;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._uBPwkApCEeKxusbn3Pe47g) ENABLED START */

@@ -119,6 +119,46 @@ public class TraceabilityComponent extends AbstractSlotWorkflowComponent {
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "gcoreModelSlot")
+	public String getDefaultGcoreModelSlot() {
+		return "coremodel";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "greqModelSlot")
+	public String getDefaultGreqModelSlot() {
+		return "reqmodel";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "gtraceModelSlot")
+	public String getDefaultGtraceModelSlot() {
+		return "tracemodel";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "useModelExtensionsForCrossModelNavigation")
+	public boolean getDefaultUseModelExtensionsForCrossModelNavigation() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "useDefaultUriMapping")
+	public boolean getDefaultUseDefaultUriMapping() {
+		return true;
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>gcoreModelSlot</b></em>'.
 	 */
 	public String getGcoreModelSlot() {
@@ -236,46 +276,6 @@ public class TraceabilityComponent extends AbstractSlotWorkflowComponent {
 	 */
 	public void setUseDefaultUriMapping(boolean useDefaultUriMapping) {
 		this.useDefaultUriMapping = useDefaultUriMapping;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "gcoreModelSlot")
-	public String getDefaultGcoreModelSlot() {
-		return "coremodel";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "greqModelSlot")
-	public String getDefaultGreqModelSlot() {
-		return "reqmodel";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "gtraceModelSlot")
-	public String getDefaultGtraceModelSlot() {
-		return "tracemodel";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "useModelExtensionsForCrossModelNavigation")
-	public boolean getDefaultUseModelExtensionsForCrossModelNavigation() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "useDefaultUriMapping")
-	public boolean getDefaultUseDefaultUriMapping() {
-		return true;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._syfZYI8TEeKpNoiOVa6Abg) ENABLED START */

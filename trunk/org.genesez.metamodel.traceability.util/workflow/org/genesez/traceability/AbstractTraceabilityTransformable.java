@@ -64,6 +64,30 @@ public abstract class AbstractTraceabilityTransformable {
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "gcoreModelSlot")
+	public String getDefaultGcoreModelSlot() {
+		return "coremodel";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "greqModelSlot")
+	public String getDefaultGreqModelSlot() {
+		return "reqmodel";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "gtraceModelSlot")
+	public String getDefaultGtraceModelSlot() {
+		return "tracemodel";
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>gcoreModelSlot</b></em>'.
 	 */
 	public String getGcoreModelSlot() {
@@ -121,30 +145,6 @@ public abstract class AbstractTraceabilityTransformable {
 	 */
 	public void setTemplate(String template) {
 		this.template = template;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "gcoreModelSlot")
-	public String getDefaultGcoreModelSlot() {
-		return "coremodel";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "greqModelSlot")
-	public String getDefaultGreqModelSlot() {
-		return "reqmodel";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "gtraceModelSlot")
-	public String getDefaultGtraceModelSlot() {
-		return "tracemodel";
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._CRUH0I_XEeK_rM5VK2SGEA) ENABLED START */

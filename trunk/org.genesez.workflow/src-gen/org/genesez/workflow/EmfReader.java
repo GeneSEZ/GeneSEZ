@@ -81,6 +81,30 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "makeEPackagesGlobal")
+	public boolean getDefaultMakeEPackagesGlobal() {
+		return true;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "firstElementOnly")
+	public boolean getDefaultFirstElementOnly() {
+		return true;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "ignoreMissingModel")
+	public boolean getDefaultIgnoreMissingModel() {
+		return false;
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>makeEPackagesGlobal</b></em>'.
 	 */
 	public boolean getMakeEPackagesGlobal() {
@@ -123,30 +147,6 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	 */
 	public void setIgnoreMissingModel(boolean ignoreMissingModel) {
 		this.ignoreMissingModel = ignoreMissingModel;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "makeEPackagesGlobal")
-	public boolean getDefaultMakeEPackagesGlobal() {
-		return true;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "firstElementOnly")
-	public boolean getDefaultFirstElementOnly() {
-		return true;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "ignoreMissingModel")
-	public boolean getDefaultIgnoreMissingModel() {
-		return false;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._vaiVYPRiEeGG-J2DIYyoXg) ENABLED START */

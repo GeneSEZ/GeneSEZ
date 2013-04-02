@@ -45,6 +45,14 @@ public class Typo3DefaultDirectoryCreator extends SimpleScript {
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "script")
+	public String getDefaultScript() {
+		return "org::genesez::platform::typo3v4::mvc::scripts::DefaultDirectoryCreation::createDefaultDirectories";
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>outputDir</b></em>'.
 	 */
 	public String getOutputDir() {
@@ -57,14 +65,6 @@ public class Typo3DefaultDirectoryCreator extends SimpleScript {
 	 */
 	public void setOutputDir(String outputDir) {
 		this.outputDir = outputDir;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "script")
-	public String getDefaultScript() {
-		return "org::genesez::platform::typo3v4::mvc::scripts::DefaultDirectoryCreation::createDefaultDirectories";
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._hJRnUAo8EeKxusbn3Pe47g) ENABLED START */

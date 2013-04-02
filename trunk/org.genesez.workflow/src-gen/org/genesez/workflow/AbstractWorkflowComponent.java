@@ -114,6 +114,14 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "abortOnError")
+	public boolean getDefaultAbortOnError() {
+		return true;
+	}
+	
+	/**
 	 * Specifies the execution in case of errors.
 	 */
 	public boolean getAbortOnError() {
@@ -126,14 +134,6 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 	 */
 	public void setAbortOnError(boolean abortOnError) {
 		this.abortOnError = abortOnError;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "abortOnError")
-	public boolean getDefaultAbortOnError() {
-		return true;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._paljEPU8EeGsV8fV-DCYeA) ENABLED START */

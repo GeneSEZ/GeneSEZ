@@ -70,6 +70,46 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "schemaLocation")
+	public boolean getDefaultSchemaLocation() {
+		return true;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "schemaLocationImplementation")
+	public boolean getDefaultSchemaLocationImplementation() {
+		return true;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "ignoreEmptySlot")
+	public boolean getDefaultIgnoreEmptySlot() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "cloneSlotContents")
+	public boolean getDefaultCloneSlotContents() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "multipleResourcesInCaseOfList")
+	public boolean getDefaultMultipleResourcesInCaseOfList() {
+		return false;
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>schemaLocation</b></em>'.
 	 */
 	public boolean getSchemaLocation() {
@@ -142,46 +182,6 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	 */
 	public void setMultipleResourcesInCaseOfList(boolean multipleResourcesInCaseOfList) {
 		this.multipleResourcesInCaseOfList = multipleResourcesInCaseOfList;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "schemaLocation")
-	public boolean getDefaultSchemaLocation() {
-		return true;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "schemaLocationImplementation")
-	public boolean getDefaultSchemaLocationImplementation() {
-		return true;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "ignoreEmptySlot")
-	public boolean getDefaultIgnoreEmptySlot() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "cloneSlotContents")
-	public boolean getDefaultCloneSlotContents() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "multipleResourcesInCaseOfList")
-	public boolean getDefaultMultipleResourcesInCaseOfList() {
-		return false;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._UMGTcPLIEeGYwYEQM4LYvw) ENABLED START */

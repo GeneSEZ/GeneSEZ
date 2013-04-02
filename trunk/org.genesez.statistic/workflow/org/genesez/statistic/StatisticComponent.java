@@ -219,6 +219,54 @@ public class StatisticComponent extends Model2TextComponent {
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "htmlTemplateDir")
+	public String getDefaultHtmlTemplateDir() {
+		return "html_template";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "slot")
+	public String getDefaultSlot() {
+		return "statisticmodel";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "labelOwnImplCode")
+	public String getDefaultLabelOwnImplCode() {
+		return "impl. Code";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "labelGeneratedCode")
+	public String getDefaultLabelGeneratedCode() {
+		return "gen. Code";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "labelDocumentation")
+	public String getDefaultLabelDocumentation() {
+		return "documentation";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "labelComments")
+	public String getDefaultLabelComments() {
+		return "comments";
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>htmlTemplateDir</b></em>'.
 	 */
 	public String getHtmlTemplateDir() {
@@ -321,54 +369,6 @@ public class StatisticComponent extends Model2TextComponent {
 	 */
 	public void setTitle(String title) {
 		this.title = title;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "htmlTemplateDir")
-	public String getDefaultHtmlTemplateDir() {
-		return "html_template";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "slot")
-	public String getDefaultSlot() {
-		return "statisticmodel";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "labelOwnImplCode")
-	public String getDefaultLabelOwnImplCode() {
-		return "impl. Code";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "labelGeneratedCode")
-	public String getDefaultLabelGeneratedCode() {
-		return "gen. Code";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "labelDocumentation")
-	public String getDefaultLabelDocumentation() {
-		return "documentation";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "labelComments")
-	public String getDefaultLabelComments() {
-		return "comments";
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._u1uL0IZUEeKi-fAVJTcXlg) ENABLED START */
