@@ -31,6 +31,7 @@ extension org::genesez::util::GlobalObjectStorage;
 // use logging
 extension org::genesez::util::logging::Logging;
 extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::Conversion;
 
 // behavior models
 extension org::genesez::adapter::uml2::gcore::UML2GcoreActivities;
@@ -512,7 +513,8 @@ private create MAssociation makeAssociation(Association a, MPackage container) :
 	ownedComment.addAll( a.ownedComment.typeSelect(Comment).makeComment() ) ->
 	// associations ends: filter non navigable association ends 
 	// non navigable association ends do not have the class refernce set, except the association object is an association class, then the association class is itself set as class
-	end.addAll( a.memberEnd.select( e|e.class != null && e.class != a ).makeAssociationRole() ) ->
+	logTrace("featuring classifiers: " + a.memberEnd.featuringClassifier.fqn() ) ->
+	end.addAll( a.memberEnd.select( e| !e.featuringClassifier.isEmpty && !e.featuringClassifier.contains(a) ).makeAssociationRole() ) ->
 	logTrace("link ends: " + end) ->
 	linkEnds() ->
 	associationClass(a) ->
