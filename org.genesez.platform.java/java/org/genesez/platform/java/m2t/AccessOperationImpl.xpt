@@ -110,15 +110,45 @@
 «ENDDEFINE»
 
 «REM»
-	Generates the implementation of a set access operation.
+	Generates the implementation of a set access operation for associations.
+	The generated implementation cares about bidirectionality.
 	
-	@TODO: it's just a simple setter, no association handling!
-	@TODO: check if parameter is the same instance as attribute
+	@todo	set access operation for multi valued types should call add access operation (simplest impl)
+	@todo	association classes, qualified associations
 «ENDREM»
 «DEFINE SetOperationImpl(MAssociationRole end) FOR MOperation -»
 	«LET parameter.first() AS param -»
-	«IF param.multiplicity.isSingleValued() -»
-		«IF !static-»this.«ENDIF-»«param.name» = «IF static-»_«ENDIF-»«param.name»;
+	«IF end.hasQualifier() -»
+		«EXPAND Operation::ProtectedRegion -»
+	«ELSEIF end.hasAssociationClass() -»
+		«EXPAND Operation::ProtectedRegion -»
+	«ELSE -»
+	«IF end.multiplicity.isSingleValued() -»
+		if (this.«end.asAttribute()» == «param.asParameter()») {
+			return;
+		}
+		«IF end.hasOpposite() && ( end.opposite.emGenerateSetAccess() || end.opposite.emGenerateRemoveAccess() ) -»
+		«end.type.mapName().asTypeName()» former = this.«end.asAttribute()»;
+		«IF !static»this.«ENDIF»«end.asAttribute()» = «param.asParameter()»;
+		if (former != null) {
+			«IF end.opposite.multiplicity.isSingleValued() -»
+			former.«end.opposite.asSetter()»(null);
+			«ENDIF -»
+			«IF end.opposite.multiplicity.isMultiValued() -»
+			former.«end.opposite.asRemovePropertyAccessOperation()»(this);
+			«ENDIF -»
+		}
+		if («param.asParameter()» != null) {
+			«IF end.opposite.multiplicity.isSingleValued() -»
+			«param.asParameter()».«end.opposite.asSetter()»(this);
+			«ENDIF -»
+			«IF end.opposite.multiplicity.isMultiValued() -»
+			«param.asParameter()».«end.opposite.asAddPropertyAccessOperation()»(this);
+			«ENDIF -»
+		}
+		«ELSE -»
+		«IF !static»this.«ENDIF»«end.asAttribute()» = «param.asParameter()»;
+		«ENDIF -»
 	«ELSE -»
 		«IF emHasStereotypeAssignment("primitive") -»
 			«IF !static-»this.«ENDIF-»«param.name» = new «param.type.mapName().asTypeName() -»[«IF static-»_«ENDIF-»«param.name».length];
@@ -129,33 +159,35 @@
 			«IF !static-»this.«ENDIF-»«param.name» = «IF static-»_«ENDIF-»«param.name»;
 		«ENDIF-»
 	«ENDIF -»
+	«ENDIF -»
 	«ENDLET -»
 «ENDDEFINE»
 
 «REM»
-	Generates the implementation of an add access operation.
+	Generates the implementation of an add access operation for associations.
+	The generated implementation cares about bidirectionality.
 	Only for multi-valued properties.
 	
-	TODO: verify + ensure: bidirectionality, association classes, qualified associations
+	@todo	association classes, qualified associations
 «ENDREM»
 «DEFINE AddOperationImpl(MAssociationRole end) FOR MOperation -»
 	«IF end.multiplicity.isMultiValued() -»
 	«LET parameter.first() AS param -»
-		«IF end.hasAssociationClass() -»
+		«IF end.hasQualifier() -»
+			«EXPAND Operation::ProtectedRegion -»
+		«ELSEIF end.hasAssociationClass() -»
 			«EXPAND Operation::ProtectedRegion -»
 		«ELSE -»
-		if (this.«end.asAttribute()».contains(«param.asParameter()»)) {
+		if («param.asParameter()» == null || this.«end.asAttribute()».contains(«param.asParameter()»)) {
 			return;
 		}
 		this.«end.asAttribute()».add(«param.asParameter()»);
 			«IF end.hasOpposite() -»
-				«IF end.oppositeMultiplicity.isSingleValued() && end.opposite.emGenerateAddAccess() && end.opposite.emGenerateGetAccess() -»
-		if (!«end.asAttribute()».«end.opposite.asGetter()-»().contains(this)) {
-			«end.asAttribute()».«end.opposite.asAddPropertyAccessOperation()»(this);
-		}
+				«IF end.opposite.multiplicity.isSingleValued() && end.opposite.emGenerateSetAccess() -»
+		«param.asParameter()».«end.opposite.asSetter()-»(this);
 				«ENDIF -»
-				«IF end.oppositeMultiplicity.isMultiValued() && end.opposite.emGenerateSetAccess() -»
-		this.«end.asAttribute()».«end.opposite.asSetter()-»(this);
+				«IF end.opposite.multiplicity.isMultiValued() && end.opposite.emGenerateAddAccess() -»
+		«param.asParameter()».«end.opposite.asAddPropertyAccessOperation()»(this);
 				«ENDIF -»
 			«ENDIF -»
 		«ENDIF -»
@@ -164,29 +196,30 @@
 «ENDDEFINE»
 
 «REM»
-	Generates the implementation of a remove access operation.
+	Generates the implementation of a remove access operation for associations.
+	The generated implementation cares about bidirectionality.
 	Only for multi-valued properties.
 	
-	TODO: verify + ensure: bidirectionality, association classes, qualified associations
+	@todo	association classes, qualified associations
 «ENDREM»
 «DEFINE RemoveOperationImpl(MAssociationRole end) FOR MOperation -»
 	«IF end.multiplicity.isMultiValued() -»
 	«LET parameter.first() AS param -»
-		«IF end.hasAssociationClass() -»
+		«IF end.hasQualifier() -»
+			«EXPAND Operation::ProtectedRegion -»
+		«ELSEIF end.hasAssociationClass() -»
 			«EXPAND Operation::ProtectedRegion -»
 		«ELSE -»
-		if (!this.«end.asAttribute()».contains(«param.asParameter()»)) {
+		if («param.asParameter()» == null || !this.«end.asAttribute()».contains(«param.asParameter()»)) {
 			return;
 		}
 		this.«end.asAttribute()».remove(«param.asParameter()»);
 			«IF end.hasOpposite() -»
-				«IF end.oppositeMultiplicity.isSingleValued() && end.opposite.emGenerateRemoveAccess() && end.opposite.emGenerateGetAccess() -»
-		if («end.asAttribute()».«end.opposite.asGetter()»().contains(this)) {
-			«end.asAttribute()».«end.opposite.asRemovePropertyAccessOperation()»(this);
-		}
+				«IF end.opposite.multiplicity.isSingleValued() && end.opposite.emGenerateSetAccess() -»
+		«param.asParameter()».«end.opposite.asSetter()-»(null);
 				«ENDIF -»
-				«IF end.oppositeMultiplicity.isMultiValued() && end.opposite.emGenerateSetAccess() -»
-		this.«end.asAttribute()».«end.opposite.asSetter()-»(null);
+				«IF end.opposite.multiplicity.isMultiValued() && end.opposite.emGenerateRemoveAccess() -»
+		«param.asParameter()».«end.opposite.asRemovePropertyAccessOperation()»(this);
 				«ENDIF -»
 			«ENDIF -»
 		«ENDIF -»
@@ -198,30 +231,26 @@
 «REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
 «REM»
-	Does nothing, just here for error free template.
+	Does nothing, just here for error free caller template.
 «ENDREM»
 «DEFINE GetOperationImpl(MElement e) FOR MOperation -»
-	// TODO
 «ENDDEFINE»
 
 «REM»
-	Does nothing, just here for error free template.
+	Does nothing, just here for error free caller template.
 «ENDREM»
 «DEFINE SetOperationImpl(MElement e) FOR MOperation -»
-	// TODO
 «ENDDEFINE»
 
 «REM»
-	Does nothing, just here for error free template.
+	Does nothing, just here for error free caller template.
 «ENDREM»
 «DEFINE AddOperationImpl(MElement e) FOR MOperation -»
-	// TODO
 «ENDDEFINE»
 
 «REM»
-	Does nothing, just here for error free template.
+	Does nothing, just here for error free caller template.
 «ENDREM»
 «DEFINE RemoveOperationImpl(MElement e) FOR MOperation -»
-	// TODO
 «ENDDEFINE»
 
