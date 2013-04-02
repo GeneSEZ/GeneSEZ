@@ -28,10 +28,10 @@ public class Wheel implements IChangeable, AssociationRole {
 	/** Stores the association management objects */
 	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object, ? extends Object>>();
 	
-	/** Stores the associated object of association MYCAR to Car */
+	/** Stores the linked object of association '<em><b>mycar</b></em>' */
 	private Car mycar;
 	
-	/** Stores associated objects of association SCREW to Screw */
+	/** Stores all linked objects of association '<em><b>screw</b></em>' */
 	private java.util.Set<Screw> screw = new java.util.HashSet<Screw>();
 	
 	private double diameter;

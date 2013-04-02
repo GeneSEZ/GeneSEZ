@@ -35,7 +35,7 @@ public class Figure implements Form, AssociationRole {
 	/** Stores the association management objects */
 	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object, ? extends Object>>();
 	
-	/** Stores associated objects of association FORMS to Form */
+	/** Stores all linked objects of association '<em><b>forms</b></em>' */
 	private java.util.Set<Form> forms = new java.util.HashSet<Form>();
 	
 	/**

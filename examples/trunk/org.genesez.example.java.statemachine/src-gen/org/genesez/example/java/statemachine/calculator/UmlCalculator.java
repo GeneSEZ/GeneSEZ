@@ -35,7 +35,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	/** Stores the association management objects */
 	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object, ? extends Object>>();
 	
-	/** Stores the associated object of association OPERAND to UmlOperand */
+	/** Stores the linked object of association '<em><b>operand</b></em>' */
 	private UmlOperand operand;
 	
 	private BigDecimal x;

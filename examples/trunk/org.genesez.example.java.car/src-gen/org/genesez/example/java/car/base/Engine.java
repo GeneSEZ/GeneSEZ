@@ -26,7 +26,7 @@ public class Engine implements AssociationRole {
 	/** Stores the association management objects */
 	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object, ? extends Object>>();
 	
-	/** Stores the associated object of association CAR to Car */
+	/** Stores the linked object of association '<em><b>car</b></em>' */
 	private Car car;
 	
 	private byte ps;

@@ -29,21 +29,22 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	/** Stores the association management objects */
 	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object, ? extends Object>>();
 	
-	/** Stores the associated object of association SPARE to Wheel */
+	/** Stores the linked object of association '<em><b>spare</b></em>' */
 	private Wheel spare;
 	
-	/** Stores the associated object of association LICENSE to License */
+	/** Stores the linked object of association '<em><b>license</b></em>' */
 	private License license;
-	/** Stores the association class object of association LICENSE to License */
+	
+	/** Stores the association class object of association '<em><b>license</b></em>' */
 	private Owner owner;
 	
-	/** Stores the associated object of association LICENSEPLATE to LicensePlate */
+	/** Stores the linked object of association '<em><b>licensePlate</b></em>' */
 	private LicensePlate licensePlate;
 	
-	/** Stores the associated object of association ENGINE to Engine */
+	/** Stores the linked object of association '<em><b>engine</b></em>' */
 	private Engine engine;
 	
-	/** Stores associated objects of association WHEELS to Wheel */
+	/** Stores all linked objects of association '<em><b>wheels</b></em>' */
 	private java.util.Set<Wheel> wheels = new java.util.HashSet<Wheel>();
 	
 	/**
