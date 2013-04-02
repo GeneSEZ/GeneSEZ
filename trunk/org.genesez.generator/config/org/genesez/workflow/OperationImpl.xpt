@@ -19,13 +19,14 @@
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 «EXTENSION org::genesez::platform::java::util::Naming»
 «EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::m2m::AccessOperation»
 «EXTENSION org::genesez::util::logging::Logging»
 
 
 «AROUND org::genesez::platform::java::m2t::Operation::_ImplementationBody FOR MOperation -»
 «IF (name == "validate") -»
 	«EXPAND ValidateBody FOR classifier -»
-«ELSEIF name == "getParameter" -»
+«ELSEIF name == "getParameter" && !emIsGetAccessOperation() -»
 	«EXPAND GetParameterBody -»
 «ELSE -»
 	«targetDef.proceed() -»
