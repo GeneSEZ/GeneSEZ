@@ -184,6 +184,12 @@ boolean emIsGetAccessOperation(MOperation this, MProperty prop) :
 	name == prop.asGetter() && parameter.isEmpty && hasReturn() && return.type == prop.type;
 
 /**
+ * Returns true if the specified operation is a get access operation.
+ */
+boolean emIsGetAccessOperation(MOperation this) :
+	emHasStereotypeAssignment( prGetAccessOperationIdentifier() );
+
+/**
  * Returns true if a set access operation for the specified property already exists, otherwise false.
  */
 boolean emHasSetAccessOperation(MProperty this) :
@@ -194,6 +200,12 @@ boolean emHasSetAccessOperation(MProperty this) :
  */
 boolean emIsSetAccessOperation(MOperation this, MProperty prop) :
 	name == prop.asSetter() && !hasReturn() && parameter.size == 1 && parameter.first().type == prop.type;
+
+/**
+ * Returns true if the specified operation is a set access operation.
+ */
+boolean emIsSetAccessOperation(MOperation this) :
+	emHasStereotypeAssignment( prSetAccessOperationIdentifier() );
 
 /**
  * Returns true if an add access operation for the specified property already exists, otherwise false.
@@ -208,6 +220,12 @@ boolean emIsAddAccessOperation(MOperation this, MProperty prop) :
 	name == prop.asAddPropertyAccessOperation() && !hasReturn() && parameter.size == 1 && parameter.first().type == prop.type;
 
 /**
+ * Returns true if the specified operation is an add access operation.
+ */
+boolean emIsAddAccessOperation(MOperation this) :
+	emHasStereotypeAssignment( prAddAccessOperationIdentifier() );
+
+/**
  * Returns true if a remove access operation for the specified property already exists, otherwise false.
  */
 boolean emHasRemoveAccessOperation(MProperty this) :
@@ -218,6 +236,12 @@ boolean emHasRemoveAccessOperation(MProperty this) :
  */
 boolean emIsRemoveAccessOperation(MOperation this, MProperty prop) :
 	name == prop.asRemovePropertyAccessOperation() && !hasReturn() && parameter.size == 1 && parameter.first().type == prop.type;
+
+/**
+ * Returns true if the specified operation is a remove access operation.
+ */
+boolean emIsRemoveAccessOperation(MOperation this) :
+	emHasStereotypeAssignment( prRemoveAccessOperationIdentifier() );
 
 
 /**
