@@ -8,7 +8,7 @@ package org.genesez.workflow;
 /**
  * Please describe the responsibility of your class in your modeling tool.
  */
-public class AbstractTransformable implements Transformable {
+public abstract class AbstractTransformable implements Transformable {
 	
 	private java.util.Set<Parameter> parameter = new java.util.LinkedHashSet<Parameter>();
 	
@@ -33,14 +33,6 @@ public class AbstractTransformable implements Transformable {
 	 */
 	public void removeParameter(Parameter parameter) {
 		this.parameter.remove(parameter);
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	public boolean validate() {
-		boolean result = true;
-		return result;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation.__92oMJreEeKHbs5kPL3C6w) ENABLED START */

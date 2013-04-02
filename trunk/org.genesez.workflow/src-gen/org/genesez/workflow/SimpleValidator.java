@@ -29,7 +29,6 @@ public class SimpleValidator extends AbstractTransformable implements Model2Mode
 			logger.error("Mandatory parameter 'script' not set!");
 			result = false;
 		}
-		result = result && super.validate();
 		return result;
 	}
 	

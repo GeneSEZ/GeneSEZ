@@ -29,7 +29,6 @@ public class SimpleModel2Text extends AbstractTransformable implements Model2Tex
 			logger.error("Mandatory parameter 'template' not set!");
 			result = false;
 		}
-		result = result && super.validate();
 		return result;
 	}
 	
