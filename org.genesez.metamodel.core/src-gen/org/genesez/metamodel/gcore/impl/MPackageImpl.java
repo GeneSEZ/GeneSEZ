@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.genesez.metamodel.gcore.GcorePackage;
 import org.genesez.metamodel.gcore.MAssociation;
+import org.genesez.metamodel.gcore.MDependency;
 import org.genesez.metamodel.gcore.MPackage;
 
 /**
@@ -25,9 +26,10 @@ import org.genesez.metamodel.gcore.MPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MPackageImpl#getNestingPackage <em>Nesting Package</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPackageImpl#getNestedPackage <em>Nested Package</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.impl.MPackageImpl#getNestingPackage <em>Nesting Package</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPackageImpl#getAssociation <em>Association</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.impl.MPackageImpl#getOwnedDependency <em>Owned Dependency</em>}</li>
  * </ul>
  * </p>
  *
@@ -56,6 +58,16 @@ public class MPackageImpl extends MDefinitionContextImpl implements MPackage
   protected EList<MAssociation> association;
 
   /**
+   * The cached value of the '{@link #getOwnedDependency() <em>Owned Dependency</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOwnedDependency()
+   * @generated
+   * @ordered
+   */
+  protected EList<MDependency> ownedDependency;
+
+  /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -81,17 +93,6 @@ public class MPackageImpl extends MDefinitionContextImpl implements MPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public MPackage getNestingPackage()
-  {
-    if (eContainerFeatureID() != GcorePackage.MPACKAGE__NESTING_PACKAGE) return null;
-    return (MPackage)eContainer();
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EList<MPackage> getNestedPackage()
   {
     if (nestedPackage == null)
@@ -99,6 +100,17 @@ public class MPackageImpl extends MDefinitionContextImpl implements MPackage
       nestedPackage = new EObjectContainmentWithInverseEList<MPackage>(MPackage.class, this, GcorePackage.MPACKAGE__NESTED_PACKAGE, GcorePackage.MPACKAGE__NESTING_PACKAGE);
     }
     return nestedPackage;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MPackage getNestingPackage()
+  {
+    if (eContainerFeatureID() != GcorePackage.MPACKAGE__NESTING_PACKAGE) return null;
+    return (MPackage)eContainer();
   }
 
   /**
@@ -120,20 +132,36 @@ public class MPackageImpl extends MDefinitionContextImpl implements MPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EList<MDependency> getOwnedDependency()
+  {
+    if (ownedDependency == null)
+    {
+      ownedDependency = new EObjectContainmentWithInverseEList<MDependency>(MDependency.class, this, GcorePackage.MPACKAGE__OWNED_DEPENDENCY, GcorePackage.MDEPENDENCY__OWNING_PACKAGE);
+    }
+    return ownedDependency;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @SuppressWarnings("unchecked")
   @Override
   public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
     switch (featureID)
     {
+      case GcorePackage.MPACKAGE__NESTED_PACKAGE:
+        return ((InternalEList<InternalEObject>)(InternalEList<?>)getNestedPackage()).basicAdd(otherEnd, msgs);
       case GcorePackage.MPACKAGE__NESTING_PACKAGE:
         if (eInternalContainer() != null)
           msgs = eBasicRemoveFromContainer(msgs);
         return eBasicSetContainer(otherEnd, GcorePackage.MPACKAGE__NESTING_PACKAGE, msgs);
-      case GcorePackage.MPACKAGE__NESTED_PACKAGE:
-        return ((InternalEList<InternalEObject>)(InternalEList<?>)getNestedPackage()).basicAdd(otherEnd, msgs);
       case GcorePackage.MPACKAGE__ASSOCIATION:
         return ((InternalEList<InternalEObject>)(InternalEList<?>)getAssociation()).basicAdd(otherEnd, msgs);
+      case GcorePackage.MPACKAGE__OWNED_DEPENDENCY:
+        return ((InternalEList<InternalEObject>)(InternalEList<?>)getOwnedDependency()).basicAdd(otherEnd, msgs);
     }
     return super.eInverseAdd(otherEnd, featureID, msgs);
   }
@@ -148,12 +176,14 @@ public class MPackageImpl extends MDefinitionContextImpl implements MPackage
   {
     switch (featureID)
     {
-      case GcorePackage.MPACKAGE__NESTING_PACKAGE:
-        return eBasicSetContainer(null, GcorePackage.MPACKAGE__NESTING_PACKAGE, msgs);
       case GcorePackage.MPACKAGE__NESTED_PACKAGE:
         return ((InternalEList<?>)getNestedPackage()).basicRemove(otherEnd, msgs);
+      case GcorePackage.MPACKAGE__NESTING_PACKAGE:
+        return eBasicSetContainer(null, GcorePackage.MPACKAGE__NESTING_PACKAGE, msgs);
       case GcorePackage.MPACKAGE__ASSOCIATION:
         return ((InternalEList<?>)getAssociation()).basicRemove(otherEnd, msgs);
+      case GcorePackage.MPACKAGE__OWNED_DEPENDENCY:
+        return ((InternalEList<?>)getOwnedDependency()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -184,12 +214,14 @@ public class MPackageImpl extends MDefinitionContextImpl implements MPackage
   {
     switch (featureID)
     {
-      case GcorePackage.MPACKAGE__NESTING_PACKAGE:
-        return getNestingPackage();
       case GcorePackage.MPACKAGE__NESTED_PACKAGE:
         return getNestedPackage();
+      case GcorePackage.MPACKAGE__NESTING_PACKAGE:
+        return getNestingPackage();
       case GcorePackage.MPACKAGE__ASSOCIATION:
         return getAssociation();
+      case GcorePackage.MPACKAGE__OWNED_DEPENDENCY:
+        return getOwnedDependency();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -213,6 +245,10 @@ public class MPackageImpl extends MDefinitionContextImpl implements MPackage
         getAssociation().clear();
         getAssociation().addAll((Collection<? extends MAssociation>)newValue);
         return;
+      case GcorePackage.MPACKAGE__OWNED_DEPENDENCY:
+        getOwnedDependency().clear();
+        getOwnedDependency().addAll((Collection<? extends MDependency>)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -233,6 +269,9 @@ public class MPackageImpl extends MDefinitionContextImpl implements MPackage
       case GcorePackage.MPACKAGE__ASSOCIATION:
         getAssociation().clear();
         return;
+      case GcorePackage.MPACKAGE__OWNED_DEPENDENCY:
+        getOwnedDependency().clear();
+        return;
     }
     super.eUnset(featureID);
   }
@@ -247,12 +286,14 @@ public class MPackageImpl extends MDefinitionContextImpl implements MPackage
   {
     switch (featureID)
     {
-      case GcorePackage.MPACKAGE__NESTING_PACKAGE:
-        return getNestingPackage() != null;
       case GcorePackage.MPACKAGE__NESTED_PACKAGE:
         return nestedPackage != null && !nestedPackage.isEmpty();
+      case GcorePackage.MPACKAGE__NESTING_PACKAGE:
+        return getNestingPackage() != null;
       case GcorePackage.MPACKAGE__ASSOCIATION:
         return association != null && !association.isEmpty();
+      case GcorePackage.MPACKAGE__OWNED_DEPENDENCY:
+        return ownedDependency != null && !ownedDependency.isEmpty();
     }
     return super.eIsSet(featureID);
   }

@@ -2,15 +2,17 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="gcore" nsURI="http://genesez.org/metamodel/core" nsPrefix="gcore">
   <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-    <details key="documentation" value="Author:gerbe.Created:8/30/12 6:57 PM.Title:.Comment:."/>
+    <details key="documentation" value="The core metamodel of the GeneSEZ Generator Framework."/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="MPackage" eSuperTypes="#//MDefinitionContext">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nestingPackage" eType="#//MPackage"
-        changeable="false" eOpposite="#//MPackage/nestedPackage"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nestedPackage" upperBound="-1"
         eType="#//MPackage" containment="true" eOpposite="#//MPackage/nestingPackage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nestingPackage" eType="#//MPackage"
+        changeable="false" eOpposite="#//MPackage/nestedPackage"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="association" upperBound="-1"
         eType="#//MAssociation" containment="true" eOpposite="#//MAssociation/owningPackage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedDependency" upperBound="-1"
+        eType="#//MDependency" containment="true" eOpposite="#//MDependency/owningPackage"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MClass" eSuperTypes="#//MClassifier">
     <eStructuralFeatures xsi:type="ecore:EReference" name="ownedAssociation" eType="#//MAssociation"
@@ -67,6 +69,8 @@
         eType="#//MStereotype"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="aspect" upperBound="-1"
         eType="#//MAspect" containment="true" eOpposite="#//MAspect/element"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependency" upperBound="-1"
+        eType="#//MDependency" eOpposite="#//MDependency/client"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MProperty" abstract="true" eSuperTypes="#//MElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" lowerBound="1"
@@ -163,10 +167,10 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="owningElement" eType="#//MElement"
         changeable="false" eOpposite="#//MElement/ownedComment"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedComment" upperBound="-1"
-        eType="#//MComment" containment="true" eOpposite="#//MComment/nestingComment"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nestingComment" eType="#//MComment"
         changeable="false" eOpposite="#//MComment/nestedComment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedComment" upperBound="-1"
+        eType="#//MComment" containment="true" eOpposite="#//MComment/nestingComment"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MTaggedValue">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -392,6 +396,14 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="upperBound" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MDependency" eSuperTypes="#//MElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owningPackage" lowerBound="1"
+        eType="#//MPackage" changeable="false" eOpposite="#//MPackage/ownedDependency"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="supplier" upperBound="-1"
+        eType="#//MElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="client" upperBound="-1"
+        eType="#//MElement" eOpposite="#//MElement/dependency"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="MDestinationKind">
     <eLiterals name="onEntry" value="1"/>

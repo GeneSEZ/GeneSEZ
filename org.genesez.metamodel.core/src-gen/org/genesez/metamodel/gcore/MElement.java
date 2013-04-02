@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.genesez.metamodel.gcore.MElement#getTaggedValue <em>Tagged Value</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MElement#getStereotype <em>Stereotype</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MElement#getAspect <em>Aspect</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.MElement#getDependency <em>Dependency</em>}</li>
  * </ul>
  * </p>
  *
@@ -150,5 +151,23 @@ public interface MElement extends EObject
    * @generated
    */
   EList<MAspect> getAspect();
+
+  /**
+   * Returns the value of the '<em><b>Dependency</b></em>' reference list.
+   * The list contents are of type {@link org.genesez.metamodel.gcore.MDependency}.
+   * It is bidirectional and its opposite is '{@link org.genesez.metamodel.gcore.MDependency#getClient <em>Client</em>}'.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Dependency</em>' reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Dependency</em>' reference list.
+   * @see org.genesez.metamodel.gcore.GcorePackage#getMElement_Dependency()
+   * @see org.genesez.metamodel.gcore.MDependency#getClient
+   * @model opposite="client"
+   * @generated
+   */
+  EList<MDependency> getDependency();
 
 } // MElement

@@ -106,6 +106,7 @@ public class GcoreFactoryImpl extends EFactoryImpl implements GcoreFactory
       case GcorePackage.MHISTORY_STATE: return createMHistoryState();
       case GcorePackage.MTIME_EVENT: return createMTimeEvent();
       case GcorePackage.MMULTIPLICITY: return createMMultiplicity();
+      case GcorePackage.MDEPENDENCY: return createMDependency();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -594,6 +595,17 @@ public class GcoreFactoryImpl extends EFactoryImpl implements GcoreFactory
   {
     MMultiplicityImpl mMultiplicity = new MMultiplicityImpl();
     return mMultiplicity;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MDependency createMDependency()
+  {
+    MDependencyImpl mDependency = new MDependencyImpl();
+    return mDependency;
   }
 
   /**

@@ -392,6 +392,15 @@ public interface GcoreFactory extends EFactory
   MMultiplicity createMMultiplicity();
 
   /**
+   * Returns a new object of class '<em>MDependency</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>MDependency</em>'.
+   * @generated
+   */
+  MDependency createMDependency();
+
+  /**
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
