@@ -16,11 +16,13 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.genesez.metamodel.gcore.GcorePackage;
 import org.genesez.metamodel.gcore.MAspect;
 import org.genesez.metamodel.gcore.MComment;
+import org.genesez.metamodel.gcore.MDependency;
 import org.genesez.metamodel.gcore.MElement;
 import org.genesez.metamodel.gcore.MExternal;
 import org.genesez.metamodel.gcore.MGeneric;
@@ -41,6 +43,7 @@ import org.genesez.metamodel.gcore.MTaggedValue;
  *   <li>{@link org.genesez.metamodel.gcore.impl.MExternalImpl#getTaggedValue <em>Tagged Value</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MExternalImpl#getStereotype <em>Stereotype</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MExternalImpl#getAspect <em>Aspect</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.impl.MExternalImpl#getDependency <em>Dependency</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MExternalImpl#getModel <em>Model</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MExternalImpl#getGenericParameter <em>Generic Parameter</em>}</li>
  * </ul>
@@ -129,6 +132,16 @@ public class MExternalImpl extends MTypeImpl implements MExternal
    * @ordered
    */
   protected EList<MAspect> aspect;
+
+  /**
+   * The cached value of the '{@link #getDependency() <em>Dependency</em>}' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDependency()
+   * @generated
+   * @ordered
+   */
+  protected EList<MDependency> dependency;
 
   /**
    * The cached value of the '{@link #getGenericParameter() <em>Generic Parameter</em>}' containment reference list.
@@ -268,6 +281,20 @@ public class MExternalImpl extends MTypeImpl implements MExternal
    * <!-- end-user-doc -->
    * @generated
    */
+  public EList<MDependency> getDependency()
+  {
+    if (dependency == null)
+    {
+      dependency = new EObjectWithInverseResolvingEList.ManyInverse<MDependency>(MDependency.class, this, GcorePackage.MEXTERNAL__DEPENDENCY, GcorePackage.MDEPENDENCY__CLIENT);
+    }
+    return dependency;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public MModel getModel()
   {
     if (eContainerFeatureID() != GcorePackage.MEXTERNAL__MODEL) return null;
@@ -305,6 +332,8 @@ public class MExternalImpl extends MTypeImpl implements MExternal
         return ((InternalEList<InternalEObject>)(InternalEList<?>)getTaggedValue()).basicAdd(otherEnd, msgs);
       case GcorePackage.MEXTERNAL__ASPECT:
         return ((InternalEList<InternalEObject>)(InternalEList<?>)getAspect()).basicAdd(otherEnd, msgs);
+      case GcorePackage.MEXTERNAL__DEPENDENCY:
+        return ((InternalEList<InternalEObject>)(InternalEList<?>)getDependency()).basicAdd(otherEnd, msgs);
       case GcorePackage.MEXTERNAL__MODEL:
         if (eInternalContainer() != null)
           msgs = eBasicRemoveFromContainer(msgs);
@@ -331,6 +360,8 @@ public class MExternalImpl extends MTypeImpl implements MExternal
         return ((InternalEList<?>)getTaggedValue()).basicRemove(otherEnd, msgs);
       case GcorePackage.MEXTERNAL__ASPECT:
         return ((InternalEList<?>)getAspect()).basicRemove(otherEnd, msgs);
+      case GcorePackage.MEXTERNAL__DEPENDENCY:
+        return ((InternalEList<?>)getDependency()).basicRemove(otherEnd, msgs);
       case GcorePackage.MEXTERNAL__MODEL:
         return eBasicSetContainer(null, GcorePackage.MEXTERNAL__MODEL, msgs);
       case GcorePackage.MEXTERNAL__GENERIC_PARAMETER:
@@ -377,6 +408,8 @@ public class MExternalImpl extends MTypeImpl implements MExternal
         return getStereotype();
       case GcorePackage.MEXTERNAL__ASPECT:
         return getAspect();
+      case GcorePackage.MEXTERNAL__DEPENDENCY:
+        return getDependency();
       case GcorePackage.MEXTERNAL__MODEL:
         return getModel();
       case GcorePackage.MEXTERNAL__GENERIC_PARAMETER:
@@ -418,6 +451,10 @@ public class MExternalImpl extends MTypeImpl implements MExternal
         getAspect().clear();
         getAspect().addAll((Collection<? extends MAspect>)newValue);
         return;
+      case GcorePackage.MEXTERNAL__DEPENDENCY:
+        getDependency().clear();
+        getDependency().addAll((Collection<? extends MDependency>)newValue);
+        return;
       case GcorePackage.MEXTERNAL__GENERIC_PARAMETER:
         getGenericParameter().clear();
         getGenericParameter().addAll((Collection<? extends MGeneric>)newValue);
@@ -454,6 +491,9 @@ public class MExternalImpl extends MTypeImpl implements MExternal
       case GcorePackage.MEXTERNAL__ASPECT:
         getAspect().clear();
         return;
+      case GcorePackage.MEXTERNAL__DEPENDENCY:
+        getDependency().clear();
+        return;
       case GcorePackage.MEXTERNAL__GENERIC_PARAMETER:
         getGenericParameter().clear();
         return;
@@ -483,6 +523,8 @@ public class MExternalImpl extends MTypeImpl implements MExternal
         return stereotype != null && !stereotype.isEmpty();
       case GcorePackage.MEXTERNAL__ASPECT:
         return aspect != null && !aspect.isEmpty();
+      case GcorePackage.MEXTERNAL__DEPENDENCY:
+        return dependency != null && !dependency.isEmpty();
       case GcorePackage.MEXTERNAL__MODEL:
         return getModel() != null;
       case GcorePackage.MEXTERNAL__GENERIC_PARAMETER:
@@ -509,6 +551,7 @@ public class MExternalImpl extends MTypeImpl implements MExternal
         case GcorePackage.MEXTERNAL__TAGGED_VALUE: return GcorePackage.MELEMENT__TAGGED_VALUE;
         case GcorePackage.MEXTERNAL__STEREOTYPE: return GcorePackage.MELEMENT__STEREOTYPE;
         case GcorePackage.MEXTERNAL__ASPECT: return GcorePackage.MELEMENT__ASPECT;
+        case GcorePackage.MEXTERNAL__DEPENDENCY: return GcorePackage.MELEMENT__DEPENDENCY;
         default: return -1;
       }
     }
@@ -533,6 +576,7 @@ public class MExternalImpl extends MTypeImpl implements MExternal
         case GcorePackage.MELEMENT__TAGGED_VALUE: return GcorePackage.MEXTERNAL__TAGGED_VALUE;
         case GcorePackage.MELEMENT__STEREOTYPE: return GcorePackage.MEXTERNAL__STEREOTYPE;
         case GcorePackage.MELEMENT__ASPECT: return GcorePackage.MEXTERNAL__ASPECT;
+        case GcorePackage.MELEMENT__DEPENDENCY: return GcorePackage.MEXTERNAL__DEPENDENCY;
         default: return -1;
       }
     }

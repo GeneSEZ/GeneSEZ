@@ -310,6 +310,11 @@ public class GcoreAdapterFactory extends AdapterFactoryImpl
         return createMMultiplicityAdapter();
       }
       @Override
+      public Adapter caseMDependency(MDependency object)
+      {
+        return createMDependencyAdapter();
+      }
+      @Override
       public Adapter defaultCase(EObject object)
       {
         return createEObjectAdapter();
@@ -1032,6 +1037,21 @@ public class GcoreAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createMMultiplicityAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gcore.MDependency <em>MDependency</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.genesez.metamodel.gcore.MDependency
+   * @generated
+   */
+  public Adapter createMDependencyAdapter()
   {
     return null;
   }

@@ -26,6 +26,7 @@ import org.genesez.metamodel.gcore.MComment;
 import org.genesez.metamodel.gcore.MCompositeState;
 import org.genesez.metamodel.gcore.MDataType;
 import org.genesez.metamodel.gcore.MDefinitionContext;
+import org.genesez.metamodel.gcore.MDependency;
 import org.genesez.metamodel.gcore.MDestinationKind;
 import org.genesez.metamodel.gcore.MElement;
 import org.genesez.metamodel.gcore.MEnumeration;
@@ -403,6 +404,13 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass mDependencyEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EEnum mDestinationKindEEnum = null;
 
   /**
@@ -483,7 +491,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getMPackage_NestingPackage()
+  public EReference getMPackage_NestedPackage()
   {
     return (EReference)mPackageEClass.getEStructuralFeatures().get(0);
   }
@@ -493,7 +501,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getMPackage_NestedPackage()
+  public EReference getMPackage_NestingPackage()
   {
     return (EReference)mPackageEClass.getEStructuralFeatures().get(1);
   }
@@ -506,6 +514,16 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
   public EReference getMPackage_Association()
   {
     return (EReference)mPackageEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getMPackage_OwnedDependency()
+  {
+    return (EReference)mPackageEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -796,6 +814,16 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
   public EReference getMElement_Aspect()
   {
     return (EReference)mElementEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getMElement_Dependency()
+  {
+    return (EReference)mElementEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -1323,7 +1351,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getMComment_NestedComment()
+  public EReference getMComment_NestingComment()
   {
     return (EReference)mCommentEClass.getEStructuralFeatures().get(3);
   }
@@ -1333,7 +1361,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getMComment_NestingComment()
+  public EReference getMComment_NestedComment()
   {
     return (EReference)mCommentEClass.getEStructuralFeatures().get(4);
   }
@@ -2583,6 +2611,46 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getMDependency()
+  {
+    return mDependencyEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getMDependency_OwningPackage()
+  {
+    return (EReference)mDependencyEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getMDependency_Supplier()
+  {
+    return (EReference)mDependencyEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getMDependency_Client()
+  {
+    return (EReference)mDependencyEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EEnum getMDestinationKind()
   {
     return mDestinationKindEEnum;
@@ -2619,9 +2687,10 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
 
     // Create classes and their features
     mPackageEClass = createEClass(MPACKAGE);
-    createEReference(mPackageEClass, MPACKAGE__NESTING_PACKAGE);
     createEReference(mPackageEClass, MPACKAGE__NESTED_PACKAGE);
+    createEReference(mPackageEClass, MPACKAGE__NESTING_PACKAGE);
     createEReference(mPackageEClass, MPACKAGE__ASSOCIATION);
+    createEReference(mPackageEClass, MPACKAGE__OWNED_DEPENDENCY);
 
     mClassEClass = createEClass(MCLASS);
     createEReference(mClassEClass, MCLASS__OWNED_ASSOCIATION);
@@ -2657,6 +2726,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     createEReference(mElementEClass, MELEMENT__TAGGED_VALUE);
     createEReference(mElementEClass, MELEMENT__STEREOTYPE);
     createEReference(mElementEClass, MELEMENT__ASPECT);
+    createEReference(mElementEClass, MELEMENT__DEPENDENCY);
 
     mPropertyEClass = createEClass(MPROPERTY);
     createEAttribute(mPropertyEClass, MPROPERTY__VISIBILITY);
@@ -2719,8 +2789,8 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     createEAttribute(mCommentEClass, MCOMMENT__XMI_GUID);
     createEAttribute(mCommentEClass, MCOMMENT__ANNOTATION);
     createEReference(mCommentEClass, MCOMMENT__OWNING_ELEMENT);
-    createEReference(mCommentEClass, MCOMMENT__NESTED_COMMENT);
     createEReference(mCommentEClass, MCOMMENT__NESTING_COMMENT);
+    createEReference(mCommentEClass, MCOMMENT__NESTED_COMMENT);
 
     mTaggedValueEClass = createEClass(MTAGGED_VALUE);
     createEAttribute(mTaggedValueEClass, MTAGGED_VALUE__VALUE);
@@ -2876,6 +2946,11 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     createEAttribute(mMultiplicityEClass, MMULTIPLICITY__LOWER_BOUND);
     createEAttribute(mMultiplicityEClass, MMULTIPLICITY__UPPER_BOUND);
 
+    mDependencyEClass = createEClass(MDEPENDENCY);
+    createEReference(mDependencyEClass, MDEPENDENCY__OWNING_PACKAGE);
+    createEReference(mDependencyEClass, MDEPENDENCY__SUPPLIER);
+    createEReference(mDependencyEClass, MDEPENDENCY__CLIENT);
+
     // Create enums
     mDestinationKindEEnum = createEEnum(MDESTINATION_KIND);
   }
@@ -2951,12 +3026,14 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     mFinalStateEClass.getESuperTypes().add(this.getMLeafState());
     mHistoryStateEClass.getESuperTypes().add(this.getMLeafState());
     mTimeEventEClass.getESuperTypes().add(this.getMEvent());
+    mDependencyEClass.getESuperTypes().add(this.getMElement());
 
     // Initialize classes and features; add operations and parameters
     initEClass(mPackageEClass, MPackage.class, "MPackage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getMPackage_NestingPackage(), this.getMPackage(), this.getMPackage_NestedPackage(), "nestingPackage", null, 0, 1, MPackage.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMPackage_NestedPackage(), this.getMPackage(), this.getMPackage_NestingPackage(), "nestedPackage", null, 0, -1, MPackage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMPackage_NestingPackage(), this.getMPackage(), this.getMPackage_NestedPackage(), "nestingPackage", null, 0, 1, MPackage.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMPackage_Association(), this.getMAssociation(), this.getMAssociation_OwningPackage(), "association", null, 0, -1, MPackage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMPackage_OwnedDependency(), this.getMDependency(), this.getMDependency_OwningPackage(), "ownedDependency", null, 0, -1, MPackage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(mClassEClass, MClass.class, "MClass", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getMClass_OwnedAssociation(), this.getMAssociation(), this.getMAssociation_AssociationClass(), "ownedAssociation", null, 0, 1, MClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2992,6 +3069,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     initEReference(getMElement_TaggedValue(), this.getMTaggedValue(), this.getMTaggedValue_OwningElement(), "taggedValue", null, 0, -1, MElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMElement_Stereotype(), this.getMStereotype(), null, "stereotype", null, 0, -1, MElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMElement_Aspect(), this.getMAspect(), this.getMAspect_Element(), "aspect", null, 0, -1, MElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMElement_Dependency(), this.getMDependency(), this.getMDependency_Client(), "dependency", null, 0, -1, MElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(mPropertyEClass, MProperty.class, "MProperty", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getMProperty_Visibility(), ecorePackage.getEString(), "visibility", null, 1, 1, MProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3054,8 +3132,8 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     initEAttribute(getMComment_XmiGuid(), ecorePackage.getEString(), "xmiGuid", null, 1, 1, MComment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMComment_Annotation(), ecorePackage.getEString(), "annotation", null, 1, 1, MComment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMComment_OwningElement(), this.getMElement(), this.getMElement_OwnedComment(), "owningElement", null, 0, 1, MComment.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getMComment_NestedComment(), this.getMComment(), this.getMComment_NestingComment(), "nestedComment", null, 0, -1, MComment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMComment_NestingComment(), this.getMComment(), this.getMComment_NestedComment(), "nestingComment", null, 0, 1, MComment.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMComment_NestedComment(), this.getMComment(), this.getMComment_NestingComment(), "nestedComment", null, 0, -1, MComment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(mTaggedValueEClass, MTaggedValue.class, "MTaggedValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getMTaggedValue_Value(), ecorePackage.getEString(), "value", null, 0, 1, MTaggedValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3210,6 +3288,11 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     initEAttribute(getMMultiplicity_Ordered(), ecorePackage.getEBoolean(), "ordered", null, 1, 1, MMultiplicity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMMultiplicity_LowerBound(), ecorePackage.getEInt(), "lowerBound", null, 1, 1, MMultiplicity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMMultiplicity_UpperBound(), ecorePackage.getEInt(), "upperBound", null, 1, 1, MMultiplicity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(mDependencyEClass, MDependency.class, "MDependency", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getMDependency_OwningPackage(), this.getMPackage(), this.getMPackage_OwnedDependency(), "owningPackage", null, 1, 1, MDependency.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMDependency_Supplier(), this.getMElement(), null, "supplier", null, 0, -1, MDependency.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMDependency_Client(), this.getMElement(), this.getMElement_Dependency(), "client", null, 0, -1, MDependency.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize enums and add enum literals
     initEEnum(mDestinationKindEEnum, MDestinationKind.class, "MDestinationKind");

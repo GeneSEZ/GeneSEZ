@@ -20,7 +20,7 @@ import org.eclipse.emf.ecore.EReference;
  * </ul>
  * <!-- end-user-doc -->
  * <!-- begin-model-doc -->
- * Author:gerbe.Created:8/30/12 6:57 PM.Title:.Comment:.
+ * The core metamodel of the GeneSEZ Generator Framework.
  * <!-- end-model-doc -->
  * @see org.genesez.metamodel.gcore.GcoreFactory
  * @model kind="package"
@@ -125,13 +125,22 @@ public interface GcorePackage extends EPackage
   int MELEMENT__ASPECT = 5;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MELEMENT__DEPENDENCY = 6;
+
+  /**
    * The number of structural features of the '<em>MElement</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MELEMENT_FEATURE_COUNT = 6;
+  int MELEMENT_FEATURE_COUNT = 7;
 
   /**
    * The meta object id for the '{@link org.genesez.metamodel.gcore.impl.MDefinitionContextImpl <em>MDefinition Context</em>}' class.
@@ -196,6 +205,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MDEFINITION_CONTEXT__ASPECT = MELEMENT__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MDEFINITION_CONTEXT__DEPENDENCY = MELEMENT__DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>Classifier</b></em>' containment reference list.
@@ -307,6 +325,15 @@ public interface GcorePackage extends EPackage
   int MPACKAGE__ASPECT = MDEFINITION_CONTEXT__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MPACKAGE__DEPENDENCY = MDEFINITION_CONTEXT__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>Classifier</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -343,22 +370,22 @@ public interface GcorePackage extends EPackage
   int MPACKAGE__EVENT = MDEFINITION_CONTEXT__EVENT;
 
   /**
-   * The feature id for the '<em><b>Nesting Package</b></em>' container reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MPACKAGE__NESTING_PACKAGE = MDEFINITION_CONTEXT_FEATURE_COUNT + 0;
-
-  /**
    * The feature id for the '<em><b>Nested Package</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MPACKAGE__NESTED_PACKAGE = MDEFINITION_CONTEXT_FEATURE_COUNT + 1;
+  int MPACKAGE__NESTED_PACKAGE = MDEFINITION_CONTEXT_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Nesting Package</b></em>' container reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MPACKAGE__NESTING_PACKAGE = MDEFINITION_CONTEXT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Association</b></em>' containment reference list.
@@ -370,13 +397,22 @@ public interface GcorePackage extends EPackage
   int MPACKAGE__ASSOCIATION = MDEFINITION_CONTEXT_FEATURE_COUNT + 2;
 
   /**
+   * The feature id for the '<em><b>Owned Dependency</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MPACKAGE__OWNED_DEPENDENCY = MDEFINITION_CONTEXT_FEATURE_COUNT + 3;
+
+  /**
    * The number of structural features of the '<em>MPackage</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MPACKAGE_FEATURE_COUNT = MDEFINITION_CONTEXT_FEATURE_COUNT + 3;
+  int MPACKAGE_FEATURE_COUNT = MDEFINITION_CONTEXT_FEATURE_COUNT + 4;
 
   /**
    * The meta object id for the '{@link org.genesez.metamodel.gcore.impl.MClassifierImpl <em>MClassifier</em>}' class.
@@ -441,6 +477,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MCLASSIFIER__ASPECT = MELEMENT__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MCLASSIFIER__DEPENDENCY = MELEMENT__DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>Specialization</b></em>' reference list.
@@ -649,6 +694,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MCLASS__ASPECT = MCLASSIFIER__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MCLASS__DEPENDENCY = MCLASSIFIER__DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>Specialization</b></em>' reference list.
@@ -868,6 +922,15 @@ public interface GcorePackage extends EPackage
   int MPROPERTY__ASPECT = MELEMENT__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MPROPERTY__DEPENDENCY = MELEMENT__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>Visibility</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -993,6 +1056,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MASSOCIATION_ROLE__ASPECT = MPROPERTY__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MASSOCIATION_ROLE__DEPENDENCY = MPROPERTY__DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>Visibility</b></em>' attribute.
@@ -1185,6 +1257,15 @@ public interface GcorePackage extends EPackage
   int MASSOCIATION__ASPECT = MELEMENT__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MASSOCIATION__DEPENDENCY = MELEMENT__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>Derived</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1292,6 +1373,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MATTRIBUTE__ASPECT = MPROPERTY__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATTRIBUTE__DEPENDENCY = MPROPERTY__DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>Visibility</b></em>' attribute.
@@ -1448,6 +1538,15 @@ public interface GcorePackage extends EPackage
   int MMODEL__ASPECT = MPACKAGE__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MMODEL__DEPENDENCY = MPACKAGE__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>Classifier</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1484,15 +1583,6 @@ public interface GcorePackage extends EPackage
   int MMODEL__EVENT = MPACKAGE__EVENT;
 
   /**
-   * The feature id for the '<em><b>Nesting Package</b></em>' container reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MMODEL__NESTING_PACKAGE = MPACKAGE__NESTING_PACKAGE;
-
-  /**
    * The feature id for the '<em><b>Nested Package</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1502,6 +1592,15 @@ public interface GcorePackage extends EPackage
   int MMODEL__NESTED_PACKAGE = MPACKAGE__NESTED_PACKAGE;
 
   /**
+   * The feature id for the '<em><b>Nesting Package</b></em>' container reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MMODEL__NESTING_PACKAGE = MPACKAGE__NESTING_PACKAGE;
+
+  /**
    * The feature id for the '<em><b>Association</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1509,6 +1608,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MMODEL__ASSOCIATION = MPACKAGE__ASSOCIATION;
+
+  /**
+   * The feature id for the '<em><b>Owned Dependency</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MMODEL__OWNED_DEPENDENCY = MPACKAGE__OWNED_DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>Any Stereotype</b></em>' containment reference list.
@@ -1600,6 +1708,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MINTERFACE__ASPECT = MCLASSIFIER__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MINTERFACE__DEPENDENCY = MCLASSIFIER__DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>Specialization</b></em>' reference list.
@@ -1810,6 +1927,15 @@ public interface GcorePackage extends EPackage
   int MOPERATION__ASPECT = MELEMENT__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MOPERATION__DEPENDENCY = MELEMENT__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>Visibility</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1964,6 +2090,15 @@ public interface GcorePackage extends EPackage
   int MPARAMETER__ASPECT = MELEMENT__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MPARAMETER__DEPENDENCY = MELEMENT__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>Defaultvalue</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2098,6 +2233,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MDATA_TYPE__ASPECT = MCLASSIFIER__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MDATA_TYPE__DEPENDENCY = MCLASSIFIER__DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>Specialization</b></em>' reference list.
@@ -2306,6 +2450,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MENUMERATION__ASPECT = MDATA_TYPE__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MENUMERATION__DEPENDENCY = MDATA_TYPE__DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>Specialization</b></em>' reference list.
@@ -2525,6 +2678,15 @@ public interface GcorePackage extends EPackage
   int MSTEREOTYPE__ASPECT = MELEMENT__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MSTEREOTYPE__DEPENDENCY = MELEMENT__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>Property</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2644,22 +2806,22 @@ public interface GcorePackage extends EPackage
   int MCOMMENT__OWNING_ELEMENT = 2;
 
   /**
-   * The feature id for the '<em><b>Nested Comment</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MCOMMENT__NESTED_COMMENT = 3;
-
-  /**
    * The feature id for the '<em><b>Nesting Comment</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MCOMMENT__NESTING_COMMENT = 4;
+  int MCOMMENT__NESTING_COMMENT = 3;
+
+  /**
+   * The feature id for the '<em><b>Nested Comment</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MCOMMENT__NESTED_COMMENT = 4;
 
   /**
    * The number of structural features of the '<em>MComment</em>' class.
@@ -2955,6 +3117,15 @@ public interface GcorePackage extends EPackage
   int MLITERAL__ASPECT = MELEMENT__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MLITERAL__DEPENDENCY = MELEMENT__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>Owning Enumeration</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3174,13 +3345,22 @@ public interface GcorePackage extends EPackage
   int MEXTERNAL__ASPECT = MTYPE_FEATURE_COUNT + 5;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MEXTERNAL__DEPENDENCY = MTYPE_FEATURE_COUNT + 6;
+
+  /**
    * The feature id for the '<em><b>Model</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MEXTERNAL__MODEL = MTYPE_FEATURE_COUNT + 6;
+  int MEXTERNAL__MODEL = MTYPE_FEATURE_COUNT + 7;
 
   /**
    * The feature id for the '<em><b>Generic Parameter</b></em>' containment reference list.
@@ -3189,7 +3369,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MEXTERNAL__GENERIC_PARAMETER = MTYPE_FEATURE_COUNT + 7;
+  int MEXTERNAL__GENERIC_PARAMETER = MTYPE_FEATURE_COUNT + 8;
 
   /**
    * The number of structural features of the '<em>MExternal</em>' class.
@@ -3198,7 +3378,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MEXTERNAL_FEATURE_COUNT = MTYPE_FEATURE_COUNT + 8;
+  int MEXTERNAL_FEATURE_COUNT = MTYPE_FEATURE_COUNT + 9;
 
   /**
    * The meta object id for the '{@link org.genesez.metamodel.gcore.impl.MBehaviorImpl <em>MBehavior</em>}' class.
@@ -3263,6 +3443,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MBEHAVIOR__ASPECT = MELEMENT__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MBEHAVIOR__DEPENDENCY = MELEMENT__DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>Classifier</b></em>' containment reference list.
@@ -3417,6 +3606,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MACTIVITY__ASPECT = MBEHAVIOR__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACTIVITY__DEPENDENCY = MBEHAVIOR__DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>Classifier</b></em>' containment reference list.
@@ -3591,6 +3789,15 @@ public interface GcorePackage extends EPackage
   int MNODE__ASPECT = MELEMENT__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MNODE__DEPENDENCY = MELEMENT__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>To</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3680,6 +3887,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MACTION__ASPECT = MNODE__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACTION__DEPENDENCY = MNODE__DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>To</b></em>' reference list.
@@ -3807,6 +4023,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MSTATE_MACHINE__ASPECT = MBEHAVIOR__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MSTATE_MACHINE__DEPENDENCY = MBEHAVIOR__DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>Classifier</b></em>' containment reference list.
@@ -3990,6 +4215,15 @@ public interface GcorePackage extends EPackage
   int MFLOW__ASPECT = MELEMENT__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MFLOW__DEPENDENCY = MELEMENT__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>Source</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4099,6 +4333,15 @@ public interface GcorePackage extends EPackage
   int MGUARD__ASPECT = MELEMENT__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MGUARD__DEPENDENCY = MELEMENT__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>Transition</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4188,6 +4431,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MUSE_CASE__ASPECT = MCLASSIFIER__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MUSE_CASE__DEPENDENCY = MCLASSIFIER__DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>Specialization</b></em>' reference list.
@@ -4398,6 +4650,15 @@ public interface GcorePackage extends EPackage
   int MINITIAL__ASPECT = MNODE__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MINITIAL__DEPENDENCY = MNODE__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>To</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4489,6 +4750,15 @@ public interface GcorePackage extends EPackage
   int MFINAL__ASPECT = MNODE__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MFINAL__DEPENDENCY = MNODE__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>To</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4578,6 +4848,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MSTATE__ASPECT = MELEMENT__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MSTATE__DEPENDENCY = MELEMENT__DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>Owner</b></em>' container reference.
@@ -4716,6 +4995,15 @@ public interface GcorePackage extends EPackage
   int MTRANSITION__ASPECT = MELEMENT__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MTRANSITION__DEPENDENCY = MELEMENT__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>Kind</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4852,6 +5140,15 @@ public interface GcorePackage extends EPackage
   int MEVENT__ASPECT = MELEMENT__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MEVENT__DEPENDENCY = MELEMENT__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>Is Call</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4959,6 +5256,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MATOMIC_TRANSITION__ASPECT = MELEMENT__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATOMIC_TRANSITION__DEPENDENCY = MELEMENT__DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>Defining Transition</b></em>' reference.
@@ -5142,6 +5448,15 @@ public interface GcorePackage extends EPackage
   int MLEAF_STATE__ASPECT = MSTATE__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MLEAF_STATE__DEPENDENCY = MSTATE__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>Owner</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -5276,6 +5591,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MCOMPOSITE_STATE__ASPECT = MSTATE__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MCOMPOSITE_STATE__DEPENDENCY = MSTATE__DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>Owner</b></em>' container reference.
@@ -5423,6 +5747,15 @@ public interface GcorePackage extends EPackage
   int MINITIAL_STATE__ASPECT = MLEAF_STATE__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MINITIAL_STATE__DEPENDENCY = MLEAF_STATE__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>Owner</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -5559,6 +5892,15 @@ public interface GcorePackage extends EPackage
   int MFINAL_STATE__ASPECT = MLEAF_STATE__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MFINAL_STATE__DEPENDENCY = MLEAF_STATE__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>Owner</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -5693,6 +6035,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MHISTORY_STATE__ASPECT = MLEAF_STATE__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MHISTORY_STATE__DEPENDENCY = MLEAF_STATE__DEPENDENCY;
 
   /**
    * The feature id for the '<em><b>Owner</b></em>' container reference.
@@ -5858,6 +6209,15 @@ public interface GcorePackage extends EPackage
   int MTIME_EVENT__ASPECT = MEVENT__ASPECT;
 
   /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MTIME_EVENT__DEPENDENCY = MEVENT__DEPENDENCY;
+
+  /**
    * The feature id for the '<em><b>Is Call</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -5976,6 +6336,115 @@ public interface GcorePackage extends EPackage
   int MMULTIPLICITY_FEATURE_COUNT = 4;
 
   /**
+   * The meta object id for the '{@link org.genesez.metamodel.gcore.impl.MDependencyImpl <em>MDependency</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.genesez.metamodel.gcore.impl.MDependencyImpl
+   * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMDependency()
+   * @generated
+   */
+  int MDEPENDENCY = 47;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MDEPENDENCY__NAME = MELEMENT__NAME;
+
+  /**
+   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MDEPENDENCY__XMI_GUID = MELEMENT__XMI_GUID;
+
+  /**
+   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MDEPENDENCY__OWNED_COMMENT = MELEMENT__OWNED_COMMENT;
+
+  /**
+   * The feature id for the '<em><b>Tagged Value</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MDEPENDENCY__TAGGED_VALUE = MELEMENT__TAGGED_VALUE;
+
+  /**
+   * The feature id for the '<em><b>Stereotype</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MDEPENDENCY__STEREOTYPE = MELEMENT__STEREOTYPE;
+
+  /**
+   * The feature id for the '<em><b>Aspect</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MDEPENDENCY__ASPECT = MELEMENT__ASPECT;
+
+  /**
+   * The feature id for the '<em><b>Dependency</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MDEPENDENCY__DEPENDENCY = MELEMENT__DEPENDENCY;
+
+  /**
+   * The feature id for the '<em><b>Owning Package</b></em>' container reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MDEPENDENCY__OWNING_PACKAGE = MELEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Supplier</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MDEPENDENCY__SUPPLIER = MELEMENT_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Client</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MDEPENDENCY__CLIENT = MELEMENT_FEATURE_COUNT + 2;
+
+  /**
+   * The number of structural features of the '<em>MDependency</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MDEPENDENCY_FEATURE_COUNT = MELEMENT_FEATURE_COUNT + 3;
+
+  /**
    * The meta object id for the '{@link org.genesez.metamodel.gcore.MDestinationKind <em>MDestination Kind</em>}' enum.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -5983,7 +6452,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMDestinationKind()
    * @generated
    */
-  int MDESTINATION_KIND = 47;
+  int MDESTINATION_KIND = 48;
 
 
   /**
@@ -5997,17 +6466,6 @@ public interface GcorePackage extends EPackage
   EClass getMPackage();
 
   /**
-   * Returns the meta object for the container reference '{@link org.genesez.metamodel.gcore.MPackage#getNestingPackage <em>Nesting Package</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the container reference '<em>Nesting Package</em>'.
-   * @see org.genesez.metamodel.gcore.MPackage#getNestingPackage()
-   * @see #getMPackage()
-   * @generated
-   */
-  EReference getMPackage_NestingPackage();
-
-  /**
    * Returns the meta object for the containment reference list '{@link org.genesez.metamodel.gcore.MPackage#getNestedPackage <em>Nested Package</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -6019,6 +6477,17 @@ public interface GcorePackage extends EPackage
   EReference getMPackage_NestedPackage();
 
   /**
+   * Returns the meta object for the container reference '{@link org.genesez.metamodel.gcore.MPackage#getNestingPackage <em>Nesting Package</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the container reference '<em>Nesting Package</em>'.
+   * @see org.genesez.metamodel.gcore.MPackage#getNestingPackage()
+   * @see #getMPackage()
+   * @generated
+   */
+  EReference getMPackage_NestingPackage();
+
+  /**
    * Returns the meta object for the containment reference list '{@link org.genesez.metamodel.gcore.MPackage#getAssociation <em>Association</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -6028,6 +6497,17 @@ public interface GcorePackage extends EPackage
    * @generated
    */
   EReference getMPackage_Association();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.genesez.metamodel.gcore.MPackage#getOwnedDependency <em>Owned Dependency</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Owned Dependency</em>'.
+   * @see org.genesez.metamodel.gcore.MPackage#getOwnedDependency()
+   * @see #getMPackage()
+   * @generated
+   */
+  EReference getMPackage_OwnedDependency();
 
   /**
    * Returns the meta object for class '{@link org.genesez.metamodel.gcore.MClass <em>MClass</em>}'.
@@ -6341,6 +6821,17 @@ public interface GcorePackage extends EPackage
    * @generated
    */
   EReference getMElement_Aspect();
+
+  /**
+   * Returns the meta object for the reference list '{@link org.genesez.metamodel.gcore.MElement#getDependency <em>Dependency</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference list '<em>Dependency</em>'.
+   * @see org.genesez.metamodel.gcore.MElement#getDependency()
+   * @see #getMElement()
+   * @generated
+   */
+  EReference getMElement_Dependency();
 
   /**
    * Returns the meta object for class '{@link org.genesez.metamodel.gcore.MProperty <em>MProperty</em>}'.
@@ -6905,17 +7396,6 @@ public interface GcorePackage extends EPackage
   EReference getMComment_OwningElement();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.genesez.metamodel.gcore.MComment#getNestedComment <em>Nested Comment</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Nested Comment</em>'.
-   * @see org.genesez.metamodel.gcore.MComment#getNestedComment()
-   * @see #getMComment()
-   * @generated
-   */
-  EReference getMComment_NestedComment();
-
-  /**
    * Returns the meta object for the container reference '{@link org.genesez.metamodel.gcore.MComment#getNestingComment <em>Nesting Comment</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -6925,6 +7405,17 @@ public interface GcorePackage extends EPackage
    * @generated
    */
   EReference getMComment_NestingComment();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.genesez.metamodel.gcore.MComment#getNestedComment <em>Nested Comment</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Nested Comment</em>'.
+   * @see org.genesez.metamodel.gcore.MComment#getNestedComment()
+   * @see #getMComment()
+   * @generated
+   */
+  EReference getMComment_NestedComment();
 
   /**
    * Returns the meta object for class '{@link org.genesez.metamodel.gcore.MTaggedValue <em>MTagged Value</em>}'.
@@ -8261,6 +8752,49 @@ public interface GcorePackage extends EPackage
   EAttribute getMMultiplicity_UpperBound();
 
   /**
+   * Returns the meta object for class '{@link org.genesez.metamodel.gcore.MDependency <em>MDependency</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>MDependency</em>'.
+   * @see org.genesez.metamodel.gcore.MDependency
+   * @generated
+   */
+  EClass getMDependency();
+
+  /**
+   * Returns the meta object for the container reference '{@link org.genesez.metamodel.gcore.MDependency#getOwningPackage <em>Owning Package</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the container reference '<em>Owning Package</em>'.
+   * @see org.genesez.metamodel.gcore.MDependency#getOwningPackage()
+   * @see #getMDependency()
+   * @generated
+   */
+  EReference getMDependency_OwningPackage();
+
+  /**
+   * Returns the meta object for the reference list '{@link org.genesez.metamodel.gcore.MDependency#getSupplier <em>Supplier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference list '<em>Supplier</em>'.
+   * @see org.genesez.metamodel.gcore.MDependency#getSupplier()
+   * @see #getMDependency()
+   * @generated
+   */
+  EReference getMDependency_Supplier();
+
+  /**
+   * Returns the meta object for the reference list '{@link org.genesez.metamodel.gcore.MDependency#getClient <em>Client</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference list '<em>Client</em>'.
+   * @see org.genesez.metamodel.gcore.MDependency#getClient()
+   * @see #getMDependency()
+   * @generated
+   */
+  EReference getMDependency_Client();
+
+  /**
    * Returns the meta object for enum '{@link org.genesez.metamodel.gcore.MDestinationKind <em>MDestination Kind</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -8304,14 +8838,6 @@ public interface GcorePackage extends EPackage
     EClass MPACKAGE = eINSTANCE.getMPackage();
 
     /**
-     * The meta object literal for the '<em><b>Nesting Package</b></em>' container reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference MPACKAGE__NESTING_PACKAGE = eINSTANCE.getMPackage_NestingPackage();
-
-    /**
      * The meta object literal for the '<em><b>Nested Package</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -8320,12 +8846,28 @@ public interface GcorePackage extends EPackage
     EReference MPACKAGE__NESTED_PACKAGE = eINSTANCE.getMPackage_NestedPackage();
 
     /**
+     * The meta object literal for the '<em><b>Nesting Package</b></em>' container reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MPACKAGE__NESTING_PACKAGE = eINSTANCE.getMPackage_NestingPackage();
+
+    /**
      * The meta object literal for the '<em><b>Association</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EReference MPACKAGE__ASSOCIATION = eINSTANCE.getMPackage_Association();
+
+    /**
+     * The meta object literal for the '<em><b>Owned Dependency</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MPACKAGE__OWNED_DEPENDENCY = eINSTANCE.getMPackage_OwnedDependency();
 
     /**
      * The meta object literal for the '{@link org.genesez.metamodel.gcore.impl.MClassImpl <em>MClass</em>}' class.
@@ -8570,6 +9112,14 @@ public interface GcorePackage extends EPackage
      * @generated
      */
     EReference MELEMENT__ASPECT = eINSTANCE.getMElement_Aspect();
+
+    /**
+     * The meta object literal for the '<em><b>Dependency</b></em>' reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MELEMENT__DEPENDENCY = eINSTANCE.getMElement_Dependency();
 
     /**
      * The meta object literal for the '{@link org.genesez.metamodel.gcore.impl.MPropertyImpl <em>MProperty</em>}' class.
@@ -9008,20 +9558,20 @@ public interface GcorePackage extends EPackage
     EReference MCOMMENT__OWNING_ELEMENT = eINSTANCE.getMComment_OwningElement();
 
     /**
-     * The meta object literal for the '<em><b>Nested Comment</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference MCOMMENT__NESTED_COMMENT = eINSTANCE.getMComment_NestedComment();
-
-    /**
      * The meta object literal for the '<em><b>Nesting Comment</b></em>' container reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EReference MCOMMENT__NESTING_COMMENT = eINSTANCE.getMComment_NestingComment();
+
+    /**
+     * The meta object literal for the '<em><b>Nested Comment</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MCOMMENT__NESTED_COMMENT = eINSTANCE.getMComment_NestedComment();
 
     /**
      * The meta object literal for the '{@link org.genesez.metamodel.gcore.impl.MTaggedValueImpl <em>MTagged Value</em>}' class.
@@ -10074,6 +10624,40 @@ public interface GcorePackage extends EPackage
      * @generated
      */
     EAttribute MMULTIPLICITY__UPPER_BOUND = eINSTANCE.getMMultiplicity_UpperBound();
+
+    /**
+     * The meta object literal for the '{@link org.genesez.metamodel.gcore.impl.MDependencyImpl <em>MDependency</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.genesez.metamodel.gcore.impl.MDependencyImpl
+     * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMDependency()
+     * @generated
+     */
+    EClass MDEPENDENCY = eINSTANCE.getMDependency();
+
+    /**
+     * The meta object literal for the '<em><b>Owning Package</b></em>' container reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MDEPENDENCY__OWNING_PACKAGE = eINSTANCE.getMDependency_OwningPackage();
+
+    /**
+     * The meta object literal for the '<em><b>Supplier</b></em>' reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MDEPENDENCY__SUPPLIER = eINSTANCE.getMDependency_Supplier();
+
+    /**
+     * The meta object literal for the '<em><b>Client</b></em>' reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MDEPENDENCY__CLIENT = eINSTANCE.getMDependency_Client();
 
     /**
      * The meta object literal for the '{@link org.genesez.metamodel.gcore.MDestinationKind <em>MDestination Kind</em>}' enum.

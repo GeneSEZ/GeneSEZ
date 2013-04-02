@@ -17,8 +17,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.genesez.metamodel.gcore.MComment#getXmiGuid <em>Xmi Guid</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MComment#getAnnotation <em>Annotation</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MComment#getOwningElement <em>Owning Element</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.MComment#getNestedComment <em>Nested Comment</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MComment#getNestingComment <em>Nesting Comment</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.MComment#getNestedComment <em>Nested Comment</em>}</li>
  * </ul>
  * </p>
  *
@@ -98,6 +98,23 @@ public interface MComment extends EObject
   MElement getOwningElement();
 
   /**
+   * Returns the value of the '<em><b>Nesting Comment</b></em>' container reference.
+   * It is bidirectional and its opposite is '{@link org.genesez.metamodel.gcore.MComment#getNestedComment <em>Nested Comment</em>}'.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Nesting Comment</em>' container reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Nesting Comment</em>' container reference.
+   * @see org.genesez.metamodel.gcore.GcorePackage#getMComment_NestingComment()
+   * @see org.genesez.metamodel.gcore.MComment#getNestedComment
+   * @model opposite="nestedComment" transient="false" changeable="false"
+   * @generated
+   */
+  MComment getNestingComment();
+
+  /**
    * Returns the value of the '<em><b>Nested Comment</b></em>' containment reference list.
    * The list contents are of type {@link org.genesez.metamodel.gcore.MComment}.
    * It is bidirectional and its opposite is '{@link org.genesez.metamodel.gcore.MComment#getNestingComment <em>Nesting Comment</em>}'.
@@ -114,22 +131,5 @@ public interface MComment extends EObject
    * @generated
    */
   EList<MComment> getNestedComment();
-
-  /**
-   * Returns the value of the '<em><b>Nesting Comment</b></em>' container reference.
-   * It is bidirectional and its opposite is '{@link org.genesez.metamodel.gcore.MComment#getNestedComment <em>Nested Comment</em>}'.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Nesting Comment</em>' container reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Nesting Comment</em>' container reference.
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMComment_NestingComment()
-   * @see org.genesez.metamodel.gcore.MComment#getNestedComment
-   * @model opposite="nestedComment" transient="false" changeable="false"
-   * @generated
-   */
-  MComment getNestingComment();
 
 } // MComment

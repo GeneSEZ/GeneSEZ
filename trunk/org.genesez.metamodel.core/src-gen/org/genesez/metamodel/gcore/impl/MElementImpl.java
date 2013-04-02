@@ -17,11 +17,13 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.genesez.metamodel.gcore.GcorePackage;
 import org.genesez.metamodel.gcore.MAspect;
 import org.genesez.metamodel.gcore.MComment;
+import org.genesez.metamodel.gcore.MDependency;
 import org.genesez.metamodel.gcore.MElement;
 import org.genesez.metamodel.gcore.MStereotype;
 import org.genesez.metamodel.gcore.MTaggedValue;
@@ -39,6 +41,7 @@ import org.genesez.metamodel.gcore.MTaggedValue;
  *   <li>{@link org.genesez.metamodel.gcore.impl.MElementImpl#getTaggedValue <em>Tagged Value</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MElementImpl#getStereotype <em>Stereotype</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MElementImpl#getAspect <em>Aspect</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.impl.MElementImpl#getDependency <em>Dependency</em>}</li>
  * </ul>
  * </p>
  *
@@ -125,6 +128,16 @@ public abstract class MElementImpl extends EObjectImpl implements MElement
    * @ordered
    */
   protected EList<MAspect> aspect;
+
+  /**
+   * The cached value of the '{@link #getDependency() <em>Dependency</em>}' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDependency()
+   * @generated
+   * @ordered
+   */
+  protected EList<MDependency> dependency;
 
   /**
    * <!-- begin-user-doc -->
@@ -254,6 +267,20 @@ public abstract class MElementImpl extends EObjectImpl implements MElement
    * <!-- end-user-doc -->
    * @generated
    */
+  public EList<MDependency> getDependency()
+  {
+    if (dependency == null)
+    {
+      dependency = new EObjectWithInverseResolvingEList.ManyInverse<MDependency>(MDependency.class, this, GcorePackage.MELEMENT__DEPENDENCY, GcorePackage.MDEPENDENCY__CLIENT);
+    }
+    return dependency;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @SuppressWarnings("unchecked")
   @Override
   public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
@@ -266,6 +293,8 @@ public abstract class MElementImpl extends EObjectImpl implements MElement
         return ((InternalEList<InternalEObject>)(InternalEList<?>)getTaggedValue()).basicAdd(otherEnd, msgs);
       case GcorePackage.MELEMENT__ASPECT:
         return ((InternalEList<InternalEObject>)(InternalEList<?>)getAspect()).basicAdd(otherEnd, msgs);
+      case GcorePackage.MELEMENT__DEPENDENCY:
+        return ((InternalEList<InternalEObject>)(InternalEList<?>)getDependency()).basicAdd(otherEnd, msgs);
     }
     return super.eInverseAdd(otherEnd, featureID, msgs);
   }
@@ -286,6 +315,8 @@ public abstract class MElementImpl extends EObjectImpl implements MElement
         return ((InternalEList<?>)getTaggedValue()).basicRemove(otherEnd, msgs);
       case GcorePackage.MELEMENT__ASPECT:
         return ((InternalEList<?>)getAspect()).basicRemove(otherEnd, msgs);
+      case GcorePackage.MELEMENT__DEPENDENCY:
+        return ((InternalEList<?>)getDependency()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -312,6 +343,8 @@ public abstract class MElementImpl extends EObjectImpl implements MElement
         return getStereotype();
       case GcorePackage.MELEMENT__ASPECT:
         return getAspect();
+      case GcorePackage.MELEMENT__DEPENDENCY:
+        return getDependency();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -349,6 +382,10 @@ public abstract class MElementImpl extends EObjectImpl implements MElement
         getAspect().clear();
         getAspect().addAll((Collection<? extends MAspect>)newValue);
         return;
+      case GcorePackage.MELEMENT__DEPENDENCY:
+        getDependency().clear();
+        getDependency().addAll((Collection<? extends MDependency>)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -381,6 +418,9 @@ public abstract class MElementImpl extends EObjectImpl implements MElement
       case GcorePackage.MELEMENT__ASPECT:
         getAspect().clear();
         return;
+      case GcorePackage.MELEMENT__DEPENDENCY:
+        getDependency().clear();
+        return;
     }
     super.eUnset(featureID);
   }
@@ -407,6 +447,8 @@ public abstract class MElementImpl extends EObjectImpl implements MElement
         return stereotype != null && !stereotype.isEmpty();
       case GcorePackage.MELEMENT__ASPECT:
         return aspect != null && !aspect.isEmpty();
+      case GcorePackage.MELEMENT__DEPENDENCY:
+        return dependency != null && !dependency.isEmpty();
     }
     return super.eIsSet(featureID);
   }
