@@ -73,6 +73,46 @@ public class ProfileGenerator extends SimpleModel2Text {
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "profileFileName")
+	public String getDefaultProfileFileName() {
+		return "Profile.ext";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "accessHelperFileName")
+	public String getDefaultAccessHelperFileName() {
+		return "AccessHelper.ext";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "stereotypeNamePrefix")
+	public String getDefaultStereotypeNamePrefix() {
+		return "";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "enumerationNamePrefix")
+	public String getDefaultEnumerationNamePrefix() {
+		return "";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "template")
+	public String getDefaultTemplate() {
+		return "org::genesez::platform::common::profile::templates::Root::Root";
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>xtendFilePath</b></em>'.
 	 */
 	public String getXtendFilePath() {
@@ -145,46 +185,6 @@ public class ProfileGenerator extends SimpleModel2Text {
 	 */
 	public void setEnumerationNamePrefix(String enumerationNamePrefix) {
 		this.enumerationNamePrefix = enumerationNamePrefix;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "profileFileName")
-	public String getDefaultProfileFileName() {
-		return "Profile.ext";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "accessHelperFileName")
-	public String getDefaultAccessHelperFileName() {
-		return "AccessHelper.ext";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "stereotypeNamePrefix")
-	public String getDefaultStereotypeNamePrefix() {
-		return "";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "enumerationNamePrefix")
-	public String getDefaultEnumerationNamePrefix() {
-		return "";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "template")
-	public String getDefaultTemplate() {
-		return "org::genesez::platform::common::profile::templates::Root::Root";
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._JnZ-oAofEeKxusbn3Pe47g) ENABLED START */

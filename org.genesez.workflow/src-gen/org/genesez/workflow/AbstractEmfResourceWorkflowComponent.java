@@ -49,6 +49,14 @@ public abstract class AbstractEmfResourceWorkflowComponent extends AbstractSlotW
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "useSingleGlobalResourceSet")
+	public boolean getDefaultUseSingleGlobalResourceSet() {
+		return false;
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>useSingleGlobalResourceSet</b></em>'.
 	 */
 	public boolean getUseSingleGlobalResourceSet() {
@@ -106,14 +114,6 @@ public abstract class AbstractEmfResourceWorkflowComponent extends AbstractSlotW
 	 */
 	public void setFile(String file) {
 		this.file = file;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "useSingleGlobalResourceSet")
-	public boolean getDefaultUseSingleGlobalResourceSet() {
-		return false;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._y0pgQPRsEeGG-J2DIYyoXg) ENABLED START */

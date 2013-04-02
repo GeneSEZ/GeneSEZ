@@ -31,6 +31,14 @@ public abstract class AbstractSlotWorkflowComponent extends AbstractWorkflowComp
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "slot")
+	public String getDefaultSlot() {
+		return "coremodel";
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>slot</b></em>'.
 	 */
 	public String getSlot() {
@@ -43,14 +51,6 @@ public abstract class AbstractSlotWorkflowComponent extends AbstractWorkflowComp
 	 */
 	public void setSlot(String slot) {
 		this.slot = slot;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "slot")
-	public String getDefaultSlot() {
-		return "coremodel";
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._nY_VQPRsEeGG-J2DIYyoXg) ENABLED START */

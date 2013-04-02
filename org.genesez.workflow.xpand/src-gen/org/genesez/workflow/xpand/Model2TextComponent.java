@@ -165,6 +165,38 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "fileEncoding")
+	public String getDefaultFileEncoding() {
+		return "utf-8";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "isMultiValueSlot")
+	public boolean getDefaultIsMultiValueSlot() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "prDefaultExcludes")
+	public boolean getDefaultPrDefaultExcludes() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "prExcludes")
+	public String getDefaultPrExcludes() {
+		return ".svn";
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>fileEncoding</b></em>'.
 	 */
 	public String getFileEncoding() {
@@ -413,38 +445,6 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	 */
 	public void removeAopModel2Text(Model2Text aopModel2Text) {
 		this.aopModel2Text.remove(aopModel2Text);
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "fileEncoding")
-	public String getDefaultFileEncoding() {
-		return "utf-8";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "isMultiValueSlot")
-	public boolean getDefaultIsMultiValueSlot() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "prDefaultExcludes")
-	public boolean getDefaultPrDefaultExcludes() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "prExcludes")
-	public String getDefaultPrExcludes() {
-		return ".svn";
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._wWx1oPt9EeGRytmSxmtqcQ) ENABLED START */

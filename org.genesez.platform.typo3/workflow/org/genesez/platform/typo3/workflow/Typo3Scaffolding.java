@@ -41,21 +41,6 @@ public class Typo3Scaffolding extends SimpleScript {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>scaffolding</b></em>'.
-	 */
-	public boolean getScaffolding() {
-		return scaffolding;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>scaffolding</b></em>'.
-	 * @param	scaffolding	the value to set.
-	 */
-	public void setScaffolding(boolean scaffolding) {
-		this.scaffolding = scaffolding;
-	}
-	
-	/**
 	 * Method stub for further implementation.
 	 */
 	@WfDefault(parameter = "scaffolding")
@@ -68,7 +53,22 @@ public class Typo3Scaffolding extends SimpleScript {
 	 */
 	@WfDefault(parameter = "script")
 	public String getDefaultScript() {
-		return "org::genesez::platform::typo3v4::mvc::m2m::Scaffolding::modelScaffolding";
+		return "org::genesez::platform::typo3v4::mvc::modification::Scaffolding::modelScaffolding";
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>scaffolding</b></em>'.
+	 */
+	public boolean getScaffolding() {
+		return scaffolding;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>scaffolding</b></em>'.
+	 * @param	scaffolding	the value to set.
+	 */
+	public void setScaffolding(boolean scaffolding) {
+		this.scaffolding = scaffolding;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._Dz4oYApBEeKxusbn3Pe47g) ENABLED START */

@@ -96,6 +96,64 @@ public class Gcore2Java extends SimpleModel2Text {
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "fieldAccess")
+	public boolean getDefaultFieldAccess() {
+		return true;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "useModelNameAsBasePackage")
+	public boolean getDefaultUseModelNameAsBasePackage() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "basePackage")
+	public String getDefaultBasePackage() {
+		return "";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "accessorForStereotypes")
+	public java.util.Set<String> getDefaultAccessorForStereotypes() {
+		java.util.Set<String> result = new java.util.HashSet<String>();
+		result.add("entity");
+		return result;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "accessorStereotype")
+	public String getDefaultAccessorStereotype() {
+		return "accessor";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "usePropertyVisibilityForAccessors")
+	public boolean getDefaultUsePropertyVisibilityForAccessors() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "template")
+	public String getDefaultTemplate() {
+		return "org::genesez::platform::java::m2t::Root::Root";
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>excludePackage</b></em>'.
 	 */
 	public java.util.Set<String> getExcludePackage() {
@@ -237,64 +295,6 @@ public class Gcore2Java extends SimpleModel2Text {
 	 */
 	public void setUsePropertyVisibilityForAccessors(boolean usePropertyVisibilityForAccessors) {
 		this.usePropertyVisibilityForAccessors = usePropertyVisibilityForAccessors;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "fieldAccess")
-	public boolean getDefaultFieldAccess() {
-		return true;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "useModelNameAsBasePackage")
-	public boolean getDefaultUseModelNameAsBasePackage() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "basePackage")
-	public String getDefaultBasePackage() {
-		return "";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "accessorForStereotypes")
-	public java.util.Set<String> getDefaultAccessorForStereotypes() {
-		java.util.Set<String> result = new java.util.HashSet<String>();
-		result.add("entity");
-		return result;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "accessorStereotype")
-	public String getDefaultAccessorStereotype() {
-		return "accessor";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "usePropertyVisibilityForAccessors")
-	public boolean getDefaultUsePropertyVisibilityForAccessors() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "template")
-	public String getDefaultTemplate() {
-		return "org::genesez::platform::java::m2t::Root::Root";
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._tPrfIAjhEeKn2-J_iePC7Q) ENABLED START */

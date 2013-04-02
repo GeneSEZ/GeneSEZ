@@ -137,6 +137,85 @@ public class LineCounter extends FileTreeObserverAdapter {
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "withFileDetails")
+	public boolean getDefaultWithFileDetails() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "beginProtectedRegionRegExp")
+	public String getDefaultBeginProtectedRegionRegExp() {
+		return ".*(PROTECTED REGION) ID(.*).*START.*";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "endProtectedRegionRegExp")
+	public String getDefaultEndProtectedRegionRegExp() {
+		return ".*(PROTECTED REGION) END.*";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "singleLineComment")
+	public String getDefaultSingleLineComment() {
+		return "//";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "multiLineStartComment")
+	public String getDefaultMultiLineStartComment() {
+		return "/*";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "documentationStartComment")
+	public String getDefaultDocumentationStartComment() {
+		return "/**";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "multiLineEndComment")
+	public String getDefaultMultiLineEndComment() {
+		return "*/";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "relativeGeneratedDir")
+	public java.util.Set<String> getDefaultRelativeGeneratedDir() {
+		java.util.Set<String> result = new java.util.LinkedHashSet<String>();
+		result.add("src-gen");
+		return result;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "excludedDir")
+	public java.util.Set<String> getDefaultExcludedDir() {
+		java.util.Set<String> result = new java.util.LinkedHashSet<String>();
+		result.add(".svn");
+		result.add(".cvs");
+		result.add(".hg");
+		result.add(".git");
+		return result;
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>withFileDetails</b></em>'.
 	 */
 	public boolean getWithFileDetails() {
@@ -330,85 +409,6 @@ public class LineCounter extends FileTreeObserverAdapter {
 	 */
 	public StatDir getRootDir() {
 		return rootDir;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "withFileDetails")
-	public boolean getDefaultWithFileDetails() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "beginProtectedRegionRegExp")
-	public String getDefaultBeginProtectedRegionRegExp() {
-		return ".*(PROTECTED REGION) ID(.*).*START.*";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "endProtectedRegionRegExp")
-	public String getDefaultEndProtectedRegionRegExp() {
-		return ".*(PROTECTED REGION) END.*";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "singleLineComment")
-	public String getDefaultSingleLineComment() {
-		return "//";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "multiLineStartComment")
-	public String getDefaultMultiLineStartComment() {
-		return "/*";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "documentationStartComment")
-	public String getDefaultDocumentationStartComment() {
-		return "/**";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "multiLineEndComment")
-	public String getDefaultMultiLineEndComment() {
-		return "*/";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "relativeGeneratedDir")
-	public java.util.Set<String> getDefaultRelativeGeneratedDir() {
-		java.util.Set<String> result = new java.util.LinkedHashSet<String>();
-		result.add("src-gen");
-		return result;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "excludedDir")
-	public java.util.Set<String> getDefaultExcludedDir() {
-		java.util.Set<String> result = new java.util.LinkedHashSet<String>();
-		result.add(".svn");
-		result.add(".cvs");
-		result.add(".hg");
-		result.add(".git");
-		return result;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._Nx0r8IzJEeKLl_w7vhifuQ) ENABLED START */

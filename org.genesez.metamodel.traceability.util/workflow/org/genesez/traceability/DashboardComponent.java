@@ -101,6 +101,22 @@ public class DashboardComponent extends Model2TextComponent {
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "templateZipFile")
+	public String getDefaultTemplateZipFile() {
+		return "template.zip";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "slot")
+	public String getDefaultSlot() {
+		return "tracemodel";
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>templateDir</b></em>'.
 	 */
 	public String getTemplateDir() {
@@ -128,22 +144,6 @@ public class DashboardComponent extends Model2TextComponent {
 	 */
 	public void setTemplateZipFile(String templateZipFile) {
 		this.templateZipFile = templateZipFile;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "templateZipFile")
-	public String getDefaultTemplateZipFile() {
-		return "template.zip";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "slot")
-	public String getDefaultSlot() {
-		return "tracemodel";
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._y4kyYI8JEeKpNoiOVa6Abg) ENABLED START */

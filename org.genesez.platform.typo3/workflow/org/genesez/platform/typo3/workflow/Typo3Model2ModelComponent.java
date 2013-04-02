@@ -91,6 +91,30 @@ public class Typo3Model2ModelComponent extends Model2ModelComponent {
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "useModelNameAsExtensionKey")
+	public boolean getDefaultUseModelNameAsExtensionKey() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "isT3MvcCompliant")
+	public boolean getDefaultIsT3MvcCompliant() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "xtendNamingFile")
+	public String getDefaultXtendNamingFile() {
+		return "org::genesez::platform::typo3v4::mvc::convention::Naming";
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>useModelNameAsExtensionKey</b></em>'.
 	 */
 	public boolean getUseModelNameAsExtensionKey() {
@@ -133,30 +157,6 @@ public class Typo3Model2ModelComponent extends Model2ModelComponent {
 	 */
 	public void setExtensionKey(String extensionKey) {
 		this.extensionKey = extensionKey;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "useModelNameAsExtensionKey")
-	public boolean getDefaultUseModelNameAsExtensionKey() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "isT3MvcCompliant")
-	public boolean getDefaultIsT3MvcCompliant() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "xtendNamingFile")
-	public String getDefaultXtendNamingFile() {
-		return "org::genesez::platform::typo3v4::mvc::convention::Naming";
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._esLdUAo9EeKxusbn3Pe47g) ENABLED START */

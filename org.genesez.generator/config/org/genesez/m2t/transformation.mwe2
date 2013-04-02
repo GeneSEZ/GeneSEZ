@@ -58,13 +58,17 @@ Workflow {
 			script = "org::genesez::m2t::ApacheCommonsLogging::modify"
 		}
 		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::platform::java::m2m::aop::AssociationLibrary::prepare"
+		}
+		// cares about property access operations
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::platform::java::m2m::AccessOperation::prepare"
+		}
+		model2model = org.genesez.workflow.SimpleScript {
 			script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
 		}
 		model2model = org.genesez.workflow.SimpleScript {
 			script = "org::genesez::metamodel::core::util::m2m::UseDependencies::addUseDependencies"
-		}
-		model2model = org.genesez.workflow.SimpleScript {
-			script = "org::genesez::platform::java::m2m::aop::AssociationLibrary::prepare"
 		}
 	}
 	
@@ -103,7 +107,7 @@ Workflow {
 			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
 			
 			model2text = org.genesez.platform.java.workflow.Gcore2Java {
-				excludeContentPackage = "."
+				excludePackageContent = "."
 				
 				excludePackage = "org::genesez::m2t::xpand"
 				excludePackage = "org::genesez::m2t::cp::xpand"
@@ -128,9 +132,9 @@ Workflow {
 			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
 			
 			model2text = platform.java.workflow.Gcore2Java {
-				excludeContentPackage = "."
-				excludeContentPackage = "org::genesez::m2t"
-				excludeContentPackage = "org::genesez::m2t::cp"
+				excludePackageContent = "."
+				excludePackageContent = "org::genesez::m2t"
+				excludePackageContent = "org::genesez::m2t::cp"
 				
 				excludePackage = "org::genesez::m2t::deletion"
 			}

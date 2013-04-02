@@ -82,6 +82,22 @@ public class Gcore2PdfLatex extends Model2TextComponent {
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "showPdfLatexLog")
+	public boolean getDefaultShowPdfLatexLog() {
+		return true;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "command")
+	public String getDefaultCommand() {
+		return "pdflatex";
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>pdfOutputDir</b></em>'.
 	 */
 	public String getPdfOutputDir() {
@@ -139,22 +155,6 @@ public class Gcore2PdfLatex extends Model2TextComponent {
 	 */
 	public void setCommand(String command) {
 		this.command = command;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "showPdfLatexLog")
-	public boolean getDefaultShowPdfLatexLog() {
-		return true;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "command")
-	public String getDefaultCommand() {
-		return "pdflatex";
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._AmnOYAoxEeKxusbn3Pe47g) ENABLED START */
