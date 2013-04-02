@@ -85,3 +85,16 @@ String fqn(NamedElement this) : owner != null ? owner.fqn() + "::" + name : name
  * @return	full qualified name
  */
 String fqn(Element this) : owner != null ? owner.fqn() + "::" + toString() : toString();
+
+/**
+ * Returns a qualified model name for identification of the specified model element.
+ */
+String fqmn(Element this) : fqn() + " [" + metaType + " | " + xmiId() + "]";
+
+/**
+ * getter for the xmiId of an uml element
+ * @param	obj	an uml object
+ * @return	the unique xmi id
+ */
+String xmiId (Element obj) : 
+	JAVA org.genesez.adapter.uml2.TransformationHelper.getXmiId(org.eclipse.emf.ecore.EObject);
