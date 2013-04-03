@@ -58,7 +58,7 @@ public class Conversion {
 		}
 	};
 	
-	private static Pattern FORMAT_AS_BOLD = Pattern.compile("(?<!\\\\)\\*(.+?)(?<!\\\\)\\*");
+	//private static Pattern FORMAT_AS_BOLD = Pattern.compile("(?<!\\\\)\\*(.+?)(?<!\\\\)\\*");
 	
 	private static Replaceable bold = new Replaceable() {
 		
@@ -71,7 +71,7 @@ public class Conversion {
 		}
 	};
 	
-	private static Pattern FORMAT_AS_ITALIC = Pattern.compile("(?<!\\\\)_(.+?)(?<!\\\\)_");
+	//private static Pattern FORMAT_AS_ITALIC = Pattern.compile("(?<!\\\\)_(.+?)(?<!\\\\)_");
 	
 	private static Replaceable italic = new Replaceable() {
 		
