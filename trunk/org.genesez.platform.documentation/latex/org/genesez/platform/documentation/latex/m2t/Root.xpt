@@ -1,14 +1,23 @@
-
+«REM»
+	(c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
 «IMPORT gcore»
+
 
 «REM»
 	Generates a simple model documentation.
-	@author tobias haubold <toh@fh-zwickau.de>
+	
+	@author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
 «ENDREM»
 
-«EXTENSION org::genesez::platform::documentation::latex::Formatting»
-«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
-«EXTENSION org::genesez::metamodel::core::util::Conversion»
+
+«EXTENSION org::genesez::platform::documentation::latex::util::Convention»
+«EXTENSION org::genesez::platform::documentation::latex::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
 
 
 «DEFINE Root FOR MModel -»
@@ -20,7 +29,7 @@
 
 
 «DEFINE Root FOR MPackage -»
-\section{Package {\tt «name.format()»}}
+\section{Package {\tt «name.formatText()»}}
 
 	«EXPAND Root FOREACH classifier -»
 	«EXPAND Root FOREACH nestedPackage -»
@@ -28,9 +37,9 @@
 
 
 «DEFINE Root FOR MClassifier -»
-\subsection{«metaTypeName()» {\tt «name.format()»}}
+\subsection{«metaTypeName()» {\tt «name.formatText()»}}
 
-«comment().format()»
+«comment().formatText()»
 
 «EXPAND Attributes -»
 «EXPAND References -»
@@ -42,7 +51,7 @@
 «IF !property.typeSelect(MAttribute).isEmpty -»
 \subsubsection{Attributes}
 
-The «metaTypeName()» \verb|«name.format()»| defines the following attributes:
+The «metaTypeName()» \verb|«name.formatText()»| defines the following attributes:
 
 \begin{description}
 	«EXPAND Item FOREACH property.typeSelect(MAttribute) -»
@@ -55,7 +64,7 @@ The «metaTypeName()» \verb|«name.format()»| defines the following attributes
 «IF !property.typeSelect(MAssociationRole).isEmpty -»
 \subsubsection{References}
 
-The «metaTypeName()» \verb|«name.format()»| defines the following references:
+The «metaTypeName()» \verb|«name.formatText()»| defines the following references:
 
 \begin{description}
 	«EXPAND Item FOREACH property.typeSelect(MAssociationRole) -»
@@ -65,5 +74,5 @@ The «metaTypeName()» \verb|«name.format()»| defines the following references
 
 
 «DEFINE Item FOR MProperty -»
-	\item[«name.format()» : «type.name().format()»] «comment().format()»
+	\item[«name.formatText()» : «type.name().formatText()»] «comment().formatText()»
 «ENDDEFINE»
