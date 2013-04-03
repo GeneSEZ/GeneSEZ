@@ -7,7 +7,7 @@ import org.genesez.metamodel.gcore.MOperation;
 import org.genesez.metamodel.gcore.MProperty;
 
 /**
- * Utility class for TYPO3 MVC naming conventions.
+ * Utility class for TYPO3 CMS MVC naming conventions.
  * 
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
  * @date 2012-02-17

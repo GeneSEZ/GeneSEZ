@@ -1,7 +1,7 @@
 package org.genesez.platform.typo3cms.mvc.convention;
 
 /**
- * Utility class for TYPO3 MVC extension conventions.
+ * Utility class for TYPO3 CMS MVC extension conventions.
  * 
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
  * @date 2011-04-13
@@ -9,12 +9,12 @@ package org.genesez.platform.typo3cms.mvc.convention;
 public class Convention {
 
 	/**
-	 * Create the TYPO3 MVC extension name by a given extension key. This method
+	 * Create the TYPO3 CMS MVC extension name by a given extension key. This method
 	 * splits the extension key at the underscores and transform every token to
 	 * first upper case to get a valid extension name.
 	 * 
-	 * @param extensionKey The TYPO3 MVC extension key.
-	 * @return The TYPO3 MVC extension name based on extension key.
+	 * @param extensionKey The TYPO3 CMS MVC extension key.
+	 * @return The TYPO3 CMS MVC extension name based on extension key.
 	 */
 	public static String extensionName(String extensionKey) {
 		StringBuffer extensionName = new StringBuffer();
