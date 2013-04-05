@@ -136,7 +136,7 @@ create MModel transform(Profile p) :
 	p.getAllAppliedProfiles().logUnresolvedUmlProfile() ->
 	logTrace( "transform profile [ " + metaType + " ] - " + p ) ->
 	transformBasics(p) ->
-	transformPackage(p) ->
+	transformProfile(p) ->
 	this;
 
 
@@ -719,7 +719,7 @@ private Integer oppositeUpperBoundMultiplicity(Property aend) :
  * @return	the GeneSEZ stereotype
  */
 create MStereotype make(Stereotype s) :
-	logTrace("make stereotype: " + s) ->
+	logTrace( "make [ " + metaType + " ] - " + s.fqmn() ) ->
 	// basic element properties
 	transformBasics(s) ->
 	// container
@@ -964,16 +964,38 @@ String value(ValueSpecification this) :
  * @return	the GeneSEZ package
  */
 private MPackage transformPackage(MPackage this, Package p) :
-	// associations
-	// add comment to package
-	ownedComment.addAll( p.ownedComment.typeSelect(Comment).transform() ) ->
+	logTrace( "transform [ " + metaType + " ] - " + p.fqmn() ) ->
+	// basic package properties
+	transformProperties( p ) ->
 	// containments
-	p.ownedElement.typeSelect(Package).transform( this ) ->
 	p.ownedElement.typeSelect(Classifier).reject(
 		e|{Activity, Actor, Association, Extension}.contains(e.metaType) 
 		).transform( this ) ->
 	// create behaviours in package
 	p.ownedElement.typeSelect(Behavior).transform( this ) ->
+	this;
+
+/**
+ * Transforms an UML profile into a GeneSEZ package.
+ */
+private MPackage transformProfile(MPackage this, Profile p) :
+	logTrace( "transform [ " + metaType + " ] - " + p.fqmn() ) ->
+	// basic package properties
+	transformProperties( p ) ->
+	// containments
+	p.ownedElement.typeSelect(Classifier).reject(
+		e|{Activity, Actor, Association, Extension, Stereotype}.contains(e.metaType) 
+		).transform( this ) ->
+	// stereotypes into classes
+	classifier.addAll( p.ownedStereotype.transformClass() ) ->
+	this;
+
+/**
+ * Transforms properties of UML packages into GeneSEZ packages.
+ */
+private MPackage transformProperties(MPackage this, Package p) :
+	// add comment to package
+	ownedComment.addAll( p.ownedComment.typeSelect(Comment).transform() ) ->
 	// map associations in package
 	association.addAll( p.ownedElement.typeSelect(Association).transformAssociation() ) ->
 	// map dependencies
@@ -982,6 +1004,17 @@ private MPackage transformPackage(MPackage this, Package p) :
 	stereotype.addAll( p.getAppliedStereotypes().make() ) ->
 	// set tagged values
 	taggedValue.addAll( makeTaggedValues(p) ) ->
+	// containments
+	p.ownedElement.typeSelect(Package).transform( this ) ->
+	this;
+
+/**
+ * Transforms UML stereotypes into GeneSEZ classes.
+ */
+private create MClass transformClass(Stereotype s) :
+	logTrace( "transform [ " + metaType + " ] - " + s.fqmn() ) ->
+	transformBasics( s ) ->
+	transformClassifier( s ) ->
 	this;
 
 /**
