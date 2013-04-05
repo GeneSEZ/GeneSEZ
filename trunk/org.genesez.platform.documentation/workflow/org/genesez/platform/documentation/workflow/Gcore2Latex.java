@@ -29,7 +29,7 @@ public class Gcore2Latex extends SimpleModel2Text {
 	 */
 	@WfDefault(parameter = "template")
 	public String getDefaultTemplate() {
-		return "org::genesez::platform::documentation::latex::Root::Root";
+		return "org::genesez::platform::documentation::latex::m2t::Root::Root";
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._96UnQAowEeKxusbn3Pe47g) ENABLED START */

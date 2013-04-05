@@ -29,7 +29,7 @@ public class Gcore2DocBook extends SimpleModel2Text {
 	 */
 	@WfDefault(parameter = "template")
 	public String getDefaultTemplate() {
-		return "org::genesez::platform::documentation::docbook::Root::Root";
+		return "org::genesez::platform::documentation::docbook::m2t::Root::Root";
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._8cD5gAowEeKxusbn3Pe47g) ENABLED START */
