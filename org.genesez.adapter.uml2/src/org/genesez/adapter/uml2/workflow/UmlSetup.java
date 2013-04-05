@@ -109,7 +109,14 @@ public class UmlSetup extends Setup {
 	 */
 	public void setStandardProfileMapping(boolean map) {
 		if (map) {
-			addUriMap( new org.eclipse.xtend.typesystem.emf.Mapping("pathmap://UML_PROFILES/Standard.profile.uml", "pathmap://UML_PROFILES/StandardL2.profile.uml"));
+			try {
+				EPackage ePackage = EcoreUtil2.getEPackageByClassName("org.eclipse.uml2.uml.profile.l2.L2Package");
+				if (ePackage != null) {
+					addUriMap( new org.eclipse.xtend.typesystem.emf.Mapping("pathmap://UML_PROFILES/Standard.profile.uml", "pathmap://UML_PROFILES/StandardL2.profile.uml"));
+				}
+			} catch (ConfigurationException ce) {
+				logger.info("Not running with UML 4 -> not registering mapping for uml standard profile");
+			}
 		}
 	}
 	
@@ -130,7 +137,7 @@ public class UmlSetup extends Setup {
 				EPackage.Registry.INSTANCE.put(nsUri, ePackage);
 			}
 		} catch (ConfigurationException ce) {
-			logger.warn("Unable to register EPackage with namespace URI: " + nsUri);
+			logger.info("Unable to register EPackage with namespace URI: " + nsUri);
 		}
 	}
 }
