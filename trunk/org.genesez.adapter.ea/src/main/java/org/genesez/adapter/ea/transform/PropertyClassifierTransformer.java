@@ -1,5 +1,10 @@
 package org.genesez.adapter.ea.transform;
 
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_17_0_5_12d203c6_1363949200668_792167_2693) 
+ */
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.uml2.uml.Element;
@@ -8,24 +13,55 @@ import org.eclipse.uml2.uml.StructuredClassifier;
 import org.eclipse.uml2.uml.Type;
 import org.genesez.adapter.ea.ElementRegistry;
 
+/**
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author christian
+ */
 
 public class PropertyClassifierTransformer extends PropertyTransformer {
-
-	private static final Log log = LogFactory.getLog(PropertyClassifierTransformer.class);
 	
-	@Override
-	public Property transform(org.sparx.Attribute _a, StructuredClassifier _parent) {
-		return super.transform(_a, _parent);
+	// -- generated attribute, constant + association declarations ----------
+	
+	private static final Log LOG = LogFactory.getLog(PropertyClassifierTransformer.class);
+	
+	// -- generated method stubs for implementations + derived attributes ---
+	/**
+	 * Method stub for further implementation.
+	 * @param	attribute	
+	 * @param	parent	
+	 * @return	
+	 */
+	
+	public Property transform(org.sparx.Attribute attribute, StructuredClassifier parent) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363949493489_939916_2765) ENABLED START */
+		return super.transform(attribute, parent);
+		/* PROTECTED REGION END */
 	}
 	
-	@Override
+	/**
+	 * Method stub for further implementation.
+	 * @return	
+	 */
+	
 	protected Type findType() {
-		Element type = ElementRegistry.instance.getById(this.eaAttribute.GetClassifierID());
-
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363949530953_491515_2770) ENABLED START */
+		Element type = ElementRegistry.INSTANCE.getElementById(this.eaAttribute.GetClassifierID());
+		
 		if (type == null) {
-			log.fatal("Classifier for attribute " + this.eaAttribute.GetName() + " not found");
+			LOG.fatal("Classifier for attribute " + this.eaAttribute.GetName() + " not found");
 		}
-
-		return (Type)type;
+		
+		return (Type) type;
+		/* PROTECTED REGION END */
 	}
+	
+	// -- generated association + attribute accessors -----------------------
+	
+	// -- generated code of other cartridges --------------------------------
+	
+	// -- own code implementation -------------------------------------------
+	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363949200668_792167_2693) ENABLED START */
+	// TODO: put your own implementation code here
+	/* PROTECTED REGION END */
+	
 }

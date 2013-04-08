@@ -1,5 +1,10 @@
 package org.genesez.adapter.ea;
 
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_17_0_12d203c6_1328866934865_740501_2040) 
+ */
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,74 +23,100 @@ import org.eclipse.uml2.uml.UMLPackage;
 /**
  * An oAW workflow component to import UML profiles
  * 
- * @author gerbe
- *
  * The profile reader imports a number of UML profiles and make these profiles
  * available for applying them to a transformed UML model.
+ * @author christian
  */
+
 public class ProfileReader extends AbstractWorkflowComponent {
-
-	private static final Log log = LogFactory.getLog(ProfileReader.class);
-
+	
+	// -- generated attribute, constant + association declarations ----------
+	
+	private static final Log LOG = LogFactory.getLog(ProfileReader.class);
+	
 	private String profileDirectory = null;
+	
 	private String profileExtension = "profile.uml";
-	private Map<String, String> profileFiles = new HashMap<String, String>();
 	
-	public void checkConfiguration(Issues issues) {
-		// nothing to do here
-	}
+	// -- generated method stubs for implementations + derived attributes ---
+	/**
+	 * Method stub for further implementation.
+	 * @param	ctx	
+	 * @param	pm	
+	 * @param	issues	
+	 */
 	
-	protected void invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
-		for (String s: this.profileFiles.keySet()) {
+	protected void invokeInternal(WorkflowContext ctx, ProgressMonitor pm, Issues issues) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363353664639_712434_2442) ENABLED START */
+		for (String s : this.profileFiles.keySet()) {
 			try {
 				URI uri = URI.createFileURI(this.profileFiles.get(s));
-				log.debug("Profile URI for " + s + ": " + uri.toString());
-				log.info("Loading profile " + s);
-				Resource resource = ResourceRegistry.instance.load(s, uri);
-				Profile profile = (Profile)EcoreUtil.getObjectByType(resource.getContents(), UMLPackage.Literals.PACKAGE);
-				ProfileRegistry.instance.register(s, profile);
+				LOG.debug("Profile URI for " + s + ": " + uri.toString());
+				LOG.info("Loading profile " + s);
+				Resource resource = ResourceRegistry.INSTANCE.load(s, uri);
+				Profile profile = (Profile) EcoreUtil.getObjectByType(resource.getContents(), UMLPackage.Literals.PACKAGE);
+				ProfileRegistry.INSTANCE.register(s, profile);
 				//	this is a very ugly hack to transform
 				//	./profile/testing.profile.uml into
 				//	../profile/testing.profile.uml
 				String profileURI = profile.eResource().getURI().toString();
-				log.debug("Profile URI: " + profileURI);
-				profile.eResource().setURI(
-					URI.createURI(
-						profileURI.replace(this.profileDirectory+"/", ""))
-					);
-				log.debug("Profile URI: " + profile.eResource().getURI().toString());
-				log.debug("Profile " + s + " successfully loaded");
+				LOG.debug("Profile URI: " + profileURI);
+				profile.eResource().setURI(URI.createURI(profileURI.replace(this.profileDirectory + "/", "")));
+				LOG.debug("Profile URI: " + profile.eResource().getURI().toString());
+				LOG.debug("Profile " + s + " successfully loaded");
 			} catch (Exception e) {
 				issues.addError(e.toString());
 			}
 		}
+		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * Set the directory where to search for the profiles
-	 * @param value	the directory path
+	 * Method stub for further implementation.
+	 * @param	i	
 	 */
-	public void  setProfileDirectory(String value) {
-		log.debug("Setting profile directory to " + value);
-		this.profileDirectory = value;
+	
+	public void checkConfiguration(Issues i) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363353670969_632812_2447) ENABLED START */
+		
+		// :)
+		
+		/* PROTECTED REGION END */
 	}
-
-	/**
-	 * Set the extension of UML profile files
-	 * @param value	The extension string
-	 */
-	public void  setProfileExtension(String value) {
-		log.debug("Setting profile extension to " + value);
-		this.profileExtension = value;
-	}
-
+	
 	/**
 	 * Add profile names
-	 * @param value	Name of a profile to import
+	 * @param	value	
 	 */
+	
 	public void addProfile(String value) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363353990924_467227_2459) ENABLED START */
 		String file = this.profileDirectory + "/" + value + this.profileExtension;
-		log.debug("Adding profile " + value + " from " + file);
+		LOG.debug("Adding profile " + value + " from " + file);
 		this.profileFiles.put(value, file);
+		/* PROTECTED REGION END */
 	}
+	
+	// -- generated association + attribute accessors -----------------------
+	/**
+	 * Sets the value of attribute '<em><b>profileDirectory</b></em>'
+	 */
+	public void setProfileDirectory(String profileDirectory) {
+		this.profileDirectory = profileDirectory;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>profileExtension</b></em>'
+	 */
+	public void setProfileExtension(String profileExtension) {
+		this.profileExtension = profileExtension;
+	}
+	
+	// -- generated code of other cartridges --------------------------------
+	
+	// -- own code implementation -------------------------------------------
+	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_12d203c6_1328866934865_740501_2040) ENABLED START */
+	private Map<String, String> profileFiles = new HashMap<String, String>();
+	/* PROTECTED REGION END */
+	
 }

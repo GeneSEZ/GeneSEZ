@@ -1,181 +1,177 @@
 package org.genesez.adapter.ea.transform;
 
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_17_0_5_12d203c6_1363942855327_489308_2295) 
+ */
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.uml2.uml.Component;
-import org.eclipse.uml2.uml.InstanceSpecification;
+import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.UMLFactory;
 import org.genesez.adapter.ea.ElementRegistry;
 
-
 /**
  * transforms all components
- * 
- * @author gerbe
  * @author christian
- * @version 4
- * 
  */
 
 public class ComponentTransformer extends AbstractElementTransformer {
-
-	private static final Log log = LogFactory
-			.getLog(ComponentTransformer.class);
-
-	private org.eclipse.uml2.uml.Package umlPackage = null;
-
+	
+	// -- generated attribute, constant + association declarations ----------
+	
+	private static final Log LOG = LogFactory.getLog(ComponentTransformer.class);
+	
+	private Package umlPackage = null;
+	
+	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * the actual component transformer the returns the emf uml component
-	 * 
-	 * @param _e org.sparx.Element to transform
-	 * @param _parent package
-	 * @return component
+	 * @param	element	
+	 * @param	parent	
+	 * @return	
 	 */
-	Component transform(org.sparx.Element _e,
-			org.eclipse.uml2.uml.Package _parent) {
-
+	
+	public Component transform(org.sparx.Element element, Package parent) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363942926653_742441_2323) ENABLED START */
 		Component component = UMLFactory.eINSTANCE.createComponent();
-		component.setName(_e.GetName());
-
+		component.setName(element.GetName());
+		
 		// DEBUGGING
-//		ElementDebugger.INSTANCE.printElement(_e);
-
+		//		ElementDebugger.INSTANCE.printElement(_e);
+		
 		// set package for methods
-		this.umlPackage = _parent;
+		this.umlPackage = parent;
 		// set default variables
 		this.umlElement = component;
-		this.eaElement = _e;
-
+		this.eaElement = element;
+		
 		// if component is an instance of a component
-		final int classfierId = _e.GetClassfierID();
-//		boolean addElement = true;
+		final int classfierId = element.GetClassfierID();
+		//		boolean addElement = true;
 		if (classfierId != 0) {
 			
-			Component comp = (Component) ElementRegistry.instance
-					.getById(classfierId);
-			log.debug("Creating instance of Component " + _e.GetName() + ":" + comp.getName());
+			Component comp = (Component) ElementRegistry.INSTANCE.getElementById(classfierId);
+			LOG.debug("Creating instance of Component " + element.GetName() + ":" + comp.getName());
 			// createInstanceSpecification(_e, comp);
-			component.setName(_e.GetName() + ":" + comp.getName());
+			component.setName(element.GetName() + ":" + comp.getName());
 			this.umlPackage.getPackagedElements().add(component);
 			// addElement = false;
 		} else {
 			this.umlPackage.getPackagedElements().add(component);
-			log.debug("Creating Component " + _e.GetName() + ", parent "
-					+ _parent.getName() + ", id: " + _e.GetElementID());
+			LOG.debug("Creating Component " + element.GetName() + ", parent " + parent.getName() + ", id: " + element.GetElementID());
 		}
-
+		
 		// apply the stereotype of the component
-		ApplyStereotypeTransformer.applyStereotypes(eaElement, umlElement);
-
+		ApplyStereotypeTransformer.INSTANCE.applyStereotypes(eaElement, umlElement);
+		
 		// transform others
 		this.transformElements();
 		
-//		for(org.sparx.Element e : _e.GetElements())
-//			this.transformRecursive(e, component);
+		//		for(org.sparx.Element e : _e.GetElements())
+		//			this.transformRecursive(e, component);
 		
 		this.transformConnectors();
 		this.transformAttributes();
 		this.transformOperations();
-
+		
 		// if it's no instance add to registry
 		// if(addElement)
-		ElementRegistry.instance.addElement(_e, component);
+		ElementRegistry.INSTANCE.addElement(element, component);
 		return component;
+		/* PROTECTED REGION END */
 	}
-
+	
 	/**
-	 * creates an interface specification when a component is an instance
-	 * 
-	 * @param _e
-	 * @param comp
-	 * 
-	 * @deprecated
+	 * transforms all components recursive that exist in the component
+	 * @param	element	
+	 * @param	nextComponent	
 	 */
-	private void createInstanceSpecification(org.sparx.Element _e,
-			Component comp) {
-		log.debug("Element is an instance of a component -> creating an instance specification (Classifier: "
-				+ comp.getName() + ")");
-		InstanceSpecification instance = UMLFactory.eINSTANCE
-				.createInstanceSpecification();
-		instance.getClassifiers().add(comp);
-		instance.setName(_e.GetName());
-		umlPackage.getPackagedElements().add(instance);
-		ElementRegistry.instance.addElement(_e, instance);
-	}
-
-	/**
-	 * transforms all components rekursive that exist in the component
-	 * @param _e
-	 * @param nextComponent
-	 * 
-	 */
-	private void transformRecursive(org.sparx.Element _e, Component nextComponent){
-		log.debug("Transforming element " + _e.GetName() + ", type: "
-				+ _e.GetType() + ", id: " + _e.GetElementID());
-		log.debug("Basic UML element =" + ((Component)this.umlElement).getName()	);
-
-		if (_e.GetType().equals("Port")) {
-			log.debug("Element is a Port");
+	
+	private void transformRecursive(org.sparx.Element element, Component nextComponent) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363942990449_85663_2329) ENABLED START */
+		LOG.debug("Transforming element " + element.GetName() + ", type: " + element.GetType() + ", id: " + element.GetElementID());
+		LOG.debug("Basic UML element =" + ((Component) this.umlElement).getName());
+		
+		if (element.GetType().equals("Port")) {
+			LOG.debug("Element is a Port");
 			PortTransformer t = new PortTransformer();
-			t.transform(_e, nextComponent);
-		} else if (_e.GetType().equals("Component")) {
-			final int classifierId = _e.GetClassifierID();
-			Component comp = (Component) ElementRegistry.instance.getById(classifierId);
+			t.transform(element, nextComponent);
+		} else if (element.GetType().equals("Component")) {
+			final int classifierId = element.GetClassifierID();
+			Component comp = (Component) ElementRegistry.INSTANCE.getElementById(classifierId);
 			Component component = null;
-
+			
 			if (classifierId != 0) {
-				log.debug("Creating instance of Component " + _e.GetName() + ":" + comp.getName());
+				LOG.debug("Creating instance of Component " + element.GetName() + ":" + comp.getName());
 				component = UMLFactory.eINSTANCE.createComponent();
-				component.setName(_e.GetName() + ":" + comp.getName());
+				component.setName(element.GetName() + ":" + comp.getName());
 				// add the component the parent component
 				nextComponent.getPackagedElements().add(component);
 			} else {
-				log.debug("Creating Component " + _e.GetName() + ", parent "
-						+ comp.getName() + ", id: " + _e.GetElementID());
+				LOG.debug("Creating Component " + element.GetName() + ", parent " + comp.getName() + ", id: " + element.GetElementID());
 				component = UMLFactory.eINSTANCE.createComponent();
-				component.setName(_e.GetName());
+				component.setName(element.GetName());
 				comp.getPackagedElements().add(component);
 			}
 			// apply stereotypes
-			component = (Component) ApplyStereotypeTransformer.applyStereotypes(_e, component);
-
-			ElementRegistry.instance.addElement(_e, component);
+			component = (Component) ApplyStereotypeTransformer.INSTANCE.applyStereotypes(element, component);
 			
-			for(org.sparx.Element e: _e.GetElements())
+			ElementRegistry.INSTANCE.addElement(element, component);
+			
+			for (org.sparx.Element e : element.GetElements())
 				this.transformRecursive(e, component);
-
+			
 		} else {
-			log.error("Element type not known!");
+			LOG.error("Element type not known!");
 		}
-		
+		/* PROTECTED REGION END */
 	}
 	
-	@Override
-	protected void transformElement(org.sparx.Element _e) {
-		this.transformRecursive(_e, (Component) this.umlElement);
-	}
-
 	/**
-	 * transforms an connector from the component and adds it to the ConnectorFactory 
+	 * Method stub for further implementation.
+	 * @param	element	
 	 */
-	@Override
-	protected void transformConnector(org.sparx.Connector _c) {
-		log.debug("Transforming connector " + _c.GetName() + ", type: "
-				+ _c.GetType());
-
-		if (_c.GetType().equals("Dependency")) {
-			log.debug("Connector is a dependency");
-			DependencyTransformer t = new DependencyTransformer();
-			t.transform(_c, (Component) this.umlElement);
-		} else if (_c.GetType().equals("Association")) {
-			log.debug("Connector is a association");
-
-			ConnectorFactory.instance.addComponentAssociation(_c);
-
-//			ElementDebugger.INSTANCE.printConnector(_c);
-		} else {
-			log.debug("Connector " + _c.GetType() + " is not implemented.");
-		}
+	
+	protected void transformElement(org.sparx.Element element) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363943088050_105798_2336) ENABLED START */
+		this.transformRecursive(element, (Component) this.umlElement);
+		/* PROTECTED REGION END */
 	}
-
+	
+	/**
+	 * Method stub for further implementation.
+	 * @param	connector	
+	 */
+	
+	protected void transformConnector(org.sparx.Connector connector) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363943111360_75028_2339) ENABLED START */
+		LOG.debug("Transforming connector " + connector.GetName() + ", type: " + connector.GetType());
+		
+		if (connector.GetType().equals("Dependency")) {
+			LOG.debug("Connector is a dependency");
+			DependencyTransformer t = new DependencyTransformer();
+			t.transform(connector, (Component) this.umlElement);
+		} else if (connector.GetType().equals("Association")) {
+			LOG.debug("Connector is a association");
+			
+			ConnectorFactory.INSTANCE.addComponentAssociation(connector);
+			
+			//			ElementDebugger.INSTANCE.printConnector(_c);
+		} else {
+			LOG.debug("Connector " + connector.GetType() + " is not implemented.");
+		}
+		/* PROTECTED REGION END */
+	}
+	
+	// -- generated association + attribute accessors -----------------------
+	
+	// -- generated code of other cartridges --------------------------------
+	
+	// -- own code implementation -------------------------------------------
+	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363942855327_489308_2295) ENABLED START */
+	// TODO: put your own implementation code here
+	/* PROTECTED REGION END */
+	
 }

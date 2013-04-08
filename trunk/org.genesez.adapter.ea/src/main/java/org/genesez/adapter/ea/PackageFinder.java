@@ -1,108 +1,77 @@
 package org.genesez.adapter.ea;
 
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_17_0_12d203c6_1328866905812_18982_1969) 
+ */
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.lib.AbstractWorkflowComponent;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
-import org.sparx.Package;
+import org.eclipse.uml2.uml.Package;
 
 /**
  * An oAW workflow component to find a package within an Enterprise Architect model
  * 
- * @author gerbe
- *
  * The PackageFinder search for a Enterprise Architect package within a model
  * by a provided search path and set the package to the output slot.
  * The Enterprise Architect model needs to be located at the input slot.
+ * @author christian
  */
+
 public class PackageFinder extends AbstractWorkflowComponent {
-
-	private static final Log log = LogFactory.getLog(PackageFinder.class);
-
-	private String inputSlot = null;
-	private String outputSlot = null;
-	private String packagePath = null;
-	private String[] pkgPath = null;
 	
-	private Package inputModel = null;
+	// -- generated attribute, constant + association declarations ----------
 	
-	public void checkConfiguration(Issues issues) {
-		this.pkgPath = this.packagePath.split("/");
-		if ( 1 > this.pkgPath.length ) {
-			issues.addError("Invalid package path");
-		}
-	}
+	private static final Log LOG = LogFactory.getLog(PackageFinder.class);
 	
-	protected void invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
-		log.info("Start searching Package " + this.packagePath);
-		log.debug("Get model from slot: " + this.inputSlot);
-		this.inputModel = (Package) ctx.get(this.inputSlot);
-		if ( null == this.inputModel ) {
-			issues.addError("No model in inputSlot");
-		}
-		Package outputPackage = this.findPackage();
-		if ( null == outputPackage ) {
-			issues.addError("Package " + this.packagePath + " not found in model");
-		}
-		ctx.set(this.outputSlot, outputPackage);	
-	}
-
+	private String inputSlot;
+	
+	private String outputSlot;
+	
+	private String packagePath;
+	
+	private java.util.Set<String> pkgPath = new java.util.HashSet<String>();
+	
+	private Package inputModel;
+	
+	// -- generated method stubs for implementations + derived attributes ---
 	/**
-	 * Set the input slot from where to get the Enterprise Architect model
-	 * @param value
+	 * Method stub for further implementation.
+	 * @param	wc	
+	 * @param	pm	
+	 * @param	i	
 	 */
-	public void setInputSlot(String value) {
-		log.debug("Setting inputSlot to " + value);
-		this.inputSlot = value;
-	}
-
-	/**
-	 * Set the output slot from where to put the Enterprise Architect package
-	 * @param value
-	 */
-	public void setOutputSlot(String value) {
-		log.debug("Setting outputSlot to " + value);
-		this.outputSlot = value;
+	
+	protected void invokeInternal(WorkflowContext wc, ProgressMonitor pm, Issues i) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363342407577_797486_2167) ENABLED START */
+		// TODO: implementation of method 'PackageFinder.invokeInternal(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * Set the path to the package
-	 * @param value
+	 * Method stub for further implementation.
+	 * @param	i	
 	 */
-	public void setPackagePath(String value) {
-		log.debug("Setting packagePath to " + value);
-		this.packagePath = value;
+	
+	public void checkConfiguration(Issues i) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363342418885_436538_2172) ENABLED START */
+		// TODO: implementation of method 'PackageFinder.checkConfiguration(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
 	}
 	
-	/**
-	 * Start searching for the package
-	 * @return
-	 */
-	private Package findPackage() {
-		if ( this.inputModel.GetName().equals(this.pkgPath[0])) {
-			return this.findPackage(this.inputModel, 1);
-		}
-		return null;
-	}
+	// -- generated association + attribute accessors -----------------------
 	
-	/**
-	 * Helper method to find the package 
-	 * @param _p	The package to process
-	 * @param depth	The current depth within package path
-	 * @return	The searched package or null 
-	 */
-	private Package findPackage(Package _p, int depth) {
-		if ( this.pkgPath.length == depth ) {
-			return _p;
-		} else {
-			for ( Package p : _p.GetPackages() ) {
-				if ( p.GetName().equals(this.pkgPath[depth]) ) {
-					return this.findPackage(p, depth+1);
-				}
-			}
-		}
-		return null;
-	}
+	// -- generated code of other cartridges --------------------------------
+	
+	// -- own code implementation -------------------------------------------
+	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_12d203c6_1328866905812_18982_1969) ENABLED START */
+	// TODO: put your own implementation code here
+	/* PROTECTED REGION END */
+	
 }
