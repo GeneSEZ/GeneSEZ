@@ -12,7 +12,6 @@ import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Component;
 import org.eclipse.uml2.uml.Connector;
 import org.eclipse.uml2.uml.ConnectorEnd;
-import org.eclipse.uml2.uml.ConnectorKind;
 import org.eclipse.uml2.uml.Dependency;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.InformationFlow;
@@ -151,7 +150,6 @@ public class ConnectorFactory {
 				continue;
 
 			Connector connector = UMLFactory.eINSTANCE.createConnector();
-			connector.setKind(ConnectorKind.DELEGATION_LITERAL);
 
 			component.getOwnedConnectors().add(connector);
 
