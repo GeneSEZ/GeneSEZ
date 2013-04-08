@@ -1,5 +1,10 @@
 package org.genesez.adapter.ea.transform;
 
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_17_0_5_12d203c6_1363352652227_896894_2327) 
+ */
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,135 +31,151 @@ import org.eclipse.uml2.uml.UMLFactory;
 import org.eclipse.uml2.uml.VisibilityKind;
 import org.genesez.adapter.ea.ElementRegistry;
 
-
 /**
  * This class transforms connectors which could not be resolved at runtime.
  * It's run by the post processor.
- * 
- * 
- * @author christian 
- * @version 3
- * 
+ * @author christian
  */
 
 public class ConnectorFactory {
-
-	private static final Log log = LogFactory.getLog(ConnectorFactory.class);
-
-	public static ConnectorFactory instance = new ConnectorFactory();
-
-	private Map<String, List<Integer>> informationFlowMap = new HashMap<String, List<Integer>>();
-	private Map<String, org.sparx.Connector> informationFlowGUIDMap = new HashMap<String, org.sparx.Connector>();
 	
-	private Map<String, List<Integer>> dependencyMap = new HashMap<String, List<Integer>>();
-	private Map<String, List<Integer>> delegateMap = new HashMap<String, List<Integer>>();
+	// -- generated attribute, constant + association declarations ----------
 	
-//	private Map<String, org.sparx.Connector> informationFlowMap = new HashMap<String, org.sparx.Connector>();	
+	private static final Log LOG = LogFactory.getLog(ConnectorFactory.class);
 	
-	private Map<String, org.sparx.Connector> associationMap = new HashMap<String, org.sparx.Connector>();
-	private Map<String, org.sparx.Connector> associationComponentMap = new HashMap<String, org.sparx.Connector>();
-
+	public static final ConnectorFactory INSTANCE = new ConnectorFactory();
+	
+	// -- generated constructors --------------------------------------------
 	/**
-	 * Constructor
+	 * Constructor for class '<em><b>ConnectorFactory</b></em>'.
 	 */
+	
 	private ConnectorFactory() {
-
+		/* PROTECTED REGION ID(java.constructor._17_0_5_12d203c6_1363352684960_913005_2352) ENABLED START */
+		// :)
+		/* PROTECTED REGION END */
+	}
+	
+	// -- generated method stubs for implementations + derived attributes ---
+	/**
+	 * Method stub for further implementation.
+	 */
+	
+	public void startProcessingConnectors() {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363676933605_87329_1881) ENABLED START */
+		LOG.debug("Starting post processing remaining dependencies");
+		this.processDependencies();
+		LOG.debug("Starting post processing information flows");
+		this.processInformationFlows();
+		LOG.debug("Starting post processing delegate connectors");
+		this.processDelegate();
+		LOG.debug("Starting post processing associations");
+		this.processAssociations();
+		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * Starts the post processing for all connectors
-	 * -> dependencies
-	 * -> information flows
-	 * -> connectors (delegate)
-	 * -> associations
+	 * Method stub for further implementation.
+	 * @param	c	
 	 */
-	public void startPostprocssingConnectors(){
-		log.debug("Starting post processing remaining dependencies");
-		this.processAllDependencies();
-		log.debug("Starting post processing information flows");
-		this.processAllInformationFlows();		
-		log.debug("Starting post processing delegate connectors");
-		this.processAllDelegate();
-		log.debug("Starting post processing associations");
-		this.processAllAssociations();
-	}
-
-	/**
-	 * add an association between components
-	 * @param _c
-	 */
-	public void addComponentAssociation(org.sparx.Connector _c) {
-		this.associationComponentMap.put(_c.GetConnectorGUID(), _c);
+	
+	public void addComponentAssociation(org.sparx.Connector c) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363676956282_180393_1884) ENABLED START */
+		this.associationComponentMap.put(c.GetConnectorGUID(), c);
+		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * add an association for the post processor
-	 * @param _c org.sparx.Connector
+	 * Method stub for further implementation.
+	 * @param	c	
 	 */
-	public void addAssociation(org.sparx.Connector _c){
-		associationMap.put(_c.GetConnectorGUID(), _c);
+	
+	public void addAssociation(org.sparx.Connector c) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363360332414_941716_2899) ENABLED START */
+		this.associationMap.put(c.GetConnectorGUID(), c);
+		/* PROTECTED REGION END */
 	}
-
+	
 	/**
-	 * add an information flow
-	 * @param guid
-	 * @param parent_id
+	 * Method stub for further implementation.
+	 * @param	c	
+	 * @param	parentId	
 	 */
-	public void addInformationFlow(org.sparx.Connector _c, int parent_id) {
-		final String guid = _c.GetConnectorGUID();
-		informationFlowGUIDMap.put(guid, _c);
+	
+	public void addInformationFlow(org.sparx.Connector c, int parentId) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363360351820_573154_2902) ENABLED START */
+		final String guid = c.GetConnectorGUID();
+		informationFlowGUIDMap.put(guid, c);
 		if (informationFlowMap.containsKey(guid)) {
-			informationFlowMap.get(guid).add(parent_id);
+			informationFlowMap.get(guid).add(parentId);
 		} else {
 			List<Integer> list = new ArrayList<Integer>();
-			list.add(parent_id);
+			list.add(parentId);
 			informationFlowMap.put(guid, list);
 		}
+		/* PROTECTED REGION END */
 	}
 	
-	public void addDependency(String guid, int parent_id) {
+	/**
+	 * Method stub for further implementation.
+	 * @param	guid	
+	 * @param	parentId	
+	 */
+	
+	public void addDependency(String guid, int parentId) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363352721058_550116_2355) ENABLED START */
 		if (dependencyMap.containsKey(guid)) {
-			dependencyMap.get(guid).add(parent_id);
+			dependencyMap.get(guid).add(parentId);
 		} else {
 			List<Integer> list = new ArrayList<Integer>();
-			list.add(parent_id);
+			list.add(parentId);
 			dependencyMap.put(guid, list);
 		}
+		/* PROTECTED REGION END */
 	}
-
-	public void addDelegate(String guid, int parent_id) {
+	
+	/**
+	 * Method stub for further implementation.
+	 * @param	guid	
+	 * @param	parentId	
+	 */
+	
+	public void addDelegate(String guid, int parentId) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363360379922_689124_2909) ENABLED START */
 		if (delegateMap.containsKey(guid)) {
-			delegateMap.get(guid).add(parent_id);
+			delegateMap.get(guid).add(parentId);
 		} else {
 			List<Integer> list = new ArrayList<Integer>();
-			list.add(parent_id);
+			list.add(parentId);
 			delegateMap.put(guid, list);
 		}
+		/* PROTECTED REGION END */
 	}
-
+	
 	/**
-	 * processes all delegation connectors
+	 * Method stub for further implementation.
 	 */
-	public void processAllDelegate() {
+	
+	public void processDelegate() {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363677071885_381746_1887) ENABLED START */
 		for (String guid : delegateMap.keySet()) {
 			List<Integer> list = delegateMap.get(guid);
-
-			Element element = ElementRegistry.instance.getById(list.get(0));
-
+			
+			Element element = ElementRegistry.INSTANCE.getElementById(list.get(0));
+			
 			Element owner = element.getOwner();
 			Component component = null;
-
+			
 			if (owner instanceof Component)
 				component = (Component) element.getOwner();
 			else
 				continue;
-
+			
 			Connector connector = UMLFactory.eINSTANCE.createConnector();
-
 			component.getOwnedConnectors().add(connector);
-
+			
 			for (Integer i : list) {
-				Element elem = ElementRegistry.instance.getById(i);
+				Element elem = ElementRegistry.INSTANCE.getElementById(i);
 				Port p = null;
 				if (elem instanceof Port) {
 					p = (Port) elem;
@@ -163,33 +184,36 @@ public class ConnectorFactory {
 				ConnectorEnd end = connector.createEnd();
 				end.setRole(p);
 			}
-
-			ElementRegistry.instance.addElementGuid(guid, connector);
+			
+			ElementRegistry.INSTANCE.addElementGuid(guid, connector);
 		}
+		/* PROTECTED REGION END */
 	}
-
+	
 	/**
 	 * processes all dependencies
 	 */
-	public void processAllDependencies() {
+	
+	public void processDependencies() {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363677109192_957490_1890) ENABLED START */
 		for (String guid : dependencyMap.keySet()) {
-
+			
 			List<Integer> list = dependencyMap.get(guid);
 			if (list.size() > 2)
-				log.error("Dependency to more than 2 ports not implemented!");
-
-			Element elementOne = ElementRegistry.instance.getById(list.get(0));
-			Element elementTwo = ElementRegistry.instance.getById(list.get(1));
-
+				LOG.error("Dependency to more than 2 ports not implemented!");
+			
+			Element elementOne = ElementRegistry.INSTANCE.getElementById(list.get(0));
+			Element elementTwo = ElementRegistry.INSTANCE.getElementById(list.get(1));
+			
 			Port first = null, second = null;
-
+			
 			if (elementOne instanceof Port && elementTwo instanceof Port) {
 				first = (Port) elementOne;
 				second = (Port) elementTwo;
 			} else {
 				continue;
 			}
-
+			
 			Port source = null;
 			Port target = null;
 			for (Interface iface : first.getProvideds()) {
@@ -212,50 +236,50 @@ public class ConnectorFactory {
 			}
 			// in case dependency has wrong connection
 			if (source == null || target == null) {
-				log.error("Error, Dependency from required to required or provided to provided!!!");
+				LOG.error("Error, Dependency from required to required or provided to provided!!!");
 				source = first;
 				target = second;
 			}
-
-			Class sourceClazz = (Class) ElementRegistry.instance
-					.getClassByPort(source);
-			Class targetClazz = (Class) ElementRegistry.instance
-					.getClassByPort(target);
-
+			
+			Class sourceClazz = (Class) ElementRegistry.INSTANCE.getClassByPort(source);
+			Class targetClazz = (Class) ElementRegistry.INSTANCE.getClassByPort(target);
+			
 			// provided interface port gets the connection
-
-			org.eclipse.uml2.uml.Package nearestPackage = source
-					.getNearestPackage();
-
+			
+			org.eclipse.uml2.uml.Package nearestPackage = source.getNearestPackage();
+			
 			Dependency dependency = UMLFactory.eINSTANCE.createDependency();
-
+			
 			dependency.setVisibility(VisibilityKind.PUBLIC_LITERAL);
-
+			
 			// temp name
 			// dependency.setName("dependency");
 			// add source and client
 			dependency.getSuppliers().add(sourceClazz);
 			dependency.getClients().add(targetClazz);
-
+			
 			// set package
 			nearestPackage.getPackagedElements().add(dependency);
-
+			
 			// add informationFlow to registry
-			ElementRegistry.instance.addElementGuid(guid, dependency);
+			ElementRegistry.INSTANCE.addElementGuid(guid, dependency);
 		}
+		/* PROTECTED REGION END */
 	}
 	
 	/**
 	 * processes all associations
 	 */
-	public void processAllAssociations() {
+	
+	public void processAssociations() {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363677142924_423112_1894) ENABLED START */
 		for (String guid : associationMap.keySet()) {
 			
 			// get the connector element
 			org.sparx.Connector eaElement = associationMap.get(guid);
 			
 			// debug
-//			ElementDebugger.INSTANCE.printConnector(eaElement);
+			// ElementDebugger.INSTANCE.printConnector(eaElement);
 			
 			org.sparx.ConnectorEnd supplierEnd = eaElement.GetSupplierEnd();
 			org.sparx.ConnectorEnd clientEnd = eaElement.GetClientEnd();
@@ -265,109 +289,110 @@ public class ConnectorFactory {
 			// set name
 			association.setName(eaElement.GetName());
 			
-			Element sup = ElementRegistry.instance.getById(eaElement.GetSupplierID());
-			Element cli = ElementRegistry.instance.getById(eaElement.GetClientID());
+			Element sup = ElementRegistry.INSTANCE.getElementById(eaElement.GetSupplierID());
+			Element cli = ElementRegistry.INSTANCE.getElementById(eaElement.GetClientID());
 			
-			if( !(sup instanceof Port) || !(cli instanceof Port) ){
+			if (!(sup instanceof Port) || !(cli instanceof Port)) {
 				// TODO add class associations again
-				log.error("Association for this is not implemented yet: " + sup.getClass());
+				LOG.error("Association for this is not implemented yet: " + sup.getClass());
 				continue;
 			}
 			
-			Port supplier = (Port) ElementRegistry.instance.getById(eaElement.GetSupplierID());
-			Port client = (Port) ElementRegistry.instance.getById(eaElement.GetClientID());
+			Port supplier = (Port) ElementRegistry.INSTANCE.getElementById(eaElement.GetSupplierID());
+			Port client = (Port) ElementRegistry.INSTANCE.getElementById(eaElement.GetClientID());
 			
-			log.debug("Creating association between: " + supplier.getName() + " - " + client.getName() );
+			LOG.debug("Creating association between: " + supplier.getName() + " - " + client.getName());
 			
 			Property property = null;
 			
-//			Component component = (Component) supplier.getOwner();
+			// Component component = (Component) supplier.getOwner();
 			
 			org.eclipse.uml2.uml.Package _p = supplier.getNearestPackage();
-			 
-			// create the navigation			
-			if(supplierEnd.GetNavigable().equals("Navigable")){
-//				association.getNavigableOwnedEnds().add(supplierProperty);	
-				log.debug("Supplier is Navigable!");
-				property = supplier.createQualifier(supplier.getName(), supplier.getType());		
-				association.getMemberEnds().add(property);	
-			}else{
-//				association.getMemberEnds().add(supplierProperty);
+			
+			// create the navigation
+			if (supplierEnd.GetNavigable().equals("Navigable")) {
+				// association.getNavigableOwnedEnds().add(supplierProperty);
+				LOG.debug("Supplier is Navigable!");
+				property = supplier.createQualifier(supplier.getName(), supplier.getType());
+				association.getMemberEnds().add(property);
+			} else {
+				// association.getMemberEnds().add(supplierProperty);
 				property = association.createOwnedEnd(supplier.getName(), supplier.getType());
-//				createLowerUpperCardinality(supplierProperty, clientEnd);
+				// createLowerUpperCardinality(supplierProperty, clientEnd);
 			}
 			
 			// multiplicity
 			createLowerUpperCardinality(property, supplierEnd);
 			
-			if(clientEnd.GetNavigable().equals("Navigable")){
-				log.debug("Client is Navigable!");
+			if (clientEnd.GetNavigable().equals("Navigable")) {
+				LOG.debug("Client is Navigable!");
 				property = client.createQualifier(client.getName(), client.getType());
 				association.getMemberEnds().add(property);
-			}else{
-//				association.getMemberEnds().add(clientProperty);
+			} else {
+				// association.getMemberEnds().add(clientProperty);
 				property = association.createOwnedEnd(client.getName(), client.getType());
-//				createLowerUpperCardinality(clientProperty, clientEnd);
+				// createLowerUpperCardinality(clientProperty, clientEnd);
 			}
 			// multiplicity
 			createLowerUpperCardinality(property, clientEnd);
 			
-			
-			log.debug("Package = " + _p.getName() + "\tComponent= " + _p.getName());
+			LOG.debug("Package = " + _p.getName() + "\tComponent= " + _p.getName());
 			_p.getPackagedElements().add(association);
 			
-			association = (Association) ApplyStereotypeTransformer.applyStereotypes(eaElement, association);
-			ElementRegistry.instance.addElement(eaElement, association);
+			association = (Association) ApplyStereotypeTransformer.INSTANCE.applyStereotypes(eaElement, association);
+			ElementRegistry.INSTANCE.addElement(eaElement, association);
 			
 		}
-		// now run all component associations, because they are handled different 
-		this.processAllComponentAssociations();
+		// now run all component associations, because they are handled
+		// different
+		this.processComponentAssociations();
+		/* PROTECTED REGION END */
 	}
 	
 	/**
 	 * create all associations between components
-	 * 
 	 */
-	public void processAllComponentAssociations() {
-		log.debug("Start processing associations of components...");
+	
+	public void processComponentAssociations() {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363677164033_725038_1897) ENABLED START */
+		LOG.debug("Start processing associations of components...");
 		for (String guid : associationComponentMap.keySet()) {
-
+			
 			// get connector from map
 			org.sparx.Connector eaElement = associationComponentMap.get(guid);
 			
-			Element castSupplier = ElementRegistry.instance.getById(eaElement.GetSupplierID());
-			Element castClient = ElementRegistry.instance.getById(eaElement.GetClientID());
+			Element castSupplier = ElementRegistry.INSTANCE.getElementById(eaElement.GetSupplierID());
+			Element castClient = ElementRegistry.INSTANCE.getElementById(eaElement.GetClientID());
 			
 			// if not instance of component
 			// TODO implement association between control flows and others
 			// maybe think of a new design
-			if( !(castSupplier instanceof Component)  && !(castClient instanceof Component)){
-					log.error("Association between those elements not implemented yet, " +
-							"element names are " + castSupplier.getClass() + " and " + castClient.getClass() );		
-					continue;
+			if (!(castSupplier instanceof Component) && !(castClient instanceof Component)) {
+				LOG.error("Association between those elements not implemented yet, " + "element names are " + castSupplier.getClass() + " and " + castClient.getClass());
+				continue;
 			}
 			
 			// cast components from registry
 			Component supplier = (Component) castSupplier;
 			Component client = (Component) castClient;
-						
+			
 			org.sparx.ConnectorEnd supplierEnd = eaElement.GetSupplierEnd();
 			org.sparx.ConnectorEnd clientEnd = eaElement.GetClientEnd();
-
+			
 			// create association
 			Association association = UMLFactory.eINSTANCE.createAssociation();
-
+			
 			// set name
 			association.setName(eaElement.GetName());
-			log.debug("Associationname = [" + eaElement.GetName() + "]");
-
+			LOG.debug("Associationname = [" + eaElement.GetName() + "]");
+			
 			// set package
-//			Package nearestPackage = supplier.getNearestPackage();
-//			association.setPackage(nearestPackage);
+			//			Package nearestPackage = supplier.getNearestPackage();
+			//			association.setPackage(nearestPackage);
 			supplier.getPackagedElements().add(association);
-
+			
 			Property property = null;
-
+			
 			// first association memberEnd
 			if (supplierEnd.GetNavigable().equals("Navigable")) {
 				property = client.createOwnedAttribute(null, supplier);
@@ -375,10 +400,10 @@ public class ConnectorFactory {
 			} else {
 				property = association.createOwnedEnd(null, supplier);
 			}
-
-			log.debug("Creating cardinality of supplier.");
+			
+			LOG.debug("Creating cardinality of supplier.");
 			createLowerUpperCardinality(property, supplierEnd);
-
+			
 			// second association memberEnd
 			if (clientEnd.GetNavigable().equals("Navigable")) {
 				property = supplier.createOwnedAttribute(null, client);
@@ -386,81 +411,86 @@ public class ConnectorFactory {
 			} else {
 				property = association.createOwnedEnd(null, client);
 			}
-
-			log.debug("Creating cardinality of client.");
+			
+			LOG.debug("Creating cardinality of client.");
 			createLowerUpperCardinality(property, clientEnd);
-
+			
 			// apply stereotypes
-			association = (Association) ApplyStereotypeTransformer
-					.applyStereotypes(eaElement, association);
-
+			association = (Association) ApplyStereotypeTransformer.INSTANCE.applyStereotypes(eaElement, association);
+			
 		}
+		/* PROTECTED REGION END */
 	}
 	
 	/**
 	 * private method to create the multiplicity
-	 * 
-	 * @param property
-	 * @param end
+	 * @param	property	
+	 * @param	end	
 	 */
-	private void createLowerUpperCardinality(Property property, org.sparx.ConnectorEnd end){
+	
+	private void createLowerUpperCardinality(Property property, org.sparx.ConnectorEnd end) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363677239565_889873_1901) ENABLED START */
 		int lower, upper;
 		List<Integer> values = getCardinality(end);
 		lower = values.get(0);
 		upper = values.get(1);
-
+		
 		// lower value
 		property.setLowerValue(getLiteralInteger(lower));
 		// upper value
 		property.setUpperValue(getLiteralUnlimitedNatural(upper));
+		/* PROTECTED REGION END */
 	}
-
+	
 	/**
 	 * create lower value for multiplicity
-	 * 
-	 * @param lower
-	 * @return
+	 * @param	lower	
+	 * @return	
 	 */
+	
 	private LiteralInteger getLiteralInteger(int lower) {
-		LiteralInteger literalInteger = UMLFactory.eINSTANCE
-				.createLiteralInteger();
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363677335004_406825_1910) ENABLED START */
+		LiteralInteger literalInteger = UMLFactory.eINSTANCE.createLiteralInteger();
 		literalInteger.setValue(lower);
 		return literalInteger;
+		/* PROTECTED REGION END */
 	}
-
+	
 	/**
 	 * create upper value for multiplicity
-	 * 
-	 * @param upper
-	 * @return
+	 * @param	upper	
+	 * @return	
 	 */
+	
 	private LiteralUnlimitedNatural getLiteralUnlimitedNatural(int upper) {
-		LiteralUnlimitedNatural unlimitedInteger = UMLFactory.eINSTANCE
-				.createLiteralUnlimitedNatural();
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363677386473_44938_1918) ENABLED START */
+		LiteralUnlimitedNatural unlimitedInteger = UMLFactory.eINSTANCE.createLiteralUnlimitedNatural();
 		unlimitedInteger.setValue(upper);
 		return unlimitedInteger;
+		/* PROTECTED REGION END */
 	}
-
+	
 	/**
-	 * read the multiplicity from connectorEnd
-	 * 
-	 * @param connectorEnd
-	 * @return
+	 * Method stub for further implementation.
+	 * @param	connectorEnd	
+	 * @return	
 	 */
-	private List<Integer> getCardinality(org.sparx.ConnectorEnd connectorEnd) {
+	
+	private java.util.List<Integer> getCardinality(org.sparx.ConnectorEnd connectorEnd) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363677509656_617682_1926) ENABLED START */
 		List<Integer> values = new ArrayList<Integer>(2);
 		int lower = 0, upper = 0;
 		String cardinality = connectorEnd.GetCardinality();
-		log.debug("Origin: " + cardinality);
+		LOG.debug("Origin: " + cardinality);
 		// if string is empty
 		if (cardinality.equals("")) {
-			log.debug("Cardinality is empty");
+			LOG.debug("Cardinality is empty");
 			lower = 1;
 			upper = 1;
 		} else if (cardinality.length() == 1) {
-			log.debug("Cardinality has length of one");
+			LOG.debug("Cardinality has length of one");
 			// single value might be any value >= 0 or *
-			upper = evaluateCardinalty(cardinality);
+			upper = evaluateCardinality(cardinality);
 			// in case it is *
 			if (upper == -1) {
 				lower = 0;
@@ -470,33 +500,35 @@ public class ConnectorFactory {
 		} else {
 			// values that might be 0..*, 1..8, 8..*, etc.
 			int counter = 0;
-			log.debug("Cardinality > 1");
+			LOG.debug("Cardinality > 1");
 			// split string with ".."
 			for (String split : cardinality.split("\\.\\.")) {
-				log.debug("Split: " + split);
+				LOG.debug("Split: " + split);
 				if (counter++ == 0) {
-					log.debug("Lower Value = " + split);
-					lower = evaluateCardinalty(split);
+					LOG.debug("Lower Value = " + split);
+					lower = evaluateCardinality(split);
 				} else {
-					log.debug("Upper Value = " + split);
-					upper = evaluateCardinalty(split);
+					LOG.debug("Upper Value = " + split);
+					upper = evaluateCardinality(split);
 				}
 			}
 		}
 		values.add(lower);
 		values.add(upper);
-
-		log.debug("Cardinalty: [" + lower + ".." + upper + "]");
+		
+		LOG.debug("Cardinalty: [" + lower + ".." + upper + "]");
 		return values;
+		/* PROTECTED REGION END */
 	}
-
+	
 	/**
-	 * evaluate the multiplicity
-	 * 
-	 * @param cardinality
-	 * @return
+	 * Method stub for further implementation.
+	 * @param	cardinality	
+	 * @return	
 	 */
-	private int evaluateCardinalty(String cardinality) {
+	
+	private int evaluateCardinality(String cardinality) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363677677672_483862_1936) ENABLED START */
 		// if empty set default to "1"
 		if (cardinality.equals("*")) {
 			// return unlimited
@@ -505,24 +537,26 @@ public class ConnectorFactory {
 			// return value of string as integer
 			return Integer.valueOf(cardinality);
 		}
+		/* PROTECTED REGION END */
 	}
-
+	
 	/**
-	 * post process all information flows
+	 * Method stub for further implementation.
 	 */
-	public void processAllInformationFlows() {
-
+	
+	public void processInformationFlows() {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363677713915_399928_1940) ENABLED START */
 		// TODO information flow needs to have at least one classifier
 		// Specifies the information items that may circulate on this
 		// information flow.
 		for (String guid : informationFlowMap.keySet()) {
-
+			
 			List<Integer> list = informationFlowMap.get(guid);
 			if (list.size() > 2)
-				log.fatal("InformationFlow to more than 2 ports not implemented!");
-			Port first = (Port) ElementRegistry.instance.getById(list.get(0));
-			Port second = (Port) ElementRegistry.instance.getById(list.get(1));
-
+				LOG.fatal("InformationFlow to more than 2 ports not implemented!");
+			Port first = (Port) ElementRegistry.INSTANCE.getElementById(list.get(0));
+			Port second = (Port) ElementRegistry.INSTANCE.getElementById(list.get(1));
+			
 			Port source = null;
 			Port target = null;
 			for (Interface iface : first.getProvideds()) {
@@ -545,39 +579,37 @@ public class ConnectorFactory {
 			}
 			// in case informationflow has wrong connection
 			if (source == null || target == null) {
-				log.warn("Error, InformationFlow from required to required or provided to provided!!!");
+				LOG.warn("Error, InformationFlow from required to required or provided to provided!!!");
 				source = first;
 				target = second;
 			}
-
-			Class sourceClazz = (Class) ElementRegistry.instance
-					.getClassByPort(source);
-			Class targetClazz = (Class) ElementRegistry.instance
-					.getClassByPort(target);
+			
+			Class sourceClazz = (Class) ElementRegistry.INSTANCE.getClassByPort(source);
+			Class targetClazz = (Class) ElementRegistry.INSTANCE.getClassByPort(target);
 			// provided interface port gets the connection
-
-			org.eclipse.uml2.uml.Package nearestPackage = source
-					.getNearestPackage();
+			
+			org.eclipse.uml2.uml.Package nearestPackage = source.getNearestPackage();
 			
 			// get the original connector
 			org.sparx.Connector con = informationFlowGUIDMap.get(guid);
 			
 			// create information flow and set name
-			InformationFlow flow = (InformationFlow) nearestPackage
-					.createPackagedElement(con.GetName(), UMLFactory.eINSTANCE
-							.createInformationFlow().eClass());
-
+			InformationFlow flow = (InformationFlow) nearestPackage.createPackagedElement(con.GetName(), UMLFactory.eINSTANCE.createInformationFlow().eClass());
+			
 			flow.getInformationSources().add(sourceClazz);
 			flow.getInformationTargets().add(targetClazz);
 			// add informationFlow to registry
-			ElementRegistry.instance.addElementGuid(guid, flow);
+			ElementRegistry.INSTANCE.addElementGuid(guid, flow);
 		}
+		/* PROTECTED REGION END */
 	}
-
+	
 	/**
 	 * some helpful method for debugging dependency problems 
 	 */
+	
 	public void printDependencies() {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363677743340_69490_1943) ENABLED START */
 		StringBuilder sb = new StringBuilder("\n");
 		sb.append("Dependencies:");
 		sb.append("\n");
@@ -585,7 +617,7 @@ public class ConnectorFactory {
 			sb.append(guid + ":\n");
 			int i = 1;
 			for (Integer parent : dependencyMap.get(guid)) {
-				Element element = ElementRegistry.instance.getById(parent);
+				Element element = ElementRegistry.INSTANCE.getElementById(parent);
 				if (element != null) {
 					sb.append(i++);
 					if (element instanceof Port) {
@@ -594,7 +626,7 @@ public class ConnectorFactory {
 					} else if (element instanceof Dependency) {
 						Dependency dep = (Dependency) element;
 						sb.append(". Dependency=" + dep.getName());
-
+						
 						sb.append("\nSuppliers:\n");
 						for (NamedElement ne : dep.getSuppliers())
 							sb.append("\n" + ne.getName());
@@ -607,31 +639,33 @@ public class ConnectorFactory {
 					} else {
 						sb.append("\nClass: " + element.getClass());
 					}
-
+					
 					sb.append("\n");
 				} else {
-					log.fatal("parentID(" + parent + " not found in registry");
+					LOG.fatal("parentID(" + parent + " not found in registry");
 				}
-
+				
 			}
 			sb.append("-------------------------------------------------------------------------\n");
 		}
 		sb.append("\n=======================================================================");
-		log.debug(sb.toString());
-
+		LOG.debug(sb.toString());
+		/* PROTECTED REGION END */
 	}
-
+	
 	/**
-	 * some helpful method for debugging information flow problems 
+	 * some helpful method for debugging information flow problems
 	 */
+	
 	public void printInformationFlows() {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363677760459_596928_1946) ENABLED START */
 		StringBuilder sb = new StringBuilder();
 		sb.append("List InformationFlows:");
 		sb.append("\n");
 		for (String guid : informationFlowMap.keySet()) {
 			sb.append(guid + ":\n");
 			for (Integer parent : informationFlowMap.get(guid)) {
-				Port port = (Port) ElementRegistry.instance.getById(parent);
+				Port port = (Port) ElementRegistry.INSTANCE.getElementById(parent);
 				sb.append("\tName=" + port.getName());
 				sb.append("\n");
 				sb.append("\tProvided:\n");
@@ -646,8 +680,29 @@ public class ConnectorFactory {
 				}
 			}
 		}
-
-		log.debug(sb.toString());
+		
+		LOG.debug(sb.toString());
+		/* PROTECTED REGION END */
 	}
-
+	
+	// -- generated association + attribute accessors -----------------------
+	
+	// -- generated code of other cartridges --------------------------------
+	
+	// -- own code implementation -------------------------------------------
+	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363352652227_896894_2327) ENABLED START */
+	
+	private Map<String, List<Integer>> informationFlowMap = new HashMap<String, List<Integer>>();
+	private Map<String, org.sparx.Connector> informationFlowGUIDMap = new HashMap<String, org.sparx.Connector>();
+	
+	private Map<String, List<Integer>> dependencyMap = new HashMap<String, List<Integer>>();
+	private Map<String, List<Integer>> delegateMap = new HashMap<String, List<Integer>>();
+	
+	//	private Map<String, org.sparx.Connector> informationFlowMap = new HashMap<String, org.sparx.Connector>();	
+	
+	private Map<String, org.sparx.Connector> associationMap = new HashMap<String, org.sparx.Connector>();
+	private Map<String, org.sparx.Connector> associationComponentMap = new HashMap<String, org.sparx.Connector>();
+	
+	/* PROTECTED REGION END */
+	
 }

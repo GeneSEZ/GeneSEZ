@@ -1,5 +1,10 @@
 package org.genesez.adapter.ea;
 
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_17_0_12d203c6_1328866975656_393979_2132) 
+ */
+
 import java.util.Collections;
 import java.util.Map.Entry;
 
@@ -17,73 +22,100 @@ import org.eclipse.uml2.uml.Model;
 
 /**
  * An oAW workflow component to write an UML XWI file
- * 
- * @author gerbe
- * @author christian
- *
+ *  
  * The XmiWriter creates an XMI output file from a UML model.
  * The model needs to be placed in the input slot.
+ * 
+ * @author Georg Beine
+ * @author christian
  */
+
 public class XmiWriter extends AbstractWorkflowComponent {
-
-	private static final Log log = LogFactory.getLog(XmiWriter.class);
-
+	
+	// -- generated attribute, constant + association declarations ----------
+	
+	private static final Log LOG = LogFactory.getLog(XmiWriter.class);
+	
 	private String inputSlot = null;
+	
 	private String xmiFile = null;
+	
 	private String resourceSlot = null;
-
-	public void checkConfiguration(Issues issues) {
+	
+	// -- generated method stubs for implementations + derived attributes ---
+	/**
+	 * Method stub for further implementation.
+	 * @param	i	
+	 */
+	
+	public void checkConfiguration(Issues i) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363096138713_871381_2050) ENABLED START */
 		URI uri = URI.createURI(this.xmiFile);
-		log.debug("Creating URI: " + uri);
-		ResourceRegistry.instance.create(this.resourceSlot, uri);
+		LOG.debug("Creating URI: " + uri);
+		ResourceRegistry.INSTANCE.create(this.resourceSlot, uri);
+		/* PROTECTED REGION END */
 	}
 	
-	protected void invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
+	/**
+	 * Method stub for further implementation.
+	 * @param	ctx	
+	 * @param	pm	
+	 * @param	issues	
+	 */
+	
+	protected void invokeInternal(WorkflowContext ctx, ProgressMonitor pm, Issues issues) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363096168682_36592_2058) ENABLED START */
 		try {
-			log.info("Start writing XMI file...");
-			log.debug("Get model from slot: " + this.inputSlot);
+			LOG.info("Start writing XMI file...");
+			LOG.debug("Get model from slot: " + this.inputSlot);
 			Model output = (Model) ctx.get(this.inputSlot);
-			log.debug("Get resource from slot: " + this.resourceSlot);
-			XMIResource resource = (XMIResource) ResourceRegistry.instance.get(this.resourceSlot);
+			LOG.debug("Get resource from slot: " + this.resourceSlot);
+			XMIResource resource = (XMIResource) ResourceRegistry.INSTANCE.getResource(this.resourceSlot);
 			resource.getContents().add(output);
-			for (Entry<String, Element> e : ElementRegistry.instance.getElements()) {
-				log.debug("Add element " + e.getKey());
+			for (Entry<String, Element> e : ElementRegistry.INSTANCE.getElements()) {
+				LOG.debug("Add element " + e.getKey());
 				resource.setID(e.getValue(), e.getKey());
 			}
-			for (EObject e : ContentRegistry.instance.getContents()) {
-				log.debug("Add content " + e.toString());
-				resource.getContents().add(e);				
+			for (EObject e : ContentRegistry.INSTANCE.getContents()) {
+				LOG.debug("Add content " + e.toString());
+				resource.getContents().add(e);
 			}
-			log.debug("Save XMI file");
+			LOG.debug("Save XMI file");
 			resource.save(Collections.EMPTY_MAP);
-			log.info("Finished!");
+			LOG.info("Finished!");
 		} catch (Exception e) {
 			issues.addError(e.toString());
 		}
+		/* PROTECTED REGION END */
+	}
+	
+	// -- generated association + attribute accessors -----------------------
+	/**
+	 * Sets the value of attribute '<em><b>inputSlot</b></em>'
+	 */
+	public void setInputSlot(String inputSlot) {
+		this.inputSlot = inputSlot;
 	}
 	
 	/**
-	 * Set the name of the XMI output file
-	 * @param value
+	 * Sets the value of attribute '<em><b>xmiFile</b></em>'
 	 */
-	public void  setXmiFile(String value) {
-		this.xmiFile = value;
+	public void setXmiFile(String xmiFile) {
+		this.xmiFile = xmiFile;
 	}
 	
 	/**
-	 * Set the workflow input slot
-	 * @param value
+	 * Sets the value of attribute '<em><b>resourceSlot</b></em>'
 	 */
-	public void  setInputSlot(String value) {
-		this.inputSlot = value;
+	public void setResourceSlot(String resourceSlot) {
+		this.resourceSlot = resourceSlot;
 	}
-
-	/**
-	 * Set the workflow resource slot
-	 * @param value
-	 */
-	public void  setResourceSlot(String value) {
-		log.debug("Setting resourceSlot to " + value);
-		this.resourceSlot = value;
-	}
+	
+	// -- generated code of other cartridges --------------------------------
+	
+	// -- own code implementation -------------------------------------------
+	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_12d203c6_1328866975656_393979_2132) ENABLED START */
+	
+	/* PROTECTED REGION END */
+	
 }

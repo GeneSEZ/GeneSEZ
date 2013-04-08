@@ -1,244 +1,355 @@
 package org.genesez.adapter.ea;
 
-import java.util.*;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_17_0_12d203c6_1328866883977_778148_1923) 
+ */
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Port;
 
 /**
- * Collect all identifiable elements created during model transformation
- * 
- * @author gerbe
- * 
- * The ElementRegistry registers and provides access to all identifiable
- * elements created during the model transformation process.
- * It also provides a search interface to get elements by their GUID or by
- * their Enterprise Architect ID.
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author christian
  */
-public class ElementRegistry {
 
-	private static final Log log = LogFactory.getLog(ElementRegistry.class);
-	public static final ElementRegistry instance = new ElementRegistry();
+public class ElementRegistry {
 	
-	private Map<String, Element> elements = new HashMap<String, Element>(); 
-	private Map<Integer, String> idGuidMap = new HashMap<Integer, String>(); 
+	// -- generated attribute, constant + association declarations ----------
 	
-	private Map<String, Interface> interfaceMap = new HashMap<String, Interface>();
-	private Map<Port, Class> classMap = new HashMap<Port, Class>();
+	public static final ElementRegistry INSTANCE = new ElementRegistry();
 	
+	private static final Log LOG = LogFactory.getLog(ElementRegistry.class);
+	
+	// -- generated constructors --------------------------------------------
 	/**
-	 * Just to make constructor private
+	 * Constructor for class '<em><b>ElementRegistry</b></em>'.
 	 */
+	
 	private ElementRegistry() {
+		/* PROTECTED REGION ID(java.constructor._17_0_5_12d203c6_1363105844828_326154_2977) ENABLED START */
+		
 		// nothing to do here ;-)
+		
+		/* PROTECTED REGION END */
 	}
 	
+	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Initializes (or reset) the ElementRegistry
 	 */
+	
 	public void initialize() {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363105865366_58090_2980) ENABLED START */
 		this.elements = new HashMap<String, Element>();
 		this.idGuidMap = new HashMap<Integer, String>();
 		this.interfaceMap = new HashMap<String, Interface>();
 		this.classMap = new HashMap<Port, Class>();
+		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * Add an Enterprise Architect attribute and the corresponding element
-	 * @param _a	The Enterprise Architect attribute
-	 * @param _e	The uml model element
+	 * Method stub for further implementation.
 	 */
-	public void addElement(org.sparx.Attribute _a, Element _e) {
-		this.addElementGuid(_a.GetAttributeGUID(), _e);
+	
+	public void printAll() {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363105225572_390767_2969) ENABLED START */
+		LOG.debug("Print ElementRegistryMap...");
+		StringBuilder sb = new StringBuilder("\n");
+		for (String s : elements.keySet()) {
+			String id = "";
+			for (Integer key : idGuidMap.keySet()) {
+				String guid = idGuidMap.get(key);
+				if (guid.equals(s)) {
+					id = key.toString();
+				}
+			}
+			sb.append("ID(" + id + ") -> ");
+			sb.append(s + "\t" + (elements.get(s)).toString());
+			sb.append("\n");
+		}
+		LOG.debug(sb.toString());
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 * @param	a	
+	 * @param	e	
+	 */
+	
+	public void addElement(org.sparx.Attribute a, Element e) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363105231599_701004_2972) ENABLED START */
+		this.addElementGuid(a.GetAttributeGUID(), e);
 		// TODO is this needed
 		//this.addElementIdGuid(_a.GetAttributeID(), _a.GetAttributeGUID());
+		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * Add an Enterprise Architect connector and the corresponding element
-	 * @param _a	The Enterprise Architect connector
-	 * @param _e	The uml model element
+	 * Method stub for further implementation.
+	 * @param	c	
+	 * @param	e	
 	 */
-	public void addElement(org.sparx.Connector _c, Element _e) {
-		this.addElementGuid(_c.GetConnectorGUID(), _e);
+	
+	public void addElement(org.sparx.Connector c, Element e) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363337648329_314069_1914) ENABLED START */
+		this.addElementGuid(c.GetConnectorGUID(), e);
 		// now processed by postprocessor
 		// otherwise error in simulation
 		//this.addElementIdGuid(_c.GetConnectorID(), _c.GetConnectorGUID());
+		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * Add an Enterprise Architect element and the corresponding element
-	 * @param _a	The Enterprise Architect element
-	 * @param _e	The uml model element
+	 * Method stub for further implementation.
+	 * @param	x	
+	 * @param	e	
 	 */
-	public void addElement(org.sparx.Element _x, Element _e) {
-		this.addElementGuid(_x.GetElementGUID(), _e);
-		this.addElementIdGuid(_x.GetElementID(), _x.GetElementGUID());
+	
+	public void addElement(org.sparx.Element x, Element e) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363106001295_163796_2983) ENABLED START */
+		this.addElementGuid(x.GetElementGUID(), e);
+		this.addElementIdGuid(x.GetElementID(), x.GetElementGUID());
+		/* PROTECTED REGION END */
 	}
 	
 	/**
 	 * Add an Enterprise Architect package and the corresponding element
-	 * @param _a	The Enterprise Architect package
-	 * @param _e	The uml model element
+	 * @param	p	
+	 * @param	e	
 	 */
-	public void addElement(org.sparx.Package _p, Element _e) {
-		this.addElementGuid(_p.GetPackageGUID(), _e);
+	
+	public void addElement(org.sparx.Package p, Element e) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363337816728_599082_1920) ENABLED START */
+		this.addElementGuid(p.GetPackageGUID(), e);
 		// TODO is this needed?		
-//		this.addElementIdGuid(_p.GetPackageID(), _p.GetPackageGUID());
+		//		this.addElementIdGuid(_p.GetPackageID(), _p.GetPackageGUID());
+		/* PROTECTED REGION END */
 	}
 	
 	/**
 	 * Add an element and its GUID entry
-	 * @param _guid	The GUID of the element
-	 * @param _e	The uml model element
+	 * @param	guid	
+	 * @param	e	
 	 */
-	public void addElementGuid(String _guid, Element _e) {
-		if (this.elements.containsKey(_guid)) {
-			log.fatal("Key " + _guid + " already contained");
+	
+	public void addElementGuid(String guid, Element e) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363337939964_251840_1924) ENABLED START */
+		if (this.elements.containsKey(guid)) {
+			LOG.fatal("Key " + guid + " already contained -> " + getElement(guid));
 		} else {
-			this.elements.put(_guid, _e);
+			this.elements.put(guid, e);
 		}
+		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * Add a GUID to Enterprise Architect ID mapping entry
-	 * @param _id	The Enterprise Architect ID
-	 * @param _guid	The GUID of the element
+	 * Method stub for further implementation.
+	 * @param	id	
+	 * @param	guid	
 	 */
-	private void addElementIdGuid(int _id, String _guid) {
-		if (this.idGuidMap.containsKey(_id)) {
-			log.fatal("Key " + _id + " already contained");
+	
+	private void addElementIdGuid(int id, String guid) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363337963102_524414_1928) ENABLED START */
+		if (this.idGuidMap.containsKey(id)) {
+			LOG.fatal("Key " + id + " already contained");
 		} else {
-			this.idGuidMap.put(_id, _guid);
+			this.idGuidMap.put(id, guid);
 		}
+		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * Provides access to the registered elements collection
-	 * @return
+	 * returns the interface by string
+	 * @param	name	
+	 * @return	
 	 */
-	public Set<Entry<String, Element>> getElements() {
-		return this.elements.entrySet();
-	}
 	
-	/**
-	 * Verifies if an element exists in the registry using its GUID
-	 * @param _guid	The elements GUID to search for
-	 * @return
-	 */
-	public boolean exists(String _guid) {
-		return this.elements.containsKey(_guid);
-	}
-
-	/**
-	 * Verifies if an element exists in the registry using its Enterprise Architect ID
-	 * @param _id	The elements Enterprise Architect ID
-	 * @return
-	 */
-	public boolean existsId(int _id) {
-		if (this.idGuidMap.containsKey(_id)) {
-			return this.exists(this.idGuidMap.get(_id));
-		}
-		return false;
-	}
-
-	/**
-	 * Returns an element by its GUID
-	 * @param _guid	The elements GUID to search for
-	 * @return
-	 */
-	public Element get(String _guid) {
-		log.debug("Return Element with GUID " + _guid);
-		return this.elements.get(_guid);
-	}
-	
-	/**
-	 * Returns an element by its Enterprise Architect ID
-	 * @param _id	The elements Enterprise Architect ID
-	 * @return
-	 */
-	public Element getById(int _id) {
-		log.debug("Return Element with ID " + _id);
-		if (this.idGuidMap.containsKey(_id)) {
-			return this.get(this.idGuidMap.get(_id));
-		}
-		return null;
-	}
-	
-	//------------
-	/**
-	 * Adds an interface to interface map
-	 */
-	public void addInterface(org.sparx.Element _e, Interface iface) {
-		if (!interfaceMap.containsKey(iface.getName())) {
-			this.interfaceMap.put(iface.getName(), iface);
-			this.addElementGuid(_e.GetElementGUID(), iface);
-		}
-	}
-	
-	public void addClass(Port port, Class clazz){
-		this.classMap.put(port, clazz);
-	}
-	
-	public Class getClassByPort(Port port){
-		return classMap.get(port);
-	}
-	
-	public void printClassMap(){
-		StringBuilder sb = new StringBuilder("ClassMap:\n");
-		for(Port p: classMap.keySet()){
-			sb.append(p.getName() + "\t-> " + classMap.get(p).getName());
-			sb.append("\n");
-		}
-		log.debug(sb.toString());
-	}
-	
-	/**
-	 * Returns the interface by string
-	 * 
-	 * @param name The interface element name
-	 * @return
-	 */
 	public Interface getInterfaceByName(String name) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363338075796_836391_1932) ENABLED START */
 		return interfaceMap.get(name);
+		/* PROTECTED REGION END */
 	}
-
+	
 	/**
 	 * print all interfaces
 	 */
+	
 	public void printInterfaces() {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363338246778_74066_1941) ENABLED START */
 		StringBuilder sb = new StringBuilder("\n");
 		for (String s : interfaceMap.keySet()) {
 			sb.append("\t");
 			sb.append(s + " -> " + interfaceMap.get(s));
 			sb.append("\n");
 		}
-		log.debug(sb.toString());
+		LOG.debug(sb.toString());
+		/* PROTECTED REGION END */
 	}
-
+	
 	/**
 	 * prints all elements to debug
 	 */
-	public void print() {
-		log.debug("Print ElementRegistryMap...");
+	
+	public void printElementRegistry() {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363338255392_174539_1944) ENABLED START */
+		LOG.debug("Print ElementRegistryMap...");
 		StringBuilder sb = new StringBuilder("\n");
 		for (String s : elements.keySet()) {
-			String id = "";			
-			for(Integer key : idGuidMap.keySet()){
+			String id = "";
+			for (Integer key : idGuidMap.keySet()) {
 				String guid = idGuidMap.get(key);
-				if(guid.equals(s)){
+				if (guid.equals(s)) {
 					id = key.toString();
 				}
 			}
-			sb.append("ID("+ id +") -> ");
+			sb.append("ID(" + id + ") -> ");
 			sb.append(s + "\t" + (elements.get(s)).toString());
 			sb.append("\n");
 		}
-		log.debug(sb.toString());
+		LOG.debug(sb.toString());
+		/* PROTECTED REGION END */
 	}
+	
+	/**
+	 * Method stub for further implementation.
+	 * @param	e	
+	 * @param	iface	
+	 */
+	
+	public void addInterface(org.sparx.Element e, Interface iface) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363338462585_989431_1950) ENABLED START */
+		if (!interfaceMap.containsKey(iface.getName())) {
+			this.interfaceMap.put(iface.getName(), iface);
+			this.addElementGuid(e.GetElementGUID(), iface);
+		} else {
+			LOG.error("interface already contained in map");
+		}
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 * @param	port	
+	 * @param	clazz	
+	 */
+	
+	public void addClass(Port port, Class clazz) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363338496439_432362_1954) ENABLED START */
+		if (!this.classMap.containsKey(port)) {
+			this.classMap.put(port, clazz);
+		} else {
+			LOG.error("port already contained in map");
+		}
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 * @param	port	
+	 * @return	
+	 */
+	
+	public Class getClassByPort(Port port) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363338538677_862516_1966) ENABLED START */
+		return this.classMap.get(port);
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	
+	public void printClassMap() {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363338565967_83196_1970) ENABLED START */
+		StringBuilder sb = new StringBuilder("ClassMap:\n");
+		for (Port p : classMap.keySet()) {
+			sb.append(p.getName() + "\t-> " + classMap.get(p).getName());
+			sb.append("\n");
+		}
+		LOG.debug(sb.toString());
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 * @param	id	
+	 * @return	
+	 */
+	
+	public Element getElementById(int id) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363344171017_955579_2242) ENABLED START */
+		LOG.debug("Return Element with ID " + id);
+		//		if (this.idGuidMap.containsKey(id)) {
+		return this.getElement(this.idGuidMap.get(id));
+		//		}
+		//		return null;
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 * @param	guid	
+	 * @return	
+	 */
+	
+	public Element getElement(String guid) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363344210202_541794_2246) ENABLED START */
+		LOG.debug("Return Element with GUID " + guid);
+		return this.elements.get(guid);
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Verifies if an element exists in the registry using its GUID
+	 * @param	guid	
+	 * @return	
+	 */
+	
+	public boolean isExisting(String guid) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363940404793_936262_2092) ENABLED START */
+		return this.elements.containsKey(guid);
+		/* PROTECTED REGION END */
+	}
+	
+	// -- generated association + attribute accessors -----------------------
+	/**
+	 * Returns the value of attribute '<em><b>INSTANCE</b></em>'
+	 */
+	public static final ElementRegistry getInstance() {
+		return INSTANCE;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>LOG</b></em>'
+	 */
+	public static final Log getLog() {
+		return LOG;
+	}
+	
+	// -- generated code of other cartridges --------------------------------
+	
+	// -- own code implementation -------------------------------------------
+	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_12d203c6_1328866883977_778148_1923) ENABLED START */
+	private Map<String, Element> elements = new HashMap<String, Element>();
+	private Map<Integer, String> idGuidMap = new HashMap<Integer, String>();
+	
+	private Map<String, Interface> interfaceMap = new HashMap<String, Interface>();
+	private Map<Port, Class> classMap = new HashMap<Port, Class>();
+	
+	public Set<Entry<String, Element>> getElements() {
+		return this.elements.entrySet();
+	}
+	/* PROTECTED REGION END */
+	
 }

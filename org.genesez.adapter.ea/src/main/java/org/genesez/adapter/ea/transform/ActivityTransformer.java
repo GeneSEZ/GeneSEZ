@@ -1,5 +1,10 @@
 package org.genesez.adapter.ea.transform;
 
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_17_0_5_12d203c6_1363340874505_454681_2106) 
+ */
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,49 +20,80 @@ import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.UMLFactory;
 import org.genesez.adapter.ea.ElementRegistry;
 
+/**
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author christian
+ */
 
 public class ActivityTransformer extends AbstractElementTransformer {
-
-	private static final Log log = LogFactory.getLog(ActivityTransformer.class);
-
-	private Map<String, ActivityEdge> edges = new HashMap<String, ActivityEdge>();
-	private Map<Integer, Set<String>> edgeSources = new HashMap<Integer, Set<String>>();
-	private Map<Integer, Set<String>> edgeTargets = new HashMap<Integer, Set<String>>();
-
-	Activity transform(org.sparx.Element _e, BehavioredClassifier _parent) {
-		log.debug("Creating Activity " + _e.GetName() + ", parent " + _parent.getName());
-		Activity activity = (Activity) _parent.createOwnedBehavior(_e.GetName(),
-				UMLFactory.eINSTANCE.createActivity().eClass());
-
-		this.umlElement = activity;
-		this.transform(_e);
-
-		return activity;
-	}
-
-	Activity transform(org.sparx.Element _e, Package _parent) {
-		log.debug("Creating Activity " + _e.GetName() + ", parent " + _parent.getName());
-		Activity activity = UMLFactory.eINSTANCE.createActivity();
-		activity.setName(_e.GetName());
-		activity.setPackage(_parent);
+	
+	// -- generated attribute, constant + association declarations ----------
+	
+	private static final Log LOG = LogFactory.getLog(ActivityTransformer.class);
+	
+	// -- generated method stubs for implementations + derived attributes ---
+	/**
+	 * Method stub for further implementation.
+	 * @param	e	
+	 * @param	parent	
+	 * @return	
+	 */
+	
+	public Activity transform(org.sparx.Element e, BehavioredClassifier parent) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363361825736_383301_3017) ENABLED START */
+		LOG.debug("Creating Activity " + e.GetName() + ", parent " + parent.getName());
+		Activity activity = (Activity) parent.createOwnedBehavior(e.GetName(), UMLFactory.eINSTANCE.createActivity().eClass());
 		
 		this.umlElement = activity;
-		this.transform(_e);
-
+		this.transform(e);
+		
 		return activity;
+		/* PROTECTED REGION END */
 	}
 	
-	private void transform(org.sparx.Element _e) {
-		this.eaElement = _e;
+	/**
+	 * Method stub for further implementation.
+	 * @param	e	
+	 * @param	parent	
+	 * @return	
+	 */
+	
+	public Activity transform(org.sparx.Element e, Package parent) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362090688_873925_3031) ENABLED START */
+		LOG.debug("Creating Activity " + e.GetName() + ", parent " + parent.getName());
+		Activity activity = UMLFactory.eINSTANCE.createActivity();
+		activity.setName(e.GetName());
+		activity.setPackage(parent);
+		
+		this.umlElement = activity;
+		this.transform(e);
+		
+		return activity;
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 * @param	e	
+	 */
+	
+	private void transform(org.sparx.Element e) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362122387_219403_3036) ENABLED START */
+		this.eaElement = e;
 		this.transformConnectors();
 		this.transformElements();
 		this.applyStereotypes();
-
-		ElementRegistry.instance.addElement(_e, this.umlElement);
+		
+		ElementRegistry.INSTANCE.addElement(e, this.umlElement);
+		/* PROTECTED REGION END */
 	}
 	
-	@Override
+	/**
+	 * Method stub for further implementation.
+	 */
+	
 	protected void transformConnectors() {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362146580_726370_3039) ENABLED START */
 		for (org.sparx.Element e : this.eaElement.GetElements()) {
 			for (org.sparx.Connector c : e.GetConnectors()) {
 				// Connectors are always found two times:
@@ -68,144 +104,195 @@ public class ActivityTransformer extends AbstractElementTransformer {
 				this.transformConnector(c);
 			}
 		}
-	}
-
-	@Override
-	protected void transformConnector(org.sparx.Connector _c) {
-		log.debug("Transforming connector " + _c.GetName());
-		
-		if (_c.GetType().equals("ControlFlow")) {
-			log.debug("Connector is a ControlFlow");
-			ControlFlowTransformer t = new ControlFlowTransformer();
-			this.addActivityEdge(_c, t.transform(_c, (Activity)this.umlElement ));
-		}
+		/* PROTECTED REGION END */
 	}
 	
-	@Override
-	protected void transformElement(org.sparx.Element _e) {
-		log.debug("Transforming element " + _e.GetName());
-
+	/**
+	 * Method stub for further implementation.
+	 * @param	c	
+	 */
+	
+	protected void transformConnector(org.sparx.Connector c) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362168230_485022_3042) ENABLED START */
+		LOG.debug("Transforming connector " + c.GetName());
+		
+		if (c.GetType().equals("ControlFlow")) {
+			LOG.debug("Connector is a ControlFlow");
+			ControlFlowTransformer t = new ControlFlowTransformer();
+			this.addActivityEdge(c, t.transform(c, (Activity) this.umlElement));
+		}
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 * @param	e	
+	 */
+	
+	protected void transformElement(org.sparx.Element e) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362203391_514284_3045) ENABLED START */
+		LOG.debug("Transforming element " + e.GetName());
+		
 		ActivityNode node = null;
-
+		
 		// Owned activities
-		if ( _e.GetType().equals("Activity") ) {
-				log.debug("Element is an Activity");
-				ActivityTransformer t = new ActivityTransformer();
-				t.transform(_e, (Activity)this.umlElement);
+		if (e.GetType().equals("Activity")) {
+			LOG.debug("Element is an Activity");
+			ActivityTransformer t = new ActivityTransformer();
+			t.transform(e, (Activity) this.umlElement);
 		}
 		// Call behavior actions
-		else if ( _e.GetType().equals("Action") && _e.GetClassfierID() > 0 ) {
-			log.debug("Element is a CallBehaviorAction");
+		else if (e.GetType().equals("Action") && e.GetClassfierID() > 0) {
+			LOG.debug("Element is a CallBehaviorAction");
 			CallBehaviorActionTransformer t = new CallBehaviorActionTransformer();
-			node = t.transform(_e, (Activity)this.umlElement);
+			node = t.transform(e, (Activity) this.umlElement);
 		}
 		// All other actions
-		else if ( _e.GetType().equals("Action") ) {
-			log.debug("Element is an Action");
+		else if (e.GetType().equals("Action")) {
+			LOG.debug("Element is an Action");
 			CallOperationActionTransformer t = new CallOperationActionTransformer();
-			node = t.transform(_e, (Activity)this.umlElement);
-		}
-		else if ( _e.GetType().equals("StateNode") && _e.GetSubtype() == 100 ) {
-			log.debug("Element is an InitialNode");
+			node = t.transform(e, (Activity) this.umlElement);
+		} else if (e.GetType().equals("StateNode") && e.GetSubtype() == 100) {
+			LOG.debug("Element is an InitialNode");
 			InitialNodeTransformer t = new InitialNodeTransformer();
-			node = t.transform(_e, (Activity)this.umlElement);
-		}
-		else if ( _e.GetType().equals("StateNode") && _e.GetSubtype() == 101 ) {
-			log.debug("Element is an ActivityFinialNode");
+			node = t.transform(e, (Activity) this.umlElement);
+		} else if (e.GetType().equals("StateNode") && e.GetSubtype() == 101) {
+			LOG.debug("Element is an ActivityFinialNode");
 			ActivityFinalNodeTransformer t = new ActivityFinalNodeTransformer();
-			node = t.transform(_e, (Activity)this.umlElement);
-		}
-		else if ( _e.GetType().equals("StateNode") && _e.GetSubtype() == 102 ) {
-			log.debug("Element is a FlowFinalNode");
+			node = t.transform(e, (Activity) this.umlElement);
+		} else if (e.GetType().equals("StateNode") && e.GetSubtype() == 102) {
+			LOG.debug("Element is a FlowFinalNode");
 			FlowFinalNodeTransformer t = new FlowFinalNodeTransformer();
-			node = t.transform(_e, (Activity)this.umlElement);
-		}
-		else if ( _e.GetType().equals("Decision") ) {
-			log.debug("Element is a DecisionNode");
+			node = t.transform(e, (Activity) this.umlElement);
+		} else if (e.GetType().equals("Decision")) {
+			LOG.debug("Element is a DecisionNode");
 			DecisionNodeTransformer t = new DecisionNodeTransformer();
-			node = t.transform(_e, (Activity)this.umlElement);
-		}
-		else if ( _e.GetType().equals("MergeNode") ) {
-			log.debug("Element is a MergeNode");
+			node = t.transform(e, (Activity) this.umlElement);
+		} else if (e.GetType().equals("MergeNode")) {
+			LOG.debug("Element is a MergeNode");
 			MergeNodeTransformer t = new MergeNodeTransformer();
-			node = t.transform(_e, (Activity)this.umlElement);
+			node = t.transform(e, (Activity) this.umlElement);
 		}
 		// Fork nodes
-		else if ( _e.GetType().equals("Synchronization") && isForkNode(_e) ) {
-			log.debug("Element is a ForkNode");
+		else if (e.GetType().equals("Synchronization") && isForkNode(e)) {
+			LOG.debug("Element is a ForkNode");
 			ForkNodeTransformer t = new ForkNodeTransformer();
-			node = t.transform(_e, (Activity)this.umlElement);
+			node = t.transform(e, (Activity) this.umlElement);
 		}
 		// Join nodes
-		else if ( _e.GetType().equals("Synchronization") && isJoinNode(_e) ) {
-			log.debug("Element is a JoinNode");
+		else if (e.GetType().equals("Synchronization") && isJoinNode(e)) {
+			LOG.debug("Element is a JoinNode");
 			JoinNodeTransformer t = new JoinNodeTransformer();
-			node = t.transform(_e, (Activity)this.umlElement);
+			node = t.transform(e, (Activity) this.umlElement);
 		}
 		
-		if ( null != node ) {
-			this.applyActivityEdges(_e, node);
+		if (null != node) {
+			this.applyActivityEdges(e, node);
 		}
+		/* PROTECTED REGION END */
 	}
 	
-	private void addActivityEdge(org.sparx.Connector _c, ActivityEdge _edge) {
-		this.edges.put(_c.GetConnectorGUID(), _edge);
-
+	/**
+	 * Method stub for further implementation.
+	 * @param	c	
+	 * @param	edge	
+	 */
+	
+	private void addActivityEdge(org.sparx.Connector c, ActivityEdge edge) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362233555_701061_3048) ENABLED START */
+		this.edges.put(c.GetConnectorGUID(), edge);
+		
 		// create a dummy HashSet for the connectors guid 
 		HashSet<String> connectorGuid = new HashSet<String>();
-		connectorGuid.add(_c.GetConnectorGUID());
-
+		connectorGuid.add(c.GetConnectorGUID());
+		
 		// add the connector to its sources connector list
-		if (this.edgeSources.containsKey(_c.GetClientID())) {
-			this.edgeSources.get(_c.GetClientID()).addAll(connectorGuid);
+		if (this.edgeSources.containsKey(c.GetClientID())) {
+			this.edgeSources.get(c.GetClientID()).addAll(connectorGuid);
 		} else {
-			this.edgeSources.put(_c.GetClientID(), connectorGuid);
+			this.edgeSources.put(c.GetClientID(), connectorGuid);
 		}
-
+		
 		// add the connector to its targets connector list
-		if (this.edgeTargets.containsKey(_c.GetSupplierID())) {
-			this.edgeTargets.get(_c.GetSupplierID()).addAll(connectorGuid);
+		if (this.edgeTargets.containsKey(c.GetSupplierID())) {
+			this.edgeTargets.get(c.GetSupplierID()).addAll(connectorGuid);
 		} else {
-			this.edgeTargets.put(_c.GetSupplierID(), connectorGuid);
+			this.edgeTargets.put(c.GetSupplierID(), connectorGuid);
 		}
+		/* PROTECTED REGION END */
 	}
 	
-	private void applyActivityEdges(org.sparx.Element _e, ActivityNode _node) {
-
+	/**
+	 * Method stub for further implementation.
+	 * @param	e	
+	 * @param	node	
+	 */
+	
+	private void applyActivityEdges(org.sparx.Element e, ActivityNode node) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362273681_9146_3053) ENABLED START */
 		// Apply node as source
-		if (this.edgeSources.containsKey(_e.GetElementID())) {
-			log.debug("Outgoing Flows: " + this.edgeSources.get(_e.GetElementID()).size());
-			for (String connectorGuid: this.edgeSources.get(_e.GetElementID()) ) {
-				this.edges.get(connectorGuid).setSource(_node);
+		if (this.edgeSources.containsKey(e.GetElementID())) {
+			LOG.debug("Outgoing Flows: " + this.edgeSources.get(e.GetElementID()).size());
+			for (String connectorGuid : this.edgeSources.get(e.GetElementID())) {
+				this.edges.get(connectorGuid).setSource(node);
 			}
 		}
 		
 		// Apply node as target
-		if (this.edgeTargets.containsKey(_e.GetElementID())) {
-			log.debug("Incoming Flows: " + this.edgeTargets.get(_e.GetElementID()).size());
-			for (String connectorGuid: this.edgeTargets.get(_e.GetElementID()) ) {
-				this.edges.get(connectorGuid).setTarget(_node);
+		if (this.edgeTargets.containsKey(e.GetElementID())) {
+			LOG.debug("Incoming Flows: " + this.edgeTargets.get(e.GetElementID()).size());
+			for (String connectorGuid : this.edgeTargets.get(e.GetElementID())) {
+				this.edges.get(connectorGuid).setTarget(node);
 			}
 		}
+		/* PROTECTED REGION END */
 	}
 	
-	private static boolean isForkNode(org.sparx.Element _e) {
+	/**
+	 * Method stub for further implementation.
+	 * @param	e	
+	 * @return	
+	 */
+	
+	private boolean isForkNode(org.sparx.Element e) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362375949_303244_3062) ENABLED START */
 		int i = 0;
-		for (org.sparx.Connector c: _e.GetConnectors()) {
-			if (c.GetClientID() == _e.GetElementID()) {
-				i++;
-			}
-		}			
-		return i>1;
-	}
-
-	private static boolean isJoinNode(org.sparx.Element _e) {
-		int i = 0;
-		for (org.sparx.Connector c: _e.GetConnectors()) {
-			if (c.GetSupplierID() == _e.GetElementID()) {
+		for (org.sparx.Connector c : e.GetConnectors()) {
+			if (c.GetClientID() == e.GetElementID()) {
 				i++;
 			}
 		}
-		return i>1;
+		return i > 1;
+		/* PROTECTED REGION END */
 	}
+	
+	/**
+	 * Method stub for further implementation.
+	 * @param	e	
+	 * @return	
+	 */
+	
+	private boolean isJoinNode(org.sparx.Element e) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363340960011_961298_2134) ENABLED START */
+		int i = 0;
+		for (org.sparx.Connector c : e.GetConnectors()) {
+			if (c.GetSupplierID() == e.GetElementID()) {
+				i++;
+			}
+		}
+		return i > 1;
+		/* PROTECTED REGION END */
+	}
+	
+	// -- generated association + attribute accessors -----------------------
+	
+	// -- generated code of other cartridges --------------------------------
+	
+	// -- own code implementation -------------------------------------------
+	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363340874505_454681_2106) ENABLED START */
+	private Map<String, ActivityEdge> edges = new HashMap<String, ActivityEdge>();
+	private Map<Integer, Set<String>> edgeSources = new HashMap<Integer, Set<String>>();
+	private Map<Integer, Set<String>> edgeTargets = new HashMap<Integer, Set<String>>();
+	/* PROTECTED REGION END */
+	
 }

@@ -1,5 +1,10 @@
 package org.genesez.adapter.ea;
 
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_17_0_12d203c6_1328866954886_446698_2086) 
+ */
+
 import java.io.File;
 import java.io.FileNotFoundException;
 
@@ -16,26 +21,48 @@ import org.sparx.Repository;
 /**
  * An oAW workflow component to read a model from an Enterprise Architect repository
  * 
- * @author gerbe
- *
  * The RepositoryReader fetches an Enterprise Architect model by its name
  * from a repository and set the model to the output slot.
+ * 
+ * @author gerbe
+ * @author christian
  */
-public class RepositoryReader extends AbstractWorkflowComponent {
 
-	private final static Log log = LogFactory.getLog(RepositoryReader.class);
+public class RepositoryReader extends AbstractWorkflowComponent {
 	
-	private String repositoryFile = null;
-	private String modelName = null;
-	private String outputSlot = null;
+	// -- generated attribute, constant + association declarations ----------
+	
+	private static final Log LOG = LogFactory.getLog(RepositoryReader.class);
 	
 	private static Repository repository = null;
 	
-	public void checkConfiguration(Issues issues) {
-		// nothing to do here
+	private String repositoryFile = null;
+	
+	private String modelName = null;
+	
+	private String outputSlot = null;
+	
+	// -- generated method stubs for implementations + derived attributes ---
+	/**
+	 * Method stub for further implementation.
+	 * @param	i	
+	 */
+	
+	public void checkConfiguration(Issues i) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363096603380_494420_2122) ENABLED START */
+		// :)
+		/* PROTECTED REGION END */
 	}
 	
-	protected void invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
+	/**
+	 * Method stub for further implementation.
+	 * @param	ctx	
+	 * @param	pm	
+	 * @param	issues	
+	 */
+	
+	protected void invokeInternal(WorkflowContext ctx, ProgressMonitor pm, Issues issues) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363355541021_453032_2540) ENABLED START */
 		try {
 			Package model = this.readModel();
 			ctx.set(outputSlot, model);
@@ -44,83 +71,101 @@ public class RepositoryReader extends AbstractWorkflowComponent {
 		} catch (Exception e) {
 			issues.addError(e.toString());
 		}
-	}
-
-	/**
-	 * Set the filename of the Enterprise Architect repository
-	 * @param value	filename of the Enterprise Architect repository
-	 */
-	public void setRepositoryFile(String value) {
-		log.debug("Setting repository to " + value);
-		this.repositoryFile = value;
-	}
-	
-	/**
-	 * Set the name of the model to transform
-	 * @param value	the name of the model
-	 */
-	public void setModelName(String value) {
-		log.debug("Setting modelName to " + value);
-		this.modelName = value;
-	}
-	
-	/**
-	 * Set the name of the output slot of the model
-	 * @param value	the name of the output slot
-	 */
-	public void setOutputSlot(String value) {
-		log.debug("Setting outputSlot to " + value);
-		this.outputSlot = value;
+		/* PROTECTED REGION END */
 	}
 	
 	/**
 	 * Reads the repository and extracts the model to transform
-	 * @return the model to transform
-	 * @throws FileNotFoundException
-	 * @throws Exception
+	 * @return	
+	 * @throws	Exception
+	 * @throws	FileNotFoundException
 	 */
-	private Package readModel() throws FileNotFoundException, Exception {
+	
+	private org.sparx.Package readModel() throws Exception, FileNotFoundException {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363355721609_465892_2794) ENABLED START */
 		File file = new File(this.repositoryFile);
-		if ( ! file.exists() ) {
+		if (!file.exists()) {
 			throw new FileNotFoundException("File not found: " + this.repositoryFile);
 		}
-
-		log.info("Reading Model: " + this.repositoryFile);
-
+		
+		LOG.info("Reading Model: " + this.repositoryFile);
+		
 		// new repository
 		repository = new Repository();
-		if ( ! repository.OpenFile(file.getAbsolutePath()) ) {
+		if (!repository.OpenFile(file.getAbsolutePath())) {
 			throw new Exception("Cannot read Enterprise Architect repository: " + file.getAbsolutePath());
 		}
-
+		
 		Collection<Package> pkgs = repository.GetModels();
-
-		log.info("Repository " + this.repositoryFile + " contains " + pkgs.GetCount() + " models");
+		
+		LOG.info("Repository " + this.repositoryFile + " contains " + pkgs.GetCount() + " models");
 		
 		Package model = null;
 		
-		for ( Package m : pkgs ) {
-			log.info("Found model: " + m.GetName());
-			if ( m.GetName().equals(this.modelName) ) {
+		for (Package m : pkgs) {
+			LOG.info("Found model: " + m.GetName());
+			if (m.GetName().equals(this.modelName)) {
 				model = m;
 				break;
 			}
 		}
 		
-		if ( model == null ) {
+		if (model == null) {
 			throw new Exception("Model " + this.modelName + " not found in repository");
 		}
-			
+		
 		return model;
+		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * closes the repository 
+	 * closes the repository
 	 */
-	public static void closeRepository(){
-		if(repository != null){
+	
+	public static void closeRepository() {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363356134923_625218_2804) ENABLED START */
+		if (repository != null) {
 			repository.CloseFile();
 			repository.Exit();
 		}
+		LOG.info("repository has been closed successfully");
+		/* PROTECTED REGION END */
 	}
+	
+	// -- generated association + attribute accessors -----------------------
+	/**
+	 * Sets the value of attribute '<em><b>repositoryFile</b></em>'
+	 */
+	public void setRepositoryFile(String repositoryFile) {
+		this.repositoryFile = repositoryFile;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>modelName</b></em>'
+	 */
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>outputSlot</b></em>'
+	 */
+	public void setOutputSlot(String outputSlot) {
+		this.outputSlot = outputSlot;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>repository</b></em>'
+	 */
+	public static Repository getRepository() {
+		return repository;
+	}
+	
+	// -- generated code of other cartridges --------------------------------
+	
+	// -- own code implementation -------------------------------------------
+	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_12d203c6_1328866954886_446698_2086) ENABLED START */
+	
+	/* PROTECTED REGION END */
+	
 }
