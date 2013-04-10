@@ -4,6 +4,12 @@ package org.genesez.m2t.deletion;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_ZAIqzgD0EeK7ac-mrkJBDw) 
  */
+import java.nio.file.Path;
+
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_ZAIqzgD0EeK7ac-mrkJBDw) 
+ */
 import org.genesez.m2t.FileTreeObserverAdapter;
 
 /**
@@ -34,10 +40,27 @@ public abstract class DeletionFeature extends FileTreeObserverAdapter {
 	 */
 	protected boolean prepared = false;
 	
+	private boolean isInitialized = false;
+	
 	/**
 	 * Method stub for further implementation.
 	 */
 	public abstract void delete();
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	public void updateBeforeDir(Path dir) {
+		/* PROTECTED REGION ID(java.implementation._RjDVMKHuEeKidfUJzdEuFw) ENABLED START */
+		if (!isInitialized) {
+			// exclude all revision control metadata folders
+			for (RevisionControlSystem rep : RevisionControlSystem.REGISTRY) {
+				excludedDirectoryNames.add(rep.getMetadataFolderName());
+			}
+			isInitialized = true;
+		}
+		/* PROTECTED REGION END */
+	}
 	
 	/**
 	 * Sets prepared to true. Called if file tree walked completely.
@@ -89,11 +112,5 @@ public abstract class DeletionFeature extends FileTreeObserverAdapter {
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._ZAIqzgD0EeK7ac-mrkJBDw) ENABLED START */
-	{
-		// exclude all revision control metadata folders
-		for (RevisionControlSystem rep : RevisionControlSystem.REGISTRY) {
-			excludedDirectoryNames.add(rep.getMetadataFolderName());
-		}
-	}
 	/* PROTECTED REGION END */
 }
