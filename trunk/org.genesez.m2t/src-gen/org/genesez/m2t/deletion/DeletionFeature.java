@@ -5,11 +5,6 @@ package org.genesez.m2t.deletion;
  * 	@FILE-ID : (_ZAIqzgD0EeK7ac-mrkJBDw) 
  */
 import java.nio.file.Path;
-
-/* 
- *	Do not place import/include statements above this comment, just below. 
- * 	@FILE-ID : (_ZAIqzgD0EeK7ac-mrkJBDw) 
- */
 import org.genesez.m2t.FileTreeObserverAdapter;
 
 /**
