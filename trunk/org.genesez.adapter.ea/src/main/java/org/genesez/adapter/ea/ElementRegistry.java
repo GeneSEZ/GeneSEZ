@@ -18,7 +18,15 @@ import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Port;
 
 /**
- * Please describe the responsibility of your class in your modeling tool.
+ * Collect all identifiable elements created during model transformation
+ * 
+ * The ElementRegistry registers and provides access to all identifiable
+ * elements created during the model transformation process.
+ * It also provides a search interface to get elements by their GUID or by
+ * their Enterprise Architect ID.
+ * 
+ * @author Gerrit Beine
+ *  
  * @author christian
  */
 
@@ -32,7 +40,7 @@ public class ElementRegistry {
 	
 	// -- generated constructors --------------------------------------------
 	/**
-	 * Constructor for class '<em><b>ElementRegistry</b></em>'.
+	 * Just to make constructor private
 	 */
 	
 	private ElementRegistry() {
@@ -58,33 +66,9 @@ public class ElementRegistry {
 	}
 	
 	/**
-	 * Method stub for further implementation.
-	 */
-	
-	public void printAll() {
-		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363105225572_390767_2969) ENABLED START */
-		LOG.debug("Print ElementRegistryMap...");
-		StringBuilder sb = new StringBuilder("\n");
-		for (String s : elements.keySet()) {
-			String id = "";
-			for (Integer key : idGuidMap.keySet()) {
-				String guid = idGuidMap.get(key);
-				if (guid.equals(s)) {
-					id = key.toString();
-				}
-			}
-			sb.append("ID(" + id + ") -> ");
-			sb.append(s + "\t" + (elements.get(s)).toString());
-			sb.append("\n");
-		}
-		LOG.debug(sb.toString());
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 * @param	a	
-	 * @param	e	
+	 * Add an Enterprise Architect attribute and the corresponding element
+	 * @param	a	The Enterprise Architect attribute
+	 * @param	e	The UMLl model element
 	 */
 	
 	public void addElement(org.sparx.Attribute a, Element e) {
@@ -96,9 +80,9 @@ public class ElementRegistry {
 	}
 	
 	/**
-	 * Method stub for further implementation.
-	 * @param	c	
-	 * @param	e	
+	 * Add an Enterprise Architect connector and the corresponding element
+	 * @param	c	The Enterprise Architect connector
+	 * @param	e	The UML model element
 	 */
 	
 	public void addElement(org.sparx.Connector c, Element e) {
@@ -111,9 +95,9 @@ public class ElementRegistry {
 	}
 	
 	/**
-	 * Method stub for further implementation.
-	 * @param	x	
-	 * @param	e	
+	 * Add an Enterprise Architect element and the corresponding element
+	 * @param	x	The UML model element
+	 * @param	e	The Enterprise Architect element
 	 */
 	
 	public void addElement(org.sparx.Element x, Element e) {
@@ -125,8 +109,8 @@ public class ElementRegistry {
 	
 	/**
 	 * Add an Enterprise Architect package and the corresponding element
-	 * @param	p	
-	 * @param	e	
+	 * @param	p	The UML model element
+	 * @param	e	The Enterprise Architect package
 	 */
 	
 	public void addElement(org.sparx.Package p, Element e) {
@@ -139,8 +123,8 @@ public class ElementRegistry {
 	
 	/**
 	 * Add an element and its GUID entry
-	 * @param	guid	
-	 * @param	e	
+	 * @param	guid	The GUID of the element
+	 * @param	e	The UML model element
 	 */
 	
 	public void addElementGuid(String guid, Element e) {
@@ -154,9 +138,9 @@ public class ElementRegistry {
 	}
 	
 	/**
-	 * Method stub for further implementation.
-	 * @param	id	
-	 * @param	guid	
+	 * Add a GUID to Enterprise Architect ID mapping entry
+	 * @param	id	The Enterprise Architect ID
+	 * @param	guid	The GUID of the element
 	 */
 	
 	private void addElementIdGuid(int id, String guid) {
@@ -222,7 +206,7 @@ public class ElementRegistry {
 	}
 	
 	/**
-	 * Method stub for further implementation.
+	 * Adds an string to interface map
 	 * @param	e	
 	 * @param	iface	
 	 */

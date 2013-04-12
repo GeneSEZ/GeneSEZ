@@ -13,13 +13,14 @@ import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.EnumerationLiteral;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Stereotype;
+import org.eclipse.uml2.uml.Type;
 import org.genesez.adapter.ea.ContentRegistry;
 import org.genesez.adapter.ea.ProfileRegistry;
 import org.sparx.ConnectorTag;
 import org.sparx.TaggedValue;
 
 /**
- * Class for transforming stereotypes
+ * Class for applying stereotypes
  * @author christian
  */
 
@@ -33,7 +34,7 @@ public class ApplyStereotypeTransformer {
 	
 	// -- generated constructors --------------------------------------------
 	/**
-	 * Constructor for class '<em><b>ApplyStereotypeTransformer</b></em>'.
+	 * private constructor for singleton
 	 */
 	
 	private ApplyStereotypeTransformer() {
@@ -77,10 +78,10 @@ public class ApplyStereotypeTransformer {
 	}
 	
 	/**
-	 * Method stub for further implementation.
-	 * @param	eaConnector	
-	 * @param	umlElement	
-	 * @param	st	
+	 * Applies one tagged value of a stereotype to the element
+	 * @param	eaConnector	EA connector
+	 * @param	umlElement	the UML element
+	 * @param	st	The stereotype
 	 * @return	
 	 */
 	
@@ -103,29 +104,22 @@ public class ApplyStereotypeTransformer {
 	/**
 	 * Applies one tagged value of a stereotype to the element
 	 * @param	umlElement	
-	 * @param	_st	The stereotype
-	 * @param	_p	The property of the tagged value
+	 * @param	st	
+	 * @param	p	
 	 * @param	t	The tagged value from the model
 	 * @return	
 	 */
 	
-	private Element applyTaggedValueConnector(Element umlElement, Stereotype _st, Property _p, org.sparx.ConnectorTag t) {
+	private Element applyTaggedValueConnector(Element umlElement, Stereotype st, Property p, org.sparx.ConnectorTag t) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363363073292_705579_3129) ENABLED START */
-		LOG.debug("Set tagged value " + _p.getName() + " to " + t.GetValue());
-		if (_p.getType().getName().equals("String")) {
-			umlElement.setValue(_st, _p.getName(), t.GetValue());
-		} else if (_p.getType().getName().equals("Integer")) {
-			umlElement.setValue(_st, _p.getName(), Integer.valueOf(t.GetValue()));
-		} else if (_p.getType().getName().equals("Boolean")) {
-			umlElement.setValue(_st, _p.getName(), Boolean.valueOf(t.GetValue()));
-		} else if (_p.getType() instanceof Enumeration) {
-			LOG.debug("Tagged value is an enumeration");
-			Enumeration e = (Enumeration) _p.getType();
-			EnumerationLiteral l = e.getOwnedLiteral(t.GetValue());
-			umlElement.setValue(_st, _p.getName(), l);
-		} else {
-			LOG.fatal("Setting tagged values of type " + _p.getType() + " is not implemented");
-		}
+		LOG.debug("Set tagged value " + p.getName() + " to " + t.GetValue());
+		
+		// get the right object from property type
+		Object obj = getObjectFromTypeName(p, t.GetValue());
+		umlElement.setValue(st, p.getName(), obj);
+		
+		LOG.debug("The tagged value of connector is " + obj != null ? obj.getClass() : "NULL");
+		
 		return umlElement;
 		/* PROTECTED REGION END */
 	}
@@ -143,6 +137,7 @@ public class ApplyStereotypeTransformer {
 		for (String s : eaElement.GetStereotypeList().split(",")) {
 			LOG.debug("Search for stereotype " + s);
 			Stereotype st = ProfileRegistry.INSTANCE.getStereotype(s);
+			// does the UML element fit the stereotype
 			if (umlElement.isStereotypeApplicable(st)) {
 				LOG.debug("Apply stereotype " + st.getName());
 				EObject o = umlElement.applyStereotype(st);
@@ -162,18 +157,18 @@ public class ApplyStereotypeTransformer {
 	 * Method stub for further implementation.
 	 * @param	eaElement	
 	 * @param	umlElement	
-	 * @param	_st	
+	 * @param	st	
 	 */
 	
-	private void applyTaggedValuesElement(org.sparx.Element eaElement, Element umlElement, Stereotype _st) {
+	private void applyTaggedValuesElement(org.sparx.Element eaElement, Element umlElement, Stereotype st) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363363532753_365707_3157) ENABLED START */
 		LOG.debug("Applying tagged values");
-		for (Property p : _st.getAttributes()) {
+		for (Property p : st.getAttributes()) {
 			LOG.debug("Tagged value " + p.getName());
 			for (org.sparx.TaggedValue t : eaElement.GetTaggedValues()) {
 				if (p.getName().equals(t.GetName())) {
 					LOG.debug("Found use of tagged value " + p.getName());
-					applyTaggedValueElement(umlElement, _st, p, t);
+					applyTaggedValueElement(umlElement, st, p, t);
 				}
 			}
 		}
@@ -181,30 +176,51 @@ public class ApplyStereotypeTransformer {
 	}
 	
 	/**
-	 * Method stub for further implementation.
-	 * @param	umlElement	
-	 * @param	_st	
-	 * @param	_p	
-	 * @param	_t	
+	 * Applies one tagged value of a stereotype to the element
+	 * @param	umlElement	the UML element
+	 * @param	st	the UML stereotype
+	 * @param	p	UML property
+	 * @param	t	the EA tagged value
 	 */
 	
-	private void applyTaggedValueElement(Element umlElement, Stereotype _st, Property _p, TaggedValue _t) {
+	private void applyTaggedValueElement(Element umlElement, Stereotype st, Property p, TaggedValue t) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363363756025_154382_3164) ENABLED START */
-		LOG.debug("Set tagged value " + _p.getName() + " to " + _t.GetValue());
-		if (_p.getType().getName().equals("String")) {
-			umlElement.setValue(_st, _p.getName(), _t.GetValue());
-		} else if (_p.getType().getName().equals("Integer")) {
-			umlElement.setValue(_st, _p.getName(), Integer.valueOf(_t.GetValue()));
-		} else if (_p.getType().getName().equals("Boolean")) {
-			umlElement.setValue(_st, _p.getName(), Boolean.valueOf(_t.GetValue()));
-		} else if (_p.getType() instanceof Enumeration) {
+		LOG.debug("Set tagged value " + p.getName() + " to " + t.GetValue());
+		
+		// get the right object from property type
+		Object obj = getObjectFromTypeName(p, t.GetValue());
+		umlElement.setValue(st, p.getName(), obj);
+		
+		LOG.debug("The tagged value of element is " + obj != null ? obj.getClass() : "NULL");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Returns the right Object from the propertyType. i.e. Boolean, Integer, etc.
+	 * @param	property	The UML property
+	 * @param	typeName	The Name of the Tag.
+	 * @return	The identified object. If not recognized, NULL is returned.
+	 */
+	
+	private Object getObjectFromTypeName(Property property, String typeName) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1365775148844_86200_1966) ENABLED START */
+		Type type = property.getType();
+		if (type.getName().equals("String")) {
+			return typeName;
+		} else if (type.equals("Integer")) {
+			return Integer.valueOf(typeName);
+		} else if (type.getName().equals("Boolean")) {
+			return Boolean.valueOf(typeName);
+		} else if (type instanceof Enumeration) {
 			LOG.debug("Tagged value is an enumeration");
-			Enumeration e = (Enumeration) _p.getType();
-			EnumerationLiteral l = e.getOwnedLiteral(_t.GetValue());
-			umlElement.setValue(_st, _p.getName(), l);
+			Enumeration e = (Enumeration) type;
+			EnumerationLiteral l = e.getOwnedLiteral(typeName);
+			return l;
 		} else {
-			LOG.fatal("Setting tagged values of type " + _p.getType() + " is not implemented");
+			LOG.fatal("Setting tagged values of type " + property.getType() + " is not implemented");
 		}
+		
+		return null;
 		/* PROTECTED REGION END */
 	}
 	

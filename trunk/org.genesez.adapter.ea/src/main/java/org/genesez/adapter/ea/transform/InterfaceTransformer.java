@@ -35,19 +35,18 @@ public class InterfaceTransformer extends AbstractElementTransformer {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363944745586_266742_2480) ENABLED START */
 		LOG.debug("Creating Interface " + element.GetName() + ", parent " + parent.getName());
 		Interface iface = parent.createOwnedInterface(element.GetName());
-				
+		
 		setVisibility(element, iface);
 		
 		this.umlElement = iface;
 		this.eaElement = element;
-
+		
 		this.transformConnectors();
 		this.transformAttributes();
 		this.transformOperations();
 		
-//		ElementRegistry.instance.addElement(_e, iface);
 		InterfaceFactory.INSTANCE.setInterfacePackage(parent);
-		ElementRegistry.INSTANCE.addInterface(element, iface);				
+		ElementRegistry.INSTANCE.addInterface(element, iface);
 		return iface;
 		/* PROTECTED REGION END */
 	}
@@ -83,7 +82,7 @@ public class InterfaceTransformer extends AbstractElementTransformer {
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363944629075_389873_2450) ENABLED START */
-	// TODO: put your own implementation code here
+	
 	/* PROTECTED REGION END */
 	
 }

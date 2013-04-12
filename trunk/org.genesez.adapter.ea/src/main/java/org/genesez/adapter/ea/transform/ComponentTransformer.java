@@ -38,8 +38,8 @@ public class ComponentTransformer extends AbstractElementTransformer {
 		Component component = UMLFactory.eINSTANCE.createComponent();
 		component.setName(element.GetName());
 		
-		// DEBUGGING
-		//		ElementDebugger.INSTANCE.printElement(_e);
+		// debugging messages
+		ElementDebugger.INSTANCE.printElement(element);
 		
 		// set package for methods
 		this.umlPackage = parent;
@@ -79,6 +79,7 @@ public class ComponentTransformer extends AbstractElementTransformer {
 		// if it's no instance add to registry
 		// if(addElement)
 		ElementRegistry.INSTANCE.addElement(element, component);
+		
 		return component;
 		/* PROTECTED REGION END */
 	}
@@ -120,8 +121,10 @@ public class ComponentTransformer extends AbstractElementTransformer {
 			
 			ElementRegistry.INSTANCE.addElement(element, component);
 			
-			for (org.sparx.Element e : element.GetElements())
+			// recursive call of every component
+			for (org.sparx.Element e : element.GetElements()) {
 				this.transformRecursive(e, component);
+			}
 			
 		} else {
 			LOG.error("Element type not known!");
@@ -158,7 +161,8 @@ public class ComponentTransformer extends AbstractElementTransformer {
 			
 			ConnectorFactory.INSTANCE.addComponentAssociation(connector);
 			
-			//			ElementDebugger.INSTANCE.printConnector(_c);
+			// debugging messages
+			ElementDebugger.INSTANCE.printConnector(connector);
 		} else {
 			LOG.debug("Connector " + connector.GetType() + " is not implemented.");
 		}
@@ -171,7 +175,7 @@ public class ComponentTransformer extends AbstractElementTransformer {
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363942855327_489308_2295) ENABLED START */
-	// TODO: put your own implementation code here
+	
 	/* PROTECTED REGION END */
 	
 }

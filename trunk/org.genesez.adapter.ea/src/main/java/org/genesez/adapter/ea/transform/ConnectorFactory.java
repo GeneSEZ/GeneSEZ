@@ -45,6 +45,8 @@ public class ConnectorFactory {
 	
 	public static final ConnectorFactory INSTANCE = new ConnectorFactory();
 	
+	public static final String NAVIGABLE_STRING = "Navigable";
+	
 	// -- generated constructors --------------------------------------------
 	/**
 	 * Constructor for class '<em><b>ConnectorFactory</b></em>'.
@@ -58,7 +60,11 @@ public class ConnectorFactory {
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
-	 * Method stub for further implementation.
+	 * Starts the post processing for all connectors
+	 * -> dependencies
+	 * -> information flows
+	 * -> connectors (delegate)
+	 * -> associations
 	 */
 	
 	public void startProcessingConnectors() {
@@ -86,7 +92,7 @@ public class ConnectorFactory {
 	}
 	
 	/**
-	 * Method stub for further implementation.
+	 * add an association for the post processor
 	 * @param	c	
 	 */
 	
@@ -153,7 +159,7 @@ public class ConnectorFactory {
 	}
 	
 	/**
-	 * Method stub for further implementation.
+	 * processes all delegation connectors
 	 */
 	
 	public void processDelegate() {
@@ -166,10 +172,11 @@ public class ConnectorFactory {
 			Element owner = element.getOwner();
 			Component component = null;
 			
-			if (owner instanceof Component)
+			if (owner instanceof Component) {
 				component = (Component) element.getOwner();
-			else
+			} else {
 				continue;
+			}
 			
 			Connector connector = UMLFactory.eINSTANCE.createConnector();
 			component.getOwnedConnectors().add(connector);
@@ -179,8 +186,9 @@ public class ConnectorFactory {
 				Port p = null;
 				if (elem instanceof Port) {
 					p = (Port) elem;
-				} else
+				} else {
 					break;
+				}
 				ConnectorEnd end = connector.createEnd();
 				end.setRole(p);
 			}
@@ -199,8 +207,10 @@ public class ConnectorFactory {
 		for (String guid : dependencyMap.keySet()) {
 			
 			List<Integer> list = dependencyMap.get(guid);
-			if (list.size() > 2)
-				LOG.error("Dependency to more than 2 ports not implemented!");
+			if (list.size() > 2) {
+				LOG.error("Dependency to more than 2 ports not implemented yet! Continue with next.");
+				continue;
+			}
 			
 			Element elementOne = ElementRegistry.INSTANCE.getElementById(list.get(0));
 			Element elementTwo = ElementRegistry.INSTANCE.getElementById(list.get(1));
@@ -211,6 +221,7 @@ public class ConnectorFactory {
 				first = (Port) elementOne;
 				second = (Port) elementTwo;
 			} else {
+				// go on if those are not two ports
 				continue;
 			}
 			
@@ -279,7 +290,7 @@ public class ConnectorFactory {
 			org.sparx.Connector eaElement = associationMap.get(guid);
 			
 			// debug
-			// ElementDebugger.INSTANCE.printConnector(eaElement);
+			ElementDebugger.INSTANCE.printConnector(eaElement);
 			
 			org.sparx.ConnectorEnd supplierEnd = eaElement.GetSupplierEnd();
 			org.sparx.ConnectorEnd clientEnd = eaElement.GetClientEnd();
@@ -307,10 +318,10 @@ public class ConnectorFactory {
 			
 			// Component component = (Component) supplier.getOwner();
 			
-			org.eclipse.uml2.uml.Package _p = supplier.getNearestPackage();
+			org.eclipse.uml2.uml.Package nearestPackage = supplier.getNearestPackage();
 			
 			// create the navigation
-			if (supplierEnd.GetNavigable().equals("Navigable")) {
+			if (supplierEnd.GetNavigable().equals(NAVIGABLE_STRING)) {
 				// association.getNavigableOwnedEnds().add(supplierProperty);
 				LOG.debug("Supplier is Navigable!");
 				property = supplier.createQualifier(supplier.getName(), supplier.getType());
@@ -324,7 +335,7 @@ public class ConnectorFactory {
 			// multiplicity
 			createLowerUpperCardinality(property, supplierEnd);
 			
-			if (clientEnd.GetNavigable().equals("Navigable")) {
+			if (clientEnd.GetNavigable().equals(NAVIGABLE_STRING)) {
 				LOG.debug("Client is Navigable!");
 				property = client.createQualifier(client.getName(), client.getType());
 				association.getMemberEnds().add(property);
@@ -336,8 +347,8 @@ public class ConnectorFactory {
 			// multiplicity
 			createLowerUpperCardinality(property, clientEnd);
 			
-			LOG.debug("Package = " + _p.getName() + "\tComponent= " + _p.getName());
-			_p.getPackagedElements().add(association);
+			LOG.debug("Package = " + nearestPackage.getName() + "\tComponent= " + nearestPackage.getName());
+			nearestPackage.getPackagedElements().add(association);
 			
 			association = (Association) ApplyStereotypeTransformer.INSTANCE.applyStereotypes(eaElement, association);
 			ElementRegistry.INSTANCE.addElement(eaElement, association);
@@ -387,14 +398,12 @@ public class ConnectorFactory {
 			LOG.debug("Associationname = [" + eaElement.GetName() + "]");
 			
 			// set package
-			//			Package nearestPackage = supplier.getNearestPackage();
-			//			association.setPackage(nearestPackage);
 			supplier.getPackagedElements().add(association);
 			
 			Property property = null;
 			
 			// first association memberEnd
-			if (supplierEnd.GetNavigable().equals("Navigable")) {
+			if (supplierEnd.GetNavigable().equals(NAVIGABLE_STRING)) {
 				property = client.createOwnedAttribute(null, supplier);
 				association.getMemberEnds().add(property);
 			} else {
@@ -405,7 +414,7 @@ public class ConnectorFactory {
 			createLowerUpperCardinality(property, supplierEnd);
 			
 			// second association memberEnd
-			if (clientEnd.GetNavigable().equals("Navigable")) {
+			if (clientEnd.GetNavigable().equals(NAVIGABLE_STRING)) {
 				property = supplier.createOwnedAttribute(null, client);
 				association.getMemberEnds().add(property);
 			} else {
@@ -552,8 +561,12 @@ public class ConnectorFactory {
 		for (String guid : informationFlowMap.keySet()) {
 			
 			List<Integer> list = informationFlowMap.get(guid);
-			if (list.size() > 2)
+			
+			// logging for special case
+			if (list.size() > 2) {
 				LOG.fatal("InformationFlow to more than 2 ports not implemented!");
+			}
+			
 			Port first = (Port) ElementRegistry.INSTANCE.getElementById(list.get(0));
 			Port second = (Port) ElementRegistry.INSTANCE.getElementById(list.get(1));
 			
@@ -628,11 +641,13 @@ public class ConnectorFactory {
 						sb.append(". Dependency=" + dep.getName());
 						
 						sb.append("\nSuppliers:\n");
-						for (NamedElement ne : dep.getSuppliers())
+						for (NamedElement ne : dep.getSuppliers()) {
 							sb.append("\n" + ne.getName());
+						}
 						sb.append("\nClients:\n");
-						for (NamedElement ne : dep.getClients())
+						for (NamedElement ne : dep.getClients()) {
 							sb.append("\t" + ne.getName());
+						}
 					} else if (element instanceof Package) {
 						Package pack = (Package) element;
 						sb.append(". Package=" + pack.getName());
