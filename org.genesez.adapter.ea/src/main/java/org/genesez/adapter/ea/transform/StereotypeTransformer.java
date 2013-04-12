@@ -34,11 +34,9 @@ public class StereotypeTransformer extends AbstractElementTransformer {
 	
 	public Stereotype transform(org.sparx.Element element, Profile parent) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363954738823_497759_2867) ENABLED START */
-		LOG.debug("Creating Stereotype " + element.GetName() + ", parent "
-				+ parent.getName() +", abstract(" + element.GetAbstract() + ")");
-
-		Stereotype stereotype = parent.createOwnedStereotype(element.GetName(), element
-				.GetAbstract().equals("0")? false : true);
+		LOG.debug("Creating Stereotype " + element.GetName() + ", parent " + parent.getName() + ", abstract(" + element.GetAbstract() + ")");
+		
+		Stereotype stereotype = parent.createOwnedStereotype(element.GetName(), element.GetAbstract().equals("0") ? false : true);
 		
 		this.umlElement = stereotype;
 		this.eaElement = element;

@@ -78,7 +78,7 @@ public class ModelTransformer extends AbstractPackageTransformer {
 	protected static Package load(URI uri) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363340418177_894154_2062) ENABLED START */
 		LOG.fatal("LOADING PACKAGE URI -> " + uri.toFileString());
-		org.eclipse.uml2.uml.Package package_ = null;
+		org.eclipse.uml2.uml.Package tempPackage = null;
 		
 		ResourceSet rs = new ResourceSetImpl();
 		
@@ -86,7 +86,7 @@ public class ModelTransformer extends AbstractPackageTransformer {
 			
 			Resource resource = rs.getResource(uri, true);
 			
-			package_ = (org.eclipse.uml2.uml.Package) EcoreUtil.getObjectByType(
+			tempPackage = (org.eclipse.uml2.uml.Package) EcoreUtil.getObjectByType(
 			
 			resource.getContents(), UMLPackage.Literals.PACKAGE);
 			
@@ -98,7 +98,7 @@ public class ModelTransformer extends AbstractPackageTransformer {
 			
 		}
 		
-		return package_;
+		return tempPackage;
 		/* PROTECTED REGION END */
 	}
 	
@@ -108,7 +108,9 @@ public class ModelTransformer extends AbstractPackageTransformer {
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363340173835_292420_2022) ENABLED START */
-	// TODO: put your own implementation code here
+	
+	// :)
+	
 	/* PROTECTED REGION END */
 	
 }

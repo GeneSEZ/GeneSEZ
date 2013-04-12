@@ -21,7 +21,7 @@ import org.eclipse.uml2.uml.UMLFactory;
 import org.genesez.adapter.ea.ElementRegistry;
 
 /**
- * Please describe the responsibility of your class in your modeling tool.
+ * transforms activity components
  * @author christian
  */
 
@@ -30,6 +30,12 @@ public class ActivityTransformer extends AbstractElementTransformer {
 	// -- generated attribute, constant + association declarations ----------
 	
 	private static final Log LOG = LogFactory.getLog(ActivityTransformer.class);
+	
+	public static final int INITIAL_NODE = 100;
+	
+	public static final int ACTIVITY_FINAL_NODE = 101;
+	
+	public static final int FLOW_FINAL_NODE = 102;
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
@@ -152,15 +158,15 @@ public class ActivityTransformer extends AbstractElementTransformer {
 			LOG.debug("Element is an Action");
 			CallOperationActionTransformer t = new CallOperationActionTransformer();
 			node = t.transform(e, (Activity) this.umlElement);
-		} else if (e.GetType().equals("StateNode") && e.GetSubtype() == 100) {
+		} else if (e.GetType().equals("StateNode") && e.GetSubtype() == INITIAL_NODE) {
 			LOG.debug("Element is an InitialNode");
 			InitialNodeTransformer t = new InitialNodeTransformer();
 			node = t.transform(e, (Activity) this.umlElement);
-		} else if (e.GetType().equals("StateNode") && e.GetSubtype() == 101) {
+		} else if (e.GetType().equals("StateNode") && e.GetSubtype() == ACTIVITY_FINAL_NODE) {
 			LOG.debug("Element is an ActivityFinialNode");
 			ActivityFinalNodeTransformer t = new ActivityFinalNodeTransformer();
 			node = t.transform(e, (Activity) this.umlElement);
-		} else if (e.GetType().equals("StateNode") && e.GetSubtype() == 102) {
+		} else if (e.GetType().equals("StateNode") && e.GetSubtype() == FLOW_FINAL_NODE) {
 			LOG.debug("Element is a FlowFinalNode");
 			FlowFinalNodeTransformer t = new FlowFinalNodeTransformer();
 			node = t.transform(e, (Activity) this.umlElement);
