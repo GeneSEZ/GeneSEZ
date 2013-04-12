@@ -198,7 +198,7 @@ public class ApplyStereotypeTransformer {
 	/**
 	 * Returns the right Object from the propertyType. i.e. Boolean, Integer, etc.
 	 * @param	property	The UML property
-	 * @param	typeName	The Name of the Tag.
+	 * @param	typeName	The name of the Tag.
 	 * @return	The identified object. If not recognized, NULL is returned.
 	 */
 	
