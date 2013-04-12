@@ -91,7 +91,7 @@ public class Model2UML extends AbstractWorkflowComponent {
 	 * @param	value	the slot name
 	 */
 	
-	public void setOuputSlot(String value) {
+	public void setOutputSlot(String value) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363339445341_984666_2007) ENABLED START */
 		LOG.debug("Setting outputSlot to " + value);
 		this.outputSlot = value;

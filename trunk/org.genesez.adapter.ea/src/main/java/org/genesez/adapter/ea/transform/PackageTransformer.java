@@ -12,7 +12,11 @@ import org.eclipse.uml2.uml.UMLFactory;
 import org.genesez.adapter.ea.ElementRegistry;
 
 /**
- * Please describe the responsibility of your class in your modeling tool.
+ * This class transforms packages to EMF UML. Other Elements are identified 
+ * which are contained in these packages and their transformation classes are
+ * called.
+ * 
+ * @author Gerrit Beine
  * @author christian
  */
 
@@ -50,7 +54,7 @@ public class PackageTransformer extends AbstractPackageTransformer {
 	 * @param	element	
 	 */
 	
-	protected void transform(org.sparx.Element element) {
+	protected void transformElement(org.sparx.Element element) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363947923410_360235_2625) ENABLED START */
 		LOG.debug("Transforming element " + element.GetName() + ", type: " + element.GetType());
 		
