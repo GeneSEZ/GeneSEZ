@@ -54,7 +54,8 @@ public class ComponentTransformer extends AbstractElementTransformer {
 			
 			Component comp = (Component) ElementRegistry.INSTANCE.getElementById(classfierId);
 			LOG.debug("Creating instance of Component " + element.GetName() + ":" + comp.getName());
-			// createInstanceSpecification(_e, comp);
+			// because it is instantiated as an addressable object
+			component.setIsIndirectlyInstantiated(false);
 			component.setName(element.GetName() + ":" + comp.getName());
 			this.umlPackage.getPackagedElements().add(component);
 			// addElement = false;
@@ -108,6 +109,8 @@ public class ComponentTransformer extends AbstractElementTransformer {
 				LOG.debug("Creating instance of Component " + element.GetName() + ":" + comp.getName());
 				component = UMLFactory.eINSTANCE.createComponent();
 				component.setName(element.GetName() + ":" + comp.getName());
+				// because it is instantiated as an addressable object
+				component.setIsIndirectlyInstantiated(false);
 				// add the component the parent component
 				nextComponent.getPackagedElements().add(component);
 			} else {
