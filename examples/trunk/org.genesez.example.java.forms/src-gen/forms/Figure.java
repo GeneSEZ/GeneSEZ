@@ -31,6 +31,23 @@ public class Figure implements Form, AssociationRole {
 	/** Stores all linked objects of association '<em><b>forms</b></em>' */
 	private java.util.Set<Form> forms = new java.util.HashSet<Form>();
 	
+	private boolean solid;
+	
+	/**
+	 * Returns the value of attribute '<em><b>solid</b></em>'.
+	 */
+	public boolean getSolid() {
+		return solid;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>solid</b></em>'.
+	 * @param	solid	the value to set.
+	 */
+	public void setSolid(boolean solid) {
+		this.solid = solid;
+	}
+	
 	/**
 	 * moves the position by the given delta values within a 2-dimensional 
 	 * coordinate system
@@ -39,8 +56,9 @@ public class Figure implements Form, AssociationRole {
 	 */
 	public void move(double dx, double dy) {
 		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249543362015_69354_283__14_0_b6f02e1_1214478865734_965960_209) ENABLED START */
-		// TODO: implementation of method 'Figure.move(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		for (Form f : forms) {
+			f.move(dx, dy);
+		}
 		/* PROTECTED REGION END */
 	}
 	
@@ -50,8 +68,9 @@ public class Figure implements Form, AssociationRole {
 	 */
 	public void rotate(double phi) {
 		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249543362015_69354_283__14_0_b6f02e1_1212580097609_734698_127) ENABLED START */
-		// TODO: implementation of method 'Figure.rotate(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		for (Form f : forms) {
+			f.rotate(phi);
+		}
 		/* PROTECTED REGION END */
 	}
 	
@@ -62,8 +81,9 @@ public class Figure implements Form, AssociationRole {
 	 */
 	public void rotate(Point center, double phi) {
 		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249543362015_69354_283__14_0_b6f02e1_1214478889937_90346_236) ENABLED START */
-		// TODO: implementation of method 'Figure.rotate(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		for (Form f : forms) {
+			f.rotate(center, phi);
+		}
 		/* PROTECTED REGION END */
 	}
 	
@@ -71,10 +91,11 @@ public class Figure implements Form, AssociationRole {
 	 * changes the color by repainting using the specified color
 	 * @param	color	the color to use for repainting
 	 */
-	public void repaint(Color color) {
+	public void repaint(Color color, boolean solid) {
 		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249543362015_69354_283__16_0_b6f02e1_1249464738828_388422_1023) ENABLED START */
-		// TODO: implementation of method 'Figure.repaint(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		for (Form f : forms) {
+			f.repaint(color, solid);
+		}
 		/* PROTECTED REGION END */
 	}
 	
@@ -84,8 +105,8 @@ public class Figure implements Form, AssociationRole {
 	 */
 	public Point getCenterOfArea() {
 		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249543362015_69354_283__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
-		// TODO: implementation of method 'Figure.getCenterOfArea(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		//TODO: Theoretisch müsste man hier den Mittelpunkt aller Forms holen, und aus dem wiederum den Mittelpunkt
+		return null;
 		/* PROTECTED REGION END */
 	}
 	
@@ -96,8 +117,12 @@ public class Figure implements Form, AssociationRole {
 	 */
 	public boolean isCrossing(Form form) {
 		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249543362015_69354_283__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
-		// TODO: implementation of method 'Figure.isCrossing(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		for (Form f : forms) {
+			if (f.isCrossing(form)) {
+				return true;
+			}
+		}
+		return false;
 		/* PROTECTED REGION END */
 	}
 	

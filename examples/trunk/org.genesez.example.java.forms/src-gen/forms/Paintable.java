@@ -15,7 +15,7 @@ public interface Paintable {
 	 * changes the color by repainting using the specified color
 	 * @param	color	the color to use for repainting
 	 */
-	public void repaint(Color color);
+	public void repaint(Color color, boolean solid);
 	
 	/* PROTECTED REGION ID(java.interface.own.code.declaration._16_0_b6f02e1_1249464729937_936506_1005) ENABLED START */
 	// TODO: put your own implementation code here
