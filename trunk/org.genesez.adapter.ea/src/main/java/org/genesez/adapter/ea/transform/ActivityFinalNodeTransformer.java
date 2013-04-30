@@ -17,7 +17,7 @@ import org.genesez.adapter.ea.ElementRegistry;
  * @author christian
  */
 
-public class ActivityFinalNodeTransformer extends AbstractElementTransformer {
+public class ActivityFinalNodeTransformer extends AbstractActivityNodeTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
 	
@@ -26,25 +26,25 @@ public class ActivityFinalNodeTransformer extends AbstractElementTransformer {
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
-	 * @param	e	
+	 * @param	element	
 	 * @param	parent	
 	 * @return	
 	 */
 	
-	public ActivityFinalNode transform(org.sparx.Element e, Activity parent) {
+	public ActivityFinalNode transform(org.sparx.Element element, Activity parent) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363361340204_695662_2996) ENABLED START */
-		LOG.debug("Creating ActivityFinalNode " + e.GetName() + ", parent " + parent.getName());
+		LOG.debug("Creating ActivityFinalNode " + element.GetName() + ", parent " + parent.getName());
 		
 		ActivityFinalNode node = UMLFactory.eINSTANCE.createActivityFinalNode();
 		node.setActivity(parent);
-		node.setName(e.GetName());
+		node.setName(element.GetName());
 		
 		this.umlElement = node;
-		this.eaElement = e;
+		this.eaElement = element;
 		
 		this.applyStereotypes();
 		
-		ElementRegistry.INSTANCE.addElement(e, node);
+		ElementRegistry.INSTANCE.addElement(element, node);
 		return node;
 		/* PROTECTED REGION END */
 	}

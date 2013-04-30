@@ -21,7 +21,7 @@ import org.genesez.adapter.ea.ProfileRegistry;
  * @author christian
  */
 
-public class FlowFinalNodeTransformer {
+public class FlowFinalNodeTransformer extends AbstractActivityNodeTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
 	
@@ -40,11 +40,14 @@ public class FlowFinalNodeTransformer {
 	public FlowFinalNode transform(org.sparx.Element element, Activity parent) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363939120424_322431_2005) ENABLED START */
 		LOG.debug("Creating FlowFinalNode " + element.GetName() + ", parent " + parent.getName());
+		
 		this.flowFinalNode = UMLFactory.eINSTANCE.createFlowFinalNode();
 		this.flowFinalNode.setActivity(parent);
 		this.flowFinalNode.setName(element.GetName());
 		this.applyStereotypes(element);
+		
 		ElementRegistry.INSTANCE.addElement(element, this.flowFinalNode);
+		
 		return this.flowFinalNode;
 		/* PROTECTED REGION END */
 	}
