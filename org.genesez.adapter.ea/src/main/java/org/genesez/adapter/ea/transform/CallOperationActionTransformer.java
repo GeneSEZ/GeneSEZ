@@ -17,7 +17,7 @@ import org.genesez.adapter.ea.ElementRegistry;
  * @author christian
  */
 
-public class CallOperationActionTransformer extends AbstractElementTransformer {
+public class CallOperationActionTransformer extends AbstractActivityNodeTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
 	

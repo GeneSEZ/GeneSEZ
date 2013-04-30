@@ -18,7 +18,7 @@ import org.genesez.adapter.ea.PostProcessor;
  * @author christian
  */
 
-public class CallBehaviorActionTransformer extends AbstractElementTransformer {
+public class CallBehaviorActionTransformer extends AbstractActivityNodeTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
 	

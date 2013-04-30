@@ -17,7 +17,7 @@ import org.genesez.adapter.ea.ElementRegistry;
  * @author christian
  */
 
-public class MergeNodeTransformer extends AbstractElementTransformer {
+public class MergeNodeTransformer extends AbstractActivityNodeTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
 	

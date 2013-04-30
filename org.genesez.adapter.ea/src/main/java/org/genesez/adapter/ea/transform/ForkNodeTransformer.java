@@ -17,7 +17,7 @@ import org.genesez.adapter.ea.ElementRegistry;
  * @author christian
  */
 
-public class ForkNodeTransformer extends AbstractElementTransformer {
+public class ForkNodeTransformer extends AbstractActivityNodeTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
 	

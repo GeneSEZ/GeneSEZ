@@ -139,7 +139,10 @@ public class ActivityTransformer extends AbstractElementTransformer {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362203391_514284_3045) ENABLED START */
 		LOG.debug("Transforming element " + e.GetName());
 		
+		// define node
 		ActivityNode node = null;
+		
+		IActivityTransformable activityTransformer = null;
 		
 		// Owned activities
 		if (e.GetType().equals("Activity")) {
@@ -148,51 +151,15 @@ public class ActivityTransformer extends AbstractElementTransformer {
 			t.transform(e, (Activity) this.umlElement);
 		}
 		// Call behavior actions
-		else if (e.GetType().equals("Action") && e.GetClassfierID() > 0) {
-			LOG.debug("Element is a CallBehaviorAction");
-			CallBehaviorActionTransformer t = new CallBehaviorActionTransformer();
-			node = t.transform(e, (Activity) this.umlElement);
-		}
-		// All other actions
-		else if (e.GetType().equals("Action")) {
-			LOG.debug("Element is an Action");
-			CallOperationActionTransformer t = new CallOperationActionTransformer();
-			node = t.transform(e, (Activity) this.umlElement);
-		} else if (e.GetType().equals("StateNode") && e.GetSubtype() == INITIAL_NODE) {
-			LOG.debug("Element is an InitialNode");
-			InitialNodeTransformer t = new InitialNodeTransformer();
-			node = t.transform(e, (Activity) this.umlElement);
-		} else if (e.GetType().equals("StateNode") && e.GetSubtype() == ACTIVITY_FINAL_NODE) {
-			LOG.debug("Element is an ActivityFinialNode");
-			ActivityFinalNodeTransformer t = new ActivityFinalNodeTransformer();
-			node = t.transform(e, (Activity) this.umlElement);
-		} else if (e.GetType().equals("StateNode") && e.GetSubtype() == FLOW_FINAL_NODE) {
-			LOG.debug("Element is a FlowFinalNode");
-			FlowFinalNodeTransformer t = new FlowFinalNodeTransformer();
-			node = t.transform(e, (Activity) this.umlElement);
-		} else if (e.GetType().equals("Decision")) {
-			LOG.debug("Element is a DecisionNode");
-			DecisionNodeTransformer t = new DecisionNodeTransformer();
-			node = t.transform(e, (Activity) this.umlElement);
-		} else if (e.GetType().equals("MergeNode")) {
-			LOG.debug("Element is a MergeNode");
-			MergeNodeTransformer t = new MergeNodeTransformer();
-			node = t.transform(e, (Activity) this.umlElement);
-		}
-		// Fork nodes
-		else if (e.GetType().equals("Synchronization") && isForkNode(e)) {
-			LOG.debug("Element is a ForkNode");
-			ForkNodeTransformer t = new ForkNodeTransformer();
-			node = t.transform(e, (Activity) this.umlElement);
-		}
-		// Join nodes
-		else if (e.GetType().equals("Synchronization") && isJoinNode(e)) {
-			LOG.debug("Element is a JoinNode");
-			JoinNodeTransformer t = new JoinNodeTransformer();
-			node = t.transform(e, (Activity) this.umlElement);
+		else {
+			// get the right transformer for the activity
+			activityTransformer = selectTransformer(e);
+			// transform node now
+			node = activityTransformer.transform(e, (Activity) this.umlElement);
 		}
 		
-		if (null != node) {
+		// apply edges if node not null
+		if (node != null) {
 			this.applyActivityEdges(e, node);
 		}
 		/* PROTECTED REGION END */
@@ -287,6 +254,75 @@ public class ActivityTransformer extends AbstractElementTransformer {
 			}
 		}
 		return i > 1;
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * transforms some StateNode, depending on its subtype
+	 * @param	subType	
+	 * @return	
+	 */
+	
+	private IActivityTransformable selectStateNodeTransformer(int subType) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1367313330094_43476_1703) ENABLED START */
+		IActivityTransformable activityTransformer = null;
+		if (subType == INITIAL_NODE) {
+			LOG.debug("Element is an InitialNode");
+			activityTransformer = new InitialNodeTransformer();
+		} else if (subType == ACTIVITY_FINAL_NODE) {
+			LOG.debug("Element is an ActivityFinalNode");
+			activityTransformer = new ActivityFinalNodeTransformer();
+		} else if (subType == FLOW_FINAL_NODE) {
+			LOG.debug("Element is a FlowFinalNode");
+			activityTransformer = new FlowFinalNodeTransformer();
+		}
+		return activityTransformer;
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 * @param	eaElement	
+	 * @return	
+	 */
+	
+	private IActivityTransformable selectTransformer(org.sparx.Element eaElement) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1367329350065_457718_1906) ENABLED START */
+		IActivityTransformable activityTransformer = null;
+		// Call behavior actions
+		if (eaElement.GetType().equals("Action") && eaElement.GetClassfierID() > 0) {
+			LOG.debug("Element is a CallBehaviorAction");
+			activityTransformer = new CallBehaviorActionTransformer();
+		}
+		// All other actions
+		else if (eaElement.GetType().equals("Action")) {
+			LOG.debug("Element is an Action");
+			activityTransformer = new CallOperationActionTransformer();
+		} else if (eaElement.GetType().equals("StateNode")) {
+			activityTransformer = selectStateNodeTransformer(eaElement.GetSubtype());
+		} else if (eaElement.GetType().equals("Decision")) {
+			LOG.debug("Element is a DecisionNode");
+			activityTransformer = new DecisionNodeTransformer();
+		} else if (eaElement.GetType().equals("MergeNode")) {
+			LOG.debug("Element is a MergeNode");
+			activityTransformer = new MergeNodeTransformer();
+		}
+		// Fork nodes
+		else if (eaElement.GetType().equals("Synchronization") && isForkNode(eaElement)) {
+			LOG.debug("Element is a ForkNode");
+			activityTransformer = new ForkNodeTransformer();
+		}
+		// Join nodes
+		else if (eaElement.GetType().equals("Synchronization") && isJoinNode(eaElement)) {
+			LOG.debug("Element is a JoinNode");
+			activityTransformer = new JoinNodeTransformer();
+		}
+		// if null
+		if (activityTransformer == null) {
+			LOG.error("not yet implemented activity feature: " + eaElement.GetType());
+		}
+		
+		return activityTransformer;
 		/* PROTECTED REGION END */
 	}
 	
