@@ -10,7 +10,7 @@ package forms;
  */
 public abstract class AbstractForm implements Form {
 	
-	private Object theShape;
+	protected Object theShape;
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_6_7ac024e_1366642644597_179853_1989) ENABLED START */
 	// TODO: put your own implementation code here

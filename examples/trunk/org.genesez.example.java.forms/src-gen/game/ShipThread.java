@@ -15,10 +15,6 @@ import org.genesez.platform.java.umlsupport.associations.OneAssociation;
 import org.genesez.platform.java.umlsupport.associations.RelatedAssociationRole;
 
 import teaching.WhiteBoard;
-/* 
- *	Do not place import/include statements above this comment, just below. 
- * 	@FILE-ID : (_17_0_6_7ac024e_1366477167003_317743_1555) 
- */
 
 /**
  * Please describe the responsibility of your class in your modeling tool.

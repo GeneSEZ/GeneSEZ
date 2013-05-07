@@ -18,7 +18,7 @@ import org.genesez.platform.java.umlsupport.associations.RelatedAssociationRole;
  *   describes a complex <b>figure</b> by a composition of forms
  * </p>
  */
-public class Figure implements Form, AssociationRole {
+public class Figure extends AbstractForm implements Form, AssociationRole {
 	
 	/** Defines an identifier for each association, used by the association handling library */
 	public enum Associations implements RelatedAssociationRole {
