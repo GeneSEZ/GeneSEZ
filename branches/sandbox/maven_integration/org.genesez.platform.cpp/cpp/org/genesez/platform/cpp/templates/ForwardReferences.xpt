@@ -1,0 +1,21 @@
+«IMPORT gcore»
+
+«EXTENSION org::genesez::util::logging::Logging»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+
+«EXTENSION org::genesez::platform::cpp::scripts::AccessHelper»
+«EXTENSION org::genesez::platform::cpp::scripts::Naming»
+
+«DEFINE Root FOR MClassifier»
+«EXPAND _forwards FOREACH getBidirectionalAssociationTypes()-»
+«ENDDEFINE»
+
+«DEFINE _forwards FOR MClassifier-»
+«EXPAND Namespace::openNS-»
+	class «asTypeName()»;
+«EXPAND Namespace::closeNS-»
+«ENDDEFINE»
+
+«DEFINE _forwards FOR MType-»
+«logDebug("Forward reference for MType " + asTypeName() + " not supported!")-»
+«ENDDEFINE»

@@ -1,0 +1,47 @@
+«IMPORT gcore»
+
+«EXTENSION org::genesez::util::logging::Logging»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+
+«EXTENSION org::genesez::platform::cpp::scripts::Naming»
+«EXTENSION org::genesez::platform::cpp::scripts::AccessHelper»
+«EXTENSION org::genesez::platform::cpp::helper::PackageHelper»
+
+«DEFINE SuperTypes FOR MClassifier -»
+«IF !generalization.isEmpty || !realization.isEmpty -»
+: «EXPAND Generalization -»«EXPAND Realization -»
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE Generalization FOR MClassifier -»
+«IF !generalization.isEmpty-»
+	«FOREACH generalization AS gType SEPARATOR ", "»		
+		public «gType.getFQNS()-»«gType.mapName().asTypeName()-»«IF hasGenericParameter(gType) -»«EXPAND Generic::Generics FOR gType-»«ENDIF-»
+	«ENDFOREACH-»
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE Realization FOR MClassifier -»
+«IF !realization.isEmpty -»	
+	«IF !generalization.isEmpty-»,«ENDIF-»
+	«FOREACH realization AS rType SEPARATOR ", " -»		
+		public «rType.getFQNS()-»«rType.mapName().asTypeName()-»«IF rType.hasGenericParameter() -»«EXPAND Generic::Generics FOR rType-»«ENDIF-»
+	«ENDFOREACH -»
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE TypeDef FOR MProperty -»
+	«IF isTypedef() -»
+		typedef «type.getFQNS()-»«type.name() -»«EXPAND _types-» «name -»;
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE _types FOR MProperty-»
+	«IF hasTypedefType()»
+	<«FOREACH getTypedefType() AS t SEPARATOR ", " -»
+		«t-»
+	 «ENDFOREACH-»
+	>
+	«ENDIF-»
+«ENDDEFINE»

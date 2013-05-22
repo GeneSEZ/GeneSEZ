@@ -1,0 +1,58 @@
+«REM»
+------------------------------------------------------------------------
+Root of C++ code generation templates.
+
+author: Robert Meichsner
+date: 28/11/07
+------------------------------------------------------------------------
+«ENDREM»
+
+«IMPORT gcore»
+
+«EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
+«EXTENSION org::genesez::util::logging::Logging»
+
+«REM»
+------------------------------------------------------------------------
+Public functions
+------------------------------------------------------------------------
+«ENDREM»
+
+«DEFINE Root FOR MModel-»
+«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
+«ENDDEFINE»
+
+
+«REM»
+	process packages
+«ENDREM»
+«DEFINE Root FOR MPackage-»
+«EXPAND Root FOREACH nestedPackage-»
+«EXPAND Root FOREACH classifier-»
+«ENDDEFINE»
+
+«DEFINE Root FOR MInterface-»
+	«EXPAND Interface::Root»
+«ENDDEFINE» 
+
+«DEFINE Root FOR MGeneric-»
+«logInfo("Generics/Templates are not supported!")-»
+«ENDDEFINE»
+
+«DEFINE Root FOR MClass-»	
+	«EXPAND Class::Root-»	
+«ENDDEFINE»
+
+«DEFINE Root FOR MEnumeration -»
+	«EXPAND Enumeration::Root-»
+«ENDDEFINE»
+
+«DEFINE Root FOR MClassifier»
+	«logFatal("Generation for MClassifier " + name + " not supported!")-»
+«ENDDEFINE»
+
+«REM»
+------------------------------------------------------------------------
+Private functions
+------------------------------------------------------------------------
+«ENDREM»
