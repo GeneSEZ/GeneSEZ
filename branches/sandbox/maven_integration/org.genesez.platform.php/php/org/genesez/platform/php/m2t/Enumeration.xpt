@@ -1,0 +1,73 @@
+«IMPORT gcore»
+«REM»
+	Performs the generation of enumerations. Enumerations are not natively supported by php5!
+	They are transformed into final classes with a private constructor and constants.
+	(final interfaces are not supported by php)
+	
+	currently handled:
+	- literals
+	
+	@author	tobias haubold
+	@date	2008-04-09
+	@todo	revise literals with default value, if metamodel supports them
+	@todo	extends, implements, attributes, operations, associations ???
+	@todo	comments
+«ENDREM»
+
+
+
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
+«REM» use the type mapping «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+
+«REM» use php naming conventions «ENDREM»
+«EXTENSION org::genesez::platform::php::util::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates an enumeration
+«ENDREM»
+«DEFINE Root FOR MEnumeration -»
+«EXPAND Comment::Type -»
+final class «asTypeName()» {
+	
+	«EXPAND SectionComment::Literals -»
+	«EXPAND _Literals FOREACH literal -»
+	
+	«EXPAND Comment::Constructor -»
+	private function __construct() {
+	}
+	
+	«EXPAND SectionComment::OwnCode -»
+	«EXPAND _OwnCodeImpl("php.enumeration.own.code." + xmiGuid) -»
+}
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates an enumeration literal
+«ENDREM»
+«DEFINE _Literals FOR MLiteral -»
+	const «asEnumLiteral()» = "«asEnumLiteral()»";
+«ENDDEFINE»
+
+«REM»
+	generates a region for own code declarations
+	@param	id	protected region id
+«ENDREM»
+«DEFINE _OwnCodeImpl(String id) FOR MEnumeration -»
+	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+	// TODO: put your further code for enumeration '«asTypeName()»' here
+	«ENDPROTECT»
+«ENDDEFINE»
