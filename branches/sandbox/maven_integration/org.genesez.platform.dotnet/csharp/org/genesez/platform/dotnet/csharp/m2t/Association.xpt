@@ -1,0 +1,288 @@
+«REM»
+	Association Template for C#
+	
+	@author	Gerrit Beine
+	@date	2008/01/25
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::platform::dotnet::csharp::convention::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate field declaration for an association
+«ENDREM»
+«DEFINE FieldDecl FOR MAssociationRole-»
+«EXPAND _Comment-»
+«IF isPlainAssociation()-»
+	«IF multiplicity == 1-»
+		«EXPAND _FieldDecl(type.mapName().asTypeName(), asAttribute())-»
+	«ELSE-»
+		«EXPAND _FieldImpl(type.mapName().asTypeName(), asAttribute())-»
+	«ENDIF-»
+«ELSE-»
+	«EXPAND _FieldImpl(assocClass().asTypeName(), asAttribute())-»
+«ENDIF»
+«ENDDEFINE»
+
+
+«REM»
+	generate property declaration for an association
+«ENDREM»
+«DEFINE PropertyDecl FOR MAssociationRole-»
+«EXPAND _Comment-»
+«IF isPlainAssociation()-»
+	«IF multiplicity == 1-»
+		«EXPAND _PropertyDecl( type.mapName().asTypeName(), asProperty() )-»
+	«ELSE-»
+		«EXPAND _PropertyDecl( mapCollection() + "<" + type.mapName().asTypeName() + ">",
+                        asProperty() )-»
+	«ENDIF-»
+«ELSE-»
+	«EXPAND _PropertyDecl( mapCollection() + "<" + type.mapName().asTypeName() + ">",
+                        asProperty() )-»
+	«EXPAND _PropertyDecl( mapCollection() + "<" + assocClass().asTypeName() + ">",
+                        asProperty() + assocClass().asTypeName() )-»
+«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	generate property implementation for an association
+«ENDREM»
+«DEFINE PropertyImpl FOR MAssociationRole-»
+«IF isPlainAssociation()-»
+	«IF multiplicity == 1-»
+		«EXPAND _PropertyImpl( type.mapName().asTypeName(),
+							asProperty(), asAttribute() )-»
+	«ELSE-»
+		«EXPAND _PropertyImpl( mapCollection() + "<" + type.mapName().asTypeName() + ">",
+							asProperty(), asAttribute() )-»
+	«ENDIF-»
+«ELSE-»
+	«EXPAND _Comment-»
+	public «mapCollection()»<«type.mapName().asTypeName()»> «asProperty()»
+	{
+		get {
+			«mapCollection("Implementation")»<«type.mapName().asTypeName()»> _result
+				= new «mapCollection("Implementation")»<«type.mapName().asTypeName()»>();
+			foreach ( var _assoc in this.«asAttribute()» ){
+				_result.add( _assoc.«asProperty()» );
+			}
+			return _result;
+		}
+	} 
+	
+	«EXPAND _PropertyImpl( mapCollection() + "<" + assocClass().asTypeName() + ">",
+						asProperty() + assocClass().asTypeName(), asAttribute() )-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate insert into declaration for an association
+«ENDREM»
+«DEFINE InsertDecl FOR MAssociationRole-»
+«IF isPlainAssociation()-»
+	«EXPAND _Modifier» void «asInsertIn()»( «type.mapName().asTypeName()» _insert );
+«ELSE-»
+	«EXPAND _Modifier» void «asInsertIn()»( «assocClass().asTypeName()» _assoc );
+	«EXPAND _Modifier»  «assocClass().asTypeName()» «asInsertIn()»( «type.mapName().asTypeName()» _other );
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate insert into implementation for an association
+«ENDREM»
+«DEFINE InsertImpl FOR MAssociationRole-»
+«EXPAND _Comment-»
+«IF isPlainAssociation()-»
+		public void «asInsertIn()»(«type.mapName().asTypeName()» _insert)
+		{
+	«IF multiplicity == 1-»
+			if ( «asAttribute()» == _insert ) {
+				return;
+			}
+		«IF opposite != null-»
+			if ( «asAttribute()» != null ) {
+				«asAttribute()».«opposite.asRemoveFrom()»( this );
+			}
+		«ENDIF-»
+		«asAttribute()» = _insert;
+	«ELSE-»
+			if ( «asAttribute()».contains( _insert ) ) {
+				return;
+			}
+			«asAttribute()».add( _insert );
+	«ENDIF-»
+	«IF opposite != null -»
+			_insert.«opposite.asInsertIn()»( this );
+	«ENDIF -»
+		}
+«ELSE-»
+		public void «asInsertIn()»(«assocClass().asTypeName()» _assoc)
+		{
+			if ( «asAttribute()».contains( _assoc ) ) {
+				return;
+			}
+			if( _assoc.«opposite.asProperty()»() != this ) {
+				throw new InvalidOperationException("inconsistent association object");
+			}
+			«asAttribute()».add(_at);
+		}
+		
+		public «assocClass().asTypeName()» «asInsertIn()»( «type.mapName().asTypeName()» _other ) {
+	«IF association.end.first() != this -»
+			«assocClass().asTypeName()» _assoc = new «assocClass().asTypeName()»(this, _other);
+	«ELSE -»
+			«assocClass().asTypeName()» _assoc = new «assocClass().asTypeName()»(_other, this);
+	«ENDIF -»
+			«asAttribute()».add( _assoc );
+	«IF opposite != null -»
+			_other.«opposite.asInsertIn()»( _assoc ); 
+	«ENDIF -»
+			return _assoc;
+		}
+«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM»
+	generate remove from declaration for an association
+«ENDREM»
+«DEFINE RemoveDecl FOR MAssociationRole-»
+«IF isPlainAssociation()-»
+	«EXPAND _Modifier» void «asRemoveFrom()»( «type.mapName().asTypeName()» _remove );
+«ELSE-»
+	«EXPAND _Modifier» void «asRemoveFrom()»( «assocClass().asTypeName()» _assoc );
+«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM»
+	generate remove from implementation for an association
+«ENDREM»
+«DEFINE RemoveImpl FOR MAssociationRole-»
+«EXPAND _Comment-»
+«IF isPlainAssociation() »
+	public void «asRemoveFrom()»(«type.mapName().asTypeName()» _remove) {
+	«IF multiplicity == 1 -»
+		if ( «asAttribute()» != _remove ) {
+			return;
+		}
+		«asAttribute()» = null;
+	«ELSE -»
+		if ( ! «asAttribute()».contains( _remove ) ) {
+			return;
+		}
+		«asAttribute()».remove( _remove );
+	«ENDIF -»«EXPAND _Comment-»
+	«IF opposite != null -»
+		_remove.«opposite.asRemoveFrom()»( this );
+	«ENDIF -»
+	}
+«ELSE-»
+	public void «asRemoveFrom()»(«assocClass().asTypeName()» _assoc) {
+		if ( ! «asAttribute()».contains( _assoc ) ) {
+			return;
+		}
+		«asAttribute()».remove( _assoc );
+	«IF opposite != null -»
+		_assoc.«asProperty()»().«opposite.asRemoveFrom()»( _assoc );
+	«ENDIF -»
+	}
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generate field declaration for an association
+«ENDREM»
+«DEFINE _FieldDecl(String type, String name) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		private «type» «name»;
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate field implementation for an association
+«ENDREM»
+«DEFINE _FieldImpl(String type, String name) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		private «type» «name» = new «mapCollection("Implementation")»<«name»>;;
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate property declaration for an association
+«ENDREM»
+«DEFINE _PropertyDecl(String type, String name) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+«IF classifier.metaType == MInterface-»
+		«type» «name»
+«ELSE-»
+		public «type» «name»
+«ENDIF-»
+		{
+			get;
+		}
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate property implementation for an association
+«ENDREM»
+«DEFINE _PropertyImpl(String type, String name, String attribute) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+«IF classifier.metaType == MInterface-»
+		«type» «name»
+«ELSE-»
+		public «type» «name»
+«ENDIF-»
+		{
+			get { return this.«attribute»; }
+		}
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate modifier for an association
+«ENDREM»
+«DEFINE _Modifier FOR MAssociationRole-»
+«IF classifier.metaType != MInterface-»
+		«visibility-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate comment
+«ENDREM»
+«DEFINE _Comment FOR MAssociationRole-»
+«IF hasComment()-»
+		/// «getCommentText(ownedComment)»
+«ENDIF-»
+«ENDDEFINE»
+
