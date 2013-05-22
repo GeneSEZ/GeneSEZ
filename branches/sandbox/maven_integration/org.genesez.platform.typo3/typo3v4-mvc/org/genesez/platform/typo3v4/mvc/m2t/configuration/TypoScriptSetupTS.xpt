@@ -1,0 +1,261 @@
+«IMPORT gcore»
+«REM»
+	Performs the generation of TypoScript "ext_typoscript_setup.txt".
+
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-07-14
+«ENDREM»
+
+«REM» use TYPO3 MVC Extbase access helper scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper»
+
+«REM» use TYPO3 naming context and common naming scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
+«EXTENSION org::genesez::platform::typo3v4::mvc::convention::NamingContext»
+
+«REM» use TYPO3 MVC convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3v4::mvc::convention::Convention»
+
+«REM» use TYPO3 MVC conversion scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3v4::mvc::convention::Conversion»
+
+«REM» use TYPO3 MVC access helper scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the generation of "ext_typoscript_setup.txt".
+«ENDREM»
+«DEFINE Root FOR MModel -»
+«EXPAND ContextSettings -»
+
+«FILE extTypoScriptSetupTSFileNamePath() -»
+«LET fullQualifiedExtensionNameToLowerCase() AS extensionName -»
+«EXPAND PluginConfiguration(extensionName) -»
+«EXPAND ModuleConfiguration(extensionName) -»
+«EXPAND PersistenceClassesMapping -»
+«EXPAND OwnCodeDeclaration("setup.txt.own.code.declaration." + xmiGuid) -»
+«ENDLET -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Sets the naming context for this part of generation.
+	The type mapping context is not needed for this part. 
+«ENDREM»
+«DEFINE ContextSettings FOR MModel -»
+«setInternalNamingContext( namingContextConfiguration() ) -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PluginConfiguration(String extensionName) FOR MModel -»
+«IF !allPlugins().isEmpty -»
+plugin.«extensionName -» {
+	«EXPAND PluginFeature(extensionName) -»
+	«EXPAND PluginPersistence(extensionName) -»
+	«EXPAND PluginView(extensionName) -»
+	«EXPAND OwnPluginCodeDeclaration("setup.txt.own.plugin.code.declaration." + xmiGuid) -»
+}
+
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PluginFeature(String extensionName) FOR MModel -»
+	features {
+		rewrittenPropertyMapper = {$plugin.«extensionName -».features.rewrittenPropertyMapper}
+	}
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PluginPersistence(String extensionName) FOR MModel -»
+	persistence {
+		storagePid = {$plugin.«extensionName -».persistence.storagePid}
+	}
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PluginView(String extensionName) FOR MModel -»
+	view {
+		templateRootPath = {$plugin.«extensionName -».view.templateRootPath}
+		partialRootPath = {$plugin.«extensionName -».view.partialRootPath}
+		layoutRootPath = {$plugin.«extensionName -».view.layoutRootPath}
+	}
+«ENDDEFINE»
+
+
+«REM»
+	Generates a region for own plugin TypoScript declarations.
+«ENDREM»
+«DEFINE OwnPluginCodeDeclaration(String id) FOR MModel -»
+	«PROTECT CSTART '// ' CEND '' ID (id)»
+	// TODO: put your further plugin code declarations here
+	«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ModuleConfiguration(String extensionName) FOR MModel -»
+«IF !allModules().isEmpty -»
+module.«extensionName -» {
+	«EXPAND ModulePersistence(extensionName) -»
+	«EXPAND ModuleView(extensionName) -»
+	«EXPAND OwnModuleCodeDeclaration("setup.txt.own.module.code.declaration." + xmiGuid) -»
+}
+
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ModulePersistence(String extensionName) FOR MModel -»
+	persistence {
+		storagePid = {$module.«extensionName -».persistence.storagePid}
+	}
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ModuleView(String extensionName) FOR MModel -»
+	view {
+		templateRootPath = {$module.«extensionName -».view.templateRootPath}
+		partialRootPath = {$module.«extensionName -».view.partialRootPath}
+		layoutRootPath = {$module.«extensionName -».view.layoutRootPath}
+	}
+«ENDDEFINE»
+
+
+«REM»
+	Generates a region for own module TypoScript declarations.
+«ENDREM»
+«DEFINE OwnModuleCodeDeclaration(String id) FOR MModel -»
+	«PROTECT CSTART '// ' CEND '' ID (id)»
+	// TODO: put your further module code declarations here
+	«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceClassesMapping FOR MModel -»
+«setInternalNamingContext( namingContextGeneral() ) -»
+«setExternalNamingContext( typeMappingContextGeneral() ) -»
+«IF !allPersistenceClassMappings().isEmpty -»
+config.tx_extbase {
+	persistence {
+		classes {
+			«EXPAND PersistenceClassMapping FOREACH allPersistenceClassMappings().sortBy( e | e.name() ) -»
+		}
+	}
+}
+
+«ENDIF -»
+«revertInternalNamingContext() -»
+«revertExternalNamingContext() -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceClassMapping FOR MClass -»
+			«name() -» {
+				mapping {
+					«EXPAND PersistenceClassMappingTableName -»
+					«EXPAND PersistenceClassMappingRecordType -»
+					«EXPAND PersistenceColumnsMapping -»
+				}
+				«EXPAND PersistenceSubclasses -»
+			}
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceClassMapping FOR MType -»
+			«name() -» {
+				«EXPAND PersistenceSubclasses -»
+			}
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceClassMappingTableName FOR MClass -»
+					tableName = «name( namingContextPersistence() )»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceClassMappingRecordType FOR MClass -»
+					recordType = «name()»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceColumnsMapping FOR MClass -»
+«IF !owningPersistencePropertyMappings().isEmpty -»
+					columns {
+						«EXPAND PersistenceColumnMapping FOREACH owningPersistencePropertyMappings().sortBy( e | e.name ) -»
+					}
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceColumnMapping FOR MProperty -»
+						«name( namingContextPersistence() ) -».mapOnProperty = «name()»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceSubclasses FOR MType -»
+«IF !owningSingleTableInheritanceSpecializations().isEmpty -»
+				subclasses {
+					«EXPAND PersistenceSubclass FOREACH owningSingleTableInheritanceSpecializations().sortBy( e | e.name ) -»						
+				}
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceSubclass FOR MClass -»
+					«name() -» = «name()»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a region for own TypoScript declarations.
+«ENDREM»
+«DEFINE OwnCodeDeclaration(String id) FOR MModel -»
+«PROTECT CSTART '// ' CEND '' ID (id)»
+// TODO: put your further code declarations here
+«ENDPROTECT»
+«ENDDEFINE»

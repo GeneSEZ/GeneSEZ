@@ -1,0 +1,258 @@
+«IMPORT gcore»
+«REM»
+	Generating extbase php code comments.
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-04-26
+«ENDREM»
+
+«REM» use GeneSEZ profile access helper scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GeneSEZProfileAccessHelper»
+
+«REM» use TYPO3 profile access helper scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3v4::profile::AccessHelper»
+
+«REM» use common naming scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
+
+«REM» use common conversion scripts «ENDREM»
+«EXTENSION org::genesez::platform::common::Conversion»
+
+«REM» use common user date helper scripts «ENDREM»
+«EXTENSION org::genesez::platform::common::DateHelper»
+
+«REM» use common user info helper scripts «ENDREM»
+«EXTENSION org::genesez::platform::common::UserInfoHelper»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» - - MClassifier - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«REM»
+	Generates a classifier comment (class scope).
+«ENDREM»
+«DEFINE ClassifierDeclaration FOR MClassifier -»
+«EXPAND GeneralPublicLicense -»
+
+/**
+«IF hasComment() -»
+«formatComment() -»
+«ENDIF -»
+ * 
+«EXPAND Annotation::ClassifierDeclaration -»
+ */
+«ENDDEFINE»
+
+
+«REM» - - MAttribute  - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«REM»
+	Generates the documentation for an attribute.
+«ENDREM»
+«DEFINE Attribute FOR MAttribute -»
+	/**
+	«IF hasComment() -»
+	«formatComment(" * ", "\n	") -»
+	 *
+	«ENDIF -» 
+	«EXPAND Annotation::Property -»
+	 */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for an attribute getter method.
+«ENDREM»
+«DEFINE Getter FOR MAttribute -»
+	/**
+	 * Getter for «name()»
+	 *
+	«EXPAND Annotation::Getter -»
+	 */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for a setter method of an attribute.
+«ENDREM»
+«DEFINE Setter FOR MAttribute -»
+	/**
+	 * Setter for «name()»
+	 *
+	«EXPAND Annotation::Setter -»
+	 */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for the 'insert in' method of an attribute with a collection type.
+«ENDREM»
+«DEFINE InsertIn FOR MAttribute -»
+	/**
+	 * InsertIn for «name()»
+	 *
+	«EXPAND Annotation::InsertIn -»
+	 */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for the 'remove from' method of an attribute with a collection type.
+«ENDREM»
+«DEFINE RemoveFrom FOR MAttribute -»
+	/**
+	 * RemoveFrom for «name()»
+	 *
+	«EXPAND Annotation::RemoveFrom -»
+	 */
+«ENDDEFINE»
+
+
+«REM» - - MAssocationRole - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«REM»
+	Generates the documentation for an association attribute.
+«ENDREM»
+«DEFINE Association FOR MAssociationRole -»
+	/**
+	«IF hasComment() -»
+	«formatComment(" * ", "\n	") -»
+	 *
+	«ENDIF -» 
+	«EXPAND Annotation::Property -»
+	 */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for an association getter method.
+«ENDREM»
+«DEFINE Getter FOR MAssociationRole -»
+	/**
+	 * Getter for «name()»
+	 *
+	«EXPAND Annotation::Getter -»
+	 */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for a setter method of an association.
+«ENDREM»
+«DEFINE Setter FOR MAssociationRole -»
+	/**
+	 * Setter for «name()»
+	 *
+	«EXPAND Annotation::Setter -»
+	 */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for the 'insert in' method of an association with a collection type.
+«ENDREM»
+«DEFINE InsertIn FOR MAssociationRole -»
+	/**
+	 * InsertIn for «name()»
+	 *
+	«EXPAND Annotation::InsertIn -»
+	 */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for the 'remove from' method of an association with a collection type.
+«ENDREM»
+«DEFINE RemoveFrom FOR MAssociationRole -»
+	/**
+	 * RemoveFrom for «name()»
+	 *
+	«EXPAND Annotation::RemoveFrom -»
+	 */
+«ENDDEFINE»
+
+
+«REM» - - MOperation  - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«REM»
+	Generates the constructor documentation.
+«ENDREM»
+«DEFINE Constructor FOR MOperation -»
+	/**
+	«IF hasComment() -»
+	«formatComment(" * ", "\n	") -»
+	 *
+	«ENDIF -»
+	«EXPAND Annotation::Constructor -»
+	 */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the destructor documentation.
+«ENDREM»
+«DEFINE Destructor FOR MOperation -»
+	/**
+	«IF hasComment() -»
+	«formatComment(" * ", "\n	") -»
+	 *
+	«ENDIF -»
+	«EXPAND Annotation::Destructor -»
+	 */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for an operation.
+«ENDREM»
+«DEFINE Operation FOR MOperation -»
+	/**
+	«IF hasComment() -»
+	«formatComment(" * ", "\n	") -»
+	 *
+	«ENDIF -»
+	«EXPAND Annotation::Operation -»
+	 */
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» - - MClassifier - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«REM»
+	Every php file needs to have this license information.
+«ENDREM»
+«DEFINE GeneralPublicLicense FOR MClassifier -»
+/***************************************************************
+ *  Copyright notice
+ *
+ *  (c) «getTimeStamp("yyyy") -» «IF model().getT3ExtensionManagerAuthor() != "" -»«model().getT3ExtensionManagerAuthor() -»«ELSE -»«getUserName() -»«ENDIF»
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ **************************************************************/
+«ENDDEFINE»
