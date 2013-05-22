@@ -1,0 +1,33 @@
+import gcore;
+
+extension org::genesez::metamodel::core::util::mapping::TypeMapping;
+
+extension org::genesez::platform::cpp::scripts::Naming;
+
+/**
+ * formats an operation name
+ * @context	the operation to format
+ * @return	the formatted name of the operation
+ */
+String getIncludeGuard(MClassifier this) : asTypeName().toUpperCase() + "_H_";
+
+String getIncludeGuard(MClass this) : asTypeName().toUpperCase() + "_H_";
+
+Set[MType] getIncludes(MClassifier this) :
+	let deps = {} :
+		deps.addAll(property.type.reject(e|e == this)) ->
+		deps.addAll(operation.returnType.reject(e|e == this)) ->
+		deps.addAll(operation.parameter.type.reject(e|e == this)) ->
+		deps.addAll(realization.reject(e | e == this)) ->
+		deps.addAll(generalization.reject(e| e == this)) ->
+		deps.toSet();
+		
+Set[String] getCollectionIncludes(MClassifier this) :	
+	let deps = {} :
+		deps.addAll(property.select(e|e.multiplicity != 1).mapCollection("Include")) ->
+		deps.addAll(operation.parameter.select(e|e.multiplicity != 1).mapCollection("Include")) ->
+		deps.addAll(operation.return.select(e|e.multiplicity != 1).mapCollection("Include")) ->
+		deps.toSet();
+		
+String getRelativePath(MClassifier this, MClassifier other) : JAVA
+	org.genesez.platform.cpp.helper.IncludeHelper.getRelativePath(org.genesez.metamodel.gcore.MClassifier, org.genesez.metamodel.gcore.MClassifier);
