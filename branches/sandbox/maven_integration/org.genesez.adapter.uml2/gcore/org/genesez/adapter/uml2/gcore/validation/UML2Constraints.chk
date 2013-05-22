@@ -1,0 +1,90 @@
+/**
+ * Validates an uml2 model for transformation into a GeneSEZ model
+ * 
+ * @author	tobias haubold
+ * @date	2008-03-27
+ * @version	alpha
+ */
+
+// based uml meta model
+import uml;
+
+extension org::genesez::adapter::uml2::Helper;
+extension org::genesez::util::logging::Logging;
+
+
+/**
+ * Checks all applied UML profiles if they are resolved.
+ */
+context Model WARNING "Unresolved UML Profile(s), transformation may crash!: " + getAllAppliedProfiles().select( p|p.isProxy() ) :
+	!getAllAppliedProfiles().exists( p|p.isProxy() );
+
+/**
+ * Checks all imported packages if they are resolved.
+ */
+context Model WARNING "Unresolved UML package import detected, transformation may crash!: " + getImportedPackages().select(e|e.isProxy()) :
+	!getImportedPackages().exists(e|e.isProxy());
+
+/**
+ * Checks all imported elements if they are resolved.
+ */
+context Model WARNING "Unresolved UML element import detected, transformation may crash!: " + getImportedElements().select(e|e.isProxy()) :
+	!getImportedElements().exists(e|e.isProxy());
+
+/**
+ * Checks if an element is not resolved.
+ */
+context Element WARNING "Proxy element detected! " + this + " -> " + fqn():
+	!isProxy();
+
+/**
+ * checks if the name of a named element contains only valid characters
+ * valid characters are: letters, numbers, underscores
+ * @return	false, if the name contains other characters, otherwise true
+ */
+context NamedElement WARNING "GeneSEZ UML2 Adapter: name contains invalid characters: " + metaType + ", " + fqn() :
+	switch (true) {
+		case metaType == Model : name.matches("(\\w|\\.)+")
+		case metaType == Package : true
+		case {Classifier, EnumerationLiteral}.contains(metaType) :
+			name.matches("(\\w)+")
+		case metaType == Operation : name.matches("(\\w)+") || isConstructor((Operation)this) || isDestructor((Operation)this)
+		case metaType == Parameter && ((Parameter)this).direction.toString() != "return" : name.matches("(\\w|\\.)+")
+		case metaType == Property : 
+			( 
+				((Property)this).association != null && ((Property)this).class == null 
+					? true
+					: name.matches("(\\w)+")
+			)
+		default : true
+	};
+
+/**
+ * checks if a property has a type or not
+ * @return  false, if the type is not set on the property, otherwise true
+ */
+context Property ERROR "GeneSEZ UML2 Adapter: property has no type: " + fqn() :
+	type != Void || type != null;
+
+/**
+ * checks if an association end property has more than one qualifier attribute
+ * @return	false, if the property has more than one qualified attribute
+ */
+context Property ERROR "GeneSEZ UML2 Adapter: qualified associations with more than one qualifier attribute are currently not supported" :
+	qualifier.size < 2;
+
+/**
+ * checks if a parameter has a type or not
+ * @return	false, if the parameter has no return type, otherwise true
+ */
+context Parameter ERROR "GeneSEZ UML2 Adapter: parameter has no type: " + fqn() :
+	type != Void || type != null;
+
+
+/**
+ * checks if an operation has a return type or not
+ * @return	false, if the operation has no return type, otherwise true
+ */
+context Operation WARNING "GeneSEZ UML2 Adapter: operation has no return type: " + fqn() :
+	type != Void || type != null;
+
