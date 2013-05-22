@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="org.genesez.metamodel.traceability" basedir="." default="build">
+	
+	<import file="../org.eclipse.emf.ecore.adapter.uml2/ant/ecore2java.xml" />
+	
+	
+	<target name="build" description="Performs a full build: ecore2java."
+		depends="ecore2java.transformation" />
+	
+	
+	<target name="ecore2java.transformation" description="Generates the metamodel implementation (java source code).">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="src-gen">
+				<include name="**/*" />
+			</fileset>
+		</delete>
+		<antcall target="ecore2java">
+			<param name="base.dir" value="${basedir}" />
+			<param name="ecore.file" value="model/gtrace.ecore" />
+			<param name="genmodel.file" value="model/gtrace.genmodel" />
+			<param name="ecore2java.path" value="src-gen" />
+			<param name="ecore.package" value="http://genesez.org/metamodel/traceability" />
+		</antcall>
+	</target>
+</project>
