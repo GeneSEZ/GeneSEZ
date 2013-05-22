@@ -1,0 +1,84 @@
+«IMPORT gcore»
+«REM»
+	Entry point for generating TYPO3 MVC fluid template "New.html".
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-08-24
+«ENDREM»
+
+«REM» use TYPO3 naming context and common naming scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
+«EXTENSION org::genesez::platform::typo3v4::mvc::convention::NamingContext»
+
+«REM» use TYPO3 MVC conversion scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3v4::mvc::convention::Conversion»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the generation of "Edit.html" for the backend and frontend.
+«ENDREM»
+«DEFINE Root FOR MClass -»
+«EXPAND ContextSettings -»
+
+«EXPAND BackendRoot -»
+«EXPAND FrontendRoot -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Sets the naming context for this part of generation.
+	The type mapping context is not needed for this part. 
+«ENDREM»
+«DEFINE ContextSettings FOR MClass -»
+«setInternalNamingContext( namingContextObject() ) -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the generation of "New.html" for the backend.
+«ENDREM»
+«DEFINE BackendRoot FOR MClass -»
+«FILE newHTMLBackendFileNamePath() -»
+«EXPAND NewContent -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the generation of "New.html" for the frontend.
+«ENDREM»
+«DEFINE FrontendRoot FOR MClass -»
+«FILE newHTMLFrontendFileNamePath() -»
+«EXPAND NewContent -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«DEFINE NewContent FOR MClass -»
+<f:layout name="Default" />
+
+<f:section name="main">
+	<h1>New «name( namingContextPHPCompliant() ) -»</h1>
+
+	<f:flashMessages />
+
+	<f:render partial="FormErrors" />
+
+	<f:form method="post" action="create" name="«name() -»" object="{«name() -»}">
+		<f:render partial="«name( namingContextPHPCompliant() ) -»/FormFields" />
+		<f:form.submit value="Create" />
+	</f:form>
+</f:section>
+«ENDDEFINE»

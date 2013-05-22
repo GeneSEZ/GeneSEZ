@@ -1,0 +1,88 @@
+/**
+ * Simplifies access to genesez models + makes working with the genesez metamodel more easier.
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+ * @date	2011-09-12
+ */
+
+// based on genesez meta model
+import gcore;
+
+// use TYPO3 profile + access helper scripts
+extension org::genesez::platform::typo3v4::profile::Profile;
+extension org::genesez::platform::typo3v4::profile::AccessHelper;
+
+	
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Table Configuration Array (TCA) 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Checks if the advanced configuration of a property should be generated for the 'showitem' field.
+ * 
+ * @return	True, if the advanced configuration of a property should be generated for the 'showitem' field, otherwise false.
+ */
+boolean generateAdvancedTCATypesNumbers(MProperty this) :
+	getT3TCAPropertyTypesAltLabel() != "" 
+	|| getT3TCAPropertyTypesPaletteNumber() != ""	
+	|| getT3TCAPropertyTypesSpecialConfiguration() != "" 
+	|| getT3TCAPropertyTypesFormStyleCodes() != ""
+		? true
+		: false;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Core Engine (TCE) 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Returns the a list of FlexForm sheets for a plugin without the 'DEFAULT' sheet.
+ * 
+ * @return	The list of FlexForm sheets or an empty list.
+ */
+List[String] allTCESheetsWithoutDefault(MInterface this) :
+	let sheets = {} :
+		property.typeSelect(MAttribute).select( e | e.getT3TCEOptionSheet() != "" ).
+			collect( e | sheets.add( e.getT3TCEOptionSheet() ) ) ->
+		sheets.toSet() ->
+		sheets.remove( prT3TCESheetDefault() ) ->
+		sheets.sortBy( s | s );
+
+
+/**
+ * Returns the a list of attributes for a FlexForm sheet for a plugin.
+ * 
+ * @param	sheet	The name of the FlexForm sheet.
+ * @return	The list of attributes for a FlexForm sheet or an empty list.
+ */
+List[MAttribute] allTCESheetProperties(MInterface this, String sheet) :
+	sheet == "sDEF"
+		? property.typeSelect(MAttribute).select( e | e.getT3TCEOptionSheet() == "" || e.getT3TCEOptionSheet() == prT3TCESheetDefault() )
+		: property.typeSelect(MAttribute).select( e | e.getT3TCEOptionSheet() == sheet );
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Table Configuration Array (TCA) or TYPO3 Core Engine (TCE) 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Returns The a list of evaluation functions for a property.
+ * 
+ * @param	defaultEvals	The list of default evaluation functions.
+ * @return	The list of evaluation functions for a property or an empty list.
+ */
+List[String] allTCxEvals(MProperty this, List[String] defaultEvals) :
+	let evals = {} :
+		lowerBoundMultiplicity > 0 
+			? evals.add("required") 
+			: Void ->
+		!getT3TCxEvalEvals().isEmpty
+		 	? evals.addAll( getT3TCxEvalEvals() )
+		 	: evals.addAll( defaultEvals ) ->
+		 evals.toSet();
