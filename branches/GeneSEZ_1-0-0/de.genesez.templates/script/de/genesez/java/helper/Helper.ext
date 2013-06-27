@@ -1,0 +1,141 @@
+// import genesezMM meta model
+import genesezMM;
+
+extension de::genesez::java::helper::Type;
+extension de::genesez::java::helper::Naming;
+extension de::genesez::io::io;
+
+////////////////////////////////////////////////////////////////////////////////
+// public extend functions
+////////////////////////////////////////////////////////////////////////////////
+
+
+// return a comma separated string of list elements
+String getNameList(List l) :
+	l.size > 1 
+		? ((MElement) l.first()).name + ", " + getNameList(l.withoutFirst())
+		: (l.size > 0
+			? ((MElement) l.first()).name
+			: "");
+
+
+// return a comma separated string of list elements
+String getGenericList(List l) :
+	l.size > 1 
+		? ((MGeneric) l.first()).specification + ", " + getGenericList(l.withoutFirst())
+		: (l.size > 0
+			? ((MGeneric) l.first()).specification
+			: "");
+
+
+// returns true if an classifier has generic parameter
+Boolean hasGenericParameter(MClassifier c) :
+	c.genericParameter.size > 0;
+
+
+// returns true if an classifier has generic parameter
+Boolean hasGenericParameter(MOperation o) :
+	o.genericParameter.size > 0;
+
+
+// returns true if the element has a comment else false
+Boolean hasComment(MElement e) :
+	e.ownedComment.size > 0;
+
+
+// returns the comment of an element
+String getCommentText(List l) :
+	l.size > 0
+		? getComment((MComment) l.first()).replaceAll("\n", "; ")
+		: "";
+
+
+// find out if MAssoiationRole belongs to an association class
+isPlainAssociation(MAssociationRole aend) :
+	aend.association.associationClass == null;
+
+
+// get AssociationClass for MAssoiationRole
+assocClass(MAssociationRole aend) :
+	aend.association.associationClass;
+
+// get a list of all own member attributes excluding inherited
+List getOwnAttributes(MClassifier c) :
+	c.property.typeSelect(MAttribute).select(a|!a.final && !a.derived);
+
+// get a list of all member attributes including inherited
+List getAllAttributes(MClassifier c) :
+	{}.add(c.getOwnAttributes()).add(c.getParentAttributes()).flatten();
+
+// get a list of all inherited member attributes
+List getParentAttributes(MClassifier c) :
+	c.supertype.isEmpty ? {} : c.supertype.first().getAllAttributes();
+
+// find out if an element has an stereotype
+Boolean hasStereotype(MElement e, String stereotype) :
+	!e.stereotype.typeSelect(MStereotype).select(e|e.name == stereotype).isEmpty;
+	
+
+// find out if an element has an stereotype with the tag and the correct value
+Boolean hasTaggedValue(MElement e, String stereotype, String tag, String value) :
+	!e.taggedValue.typeSelect(MTaggedValue).select(e|e.value == value && e.tag.name == tag && e.tag.stereotype.name == stereotype).isEmpty;
+
+// find out if an element has an aspect with specified domain and name
+Boolean hasAspect(MElement e, String domain, String name) :
+	!e.aspect.select(a|a.domain == domain && a.name == name).isEmpty;
+
+// find out if an element has an aspect with specified domain
+Boolean hasAspect(MElement e, String domain) :
+	!e.aspect.select(a|a.domain == domain).isEmpty;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// public java functions
+////////////////////////////////////////////////////////////////////////////////
+
+// return package path for a class
+String getPackagePath(MClassifier clazz) : 
+	JAVA de.genesez.java.helper.Helper.getPackagePath(genesezMM.MClassifier);
+
+// return file path for a class
+String getFQNPackagePath(MClassifier clazz) : 
+	JAVA de.genesez.java.helper.Helper.getFQNPackagePath(genesezMM.MClassifier);
+
+
+// return the actual date and time
+String getTimeStamp() :
+	JAVA de.genesez.java.helper.Helper.getTimeStamp();
+
+
+// return the user, who is logged in
+String getUserName() :
+	JAVA de.genesez.java.helper.Helper.getUserName();
+
+
+// return the imports of a classifier
+String getImports(MClassifier clazz) :
+	JAVA de.genesez.java.helper.ImportChecker.getImports(genesezMM.MClassifier);
+	
+// save a model reference in GlobalStore
+Void saveModel(MModel model) :
+	JAVA de.genesez.java.helper.GlobalStore.setModel(genesezMM.MModel);
+	
+// retrieve a model reference from GobalStore
+MModel retrieveModel() :
+	JAVA de.genesez.java.helper.GlobalStore.getModel();
+
+////////////////////////////////////////////////////////////////////////////////
+// private extend functions
+////////////////////////////////////////////////////////////////////////////////
+
+
+//
+private String getComment(MComment c) :
+	c.annotation != "null"
+		? c.annotation
+		: "";
+		
+
+////////////////////////////////////////////////////////////////////////////////
+// private java functions
+////////////////////////////////////////////////////////////////////////////////

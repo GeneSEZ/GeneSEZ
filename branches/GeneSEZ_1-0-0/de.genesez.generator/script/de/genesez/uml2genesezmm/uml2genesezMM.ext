@@ -1,0 +1,580 @@
+// TODO:	returntype comment form operations export
+
+// This is the transformation that transforms UML2 
+// class models into genesezMM models.
+
+// This imports the ecore metamodel; since we want to 
+// transform into an instance of ecore, we need to load 
+// this metamodel.
+import ecore;
+// Import the UML2 metamodel - this is what we transform from.
+import uml;
+// Import genesezMM metamodel - transform the uml2 into this metamodel.
+import genesezMM;
+    
+//	using logging functionality (contained metamodel project)
+extension de::genesez::io::io;
+   
+
+////////////////////////////////////////////////////////////////////////////////
+// public extend functions
+////////////////////////////////////////////////////////////////////////////////
+
+
+// on top level, we transform a UML model into an MModel. A 
+// create extension is used for this. Create extensions have
+// the sideeffect of creating an instance of the type given
+// after the create keyword. Note that the newly created 
+// MModels can be accessed by "this" inside the function
+MModel transform(Model m): 
+	let mm = makeModel(m) :
+		// add comment to model
+		mm.setOwnedComment(m.ownedComment.typeSelect(Comment).processComment().setOwningElement(mm))->
+		// start descending package tree
+		mm.setOwnedPackage(m.ownedElement.typeSelect(Package).rejectIgnoredPackages().processPackage().setModel(mm))->
+		mm;
+	
+create MModel makeModel(Model m):
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(m))->
+	setName(m.name);
+
+
+
+// create new MComment form uml2 comment
+create MComment makeComment(Comment c) :
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(c))->
+	setAnnotation(c.body);
+
+private MComment processComment(Comment c) :
+	let mc = makeComment(c) :
+		mc.setNestedComment(c.ownedComment.typeSelect(Comment).processComment().setNestingComment(mc))->
+		mc;
+
+
+// create new MStereotype from uml2 stereotype
+create MStereotype makeStereotype(Stereotype s) :
+	info("make stereotype: " + s.name) ->
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(s))->
+	makeModel(getUml2Model()).anyStereotype.add(this)->
+	setName(s.name);
+
+private MStereotype processStereotype(Stereotype s) :
+	let ms = makeStereotype(s) :
+		// add comment to stereotype
+		//ms.setOwnedComment(s.ownedComment.typeSelect(Comment).processComment().setOwningElement(ms))->
+		// add tagged values FAIL
+		ms.setProperty(s.ownedAttribute.typeSelect(Property).processTag().setStereotype(ms))->
+		ms;
+
+
+// create new MTag from uml2 property
+create MTag makeTag(Property p) :
+	info("make tag: " + p.name) ->
+	// set the unique xmiId and name
+	//setXmiGuid(xmiId(p))->
+	setName(p.name)->
+	setType(p.type.determineClassifier().name);
+
+private MTag processTag(Property p) :
+	let mt = makeTag(p) :
+		// add comment to taggedvalue
+		//mt.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(mt))->
+		mt;
+
+
+// create new MTaggedValue
+create MTaggedValue makeTaggedValue(MTag t, String val, MElement owner) :
+	info("make tagged value: " + val + ", tag: " + t.name) ->
+	setTag(t)->
+	setValue(val)->
+	setOwningElement(owner)
+//	->info("TaggedValue("+owner.name+") "+t.name+" = >"+val+"<")
+	;
+	
+private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
+	info("make tagged values: " + me.name + ", elem: " + e.toString()) ->
+	me.stereotype.property.reject(t|t.name == "base_Classifier").collect(
+		mtag|e.getAppliedStereotypes().collect(
+			styp | e.getValue(styp, mtag.name).eToString().collect(
+				tagval | makeTaggedValue(mtag, tagval, me)
+			)
+	  	)
+	).flatten().reject(e|e == null);
+
+
+
+// create new MPackage from uml2 package
+create MPackage makePackage(Package p) :
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(p))->
+	setName(p.name);
+
+// only packages are contained in the model element
+// they can contain more packages or classes
+private MPackage processPackage(Package p) :
+	let mp = makePackage(p) :
+		// add comment to package
+		mp.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(mp))->
+		// recursively descend package tree
+		mp.setNestedPackage(p.ownedElement.typeSelect(Package).processPackage().setNestingPackage(mp))->
+		// add classifier in package
+		mp.setClassifier(p.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).processClassifier().setOwningPackage(mp))->
+		// map associations in package 
+		mp.setAssociation(p.ownedElement.typeSelect(Association).processAssociationPackage(mp).setOwningPackage(mp))->
+		mp;
+
+
+
+// create new MPrimitivType from uml2 data type
+/* seems to be nonsense, see below -geobe-
+create MPrimitiveType makeClassifier(DataType c) :
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(c))->
+	setName(c.name)->
+	makeModel(getUml2Model()).primitiveTypes.add(this);
+*/
+
+// create new MPrimitivType from uml2 primitive type
+create MPrimitiveType makeClassifier(PrimitiveType c):
+	info("make classifier(primitive type -> primitive type): " + c.name) ->
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(c))->
+	setName(c.name)->
+	makeModel(getUml2Model()).primitiveTypes.add(this);
+
+//	creates the primitive type 'void' from uml datatype 'void'
+//	note: uml standard profile :: magic draw profile :: datatypes defines 'void'
+//	      as datatype, not primitive type
+create MPrimitiveType makeVoid(DataType c) :
+	info("make void: " + c.name) ->
+	setXmiGuid(xmiId(c)) ->
+	setName(c.name) ->
+	makeModel(getUml2Model()).primitiveTypes.add(this);
+	
+//	creates the primitive type 'void'
+//	note: the caller function 'determineClassifier' distinct, when this primitive type is needed
+create MPrimitiveType makeVoid() :
+	info("make void:void ") ->
+	setXmiGuid("void") ->
+	setName("void") ->
+	makeModel(getUml2Model()).primitiveTypes.add(this);
+	
+	
+// create new MPrimitiveType from uml2 void
+//	-toh- this method is nonsense, 'Void' is not uml2 void, it's oaw type void !
+//	this method is called, so anywhere in the call stack is a bug!
+/*
+create MPrimitiveType makeClassifier(Void c):
+	info("--> Void -> MPrimitiveType") ->
+	// set the unique xmiId and name
+	setXmiGuid("void")->
+	setName("void")->
+	makeModel(getUml2Model()).primitiveTypes.add(this);
+*/
+	
+// create new MClassifier from uml2 named element
+create MClassifier makeClassifier(NamedElement c) :
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(c))->
+	setName(c.name);
+	
+// create new MDataType from uml2 type
+//	TODO handle uml2 type void!
+create MDataType makeClassifier(DataType c):
+	info("makeClassifier: " + c) ->
+//	info("--> " + c.metaType.name + "  ->  " + c.package) ->
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(c))->
+	setVisibility(c.visibility == null ? "public" : c.visibility.toString())->
+	setName(c.name)
+//	->info("--> DataType -> MDataType: " + this)
+	;
+	
+// create a new MEnumeration from uml2 enumeration
+create MEnumeration makeClassifier(Enumeration c):
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(c))->
+	setName(c.name)->
+	setVisibility(c.visibility.toString())->
+	setLiteral(c.ownedLiteral.typeSelect(EnumerationLiteral).processLiteral().setOwningEnumeration(this));
+	
+// create new MClass from uml2 class
+create MInterface makeClassifier(Interface c) :
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(c))->
+	setName(c.name)->
+	setVisibility(c.visibility.toString())->
+	setAbstract(c.isAbstract)->
+	setFinal(c.isLeaf);
+	
+// create new MClass from uml2 class
+create MClass makeClassifier(Class c) :
+	info("makeClass: " + c.metaType.name + ", " + c.name) ->
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(c))->
+	setName(c.name)->
+	setVisibility(c.visibility.toString())->
+	setAbstract(c.isAbstract)->
+	setFinal(c.isLeaf);
+
+// classes are contained in packages. 
+// they own attributes and association ends
+private MClassifier processClassifier(Classifier c) :
+	info("--> processClassifier: " + c.name) -> (
+	let mc = determineClassifier(c) :
+		// add comment to classifier
+		mc.setOwnedComment(c.ownedComment.typeSelect(Comment).processComment().setOwningElement(mc))->
+		// set generics
+	info("pre generics: " + c.ownedTemplateSignature.ownedParameter) ->
+		c.ownedTemplateSignature != null ? 
+			mc.setGenericParameter(c.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).processGeneric())
+			: mc ->
+	info("generics: " + mc.genericParameter) ->
+		// set stereotype
+		mc.setStereotype(c.getAppliedStereotypes().processStereotype())->
+		// set tagged values
+		mc.setTaggedValue(makeTaggedValues(mc, c))->
+		// add client dependency (<<use>>)
+		mc.setSupplier(c.clientDependency.supplier.makeClassifier())->
+		// add superclasses (generalizations and realizations)
+		mc.setSupertype(c.general.determineClassifier())->
+		mc.supertype.addAll(c.clientDependency.typeSelect(InterfaceRealization).contract.determineClassifier())->
+		// add attributes and association ends
+		mc.setProperty(c.attribute.reject(p|p.association != null).processAttribute().setClassifier(mc))->
+		mc.property.addAll(c.attribute.select(p|p.association != null).processAssociationRole().setClassifier(mc))->
+		// add operations
+		mc.setOperation(c.getOperations().processOperaration().setClassifier(mc))->
+		mc
+	);
+	
+//	checks if given classifier is a generic or not and delegates to the appropriate function
+//	the first one is possibly not needed -toh-
+private MType determineType(Classifier c) :
+	info("determine type (classifier): " + c.name + ", type: " + c.metaType.name + ", supertypes: " + c.metaType.superTypes) ->
+	c.isTemplateParameter() ?
+		((ClassifierTemplateParameter)c.templateParameter).makeGeneric() :
+		determineClassifier(c)
+	;
+	
+private MType determineType(Type t) :
+	info("determine type (type): " + t.metaType.name + ", " + t.name) ->
+	t.isTemplateParameter() ?
+		((ClassifierTemplateParameter)t.templateParameter).makeGeneric() :
+		determineClassifier(t)
+	;
+	
+//	the uml2 metamodel doesn't define the type 'void'
+//	if you use the datatype 'void' from the profile 
+//  (UML Standard Profile::Magic Draw Profile::datatypes)
+//	it is mapped as a primitive type in genesez model
+private MClassifier determineClassifier(Classifier c) :
+	info("-> generic: " + c.isTemplateParameter()) ->
+	info("-> metaType: " + c.metaType + ", supertypes: " + c.metaType.superTypes) ->
+	info("-> template paramter: " + c.templateParameter + ", " + c.templateParameter.metaType + ", " + c.templateParameter.metaType.superTypes) ->
+	info("determine classifier: " + c.metaType.name + ", " + c.name) ->
+	// check if it's void
+	c.metaType.name == "uml::DataType" && c.name == "void" ? (
+		//	then
+		getVoid() == null ?
+			makeVoid((DataType)c) : 
+			getVoid()
+		) :
+		//	else
+		makeClassifier(c)
+	;
+	
+//	don't know if the if expression 't ==  null' is needed or not -toh-
+private MClassifier determineClassifier(Type t) :
+	info("determine classifier (type): " + t.name) ->
+	t == null ? (
+		// then
+		getVoid() == null ? 
+			makeVoid() : 
+			getVoid()
+		) :
+		// else
+		makeClassifier(t)
+	;
+	
+//	if you leave some type fields in your model blank (maybe as an alternative to specify 'void')
+//	oaw returns the type 'oaw::void'
+//	simply mapping this type to 'void'
+private MClassifier determineClassifier(Void v) :
+	info("determine classifier (oaw::void): " + v) ->
+	getVoid() == null ? makeVoid() : getVoid();
+	
+//	helper to ensure, that the primitive type 'void' is only once contained in genesez model
+private MPrimitiveType getVoid() :
+	makeModel(getUml2Model()).primitiveTypes.exists(e|e.name == "void") ?
+		makeModel(getUml2Model()).primitiveTypes.select(e|e.name == "void").first() :
+		null;
+	
+	
+// create new MLiteral for MEnumeration from uml2 enumeration literal
+create MLiteral makeLiteral(EnumerationLiteral l) :
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(l))->
+	setName(l.name);
+
+private MLiteral processLiteral(EnumerationLiteral l) :
+	let ml = makeLiteral(l) :
+		// add comment to classifier
+		ml.setOwnedComment(l.ownedComment.typeSelect(Comment).processComment().setOwningElement(ml))->
+		ml;
+
+
+
+// create new MGeneric from uml2 classifier template parameter
+create MGeneric makeGeneric(ClassifierTemplateParameter c) :
+	info("-> metaType: " + c.metaType + ", supertypes: " + c.metaType.superTypes) ->
+	info("makeGeneric: '" + ((Class)c.ownedParameteredElement).name + "' [" + this + "] from: '" + c + "'") ->
+	setSpecification(((Class)c.ownedParameteredElement).name);
+	
+private MGeneric processGeneric(ClassifierTemplateParameter c) :
+	let mg = makeGeneric(c) :
+		mg;
+
+
+// -toh- has the same implementation but different function names
+//	unified it to 'makeGeneric' instead of '-Parameter' and '-Realization'
+//	got confused/in trouble with it when implement the use of generics as type
+// create new MGeneric from uml2 classifier template parameter
+/*
+create MGeneric makeGenericRealization(ClassifierTemplateParameter c) :
+	info("-> metaType: " + c.metaType + ", supertypes: " + c.metaType.superTypes) ->
+	info("makeGenericRealization: '" + ((Class)c.ownedParameteredElement).name + "' [" + this + "] from: '" + c + "'") ->
+	setSpecification(((Class)c.ownedParameteredElement).name);
+	
+private MGeneric processGenericRealization(ClassifierTemplateParameter c) :
+	let mg = makeGenericRealization(c) :
+		mg;
+*/
+
+
+// create new MAttribute from uml2 property
+create MAttribute makeAttribute(Property p) :
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(p))->
+	setName(p.name)->
+	setVisibility(p.visibility.toString())->
+	setMultiplicity(p.getUpper())->
+	setDerived(p.isDerived)->
+	setDefaultvalue(p.getDefault())->
+	setStatic(p.isStatic)->
+	setFinal(p.isReadOnly);
+	// @toh - needs discussion if metamodel should provide this or not
+//	setUnique(p.isUnique);	
+
+private MAttribute processAttribute(Property p) :
+	info("process attribute: " + p.name) -> (
+	let ma = makeAttribute(p) :
+		// add comment to attribute
+		ma.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(ma))->
+		// set stereotype
+		ma.setStereotype(p.getAppliedStereotypes().processStereotype())->
+		// set tagged values
+		ma.setTaggedValue(makeTaggedValues(ma, p))->
+		// add type of attribute (can be a generic or classifier)
+		ma.setType(p.type.determineType())->
+		ma
+	);
+
+
+// create new MOperation from uml2 operation
+create MOperation makeOperation(Operation o) :
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(o))->
+	setName(o.name)->
+	setVisibility(o.visibility.toString())->
+	setStatic(o.isStatic)->
+	setAbstract(o.isAbstract)->
+	setFinal(o.isLeaf);
+
+private MOperation processOperaration(Operation o) :
+	info("process operation: " + o.name) -> (
+	let mo = makeOperation(o) :
+		// add comment to operation
+		mo.setOwnedComment(o.ownedComment.typeSelect(Comment).processComment().setOwningElement(mo))->
+		// set generics
+		(o.ownedTemplateSignature != null ? mo.setGenericParameter(o.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).processGeneric()) : "")->
+		// set stereotype
+		mo.setStereotype(o.getAppliedStereotypes().processStereotype())->
+		// set tagged values
+		mo.setTaggedValue(makeTaggedValues(mo, o))->
+		// add parameter to operation
+		mo.setParameter(o.ownedParameter.reject(e|e.direction.toString() == "return").processParameter().setOperation(mo))->
+		// set return type
+		//	what about template parameters ???
+	info("! return type: " + o.type.isTemplateParameter()) ->
+	info("! return type: " + o.type) ->
+		mo.setReturnType(o.type.determineType())->
+		// set raised exceptions
+		mo.setRaisedException(o.raisedException.determineType())->
+		mo
+	);
+
+
+
+// create new MParameter from uml2 parameter
+create MParameter makeParameter(Parameter p) :
+	// set the unique xmiId and name
+	setXmiGuid(p.xmiId())->
+	setName(p.name)->
+	setDefaultvalue(p.getDefault())->
+	setDirection(p.direction.toString())->
+	setMultiplicity(p.getUpper());
+	
+private MParameter processParameter(Parameter p) :
+	info("process parameter: " + p.name) -> (
+	let mp = makeParameter(p) :
+		// add comment to parameter
+		mp.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(mp))->
+		// set generic
+	//info(p.getAppliedStereotypes().getAllAttributes().typeSelect(Property).select(e|e.name == "typeModifier"))->
+		// set stereotype
+		mp.setStereotype(p.getAppliedStereotypes().processStereotype())->
+		// set tagged values
+		mp.setTaggedValue(makeTaggedValues(mp, p))->
+		// add type of parameter
+		//	what about template parameters ???
+	info("! parameter type: " + p.type.isTemplateParameter()) ->
+	info("! parameter type: " + p.type) ->
+		mp.setType(p.type.determineType())->
+		mp
+	);
+
+
+
+// create new MAssociationRole from uml2 property
+create MAssociationRole makeAssociationRole(Property aend) :
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(aend))->
+	setName(assocEndName(aend))->
+	setVisibility(aend.visibility.toString())->
+	setMultiplicity(aend.getUpper())->
+	setDerived(aend.isDerived)->
+	setAggregation(aend.aggregation.toString() == "shared" ? true : false)->
+	setComposition(aend.aggregation.toString() == "composite" ? true : false);
+
+private MAssociationRole processAssociationRole(Property aend) :
+	info("association role: " + aend.name) -> (
+	let ma = makeAssociationRole(aend) :
+		// add comment to associationrole
+		ma.setOwnedComment(aend.ownedComment.typeSelect(Comment).processComment().setOwningElement(ma))->
+		// set stereotype
+		ma.setStereotype(aend.getAppliedStereotypes().processStereotype())->
+		// set tagged values
+		ma.setTaggedValue(makeTaggedValues(ma, aend))->
+		// set classifier
+		ma.setClassifier(assocEndClass(aend))->
+		// an asscociation couldn't have a generic as type i guess
+		ma.setType(aend.type.determineClassifier())->
+		ma
+	);
+
+
+
+// create new MAssociation from uml2 association
+create MAssociation makeAssociation(Association a) :
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(a))->
+	setName(assocName(a))->
+	setDerived(a.isDerived);
+
+private MAssociation processAssociation(Association a) :
+	let ma = makeAssociation(a) :
+		// add comment to association
+		ma.setOwnedComment(a.ownedComment.typeSelect(Comment).processComment().setOwningElement(ma))->
+		ma;
+
+
+
+// associations are contained in packages and contain their ends
+private MAssociation processAssociationPackage(Association a, MPackage owningPackage): 
+	let ma = processAssociation(a) :
+		ma.setOwningPackage(owningPackage)->
+		ma.setEnd(a.memberEnd.select(e|e.class != null).processAssociationRole())->
+		ma.end.setAssociation(ma).setDerived(a.isDerived)->
+		ma.linkEnds()->
+		ma.associationClass(a)->
+		ma;
+	
+private MAssociation associationClass(MAssociation ma, Association a):
+	ma;
+
+private MAssociation associationClass(MAssociation ma, AssociationClass a):
+	info("association class: " + ma.name + ", " + a.name) -> 
+	ma.setAssociationClass(makeClassifier(a).setOwnedAssociation(ma));
+
+private String assocName(Association a):
+	(a.name == null || a.name == "") ?
+		"" :
+		a.name ;
+		
+private String assocEndName(Property a):
+	(a.name == null || a.name == "") ?
+		a.type.name.toFirstLower() :
+		a.name ;
+
+private MClass assocEndClass(Property a):
+	info("assoc end class: " + a.name) ->
+	// Note: we can call makeClassifier() as often as we want, since create
+	// extensions are cached and, when invoked several times with the 
+	// same arguments are executed only upon first invocation. Subsequent
+	// invocations return the cached result of the first invocation
+		a.class == null ? null : determineClassifier(a.class);
+	
+
+private MAssociation linkEnds(MAssociation ma) :
+	let mend = ma.end :
+	mend.size == 2 ?
+		(mend.get(0).setOpposite(mend.get(1))->
+		mend.get(1).setOpposite(mend.get(0))-> ma) :
+		ma;
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// private extend functions
+////////////////////////////////////////////////////////////////////////////////
+
+// get unique xmiId from ecore file, requires Java method
+private String xmiId (Element obj) : 
+	JAVA de.genesez.uml2genesezmm.utilities.TransUtils.getXmiId(org.eclipse.emf.ecore.EObject);
+
+
+// externally configure packages to ignore, e.g. UML standard profile ;-)
+private String ignoredPackages(): GLOBALVAR excludePackages;
+
+
+// process EJavaObject externally. this function is never called but keeps the syntax checker calm ;-)
+private List[String] eToString(ecore::EJavaObject obj):
+	JAVA de.genesez.uml2genesezmm.utilities.TransUtils.eToString(java.lang.Object);
+
+
+// process List structured EJavaObject externally
+private List[String] eToString(List obj):
+	JAVA de.genesez.uml2genesezmm.utilities.TransUtils.lToString(org.eclipse.emf.ecore.util.EDataTypeUniqueEList);
+
+
+// process flat EJavaObject externally
+private List[String] eToString(Object obj):
+	JAVA de.genesez.uml2genesezmm.utilities.TransUtils.eToString(java.lang.Object);
+
+
+// the model is passed in as a global variable
+private Model getUml2Model() : GLOBALVAR uml2model;
+
+
+// reject the ignored packages from the given package list
+private List[Package] rejectIgnoredPackages(List[Package] packages):
+	rejectPackages(packages, ignoredPackages());
+	
+
+// reject a given comma or semicolon separated list of package names from the given package list
+private List[Package] rejectPackages(List[Package] packages, String excludePackages):
+	JAVA de.genesez.uml2genesezmm.utilities.TransUtils.rejectExcludedPackages(java.util.List, java.lang.String);
+

@@ -1,0 +1,64 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::java::helper::Type»
+«EXTENSION de::genesez::java::helper::Helper»
+«EXTENSION de::genesez::java::helper::Naming»
+
+«EXTENSION de::genesez::typemapping::TypeMapping»
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+«DEFINE Root FOR MModel-»
+«EXPAND Root FOREACH ownedPackage.reject(e|e.name == "java")-»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MPackage-»
+«EXPAND Root FOREACH nestedPackage-»
+«EXPAND Root FOREACH classifier-»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MInterface-»
+«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
+	«EXPAND Class::Root-»
+«ENDFILE»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MClass-»
+«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
+	«EXPAND Class::Root-»
+«ENDFILE»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MEnumeration-»
+«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
+	«EXPAND Class::Root-»
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE Root FOR MDataType-»
+«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
+	«EXPAND Class::Root-»
+«ENDFILE»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MPrimitiveType-»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MClassifier-»
+«ENDDEFINE»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
