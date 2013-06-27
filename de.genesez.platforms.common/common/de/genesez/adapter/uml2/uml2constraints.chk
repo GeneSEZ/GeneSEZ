@@ -1,0 +1,33 @@
+/**
+ * validates an uml2 model for transformation into a genesez model
+ * 
+ * @author	tobias haubold
+ * @date	2008-03-27
+ * @version	alpha
+ */
+
+// based uml meta model
+import uml;
+
+/**
+ * checks if a property has a type or not
+ * @return  true, if the type is not set on the property, otherwise false
+ */
+context Property ERROR "GeneSEZ UML2 Adapter: property has no type [ name: " + name + " ]" :
+	type == Void || type == null;
+
+/**
+ * checks if a parameter has a type or not
+ * @return	true, if the parameter has no return type, otherwise false
+ */
+context Parameter ERROR "GeneSEZ UML2 Adapter: parameter has no type [ name: " + name + " ]" :
+	type == Void || type == null;
+
+
+/**
+ * checks if an operation has a return type or not
+ * @return	true, if the operation has no return type, otherwise false
+ */
+context Operation WARNING "GeneSEZ UML2 Adapter: operation has no return type [ name: " + name + " ] and was set to 'void'" :
+	type == Void || type == null;
+
