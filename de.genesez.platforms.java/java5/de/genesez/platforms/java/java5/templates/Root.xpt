@@ -1,0 +1,62 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+«DEFINE Root FOR MModel-»
+«EXPAND Root FOREACH ownedPackage.reject(e|e.name == "java")-»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MPackage-»
+«EXPAND Root FOREACH nestedPackage-»
+«EXPAND Root FOREACH classifier-»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MInterface-»
+«FILE getFilename()-»
+	«EXPAND Class::Root-»
+«ENDFILE»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MClass-»
+«FILE getFilename()-»
+	«EXPAND Class::Root-»
+«ENDFILE»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MEnumeration-»
+«FILE getFilename()-»
+	«EXPAND Class::Root-»
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE Root FOR MDataType-»
+«FILE getFilename()-»
+	«EXPAND Class::Root-»
+«ENDFILE»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MPrimitiveType-»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MClassifier-»
+«ENDDEFINE»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////

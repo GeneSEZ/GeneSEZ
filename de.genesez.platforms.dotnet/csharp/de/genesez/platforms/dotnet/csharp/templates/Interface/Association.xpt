@@ -1,0 +1,70 @@
+«REM»
+	Association Template for C# interfaces
+	
+	@author	Gerrit Beine
+	@date	2008/01/18
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Arrange»
+
+«IMPORT de::genesez::platforms::dotnet::csharp»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate association attributes for an interface
+«ENDREM»
+«DEFINE Properties FOR MInterface-»
+	«EXPAND _PropertyDecl FOREACH associationProperties()-»
+«ENDDEFINE»
+
+
+«REM»
+	generate operations for associations in an interface
+«ENDREM»
+«DEFINE OperationDecl FOR MInterface-»
+	«EXPAND _InsertDecl FOREACH associations()-»
+	«EXPAND _RemoveDecl FOREACH associations()-»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate property declaration for an association
+«ENDREM»
+«DEFINE _PropertyDecl FOR MAssociationRole-»
+	«EXPAND templates::Association::PropertyDecl-»
+«ENDDEFINE»
+
+
+«REM»
+	generate insert into declaration for an association
+«ENDREM»
+«DEFINE _InsertDecl FOR MAssociationRole-»
+	«EXPAND templates::Association::InsertDecl-»
+«ENDDEFINE»
+
+
+«REM»
+	generate remove from declaration for an association
+«ENDREM»
+«DEFINE _RemoveDecl FOR MAssociationRole-»
+	«EXPAND templates::Association::RemoveDecl-»
+«ENDDEFINE»
+

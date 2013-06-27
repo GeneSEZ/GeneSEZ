@@ -1,0 +1,33 @@
+/*
+	some useful functions for M2T transformations
+*/
+
+//	based on genesez meta model
+import genesezMM;
+extension de::genesez::io::io;
+
+
+/**
+ * accessor for the global variable 'excludePackages'
+ * @return	value of the global variable 'excludePackages'
+ */
+String ignoredPackages() : (String) GLOBALVAR excludePackages;
+
+/**
+ * reject all packages in the 'excludePackages' variable from the list
+ * @param	packages	list of packages
+ * @return	list without the ignored packages
+ */
+List[MPackage] rejectIgnoredPackages(List[MPackage] packages) :
+	packages.rejectIgnoredPackages(ignoredPackages());
+	
+/**
+ * rejects all packages from the given list, specified in the given string as a comma 
+ * or semicolon separated list with full qualified package names
+ * @param	packages		list of packages
+ * @param	ignoredPackages	comma or semicola separated list with package names
+ * @return	list of packages without the ignored
+ */
+private List[MPackage] rejectIgnoredPackages(List[MPackage] packages, String ignoredPackages) :
+	JAVA de.genesez.common.m2t.TransUtils.rejectIgnoredPackages(java.util.List, java.lang.String);
+

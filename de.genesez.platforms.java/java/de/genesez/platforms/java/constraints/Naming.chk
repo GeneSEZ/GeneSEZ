@@ -1,0 +1,66 @@
+//	based genesez meta model
+import genesezMM;
+//	using java naming conventions
+extension de::genesez::platforms::java::scripts::Naming;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	java naming convention checks
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if a package name and only a package name is written in all-lowercase chars
+ * @return	true, if the package is named according naming conventions, otherwise false
+ */
+context MPackage WARNING "GeneSEZ-Gen: package name isn't written in all-lowercase letters (" + "package: " + name + ")" :
+	metaType == MModel
+		? true
+		: name == name.asPackageName();
+
+/**
+ * checks if an interface starts with a upper-case letter
+ * @return	true, if the interface name starts with an upper-case letter, otherwise false
+ */
+context MInterface WARNING "GeneSEZ-Gen: interface name doesn't start with a capital letter (" + "classifier: " + name + ")" :
+	name == name.asClassifierName();
+
+/**
+ * checks if a class starts with a upper-case letter
+ * @return	true, if the class name starts with a upper-case letter, otherwise false
+ */
+context MClass WARNING "GeneSEZ-Gen: class name doesn't start with a capital letter (" + "classifier: " + name + ")" :
+	name == name.asClassifierName();
+
+/**
+ * checks if an enumeration starts with a upper-case char
+ * @return	true, if the enumeration name starts with an upper-case letter, otherwise false
+ */
+context MEnumeration WARNING "GeneSEZ-Gen: enumeration name doesn't start with a capital letter (" + "classifier: " + name + ")" :
+	name == name.asClassifierName();
+
+/**
+ * checks if a parameter name starts with a lower-case letter
+ * @return	true, if the parameter name starts with a lower-case letter, otherwise false
+ */
+context MParameter WARNING "GeneSEZ-Gen: parameter name doesn't start with a lowercase letter (" + "parameter: " + name + " in operation: " + operation.name + " in classifier: " + operation.classifier.name + ")" : 
+	name == name.asParameterName();
+
+/**
+ * check if an attribute name starts with a lower-case char
+ * @return	true, if the attribute name starts with a lower-case letter, otherwise false
+ */
+context MAttribute WARNING "GeneSEZ-Gen: variable name doesn't start with a lowercase letter (" + "variable: " + name + " in classifier: " + classifier.name + ")" :
+	final
+		? name == asAttributeName()
+		: true;
+
+/**
+ * checks if a constant name is to upper-case
+ * @return	true, if the name of a constant is in upper-case, otherwise false
+ */
+context MAttribute WARNING "GeneSEZ-Gen: constant name isn't written in all-uppercase letters (" + "constant: " + name + " in classifier: " + classifier.name + ")" :
+	!final
+		? name == asAttributeName()
+		: true;
+

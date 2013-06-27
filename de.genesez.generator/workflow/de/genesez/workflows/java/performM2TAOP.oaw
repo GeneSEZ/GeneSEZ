@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+	
+	<!-- 
+		performs a model-to-text transformation (code generation)
+		using AOP of templates
+		(without AOP see the workflow component 'performM2T')
+		- includes beautifier for java + xml
+		
+		following parameters are required:
+		==================================
+		
+		$rootTemplate		the root xpt-file where the generation starts
+		$aspects			the root xpt-file where the aspects are defined
+		$excludePackages	comma or semicola separated list with packages to exclude from code generation
+							(full qualified package names, ', ' or '; ' are also permitted)
+		$xmlMappingFile		name of the xml mapping file
+		$outputDir			the path where the generated file are produced
+		$proRegDir			the path where the protected reagions are found
+							(usually the same as the output directory
+		$configFile			xml file for configuration settings
+	-->
+	
+	
+	<!-- This component calls the codeGenerator workflow file. -->
+	<cartridge
+		file="de::genesez::workflows::java::performM2T.oaw"
+		rootTemplate="${rootTemplate}"
+		excludePackages="${excludePackages}"
+		xmlMappingFile="${xmlMappingFile}"
+		configFile="${configFile}"
+		outputDir="${outputDir}"
+		proRegDir="${proRegDir}"
+	/>
+	
+	
+	<!-- This component map advices around the code generation. -->
+	<component adviceTarget="performM2T" id="performM2TAOP" class="oaw.xpand2.GeneratorAdvice">
+		<advices value="${aspects}"/>
+	</component>
+
+</workflow>

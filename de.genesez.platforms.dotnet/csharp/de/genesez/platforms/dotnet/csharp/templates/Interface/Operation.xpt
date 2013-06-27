@@ -1,0 +1,45 @@
+«REM»
+	Operation template for C# interfaces
+	
+	@author	Gerrit Beine
+	@date	2008/01/18
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Arrange»
+
+«IMPORT de::genesez::platforms::dotnet::csharp»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate operation declarations for an interface
+«ENDREM»
+«DEFINE OperationDecl FOR MInterface-»
+	«EXPAND _OperationDecl FOREACH publicMethods()-»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate a declaration for an operation
+«ENDREM»
+«DEFINE _OperationDecl FOR MOperation-»
+	«EXPAND templates::Operation::OperationDecl-»
+«ENDDEFINE»
+

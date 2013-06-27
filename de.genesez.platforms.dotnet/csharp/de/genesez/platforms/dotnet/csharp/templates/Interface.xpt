@@ -1,0 +1,112 @@
+«REM»
+	Interface template for C#
+	
+	@author	Gerrit Beine
+	@date	2008/01/18
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Arrange»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate an interface
+«ENDREM»
+«DEFINE Root FOR MInterface-»
+	«EXPAND _Interface»
+	{		
+		«IF hasPublicFields()»«EXPAND _PublicFields»«ENDIF-»
+		«IF hasProperties()»«EXPAND _Properties»«ENDIF-»
+		«IF hasPublicMethods()»«EXPAND _OperationDecl»«ENDIF-»
+		«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
+	}
+«ENDDEFINE»
+
+
+«REM»
+	do nothing for other classifiers
+«ENDREM»
+«DEFINE Root FOR MClassifier-»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate the interface declaration
+«ENDREM»
+«DEFINE _Interface FOR MInterface-»
+	public interface «asInterfaceName(name)-»«EXPAND _Supertype-»
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for public field declarations
+«ENDREM»
+«DEFINE _PublicFields FOR MInterface-»
+		#region Public Fields
+		«EXPAND Interface::Attribute::PublicFields-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for property declarations
+«ENDREM»
+«DEFINE _Properties FOR MInterface-»
+		#region Properties
+		«EXPAND Interface::Attribute::Properties-»
+		«EXPAND Interface::Association::Properties-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for operation declarations
+«ENDREM»
+«DEFINE _OperationDecl FOR MInterface-»
+		#region Public Methods
+		«EXPAND Interface::Association::OperationDecl-»
+		«EXPAND Interface::Operation::OperationDecl-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate generalization for an interface
+«ENDREM»
+«DEFINE _Supertype FOR MInterface-»
+«IF hasSupertypes()-»
+ : «FOREACH supertypes() AS type SEPARATOR ", "»«asClassifierName(type)»«ENDFOREACH-» 
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate a protected region for own implementations
+«ENDREM»
+«DEFINE _OwnCodeImpl(String proRegId) FOR MClassifier-»
+		«PROTECT CSTART "/* " CEND " */" ID (proRegId)»
+		/* TODO put your own implementation code here */
+		
+		«ENDPROTECT»
+«ENDDEFINE»
