@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+	ant build file which includes the classpath for the genesez metamodel project
+	- classpath includes all referenced eclipse libraries
+	
+	@author dreamer 
+ -->
+<project basedir="." default="" name="de.genesez.metamodel">
+	<!-- environment specific directories -->
+	<property file="build/environment.properties" />
+	
+	<!--property name="ECLIPSE_HOME" value="C:/appz-copied/eclipse-SDK-3.2.2-win32/eclipse" />
+	<property name="OAW_PLUGIN_DIR" value="C:/appz-copied/eclipse-plugins/eclipse-plugin-mdsd-oaw-4.2.1/eclipse/plugins" />
+	<property name="EMF_PLUGIN_DIR" value="C:/appz-copied/eclipse-plugins/eclipse-plugin-mdsd-oaw-4.2.1/eclipse/plugins" /-->
+	
+	<property environment="env"/>
+	<property name="debuglevel" value="source,lines,vars"/>
+	<property name="target" value="1.5"/>
+	<property name="source" value="1.5"/>
+	
+	<path id="Plug-in Dependencies.libraryclasspath">
+		<fileset dir="${ECLIPSE_HOME}/plugins">
+			<include name="org.eclipse.jdt.core_*.jar" />
+			<include name="org.eclipse.jdt.compiler.apt_*.jar" />
+			<include name="org.eclipse.jdt.compiler.tool_*.jar" />
+			<include name="org.eclipse.jface.text_*.jar" />
+			<include name="org.eclipse.text_*.jar" />
+			<include name="org.eclipse.core.filebuffers_*.jar" />
+			<include name="org.eclipse.ui.editors_*.jar" />
+			<include name="org.eclipse.ui.views_*.jar" />
+			<include name="org.eclipse.ui.workbench.texteditor_*.jar" />
+		</fileset>
+		<fileset dir="${EMF_PLUGIN_DIR}">
+			<include name="org.eclipse.emf.common_*.jar" />
+			<include name="org.eclipse.emf.ecore.xmi_*.jar" />
+			<include name="org.eclipse.emf.ecore_*.jar" />
+			<include name="org.eclipse.emf.mapping.ecore2xml_*.jar" />
+			<include name="org.eclipse.uml2.uml_*.jar" />
+			<include name="org.eclipse.uml2.common_*.jar" />
+			<include name="org.eclipse.uml2.uml.resources_*.jar" />
+		</fileset>
+		<fileset dir="${OAW_PLUGIN_DIR}">
+			<include name="org.apache.commons.cli_1.0.0.jar" />
+			<include name="org.openarchitectureware.base_4.1.2.*.jar" />
+			<include name="org.openarchitectureware.core.check_4.1.2.*.jar" />
+			<include name="org.openarchitectureware.core.expressions_4.1.2.*.jar" />
+			<include name="org.openarchitectureware.core.workflow_4.1.2.*.jar" />
+			<include name="org.openarchitectureware.core.emftools_4.1.2.*.jar" />
+			<include name="org.openarchitectureware.core.xpand2_4.1.2.*.jar" />
+			<include name="org.openarchitectureware.uml2.adapter_4.1.2.*.jar" />
+			<include name="org.openarchitectureware.workflow_4.1.2.*.jar" />
+			
+			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/antlr-2.7.6.jar" />
+			
+			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/antlr-2.7.6.jar"/>
+			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/beanutils-1.7.0.jar"/>
+			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/dom4j-1.6.jar"/>
+			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/jalopy-1.5rc3.jar"/>
+			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/log4j-1.2.8.jar"/>
+			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/logging-1.0.3.jar"/>
+			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/xercesImpl-2.7.1.jar"/>
+			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/xml-apis.jar"/>
+			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/xstream-1.1.3.jar"/>
+		</fileset>
+	</path>
+	
+	<path id="de.genesez.metamodel.classpath">
+		<pathelement location="bin"/>
+		<pathelement location="script"/>
+		<pathelement location="config"/>
+		<pathelement location="model-gen"/>
+		<path refid="Plug-in Dependencies.libraryclasspath"/>
+	</path>
+	
+	<!--
+	<target name="init">
+		<mkdir dir="bin"/>
+		<copy includeemptydirs="false" todir="bin">
+			<fileset dir="src" excludes="**/*.launch, **/*.java"/>
+		</copy>
+		<copy includeemptydirs="false" todir="bin">
+			<fileset dir="genesezMM" excludes="**/*.launch, **/*.java"/>
+		</copy>
+	</target>
+	<target name="clean">
+		<delete dir="bin"/>
+	</target>
+	<target depends="clean" name="cleanall"/>
+	<target depends="build-subprojects,build-project" name="build"/>
+	<target name="build-subprojects"/>
+	<target depends="init" name="build-project">
+		<echo message="${ant.project.name}: ${ant.file}"/>
+		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+			<src path="src"/>
+			<exclude name="**/.svn"/>
+			<classpath refid="de.genesez.metamodel.classpath"/>
+		</javac>
+		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+			<src path="genesezMM"/>
+			<exclude name="**/.svn"/>
+			<classpath refid="de.genesez.metamodel.classpath"/>
+		</javac>
+	</target>
+	<target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+	<target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+		<copy todir="${ant.library.dir}">
+			<fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+		</copy>
+		<unzip dest="${ant.library.dir}">
+			<patternset includes="jdtCompilerAdapter.jar"/>
+			<fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+		</unzip>
+	</target>
+	<target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+		<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+		<antcall target="build"/>
+	</target>
+	-->
+</project>

@@ -1,0 +1,90 @@
+<?xml version="1.0" ?>
+<!--
+	ant build file for automation of model transformation steps
+	@author	dreamer
+	
+	includes following ant tasks:
+	- oaw workflow task to generate *.ecore file from emf uml2 model
+	  [ uml2ecore ]
+	- ecore code generation task to generate the *.genmodel file and
+	  the java metamodel implementation
+	  [ ecore2java ]
+	
+	note: it's a kind of an abstract build file
+-->
+
+<project name="de.genesez.metamodel.user" basedir=".." default="">
+	
+	<!--
+		include oaw properties + build properties
+	-->
+	<property file="config/genesezMM.properties" />
+	<property file="build/build.properties" />
+	
+	<!--
+		exported ant buildfile from eclipse containing all referenced libraries
+		provides classpathref 'de.genesez.metamodel.classpath'
+	-->
+	<import file="build-cp.xml" />
+	
+	
+	<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+	
+	<!-- oaw workflow task definition -->
+	<taskdef name = "oaw.workflow"
+		classname = "org.openarchitectureware.workflow.ant.WorkflowAntTask"
+		classpathref = "de.genesez.metamodel.classpath" />
+	
+	
+	<!-- transform emf uml2 models to ecore models using oaw workflow -->
+	<target name = "uml2ecore">
+		<!-- workflow task is derived from the java ant task -->
+		<oaw.workflow file = "${oaw.workflow.file}"
+			classpathref="de.genesez.metamodel.classpath"
+			fork = "true"
+			dir = "${basedir}">
+			
+			<param name="baseDir" value="${basedir}/" />
+		</oaw.workflow>
+	</target>
+	
+	<!-- other method to start oaw workflow with java ant task -->
+	<!--target name = "uml2ecore2">
+		<java classname = "org.openarchitectureware.workflow.WorkflowRunner"
+			classpathref="de.genesez.metamodel.classpath"
+			fork = "true"
+			dir = "${basedir}">
+			
+			<classpath>
+				<path refid="de.genesez.metamodel.classpath" />
+				<pathelement location="${basedir}" />
+			</classpath>
+			
+			<arg value = "-pbaseDir=${basedir}/" />
+			<arg value = "genesezMMRun.oaw" />
+		</java>
+	</target-->
+	
+	
+	<!--
+		generate *.genmodel + java code impl from *.ecore model
+		note: genModel must be set in task and must be generated!
+	-->
+	<target name = "ecore2java">
+		<emf.Ecore2Java model = "${ecoreMetaModelPath}${ecoreMetaModelFile}"
+			genModel = "${genModelPath}/${genModelFile}"
+			reconcileGenModel="overwrite"
+			
+			generateJavaCode="true"
+			generateModelProject="false"
+			generateEditProject="false"
+			generateEditorProject="false"
+			
+			modelProject = "${basedir}"
+			modelProjectFragmentPath = "${ecore2java.path}">
+			
+			<arg line = "-package ${ecore.package}" />
+		</emf.Ecore2Java>
+	</target>
+	
+</project>

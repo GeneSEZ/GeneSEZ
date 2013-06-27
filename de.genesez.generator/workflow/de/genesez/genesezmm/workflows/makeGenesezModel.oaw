@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+
+	<!-- 	
+			Bunch of workflow components which
+			- instantiate an uml2 model
+			- transform the model from uml2 meta model to genesez meta model
+			  (without profile support)
+			
+			Following parameters are required:
+			==================================
+			
+			$inputModelFile		name of the uml2 file
+			$excludePackages	comma or semicolon separated list of package names to exclude
+								(comma blank [, ] or semicolon blank [; ] are also permitted)
+			$genesezModel		name of the slot which holds the genesez model
+	 -->
+	
+	
+	<!-- reading + instantiating the uml2 model -->
+	<cartridge
+		file = "de::genesez::genesezmm::workflows::xmiReader.oaw"
+		inputModelFile = "${inputModelFile}"
+		modelSlot = "uml2model"
+	/>
+	
+	<!-- transform model from uml2 meta model to genesez meta model -->
+	<cartridge
+		file = "de::genesez::genesezmm::workflows::uml2genesezMM.oaw"
+		uml2Model = "uml2model"
+		excludePackages = "${excludePackages}"
+		genesezModel = "${genesezModel}"
+	/>
+	
+</workflow>

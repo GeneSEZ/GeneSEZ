@@ -1,0 +1,29 @@
+// this file contains a number of constraints that are evaluated
+// on the UML2 model before it is transformed into eCore
+
+// this imports the UML2 meta model
+import uml;
+
+//	using logging functionality (from metamodel project)
+extension de::genesez::io::io;   
+
+// this is the transformation file; we call one helper function
+// from that file (the mapTypeName()), that's why we import it
+extension de::genesez::uml2ecore::uml2ecore;   
+
+
+// currently, we ignore any sub packages, because it is unclear 
+// how to map them to ECore. Therefore, we output a warning in case
+// the UML model has packages in it
+context Model WARNING "anything in packages below the root package (model) will be ignored": 
+	ownedElement.typeSelect(Package).isEmpty;
+	 
+
+// and this verifies that we can map the used primitive types 
+// to Ecore. This mapping is implemented by the mapTypeName() 
+// extension in uml2ecore.ext; if it returns null, no mapping
+// is available
+context PrimitiveType WARNING "cannot map type to Ecore (type is "+name+")":
+ 	name.mapTypeName() != null;
+ 	 
+  

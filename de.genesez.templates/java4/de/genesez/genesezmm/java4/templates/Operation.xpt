@@ -1,0 +1,135 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::genesezmm::AccessHelper»
+
+«EXTENSION de::genesez::java::helper::Type»
+«EXTENSION de::genesez::java::helper::Helper»
+«EXTENSION de::genesez::java::helper::Naming»
+
+«EXTENSION de::genesez::typemapping::TypeMapping»
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate constructor for mclass
+«DEFINE ConstructorImpl FOR MClass-»
+«EXPAND ConstructorImpl FOREACH operation.select(e|e.name == name)-»
+«ENDDEFINE»
+
+
+// generate all abstract methods for a classifier
+«DEFINE OperationDecl FOR MClassifier-»
+«EXPAND OperationDecl FOREACH operation.select(e|e.name != name && e.abstract)-»
+«ENDDEFINE»
+
+
+// generate all methods for a classifier
+«DEFINE OperationImpl FOR MClassifier-»
+«EXPAND OperationImpl FOREACH operation.select(e|e.name != name && !e.abstract)-»
+«ENDDEFINE»
+
+
+// generate constructor for mclass
+«DEFINE ConstructorImpl FOR MOperation-»
+«EXPAND _CommentOperation-»
+«EXPAND _Modifier» «asClassifierName(name)» («EXPAND _Parameter») «EXPAND _Exception» {
+«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
+}
+«ENDDEFINE»
+
+
+// generate a declaration for an abstract operation
+«DEFINE OperationDecl FOR MOperation-»
+«EXPAND _CommentOperation-»
+«EXPAND _Modifier» «typeMap(returnType.name())» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception»;
+«ENDDEFINE»
+
+
+// generate an implementation for an normal operation
+«DEFINE OperationImpl FOR MOperation-»
+«EXPAND _CommentOperation-»
+«EXPAND _Modifier» «typeMap(returnType.name())» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
+	«getReturnTypeDeclaration(typeMap(returnType.name()))»
+	«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
+	«getReturnTypeReturn(typeMap(returnType.name()))»
+}
+«ENDDEFINE»
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+«DEFINE _CommentOperation FOR MOperation-»
+/**
+«IF hasComment()-»
+ * «getCommentText(ownedComment)»
+«ENDIF-»
+«EXPAND _CommentParameter-»
+«EXPAND _CommentReturn-»
+«EXPAND _CommentExeception-»
+ */
+«ENDDEFINE»
+
+«DEFINE _CommentParameter FOR MOperation-»
+«FOREACH parameter.typeSelect(MParameter) AS p-»
+ * @param  «asParameterName(p.name)»  «getCommentText(p.ownedComment)»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+«DEFINE _CommentReturn FOR MOperation-»
+«IF returnType.name().toLowerCase() != "void" -»
+ * @return  «getCommentText(returnType.ownedComment())»
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE _CommentExeception FOR MOperation-»
+«FOREACH raisedException.typeSelect(MClassifier) AS c-»
+ * @throws  «asClassifierName(c.name)»  «getCommentText(c.ownedComment)»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+
+// generate a protected region for own implementations
+«DEFINE _OwnCodeImpl(String proRegId) FOR MOperation-»
+/* «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)» */
+/* <!-- TODO put your own implementation code here --> */
+
+/* «ENDPROTECT» */
+«ENDDEFINE»
+
+
+// generate modifiers for moperation
+«DEFINE _Modifier FOR MOperation-»
+«visibility» «IF static»static«ENDIF» «IF final»final«ENDIF» «IF abstract»abstract«ENDIF»
+«ENDDEFINE»
+
+
+// generate a parameter list for moperation
+«DEFINE _Parameter FOR MOperation-»
+«FOREACH parameter AS p SEPARATOR ", "»
+	«EXPAND _Parameter FOR p-»
+«ENDFOREACH»
+«ENDDEFINE»
+
+
+// generate a parameter for moperation
+«DEFINE _Parameter FOR MParameter»
+«IF multiplicity == 1-»
+	«typeMap(type.name())» «asParameterName(name)»
+«ELSE-»
+	«typeMap(type.name())»[] «asParameterName(name)»
+«ENDIF-»
+«ENDDEFINE»
+
+
+// generate exceptions for a moperation
+«DEFINE _Exception FOR MOperation-»
+«IF !raisedException.isEmpty-»
+	throws «FOREACH raisedException AS e SEPARATOR ", "»«asClassifierName(e.name())»«ENDFOREACH»
+«ENDIF-»
+«ENDDEFINE»
