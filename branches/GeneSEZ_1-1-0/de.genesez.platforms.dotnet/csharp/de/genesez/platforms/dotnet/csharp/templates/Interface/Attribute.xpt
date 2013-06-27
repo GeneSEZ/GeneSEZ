@@ -1,0 +1,61 @@
+«REM»
+	Attribute template for C# classes
+	
+	@autor	Gerrit Beine
+	@date	2008/01/18
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Arrange»
+
+«IMPORT de::genesez::platforms::dotnet::csharp»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate public attributes for a class
+«ENDREM»
+«DEFINE PublicFields FOR MInterface-»
+	«EXPAND _FieldDecl FOREACH publicFields()-»
+«ENDDEFINE»
+
+
+«REM»
+	generate public attributes for a class
+«ENDREM»
+«DEFINE Properties FOR MInterface-»
+	«EXPAND _PropertyDecl FOREACH properties()-»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate field declaration for an attribute
+«ENDREM»
+«DEFINE _FieldDecl FOR MAttribute-»
+	«EXPAND templates::Attribute::FieldDecl-»
+«ENDDEFINE»
+
+
+«REM»
+	generate property for an attribute
+«ENDREM»
+«DEFINE _PropertyDecl FOR MAttribute-»
+	«EXPAND templates::Attribute::PropertyDecl-»
+«ENDDEFINE»
+

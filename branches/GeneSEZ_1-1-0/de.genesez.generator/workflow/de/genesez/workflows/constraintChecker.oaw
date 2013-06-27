@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+	
+	<!-- 
+		executes a check script to validate the model against constraints
+		
+		following parameters are required:
+		==================================
+		
+		$modelSlot			name of the model slot which holds the model to check
+		$checkScript		the chk-file where the constraints are defined
+		$abortOnError		set true, if the generation stops on errors
+	 -->
+	
+	<!-- initialize the support for UML2 models -->
+	<bean class="org.openarchitectureware.uml2.Setup" standardUML2Setup="true" />
+	
+	<!-- working with genesez models requires the genesez meta model -->
+	<bean id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+		<metaModelPackage value="genesezMM.GenesezMMPackage" />
+	</bean>
+	<!-- bean id="genesezMM" class="org.eclipse.m2t.type.emf.EmfRegistryMetaModel" / -->
+	<!-- bean id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+		<metaModelFile value="genesezMM.ecore" />
+	</bean -->
+	
+    <!-- working with uml2 models requires the uml2 meta model -->
+	<bean id="uml2MM" class="org.openarchitectureware.uml2.UML2MetaModel"/>
+	
+	
+	<component id="constraintChecker" class="org.openarchitectureware.check.CheckComponent">
+		
+		<metaModel idRef="genesezMM" />
+		<metaModel idRef="uml2MM" />
+		
+		<!-- This is the file that contains the constraints. Note the use of
+			 :: as the namespace delimiter. Also don't specify the .chk
+			 extension of the uml2Constraints file. The namespaces correspond
+			 to Java packages. -->
+		<checkFile value="${checkScript}" />
+		
+		<!-- Check the complete set of model elements under the generatorModel 
+			 slot in the workflow. This will be the model object and all its
+			 children, recusively.  -->
+		<emfAllChildrenSlot value="${modelSlot}" />
+		
+		<!-- Finally, if encounter errors here (i.e. failed constraints)
+			 we stop the workflow here. We won't invoke the transformation if
+			 the model is faulty. -->
+		<abortOnError value="${abortOnError}" />
+	</component>
+
+</workflow>

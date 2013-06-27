@@ -1,0 +1,130 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+
+«EXTENSION de::genesez::typemapping::TypeMapping»
+
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// additional functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate a declaration for an attribute
+«DEFINE ThreadDecl FOR MClassifier-»
+/**
+ */
+private Thread runner;
+«ENDDEFINE»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// override functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate a getter implementation method for a mattribute
+«DEFINE GetterImpl FOR MAttribute-»
+«EXPAND _CommentGetter-»
+«IF multiplicity == 1-»
+	public «IF static»static«ENDIF» «typeMap(type.name())» «asGetter(name)»() {
+		return «asAttributeName()»;
+	}
+«ELSE-»
+	public «IF static»static«ENDIF» «typeMap(type.name())» «asGetter(name)»(int _index) {
+		return («type.name()»)«asVariableName(name)».elementAt(_index);
+	}
+	
+	public «IF static»static«ENDIF» int «asGetter(name + "Count")»() {
+		return «asVariableName(name)».size();
+	}
+«ENDIF-»
+«ENDDEFINE»
+
+
+// generate a insert in implementation method
+«DEFINE InsertInImpl FOR MAttribute-»
+«IF multiplicity != 1-»
+	«EXPAND _CommentAccessor-»
+	public «IF static»static«ENDIF» void insertIn«name.toFirstUpper()»(«typeMap(type.name())» _in) {
+		if («asAttributeName()».contains(_in)) {
+			return;
+		}
+		«asAttributeName()».addElement(_in);
+	}
+«ENDIF-»
+«ENDDEFINE»
+
+
+// generate a remove from implementation method
+«DEFINE RemoveFromImpl FOR MAttribute-»
+«IF multiplicity != 1-»
+	«EXPAND _CommentAccessor-»
+	public void removeFrom«name.toFirstUpper()»(«typeMap(type.name())» _ex) {
+		if (!«asAttributeName()».contains(_ex)) {
+			return;
+		}
+		«asAttributeName()».removeElement(_ex);
+	}
+	«ENDIF-»
+«ENDDEFINE»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+«DEFINE _CommentAttribute FOR MAttribute-»
+/**
+ * variable
+«IF hasComment()-»
+ * @see {@link «asGetter(name)»}
+«ENDIF-»
+ */
+«ENDDEFINE»
+
+
+«DEFINE _CommentGetter FOR MAttribute-»
+/**
+ * accessor for attribute «asAttributeName()»
+«IF hasComment()-»
+ * «getCommentText(ownedComment)»
+«ENDIF-»
+ */
+«ENDDEFINE»
+
+
+«DEFINE _CommentAccessor FOR MAttribute-»
+/**
+ * accessor for attribute «asAttributeName()»
+«IF hasComment()-»
+ * @see {@link «asGetter(name)»}
+«ENDIF-»
+ */
+«ENDDEFINE»
+
+
+// generate a protected region for own implementations
+«DEFINE _OwnCodeImpl(String proRegId) FOR MAttribute-»
+/* «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)» */
+/* <!-- TODO put your own implementation code here --> */
+
+/* «ENDPROTECT» */
+«ENDDEFINE»
+
+
+// generate modifiers for mattribute
+«DEFINE _Modifier FOR MAttribute-»
+«visibility» «IF static»static«ENDIF» «IF final»final«ENDIF»
+«ENDDEFINE»
+
+
+// generate defaultvalue for mattribute
+«DEFINE _DefaultValue FOR MAttribute-»
+«IF defaultvalue.length > 0»= «defaultvalue»«ENDIF»
+«ENDDEFINE»

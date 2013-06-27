@@ -1,0 +1,188 @@
+«REM»
+	Class Template for C#
+	
+	@autor	Gerrit Beine
+	@date	2008/01/08
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Arrange»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate a class
+«ENDREM»
+«DEFINE Root FOR MClass-»
+	«EXPAND _Class»
+	{
+		«IF hasStaticFields()»«EXPAND _StaticFields»«ENDIF-»
+		«IF hasPrivateFields()»«EXPAND _PrivateFields»«ENDIF-»
+		«IF hasPublicFields()»«EXPAND _PublicFields»«ENDIF-»
+		«IF hasProperties()»«EXPAND _Properties»«ENDIF-»
+		«IF hasConstructors()»«EXPAND _Constructors»«ENDIF-»
+		«IF hasAbstractMethods()»«EXPAND _AbstractMethods»«ENDIF-»
+		«IF hasStaticMethods()»«EXPAND _StaticMethods»«ENDIF-»
+		«IF hasPublicMethods()»«EXPAND _PublicMethods»«ENDIF-»
+		«IF hasPrivateMethods()»«EXPAND _PrivateMethods»«ENDIF-»
+		«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
+	}
+«ENDDEFINE»
+
+
+«REM»
+	do nothing for other classifiers
+«ENDREM»
+«DEFINE Root FOR MClassifier-»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate the class declaration
+«ENDREM»
+«DEFINE _Class FOR MClass-»
+		public class «asClassifierName()-»«EXPAND _Supertype-»
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for static fields
+«ENDREM»
+«DEFINE _StaticFields FOR MClass-»
+		#region Static Fields
+		«EXPAND Class::Attribute::StaticFields-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for private fields
+«ENDREM»
+«DEFINE _PrivateFields FOR MClass-»
+		#region Private Fields
+		«EXPAND Class::Attribute::PrivateFields-»
+		«EXPAND Class::Association::PrivateFields-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for public fields
+«ENDREM»
+«DEFINE _PublicFields FOR MClass-»
+		#region Public Fields
+		«EXPAND Class::Attribute::PublicFields-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for properties
+«ENDREM»
+«DEFINE _Properties FOR MClass-»
+		#region Properties
+		«EXPAND Class::Attribute::Properties-»
+		«EXPAND Class::Association::Properties-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for constructors
+«ENDREM»
+«DEFINE _Constructors FOR MClass-»
+		#region Constructors
+		«EXPAND Class::Operation::ConstructorImpl-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for abstract methods
+«ENDREM»
+«DEFINE _AbstractMethods FOR MClass-»
+		#region Abstract Methods
+		«EXPAND Class::Operation::OperationDecl-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for static methods
+«ENDREM»
+«DEFINE _StaticMethods FOR MClass-»
+		#region Static Methods
+		«EXPAND Class::Operation::StaticOperationImpl-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for public methods
+«ENDREM»
+«DEFINE _PublicMethods FOR MClass-»
+		#region Public Methods
+		«EXPAND Class::Operation::PublicOperationImpl-»
+		«EXPAND Class::Association::InsertImpl-»
+		«EXPAND Class::Association::RemoveImpl-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for private methods
+«ENDREM»
+«DEFINE _PrivateMethods FOR MClass-»
+		#region Private Methods
+		«EXPAND Class::Operation::PrivateOperationImpl-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate generalization for an interface
+«ENDREM»
+«DEFINE _Supertype FOR MClass-»
+«IF hasSupertypes() -»
+ : «FOREACH supertypes() AS t SEPARATOR ", "»«asClassifierName(t)»«ENDFOREACH-» 
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate a protected region for own implementations
+«ENDREM»
+«DEFINE _OwnCodeImpl(String proRegId) FOR MClass-»
+		#region Your Own Implementations
+		«PROTECT CSTART "/* " CEND " */" ID (proRegId)»
+		/* TODO put your own implementation code here */
+		
+		«ENDPROTECT»
+		#endregion
+«ENDDEFINE»
