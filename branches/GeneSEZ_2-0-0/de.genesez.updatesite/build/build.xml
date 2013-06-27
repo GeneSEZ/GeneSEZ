@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." name="GeneSEZ Update-Site">
+
+	<condition property="build.basedir"
+		value="${basedir}/..">
+		<not>
+			<isset property="build.basedir" />
+		</not>
+	</condition>
+
+	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
+	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />
+
+	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
+
+	<condition property="updatesite.destination"
+		value="${updatesite.location}/${branch}"
+		else="${updatesite.location}">
+		<isset property="branch" />
+	</condition>
+
+	<property name="feature.destination" value="${updatesite.destination}/features" />
+	<property name="plugin.destination" value="${updatesite.destination}/plugins" />
+
+<!--======================================================-->
+<!-- UpdateSite Export target -->
+<!-- ==================================================== -->
+	<target name="distribute">
+		<for param="project">
+			<path refid="build.plugins" />
+			<sequential>
+				<copy todir="${updatesite.plugins}">
+					<fileset dir="@{project}/dist">
+						<include name="*_${plugin.version}.jar"/>
+					</fileset>
+				</copy>
+			</sequential>
+		</for>
+		<for param="project">
+			<path refid="build.features" />
+			<sequential>
+				<copy todir="${updatesite.features}">
+					<fileset dir="@{project}/dist">
+						<include name="*_${plugin.version}.jar"/>
+					</fileset>
+				</copy>
+			</sequential>
+		</for>
+		<copy includeemptydirs="false" todir="${feature.destination}">
+			<fileset dir="features" includes="**/*.jar" />
+		</copy>
+		<copy includeemptydirs="false" todir="${plugin.destination}">
+			<fileset dir="plugins" includes="**/*.jar" />
+		</copy>
+		<copy file="site.xml" todir="${updatesite.destination}" />
+ 	</target>
+
+</project>

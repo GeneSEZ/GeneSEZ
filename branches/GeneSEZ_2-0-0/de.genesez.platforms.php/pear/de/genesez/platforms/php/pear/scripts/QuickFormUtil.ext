@@ -1,0 +1,34 @@
+/**
+ * Utility functions for the PEAR::HTML_QuickForm support
+ * 
+ * @author	tobias haubold
+ * @date	2008-09-10
+ */
+
+// based on genesez meta model
+import gcore;
+
+/**
+ * returns true if values of properties of objects are set using a setter method
+ * @return	true, if a setter method should be used, otherwise false
+ */
+boolean isSetterAccess() : propertyAccess() == "setter";
+
+/**
+ * returns true if values of properties of objects are set using the attribute
+ * @return	true, if the values are directly assigned to objects, otherwise false
+ */
+boolean isAttributeAccess() : propertyAccess() == "attribute";
+
+/**
+ * returns true if values of properties of objects are set using array access
+ * @return	true, if the values are assigned to objects like arrays, otherwise false
+ */
+boolean isArrayAccess() : propertyAccess() == "array";
+
+/**
+ * returns how properties of objects are accessed as configured as global variable
+ * the default is using a 'setter' method
+ * @return	value indicating how property of objects are accessed
+ */
+String propertyAccess() : GLOBALVAR propertyAccess == null ? "setter" : GLOBALVAR propertyAccess;

@@ -1,0 +1,126 @@
+«IMPORT gcore»
+
+«REM»
+	imports for ejb3 platform
+	
+	@author		andre pflueger
+	@date		2010-10-11
+	@version	2.0
+«ENDREM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+«REM» 
+	generates import proReg and statements for ejb classes
+	is used by aspects to extend´import generation of java5 cartridge
+«ENDREM»
+«DEFINE ImportStatements FOR MClassifier-»
+	«EXPAND CallbackImport»
+	«IF operation.exists(e|e.hasStereotype("ejb3Timer"))-»
+		import javax.ejb.Timer;
+	«ENDIF»
+	«IF hasStereotype("ejb3SessionBean")-»
+		import javax.persistence.PersistenceContext;
+		«IF hasTaggedValue("ejb3SessionBean", "stateful", "false")-»
+			import javax.ejb.Stateless;
+		«ELSEIF hasTaggedValue("ejb3SessionBean", "stateful", "true")»
+			import javax.ejb.Stateful;
+		«ENDIF-»
+		«IF hasStereotype("ejb3Remote")-»
+			import javax.ejb.Remote;
+		«ENDIF-»
+		«IF hasStereotype("ejb3Local")-»
+			import javax.ejb.Local;
+		«ENDIF-»
+		«IF hasStereotype("ejb3WebService")-»
+			import javax.jws.WebService;
+			import javax.jws.soap.SOAPBinding;
+			import javax.jws.WebMethod;
+			import javax.jws.Oneway;
+			import javax.jws.WebParam;
+			import javax.jws.WebResult;
+			import javax.jws.HandlerChain;
+		«ENDIF-»
+	«ENDIF»
+	«IF hasStereotype("ejb3MessageDrivenBean")-»
+		import javax.ejb.MessageDriven;	
+		import javax.jms.MessageListener;
+		import javax.ejb.ActivationConfigProperty;		
+	«ENDIF»
+	import javax.annotation.*;
+	import javax.ejb.*;
+	«FOREACH this.getModel().nestedPackage AS p-»
+			import «IF this.basePackage() != ""-»«this.basePackage()-».«ENDIF-»«p.name-».*;
+	«ENDFOREACH»	
+«ENDDEFINE»
+
+
+«REM» 
+	evaluate the stereotype ejb3Callback for class import
+	can be used by interceptor and entity listener class generation
+	
+	takes care of downwards compatibility from ejb3 to ejb2.x by
+	not creating callback methods in an interceptor class for some
+	special methods with coressponding callback annotations 
+	(page 363 of ejb3 professionell of Oliver Ihns)
+	
+	downwards compability shoud be done by check language before generation starts 
+«ENDREM»
+«DEFINE CallbackImport FOR MClassifier-»
+	«FOREACH operation.select(e|e.hasTaggedValue("ejb3Callback", "external", "true")) AS methods»
+		«IF methods.hasStereotype("ejb3OperationInterceptor")
+			&& !(methods.name == "ejbCreate" 
+				&& methods.hasTaggedValue("ejb3Callback", "postConstruct", "true"))
+			|| !(methods.name == "ejbRemove" 
+				&& methods.hasTaggedValue("ejb3Callback", "preDestroy", "true"))
+			|| !(methods.name == "ejbActivate" 
+				&& methods.hasTaggedValue("ejb3Callback", "postActivate", "true"))
+			|| !(methods.name == "ejbPassivate" 
+				&& methods.hasTaggedValue("ejb3Callback", "prePassivate", "true"))
+		-»
+			«IF methods.hasTaggedValue("ejb3Callback", "preConstruct", "true")»
+				import javax.annotation.PostConstruct;
+			«ENDIF»
+			«IF methods.hasTaggedValue("ejb3Callback", "preDestroy", "true")»
+				import javax.annotation.PreDestroy;
+			«ENDIF»
+			«IF methods.hasTaggedValue("ejb3Callback", "postActivate", "true")»
+				import javax.ejb.PostActivate;
+			«ENDIF»
+			«IF methods.hasTaggedValue("ejb3Callback", "prePassivate", "true")»
+				import javax.ejb.PrePassivate;
+			«ENDIF»
+			«IF methods.hasTaggedValue("ejb3Callback", "postPersist", "true")»
+				import javax.persistence.PostPersist;
+			«ENDIF»
+			«IF methods.hasTaggedValue("ejb3Callback", "prePersist", "true")»
+				import javax.persistence.PrePersist;
+			«ENDIF»
+			«IF methods.hasTaggedValue("ejb3Callback", "postUpdate", "true")»
+				import javax.persistence.PostUpdate;
+			«ENDIF»
+			«IF methods.hasTaggedValue("ejb3Callback", "preUpdate", "true")»
+				import javax.persistence.PreUpdate;
+			«ENDIF»	
+			«IF methods.hasTaggedValue("ejb3Callback", "postRemove", "true")»
+				import javax.persistence.PostRemove;
+			«ENDIF»
+			«IF methods.hasTaggedValue("ejb3Callback", "preRemove", "true")»
+				import javax.persistence.PreRemove;
+			«ENDIF»
+			«IF methods.hasTaggedValue("ejb3Callback", "postLoad", "true")»
+				import javax.persistence.PostLoad;
+			«ENDIF»
+		«ENDIF-»
+	«ENDFOREACH»
+«ENDDEFINE»

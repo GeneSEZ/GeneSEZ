@@ -1,0 +1,85 @@
+«REM»
+	Template for jbv attributes
+	
+	@author		andre pflueger
+	@date		2011-01-13
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» 
+	evaluate stereotypes for attributes 
+«ENDREM»
+«DEFINE Annotation FOR MAttribute-»
+	«EXPAND _Email-»
+	«EXPAND _Size-»
+	«EXPAND _Pattern-»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» 
+	evaluate stereotype "jhvEmail"
+«ENDREM»
+«DEFINE _Email FOR MAttribute-»
+	«IF hasStereotype("jhvEmail")-»
+		@Email«IF hasUtilizableValue("jhvEmail", "message")-»(
+			message="«getTaggedValue("jhvEmail", "message")-»")
+		«ENDIF»		
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM» 
+	evaluate stereotype "jbvSize"
+«ENDREM»
+«DEFINE _Size FOR MAttribute-»
+	«IF hasStereotype("jbvSize")-»
+		@Size«IF (hasUtilizableValue("jbvSize", "min") || hasUtilizableValue("jbvSize", "max") || hasUtilizableValue("jbvSize", "message"))-»(
+			«IF hasUtilizableValue("jbvSize", "min")-»
+				min=«getTaggedValue("jbvSize", "min")-»,
+			«ENDIF-»
+			«IF hasUtilizableValue("jbvSize", "max")-»
+				max=«getTaggedValue("jbvSize", "max")-»,
+			«ENDIF-»
+			«IF hasUtilizableValue("jbvSize", "message")-»
+				message="«getTaggedValue("jbvSize", "message")-»"
+			«ENDIF-»)
+		«ENDIF»		
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM» 
+	evaluate stereotype "jbvPattern"
+«ENDREM»
+«DEFINE _Pattern FOR MAttribute-»
+	«IF hasStereotype("jbvPattern")-»
+		@Pattern«IF (hasUtilizableValue("jbvPattern", "regex") || hasUtilizableValue("jbvPattern", "message"))-»(
+			«IF hasUtilizableValue("jbvPattern", "regex")-»
+				regex="«getTaggedValue("jbvPattern", "regex")-»",
+			«ENDIF-»
+			«IF hasUtilizableValue("jbvPattern", "message")-»
+				message="«getTaggedValue("jbvPattern", "message")-»"
+			«ENDIF-»)
+		«ENDIF»		
+	«ENDIF-»
+«ENDDEFINE»

@@ -1,0 +1,221 @@
+«IMPORT gcore»
+
+«EXTENSION de::genesez::platforms::common::log::Log»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::cpp::scripts::Naming»
+«EXTENSION de::genesez::platforms::cpp::scripts::AccessHelper»
+«EXTENSION de::genesez::platforms::cpp::helper::IncludeHelper»
+«EXTENSION de::genesez::platforms::cpp::helper::PackageHelper»
+
+«DEFINE Declaration(String vis) FOR MInterface -»
+«IF vis == "public" -»«EXPAND _destructorDecl(vis) -»«ENDIF -»	
+«EXPAND _ioperations FOREACH operation.select(e | ( !e.isConstructor() && e.visibility == vis )) -»
+«ENDDEFINE»
+
+«DEFINE Declaration(String vis) FOR MClass -»
+	«EXPAND _constructorDecl(vis)-»
+	«EXPAND _destructorDecl(vis)-»
+	«EXPAND _operationsDecl FOREACH operation.select(e | ( !e.isConstructor() && e.visibility == vis && !e.isClassOperator())) -»
+«ENDDEFINE»
+
+«DEFINE Implementation FOR MClass -»
+	«EXPAND _defConstructorImpl -»
+	
+	«EXPAND _constructorImpl FOREACH operation.select(e | e.isConstructor()) -»	
+	«EXPAND _destructorImpl -»
+	
+	«EXPAND _operationsImpl FOREACH operation.select(e | !e.isConstructor() && !e.isClassOperator()) -»	
+«ENDDEFINE»
+
+«DEFINE ClassOperatorDeclaration FOR MClass -»
+«FOREACH operation.select(e|e.isClassOperator()) AS o-»
+	«IF o.isSingleValuedType()-»	
+		«EXPAND _returnTypeSingle FOR o» operator«o.asOperation()-»(«EXPAND _parameters FOR o-»);
+	«ELSE-»
+		«EXPAND _returnTypeMulti FOR o» operator«o.asOperation()-»(«EXPAND _parameters FOR o-»);
+	«ENDIF-»
+«ENDFOREACH-»	
+«ENDDEFINE»
+
+«DEFINE ClassOperatorImplementation FOR MClass -»
+«FOREACH operation.select(e|e.isClassOperator()) AS o-»
+	«IF o.isSingleValuedType()-»	
+		«IF hasGenericParameter()-»«EXPAND Generic::Declaration-»«ENDIF-» «EXPAND _returnTypeSingle FOR o» operator«o.asOperation()-»(«EXPAND _parametersImpl FOR o-») {
+	«ELSE-»
+		«IF hasGenericParameter()-»«EXPAND Generic::Declaration-»«ENDIF-» «EXPAND _returnTypeMulti FOR o» operator«o.asOperation()-»(«EXPAND _parametersImpl FOR o-») {
+	«ENDIF-»
+	«PROTECT CSTART '/* ' CEND ' */' ID ("cpp.implementation." + o.xmiGuid)»
+	// TODO: implementation of '«o.asOperation()-»' for class '«o.classifier.asTypeName()»'
+	throw std::exception();
+	«ENDPROTECT»	
+	}
+«ENDFOREACH-»	
+«ENDDEFINE»
+
+«REM»
+ ************************************
+ private stuff
+ ************************************
+«ENDREM»
+
+«DEFINE _constructorDecl(String vis) FOR MClass-»	
+	«IF !abstract && vis == "public"-»«EXPAND _defaultConstructorDecl-»«ENDIF-»		
+	«IF abstract && vis == "protected"-»«EXPAND _defaultConstructorDecl-»«ENDIF-»	
+	«IF vis == "public"-»«EXPAND _copyConstructorDecl-»«ENDIF-»	
+	«EXPAND _otherConstructorDecl FOREACH operation.select(e | ( e.isConstructor() && e.visibility == vis )) -»
+«ENDDEFINE»
+
+«DEFINE _defaultConstructorDecl FOR MClass -»
+«EXPAND Comment::DefaultConstructor -»
+	«asTypeName() -»();	
+«ENDDEFINE»
+
+«DEFINE _copyConstructorDecl FOR MClass -»
+	«EXPAND Comment::CopyConstructor -»
+	«asTypeName() -»(const «getFQNS()-»«asTypeName()-»«IF hasGenericParameter()-»«EXPAND Generic::Generics-»«ENDIF-»&);
+«ENDDEFINE»
+
+«DEFINE _otherConstructorDecl FOR MOperation -»
+	«classifier.asTypeName()-»(«EXPAND _parameters-»);
+«ENDDEFINE »
+
+«DEFINE _destructorDecl(String vis) FOR MClassifier -»
+«IF(!final && vis == "public")-»
+virtual ~«asTypeName()-»()«IF isInterface()-» {}«ENDIF-»;
+«ENDIF-»
+«IF (final && vis == "private")-»
+virtual ~«asTypeName()-»()«IF isInterface()-» {}«ENDIF-»;
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE _operationsDecl FOR MOperation -»
+«EXPAND Comment::Comment -»
+«IF isSingleValuedType() -»
+«EXPAND _modifier -» «EXPAND _returnTypeSingle -» «IF isOperatorOverload() -»operator«ENDIF -»«asOperation() -»(«EXPAND _parameters -») «EXPAND _pureModifier -»«IF isConstOp() -» const«ENDIF -»;
+«ELSE-»
+«EXPAND _modifier -» «EXPAND _returnTypeMulti -» «IF isOperatorOverload() -»operator«ENDIF -»«asOperation() -»(«EXPAND _parameters -») «EXPAND _pureModifier -»;
+«ENDIF-»	
+«ENDDEFINE»
+
+«DEFINE _returnTypeSingle FOR MOperation -»
+«IF returnType.isGenericType() -»«returnType.name() -»«getTypeModifier() -»
+«ELSE -»
+«returnType.getFQNS() -»«returnType.mapName().asTypeName() -»«EXPAND Generic::Generics -»«getTypeModifier() -»
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _returnTypeMulti FOR MOperation-»
+«IF returnType.isGenericType()»«mapType()-»<«returnType.name() -»«getTypeModifier()»>
+«ELSE»«mapType()-»<«returnType.mapName().asTypeName()-»«EXPAND Generic::Generics -»>«getTypeModifier()»«ENDIF»
+«ENDDEFINE»
+
+«DEFINE _ioperations FOR MOperation -»
+«IF isSingleValuedType()-»
+«EXPAND _imodifier -» «EXPAND _returnTypeSingle -» «IF isOperatorOverload()-»operator«ENDIF-»«asOperation() -»(«EXPAND _parameters -») = 0;
+«ELSE-»
+«EXPAND _imodifier -» «EXPAND _returnTypeMulti -»-»> «asOperation() -»(«EXPAND _parameters -») = 0;«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE _parameters FOR MOperation -»
+«FOREACH parameter AS p SEPARATOR ", "-»
+	«IF p.isSingleValuedType() -»«IF isOperatorOverload() -»const «ENDIF -»«EXPAND _parameterSingle FOR p -»«IF p.hasDefaultValue() -»«p.asParameter() -» «EXPAND _defaultValue FOR p -»«ENDIF -»
+	«ELSE-»«IF isOperatorOverload()-»const «ENDIF-» «EXPAND _parameterMulti FOR p-»«ENDIF -»
+«ENDFOREACH -»
+«ENDDEFINE»
+
+«DEFINE _parameterSingle FOR MParameter-»
+«IF type.isGenericType() -»«type.name() -»«getTypeModifier() -»
+«ELSE- »«type.getFQNS() -»«type.mapName().asTypeName() -»«EXPAND Generic::Generics -»«getTypeModifier() -»«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _parameterMulti FOR MParameter-»
+«IF type.isGenericType()-»«mapType() -»<«type.name() -»«getTypeModifier()-»>
+«ELSE»«mapType()-»<«type.getFQNS()-»«type.asTypeName()-»«EXPAND Generic::Generics -»>«getTypeModifier() -»«ENDIF»
+«ENDDEFINE»
+
+«DEFINE _defaultValue FOR MParameter -»
+«IF hasDefaultValue() -»= «defaultvalue -»«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _modifier FOR MOperation -»
+«IF abstract -»virtual «ENDIF -»«IF static -»static «ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _imodifier FOR MOperation -»
+virtual«IF static -» static«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _pureModifier FOR MOperation -»
+	«IF abstract -»= 0«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _defConstructorImpl FOR MClass-»
+«IF hasGenericParameter()-»«EXPAND Generic::Declaration-»«ENDIF-»«asTypeName()»«IF hasGenericParameter()-»«EXPAND Generic::Generics-»«ENDIF-»::«asTypeName()-»() «EXPAND _initializationList-»{
+	«PROTECT CSTART '/* ' CEND ' */' ID("cpp.stdconstructor." + xmiGuid)»
+	// TODO: implementation of standard constructor for class '«asTypeName()»'
+
+	«ENDPROTECT»
+}
+	
+«IF hasGenericParameter()-»«EXPAND Generic::Declaration-»«ENDIF-»«asTypeName()»«IF hasGenericParameter()-»«EXPAND Generic::Generics-»«ENDIF-»::«asTypeName()-»(const «getFQNS()-»«asTypeName()-»«IF hasGenericParameter()-»«EXPAND Generic::Generics-»«ENDIF-»& _toCopy){
+	«PROTECT CSTART '/* ' CEND ' */' ID("cpp.copyconstructor." + xmiGuid)»
+	// TODO: implementation of copy constructor for class '«asTypeName()»'
+	«FOREACH property.typeSelect(MAttribute).select(e| !e.isTypedef() && !e.derived && !e.final && !e.static) AS mAttribute -»
+	«mAttribute.asAttribute()-» = _toCopy.«mAttribute.asAttribute()-»;
+	«ENDFOREACH»	
+	«FOREACH property.typeSelect(MAssociationRole).select(e|!e.derived) AS mAssociationRole -»«mAssociationRole.asAttribute() -» = _toCopy.«mAssociationRole.asAttribute()-»;«ENDFOREACH-»
+«ENDPROTECT»		
+}
+«ENDDEFINE»
+
+«DEFINE _constructorImpl FOR MOperation-»
+«IF classifier.hasGenericParameter()-»«EXPAND Generic::Declaration FOR classifier-»«ENDIF-»«classifier.asTypeName()»«IF classifier.hasGenericParameter()-»«EXPAND Generic::Generics FOR classifier-»«ENDIF-»::«classifier.asTypeName()-»(«EXPAND _parametersImpl-»){
+	«PROTECT CSTART '/* ' CEND ' */' ID("cpp.constructor." + xmiGuid)»
+	// TODO: implementation of constructor for class '«classifier.asTypeName()»'
+	
+	«ENDPROTECT»	
+}
+«ENDDEFINE»
+
+«DEFINE _destructorImpl FOR MClass-»
+«IF hasGenericParameter()-»«EXPAND Generic::Declaration-»«ENDIF-»«asTypeName()»«IF hasGenericParameter()-»«EXPAND Generic::Generics-»«ENDIF-»::~«asTypeName()-»(){
+	«PROTECT CSTART '/* ' CEND ' */' ID("cpp.destructor." + xmiGuid)»
+	// TODO: implementation of destructor for class '«asTypeName()»'
+		
+	«ENDPROTECT»	
+}
+«ENDDEFINE»
+
+«DEFINE _operationsImpl FOR MOperation-»
+«IF !abstract-»
+	«IF classifier.hasGenericParameter()-»«EXPAND Generic::Declaration FOR classifier»«ENDIF»
+	«IF isSingleValuedType()-»
+		«EXPAND _returnTypeSingle» «classifier.asTypeName()»«IF classifier.hasGenericParameter()-»«EXPAND Generic::Generics FOR classifier-»«ENDIF-»::«IF isOperatorOverload()-»operator«ENDIF-»«asOperation() -»(«EXPAND _parametersImpl-»)«IF isConstOp() -» const«ENDIF -» {					
+	«ELSE-»
+		«EXPAND _returnTypeMulti» «classifier.asTypeName()»«IF classifier.hasGenericParameter()-»«EXPAND Generic::Generics FOR classifier-»«ENDIF-»::«IF isOperatorOverload()-»operator«ENDIF-»«asOperation() -»(«EXPAND _parametersImpl-»)«IF isConstOp() -» const«ENDIF -» {
+	«ENDIF-»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("cpp.implementation." + xmiGuid)»
+		// TODO: implementation of '«asOperation()-»' for class '«classifier.asTypeName()»'
+		throw std::exception();
+		«ENDPROTECT»
+	}
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE _parametersImpl FOR MOperation -»
+	«FOREACH parameter AS p SEPARATOR ", "-»
+		«IF p.isSingleValuedType()-»«IF isOperatorOverload()-»const«ENDIF-» «EXPAND _parameterSingle FOR p-» «p.asParameter()-»
+		«ELSE-»«IF isOperatorOverload()-»const«ENDIF-» «EXPAND _parameterMulti FOR p-» «p.asParameter() -»«ENDIF -»
+	«ENDFOREACH -»
+«ENDDEFINE»
+	
+«DEFINE _initializationList FOR MClass-»
+	«IF property.typeSelect(MAttribute).exists(e|e.hasDefaultValue() && !e.static && !e.final)-»
+		: «FOREACH property.typeSelect(MAttribute).select(e|e.hasDefaultValue() && !e.static && !e.final) AS p SEPARATOR ", "-»
+			«p.name-»(«p.defaultvalue-»)
+		  «ENDFOREACH»
+	«ENDIF-»
+«ENDDEFINE»

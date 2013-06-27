@@ -1,0 +1,118 @@
+import gcore;
+import greq;
+import gtrace;
+
+/**
+ * Provides helper function to access outdated traceability links, revised specification elements 
+ * and affected structure model elements.
+ * @author tobias haubold
+ */
+
+extension de::genesez::metamodel::navigation::RequirementsTraceability;
+extension de::genesez::platforms::dashboard::Conversion;
+extension de::genesez::platforms::dashboard::AccessHelper;
+
+
+cached List[TScenarioTrace] outdatedScenarioTrace(MClassifier this) :
+	scenarioTrace().select( e|e.criteria() ).sortBy( e|e.order() );
+
+cached List[TScenarioTrace] outdatedScenarioStepTrace(MOperation this) :
+	scenarioStepTrace().select( e|e.criteria() ).sortBy( e|e.order() );
+
+cached List[TRequirementTrace] outdatedRequirementTrace(MElement this) :
+	requirementTrace().select( e|e.criteria() ).sortBy( e|e.order() );
+
+
+Boolean hasOutdatedTraces(RSpecObject this) :
+	switch (metaType) {
+		case RRequirement : ((RRequirement)this).requirementTrace().exists( e|e.criteria() )
+		case RScenario : ((RScenario)this).scenarioTrace().exists( e|e.criteria() )
+		case RScenarioStep : ((RScenarioStep)this).scenarioStepTrace().exists( e|e.criteria() )
+		default : false
+	};
+
+
+Boolean isOutdated(TScenarioTrace this) : criteria();
+Boolean isOutdated(TScenarioStepTrace this) : criteria();
+Boolean isOutdated(TRequirementTrace this) : criteria();
+
+
+cached Boolean hasOutdatedScenarioTraces(RModel this) :
+	scenario.scenarioTrace().exists( st|st.isOutdated() );
+
+cached Boolean hasOutdatedScenarioStepTraces(RModel this) :
+	scenario.step.scenarioStepTrace().exists( sst|sst.isOutdated() );
+
+cached Boolean hasOutdatedRequirementTraces(RModel this) :
+	requirement.requirementTrace().exists( rt|rt.isOutdated() );
+
+
+cached List[RRequirement] revisedRequirement(RModel this) :
+	requirement.select( r|r.requirementTrace().exists( e|e.isOutdated() ) );
+
+cached List[RScenario] revisedScenario(RModel this) :
+	scenario.select( s|s.scenarioTrace().exists( e|e.isOutdated() ) );
+
+cached List[RScenarioStep] revisedScenarioStep(RModel this) :
+	scenario.step.select( s|s.scenarioStepTrace().exists( e|e.isOutdated() ) );
+
+
+cached List[MClassifier] affectedClassifier(MModel this) :
+	allClassifiers().select( c|c.scenarioTrace().exists( e|e.isOutdated() ) || c.requirementTrace().exists( e|e.isOutdated() ) );
+
+cached List[MAssociationRole] affectedAssociationRole(MModel this) :
+	allAssociationRoles().select( ar|ar.requirementTrace().exists( e|e.isOutdated() ) );
+
+cached List[MOperation] affectedOperation(MModel this) :
+	allOperations().select( o|o.scenarioStepTrace().exists( e|e.isOutdated() ) || o.requirementTrace().exists( e|e.isOutdated() ) );
+
+cached List[MParameter] affectedParameter(MModel this) :
+	allParameters().select( p|p.requirementTrace().exists( e|e.isOutdated() ) );
+
+cached List[MAttribute] affectedAttribute(MModel this) :
+	allAttributes().select( p|p.requirementTrace().exists( e|e.isOutdated() ) );
+
+
+// - - getter for revised specification
+/*
+cached List[RRequirement] revisedRequirement(MElement this) :
+	requirementTrace().select( e|e.criteria() ).sortBy( e|e.order() ).requirement;
+
+cached List[RScenario] revisedScenario(MClassifier this) :
+	scenarioTrace().select( e|e.criteria() ).sortBy( e|e.order() ).scenario;
+
+cached List[RScenarioStep] revisedScenarioStep(MOperation this) :
+	scenarioStepTrace().select( e|e.criteria() ).sortBy( e|e.order() ).scenarioStep;
+*/
+
+/**
+ * evaluates the criteria for revised traceability links
+ * @return	true, if the specification object is revised and the traceability link needs to be checked
+ */
+private boolean criteria(TTrace this) :
+	reviewed <= spec().version;
+
+/**
+ * returns the value, a comparator works on to sort a list of traces
+ * - first, the value reviewed + version are checked for dates and the diff in days is used
+ * - second, the value reviewed + version are checked for numbers and the diff is used
+ * - at last, the version of the specification object is used
+ */
+private Integer order(TTrace this) :
+	reviewed.isDate() && spec().version.isDate()
+	? daydiff(reviewed, spec().version)
+	: ( reviewed.isNumber() && spec().version.isNumber()
+		? spec().version.asInteger() - reviewed.asInteger()
+		: spec().version
+	);
+
+/**
+ * helper to obtain the specification object from a traceability link
+ */
+private RSpecObject spec(TTrace this) :
+	switch (metaType) {
+		case TRequirementTrace : ((TRequirementTrace)this).requirement
+		case TScenarioTrace : ((TScenarioTrace)this).scenario
+		case TScenarioStepTrace : ((TScenarioStepTrace)this).scenarioStep
+		default : null
+	};

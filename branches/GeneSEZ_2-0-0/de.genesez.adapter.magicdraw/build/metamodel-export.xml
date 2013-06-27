@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<project name="de.genesez.adapter.magicdraw" basedir=".." default="">
+	
+	<condition property="build.display"
+		value="${env.DISPLAY}"
+		else=":1">
+		<isset property="env.DISPLAY" />
+	</condition>
+	
+	<target name="magicdraw.clean" description="remove exported magic draw models">
+		<fileset dir="${modeling.dir}">
+			<include name="*.uml" />
+		</fileset>
+	</target>
+	
+	<target name="magicdraw.metamodel.export"
+		description="Export the GeneSEZ metamodel from Magic Draw to EMF XMI">
+		<parallel>
+			<antcall target="magicdraw.startx" />
+			<sequential>
+				<sleep seconds="5" />
+				<exec executable="${EXPORTEMFUML2}" osfamily="unix">
+					<env key="DISPLAY" value="${build.display}" />
+					<arg value="project_file=${basedir}/${magicdraw.file}" />
+					<arg value="destination_dir=${basedir}/${modeling.dir}" />
+					<arg value="load_all_modules=true" />
+					<arg value="check_time=true" />
+				</exec>
+				<exec executable="${EXPORTEMFUML2}.exe" osfamily="windows">
+					<env key="DISPLAY" value="${build.display}" />
+					<arg value="project_file=${basedir}/${magicdraw.file}" />
+					<arg value="destination_dir=${basedir}/${modeling.dir}" />
+					<arg value="load_all_modules=true" />
+					<arg value="check_time=true" />
+				</exec>
+				<antcall target="magicdraw.endx" />
+			</sequential>
+		</parallel>
+	</target>
+	
+	<!-- private target section -->
+	
+	<target name="magicdraw.startx" unless="env.DISPLAY">
+		<exec executable="${STARTPROC_BIN}" osfamily="unix">
+			<arg value="--start" />
+			<arg value="--background" />
+			<arg value="--exec" />
+			<arg value="${XVFB_BIN}" />
+			<arg value="--" />
+			<arg value="${build.display}" />
+			<arg value="-screen" />
+			<arg value="0" />
+			<arg value="800x600x8" />
+		</exec>
+	</target>
+
+	<target name="magicdraw.endx" unless="env.DISPLAY">
+		<exec executable="${KILLPROC_BIN}" osfamily="unix">
+			<arg value="--stop" />
+			<arg value="--exec" />
+			<arg value="${XVFB_BIN}" />
+		</exec>
+	</target>
+
+</project>
