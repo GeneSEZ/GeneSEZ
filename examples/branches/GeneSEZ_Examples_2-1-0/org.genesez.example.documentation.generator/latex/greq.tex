@@ -1,0 +1,174 @@
+
+\subsection{Class {\tt RModel}}
+Represents the entire requirements model, i.e. the root element of the model tree.
+
+\subsubsection{Attributes}
+The class \verb|RModel| defines the following attributes:
+\begin{description}
+	\item[name : String] The name of the requirements model, usually the same name as the project the requirements contained by the model are used for.
+\end{description}
+
+\subsubsection{References}
+The class \verb|RModel| defines the following references:
+\begin{description}
+	\item[requirement : RRequirement] Contains a list of all requirements within the model.
+	\item[scenario : RScenario] Contains a list of all scenarios within the model.
+	\item[extension : RAnnotation] Contains a list of all annotations defined for this model.
+\end{description}
+
+\subsection{Class {\tt RRequirement}}
+A requirement is a very focused statement about a paricular business need concerning a paricular unit of a system.
+
+\subsubsection{Attributes}
+The class \verb|RRequirement| defines the following attributes:
+\begin{description}
+	\item[rationale : String] Describes the sense of the requirement and can be useful to find a test context for the requirement.
+Usually the \verb|rationale| describes the requirement from another point of view as the \verb|description|.
+	\item[type : String] The type is used to classifiy requirements.
+Commonly used are \emph{functional} , 'non-functional' and \emph{constraint} .
+	\item[precedence : String] Specifies an ordinal value to determine crucial requirements by relating the values of different requirements.
+Possible values include the priority or a target relese.
+	\item[verificationMethod : String] Specifies how this requirement can be verified.
+It should just consits of a single word for an easy possible evaluation.
+Possibilities are: \emph{test} , \emph{demo}  and \emph{review} . You can check the SysML specification for more (non normative) possibilities.
+\end{description}
+
+\subsubsection{References}
+The class \verb|RRequirement| defines the following references:
+\begin{description}
+	\item[model : RModel] Reference to the requirements model.
+	\item[parent : RRequirement] Reference to the parent requirement. The opposite is child.
+It is used to nest requirements, with the exception of namespace embedding.
+
+This dependency is taken from SysML with change that no requirement is embedded into the namespace of one another.
+	\item[child : RRequirement] Contains a list of child requirements. The opposite is parent.
+It is used to nest requirements, with the exception of namespace embedding.
+
+This dependency is taken from SysML with change that no requirement is embedded into the namespace of one another.
+	\item[deriving : RRequirement] Reference to the requirement this requirement is derived from. The opposite is derived.
+It can be used to express a dependency between requirements in the means that the existence of one requirements it logical by one another.
+
+This dependency is taken from SysML.
+	\item[derived : RRequirement] Contains a list of derived requirements. The opposite is deriving.
+It can be used to express a dependency between requirements in the means that the existence of one requirement is logical by one another.
+
+This dependency is taken from SysML.
+	\item[refining : RRequirement] Reference to the requirement this requirement is refined from. The opposite is refined.
+It can be used to express a dependency between requirements in the means that one requirements is more precise than one another.
+
+This dependency is taken from SysML.
+	\item[refined : RRequirement] Contains a list of refined requirements. The opposite is refining.
+It can be used to express a dependency between requirements in the means that one requirements is more precise than one another.
+
+This dependency is taken from SysML.
+	\item[supportedScenario : RScenario] References to scenarios involving this requirement in their business objective.
+The opposite is supportedRequirement.
+	\item[supportedScenarioStep : RScenarioStep] References to scenario steps involving this requirement in their business objective.
+The opposite is supportedRequirement.
+\end{description}
+
+\subsection{Class {\tt RScenario}}
+A scenario is a description of how a system can be used to achieve a particular business need.
+It consists of steps which need to be performed in the defined order.
+
+A scenario is something like a \emph{use case} or a \emph{user story}.
+
+\subsubsection{Attributes}
+The class \verb|RScenario| defines the following attributes:
+\begin{description}
+	\item[precedence : String] Specifies an ordinal value to determine crucial scenarios by relating the values of different scenarios.
+Possible values include the priority or a target relese.
+	\item[verificationMethod : String] Specifies how this scenario can be verified.
+It should just consits of a single word for an easy possible evaluation.
+Possibilities are: \emph{test} , \emph{demo}  and \emph{review} . You can check the SysML specification for more non normative possibilities.
+\end{description}
+
+\subsubsection{References}
+The class \verb|RScenario| defines the following references:
+\begin{description}
+	\item[model : RModel] Reference to the requirements model.
+	\item[step : RScenarioStep] Contains a list of steps which must be performed in the defined order.
+	\item[supportedRequirement : RRequirement] Reference to requirements, involved in performing this scenario. The opposite is supportedScenario.
+\end{description}
+
+\subsection{Class {\tt RScenarioStep}}
+A scenario step is a particular, elementary doing of an actor involving a system.
+
+
+\subsubsection{References}
+The class \verb|RScenarioStep| defines the following references:
+\begin{description}
+	\item[scenario : RScenario] Reference to the context this step is performed.
+	\item[supportedRequirement : RRequirement] Reference to a list of requirements, involved in performing this step.
+\end{description}
+
+\subsection{Class {\tt RAnnotation}}
+Defines a particular model extension, similar to an UML stereotype.
+
+\subsubsection{Attributes}
+The class \verb|RAnnotation| defines the following attributes:
+\begin{description}
+	\item[uri : String] Provides a unique identifier for this model extension.
+\end{description}
+
+\subsubsection{References}
+The class \verb|RAnnotation| defines the following references:
+\begin{description}
+	\item[tag : RTag] Contains a list of \emph{tags}.
+	\item[model : RModel] Reference to the requirement model element.
+\end{description}
+
+\subsection{Class {\tt RTag}}
+A \verb|tag| represents a named definition of some meta data, like a key in a map or a tag of an UML stereotype.
+
+\subsubsection{Attributes}
+The class \verb|RTag| defines the following attributes:
+\begin{description}
+	\item[name : String] A description for the meta data the \verb|tag| identifies.
+	\item[type : String] Optionally identifies the type of the meta data the \verb|tag| identifies.
+\end{description}
+
+\subsubsection{References}
+The class \verb|RTag| defines the following references:
+\begin{description}
+	\item[annotation : RAnnotation] References the model extension defining the \verb|tag|.
+\end{description}
+
+\subsection{Class {\tt RValue}}
+Represents the meta data stored within a model extension, similar to values in a map or UML tagged values.
+
+\subsubsection{Attributes}
+The class \verb|RValue| defines the following attributes:
+\begin{description}
+	\item[value : String] Stores the meta data information.
+\end{description}
+
+\subsubsection{References}
+The class \verb|RValue| defines the following references:
+\begin{description}
+	\item[tag : RTag] References the meta data definition.
+	\item[object : RSpecObject] References the \emph{specification object} this meta data is assigned to.
+\end{description}
+
+\subsection{Class {\tt RSpecObject}}
+Represents a specification object.
+A specification object is general construct to group common properties of specification descriptions.
+
+\subsubsection{Attributes}
+The class \verb|RSpecObject| defines the following attributes:
+\begin{description}
+	\item[definition : String] A short but meaningful objective of the specification object.
+	\item[id : String] The unique identifier of the specification object with repect to this model but not globally unique.
+It means that objects of every specialized class can be uniquely identified, but not objects accross more specializations (globally unique).
+	\item[version : String] The version of the specification object is usually the date of the last modification or a requirement model global change indicating number like the version number in the subversion version control system.
+	\item[url : String] The URL to the corresponding specification item in the requirements management tool.
+\end{description}
+
+\subsubsection{References}
+The class \verb|RSpecObject| defines the following references:
+\begin{description}
+	\item[annotation : RAnnotation] Contains a list of all annotations assigned to this specification object.
+	\item[value : RValue] Contains a list of all values this specification object is annotated with.
+\end{description}
+
+	

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workflow>
+	
+	<!-- define a property for the file path and name of the uml2 model -->
+	<property name="uml2model" value="modelcache/gsz_blog_example.uml" />
+	
+	<!-- define a property for the file path and name of the xmi output -->
+	<property name="xmiOutput" value="modelcache/gsz_blog_example.xmi" />
+	
+	<!-- define a property for the output dir -->
+	<property name="outputDir" value="../gsz_blog_example" />
+	<!-- define a property that indicates if the model name is used as extension key or not -->
+	<property name="useModelNameAsExtensionKey" value="false" />
+	<!-- define a property for the extension key -->
+	<property name="extensionKey" value="gsz_blog_example" />
+	<!-- define a property that indicates if the model is TYPO3 Extbase complaint or not -->
+	<property name="isT3MVCCompliant" value="true" />
+	<!-- define a property that indicates if scaffolding is enabled or not -->
+	<property name="scaffolding" value="false" />
+	
+	
+
+	<!-- read the exported UML2 model and transform it into a GeneSEZ model -->
+	<component id="uml2genesez" class="org.genesez.adapter.uml2.Uml2GeneSEZ">
+		<model value="${uml2model}" />
+	</component>
+	
+	<!-- validate the GeneSEZ model against common + PHP + TYPO3 + TYPO3 MVC specific constraints -->
+	<component id="validate" class="org.genesez.platform.common.workflow.Validator">
+		<script value="org::genesez::platform::common::Constraints" />
+		<script value="org::genesez::platform::php::constraints::Syntax" />
+		<script value="org::genesez::platform::typo3v4::constraints::Convention" />
+		<script value="org::genesez::platform::typo3v4::mvc::constraints::Convention" />
+		<isT3MVCCompliant value="${isT3MVCCompliant}" />
+	</component>
+	
+	<!-- create the default directory layout for this TYPO3 MVC extension -->
+	<!--
+	<component id="defaultDirectory" class="org.genesez.platform.typo3v4.mvc.workflow.TYPO3DefaultDirectoryCreator">
+		<outputDir value="${outputDir}" />
+	</component>
+	-->
+	
+	<!-- execute static scaffolding for this TYPO3 MVC extension -->
+	<component id="scaffolding" class="org.genesez.platform.typo3v4.mvc.workflow.TYPO3Scaffolding">
+		<useModelNameAsExtensionKey value="${useModelNameAsExtensionKey}" />
+		<extensionKey value="${extensionKey}" />
+		<isT3MVCCompliant value="${isT3MVCCompliant}" />
+		<scaffolding value="${scaffolding}" />
+	</component>
+	
+	<!-- execute model modifications for this TYPO3 MVC extension -->
+	<component id="modifications" class="org.genesez.platform.typo3v4.mvc.workflow.TYPO3ModelModification">
+		<useModelNameAsExtensionKey value="${useModelNameAsExtensionKey}" />
+		<extensionKey value="${extensionKey}" />
+		<isT3MVCCompliant value="${isT3MVCCompliant}" />
+	</component>
+	
+	<!-- execute model additions for this TYPO3 MVC extension -->
+	<component id="additions" class="org.genesez.platform.typo3v4.mvc.workflow.TYPO3ModelAddition">
+		<useModelNameAsExtensionKey value="${useModelNameAsExtensionKey}" />
+		<extensionKey value="${extensionKey}" />
+		<isT3MVCCompliant value="${isT3MVCCompliant}" />
+	</component>
+	
+	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  -->
+	<component id="serialize" class="org.genesez.platform.common.workflow.Serializer">
+		<file value="${xmiOutput}" />
+	</component>
+	
+	<!-- execute code generation for this TYPO3 MVC extension -->
+	<component id="generate" class="org.genesez.platform.typo3v4.mvc.workflow.TYPO3Generator">
+		<outputDir value="${outputDir}" />
+		<typeMappingFile value="typemapping.xml" />
+		<useModelNameAsExtensionKey value="${useModelNameAsExtensionKey}" />
+		<extensionKey value="${extensionKey}" />
+		<isT3MVCCompliant value="${isT3MVCCompliant}" />
+		<scaffolding value="${scaffolding}" />
+		<generateSectionComments value="false" />
+		<!-- comma separated list of aspect scripts, used for the Xtend AOP-Feature -->
+		<aspectScript value="customization::Customization" />
+	</component>
+	
+</workflow>

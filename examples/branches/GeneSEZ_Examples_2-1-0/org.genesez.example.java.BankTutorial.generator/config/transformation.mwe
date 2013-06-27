@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workflow>	
+	<!-- set some properties -->	
+	<!-- disables the new association handling; its not tested for use with ejb3 -->
+	<property name="newAssociationHandling" value="false" />
+	<!-- use field access for ejb3 annotations -->
+	<property name="fieldAccess" value="true" />	
+	
+	
+	<!-- transform UML model into GeneSEZ metamodel -->
+	<component class="org.genesez.adapter.uml2.Uml2GeneSEZ">
+		<model value="model/BankTutorial.uml" />
+	</component>	
+	
+	<!-- validate the created model (gcore format) -->
+	<component id="validate" class="org.genesez.platform.common.workflow.Validator">
+		<script value="org::genesez::platform::common::Constraints" />
+		<script value="org::genesez::platform::java::constraints::Syntax" />
+	</component>
+	
+	<!-- optional: serialize the created model (gcore format) -->
+	<component id="serializeBeforeM2T" class="org.genesez.platform.common.workflow.Serializer">
+		<file value="model/BankTutorial.xmi" />
+	</component>
+	
+	<!-- perform model-to-model transformations according to platforms jpa, ejb3 and java5 -->
+	<component id="modify" class="org.genesez.platform.common.workflow.CompositeModel2Model">
+		<aspectTemplate value="customization::Attrib" />
+		<aspectScript value="customization::Naming" />
+		<newAssociationHandling value="${newAssociationHandling}" />
+		<fieldAccess value="${fieldAccess}" />
+		<script value="org::genesez::platform::java::jpa::scripts::Functionality::additions" />
+		<script value="org::genesez::platform::java::jpa::scripts::Functionality::modifications" />
+		<script value="org::genesez::platform::java::ejb3::scripts::Functionality::additions" />
+		<script value="org::genesez::platform::java::ejb3::scripts::Functionality::modifications" />
+		<script value="org::genesez::platform::java::java5::scripts::Functionality::modifications" />
+	</component>
+	
+	<!-- optional: serialize the created model (gcore format) -->
+	<component id="serializeAfterM2T" class="org.genesez.platform.common.workflow.Serializer">
+		<file value="model/BankTutorial_after.xmi" />
+		<cloneSlotContents value="true" />
+	</component>
+	
+	<!-- perform model-to-text transformation -->
+	<component id="model2java" class="org.genesez.platform.java.workflow.JavaGenerator">
+		<outputDir value="../org.genesez.example.java.BankTutorial/src-gen" />
+		<aspectTemplate value="customization::Attrib" />
+		<aspectScript value="customization::Naming" />
+		<aspectTemplate value="org::genesez::platform::java::ejb3::templates::AspectsAll" />
+		<newAssociationHandling value="${newAssociationHandling}" />
+		<fieldAccess value="${fieldAccess}" />
+		<useModelNameAsBasePackage value="true" />
+		<usePropertyVisibilityForAccessors value="false" />
+		<!-- there are several possibilities to specify your type mapping file(s):
+			1. You can list all files seperately here; if there are redundant rules 
+			the rule in the last specified typemapping file is active (recommended)
+			2. You can also include a typemapping file, e.g. the default java typemapping 
+			file, into your project specific file. In this case just list your project 
+			specific file here; with this solution redundant rules are not overriden by
+			the latest specified rule, e.g. in the project specific typemapping file 
+			after including another typemapping file. This is an opposing behaviour 
+			to the one described in possibility 1.
+			
+			Attention: If you use the statistic workflow component at the end of your 
+			workflow file it is necessary to add the same typemapping files to the 
+			statistic workflow component as you add to the generator workflow component. 
+			Explanation: The typemapping component is realized as singleton and 
+			uses the typemapping files specified in the last workflow component of 
+			the whole workflow file. -->
+		<typeMappingFile value="org/genesez/platform/java/typemapping/typemapping.xml" />
+		<typeMappingFile value="typemapping-bankTutorial.xml" />
+		<!-- exclude these directories from file and folder deletion feature --> 
+		<excludedDirectoryNames value="META-INF" />
+	</component>
+	
+	<!-- optional: create some detailed statistic values for bank tutorial -->
+	<component id="statistics" class="org.genesez.platform.common.workflow.StatisticComponent">
+	    <outputDir value="../org.genesez.example.java.BankTutorial/reports" />
+	    <dirToCheck value="../org.genesez.example.java.BankTutorial" />
+	    <statisticObserver class="org.genesez.platform.common.statistic.StatisticObserver">
+	    	<generate value="src-gen" />
+	    	<statisticName value="BankTutorial Statistic" />
+	    </statisticObserver>
+	    <withDetails value="true" />
+	</component>
+</workflow>

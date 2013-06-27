@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workflow>
+	<!--
+		Performs java code generation and embedds requirements traceability information using annotations.
+	-->
+	<component class="org.genesez.adapter.uml2.Uml2GeneSEZ">
+		<model value="model/forms.uml" />
+		<profile value="model/genesez.profile.uml" />
+	</component>
+	
+	<component class="org.genesez.platform.common.workflow.Traceability">
+		<!-- specify the models -->
+		<gcoreModel value="../org.genesez.example.java.requirements.traceability/model/forms.xmi" />
+		<greqModel value="../org.genesez.example.java.requirements.traceability/model/requirements.xmi" />
+		<gtraceModel value="../org.genesez.example.java.requirements.traceability/model/requirement.traceability.xmi" />
+		<!-- 
+			We created the traceability model in the same directory as the structer + requirements model. The 
+			model element references are relative uris. The execution directory of the workflow is different
+			from the directory where we created the traceability model and therefore our model references are not resolveable.
+			Using uri mappings we can point emf to the right place.
+		-->
+		<uriMap class="org.eclipse.emf.mwe.utils.Mapping">
+			<from value="requirements.xmi" />
+			<to value="../org.genesez.example.java.requirements.traceability/model/requirements.xmi" />
+		</uriMap>
+		<uriMap class="org.eclipse.emf.mwe.utils.Mapping">
+			<from value="forms.xmi" />
+			<to value="../org.genesez.example.java.requirements.traceability/model/forms.xmi" />
+		</uriMap>
+	</component>
+	
+	<component class="org.genesez.platform.common.workflow.Validator">
+		<script value="org::genesez::platform::common::Constraints" />
+		<script value="org::genesez::platform::java::constraints::Syntax" />
+	</component>
+	
+	<component class="org.genesez.platform.common.workflow.Model2Model">
+		<script value="org::genesez::platform::common::m2m::Realization::realize" />
+	</component>
+	
+	<component class="org.genesez.platform.java.workflow.JavaGenerator">
+		<typeMappingFile value="typemapping.xml" />
+		<outputDir value="../org.genesez.example.java.requirements.traceability/src-gen" />
+		<aspectTemplate value="org::genesez::platform::java5::traceability::RequirementsTraceabilityAnnotation" />
+	</component>
+</workflow>

@@ -1,0 +1,122 @@
+{namespace gre=Tx_GszRealEstate_ViewHelpers}
+
+<div class="tx-gszrealestate-show-realestate">
+
+	<div class="csc-default">
+		<div class="csc-header csc-header-n1">
+			<h1 class="csc-firstHeader">{realEstate.title}</h1>
+		</div>
+	</div>
+	
+	<div class="csc-default">
+		<p>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.id' )} {realEstate.id}</p>
+	</div>
+	
+	<div class="csc-default">
+		<div class="csc-textpic csc-textpic-intext-right">
+			<div class="csc-textpic-imagewrap">
+				<div class="csc-textpic-imagecolumn" style="width: 175px;">
+					<gre:images realEstate="{realEstate}" alt="" showSingleImage="false" width="175c" height="175c" />
+				</div>
+			</div>
+			<div class="csc-textpic-text">
+				
+				<h2>{f:translate(key : 'tx_gszrealestate.main_criteria' )}</h2>
+				<table class="contenttable">
+					<tbody>
+						<tr>
+							<td><p>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.rooms' )}</p></td>
+							<td><p>{realEstate.rooms.specification}</p></td>
+						</tr>
+						<tr>
+							<td><p>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.size' )}</p></td>
+							<td><p><f:format.number>{realEstate.size}</f:format.number> m²</p></td>
+						</tr>
+						<tr>
+							<td><p>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.floor' )}</p></td>
+							<td><p>{realEstate.floor.specification}</p></td>
+						</tr>
+						<tr>
+							<td><p>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.free_from' )}</p></td>
+							<td><p>{realEstate.freeFrom}</p></td>
+						</tr>
+						<tr>
+							<td><p>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.cellar' )}</p></td>
+							<td><p><f:if condition="{realEstate.cellar} == 1"><f:then>{f:translate(key : 'tx_gszrealestate.yes' )}</f:then><f:else>{f:translate(key : 'tx_gszrealestate.no' )}</f:else></f:if></p></td>
+						</tr>
+						<tr>
+							<td><p>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.attic' )}</p></td>
+							<td><p><f:if condition="{realEstate.attic} == 1"><f:then>{f:translate(key : 'tx_gszrealestate.yes' )}</f:then><f:else>{f:translate(key : 'tx_gszrealestate.no' )}</f:else></f:if></p></td>
+						</tr>
+						<tr>
+							<td><p>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.balcony' )}</p></td>
+							<td><p><f:if condition="{realEstate.balcony} == 1"><f:then>{f:translate(key : 'tx_gszrealestate.yes' )}</f:then><f:else>{f:translate(key : 'tx_gszrealestate.no' )}</f:else></f:if></p></td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<f:if condition="{realEstate.plotFile}">
+				<h2>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.plot_file' )}</h2>
+				<p><f:link.external uri="{realEstate.plotFile}" defaultScheme="">{f:translate(key : 'tx_gszrealestate.plot_file' )}<f:translate key="tx_gszrealestate_more" /></f:link.external></p>
+				</f:if>
+				
+				<h2>{f:translate(key : 'tx_gszrealestate.financial_disbursement' )}</h2>
+				<table class="contenttable">
+					<tbody>
+						<tr>
+							<td><p>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.rent_exclusive_of_heating' )}</p></td>
+							<td><p><f:format.currency currencySign="EUR">{realEstate.rentExclusiveOfHeating}</f:format.currency></p></td>
+						</tr>
+						<tr>
+							<td><p>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.extra_charges' )}</p></td>
+							<td><p><f:format.currency currencySign="EUR">{realEstate.extraCharges}</f:format.currency></p></td>
+						</tr>
+						<tr>
+							<td><p>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.cooperative_share' )}</p></td>
+							<td><p><f:format.currency currencySign="EUR">{realEstate.cooperativeShare}</f:format.currency></p></td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<h2>{f:translate(key : 'tx_gszrealestate.fabric' )}</h2>
+				<table class="contenttable">
+					<tbody>
+						<tr>
+							<td><p>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.state' )}</p></td>
+							<td><p>{realEstate.state}</p></td>
+						</tr>
+						<tr>
+							<td><p>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.heating' )}</p></td>
+							<td><p>{realEstate.heating.specification}</p></td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<f:if condition="{realEstate.description}">
+				<h2>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.description' )}</h2>
+				<f:format.html>{realEstate.description}</f:format.html>
+				</f:if>
+				
+				<h2>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.facility' )}</h2>
+				<f:format.html>{realEstate.facility}</f:format.html>
+				
+				<h2>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.miscellaneous' )}</h2>
+				<f:format.html>{realEstate.miscellaneous}</f:format.html>
+				
+				<h2>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.address' )}</h2>
+				<p>{realEstate.street}, {realEstate.postCode} {realEstate.town}</p>
+				
+				<h2>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.quarter' )}</h2>
+				<f:format.html>{realEstate.quarter.description}</f:format.html>
+			</div>
+		</div>
+		<div class="csc-textpic-clear">
+			<!-- -->
+		</div>
+	</div>
+	
+	<div class="csc-default">
+		<p><a href="#" onclick="history.go(-1);return false;">{f:translate(key : 'tx_gszrealestate.back' )}</a></p>
+	</div>
+	
+</div>

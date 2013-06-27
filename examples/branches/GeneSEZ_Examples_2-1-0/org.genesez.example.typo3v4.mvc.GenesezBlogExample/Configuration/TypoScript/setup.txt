@@ -1,0 +1,67 @@
+plugin.tx_gszblogexample {
+	persistence {
+		storagePid = {$plugin.tx_gszblogexample.persistence.storagePid}
+	}
+	view {
+		templateRootPath = {$plugin.tx_gszblogexample.view.templateRootPath}
+		partialRootPath = {$plugin.tx_gszblogexample.view.partialRootPath}
+		layoutRootPath = {$plugin.tx_gszblogexample.view.layoutRootPath}
+	}
+	// PROTECTED REGION ID(setup.txt.own.plugin.code.declaration.eee_1045467100313_135436_1) ENABLED START
+	view {
+		defaultPid = auto
+	}
+	settings {
+		# maximum number of posts to display per page
+		postsPerPage = 3
+		# Editor FE Usergroup uid
+		editorUsergroupUid = {$plugin.tx_gszblogexample.settings.editorUsergroupUid}
+		# Plaintext page type number
+		plaintextPageType = {$plugin.tx_gszblogexample.settings.plaintextPageType}
+	}
+	# This is an example how to modify the translation
+	_LOCAL_LANG {
+		default {
+			someUnusedKey = foo
+		}
+	}
+	// PROTECTED REGION END
+}
+
+module.tx_gszblogexample {
+	persistence {
+		storagePid = {$module.tx_gszblogexample.persistence.storagePid}
+	}
+	view {
+		templateRootPath = {$module.tx_gszblogexample.view.templateRootPath}
+		partialRootPath = {$module.tx_gszblogexample.view.partialRootPath}
+		layoutRootPath = {$module.tx_gszblogexample.view.layoutRootPath}
+	}
+	// PROTECTED REGION ID(setup.txt.own.module.code.declaration.eee_1045467100313_135436_1) ENABLED START
+	view {
+		defaultPid = auto
+	}
+	settings < plugin.tx_gszblogexample.settings
+	// PROTECTED REGION END
+}
+
+config.tx_extbase {
+	persistence {
+		classes {
+			Tx_Extbase_Domain_Model_FrontendUser {
+				subclasses {
+					Tx_GszBlogExample_Domain_Model_Administrator = Tx_GszBlogExample_Domain_Model_Administrator
+				}
+			}
+			Tx_GszBlogExample_Domain_Model_Administrator {
+				mapping {
+					tableName = fe_users
+					recordType = Tx_GszBlogExample_Domain_Model_Administrator
+				}
+			}
+		}
+	}
+}
+
+// PROTECTED REGION ID(setup.txt.own.code.declaration.eee_1045467100313_135436_1) ENABLED START
+// PROTECTED REGION END
