@@ -1,0 +1,58 @@
+«IMPORT gcore»
+
+«REM»
+	import statements for jpa platform
+	
+	@author		andre pflueger
+	@date		2010-10-11
+«ENDREM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::jpa::scripts::Naming»
+
+«REM» 
+	generates import proReg and statements for hibernate classes
+	is used by aspects to extend´import generation of java5 cartridge
+«ENDREM»
+«DEFINE ImportStatements FOR MClassifier-»
+	«IF hasStereotype("jpaPersistentEntity")-»
+		import javax.persistence.Entity;
+		import javax.persistence.Table;
+		import java.io.Serializable;
+		import javax.persistence.Inheritance;
+		import javax.persistence.InheritanceType;
+	«ENDIF»
+	«IF property.exists(e|e.hasStereotype("jpaPersistence")) 
+		|| property.exists(e|e.type.mapName().asTypeName() == "EntityManager")
+		|| property.exists(e|e.type.mapName().asTypeName() == "EntityManagerFactory")-»
+		import javax.persistence.EntityManager;
+		import javax.persistence.PersistenceUnit;
+		import javax.persistence.PersistenceContext;
+	«ENDIF»	
+	«IF operation.exists(e|e.hasStereotype("jpaAssociation")) || property.exists(e|e.hasStereotype("jpaAssociation"))-»
+		import javax.persistence.OneToMany;
+		import javax.persistence.ManyToOne;
+		import javax.persistence.OneToOne;
+		import javax.persistence.ManyToMany;
+		import javax.persistence.CascadeType;
+	«ENDIF»
+	«IF operation.exists(e|e.hasStereotype("jpaPrimaryKey")) || property.exists(e|e.hasStereotype("jpaPrimaryKey"))-»
+		import javax.persistence.Id;
+		import javax.persistence.IdClass;
+		import javax.persistence.EmbeddedId;
+		import javax.persistence.GeneratedValue;
+		import javax.persistence.GenerationType;
+	«ENDIF»
+	import javax.persistence.*;
+«ENDDEFINE»

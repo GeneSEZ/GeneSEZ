@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project name="de.genesez.build" basedir="." default="all">
+
+	<property environment="env"/>
+
+	<!-- is build local or on hudson (former cruisecontrol) -->
+	<!-- cruisecontrol uses label for the build id -->
+	<condition property="build.targets"
+		value="build/targets-cruisecontrol.xml"
+		else="build/targets-local.xml">
+		<isset property="env.BUILD_NUMBER" />
+	</condition>
+
+	<!-- the build is controlled via de.genesez.build --> 
+	<property name="build.controlled" value="true" />
+	
+	<import file="${build.targets}" />
+
+</project>

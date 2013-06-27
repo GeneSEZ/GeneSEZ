@@ -1,0 +1,170 @@
+/**
+ * Helper to create operations
+ * 
+ * @author	andre pflueger
+ * @date	2010-01-13
+ * 
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+
+/**
+ *	creates an operation and adds it to the container
+ *	returnType will be created as a MExternal
+ *	creates an empty list of parameters
+ *	xmiGuid is created by container and operation name
+ *
+ *	@param	container		instance of a MClassifier
+ *	@param	name			operation name 
+ *	@param	returnType		data type of the return type as String
+ *	@param	visibility		visibility 
+ *	@param	static			static status 
+ *	@param	abstract		abstract status
+ *	@param	final			final status
+ *	@param	multiplicity	multiplicity of the return type
+ *	@param	unique			unique status of the return type
+ *	@param	ordered			ordered status of the return type
+ *
+ *	@return					instance of the operation
+ */
+MOperation addOperation(MClassifier container, String name, String returnType, String visibility, boolean static, boolean abstract, boolean final, int multiplicity, boolean unique, boolean ordered) :
+	let o = createOperation(container, container.name+"."+name, name) :
+		o.processOperation(visibility, static, abstract, final, multiplicity, unique, ordered) ->
+		o.setReturnType(createExternal(container.model(), returnType)) ->
+		o.setParameter({}) ->
+		o;
+
+/**
+ *	creates an operation and adds it to the container
+ *	returnType will be created as a MExternal
+ *
+ *	@param	container		instance of a MClassifier
+ *	@param	xmiGuid			unique identifier 
+ *	@param	name			operation name 
+ *	@param	returnType		data type of the return type as String
+ *	@param	params			list of parameter
+ *	@param	visibility		visibility 
+ *	@param	static			static status 
+ *	@param	abstract		abstract status
+ *	@param	final			final status
+ *	@param	multiplicity	multiplicity of the return type
+ *	@param	unique			unique status of the return type
+ *	@param	ordered			ordered status of the return type
+ *
+ *	@return					instance of the operation
+ */
+MOperation addOperation(MClassifier container, String xmiGuid, String name, String returnType, List params, String visibility, boolean static, boolean abstract, boolean final, int multiplicity, boolean unique, boolean ordered) :
+	let o = createOperation(container, xmiGuid, name) :
+		o.processOperation(visibility, static, abstract, final, multiplicity, unique, ordered) ->
+		o.setReturnType(createExternal(container.model(), returnType)) ->
+		o.setParameter(params) ->
+		o;
+
+/**
+ *	creates an operation and adds it to the container
+ *
+ *	@param	container		instance of a MClassifier
+ *	@param	xmiGuid			unique identifier 
+ *	@param	name			operation name 
+ *	@param	returnType		return type
+ *	@param	params			list of parameter
+ *	@param	visibility		visibility 
+ *	@param	static			static status 
+ *	@param	abstract		abstract status
+ *	@param	final			final status
+ *	@param	multiplicity	multiplicity of the return type
+ *	@param	unique			unique status of the return type
+ *	@param	ordered			ordered status of the return type
+ *
+ *	@return					instance of the operation
+ */
+MOperation addOperation(MClassifier container, String xmiGuid, String name, MType returnType, List params, String visibility, boolean static, boolean abstract, boolean final, int multiplicity, boolean unique, boolean ordered) :
+	let o = createOperation(container, xmiGuid, name) :
+		o.processOperation(visibility, static, abstract, final, multiplicity, unique, ordered) ->
+		o.setReturnType(returnType) ->
+		o.setParameter(params) ->
+		o;
+
+/**
+ *	creates an operation and adds it to the container
+ *	creates an empty list of parameters
+ *	xmiGuid is created by container and operation name
+ *	missing MOperation settings are set to default
+ *
+ *	@param	container		instance of a MClassifier
+ *	@param	name			operation name 
+ *	@param	returnType		data type of the return type as String
+ *	@param	visibility		visibility 
+ *
+ *	@return					instance of the operation
+ */
+MOperation addOperation(MClassifier container, String name, String returnType, String visibility) :
+	let o = createOperation(container, container.name+"."+name, name) :
+		o.processOperation(visibility, false, false, false, 1, false, false) ->
+		o.setReturnType(createExternal(container.model(), returnType)) ->
+		o.setParameter({}) ->
+		o;
+		
+/**
+ *	creates an operation and adds it to the container
+ *	creates an empty list of parameters
+ *	xmiGuid is created by container and operation name
+ *	missing MOperation settings are set to default
+ *
+ *	@param	container		instance of a MClassifier
+ *	@param	name			operation name 
+ *	@param	returnType		return type
+ *	@param	visibility		visibility 
+ *
+ *	@return					instance of the operation
+ */
+MOperation addOperation(MClassifier container, String name, MType returnType, String visibility) :
+	let o = createOperation(container, container.name+"."+name, name) :
+		o.processOperation(visibility, false, false, false, 1, false, false) ->
+		o.setReturnType(returnType) ->
+		o.setParameter({}) ->
+		o;
+		
+/**
+ *	creates an operation and adds it to the container
+ *	missing MOperation settings are set to default
+ *	xmiGuid is created by container and operation name
+ *
+ *	@param	container		instance of a MClassifier
+ *	@param	name			operation name 
+ *	@param	returnType		return type
+ *	@param	visibility		visibility 
+ *	@param	params			list of parameter
+ *
+ *	@return					instance of the operation
+ */
+Void addOperation(MClassifier container, String name, MType returnType, String visibility, List params) :
+	let o = createOperation(container, container.name+"."+name, name) :
+		o.processOperation(visibility, false, false, false, 1, false, false) ->
+		o.setReturnType(returnType) ->
+		o.setParameter(params) ->
+		o;
+
+/**
+ *	creates an operation and adds it to the container
+ *	missing MOperation settings are set to default
+ *	xmiGuid is created by container and operation name
+ *
+ *	@param	container		instance of a MClassifier
+ *	@param	name			operation name 
+ *	@param	returnType		data type of the return type as String
+ *	@param	visibility		visibility 
+ *	@param	params			list of parameter
+ *
+ *	@return					instance of the operation
+ */
+MOperation addOperation(MClassifier container, String name, String returnType, String visibility, List params) :
+	let o = createOperation(container, container.name+"."+name, name) :
+		o.processOperation(visibility, false, false, false, 1, false, false) ->
+		o.setReturnType(createExternal(container.model(), returnType)) ->
+		o.setParameter(params) ->
+		o;

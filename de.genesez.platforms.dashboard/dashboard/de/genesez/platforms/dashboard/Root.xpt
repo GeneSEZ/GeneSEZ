@@ -1,0 +1,44 @@
+«IMPORT gtrace»
+
+«EXTENSION de::genesez::metamodel::navigation::RequirementsTraceability»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«REM»
+	Main entry point to generates the requirements traceability dashboard.
+	@author tobias haubold
+«ENDREM»
+
+«DEFINE Root FOR TTraceModel»
+	«EXPAND Navigation»
+	«EXPAND Traceability»
+	«EXPAND Details»
+«ENDDEFINE»
+
+«REM»
+	Generates all navigation pages.
+«ENDREM»
+«DEFINE Navigation FOR TTraceModel»
+	«EXPAND navigation::ClassifierList::Root FOR gcore()»
+	«EXPAND navigation::PackageList::Root FOR gcore()»
+	«EXPAND navigation::ScenarioList::Root FOR greq()»
+	«EXPAND navigation::RequirementList::Root FOR greq()»
+«ENDDEFINE»
+
+«REM»
+	Generates all traceability overview pages.
+«ENDREM»
+«DEFINE Traceability FOR TTraceModel»
+	«EXPAND traceability::SummaryCharts::Root»
+	«EXPAND traceability::RevisedSpecification::Root FOR greq()»
+	«EXPAND traceability::UnsatisfiedSpecification::Root FOR greq()»
+	«EXPAND traceability::UnspecifiedStructure::Root FOR gcore()»
+	«EXPAND traceability::TraceableSpecification::Root FOR greq()»
+«ENDDEFINE»
+
+«REM»
+	Generates all detailed traceability information.
+«ENDREM»
+«DEFINE Details FOR TTraceModel»
+	«EXPAND traceability::structure::Root::Root FOR gcore()»
+	«EXPAND traceability::specification::Root::Root FOR greq()»
+«ENDDEFINE»

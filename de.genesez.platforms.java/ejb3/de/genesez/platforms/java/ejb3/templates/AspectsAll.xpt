@@ -1,0 +1,180 @@
+«IMPORT gcore»
+
+«REM»
+	Template for jpa, ejb3, jws, weld, jdi and seam2-Aspects
+	
+	@author	andre pflueger
+	@date	2009-04-29
+«ENDREM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::scripts::Imports»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Class»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Attribute»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Stereotypes»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Interface»
+
+«REM»
+	override fixed imports because a different association handling 
+	is in use for the ejb3 cartridge
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Import::_OtherImports FOR MClassifier-»
+	«EXPAND de::genesez::platforms::java::jpa::templates::Import::ImportStatements-»
+	«EXPAND de::genesez::platforms::java::di4java::templates::Class::ImportStatements-»
+	«EXPAND de::genesez::platforms::java::cdi::templates::Class::ImportStatements-»
+	«EXPAND de::genesez::platforms::java::ejb3_1::templates::Class::ImportStatements»
+	«EXPAND de::genesez::platforms::java::ejb3::templates::Import::ImportStatements-»
+	«EXPAND de::genesez::platforms::java::seam2::templates::Import::ImportStatements-»
+	«targetDef.proceed()-»
+«ENDAROUND»
+
+«REM»
+	fix problems with generated imports and the containing proReg 
+	(if proreg has content, only the end of the proreg is generated)
+	fast solution idea: generate imports in the proreg; add custom imports
+	next time imports are generated they will be generated in the proreg but will 
+	be overridden by restoring the proreg which happens after generating the source code
+	
+	this is not a good handling of the problem because there is generated code in a proreg
+	which is reserved for customized code 
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Import::Import FOR MClassifier-»
+	«PROTECT CSTART "/* " CEND " */" ID ("java.type.import." + xmiGuid)» 
+	«EXPAND de::genesez::platforms::java::java5::templates::Import::_FixedImports -»
+	«EXPAND de::genesez::platforms::java::java5::templates::Import::_Import FOREACH supplier.select( s| s.isImportNeeded(this) && s.metaType.name != "gcore::MExternal")-»
+	«EXPAND de::genesez::platforms::java::java5::templates::Import::_OtherImports-»
+	«ENDPROTECT»
+«ENDAROUND»
+
+«REM»
+	annotations for interfaces
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Interface::_Annotation FOR MInterface-»
+	«EXPAND de::genesez::platforms::java::ejb3::templates::Class::RemoteLocal-»
+	«EXPAND de::genesez::platforms::java::seam2::templates::Interface::Annotation-»
+	«EXPAND de::genesez::platforms::java::jws::templates::Interface::JWS-»
+	«targetDef.proceed()-» 
+«ENDAROUND»	
+
+«REM»
+    annotations for annotations
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Annotation::_Annotation FOR MInterface-»
+    «EXPAND de::genesez::platforms::java::di4java::templates::Annotation::Annotation-»
+    «EXPAND de::genesez::platforms::java::cdi::templates::Annotation::Annotation-»
+    «EXPAND de::genesez::platforms::java::ejb3_1::templates::Annotation::Annotation-»
+    «targetDef.proceed()-»
+«ENDAROUND»
+
+«REM»
+	annotations for classes
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Class::_Annotation FOR MClass-»
+
+	«EXPAND de::genesez::platforms::java::jpa::templates::Class::Annotation-»
+	«EXPAND de::genesez::platforms::java::di4java::templates::Class::Annotation-»
+	«EXPAND de::genesez::platforms::java::cdi::templates::Class::Annotation-»
+	«EXPAND de::genesez::platforms::java::jws::templates::Class::JWS-»
+	«EXPAND de::genesez::platforms::java::seam2::templates::Class::Annotation-»
+	«EXPAND de::genesez::platforms::java::ejb3::templates::Class::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for operations (used for return type, parameters and operations)
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Operation::_Annotation FOR MOperation-»
+	«EXPAND de::genesez::platforms::java::jpa::templates::Operation::Annotation-»
+	«EXPAND de::genesez::platforms::java::di4java::templates::Operation::Annotation»
+	«EXPAND de::genesez::platforms::java::cdi::templates::Operation::Annotation-»
+	«EXPAND de::genesez::platforms::java::jws::templates::Operation::WebMethod-»
+	«EXPAND de::genesez::platforms::java::seam2::templates::Operation::Annotation-»
+	«EXPAND de::genesez::platforms::java::ejb3::templates::Operation::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for attributes
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Attribute::_Annotation FOR MAttribute-»
+	«EXPAND de::genesez::platforms::java::jpa::templates::Attribute::Annotation-»
+	«EXPAND de::genesez::platforms::java::di4java::templates::Attribute::Annotation»
+	«EXPAND de::genesez::platforms::java::cdi::templates::Attribute::Annotation-»
+	«EXPAND de::genesez::platforms::java::seam2::templates::Attribute::Annotation-»
+	«EXPAND de::genesez::platforms::java::ejb3::templates::Attribute::Annotation-»
+	«EXPAND de::genesez::platforms::java::jws::templates::Attribute::Attribute-»
+	«EXPAND de::genesez::platforms::java::jbv::templates::Attribute::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for associations
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Association::_Annotation FOR MAssociationRole-»
+	«EXPAND de::genesez::platforms::java::jpa::templates::Association::Annotation-»
+	«EXPAND de::genesez::platforms::java::seam2::templates::Association::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for operation parameters
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Operation::_Annotation FOR MParameter-»
+	«EXPAND de::genesez::platforms::java::jws::templates::Operation::WebParam-»
+	«EXPAND de::genesez::platforms::java::cdi::templates::Parameter::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	aspects for Enterprise JavaBeans (EJB) 3.0
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	add code to the extension area in the java5 class template
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Class::Root::_Extension FOR MClass-»
+	«EXPAND de::genesez::platforms::java::ejb3::templates::Class::AddPublicOperations-»
+	«targetDef.proceed()-»
+«ENDAROUND»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	aspects for jws
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	annotations for operation parameters
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Operation::_SingleValueReturn FOR MOperation-»
+	«EXPAND de::genesez::platforms::java::jws::templates::Operation::WebResult-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	aspects for seam2
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generate getter- and setter-operations in session beans with "seam2Component"-stereotype
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Interface::_Extension FOR MInterface-»
+	«EXPAND de::genesez::platforms::java::seam2::templates::Interface::GetterSetterForSessionBeans-»
+	«targetDef.proceed()»
+«ENDAROUND» 
