@@ -45,24 +45,17 @@
 	<!-- private target section -->
 	
 	<target name="magicdraw.startx" unless="env.DISPLAY">
-		<exec executable="${STARTPROC_BIN}" osfamily="unix">
-			<arg value="--start" />
-			<arg value="--background" />
-			<arg value="--exec" />
-			<arg value="${XVFB_BIN}" />
-			<arg value="--" />
+		<exec executable="${XVFB_BIN}" osfamily="unix">
 			<arg value="${build.display}" />
 			<arg value="-screen" />
 			<arg value="0" />
 			<arg value="800x600x8" />
 		</exec>
 	</target>
-
+	
 	<target name="magicdraw.endx" unless="env.DISPLAY">
-		<exec executable="${KILLPROC_BIN}" osfamily="unix">
-			<arg value="--stop" />
-			<arg value="--exec" />
-			<arg value="${XVFB_BIN}" />
+		<exec executable="${KILL_BIN}" osfamily="unix">
+			<arg value="Xvfb" />
 		</exec>
 	</target>
 
