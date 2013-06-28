@@ -15,7 +15,6 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.genesez.util.filesystem.FileSystemHelper;
 
 /**
  * The FileDeletionFeature handles the deletion of unchanged files during the generation process. With the filter-options the search can be specified.
