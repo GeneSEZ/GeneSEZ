@@ -1,330 +1,209 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version='1.0'?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<chapter id="EA-Adapter">
-	<title>Enterprise Architect Adapter</title>
-	<section id="org.genesez.adapter.ea">
-
-		<title>Introduction</title>
-
-		<para>The following elements give an overview what currently can be
-			transformed from Enterprise Architect (EA) to Eclipse Modeling
-			Framework (EMF)-UML.
-		</para>
-		<para>
-			<variablelist>
-				<varlistentry>
-					<term>
-						<emphasis role="bold">Elements</emphasis>
-					</term>
-					<listitem>
-						<para>
-							Class diagram: Class, Component, Port, Enumeration,
-							Interface
-						</para>
-						<para>
-							Activity diagram: Activity, DecisionNode, ForkNode,
-							InitialNode,
-							FlowFinalNode, JoinNode, MergeNode
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>
-						<emphasis role="bold">Connectors</emphasis>
-					</term>
-					<listitem>
-						<para>
-							Connector, Association, InformationFlow, Generalization,
-							ControlFlow, Dependency
-						</para>
-					</listitem>
-				</varlistentry>
-				<para>Stereotypes are also implemented as long as there is a given
-					Profile for that. Creating the profile from the model is not
-					supported
-					yet.
-				</para>
-				<varlistentry>
-					<term>
-						<emphasis role="bold">Goal</emphasis>
-					</term>
-					<listitem>
-						<para>Basic understanding of how a EA-model is transformed into an
-							EMF-model.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>
-						<emphasis role="bold">Prerequisites</emphasis>
-					</term>
-					<listitem>
-						<itemizedlist>
-							<listitem>
-								<para>As usual we will use UML as modeling language, so a
-									basic
-									understanding is preferable
-								</para>
-							</listitem>
-							<listitem>
-								<para>
-									Some modeling experience in EA is adviced.
-								</para>
-							</listitem>
-						</itemizedlist>
-					</listitem>
-				</varlistentry>
-			</variablelist>
-		</para>
-	</section>
-	<section>
-		<title>Configuration</title>
-		<para>
-			The following components are needed to transform an EA to an
-			EMF-UML
-			model.
-		</para>
-		<section id="org.genesez.adapter.ea.RepositoryReader">
-			<title>RepositoryReader</title>
-			<para>
-				The RepositoryReader is a WorkflowComponent, that reads an EA
-				model
-				file.
-			</para>
-			<para>
-				To add the RepositoryReader to your workflow put
-				<programlisting><![CDATA[<component class="org.genesez.adapter.ea.RepositoryReader" />]]></programlisting>
-				to your workflow file.
-			</para>
-			<para>
-				The parameters below have to be defined in the workflow file.
-			</para>
-			<variablelist>
-				<varlistentry>
-					<term>
-						<emphasis role="bold">repositoryFile</emphasis>
-					</term>
-					<term>
-						<emphasis>single-value</emphasis>
-					</term>
-					<listitem>
-						<para>
-							The file that should be read.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>
-						<emphasis role="bold">outputSlot</emphasis>
-					</term>
-					<term>
-						<emphasis>single-value</emphasis>
-					</term>
-					<term>
-						default:
-						<literal>org_genesez_adapter_ea_ea_model</literal>
-					</term>
-					<listitem>
-						<para>
-							The slot where the model will be stored and loaded for the
-							serialization.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>
-						<emphasis role="bold">modelName</emphasis>
-					</term>
-					<term>
-						<emphasis>single-value</emphasis>
-					</term>
-					<listitem>
-						<para>
-							The name of the model in EA file.
-						</para>
-					</listitem>
-				</varlistentry>
-			</variablelist>
-		</section>
-		<section id="org.genesez.adapter.ea.ProfileReader">
-			<title>ProfileReader</title>
-			<para>
-				The ProfileReader is a WorkflowComponent, that reads profiles
-				for the
-				EA model.
-			</para>
-			<para>
-				To add the ProfileReader to your workflow put
-				<programlisting><![CDATA[<component class="org.genesez.adapter.ea.ProfileReader" />]]></programlisting>
-				to your workflow file.
-			</para>
-			<para>
-				The parameters below have to be defined in the workflow file.
-			</para>
-			<variablelist>
-				<varlistentry>
-					<term>
-						<emphasis role="bold">profileExtension</emphasis>
-					</term>
-					<term>
-						<emphasis>single-value</emphasis>
-					</term>
-					<term>
-						default:
-						<literal>.profile.uml</literal>
-					</term>
-					<listitem>
-						<para>
-							The extension the profiles end with.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>
-						<emphasis role="bold">profileDir</emphasis>
-					</term>
-					<term>
-						<emphasis>single-value</emphasis>
-					</term>
-					<listitem>
-						<para>
-							The directory name where profiles are located.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>
-						<emphasis role="bold">profile</emphasis>
-					</term>
-					<term>
-						<emphasis>single-value</emphasis>
-					</term>
-					<listitem>
-						<para>
-							The name of the profile to apply to the model.
-						</para>
-					</listitem>
-				</varlistentry>
-			</variablelist>
-		</section>
-		<section id="org.genesez.adapter.ea.Model2UML">
-			<title>Model2UML</title>
-			<para>
-				The Model2UML is a WorkflowComponent, that converts the
-				serialized model to EMF-UML.
-			</para>
-			<para>
-				To add the Model2UML to your workflow put
-				<programlisting><![CDATA[<component class="org.genesez.adapter.ea.Model2UML" />]]></programlisting>
-				to your workflow file.
-			</para>
-			<para>
-				The parameters below have to be defined in the workflow file.
-			</para>
-			<variablelist>
-				<varlistentry>
-					<term>
-						<emphasis role="bold">inputSlot</emphasis>
-					</term>
-					<term>
-						<emphasis>single-value</emphasis>
-					</term>
-					<term>
-						default:
-						<literal>org_genesez_adapter_ea_ea_model</literal>
-					</term>
-					<listitem>
-						<para>
-							The input slot for the serialized EA model.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>
-						<emphasis role="bold">outputSlot</emphasis>
-					</term>
-					<term>
-						<emphasis>single-value</emphasis>
-					</term>
-					<term>
-						default:
-						<literal>org_genesez_adapter_ea_uml_model</literal>
-					</term>
-					<listitem>
-						<para>
-							The output slot name for the transformed serialized EMF-UML
-							model.
-						</para>
-					</listitem>
-				</varlistentry>
-			</variablelist>
-		</section>
-		<section id="org.genesez.adapter.ea.XmiWriter">
-			<title>XmiWriter</title>
-			<para>
-				The XmiWriter is a WorkflowComponent, that writes the
-				transformed model to a file.
-			</para>
-			<para>
-				To add the XmiWriter to your workflow put
-				<programlisting><![CDATA[<component class="org.genesez.adapter.ea.XmiWriter" />]]></programlisting>
-				to your workflow file.
-			</para>
-			<para>
-				The parameters below have to be defined in the workflow file.
-			</para>
-			<variablelist>
-				<varlistentry>
-					<term>
-						<emphasis role="bold">inputSlot</emphasis>
-					</term>
-					<term>
-						<emphasis>single-value</emphasis>
-					</term>
-					<term>
-						default:
-						<literal>org_genesez_adapter_ea_uml_model</literal>
-					</term>
-					<listitem>
-						<para>
-							The input slot for the transformed serialized EMF-UML
-							model.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>
-						<emphasis role="bold">xmiFile</emphasis>
-					</term>
-					<term>
-						<emphasis>single-value</emphasis>
-					</term>
-					<listitem>
-						<para>
-							The name of the XMI output file.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>
-						<emphasis role="bold">resourceSlot</emphasis>
-					</term>
-					<term>
-						<emphasis>single-value</emphasis>
-					</term>
-					<term>
-						default:
-						<literal>org_genesez_adapter_ea_model_resource</literal>
-					</term>
-					<listitem>
-						<para>
-							The name to find the transformed resource internally.
-							Currently the name doesn't matter, but it must be defined
-							something.
-						</para>
-					</listitem>
-				</varlistentry>
-			</variablelist>
-		</section>
-	</section>
+<chapter id="genesez.adapter.ea">
+  <title>Enterprise Architect Adapter</title>
+  <section>
+    <title>Introduction</title>
+    <para>The following elements give an overview what currently can be 
+    transformed from Enterprise Architect (EA) to Eclipse Modeling 
+    Framework (EMF)-UML.</para>
+    <para>
+      <variablelist>
+        <varlistentry>
+          <term><emphasis role="bold">Elements</emphasis></term>
+          <listitem>
+            <para>Class diagram: Class, Component, Port, Enumeration, 
+            Interface</para>
+            <para>Activity diagram: Activity, DecisionNode, ForkNode, 
+            InitialNode, FlowFinalNode, JoinNode, MergeNode</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><emphasis role="bold">Connectors</emphasis></term>
+          <listitem>
+            <para>Connector, Association, InformationFlow, 
+            Generalization, ControlFlow, Dependency</para>
+          </listitem>
+        </varlistentry>
+        <para>Stereotypes are also implemented as long as there is a 
+        given Profile for that. Creating the profile from the model is 
+        not supported yet.</para>
+        <varlistentry>
+          <term><emphasis role="bold">Goal</emphasis></term>
+          <listitem>
+            <para>Basic understanding of how a EA-model is transformed 
+            into an EMF-model.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><emphasis role="bold">Prerequisites</emphasis></term>
+          <listitem>
+            <itemizedlist>
+              <listitem>
+                <para>As usual we will use UML as modeling language, so 
+                a basic understanding is preferable</para>
+              </listitem>
+              <listitem>
+                <para>Some modeling experience in EA is adviced.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </para>
+  </section>
+  <section>
+    <title>Configuration</title>
+    <para>The following components are needed to transform an EA to an 
+    EMF-UML model.</para>
+    <section id="genesez.adapter.ea.RepositoryReader">
+      <title>RepositoryReader</title>
+      <para>The RepositoryReader is a WorkflowComponent, that reads an 
+      EA model file.</para>
+      <para>
+        To add the RepositoryReader to your workflow put
+        <programlisting>&lt;component class=&quot;org.genesez.adapter.ea.RepositoryReader&quot; /&gt;</programlisting>
+        to your workflow file.
+      </para>
+      <para>The parameters below have to be defined in the workflow 
+      file.</para>
+      <variablelist>
+        <varlistentry>
+          <term><emphasis role="bold">repositoryFile</emphasis></term>
+          <term><emphasis>single-value</emphasis></term>
+          <listitem>
+            <para>The file that should be read.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><emphasis role="bold">outputSlot</emphasis></term>
+          <term><emphasis>single-value</emphasis></term>
+          <term>default: <literal>
+          org_genesez_adapter_ea_ea_model</literal></term>
+          <listitem>
+            <para>The slot where the model will be stored and loaded 
+            for the serialization.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><emphasis role="bold">modelName</emphasis></term>
+          <term><emphasis>single-value</emphasis></term>
+          <listitem>
+            <para>The name of the model in EA file.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+    <section id="genesez.adapter.ea.ProfileReader">
+      <title>ProfileReader</title>
+      <para>The ProfileReader is a WorkflowComponent, that reads 
+      profiles for the EA model.</para>
+      <para>
+        To add the ProfileReader to your workflow put
+        <programlisting>&lt;component class=&quot;org.genesez.adapter.ea.ProfileReader&quot; /&gt;</programlisting>
+        to your workflow file.
+      </para>
+      <para>The parameters below have to be defined in the workflow 
+      file.</para>
+      <variablelist>
+        <varlistentry>
+          <term><emphasis role="bold">profileExtension</emphasis></term>
+          <term><emphasis>single-value</emphasis></term>
+          <term>default: <literal>.profile.uml</literal></term>
+          <listitem>
+            <para>The extension the profiles end with.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><emphasis role="bold">profileDir</emphasis></term>
+          <term><emphasis>single-value</emphasis></term>
+          <listitem>
+            <para>The directory name where profiles are located.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><emphasis role="bold">profile</emphasis></term>
+          <term><emphasis>single-value</emphasis></term>
+          <listitem>
+            <para>The name of the profile to apply to the model.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+    <section id="genesez.adapter.ea.Model2UML">
+      <title>Model2UML</title>
+      <para>The Model2UML is a WorkflowComponent, that converts the 
+      serialized model to EMF-UML.</para>
+      <para>
+        To add the Model2UML to your workflow put
+        <programlisting>&lt;component class=&quot;org.genesez.adapter.ea.Model2UML&quot; /&gt;</programlisting>
+        to your workflow file.
+      </para>
+      <para>The parameters below have to be defined in the workflow 
+      file.</para>
+      <variablelist>
+        <varlistentry>
+          <term><emphasis role="bold">inputSlot</emphasis></term>
+          <term><emphasis>single-value</emphasis></term>
+          <term>default: <literal>
+          org_genesez_adapter_ea_ea_model</literal></term>
+          <listitem>
+            <para>The input slot for the serialized EA model.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><emphasis role="bold">outputSlot</emphasis></term>
+          <term><emphasis>single-value</emphasis></term>
+          <term>default: <literal>
+          org_genesez_adapter_ea_uml_model</literal></term>
+          <listitem>
+            <para>The output slot name for the transformed serialized 
+            EMF-UML model.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+    <section id="genesez.adapter.ea.XmiWriter">
+      <title>XmiWriter</title>
+      <para>The XmiWriter is a WorkflowComponent, that writes the 
+      transformed model to a file.</para>
+      <para>
+        To add the XmiWriter to your workflow put
+        <programlisting>&lt;component class=&quot;org.genesez.adapter.ea.XmiWriter&quot; /&gt;</programlisting>
+        to your workflow file.
+      </para>
+      <para>The parameters below have to be defined in the workflow 
+      file.</para>
+      <variablelist>
+        <varlistentry>
+          <term><emphasis role="bold">inputSlot</emphasis></term>
+          <term><emphasis>single-value</emphasis></term>
+          <term>default: <literal>
+          org_genesez_adapter_ea_uml_model</literal></term>
+          <listitem>
+            <para>The input slot for the transformed serialized EMF-UML 
+            model.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><emphasis role="bold">xmiFile</emphasis></term>
+          <term><emphasis>single-value</emphasis></term>
+          <listitem>
+            <para>The name of the XMI output file.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><emphasis role="bold">resourceSlot</emphasis></term>
+          <term><emphasis>single-value</emphasis></term>
+          <term>default: <literal>
+          org_genesez_adapter_ea_model_resource</literal></term>
+          <listitem>
+            <para>The name to find the transformed resource internally. 
+            Currently the name doesn&apos;t matter, but it must be 
+            defined something.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+  </section>
 </chapter>

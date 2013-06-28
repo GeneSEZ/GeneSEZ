@@ -73,7 +73,7 @@
     an UML model similar to 
     <xref linkend="de.genesez.howto.java.jpa.jpamodel.figure"/>.</para>
     <figure id="de.genesez.howto.java.jpa.jpamodel.figure">
-    <xi:include href="../java/java.ee.jpa.xml" xpointer="xpointer(id('de.genesez.platforms.java.jpa.example.minimal.figure')/*)" xmlns:xi="http://www.w3.org/2001/XInclude" />
+    <xi:include href="../java/java.ee.jpa.xml" xpointer="xpointer(id('de.genesez.platform.java.jpa.example.minimal.figure')/*)" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </figure>
   </section>
   <section>
@@ -88,9 +88,9 @@
     types of the Java library.</para>
     <para>To advise the Generator that we don&apos;t want to implement 
     the domain data types ourself, we assign the stereotype 
-    <link linkend="de.genesez.uml.profile.genesez.external"><literal>
+    <link linkend="genesez.uml.profile.genesez.external"><literal>
     external</literal></link> of the 
-    <link linkend="de.genesez.uml.profile.genesez">GeneSEZ UML 
+    <link linkend="genesez.uml.profile.genesez">GeneSEZ UML 
     profile</link> to our domain data types. See the 
     <link linkend="de.genesez.metamodel.externaltypes">External Types 
     in GeneSEZ</link> for more information. Then our UML model should 
@@ -196,9 +196,9 @@
           it has the 
           <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/Table.html">
           <literal>@Table</literal></ulink> annotation present to 
-          prevent <link linkend="de.genesez.platforms.java.jpa.naming">
+          prevent <link linkend="genesez.platform.java.jpa.naming">
           potential naming conflicts</link> with database names. See 
-          <link linkend="de.genesez.platforms.java.jpa.entities">
+          <link linkend="genesez.platform.java.jpa.entities">
           persistent entities</link> for more information.</para>
           <programlisting>@Entity
 @Table(name = &quot;tbl_Bank&quot;)
@@ -219,7 +219,7 @@ public class Bank implements Serializable {
           cascade operations</link> are added as well as a standard 
           <link linkend="de.genesez.uml.profile.jpa.jpaAssociation.mappedBy">
           <literal>mappedBy</literal></link> value. See 
-          <link linkend="de.genesez.platforms.java.jpa.attributes">
+          <link linkend="genesez.platform.java.jpa.attributes">
           persistent and transient attributes</link> for more 
           information.</para>
           <programlisting>@ManyToMany(cascade = {}, mappedBy = &quot;bank&quot;)
@@ -239,10 +239,10 @@ private String name;</programlisting>
         <listitem>
           <para>You will notice that two additional attributes are 
           generated. One to 
-          <link linkend="de.genesez.platforms.java.jpa.identity">
+          <link linkend="genesez.platform.java.jpa.identity">
           uniquely identify</link> your objects using a primiary key 
           and one for 
-          <link linkend="de.genesez.platforms.java.jpa.optimisticlocking">
+          <link linkend="genesez.platform.java.jpa.optimisticlocking">
           optimistic locking</link>.</para>
           <programlisting>@Id
 @GeneratedValue(strategy = GenerationType.AUTO)
@@ -259,7 +259,7 @@ private int version;</programlisting>
           <para>You may wonder why we have just one constructor in our 
           UML model and the source code contains a second one. The 
           standard constructor is 
-          <link linkend="de.genesez.platforms.java.jpa.constructor">
+          <link linkend="genesez.platform.java.jpa.constructor">
           automatically</link> added due to the JPA 
           specification.</para>
           <programlisting>public Bank() {
@@ -274,7 +274,7 @@ private int version;</programlisting>
           (toOne) you will find a corresponding <literal>get</literal> 
           and <literal>set</literal>-method according to the Java Beans 
           convention. See 
-          <link linkend="de.genesez.platforms.java.jpa.accessors">JPA 
+          <link linkend="genesez.platform.java.jpa.accessors">JPA 
           accessor methods</link> for more information.</para>
           <programlisting>public String getName() {
     return name;
@@ -359,10 +359,10 @@ private String retypedPassword;</programlisting>
           for the attributes <literal>password</literal> and <literal>
           retypedPassword</literal> on class <literal>
           Customer</literal>. We assign the stereotype 
-          <link linkend="de.genesez.uml.profile.genesez.accessor">
+          <link linkend="genesez.uml.profile.genesez.accessor">
           <literal>accessor</literal></link> to both attributes and set 
           the tagged value 
-          <link linkend="de.genesez.uml.profile.genesez.accessor.setter">
+          <link linkend="genesez.uml.profile.genesez.accessor.setter">
           <literal>setter</literal></link> on both to <literal>
           false</literal>. Then we add two <literal>set</literal> 
           operations for both password attributes to our class.</para>
@@ -436,7 +436,7 @@ private java.util.List&lt;Statement&gt; statement = new java.util.LinkedList&lt;
           <xref linkend="de.genesez.uml.profile.jpa.jpaInheritanceType.TABLE_PER_CLASS"/>
           . Then you get the inheritance stragegy and the <literal>
           @Table</literal> annotations on all subclasses to prevent 
-          <link linkend="de.genesez.platforms.java.jpa.naming">
+          <link linkend="genesez.platform.java.jpa.naming">
           potential naming conflicts</link>.</para>
           <programlisting>@Entity 
 @Table(name = &quot;tbl_Account&quot;) 
@@ -464,13 +464,13 @@ public class SavingsAccount extends AbstractAccount implements Serializable { //
     .</para>
     <figure id="de.genesez.howto.java.jpa.genesezadjusted.figure">
       <title>UML domain model with adjusted persistence mapping</title>
-      <xi:include href="../java/java.ee.jpa.xml" xpointer="xpointer(id('de.genesez.platforms.java.jpa.example.figure')/mediaobject)" xmlns:xi="http://www.w3.org/2001/XInclude" />
+      <xi:include href="../java/java.ee.jpa.xml" xpointer="xpointer(id('genesez.platform.java.jpa.example.figure')/mediaobject)" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
     </figure>
     <para>This should conclude our persistence mapping adjustment tour. 
     Now you should have a basic idea about how to adjust the 
     persistence mapping. For a concise description of the JPA 
-    transformation see <xref linkend="de.genesez.platforms.java.jpa"/>. 
+    transformation see <xref linkend="genesez.platform.java.jpa"/>. 
     See <xref linkend="de.genesez.uml.profile.jpa"/> for the reference 
     of the GeneSEZ JPA UML profile. Overall, don&apos;t forget it is 
     GeneSEZ and see the <link linkend="de.genesez.customization">
