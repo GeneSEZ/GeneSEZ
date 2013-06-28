@@ -20,7 +20,16 @@
 	<property environment="env" />
 	
 	
-	<condition property="publish.dir" value="${PUBLISH_TRUNK_DIR}/${plugin.version}" else="${PUBLISH_TAGS_DIR}/${plugin.version}">
+	<!-- provide the genesez feature version being built for directory naming -->
+	<property name="genesez.feature.file" value="${feature.dir}/${prefix}.feature/feature.xml" />
+	<available property="genesez.feature.exists" file="${genesez.feature.file}" />
+	<xmltask source="${genesez.feature.file}">
+		<copy property="genesez.feature.version" path="/feature/@version" />
+	</xmltask>
+	<echo message="Building GeneSEZ version ${genesez.feature.version}..." />
+	
+	
+	<condition property="publish.dir" value="${PUBLISH_TRUNK_DIR}/${genesez.feature.version}" else="${PUBLISH_TAGS_DIR}/${genesez.feature.version}">
 		<contains string="${SCM_PATH}" substring="trunk" />
 	</condition>
 	<condition property="b3aggr.file" value="genesez.development.repository.b3aggr" else="genesez.release.repository.b3aggr">

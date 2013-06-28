@@ -9,8 +9,6 @@
 	
 	The timestamp has the format: <4 digit year><2 digit month><2 digit day>-<2 digit hour><2 digit minute>
 	
-	The script provides the current GeneSEZ feature beeing build on the property ${plugin.version}!
-	
 	@author	tobias haubold <toh@fh-zwickau.de>
 -->
 <project name="org.genesez.featuregroup.versioning" default="versioning">
@@ -49,16 +47,6 @@
 		<isset property="env.BUILD_NUMBER" />
 	</condition>
 	<property name="prefix" value="org.genesez" />
-	
-	
-	<!-- provide the current plugin version of the build -->
-	<property name="genesez.feature.file" value="${feature.dir}/${prefix}.feature/feature.xml" />
-	<available property="genesez.feature.exists" file="${genesez.feature.file}" />
-	<xmltask source="${genesez.feature.file}">
-		<copy property="genesez.feature.version" path="/feature/@version" />
-	</xmltask>
-	<property name="plugin.version" value="${genesez.feature.version}.${qualifier}" />
-	<echo message="Building GeneSEZ version ${plugin.version}..." />
 	
 	
 	<!-- genesez projects -->
@@ -103,15 +91,15 @@
 				<basename property="project" file="@{project}" />
 				
 				<xmltask source="@{project}/feature.xml" dest="@{project}/feature.xml">
-					<copy property="genesez.version" path="/feature/@version" />
+					<copy property="feature.version" path="/feature/@version" />
 				</xmltask>
-				<echo message="${project}: adjust version from '${genesez.version}' to '${genesez.version}.${qualifier}'" />
+				<echo message="${project}: adjust version from '${feature.version}' to '${feature.version}.${qualifier}'" />
 				<xmltask source="@{project}/feature.xml" dest="@{project}/feature.xml">
-					<replace path="/feature/@version" withText="${genesez.version}.${qualifier}" />
+					<replace path="/feature/@version" withText="${feature.version}.${qualifier}" />
 				</xmltask>
 				
 				<var name="project" unset="true" />
-				<var name="genesez.version" unset="true" />
+				<var name="feature.version" unset="true" />
 			</sequential>
 		</for>
 	</target>
