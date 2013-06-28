@@ -16,7 +16,6 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.genesez.util.filesystem.FileSystemHelper;
 
 /**
  * Does the deletion of empty packages, it runs after generation and should run after deletion.
