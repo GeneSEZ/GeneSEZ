@@ -6,7 +6,6 @@ package org.genesez.adapter.uml2.workflow;
  */
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
-import org.genesez.workflow.Model2Model;
 import org.genesez.workflow.Parameter;
 import org.genesez.workflow.SimpleScript;
 import org.genesez.workflow.profile.WfDefault;
