@@ -5,7 +5,6 @@ package org.genesez.adapter.uml2.workflow;
  * 	@FILE-ID : (_rh-c0If5EeKynYimrwgSoA) 
  */
 import org.genesez.workflow.SimpleValidator;
-import org.genesez.workflow.Validator;
 import org.genesez.workflow.profile.WfDefault;
 
 /**
