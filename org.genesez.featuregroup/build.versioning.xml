@@ -9,6 +9,8 @@
 	
 	The timestamp has the format: <4 digit year><2 digit month><2 digit day>-<2 digit hour><2 digit minute>
 	
+	The script provides the current GeneSEZ feature beeing build on the property ${plugin.version}!
+	
 	@author	tobias haubold <toh@fh-zwickau.de>
 -->
 <project name="org.genesez.featuregroup.versioning" default="versioning">
@@ -47,6 +49,16 @@
 		<isset property="env.BUILD_NUMBER" />
 	</condition>
 	<property name="prefix" value="org.genesez" />
+	
+	
+	<!-- provide the current plugin version of the build -->
+	<property name="genesez.feature.file" value="${feature.dir}/${prefix}.feature/feature.xml" />
+	<available property="genesez.feature.exists" file="${genesez.feature.file}" />
+	<xmltask source="${genesez.feature.file}">
+		<copy property="genesez.feature.version" path="/feature/@version" />
+	</xmltask>
+	<property name="plugin.version" value="${genesez.feature.version}.${qualifier}" />
+	<echo message="Building GeneSEZ version ${plugin.version}..." />
 	
 	
 	<!-- genesez projects -->
