@@ -21,5 +21,6 @@ package org.genesez.metamodel.gpresentation;
  * @model
  * @generated
  */
-public interface PCompositeArea extends PAbstractArea, PContentArea {
+public interface PCompositeArea extends PAbstractArea, PContentArea
+{
 } // PCompositeArea

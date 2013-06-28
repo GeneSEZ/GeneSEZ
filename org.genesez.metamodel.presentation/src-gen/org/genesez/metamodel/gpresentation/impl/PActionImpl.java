@@ -20,24 +20,27 @@ import org.genesez.metamodel.gpresentation.PAction;
  *
  * @generated
  */
-public class PActionImpl extends PElementImpl implements PAction {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected PActionImpl() {
-		super();
-	}
+public class PActionImpl extends PElementImpl implements PAction
+{
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected PActionImpl()
+  {
+    super();
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EClass eStaticClass() {
-		return GpresentationPackage.Literals.PACTION;
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  protected EClass eStaticClass()
+  {
+    return GpresentationPackage.Literals.PACTION;
+  }
 
 } //PActionImpl

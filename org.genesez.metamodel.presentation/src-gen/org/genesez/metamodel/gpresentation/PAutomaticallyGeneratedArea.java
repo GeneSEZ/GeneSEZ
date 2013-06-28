@@ -17,5 +17,6 @@ package org.genesez.metamodel.gpresentation;
  * @model
  * @generated
  */
-public interface PAutomaticallyGeneratedArea extends PContentArea {
+public interface PAutomaticallyGeneratedArea extends PContentArea
+{
 } // PAutomaticallyGeneratedArea
