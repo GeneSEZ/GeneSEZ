@@ -10,6 +10,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -51,7 +52,7 @@ import org.genesez.eclipse.wizard.util.replace.simpel.SimpleTextReplacer;
  * to decompress the chosen zip-file, where necessary things are changed in the project.
  * 
  * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
- * 
+ * @author tobias haubold <toh@fh-zwickau.de>
  */
 public class TemplateHelper {
 
@@ -193,9 +194,11 @@ public class TemplateHelper {
 			String destination, boolean appFromZip, boolean genFromZip, IProgressMonitor monitor) throws IOException {
 		// ZipInputstream der TemplateDatei erzeugen
 		monitor.subTask("Prepare template file for reading.");
-		IPath templatePath = new Path(template.getFile().getPath());
-		InputStream resStream = TemplateHelper.class.getResourceAsStream(IPath.SEPARATOR
-				+ templatePath.makeRelativeTo(LOCATION).toOSString());
+		// toh: just use file input stream with the file available, the old way results always in a null input stream
+//		IPath templatePath = new Path(template.getFile().getPath());
+//		InputStream resStream = TemplateHelper.class.getResourceAsStream(IPath.SEPARATOR
+//				+ templatePath.makeRelativeTo(LOCATION).toOSString());
+		InputStream resStream = new FileInputStream(template.getFile());
 		ZipInputStream zis = new ZipInputStream(new BufferedInputStream(resStream));
 		List<String> projects = new ArrayList<String>();
 		ZipEntry entry;
@@ -223,11 +226,12 @@ public class TemplateHelper {
 				entryName = entry.getName().replaceFirst(oldName, appProjectName);
 				isGenProject = false;
 			}
-
+			
 			String path = destination + File.separator + entryName;
 			if (entry.isDirectory()) {
-				if (entryName.matches(appProjectName + File.separator + "$")
-						|| entryName.matches(genProjectName + File.separator + "$")) {
+				// toh: need to change regexp for file separator, now both \ and / are optionally allowed
+				if (entryName.matches(appProjectName + "(\\\\|/)?$")
+						|| entryName.matches(genProjectName + "(\\\\|/)?$")) {
 					projects.add(entryName);
 				}
 				new File(path).mkdirs();
