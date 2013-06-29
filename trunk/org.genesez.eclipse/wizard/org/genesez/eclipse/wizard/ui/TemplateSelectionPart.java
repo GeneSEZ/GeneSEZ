@@ -168,7 +168,10 @@ public class TemplateSelectionPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Tree tree = (Tree) ((TabItem) e.item).getControl();
-				tree.deselectAll();
+				// toh: why? during debugging tree is almost always null
+				if (tree != null) {
+					tree.deselectAll();
+				}
 				context.modify(WizardConstants.DESCRIPTION, "");
 				context.modify(WizardConstants.TEMPLATE, null);
 			}
