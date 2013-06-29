@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+	svs specific typemapping
+	
+	@author	andre pflueger
+	@date	2010-01-06
+ -->
+<tns:typeMapping xmlns:tns="http://www.genesez.de/typemapping"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<tns:include>
+		<tns:file>de/genesez/platforms/java/typemapping/typemapping.xml</tns:file>
+	</tns:include>
+	<tns:externalTypes>
+		<!-- we used the type 'Money' and declared it as 'external' within the uml model -->
+		<tns:type from="Money">
+			<!-- default mapping should return the type name -->
+			<tns:to>BigDecimal</tns:to>
+			<!-- used to generate imports -->
+			<tns:context name="Import">java.math.BigDecimal</tns:context>
+		</tns:type>
+        <!--  -->
+        <tns:type from="MoneyTransferEventType">
+            <!-- default mapping should return the type name -->
+            <tns:to>Event&lt;MoneyTransferEvent&gt;</tns:to>
+        </tns:type>	
+        <!-- Event  -->
+        <tns:type from="ApplicationStartedEventType">
+            <!-- default mapping should return the type name -->
+            <tns:to>Event&lt;ApplicationStartedEvent&gt;</tns:to>
+        </tns:type>  
+        <tns:type from="BalanceNegativEventType">
+            <!-- default mapping should return the type name -->
+            <tns:to>Event&lt;BalanceNegativEvent&gt;</tns:to>
+        </tns:type> 
+        <tns:type from="AccountLockedEventType">
+            <!-- default mapping should return the type name -->
+            <tns:to>Event&lt;AccountLockedEvent&gt;</tns:to>
+        </tns:type>                        	
+	</tns:externalTypes>
+</tns:typeMapping>
