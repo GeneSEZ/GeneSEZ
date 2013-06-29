@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workflow>
+	<cartridge id="uml2genesez"
+		file="de::genesez::adapter::uml2::makeGenesezModel.oaw" 
+		inputModelFile="model-exp/BankTutorialWeld.uml"
+		genesezModel="genesezModel"
+		excludePackages="UML Standard Profile"
+		excludeStereotypes="exclude"
+		mapClassesInModelToExternal="false"
+		externalPackages = ""
+		externalStereotypes = "external"
+		includeProfiles = "qualifier"
+	/>
+	<!-- diese Variablendefinitionen sind nur für die xTend-Cartridges !!! -->
+	<!-- disables the new association handling; its not tested for use with ejb3 -->
+	<property name="model2text.newAssociationHandling" value="false" />
+	<!-- use property access for ejb3 annotations -->
+	<property name="model2text.fieldAccess" value="true" />	
+		
+	<component id="validate" class="de.genesez.platforms.common.workflow.Validator">
+		<script value="de::genesez::platforms::common::Constraints" />
+		<script value="de::genesez::platforms::java::constraints::Syntax" />
+	</component>
+	<component id="serializeBeforeM2T" class="de.genesez.platforms.common.workflow.Serializer">
+		<file value="model-gen/BankTutorialWeld.xmi" />
+	</component>
+	<!-- add functionality of the jpa, ejb3, seam2 and java5 cartridge; changes on model level -->
+	<component id="modify" class="de.genesez.platforms.common.workflow.GeneSezM2M">
+		<script value="de::genesez::platforms::java::jpa::scripts::Functionality::additions" />
+		<script value="de::genesez::platforms::java::jpa::scripts::Functionality::modifications" />
+		<script value="de::genesez::platforms::java::ejb3::scripts::Functionality::additions" />
+		<script value="de::genesez::platforms::java::ejb3::scripts::Functionality::modifications" />
+		<script value="de::genesez::platforms::java::java5::scripts::Functionality::modifications" />
+        <script value="de::genesez::platforms::java::cdi::scripts::Functionality::modifications" />
+	</component>
+	<component id="model2java" class="de.genesez.platforms.java.workflow.JavaGenerator">
+		<outputDir value="../de.genesez.Bank.Tutorial1.Server/src-gen" />
+		<aspectTemplate value="customization::Attrib" />
+		<aspectTemplate value="customization::NoAuthorComment" />
+		<aspectTemplate value="de::genesez::platforms::java::ejb3::templates::AspectsAll" />
+		<aspectScript value="customization::Naming" />
+		<newAssociationHandling value="false" />
+		<!-- now it's possible to specify more than one type mapping file -->
+		<typeMappingFile value="de/genesez/platforms/java/typemapping/typemapping.xml" />
+		<useModelNameAsBasePackage value="true" />
+		<usePropertyVisibilityForAccessors value="false" />
+	</component>
+	<component id="serializeAfterM2T" class="de.genesez.platforms.common.workflow.Serializer">
+		<file value="model-gen/de.genesez.Bank.Tutorial1.Server_after.xmi" />
+		<cloneSlotContents value="true" />
+	</component>
+	<component id="statistics" class="de.genesez.platforms.common.workflow.Statistics">
+	    <name value="de.genesez.Bank.Tutorial1.Server Statistik" />
+	    <typeMappingFile value="typemapping.xml" />
+	    <outputDir value="/Studium/Masterarbeit/GeneSEZ/workspace/de.genesez.Bank.Tutorial1.Server/reports" />
+	    <generatedDir value="/Studium/Masterarbeit/GeneSEZ/workspace/de.genesez.Bank.Tutorial1.Server/src-gen" />
+	    <manualDir value="/Studium/Masterarbeit/GeneSEZ/workspace/de.genesez.Bank.Tutorial1.Server//src" />
+	    <comments class="de.genesez.platforms.common.statistic.CommentSign">
+	        <singleLineComment value="//" />
+	        <multiLineCommentStart value="/\\*" />
+	        <multiLineCommentEnd value="\\*/" />
+	        <multiLineCommentLine value="\\*" />
+	        <multiLineDocCommentStart value="/\\*\\*" />
+	    </comments>
+	</component>	
+</workflow>
