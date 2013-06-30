@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
 
-import javax.swing.JOptionPane;
-
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
@@ -22,6 +20,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.ide.undo.CreateFileOperation;
 
 /**
@@ -114,12 +113,14 @@ public class AfterProjectCreationHelper {
 		}
 		folder.toFile().mkdirs();
 		File file = folder.append(fileName + ".mwe2").toFile();
-		int result = JOptionPane.YES_OPTION;
+		boolean result = true;
 		if (file.exists()) {
-			result = JOptionPane.showConfirmDialog(null, "The file " + file.getName() + " already exists. Overwrite?",
-					"File already exists.", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			result = MessageDialog.openQuestion(null, "File already exists.", 
+					"The file " + file.getName() + " already exists. Overwrite?");
+//			result = JOptionPane.showConfirmDialog(null, "The file " + file.getName() + " already exists. Overwrite?",
+//					"File already exists.", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		}
-		if (result == JOptionPane.YES_OPTION) {
+		if (result) {
 			if (template != null && !template.equals("")) {
 				try {
 					FileUtils.copyFile(new File(template), file);

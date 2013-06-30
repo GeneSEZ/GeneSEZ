@@ -494,11 +494,11 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 			gen.setPrDefaultExcludes(prDefaultExcludes);
 			gen.setPrExcludes(prExcludes);
 			gen.setPrSrcPaths(listToString(prSourceDir));
-			for (Outlet o : outlet) {
-				gen.addOutlet(o);
-			}
 			for (PostProcessor p : postProcessor) {
 				((List<Object>) gen.getBeautifier()).add(p);
+			}
+			for (Outlet o : outlet) {
+				gen.addOutlet(o);
 			}
 			String template = m2t.getTemplate();
 			if (isMultiValueSlot) {
