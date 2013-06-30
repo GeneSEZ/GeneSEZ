@@ -7,7 +7,6 @@
 package org.genesez.eclipse.wizard;
 
 import javax.inject.Inject;
-import javax.swing.JOptionPane;
 
 import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -18,6 +17,7 @@ import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.InjectionException;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
@@ -109,9 +109,10 @@ public class GeneSEZProjectWizard extends Wizard implements INewWizard {
 			handlerService.executeHandler(executeCommand);
 		} catch (InjectionException e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null,
-					"Couldn't inject parameters into the handler.",
-					"InjectionException", JOptionPane.ERROR_MESSAGE);
+			MessageDialog.openError(null, "InjectionException", "Couldn't inject parameters into the handler.");
+//			JOptionPane.showMessageDialog(null,
+//					"Couldn't inject parameters into the handler.",
+//					"InjectionException", JOptionPane.ERROR_MESSAGE);
 		}
 		return true;
 	}

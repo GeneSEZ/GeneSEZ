@@ -28,7 +28,6 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import javax.swing.JOptionPane;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -41,6 +40,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.genesez.eclipse.wizard.handler.ChangeGeneSEZNatureHandler;
 import org.genesez.eclipse.wizard.util.replace.simpel.ReplacerHelper;
 import org.genesez.eclipse.wizard.util.replace.simpel.SimpleTextReplacer;
@@ -137,10 +137,11 @@ public class TemplateHelper {
 			zf = new ZipFile(file);
 			ZipEntry entry = zf.getEntry(CONFIG_FILENAME);
 			if (entry == null) {
-				// TODO: SWT Klasse benutzen.
-				JOptionPane.showMessageDialog(null,
-						"Couldn't find the templateConfig.xml inside the template file: " + file.getName(),
-						"No template config file found", JOptionPane.WARNING_MESSAGE);
+				// toh: used jface dialog instead of swing dialog
+				MessageDialog.openWarning(null, "No template config file found", "Couldn't find the templateConfig.xml inside the template file: " + file.getName());
+//				JOptionPane.showMessageDialog(null,
+//						"Couldn't find the templateConfig.xml inside the template file: " + file.getName(),
+//						"No template config file found", JOptionPane.WARNING_MESSAGE);
 				return null;
 			}
 			InputStream stream = zf.getInputStream(zf.getEntry(CONFIG_FILENAME));
@@ -294,8 +295,14 @@ public class TemplateHelper {
 							appFromZip, genFromZip, monitor);
 				} catch (Exception e1) {
 					e1.printStackTrace();
-					JOptionPane.showMessageDialog(null, "Decompression of the template failed.", "Can't create projects.",
-							JOptionPane.ERROR_MESSAGE);
+					MessageDialog.openError(
+							null, 
+							"Can't create projects.", 
+							"Decompression of the template failed." + System.lineSeparator() +
+							e1.toString()
+					);
+//					JOptionPane.showMessageDialog(null, "Decompression of the template failed.", "Can't create projects.",
+//							JOptionPane.ERROR_MESSAGE);
 					return Status.CANCEL_STATUS;
 				}
 				if (projects == null) {
