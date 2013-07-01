@@ -1,10 +1,10 @@
 package Bank_Tutorial_Weld_Server.bankgroupServer.entity;
 
-/* PROTECTED REGION ID(Bank_Tutorial_Weld_Server.bankgroupServer.entity._16_0_1_41601a3_1267462981134_570566_486.IHomeBean_Imports) ENABLED START */
+/* PROTECTED REGION ID(Bank_Tutorial_Weld_Server.bankgroupServer.entity._16_0_1_41601a3_1267462905086_648269_462.IHomeBean_Imports) ENABLED START */
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
-import Bank_Tutorial_Weld_Server.bankgroupServer.IEntityBase;
+import Bank_Tutorial_Weld_Server.bankgroupServer.EntityBase;
 
 /* PROTECTED REGION END */
 
@@ -95,8 +95,8 @@ public interface IHomeBean<T extends IEntityBase, E extends EntityManager> exten
 	 */
 	public List<T> getList();
 	
-	/* PROTECTED REGION ID(Bank_Tutorial_Weld_Server.bankgroupServer.entity._16_0_1_41601a3_1267462981134_570566_486.IHomeBean_OwnCodeImpl) ENABLED START */
+	/* PROTECTED REGION ID(Bank_Tutorial_Weld_Server.bankgroupServer.entity._16_0_1_41601a3_1267462905086_648269_462.IHomeBean_OwnCodeImpl) ENABLED START */
 	/* TODO: put your own source code here */
 	/* PROTECTED REGION END */
-
+	
 }

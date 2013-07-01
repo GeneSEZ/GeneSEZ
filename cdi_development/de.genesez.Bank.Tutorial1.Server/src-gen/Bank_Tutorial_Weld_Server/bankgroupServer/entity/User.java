@@ -1,24 +1,26 @@
 package Bank_Tutorial_Weld_Server.bankgroupServer.entity;
 
-/* PROTECTED REGION ID(java.type.import._16_0_1_41601a3_1267462910495_371580_466) ENABLED START */
-/* TODO: put your own source code here */
-import java.io.Serializable;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_1_41601a3_1267462910495_371580_466) 
+ */
 import java.util.Date;
+
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import javax.persistence.Version;
 
-/* PROTECTED REGION END */
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 /**
+ * Please describe the responsibility of your class in your modeling tool.
  */
-
 @Entity
 @Table(name = "tbl_User")
 public class User implements Serializable {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	@Id
 	private String username;
@@ -30,79 +32,81 @@ public class User implements Serializable {
 	@Version
 	private int version;
 	
-	// -- generated constructors --------------------------------------------
 	/**
-	 * constructor for class '<em><b>User</b></em>'
+	 * Constructor for class '<em><b>User</b></em>'.
 	 */
+	
 	public User() {
 	}
 	
-	// -- generated method stubs for implementations + derived attributes ---
-	
-	// -- generated association + attribute accessors -----------------------
 	/**
-	 * getter for the attribute '<em><b>username</b></em>'
+	 * Returns the value of attribute '<em><b>username</b></em>'.
 	 */
+	
 	public String getUsername() {
 		return username;
 	}
 	
 	/**
-	 * documented here {@link getUsername()}
-	 * @generated	setter method for the attribute '<em><b>username</b></em>'
+	 * Sets the value of attribute '<em><b>username</b></em>'.
+	 * @param	username	the value to set.
 	 */
+	
 	public void setUsername(String username) {
 		this.username = username;
 	}
 	
 	/**
-	 * getter for the attribute '<em><b>password</b></em>'
+	 * Returns the value of attribute '<em><b>password</b></em>'.
 	 */
+	
 	public String getPassword() {
 		return password;
 	}
 	
 	/**
-	 * documented here {@link getPassword()}
-	 * @generated	setter method for the attribute '<em><b>password</b></em>'
+	 * Sets the value of attribute '<em><b>password</b></em>'.
+	 * @param	password	the value to set.
 	 */
+	
 	public void setPassword(String password) {
 		this.password = password;
 	}
 	
 	/**
-	 * getter for the attribute '<em><b>insertDate</b></em>'
+	 * Returns the value of attribute '<em><b>insertDate</b></em>'.
 	 */
+	
 	public Date getInsertDate() {
-		return insertDate;
+		return new Date(insertDate.getTime());
 	}
 	
 	/**
-	 * documented here {@link getInsertDate()}
-	 * @generated	setter method for the attribute '<em><b>insertDate</b></em>'
+	 * Sets the value of attribute '<em><b>insertDate</b></em>'.
+	 * @param	insertDate	the value to set.
 	 */
+	
 	public void setInsertDate(Date insertDate) {
 		this.insertDate = insertDate;
 	}
 	
 	/**
-	 * getter for the attribute '<em><b>version</b></em>'
+	 * Returns the value of attribute '<em><b>version</b></em>'.
 	 */
+	
 	public int getVersion() {
 		return version;
 	}
 	
 	/**
-	 * documented here {@link getVersion()}
-	 * @generated	setter method for the attribute '<em><b>version</b></em>'
+	 * Sets the value of attribute '<em><b>version</b></em>'.
+	 * @param	version	the value to set.
 	 */
+	
 	public void setVersion(int version) {
 		this.version = version;
 	}
 	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_1_41601a3_1267462910495_371580_466) ENABLED START */
 	// TODO: put your own implementation code here
 	
@@ -124,5 +128,4 @@ public class User implements Serializable {
 		return userString;
 	}
 	/* PROTECTED REGION END */
-
 }

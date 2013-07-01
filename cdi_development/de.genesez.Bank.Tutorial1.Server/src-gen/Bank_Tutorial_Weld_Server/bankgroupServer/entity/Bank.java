@@ -1,46 +1,44 @@
 package Bank_Tutorial_Weld_Server.bankgroupServer.entity;
 
-/* PROTECTED REGION ID(java.type.import._16_0_1_41601a3_1267462918311_582104_470) ENABLED START */
-/* TODO: put your own source code here */
-import java.io.Serializable;
-import javax.persistence.Basic;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_1_41601a3_1267462918311_582104_470) 
+ */
+import Bank_Tutorial_Weld_Server.bankgroupServer.EntityBase;
+
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
+import javax.persistence.Version;
+
+import javax.persistence.OneToOne;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Version;
-import Bank_Tutorial_Weld_Server.bankgroupServer.IEntityBase;
-
-/* PROTECTED REGION END */
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 /**
+ * Please describe the responsibility of your class in your modeling tool.
  */
-
 @Entity
 @Table(name = "tbl_Bank")
-public class Bank implements IEntityBase, Serializable {
+public class Bank implements EntityBase, Serializable {
 	
-	// -- generated attribute, constant + association declarations ----------
-	
-	/** stores the associated object of association BANKGROUP to Bankgroup */
+	/** Stores the linked object of association '<em><b>bankgroup</b></em>' */
 	@ManyToOne(cascade = {}, fetch = FetchType.EAGER)
 	private Bankgroup bankgroup;
 	
-	/** stores associated objects of association ACCOUNTS to Account */
+	/** Stores all linked objects of association '<em><b>accounts</b></em>' */
 	@OneToMany(cascade = {}, fetch = FetchType.EAGER, mappedBy = "bank")
 	@Basic(optional = true)
 	private java.util.Set<Account> accounts = new java.util.HashSet<Account>();
 	
-	/** stores the associated object of association ADDRESS to Address */
+	/** Stores the linked object of association '<em><b>address</b></em>' */
 	@OneToOne(cascade = {}, fetch = FetchType.EAGER, mappedBy = "bank")
 	private Address address;
 	
-	/** stores associated objects of association CUSTOMERS to Customer */
+	/** Stores all linked objects of association '<em><b>customers</b></em>' */
 	@OneToMany(cascade = {}, fetch = FetchType.EAGER, mappedBy = "bank")
 	private java.util.Set<Customer> customers = new java.util.HashSet<Customer>();
 	
@@ -53,80 +51,55 @@ public class Bank implements IEntityBase, Serializable {
 	@Version
 	private int version;
 	
-	// -- generated constructors --------------------------------------------
 	/**
-	 * constructor for class '<em><b>Bank</b></em>'
+	 * Constructor for class '<em><b>Bank</b></em>'.
 	 */
+	
 	public Bank() {
 	}
 	
-	// -- generated method stubs for implementations + derived attributes ---
-	
-	// -- generated association + attribute accessors -----------------------
 	/**
-	 * getter for the attribute '<em><b>sortCode</b></em>'
+	 * Returns the linked object of association '<em><b>bankgroup</b></em>'.
 	 */
-	public long getSortCode() {
-		return sortCode;
-	}
 	
-	/**
-	 * getter for the attribute '<em><b>name</b></em>'
-	 */
-	public String getName() {
-		return name;
-	}
-	
-	/**
-	 * documented here {@link getName()}
-	 * @generated	setter method for the attribute '<em><b>name</b></em>'
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	/**
-	 * getter for the attribute '<em><b>version</b></em>'
-	 */
-	public int getVersion() {
-		return version;
-	}
-	
-	/**
-	 * documented here {@link getVersion()}
-	 * @generated	setter method for the attribute '<em><b>version</b></em>'
-	 */
-	public void setVersion(int version) {
-		this.version = version;
-	}
-	
-	/**
-	 * accessor for association to bankgroup
-	 */
 	public Bankgroup getBankgroup() {
 		return bankgroup;
 	}
 	
 	/**
-	 * accessor for association to bankgroup
+	 * Establishes a link to the specified object for association '<em><b>bankgroup</b></em>'.
+	 * @param	bankgroup	the object to associate.
 	 */
+	
 	public void setBankgroup(Bankgroup bankgroup) {
+		if (this.bankgroup == bankgroup) {
+			return;
+		}
+		Bankgroup former = this.bankgroup;
 		this.bankgroup = bankgroup;
+		if (former != null) {
+			former.removeBanks(this);
+		}
+		if (bankgroup != null) {
+			bankgroup.addBanks(this);
+		}
 	}
 	
 	/**
-	 * accessor for association to accounts
+	 * Returns all linked objects of association '<em><b>accounts</b></em>'.
 	 */
+	
 	public java.util.Set<Account> getAccounts() {
-		return this.accounts;
-		
+		return accounts;
 	}
 	
 	/**
-	 * accessor for association to accounts
+	 * Establishes a link to the specified object for association '<em><b>accounts</b></em>'.
+	 * @param	accounts	the object to associate.
 	 */
-	public void insertInAccounts(Account accounts) {
-		if (this.accounts.contains(accounts)) {
+	
+	public void addAccounts(Account accounts) {
+		if (accounts == null || this.accounts.contains(accounts)) {
 			return;
 		}
 		this.accounts.add(accounts);
@@ -134,42 +107,60 @@ public class Bank implements IEntityBase, Serializable {
 	}
 	
 	/**
-	 * accessor for association to accounts
+	 * Removes the link to the specified specified object from association '<em><b>accounts</b></em>'.
+	 * @param	accounts	the object to remove.
 	 */
-	public void removeFromAccounts(Account accounts) {
-		if (!this.accounts.contains(accounts)) {
+	
+	public void removeAccounts(Account accounts) {
+		if (accounts == null || !this.accounts.contains(accounts)) {
 			return;
 		}
 		this.accounts.remove(accounts);
+		accounts.setBank(null);
 	}
 	
 	/**
-	 * accessor for association to address
+	 * Returns the linked object of association '<em><b>address</b></em>'.
 	 */
+	
 	public Address getAddress() {
 		return address;
 	}
 	
 	/**
-	 * accessor for association to address
+	 * Establishes a link to the specified object for association '<em><b>address</b></em>'.
+	 * @param	address	the object to associate.
 	 */
+	
 	public void setAddress(Address address) {
+		if (this.address == address) {
+			return;
+		}
+		Address former = this.address;
 		this.address = address;
+		if (former != null) {
+			former.setBank(null);
+		}
+		if (address != null) {
+			address.setBank(this);
+		}
 	}
 	
 	/**
-	 * accessor for association to customers
+	 * Returns all linked objects of association '<em><b>customers</b></em>'.
 	 */
+	
 	public java.util.Set<Customer> getCustomers() {
-		return this.customers;
-		
+		return customers;
 	}
 	
 	/**
-	 * accessor for association to customers
+	 * Establishes a link to the specified object for association '<em><b>customers</b></em>'.
+	 * @param	customers	the object to associate.
 	 */
-	public void insertInCustomers(Customer customers) {
-		if (this.customers.contains(customers)) {
+	
+	public void addCustomers(Customer customers) {
+		if (customers == null || this.customers.contains(customers)) {
 			return;
 		}
 		this.customers.add(customers);
@@ -177,20 +168,73 @@ public class Bank implements IEntityBase, Serializable {
 	}
 	
 	/**
-	 * accessor for association to customers
+	 * Removes the link to the specified specified object from association '<em><b>customers</b></em>'.
+	 * @param	customers	the object to remove.
 	 */
-	public void removeFromCustomers(Customer customers) {
-		if (!this.customers.contains(customers)) {
+	
+	public void removeCustomers(Customer customers) {
+		if (customers == null || !this.customers.contains(customers)) {
 			return;
 		}
 		this.customers.remove(customers);
+		customers.setBank(null);
 	}
 	
-	// -- generated code of other cartridges --------------------------------
+	/**
+	 * Returns the value of attribute '<em><b>sortCode</b></em>'.
+	 */
 	
-	// -- own code implementation -------------------------------------------
+	public long getSortCode() {
+		return sortCode;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>name</b></em>'.
+	 */
+	
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>name</b></em>'.
+	 * @param	name	the value to set.
+	 */
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>version</b></em>'.
+	 */
+	
+	public int getVersion() {
+		return version;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>version</b></em>'.
+	 * @param	version	the value to set.
+	 */
+	
+	public void setVersion(int version) {
+		this.version = version;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	
+	public long getId() {
+		/* PROTECTED REGION ID(java.implementation._16_0_1_41601a3_1267462918311_582104_470__16_0_1_41601a3_1284909977612_160129_381) ENABLED START */
+		// TODO: implementation of method 'Bank.getId(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_1_41601a3_1267462918311_582104_470) ENABLED START */
-
+	
 	/**
 	 * 
 	 */
@@ -227,5 +271,4 @@ public class Bank implements IEntityBase, Serializable {
 	}
 	
 	/* PROTECTED REGION END */
-
 }
