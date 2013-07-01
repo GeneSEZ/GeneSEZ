@@ -1,34 +1,22 @@
 package Bank_Tutorial_Weld_Server.qualifier;
 
-/* PROTECTED REGION ID(java.type.import._16_0_1_41601a3_1267537230263_119058_1592) ENABLED START */
-/* TODO: put your own source code here */
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_1_41601a3_1267537230263_119058_1592.JavaAnnotationInterface) 
+ */
 import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import javax.inject.Qualifier;
 
-/* PROTECTED REGION END */
-
 /**
+ * Please describe the responsibility of your class in your modeling tool.
  */
 @Qualifier
-@Target( {
-METHOD, FIELD, PARAMETER
-})
 @Retention(RUNTIME)
 public @interface RandomAccountNumber {
 	
-	// -- generated attribute, constant + association declarations ----------
-	
-	// -- generated association accessors -----------------------------------
-	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
-	/* PROTECTED REGION ID(java.annotation.own.code.declaration._16_0_1_41601a3_1267537230263_119058_1592) ENABLED START */
+	/* PROTECTED REGION ID(java.annotation.own.code.declaration._16_0_1_41601a3_1267537230263_119058_1592.JavaAnnotationInterface) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
 }

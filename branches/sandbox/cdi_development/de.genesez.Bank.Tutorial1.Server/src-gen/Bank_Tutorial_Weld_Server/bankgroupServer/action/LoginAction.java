@@ -1,29 +1,25 @@
 package Bank_Tutorial_Weld_Server.bankgroupServer.action;
 
-/* PROTECTED REGION ID(java.type.import._16_0_1_41601a3_1267462849139_226690_457) ENABLED START */
-/* TODO: put your own source code here */
-import java.io.Serializable;
-import java.util.Date;
-import javax.annotation.PreDestroy;
-import javax.ejb.PrePassivate;
-import javax.ejb.Remove;
-import javax.ejb.Stateful;
-import javax.enterprise.context.SessionScoped;
-import javax.enterprise.inject.Produces;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.EntityManager; //import org.jboss.weld.context.http.HttpSessionContext;
-import javax.servlet.http.HttpSession;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_1_41601a3_1267462849139_226690_457) 
+ */
 import Bank_Tutorial_Weld_Server.bankgroupServer.entity.User;
-import Bank_Tutorial_Weld_Server.qualifier.BankDatabase;
-import Bank_Tutorial_Weld_Server.qualifier.LoggedIn;
-import Bank_Tutorial_Weld_Server.qualifier.Logging;
 
-/* PROTECTED REGION END */
+import javax.persistence.EntityManager;
+
+import javax.inject.Named;
+
+import javax.inject.Inject;
+
+import javax.enterprise.context.SessionScoped;
+
+import javax.enterprise.inject.Produces;
+
+import javax.ejb.Stateful;
 
 /**
+ * Please describe the responsibility of your class in your modeling tool.
  */
 
 @Named("login")
@@ -31,8 +27,6 @@ import Bank_Tutorial_Weld_Server.qualifier.Logging;
 @Stateful(name = "LoginAction")
 @Logging
 public class LoginAction implements Serializable {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	@Inject
 	private Credentials credentials;
@@ -46,25 +40,23 @@ public class LoginAction implements Serializable {
 	
 	private User user;
 	
-	// -- generated constructors --------------------------------------------
 	/**
-	 * constructor for class '<em><b>LoginAction</b></em>'
+	 * Constructor for class '<em><b>LoginAction</b></em>'.
 	 */
+	
 	public LoginAction() {
 	}
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
-	 * method stub for further implementation
-	 * @return	
+	 * Method stub for further implementation.
 	 */
 	
 	@Named
 	@Produces
-	@LoggedIn
+	@LoggedIn(timeout = 1000)
 	public User getCurrentUser() {
 		/* PROTECTED REGION ID(java.implementation._16_0_1_41601a3_1271580746901_653093_600) ENABLED START */
-
+		
 		//		if (user != null)
 		//			System.out.println(user.toString());
 		return user;
@@ -73,8 +65,7 @@ public class LoginAction implements Serializable {
 	}
 	
 	/**
-	 * method stub for further implementation
-	 * @return	
+	 * Method stub for further implementation.
 	 */
 	
 	public boolean isLoggedIn() {
@@ -85,12 +76,12 @@ public class LoginAction implements Serializable {
 	}
 	
 	/**
-	 * method stub for further implementation
+	 * Method stub for further implementation.
 	 */
 	
 	public void register() {
 		/* PROTECTED REGION ID(java.implementation._16_0_1_41601a3_1271580692768_187520_593) ENABLED START */
-
+		
 		User user = (User) database.find(User.class, credentials.getUsername());
 		if (user != null) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User already registered: " + user.getUsername() + ", at date: " + user.getInsertDate()));
@@ -111,12 +102,12 @@ public class LoginAction implements Serializable {
 	}
 	
 	/**
-	 * method stub for further implementation
+	 * Method stub for further implementation.
 	 */
 	
 	public void login() {
 		/* PROTECTED REGION ID(java.implementation._16_0_1_41601a3_1271580674064_135420_591) ENABLED START */
-
+		
 		// erstmal alten User ausloggen
 		//logout();
 		
@@ -138,7 +129,7 @@ public class LoginAction implements Serializable {
 	}
 	
 	/**
-	 * method stub for further implementation
+	 * Method stub for further implementation.
 	 */
 	
 	public void logout() {
@@ -151,7 +142,7 @@ public class LoginAction implements Serializable {
 	}
 	
 	/**
-	 * method stub for further implementation
+	 * Method stub for further implementation.
 	 */
 	
 	@Remove
@@ -161,11 +152,6 @@ public class LoginAction implements Serializable {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
-	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_1_41601a3_1267462849139_226690_457) ENABLED START */
 	private static final long serialVersionUID = 1L;
 	
@@ -180,5 +166,4 @@ public class LoginAction implements Serializable {
 	}
 	
 	/* PROTECTED REGION END */
-
 }

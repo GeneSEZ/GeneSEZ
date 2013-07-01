@@ -1,6 +1,6 @@
 package Bank_Tutorial_Weld_Server.bankgroupServer.entity;
 
-/* PROTECTED REGION ID(Bank_Tutorial_Weld_Server.bankgroupServer.entity._16_0_1_41601a3_1267462981134_570566_486.ConversationAdmin_Imports) ENABLED START */
+/* PROTECTED REGION ID(Bank_Tutorial_Weld_Server.bankgroupServer.entity._16_0_1_41601a3_1267462905086_648269_462.ConversationAdmin_Imports) ENABLED START */
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
@@ -55,7 +55,7 @@ public class ConversationAdmin implements Serializable {
 		return conversationList;
 	}
 	
-	/* PROTECTED REGION ID(Bank_Tutorial_Weld_Server.bankgroupServer.entity._16_0_1_41601a3_1267462981134_570566_486.ConversationAdmin_OwnCodeImpl) ENABLED START */
+	/* PROTECTED REGION ID(Bank_Tutorial_Weld_Server.bankgroupServer.entity._16_0_1_41601a3_1267462905086_648269_462.ConversationAdmin_OwnCodeImpl) ENABLED START */
 	/* TODO: put your own source code here */
 	/* PROTECTED REGION END */
 }
