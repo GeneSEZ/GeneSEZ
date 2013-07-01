@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Modifies the attribute 'branchTagPath' of an advisor node in the buckminster cquery file.
+	(note: buckminster does not perform property expansion there, i.e. buckminster properties cannot be used)
+	
+	@author	tobias haubold <toh@fh-zwickau.de>
+-->
+<project name="org.genesez.featuregroup.cquerymod" default="cquerymod">
+	
+	<import file="lib/antcontrib.xml" />
+	<import file="lib/xmltask.xml" />
+	<property environment="env" />
+	<property file="build.properties" />
+	
+	<condition property="branch.tag.path" value="${BRANCH_TAG_PATH}" else="main">
+		<isset property="BRANCH_TAG_PATH" />
+	</condition>
+	
+	<target name="cquerymod">
+		<echo message="Set advisor nodes 'branchTagPath' to '${branch.tag.path}'" />
+		<xmltask source="genesez.feature.cquery" dest="genesez.feature.cquery">
+			<replace path="cq:componentQuery/cq:advisorNode[last()]/@branchTagPath" withText="${branch.tag.path}" />
+		</xmltask>
+	</target>
+</project>
