@@ -1,0 +1,264 @@
+/**
+ *  modificates the metamodel before generation of the source code of classes
+ *  
+ * @author  nancy doerfel
+ * @date    2010-11-06
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension org::genesez::util::logging::Logging;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::CloneElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
+extension org::genesez::platform::java::util::Naming;
+extension org::genesez::platform::java::util::JavaTypes;
+extension org::genesez::platform::java::cdi::scripts::Functionality;
+
+Void cdiClassModifications(MClass this) :
+    this.addClassIsSerializable() ->
+    this.addEntityHomeClass()
+    ;
+
+/**
+ * Check if class needs to be serializeable and add interface.
+ */
+Void addClassIsSerializable(MClass this) :
+    (this.realization.select(e| e != null && e.name().matches("Serializable")).isEmpty)
+    && (   
+           this.emHasStereotypeAssignment("cdiApplicationScoped")
+        || this.emHasStereotypeAssignment("cdiSessionScoped")
+        || this.emHasStereotypeAssignment("cdiRequestScoped")
+        || this.emHasStereotypeAssignment("cdiConversationScoped")
+        || this.emHasStereotypeAssignment("cdiDecorator")
+        )
+    ? (
+        this.realization.add( this.navModel().typeSerializable() )
+      )
+    : Void;
+
+
+/**
+ * Create the Home Class and the Home Interface
+ */
+Void addEntityHomeClass(MClass this) :
+    this.emHasStereotypeAssignment("cdiExtEntityHome")
+    ? (
+        //this.createEntityHomeClass(this.createEntityHomeInterface())
+        this.createEntityHomeClass()
+      )
+    : Void;
+
+
+
+/**
+ * Creates an enity home Interface, e.g. IAccountHome for entity Account
+ 
+ * @param entityClass the entity class as base class for the home class
+ */
+MInterface createEntityHomeInterface(MClass entityClass) :
+    let homeInterface = createInterface(entityClass.navPackage(), entityClass.xmiGuid+"_Interface_"+entityClass.name+"Home", entityClass.name+"Home") :
+    (
+        entityClass.operation.select(e|e.isConstructor() == false).cloneOperation(homeInterface) ->
+        // extends IHomeBean<..., EntityManager>
+        homeInterface.generalization.add( entityClass.navModel().ensureExternalTypeExistence("IHomeBean<"+entityClass.name+", EntityManager>", "IHomeBean<"+entityClass.name+", EntityManager>") ) ->
+        homeInterface
+    );
+   
+    
+/**
+ * Creates an enity home class, e.g. AccountHome for entity Account
+ 
+ * @param entityClass the entity class as base class for the home class
+ */
+create MClass createEntityHomeClass(MClass entityClass) :
+    let homeClass = createClass(entityClass.navPackage(), entityClass.xmiGuid+"_"+entityClass.name+"Home", entityClass.name+"Home") :
+    (
+        // Public
+        homeClass.setVisibility("public") ->
+        // extends HomeBean
+        homeClass.generalization.add( entityClass.navModel().ensureExternalTypeExistence("HomeBean<"+entityClass.name+", EntityManager>", "HomeBean<"+entityClass.name+", EntityManager>") ) ->
+        
+        // Is conversation scoped and needs @Named annotation
+        homeClass.stereotype.add(createStereotype(entityClass.navModel(), "cdiConversationScoped", "cdiConversationScoped")) ->
+        homeClass.stereotype.add(createStereotype(entityClass.navModel(), "di4javaNamed", "di4javaNamed")) ->
+        
+        // also needs to be a session bean to use em and managed transactions etc.
+        homeClass.addSessionBeanStereotype(entityClass.navModel()) ->
+        homeClass.addEntityManager(entityClass) ->
+        
+        // associations will be generated as injected fields for other home classes
+        entityClass.owningInitializableAssociationRoles().createAssociationInjectionProperty(homeClass) ->
+        
+        // need some general operations
+        homeClass.addListOperations(entityClass) ->
+        
+        homeClass.ensureOperationExistence( homeClass.name + ".getEntityManager", "getEntityManager" )
+        	.processOperation( "public", false, false, false )
+        	.ensureReturnParameterExistence( homeClass.name + ".getEntityManager.return", "" )
+        		.processParameter("", "return", createMultiplicity(0, 1))
+        		.wireType( entityClass.navModel().typeEntityManager() ) ->
+//		old impl:
+//        ( let  o = homeClass.makeOperation("getEntityManager", homeClass.name + ".getEntityManager", "public") :
+//                       o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", o.navModel().typeEntityManager() ) )
+//        ) ->
+		homeClass.ensureOperationExistence( homeClass.xmiGuid + ".wire", "wire" )
+			.processOperation( "public", false, false, false ) ->
+//      old impl:  
+//        homeClass.makeOperation("wire", "public") ->
+        
+        homeClass.addEjbRemoveOperation()
+        
+        // implements Home Interface
+       // homeClass.realization.add(homeInterface) ->
+        // home interface should implement all methods of home bean
+      //  homeClass.operation.select(e|e.isConstructor() == false).cloneOperation(homeInterface)
+    ) ->
+    homeClass;
+
+/**
+ * Add all additionally interfaces listet in the stereotype  
+ *
+ *  @param  this         instance of MClassifier
+ *  @param  container    instance of MClassifier
+
+Void addEntityHomeRealizationList(MClassifier this, MClassifier entityClass): 
+    (entityClass.emGetTaggedValue("cdiExtEntityHome", "realizations").length > 0)
+    ? (   
+        entityClass.emGetTaggedValue("cdiExtEntityHome", "realizations").split(",").addEntityHomeRealization(this, entityClass)
+      )
+    : Void;
+ */
+ 
+/**
+ * Finally add the interface, if it is part of the model.
+ *  
+ *  @param  this         instance of MClassifier
+ *  @param  container    instance of MClassifier
+ 
+Void addEntityHomeRealization(String this, MClassifier homeClass, MClassifier entityClass): 
+    (let i = entityClass.navModel().allNestedClassifiers().selectFirst(e|e.metaType == MInterface && e.name().matches(this.trim())) :
+    (
+        (i != null)
+        ? ( 
+            homeClass.realization.add((MInterface) i) -> 
+            i.operation.cloneOperation(homeClass)
+          )
+        : Void
+    )
+    );
+*/
+ 
+/**
+ * Adds a stateful session bean annotation 
+ *  @param  this         instance of MClassifier
+ *  @param  container    instance of MClassifier
+ */
+Void addSessionBeanStereotype(MClassifier this, MModel container) :
+    let s = makeSessionBeanStereotype(this) :
+        this.stereotype.add(s) ->
+        createTaggedValue(this, createTag(s, "stateful", "boolean"), "true");
+
+MStereotype makeSessionBeanStereotype(MClassifier container) :
+    let s = createStereotype(container.navPackage().navModel(), "ejb3SessionBean", "ejb3SessionBean") :
+        s.property.add(createTag(s, "stateful", "boolean")) ->
+        s;
+    
+/**
+ * Adds default entity manager
+ *  @param  this         instance of MClassifier
+ *  @param  entityClass  instance of MClassifier
+ */    
+Void addEntityManager(MClassifier this, MClassifier entityClass): 
+    entityClass.emHasTaggedValue("cdiExtEntityHome", "createDefaultEntityManager", "true") 
+    ? (
+        let a = this.addAttribute("entityManager", "EntityManager", "private", 1) :
+            a.stereotype.add(createStereotype(entityClass.navModel(), "di4javaInject", "di4javaInject")) -> 
+            a.stereotype.add(createStereotype(entityClass.navModel(), "jpaPersistenceContext", "jpaPersistenceContext"))
+      )  
+    : Void;
+    
+/**
+ * Adds default list operations
+ *  @param  this         instance of MClassifier
+ *  @param  entityClass  instance of MClassifier
+ */    
+Void addListOperations(MClassifier this, MClassifier entityClass):
+	ensureOperationExistence( entityClass.xmiGuid+".get"+entityClass.name+"List", "get"+entityClass.name+"List" )
+		.processOperation( "public", false, false, false )
+		.ensureReturnParameterExistence( entityClass.xmiGuid+".get"+entityClass.name+"List.return", "" )
+			.processParameter( "", "return", createMultiplicity(0, 1) )
+			.wireType( this.navModel().typeListFor(entityClass.name) ) ->
+//	Note: xmi guid of operation changed, based on operation name in old impl!
+//	( let 	o = makeOperation("get"+entityClass.name+"List", entityClass.name+".get"+entityClass.name+"List", "public") :
+//        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", this.navModel().typeListFor(entityClass.name) ) )
+//	) -> 
+	ensureOperationExistence( entityClass.xmiGuid + ".get"+entityClass.name+"ListCount", "get"+entityClass.name+"ListCount" )
+		.processOperation( "public", false, false, false )
+		.ensureReturnParameterExistence( entityClass.xmiGuid + ".get"+entityClass.name+"ListCount.return", "" )
+			.processParameter( "", "return", createMultiplicity(0, 1) )
+			.wireType( this.navModel().typeLongPrimitive() );
+//	Note: xmi guid of operation changed, based on operation name in old impl!
+//	( let 	o = makeOperation("get"+entityClass.name+"ListCount", entityClass.name + ".get"+entityClass.name+"ListCount", "public") :
+//        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", createPrimitiveType( o.navModel(), "long" ) ) )
+//	);
+
+/**
+ * Adds a operation annotated with @Remove, necessary when removing EJB
+ *
+ *  @param  this         instance of MClassifier
+ *  @param  entityClass  instance of MClassifier
+ */    
+Void addEjbRemoveOperation(MClassifier this): 
+	ensureOperationExistence( xmiGuid + ".removeEjb", "removeEjb" )
+		.processOperation( "public", false, false, false )
+		.ensureStereotypeAssignment(
+			navModel().ensureStereotypeExistence( "ejb3Remove", "ejb3Remove" )
+		);
+//    let o = makeOperation(this, "removeEjb", "public"): (
+//        o.stereotype.add(createStereotype(this.navModel(), "ejb3Remove", "ejb3Remove"))    
+//    );
+
+/**
+ * Takes an Association Role, transforms it into an attribute and adds it to the homeClass.
+ *
+ * @param role          association role to add as attriute to homeClass
+ * @param homeClass     base class and container or the new attribute
+ */
+Void createAssociationInjectionProperty(MAssociationRole role, MClass homeClass) :
+
+    let a = addAttribute(homeClass, role.type.name().toLowerCase()+"Home", role.type.name()+"Home", "private", 1):
+        a.setType(role.type) ->
+        a.stereotype.add(createStereotype(homeClass.navModel(), "di4javaInject", "di4javaInject")) ->
+        a.stereotype.add(createStereotype(homeClass.navModel(), "cdiExtEntityHome", "cdiExtEntityHome")) ->
+    (role.multiplicity.upperBound != 1)
+        ? (
+			homeClass.ensureOperationExistence( homeClass.xmiGuid+".get"+role.type.name()+"List", "get"+role.type.name()+"List" )
+				.processOperation( "public", false, false, false )
+				.ensureReturnParameterExistence( homeClass.xmiGuid+".get"+role.type.name()+"List.return", "" )
+					.processParameter( "", "return", createMultiplicity(0, 1) )
+					.wireType( homeClass.navModel().typeListFor(role.type.name()) )
+//	Note: xmi guid of operation changed, based on operation name in old impl!
+//        	let	o = homeClass.makeOperation("get"+role.type.name()+"List", homeClass.name+".get"+role.type.name()+"List", "public") :
+//        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", o.navModel().typeListFor(role.type().name()) ) ) 
+        )
+        : Void;
+    
+/**
+ *  creates an attribute and adds it to the property list
+ *  
+ *  @param  container       instance of MClassifier
+ *  @param  name            name of the attribute
+ *  @param  type            type of the attribute
+ *  @param  visibility      visibility of the attribute
+ *  @param  multiplicity    multiplicity of the attribute
+ */
+MAttribute addAttribute(MClassifier container, String name, String type, String visibility, int multiplicity) :
+    let a = createAttribute(container, container.xmiGuid+"_"+name, name) :
+        a.processAttribute("", false, false) ->
+        a.setMultiplicity( createMultiplicity( 0, multiplicity ) ) ->
+        a.setVisibility(visibility) ->
+        a.setType( createExternalType(container.navModel(), type, type) ) ->        
+        a;

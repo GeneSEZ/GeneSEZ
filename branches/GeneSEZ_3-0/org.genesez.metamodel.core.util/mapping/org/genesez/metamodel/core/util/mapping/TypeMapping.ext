@@ -1,0 +1,202 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+
+import gcore;
+
+
+/**
+ * Frontend for GeneSEZ Core meta model specific type mapping support.
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ */
+
+extension org::genesez::mapping::type::TypeMapping;
+
+
+// -- Types which are mapped by the type mapping ------------------------------------------------------------
+
+
+/**
+ * Returns true if a mapping for the specified type in the specified context exists, otherwise false.
+ * 
+ * @param mappingType	The type to map.
+ * @param context		The context in which the type should be mapped.
+ * @return	True if a type mapping exists, otherwise false.
+ * @see org.genesez.mapping.type.ITypeMappingManager#hasTypeMapping(java.lang.String, java.lang.String)
+ * @api
+*/
+boolean hasExternalTypeMapping(MExternal this, String contextName) :
+	hasExternalTypeMapping( name, contextName );
+
+
+/**
+ * Maps the name of an external type using the type mapping.
+ *
+ * @param	this	The external type to map.
+ * @return	The name of the external type according type mapping.
+ * @api
+ */
+String mapName(MExternal this) : 
+	mapExternalType( name );
+
+
+/**
+ * Maps the name of an external type within the specified context using the type mapping.
+ *
+ * @param	this		The external type to map.
+ * @param	contextName	The context in which the external type shall be mapped.
+ * @return	The name of the external type according type mapping.
+ * @api
+ */
+String mapName(MExternal this, String contextName) : 
+	mapExternalType( name, contextName );
+
+
+// -- Types which are not mapped by the type mapping --------------------------------------------------------
+
+
+/**
+ * The name of generic types are not mapped by the type mapping.
+ *
+ * @param	this	The generic type.
+ * @return	The specified generic type itself.
+ * @api
+ */
+MGeneric mapName(MGeneric this) : 
+	this;
+
+
+/**
+ * The name of generic types are not mapped by the type mapping.
+ *
+ * @param	this		The generic type.
+ * @param	contextName	The context.
+ * @return	The specified generic type itself.
+ * @api
+ */
+MGeneric mapName(MGeneric this, String contextName) : 
+	this;
+
+
+/**
+ * The name of classifiers are not mapped by the type mapping.
+ *
+ * @param	this	The classifier.
+ * @return	The specified classifier itself.
+ * @api
+ */
+MClassifier mapName(MClassifier this) : 
+	this;
+
+
+/**
+ * The name of classifiers are not mapped by the type mapping.
+ *
+ * @param	this		The classifier.
+ * @param	contextName	The context.
+ * @return	The specified classifier itself.
+ * @api
+ */
+MClassifier mapName(MClassifier this, String contextName) : 
+	this;
+
+
+/**
+ * The name of types are not mapped by the type mapping.
+ * This script is just there for error free templates.
+ *
+ * @param	this	The type.
+ * @return	The specified type itself.
+ * @api
+ */
+MType mapName(MType this) : 
+	this;
+
+
+/**
+ * The name of types are not mapped by the type mapping.
+ * This script is just there for error free templates.
+ *
+ * @param	this		The type.
+ * @param	contextName	The context.
+ * @return	The specified type itself.
+ * @api
+ */
+MType mapName(MType this, String contextName) : 
+	this;
+
+
+// -- Multi-valued Types of model elements which are mapped by the type mapping -----------------------------
+
+
+/**
+ * Maps the multiplicity settings to a collection type using the type mapping.
+ *
+ * @param	this		The parameter.
+ * @return	The name of the collection type.
+ * @api
+ */
+String mapCollection(MMultiplicity this) :
+	mapMultiValuedType( unique, ordered );
+
+
+/**
+ * Maps the multiplicity settings with the specified context to a collection type using the type mapping.
+ *
+ * @param	this		The parameter.
+ * @param	contextName	The context in which the collection type shall be mapped.
+ * @return	The name of the collection type.
+ * @api
+ */
+String mapCollection(MMultiplicity this, String contextName) :
+	mapMultiValuedType( unique, ordered, contextName );
+
+
+/**
+ * Maps the collection type of a parameter using the type mapping.
+ *
+ * @param	this		The parameter.
+ * @return	The name of the collection type.
+ * @api
+ */
+String mapCollection(MParameter this) :
+	mapMultiValuedType( multiplicity.unique, multiplicity.ordered );
+
+
+/**
+ * Maps the collection type of a parameter within the specified context using the type mapping.
+ *
+ * @param	this		The parameter.
+ * @param	contextName	The context in which the collection type shall be mapped.
+ * @return	The name of the collection type.
+ * @api
+ */
+String mapCollection(MParameter this, String contextName) :
+	mapMultiValuedType( multiplicity.unique, multiplicity.ordered, contextName );
+
+
+/**
+ * Maps the collection type of a property using the type mapping.
+ *
+ * @param	this		The property.
+ * @return	The name of the collection type.
+ * @api
+ */
+String mapCollection(MProperty this) :
+	mapMultiValuedType( multiplicity.unique, multiplicity.ordered );
+
+
+/**
+ * Maps the collection type of a property within the specified context using the type mapping.
+ *
+ * @param	this		The property.
+ * @param	contextName	The context in which the collection type shall be mapped.
+ * @return	The name of the collection type.
+ * @api
+ */
+String mapCollection(MProperty this, String contextName) :
+	mapMultiValuedType( multiplicity.unique, multiplicity.ordered, contextName );

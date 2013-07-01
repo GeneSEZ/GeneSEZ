@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Appends the version qualifier to each feature + plugin project.
+	
+	The version qualifier depends on the kind of build:
+	- local builds: l<current timestamp>
+	- development builds (trunk): d<current timestamp>
+	- release builds: v<current timestamp>
+	
+	The timestamp has the format: <4 digit year><2 digit month><2 digit day>-<2 digit hour><2 digit minute>
+	
+	@author	tobias haubold <toh@fh-zwickau.de>
+-->
+<project name="org.genesez.featuregroup.versioning" default="versioning">
+	
+	<import file="lib/antcontrib.xml" />
+	<import file="lib/xmltask.xml" />
+	<property environment="env" />
+	<property file="build.properties" />
+	
+	
+	<!-- current timestamp -->
+	<tstamp>
+		<format property="timestamp" pattern="yyyyMMdd-HHmm" />
+	</tstamp>
+	
+	<!-- determine the version qualifier for the current build -->
+	<condition property="qualifier" value="l${timestamp}">
+		<not>
+			<isset property="env.BUILD_NUMBER" />
+		</not>
+	</condition>
+	<condition property="qualifier" value="d${timestamp}" else="v${timestamp}">
+		<and>
+			<isset property="env.BUILD_NUMBER" />
+			<contains string="${SCM_PATH}" substring="trunk" />
+		</and>
+	</condition>
+	
+	
+	<!-- path to genesez projects -->
+	<dirname property="ant.file.dir" file="${ant.file}" />
+	<condition property="feature.dir" value="${ant.file.dir}/../../features" else="${ant.file.dir}/..">
+		<isset property="env.BUILD_NUMBER" />
+	</condition>
+	<condition property="plugin.dir" value="${ant.file.dir}/../../plugins" else="${ant.file.dir}/..">
+		<isset property="env.BUILD_NUMBER" />
+	</condition>
+	<property name="prefix" value="org.genesez" />
+	
+	
+	<!-- genesez projects -->
+	<path id="build.features">
+		<dirset dir="${feature.dir}">
+			<include name="*.feature" />
+			<!-- include name="${prefix}.featuregroup" / -->
+		</dirset>
+	</path>
+	
+	<path id="build.plugins">
+		<dirset dir="${plugin.dir}">
+			<include name="org.eclipse.emf.ecore.adapter.uml2" />
+			<include name="${prefix}.*" />
+			<exclude name="*.feature" />
+			<exclude name="${prefix}.featuregroup" />
+		</dirset>
+	</path>
+	
+	
+	<target name="versioning" description="Sets the version qualifier in all projects">
+		<echo message="Set version qualifier to '${qualifier}'" />
+		
+		<for param="project">
+			<path refid="build.plugins" />
+			<sequential>
+				<basename property="project" file="@{project}" />
+				
+				<echo message="${project}: adjust bundle version qualifier to '${qualifier}'" />
+				<replaceregexp byline="true"
+					file="@{project}/META-INF/MANIFEST.MF"
+					match="Bundle-Version:(\s*)(\d\.\d\.\d)(.*)"
+					replace="Bundle-Version:\1\2.${qualifier}\3">
+				</replaceregexp>
+				
+				<var name="project" unset="true" />
+			</sequential>
+		</for>
+		<for param="project">
+			<path refid="build.features" />
+			<sequential>
+				<basename property="project" file="@{project}" />
+				
+				<xmltask source="@{project}/feature.xml" dest="@{project}/feature.xml">
+					<copy property="feature.version" path="/feature/@version" />
+				</xmltask>
+				<echo message="${project}: adjust version from '${feature.version}' to '${feature.version}.${qualifier}'" />
+				<xmltask source="@{project}/feature.xml" dest="@{project}/feature.xml">
+					<replace path="/feature/@version" withText="${feature.version}.${qualifier}" />
+				</xmltask>
+				
+				<var name="project" unset="true" />
+				<var name="feature.version" unset="true" />
+			</sequential>
+		</for>
+	</target>
+</project>
