@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -99,26 +101,38 @@ public class TemplateHelper {
 	 */
 	public static List<TemplateConfigXml> readTemplateInformation() throws FileNotFoundException, IOException, URISyntaxException {
 		List<TemplateConfigXml> templates = new ArrayList<TemplateConfigXml>();
-		URL url = TemplateHelper.class.getProtectionDomain().getCodeSource().getLocation();
-		File folder = new File(url.getPath().concat(TEMPLATE_FOLDER));
-		File[] files;
-		if (!folder.isDirectory()) {
-			throw new FileNotFoundException("Directory " + folder.toString() + "can't be found in the project.");
-		}
-		files = folder.listFiles(new FileFilter() {
-			@Override
-			public boolean accept(File pathname) {
-				if (pathname.toString().matches(ARCHIVE_PATTERN)) {
-					return true;
+		File folder;
+		try {
+			// obtain source location: either the directory or the jar file!
+			URL url = TemplateHelper.class.getProtectionDomain().getCodeSource().getLocation();
+			// File folder = new File(url.getPath().concat(TEMPLATE_FOLDER));
+			java.nio.file.Path basePath = Paths.get(url.toURI());
+			if (!Files.isDirectory(basePath)) {
+				basePath = basePath.getParent();
+			}
+			String path = basePath.toString() + TEMPLATE_FOLDER;
+			folder = new File(path);
+			File[] files;
+			if (!folder.isDirectory()) {
+				throw new FileNotFoundException("Directory " + folder.toString() + " can't be found in the project.");
+			}
+			files = folder.listFiles(new FileFilter() {
+				@Override
+				public boolean accept(File pathname) {
+					if (pathname.toString().matches(ARCHIVE_PATTERN)) {
+						return true;
+					}
+					return false;
 				}
-				return false;
+			});
+			for (int i = 0; i < files.length; i++) {
+				TemplateConfigXml read = readArchive(files[i]);
+				if (read != null) {
+					templates.add(read);
+				}
 			}
-		});
-		for (int i = 0; i < files.length; i++) {
-			TemplateConfigXml read = readArchive(files[i]);
-			if (read != null) {
-				templates.add(read);
-			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return templates;
 	}
