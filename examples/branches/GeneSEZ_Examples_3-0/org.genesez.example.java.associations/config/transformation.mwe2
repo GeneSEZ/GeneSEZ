@@ -1,0 +1,94 @@
+module org.genesez.example.java.associations
+
+var uml2setup = org.genesez.adapter.uml2.workflow.UmlSetup {
+	standardUML2Setup = true
+}
+var gcore = org.eclipse.xtend.typesystem.emf.EmfMetaModel {
+	metaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+}
+var uml = org.eclipse.xtend.typesystem.uml2.UML2MetaModel {}
+
+var model = "associations"
+
+Workflow {
+	// read the uml2 model file
+	component = org.genesez.workflow.EmfReader {
+		file = "model/${model}.uml"
+		slot = "uml2model"
+	}
+	// validate the uml2 model for transformability
+	component = org.genesez.workflow.xpand.ValidatorComponent {
+		metaModel = uml
+		slot = "uml2model"
+		
+		validator = org.genesez.adapter.uml2.workflow.UmlModelValidation {}
+		validator = org.genesez.adapter.uml2.workflow.UmlStateMachineValidation {}
+		validator = org.genesez.adapter.uml2.workflow.Uml2GcoreStateMachineValidation {}
+	}
+	// transform the uml2 model into a GeneSEZ model
+	component = org.genesez.workflow.xpand.Model2ModelComponent {
+		metaModel = uml
+		metaModel = gcore
+		slot = "uml2model"
+		outputSlot = "coremodel"
+		
+		model2model = org.genesez.adapter.uml2.workflow.Uml2Gcore {
+		}
+	}
+	// serialize the GeneSEZ model - just for info if you want to have a look at it
+	component = org.genesez.workflow.EmfWriter {
+		schemaLocationImplementation = true
+		file = "model/${model}.gcore.xmi"
+		slot = "coremodel"
+	}
+	// prepare gcore model for java source code generation
+	component = org.genesez.workflow.xpand.ModelModificationComponent {
+		metaModel = gcore
+		
+		// cares about property access operations
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::platform::java::m2m::AccessOperation::prepare"
+		}
+		// automatically implement abstract and interface operations in classes
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
+		}
+		// add necessary use dependencies for import generation
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::metamodel::core::util::m2m::UseDependencies::addUseDependencies"
+		}
+	}
+	// serialize the GeneSEZ model - just for info if you want to have a look at it
+	component = org.genesez.workflow.EmfWriter {
+		schemaLocationImplementation = true
+		cloneSlotContents = true
+		file = "model/${model}.modified.gcore.xmi"
+		slot = "coremodel"
+	}
+	// validate the GeneSEZ model against general + java specific constraints
+	component = org.genesez.workflow.xpand.ValidatorComponent {
+		metaModel = gcore
+		validator = org.genesez.workflow.SimpleValidator {
+			script = "org::genesez::metamodel::core::util::validation::Constraints"
+		}
+		validator = org.genesez.workflow.SimpleValidator {
+			script = "org::genesez::platform::java::validation::Syntax"
+		}
+	}
+	// run the java code generation and transform the model into java source code
+	component = org.genesez.workflow.xpand.Model2TextSupport {
+		component = org.genesez.workflow.xpand.Model2TextComponent {
+			metaModel = gcore
+			outputDir = "src-gen"
+			
+			importPreserverConfig = org.genesez.platform.java.workflow.JavaImportPreserverConfig {}
+			postProcessor = org.genesez.platform.java.workflow.GeneSezJavaPostProcessor {}
+			
+			typeMappingFile = "org/genesez/platform/java/typemapping/typemapping.xml"
+			
+			model2text = org.genesez.platform.java.workflow.Gcore2Java {
+				useModelNameAsBasePackage = true
+			}
+		}
+	}
+}
