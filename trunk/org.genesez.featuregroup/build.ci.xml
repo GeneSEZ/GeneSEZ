@@ -142,7 +142,7 @@
 				
 				<!-- obtain genesez version from repo path -->
 				<var name="version" unset="true" />
-				<propertyregex property="version" regexp="_(\d.\d.\d)-" select="\1" input="${uri}" />
+				<propertyregex property="version" regexp="(\d.\d.\d)" select="\1" input="${uri}" />
 				
 				<!-- check if validation set for genesez version exists -->
 				<var name="validation.set" unset="true" />
@@ -153,6 +153,7 @@
 				<condition property="validation.set" value="${validation.set.label}" else="${last.validation.set.label}">
 					<isset property="validation.set.label" />
 				</condition>
+				<echo message="adding GeneSEZ ${version} validation set extending @{validation.set}"></echo>
 				
 				<!-- add genesez repo with reference to validation set -->
 				<xmltask source="${b3aggr.file}" dest="${b3aggr.file}">
@@ -185,14 +186,14 @@
 				
 				<!-- obtain genesez version from repo path -->
 				<var name="version" unset="true" />
-				<propertyregex property="version" regexp="_(\d.\d.\d)-" select="\1" input="${uri}" />
+				<propertyregex property="version" regexp="(\d.\d.\d)" select="\1" input="${uri}" />
 				
 				<!-- find all validation sets for that version -->
 				<xmltask source="${b3aggr.file}">
 					<call path="/aggregator:Aggregation/validationSets[starts-with(@label, '${version}')]">
 						<param name="label" path="@label" default="" />
 						<actions>
-							<echo message="GeneSEZ @{label}"></echo>
+							<echo message="adding GeneSEZ ${version} validation set extending @{label}"></echo>
 							
 							<!-- add genesez repo with reference to validation set -->
 							<xmltask source="${b3aggr.file}" dest="${b3aggr.file}">
@@ -216,7 +217,7 @@
 	
 	<target name="aggregate" depends="create.devel.b3aggr.file, create.release.b3aggr.file" if="is.aggregating"
 			description="Creates an aggregated p2 repository containing GeneSEZ builds with its dependencies.">
-		<echo message="Aggregate model file ${b3aggr.file}." />
+		<echo message="Aggregate model file: ${b3aggr.file}." />
 		<exec executable="/bin/sh" dir="${b3.home.dir}" failonerror="true">
 			<arg value="b3" />
 			<arg value="aggregate" />
