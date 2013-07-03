@@ -32,18 +32,18 @@
 	<!-- determine kind of build -->
 	<condition property="is.development.build">
 		<not>
-			<isset property="${IS_RELEASE}" />
+			<isset property="IS_RELEASE" />
 		</not>
 	</condition>
 	<condition property="is.release.candidate.build">
 		<and>
-			<isset property="${IS_RELEASE}" />
+			<isset property="IS_RELEASE" />
 			<isfalse value="${IS_RELEASE}" />
 		</and>
 	</condition>
 	<condition property="is.release.build">
 		<and>
-			<isset property="${IS_RELEASE}" />
+			<isset property="IS_RELEASE" />
 			<istrue value="${IS_RELEASE}" />
 		</and>
 	</condition>
@@ -51,17 +51,17 @@
 	
 	<condition property="publish.dir" value="${PUBLISH_DIR}/${genesez.feature.version}" else="${PUBLISH_RELEASE_DIR}/${genesez.feature.version}">
 		<not>
-			<isset property="${is.release.build}" />
+			<isset property="is.release.build" />
 		</not>
 	</condition>
 	<condition property="b3aggr.file" value="genesez.development.repository.b3aggr" else="genesez.release.repository.b3aggr">
-		<isset property="${is.development.build}" />
+		<isset property="is.development.build" />
 	</condition>
 	<property name="reponame" value="AggRepo" />
 	<property name="aggregated.publish.dir" value="${GENESEZ_REPO_DIR}" />
 	<condition property="is.aggregating">
 		<not>
-			<isset property="${is.release.candidate.build}" />
+			<isset property="is.release.candidate.build" />
 		</not>
 	</condition>
 	
