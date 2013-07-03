@@ -30,34 +30,39 @@
 	
 	
 	<!-- determine kind of build -->
-	<condition property="is.development.build" value="true" else="false">
+	<condition property="is.development.build">
 		<not>
 			<isset property="${IS_RELEASE}" />
 		</not>
 	</condition>
-	<condition property="is.release.candidate.build" value="true" else="false">
+	<condition property="is.release.candidate.build">
 		<and>
 			<isset property="${IS_RELEASE}" />
 			<isfalse value="${IS_RELEASE}" />
 		</and>
 	</condition>
-	<condition property="is.release.build" value="true" else="false">
+	<condition property="is.release.build">
 		<and>
 			<isset property="${IS_RELEASE}" />
 			<istrue value="${IS_RELEASE}" />
 		</and>
 	</condition>
+	<echo message="Build kind: development (${is.development.build}) | release candidate (${is.release.candidate.build}) | release (${is.release.build}) " />
 	
 	<condition property="publish.dir" value="${PUBLISH_DIR}/${genesez.feature.version}" else="${PUBLISH_RELEASE_DIR}/${genesez.feature.version}">
-		<isfalse value="${is.release.build}" />
+		<not>
+			<isset property="${is.release.build}" />
+		</not>
 	</condition>
 	<condition property="b3aggr.file" value="genesez.development.repository.b3aggr" else="genesez.release.repository.b3aggr">
-		<isset property="is.development.build" />
+		<isset property="${is.development.build}" />
 	</condition>
 	<property name="reponame" value="AggRepo" />
 	<property name="aggregated.publish.dir" value="${GENESEZ_REPO_DIR}" />
 	<condition property="is.aggregating">
-		<isfalse value="${is.release.candidate.build}" />
+		<not>
+			<isset property="${is.release.candidate.build}" />
+		</not>
 	</condition>
 	
 	
@@ -211,6 +216,7 @@
 	
 	<target name="aggregate" depends="create.devel.b3aggr.file, create.release.b3aggr.file" if="is.aggregating"
 			description="Creates an aggregated p2 repository containing GeneSEZ builds with its dependencies.">
+		<echo message="Aggregate model file ${b3aggr.file}." />
 		<exec executable="/bin/sh" dir="${b3.home.dir}" failonerror="true">
 			<arg value="b3" />
 			<arg value="aggregate" />
