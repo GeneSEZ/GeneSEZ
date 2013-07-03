@@ -127,13 +127,17 @@
 		<antcall target="change.permissions">
 			<param name="dir" value="${publish.dir}" />
 		</antcall>
+	</target>
+	
+	<target name="keep.most.recent.p2.repos" depends="publish.p2.repo" unless="is.release.build"
+			description="Removes the oldest p2 repos from the publish dir and keeps the specified number of most recent repos">
 		<antcall target="delete.oldest.builds">
 			<param name="publish.dir" value="${publish.dir}" />
 			<param name="latest.build.count" value="${latest.build.count}" />
 		</antcall>
 	</target>
 	
-	<target name="create.devel.b3aggr.file" depends="publish.p2.repo" if="is.development.build"
+	<target name="create.devel.b3aggr.file" depends="keep.most.recent.p2.repos" if="is.development.build"
 			description="Adds the p2 repository of all successful and available GeneSEZ builds to the b3 aggregator model file.">
 		<xmltask source="${b3aggr.file}" dest="${b3aggr.file}">
 			<copy property="last.validation.set.label" path="/aggregator:Aggregation/validationSets[last()]/@label" />
@@ -180,7 +184,7 @@
 		</for>
 	</target>
 	
-	<target name="create.release.b3aggr.file" depends="publish.p2.repo" if="is.release.build"
+	<target name="create.release.b3aggr.file" depends="keep.most.recent.p2.repos" if="is.release.build"
 			description="Adds the p2 repository of all successful and available GeneSEZ builds to the b3 aggregator model file.">
 		<for param="release">
 			<path id="genesez.releases">
