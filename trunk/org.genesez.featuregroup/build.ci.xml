@@ -17,6 +17,7 @@
 	<import file="lib/antcontrib.xml" />
 	<import file="lib/xmltask.xml" />
 	<import file="build.versioning.xml" />
+	<import file="build.ci.remove.xml" />
 	<property environment="env" />
 	
 	
@@ -28,6 +29,9 @@
 	</xmltask>
 	<echo message="Building GeneSEZ version ${genesez.feature.version}..." />
 	
+	<condition property="latest.build.count" value="${LATEST_BUILD_COUNT}" else="10">
+		<isset property="LATEST_BUILD_COUNT" />
+	</condition>
 	
 	<!-- determine kind of build -->
 	<condition property="is.development.build">
@@ -122,6 +126,10 @@
 		</move>
 		<antcall target="change.permissions">
 			<param name="dir" value="${publish.dir}" />
+		</antcall>
+		<antcall target="delete.oldest.builds">
+			<param name="publish.dir" value="${publish.dir}" />
+			<param name="latest.build.count" value="${latest.build.count}" />
 		</antcall>
 	</target>
 	
