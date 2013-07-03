@@ -189,8 +189,8 @@ Void addListOperations(MClassifier this, MClassifier entityClass):
 	ensureOperationExistence( entityClass.xmiGuid+".get"+entityClass.name+"List", "get"+entityClass.name+"List" )
 		.processOperation( "public", false, false, false )
 		.ensureReturnParameterExistence( entityClass.xmiGuid+".get"+entityClass.name+"List.return", "" )
-			.processParameter( "", "return", createMultiplicity(0, 1) )
-			.wireType( this.navModel().typeListFor(entityClass.name) ) ->
+			.processParameter( "", "return", createMultiplicity(0, -1, false, true) )
+			.wireType( entityClass ) ->
 //	Note: xmi guid of operation changed, based on operation name in old impl!
 //	( let 	o = makeOperation("get"+entityClass.name+"List", entityClass.name+".get"+entityClass.name+"List", "public") :
 //        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", this.navModel().typeListFor(entityClass.name) ) )
@@ -238,8 +238,8 @@ Void createAssociationInjectionProperty(MAssociationRole role, MClass homeClass)
 			homeClass.ensureOperationExistence( homeClass.xmiGuid+".get"+role.type.name()+"List", "get"+role.type.name()+"List" )
 				.processOperation( "public", false, false, false )
 				.ensureReturnParameterExistence( homeClass.xmiGuid+".get"+role.type.name()+"List.return", "" )
-					.processParameter( "", "return", createMultiplicity(0, 1) )
-					.wireType( homeClass.navModel().typeListFor(role.type.name()) )
+					.processParameter( "", "return", createMultiplicity(0, -1, false, true) )
+					.wireType( role.type )
 //	Note: xmi guid of operation changed, based on operation name in old impl!
 //        	let	o = homeClass.makeOperation("get"+role.type.name()+"List", homeClass.name+".get"+role.type.name()+"List", "public") :
 //        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", o.navModel().typeListFor(role.type().name()) ) ) 
