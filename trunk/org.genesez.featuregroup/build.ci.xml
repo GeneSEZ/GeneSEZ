@@ -48,7 +48,9 @@
 		</and>
 	</condition>
 	
-	<property name="publish.dir" value="${PUBLISH_DIR}/${genesez.feature.version}" />
+	<condition property="publish.dir" value="${PUBLISH_DIR}/${genesez.feature.version}" else="${PUBLISH_RELEASE_DIR}/${genesez.feature.version}">
+		<istrue value="${is.release.candidate.build}" />
+	</condition>
 	<condition property="b3aggr.file" value="genesez.development.repository.b3aggr" else="genesez.release.repository.b3aggr">
 		<isset property="is.development.build" />
 	</condition>
