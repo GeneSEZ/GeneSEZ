@@ -30,18 +30,18 @@
 	
 	
 	<!-- determine kind of build -->
-	<condition property="is.development.build">
+	<condition property="is.development.build" value="true" else="false">
 		<not>
 			<isset property="${IS_RELEASE}" />
 		</not>
 	</condition>
-	<condition property="is.release.candidate.build">
+	<condition property="is.release.candidate.build" value="true" else="false">
 		<and>
 			<isset property="${IS_RELEASE}" />
 			<isfalse value="${IS_RELEASE}" />
 		</and>
 	</condition>
-	<condition property="is.release.build">
+	<condition property="is.release.build" value="true" else="false">
 		<and>
 			<isset property="${IS_RELEASE}" />
 			<istrue value="${IS_RELEASE}" />
@@ -49,7 +49,7 @@
 	</condition>
 	
 	<condition property="publish.dir" value="${PUBLISH_DIR}/${genesez.feature.version}" else="${PUBLISH_RELEASE_DIR}/${genesez.feature.version}">
-		<istrue value="${is.release.candidate.build}" />
+		<isfalse value="${is.release.build}" />
 	</condition>
 	<condition property="b3aggr.file" value="genesez.development.repository.b3aggr" else="genesez.release.repository.b3aggr">
 		<isset property="is.development.build" />
