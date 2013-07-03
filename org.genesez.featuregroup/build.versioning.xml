@@ -16,7 +16,6 @@
 	<import file="lib/antcontrib.xml" />
 	<import file="lib/xmltask.xml" />
 	<property environment="env" />
-	<property file="build.properties" />
 	
 	
 	<!-- current timestamp -->
@@ -33,7 +32,9 @@
 	<condition property="qualifier" value="d${timestamp}" else="v${timestamp}">
 		<and>
 			<isset property="env.BUILD_NUMBER" />
-			<contains string="${SCM_PATH}" substring="trunk" />
+			<not>
+				<isset property="${IS_RELEASE}" />
+			</not>
 		</and>
 	</condition>
 	
