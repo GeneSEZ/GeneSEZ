@@ -1,0 +1,39 @@
+module org.genesez.example.documentation.umlmodel2latex
+
+var uml2setup = org.genesez.adapter.uml2.workflow.UmlSetup {
+	standardUML2Setup = true
+}
+var gcore = org.eclipse.xtend.typesystem.emf.EmfMetaModel {
+	metaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+}
+var uml = org.eclipse.xtend.typesystem.uml2.UML2MetaModel {}
+
+Workflow {
+	component = org.genesez.workflow.EmfReader {
+		file = "model/greq.uml"
+		slot = "uml2model"
+	}
+	component = org.genesez.workflow.xpand.ValidatorComponent {
+		metaModel = uml
+		slot = "uml2model"
+		
+		validator = org.genesez.adapter.uml2.workflow.UmlModelValidation {}
+		validator = org.genesez.adapter.uml2.workflow.UmlStateMachineValidation {}
+		validator = org.genesez.adapter.uml2.workflow.Uml2GcoreStateMachineValidation {}
+	}
+	component = org.genesez.workflow.xpand.Model2ModelComponent {
+		metaModel = uml
+		metaModel = gcore
+		slot = "uml2model"
+		outputSlot = "coremodel"
+		
+		model2model = org.genesez.adapter.uml2.workflow.Uml2Gcore {}
+	}
+	component = org.genesez.workflow.xpand.Model2TextSupport {
+		component = org.genesez.workflow.xpand.Model2TextComponent {
+			metaModel = gcore
+			outputDir = "output/latex"
+			model2text = org.genesez.platform.documentation.workflow.Gcore2Latex {}
+		}
+	}
+}
