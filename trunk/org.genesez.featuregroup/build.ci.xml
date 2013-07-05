@@ -200,6 +200,7 @@
 				
 				<!-- obtain genesez version from repo path -->
 				<var name="version" unset="true" />
+				<propertyregex property="version.complete" regexp="(\d.\d.\d)" select="\1" input="${uri}" />
 				<propertyregex property="version" regexp="(\d.\d).\d" select="\1" input="${uri}" />
 				
 				<!-- find all validation sets for that version -->
@@ -207,13 +208,13 @@
 					<call path="/aggregator:Aggregation/validationSets[starts-with(@label, '${version}')]">
 						<param name="label" path="@label" default="" />
 						<actions>
-							<echo message="adding GeneSEZ ${genesez.release.number} validation set extending @{label}"></echo>
+							<echo message="adding GeneSEZ ${version.complete} validation set extending @{label}"></echo>
 							
 							<!-- add genesez repo with reference to validation set -->
 							<xmltask source="${b3aggr.file}" dest="${b3aggr.file}">
 								<insert path="/aggregator:Aggregation/validationSets[last()]" position="after">
 									<![CDATA[
-									  <validationSets label="GeneSEZ-${genesez.release.number}_@{label}" extends="//@validationSets[label='@{label}']">
+									  <validationSets label="GeneSEZ-${version.complete}_@{label}" extends="//@validationSets[label='@{label}']">
 									    <contributions label="GeneSEZ">
 									      <repositories location="${uri}">
 									      </repositories>
