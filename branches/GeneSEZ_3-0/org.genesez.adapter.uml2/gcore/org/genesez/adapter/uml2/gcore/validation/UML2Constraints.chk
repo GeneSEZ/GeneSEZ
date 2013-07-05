@@ -64,7 +64,7 @@ context NamedElement WARNING "GeneSEZ UML2 Adapter: name contains invalid charac
  * @return  false, if the type is not set on the property, otherwise true
  */
 context Property ERROR "GeneSEZ UML2 Adapter: property has no type: " + fqn() :
-	type != Void || type != null;
+	!( type == Void || type == null );
 
 /**
  * checks if an association end property has more than one qualifier attribute
@@ -78,13 +78,4 @@ context Property ERROR "GeneSEZ UML2 Adapter: qualified associations with more t
  * @return	false, if the parameter has no return type, otherwise true
  */
 context Parameter ERROR "GeneSEZ UML2 Adapter: parameter has no type: " + fqn() :
-	type != Void || type != null;
-
-
-/**
- * checks if an operation has a return type or not
- * @return	false, if the operation has no return type, otherwise true
- */
-context Operation WARNING "GeneSEZ UML2 Adapter: operation has no return type: " + fqn() :
-	type != Void || type != null;
-
+	!( type == Void || type == null );
