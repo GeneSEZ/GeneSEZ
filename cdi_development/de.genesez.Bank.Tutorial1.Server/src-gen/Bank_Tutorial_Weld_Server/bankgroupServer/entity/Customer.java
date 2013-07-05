@@ -1,39 +1,38 @@
 package Bank_Tutorial_Weld_Server.bankgroupServer.entity;
 
-/* 
- *	Do not place import/include statements above this comment, just below. 
- * 	@FILE-ID : (_16_0_1_41601a3_1267462905086_648269_462) 
- */
-import Bank_Tutorial_Weld_Server.bankgroupServer.EntityBase;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
+/* PROTECTED REGION ID(java.type.import._16_0_1_41601a3_1267462905086_648269_462) ENABLED START */
+/* TODO: put your own source code here */
 import java.io.Serializable;
-import javax.persistence.Version;
-
-import javax.persistence.OneToOne;
-import javax.persistence.ManyToOne;
-import javax.persistence.ManyToMany;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Version;
+import Bank_Tutorial_Weld_Server.bankgroupServer.IEntityBase;
+
+/* PROTECTED REGION END */
 
 /**
- * Please describe the responsibility of your class in your modeling tool.
  */
+
 @Entity
 @Table(name = "tbl_Customer")
-public class Customer implements EntityBase, Serializable {
+public class Customer implements IEntityBase, Serializable {
 	
-	/** Stores all linked objects of association '<em><b>accounts</b></em>' */
-	@ManyToMany(cascade = {}, fetch = FetchType.EAGER)
+	// -- generated attribute, constant + association declarations ----------
+	
+	/** stores associated objects of association ACCOUNTS to Account */
+	@ManyToMany(cascade = {}, fetch = FetchType.EAGER, mappedBy = "customers")
 	private java.util.Set<Account> accounts = new java.util.HashSet<Account>();
 	
-	/** Stores the linked object of association '<em><b>address</b></em>' */
-	@OneToOne(cascade = {})
+	/** stores the associated object of association ADDRESS to Address */
+	@OneToOne(cascade = {}, fetch = FetchType.EAGER, mappedBy = "customer")
 	private Address address;
 	
-	/** Stores the linked object of association '<em><b>bank</b></em>' */
+	/** stores the associated object of association BANK to Bank */
 	@ManyToOne(cascade = {}, fetch = FetchType.EAGER)
 	private Bank bank;
 	
@@ -47,193 +46,154 @@ public class Customer implements EntityBase, Serializable {
 	@Version
 	private int version;
 	
+	// -- generated constructors --------------------------------------------
 	/**
-	 * Constructor for class '<em><b>Customer</b></em>'.
+	 * constructor for class '<em><b>Customer</b></em>'
 	 */
-	
 	public Customer() {
 	}
 	
+	// -- generated method stubs for implementations + derived attributes ---
 	/**
-	 * Method stub for further implementation.
+	 * method stub for further implementation
+	 * @return	
 	 */
 	
 	public String getFullName() {
 		/* PROTECTED REGION ID(java.implementation._16_0_1_41601a3_1267535825397_180057_892) ENABLED START */
-		
+
 		return firstName + " " + sirName;
 		/* PROTECTED REGION END */
 	}
 	
+	// -- generated association + attribute accessors -----------------------
 	/**
-	 * Returns all linked objects of association '<em><b>accounts</b></em>'.
+	 * getter for the attribute '<em><b>customerNumber</b></em>'
 	 */
-	
-	public java.util.Set<Account> getAccounts() {
-		return accounts;
-	}
-	
-	/**
-	 * Establishes a link to the specified object for association '<em><b>accounts</b></em>'.
-	 * @param	accounts	the object to associate.
-	 */
-	
-	public void addAccounts(Account accounts) {
-		if (accounts == null || this.accounts.contains(accounts)) {
-			return;
-		}
-		this.accounts.add(accounts);
-		accounts.addCustomers(this);
-	}
-	
-	/**
-	 * Removes the link to the specified specified object from association '<em><b>accounts</b></em>'.
-	 * @param	accounts	the object to remove.
-	 */
-	
-	public void removeAccounts(Account accounts) {
-		if (accounts == null || !this.accounts.contains(accounts)) {
-			return;
-		}
-		this.accounts.remove(accounts);
-		accounts.removeCustomers(this);
-	}
-	
-	/**
-	 * Returns the linked object of association '<em><b>address</b></em>'.
-	 */
-	
-	public Address getAddress() {
-		return address;
-	}
-	
-	/**
-	 * Establishes a link to the specified object for association '<em><b>address</b></em>'.
-	 * @param	address	the object to associate.
-	 */
-	
-	public void setAddress(Address address) {
-		if (this.address == address) {
-			return;
-		}
-		Address former = this.address;
-		this.address = address;
-		if (former != null) {
-			former.setCustomer(null);
-		}
-		if (address != null) {
-			address.setCustomer(this);
-		}
-	}
-	
-	/**
-	 * Returns the linked object of association '<em><b>bank</b></em>'.
-	 */
-	
-	public Bank getBank() {
-		return bank;
-	}
-	
-	/**
-	 * Establishes a link to the specified object for association '<em><b>bank</b></em>'.
-	 * @param	bank	the object to associate.
-	 */
-	
-	public void setBank(Bank bank) {
-		if (this.bank == bank) {
-			return;
-		}
-		Bank former = this.bank;
-		this.bank = bank;
-		if (former != null) {
-			former.removeCustomers(this);
-		}
-		if (bank != null) {
-			bank.addCustomers(this);
-		}
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>customerNumber</b></em>'.
-	 */
-	
 	public long getCustomerNumber() {
 		return customerNumber;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>customerNumber</b></em>'.
-	 * @param	customerNumber	the value to set.
+	 * documented here {@link getCustomerNumber()}
+	 * @generated	setter method for the attribute '<em><b>customerNumber</b></em>'
 	 */
-	
 	public void setCustomerNumber(long customerNumber) {
 		this.customerNumber = customerNumber;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>firstName</b></em>'.
+	 * getter for the attribute '<em><b>firstName</b></em>'
 	 */
-	
 	public String getFirstName() {
 		return firstName;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>firstName</b></em>'.
-	 * @param	firstName	the value to set.
+	 * documented here {@link getFirstName()}
+	 * @generated	setter method for the attribute '<em><b>firstName</b></em>'
 	 */
-	
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>sirName</b></em>'.
+	 * getter for the attribute '<em><b>sirName</b></em>'
 	 */
-	
 	public String getSirName() {
 		return sirName;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>sirName</b></em>'.
-	 * @param	sirName	the value to set.
+	 * documented here {@link getSirName()}
+	 * @generated	setter method for the attribute '<em><b>sirName</b></em>'
 	 */
-	
 	public void setSirName(String sirName) {
 		this.sirName = sirName;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>version</b></em>'.
+	 * getter for the attribute '<em><b>version</b></em>'
 	 */
-	
 	public int getVersion() {
 		return version;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>version</b></em>'.
-	 * @param	version	the value to set.
+	 * documented here {@link getVersion()}
+	 * @generated	setter method for the attribute '<em><b>version</b></em>'
 	 */
-	
 	public void setVersion(int version) {
 		this.version = version;
 	}
 	
 	/**
-	 * Method stub for further implementation.
+	 * accessor for association to accounts
 	 */
-	
-	public long getId() {
-		/* PROTECTED REGION ID(java.implementation._16_0_1_41601a3_1267462905086_648269_462__16_0_1_41601a3_1284909977612_160129_381) ENABLED START */
-		// TODO: implementation of method 'Customer.getId(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
-		/* PROTECTED REGION END */
+	public java.util.Set<Account> getAccounts() {
+		return this.accounts;
+		
 	}
 	
-	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_1_41601a3_1267462905086_648269_462) ENABLED START */
+	/**
+	 * accessor for association to accounts
+	 */
+	public void insertInAccounts(Account accounts) {
+		if (this.accounts.contains(accounts)) {
+			return;
+		}
+		this.accounts.add(accounts);
+		if (!accounts.getCustomers().contains(this)) {
+			accounts.insertInCustomers(this);
+		}
+	}
 	
+	/**
+	 * accessor for association to accounts
+	 */
+	public void removeFromAccounts(Account accounts) {
+		if (!this.accounts.contains(accounts)) {
+			return;
+		}
+		this.accounts.remove(accounts);
+		if (accounts.getCustomers().contains(this)) {
+			accounts.removeFromCustomers(this);
+		}
+	}
+	
+	/**
+	 * accessor for association to address
+	 */
+	public Address getAddress() {
+		return address;
+	}
+	
+	/**
+	 * accessor for association to address
+	 */
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+	
+	/**
+	 * accessor for association to bank
+	 */
+	public Bank getBank() {
+		return bank;
+	}
+	
+	/**
+	 * accessor for association to bank
+	 */
+	public void setBank(Bank bank) {
+		this.bank = bank;
+	}
+	
+	// -- generated code of other cartridges --------------------------------
+	
+	// -- own code implementation -------------------------------------------
+	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_1_41601a3_1267462905086_648269_462) ENABLED START */
+
 	/**
 	 * 
 	 */
@@ -263,4 +223,5 @@ public class Customer implements EntityBase, Serializable {
 	}
 	
 	/* PROTECTED REGION END */
+
 }

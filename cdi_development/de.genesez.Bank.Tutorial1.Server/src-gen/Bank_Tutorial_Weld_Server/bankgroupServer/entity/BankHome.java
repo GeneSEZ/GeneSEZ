@@ -1,27 +1,28 @@
 package Bank_Tutorial_Weld_Server.bankgroupServer.entity;
 
-/* 
- *	Do not place import/include statements above this comment, just below. 
- * 	@FILE-ID : (_16_0_1_41601a3_1267462918311_582104_470_BankHome) 
- */
-
-import javax.inject.Named;
-
-import javax.inject.Inject;
-
-import javax.enterprise.context.Conversation;
-import javax.enterprise.context.ConversationScoped;
-
+/* PROTECTED REGION ID(java.type.import._16_0_1_41601a3_1267462918311_582104_470_BankHome) ENABLED START */
+/* TODO: put your own source code here */
+import java.util.ArrayList;
+import java.util.List;
+import javax.ejb.Remove;
 import javax.ejb.Stateful;
+import javax.enterprise.context.ConversationScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+/* PROTECTED REGION END */
 
 /**
- * Please describe the responsibility of your class in your modeling tool.
  */
 
 @Named
 @ConversationScoped
 @Stateful(name = "BankHome")
 public class BankHome extends HomeBean<Bank, EntityManager> {
+	
+	// -- generated attribute, constant + association declarations ----------
 	
 	@Inject
 	private BankgroupHome bankgroupHome;
@@ -35,52 +36,60 @@ public class BankHome extends HomeBean<Bank, EntityManager> {
 	@Inject
 	private CustomerHome customerHome;
 	
+	// -- generated method stubs for implementations + derived attributes ---
 	/**
-	 * Method stub for further implementation.
+	 * method stub for further implementation
+	 * @return	
 	 */
 	
-	public List getAccountList() {
-		/* PROTECTED REGION ID(java.implementation._16_0_1_41601a3_1267462918311_582104_470_BankHome.getAccountList) ENABLED START */
-		// TODO: implementation of method 'BankHome.getAccountList(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+	public List<Account> getAccountList() {
+		/* PROTECTED REGION ID(java.implementation.BankHome.getAccountList) ENABLED START */
+		if (getInstance() != null && getInstance().getAccounts() != null && getInstance().getCustomers().size() > 0)
+			return new ArrayList<Account>(getInstance().getAccounts());
+		return null;
 		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * Method stub for further implementation.
+	 * method stub for further implementation
+	 * @return	
 	 */
 	
-	public List getCustomerList() {
-		/* PROTECTED REGION ID(java.implementation._16_0_1_41601a3_1267462918311_582104_470_BankHome.getCustomerList) ENABLED START */
-		// TODO: implementation of method 'BankHome.getCustomerList(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+	public List<Customer> getCustomerList() {
+		/* PROTECTED REGION ID(java.implementation.BankHome.getCustomerList) ENABLED START */
+		if (getInstance() != null && getInstance().getCustomers() != null && getInstance().getCustomers().size() > 0)
+			return new ArrayList<Customer>(getInstance().getCustomers());
+		return null;
 		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * Method stub for further implementation.
+	 * method stub for further implementation
+	 * @return	
 	 */
 	
-	public List getBankList() {
-		/* PROTECTED REGION ID(java.implementation._16_0_1_41601a3_1267462918311_582104_470.getBankList) ENABLED START */
-		// TODO: implementation of method 'BankHome.getBankList(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+	public List<Bank> getBankList() {
+		/* PROTECTED REGION ID(java.implementation.BankHome.getBankList) ENABLED START */
+		// Alle Banken auslesen
+		List<Bank> bankList = getList();
+		return bankList;
 		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * Method stub for further implementation.
+	 * method stub for further implementation
+	 * @return	
 	 */
 	
 	public long getBankListCount() {
-		/* PROTECTED REGION ID(java.implementation._16_0_1_41601a3_1267462918311_582104_470.getBankListCount) ENABLED START */
-		// TODO: implementation of method 'BankHome.getBankListCount(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION ID(java.implementation.BankHome.getBankListCount) ENABLED START */
+		return getBankList().size();
 		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * Method stub for further implementation.
+	 * method stub for further implementation
+	 * @return	
 	 */
 	
 	public EntityManager getEntityManager() {
@@ -90,28 +99,53 @@ public class BankHome extends HomeBean<Bank, EntityManager> {
 	}
 	
 	/**
-	 * Method stub for further implementation.
+	 * method stub for further implementation
 	 */
 	
 	public void wire() {
-		/* PROTECTED REGION ID(java.implementation._16_0_1_41601a3_1267462918311_582104_470_BankHome.wire) ENABLED START */
-		// TODO: implementation of method 'BankHome.wire(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION ID(java.implementation.BankHome.wire) ENABLED START */
+		// Gibt es eine Addresse?
+		if (addressHome.getId() > 0) {
+			Address address = addressHome.getInstance();
+			getInstance().setAddress(address);
+		}
+		
+		// Gibt es eine neue Bank?
+		if (bankgroupHome.getId() > 0) {
+			Bankgroup bankgroup = bankgroupHome.getInstance();
+			getInstance().setBankgroup(bankgroup);
+		}
+		
+		// Gibt es einen neuen Kunden?
+		if (customerHome.getId() > 0) {
+			Customer customer = customerHome.getInstance();
+			getInstance().insertInCustomers(customer);
+		}
+		
+		// Gibt es einen neues Konto?
+		if (accountHome.getId() > 0) {
+			Account account = accountHome.getInstance();
+			getInstance().insertInAccounts(account);
+		}
 		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * Method stub for further implementation.
+	 * method stub for further implementation
 	 */
 	
 	@Remove
 	public void removeEjb() {
-		/* PROTECTED REGION ID(java.implementation._16_0_1_41601a3_1267462918311_582104_470_BankHome.removeEjb) ENABLED START */
-		// TODO: implementation of method 'BankHome.removeEjb(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION ID(java.implementation.BankHome.removeEjb) ENABLED START */
+
 		/* PROTECTED REGION END */
 	}
 	
+	// -- generated association + attribute accessors -----------------------
+	
+	// -- generated code of other cartridges --------------------------------
+	
+	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_1_41601a3_1267462918311_582104_470_BankHome) ENABLED START */
 	private static final long serialVersionUID = 1L;
 	
@@ -124,4 +158,5 @@ public class BankHome extends HomeBean<Bank, EntityManager> {
 	private EntityManager entityManager;
 	
 	/* PROTECTED REGION END */
+
 }

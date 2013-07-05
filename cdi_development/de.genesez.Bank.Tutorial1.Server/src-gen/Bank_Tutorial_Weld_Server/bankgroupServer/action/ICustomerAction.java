@@ -1,6 +1,6 @@
-package Bank_Tutorial_Weld_Server.bankgroupServer.event;
+package Bank_Tutorial_Weld_Server.bankgroupServer.action;
 
-/* PROTECTED REGION ID(java.type.import._16_0_1_41601a3_1294585136199_199965_837) ENABLED START */
+/* PROTECTED REGION ID(java.type.import._16_0_1_41601a3_1295617805423_55545_809) ENABLED START */
 /* TODO: put your own source code here */
 import java.util.*;
 import javax.persistence.*;
@@ -14,13 +14,19 @@ import Bank_Tutorial_Weld_Server.bankgroupServer.*;
 /**
  */
 
-public class AccountLockedEvent {
+public interface ICustomerAction {
+	
+	/**
+	 * method stub for further implementation
+	 * @param	amount	
+	 * @return	
+	 */
+	public String createCredit(float amount);
 	
 	// -- generated code of other cartridges --------------------------------
 	
 	// -- own code implementation -------------------------------------------
-	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_1_41601a3_1294585136199_199965_837) ENABLED START */
+	/* PROTECTED REGION ID(java.interface.own.code.declaration._16_0_1_41601a3_1295617805423_55545_809) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
 }
