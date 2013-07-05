@@ -1,0 +1,315 @@
+/**
+ * Simplifies access to "genesez" profile 
+ * and makes working with the profile more easier. 
+ *  
+ */
+
+// based on genesez meta model
+import gcore;
+
+// use metamodel core extension mechanism scripts
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
+
+// use profile scripts
+extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	Xtend scripts for stereotype "accessor"
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Checks if an element is annotated with stereotype "accessor".
+ * 
+ * @return true if the element has the stereotype, otherwise false
+ */
+boolean prHasAccessorStereotype(MElement this) :
+	emHasStereotypeAssignment( prAccessor() );
+
+/**
+ * Checks if an element has a value of a specific tagged value 
+ * of the stereotype "accessor".
+ *
+ * @param tag  the name of a tagged value
+ * @param value  the value of a tagged value
+ * @return true if the element has a tagged value with the given value, otherwise false
+ */
+boolean prHasAccessorTaggedValue(MElement this, String tag, String value) :
+	emHasTaggedValue( prAccessor(), tag, value );
+	
+/**
+ * Checks if an element has a value reference of a specific tagged value 
+ * of the stereotype "accessor".
+ *
+ * @param tag  the name of a tagged value
+ * @param valueReference  the value reference of a tagged value
+ * @return true if the element has a tagged value with the given value reference, otherwise false
+ */
+boolean prHasAccessorTaggedValue(MElement this, String tag, MElement valueReference) :
+	emHasTaggedValue( prAccessor(), tag, valueReference );
+	
+/*
+- - "getter" - - - - - - - - - -
+*/
+	
+/**
+ * Checks if an element has a value of the tagged value "getter" 
+ * of the stereotype "accessor".
+ *
+ * @param value  the value of a tagged value
+ * @return true if the element has a tagged value with the given value, otherwise false
+ */
+boolean prHasAccessorGetter(MElement this, String value) :
+	emHasTaggedValue( prAccessor(), prAccessorGetter(), value );
+
+/**
+ * Checks if an element has a value of the tagged value "getter" 
+ * of the stereotype "accessor" and the value is utilizable (not empty or null).
+ *
+ * @return true if the element has a tagged value with a utilizable value, otherwise false
+ */
+boolean prHasAccessorUtilizableGetter(MElement this) :
+	emHasUtilizableTaggedValue( prAccessor(), prAccessorGetter() );
+
+/**
+ * Returns the value of the tagged value "getter"
+ * of the stereotype "accessor".
+ *
+ * @return the value of the tagged value
+ */
+String prGetAccessorGetter(MElement this) :
+	emGetTaggedValue( prAccessor(), prAccessorGetter() );
+
+/**
+ * Sets the value of an existing the tagged value "getter"
+ * of the stereotype "accessor".
+ *
+ * @param value the new value of a tagged value
+ */
+Void prSetAccessorGetter(MElement this, String value) :
+	ensureTaggedValueExistence( getTag ( prAccessor(), prAccessorGetter() ), value );
+
+/*
+- - "setter" - - - - - - - - - -
+*/
+	
+/**
+ * Checks if an element has a value of the tagged value "setter" 
+ * of the stereotype "accessor".
+ *
+ * @param value  the value of a tagged value
+ * @return true if the element has a tagged value with the given value, otherwise false
+ */
+boolean prHasAccessorSetter(MElement this, String value) :
+	emHasTaggedValue( prAccessor(), prAccessorSetter(), value );
+
+/**
+ * Checks if an element has a value of the tagged value "setter" 
+ * of the stereotype "accessor" and the value is utilizable (not empty or null).
+ *
+ * @return true if the element has a tagged value with a utilizable value, otherwise false
+ */
+boolean prHasAccessorUtilizableSetter(MElement this) :
+	emHasUtilizableTaggedValue( prAccessor(), prAccessorSetter() );
+
+/**
+ * Returns the value of the tagged value "setter"
+ * of the stereotype "accessor".
+ *
+ * @return the value of the tagged value
+ */
+String prGetAccessorSetter(MElement this) :
+	emGetTaggedValue( prAccessor(), prAccessorSetter() );
+
+/**
+ * Sets the value of an existing the tagged value "setter"
+ * of the stereotype "accessor".
+ *
+ * @param value the new value of a tagged value
+ */
+Void prSetAccessorSetter(MElement this, String value) :
+	ensureTaggedValueExistence( getTag ( prAccessor(), prAccessorSetter() ), value );
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	Xtend scripts for stereotype "di"
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Checks if an element is annotated with stereotype "di".
+ * 
+ * @return true if the element has the stereotype, otherwise false
+ */
+boolean prHasDiStereotype(MElement this) :
+	emHasStereotypeAssignment( prDi() );
+
+/**
+ * Checks if an element has a value of a specific tagged value 
+ * of the stereotype "di".
+ *
+ * @param tag  the name of a tagged value
+ * @param value  the value of a tagged value
+ * @return true if the element has a tagged value with the given value, otherwise false
+ */
+boolean prHasDiTaggedValue(MElement this, String tag, String value) :
+	emHasTaggedValue( prDi(), tag, value );
+	
+/**
+ * Checks if an element has a value reference of a specific tagged value 
+ * of the stereotype "di".
+ *
+ * @param tag  the name of a tagged value
+ * @param valueReference  the value reference of a tagged value
+ * @return true if the element has a tagged value with the given value reference, otherwise false
+ */
+boolean prHasDiTaggedValue(MElement this, String tag, MElement valueReference) :
+	emHasTaggedValue( prDi(), tag, valueReference );
+	
+/*
+- - "constructor" - - - - - - - - - -
+*/
+	
+/**
+ * Checks if an element has a value of the tagged value "constructor" 
+ * of the stereotype "di".
+ *
+ * @param value  the value of a tagged value
+ * @return true if the element has a tagged value with the given value, otherwise false
+ */
+boolean prHasDiConstructor(MElement this, String value) :
+	emHasTaggedValue( prDi(), prDiConstructor(), value );
+
+/**
+ * Checks if an element has a value of the tagged value "constructor" 
+ * of the stereotype "di" and the value is utilizable (not empty or null).
+ *
+ * @return true if the element has a tagged value with a utilizable value, otherwise false
+ */
+boolean prHasDiUtilizableConstructor(MElement this) :
+	emHasUtilizableTaggedValue( prDi(), prDiConstructor() );
+
+/**
+ * Returns the value of the tagged value "constructor"
+ * of the stereotype "di".
+ *
+ * @return the value of the tagged value
+ */
+String prGtDiConstructor(MElement this) :
+	emGetTaggedValue( prDi(), prDiConstructor() );
+
+/**
+ * Sets the value of an existing the tagged value "constructor"
+ * of the stereotype "di".
+ *
+ * @param value the new value of a tagged value
+ */
+Void prSetDiConstructor(MElement this, String value) :
+	ensureTaggedValueExistence( getTag ( prDi(), prDiConstructor() ), value );
+
+/*
+- - "setter" - - - - - - - - - -
+*/
+	
+/**
+ * Checks if an element has a value of the tagged value "setter" 
+ * of the stereotype "di".
+ *
+ * @param value  the value of a tagged value
+ * @return true if the element has a tagged value with the given value, otherwise false
+ */
+boolean prHasDiSetter(MElement this, String value) :
+	emHasTaggedValue( prDi(), prDiSetter(), value );
+
+/**
+ * Checks if an element has a value of the tagged value "setter" 
+ * of the stereotype "di" and the value is utilizable (not empty or null).
+ *
+ * @return true if the element has a tagged value with a utilizable value, otherwise false
+ */
+boolean prHasDiUtilizableSetter(MElement this) :
+	emHasUtilizableTaggedValue( prDi(), prDiSetter() );
+
+/**
+ * Returns the value of the tagged value "setter"
+ * of the stereotype "di".
+ *
+ * @return the value of the tagged value
+ */
+String prGetDiSetter(MElement this) :
+	emGetTaggedValue( prDi(), prDiSetter() );
+
+/**
+ * Sets the value of an existing the tagged value "setter"
+ * of the stereotype "di".
+ *
+ * @param value the new value of a tagged value
+ */
+Void prSetDiSetter(MElement this, String value) :
+	ensureTaggedValueExistence( getTag ( prDi(), prDiSetter() ), value );
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	Xtend scripts for stereotype "exclude"
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Checks if an element is annotated with stereotype "exclude".
+ * 
+ * @return true if the element has the stereotype, otherwise false
+ */
+boolean prHasExcludeStereotype(MElement this) :
+	emHasStereotypeAssignment( prExclude() );
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	Xtend scripts for stereotype "external"
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Checks if an element is annotated with stereotype "external".
+ * 
+ * @return true if the element has the stereotype, otherwise false
+ */
+boolean prHasExternalStereotype(MElement this) :
+	emHasStereotypeAssignment( prExternal() );
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	Xtend scripts for stereotype "primitive"
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Checks if an element is annotated with stereotype "primitive".
+ * 
+ * @return true if the element has the stereotype, otherwise false
+ */
+boolean prHasPrimitiveStereotype(MElement this) :
+	emHasStereotypeAssignment( prPrimitive() );
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	Xtend scripts for stereotype "volatile"
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Checks if an element is annotated with stereotype "volatile".
+ * 
+ * @return true if the element has the stereotype, otherwise false
+ */
+boolean prHasVolatileStereotype(MElement this) :
+	emHasStereotypeAssignment( prVolatile() );
+
+
+// -- Private Functionality ---------------------------------------------------------------------------------
+
+
+private getTag(MElement this, String stereotype, String tag) :
+	navModel().emGetStereotype( stereotype ).emGetTag( tag );
