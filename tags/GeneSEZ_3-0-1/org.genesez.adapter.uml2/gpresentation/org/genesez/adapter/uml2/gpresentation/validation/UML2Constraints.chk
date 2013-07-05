@@ -1,0 +1,59 @@
+/**
+ * Validates an uml2 presentation model for transformation into a GeneSEZ presentation model
+ * 
+ * @author	tobias haubold
+ * @date	2012-07-30
+ */
+
+import uml;
+extension org::genesez::adapter::uml2::gpresentation::UML2Gpresentation;
+
+/**
+ * Returns false if a PRoot has no PPackage, otherwise true.
+ */
+context InstanceSpecification if isRoot() WARNING "GeneSEZ Presentation: PRoot has no package containment reference!" :
+	hasPackage();
+
+/**
+ * Returns false if a PContentArea has no PAbstractArea, otherwise true.
+ */
+context InstanceSpecification if isCompositeArea() || isElementArea() || isReferenceArea() || isUserDefinedArea() || isAutomaticallyGeneratedArea()
+WARNING "GeneSEZ Presentation: instance of a subclass of PContentArea has no area containment reference!" :
+	hasArea();
+
+/**
+ * Returns false if a PElement has either no PElementArea or no PCompositeElement, otherwise true.
+ */
+context InstanceSpecification if isInput() || isOutput() || isAction() || isCompositeElement()
+WARNING "GeneSEZ Presentation: instance of a subclass of PElement has no containment reference (to element area or composite element)!" :
+	( hasElementArea() && !hasCompositeElement() ) || ( !hasElementArea() && hasCompositeElement() );
+
+/**
+ * Returns false if the target is missing, otherwise true.
+ */
+context InstanceSpecification if isReferenceArea() WARNING "GeneSEZ Presentation: PReferenceArea has no target reference!" :
+	hasTarget();
+
+/**
+ * Returns false if a PCompositeElement has no nested elements, otherwise true.
+ */
+context InstanceSpecification if isCompositeElement() WARNING "GeneSEZ Presentation: PCompositeElement has no nested elements!" :
+	hasNestedElements();
+
+/**
+ * Returns false if a PAbstractArea exists, otherwise true.
+ */
+context InstanceSpecification if isAbstractArea() WARNING "GeneSEZ Presentation: PAbstractArea is abstract and no instance is allowed!" :
+	false;
+
+/**
+ * Returns false if a PContentArea exists, otherwise true.
+ */
+context InstanceSpecification if isContentArea() WARNING "GeneSEZ Presentation: PContentArea is abstract and no instance is allowed!" :
+	false;
+
+/**
+ * Returns false if a PElement exists, otherwise true.
+ */
+context InstanceSpecification if isElement() WARNING "GeneSEZ Presentation: PElement is abstract and no instance is allowed!" :
+	false;

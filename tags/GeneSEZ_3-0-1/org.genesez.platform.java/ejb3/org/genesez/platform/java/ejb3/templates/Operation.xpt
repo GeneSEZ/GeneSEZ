@@ -1,0 +1,198 @@
+«IMPORT gcore»
+
+«REM»
+	Template for ejb3 operations
+	
+	@author	andre pflueger
+	@date	2009-02-22
+«ENDREM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION org::genesez::util::logging::Logging»
+
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» 
+	main method for evaluation of annotations	
+«ENDREM»
+«DEFINE Annotation FOR MOperation»
+	«EXPAND _Timer-»	
+	«EXPAND _Callback-»
+	«EXPAND Element::CMTransactionality-»
+	«EXPAND _Interceptor-»
+	«EXPAND Element::EJB-»
+	«EXPAND _Remove-»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	evaluates the stereotype ejb3Timer
+	constraints should be realized by check language
+«ENDREM»
+«DEFINE _Timer FOR MOperation-»
+	«IF (emHasStereotypeAssignment("ejb3Timer") && (parameter.exists(e|e.type.mapName().asTypeName() == "Timer") && parameter.size == 1)) && 
+		(classifier.emHasStereotypeAssignment("ejb3MessageDrivenBean") || classifier.emHasTaggedValue("ejb3SessionBean", "stateful", "false"))-»
+		@Timeout
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM» 
+	evaluate the stereotype ejb3Callback 
+	stereotype ejb3Callback for different bean types 
+	(only if there is no external callback handling 
+	(-> EntityListener and Interceptor))
+«ENDREM»
+«DEFINE _Callback FOR MOperation-»
+	«EXPAND _SBAndMDBCallback-»
+	«EXPAND _StatefulSBCallback-»
+	«EXPAND _PersistentEntityCallback-»
+	«EXPAND _OtherCallback-»	
+«ENDDEFINE»
+
+«REM» 
+    evaluate the stereotype ejb3Remove 
+«ENDREM»
+
+«DEFINE _Remove FOR MOperation-»
+    «IF emHasStereotypeAssignment("ejb3Remove")-»
+        @Remove
+    «ENDIF-»    
+«ENDDEFINE»
+
+«REM» 
+	evaluates callback annotations for session beans and message driven beans
+«ENDREM»
+«DEFINE _SBAndMDBCallback FOR MOperation-»
+	«IF emHasTaggedValue("jpaCallback", "external", "false") && 
+		(classifier.emHasStereotypeAssignment("ejb3SessionBean") || classifier.emHasStereotypeAssignment("ejb3MessageDrivenBean"))-»
+		«IF emHasTaggedValue("jpaCallback", "postConstruct", "true")-»
+			@PostConstruct
+		«ENDIF-»
+		«IF emHasTaggedValue("jpaCallback", "preDestroy", "true")-»
+			@PreDestroy
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM» 
+	evaluates callback annotations for stateful session beans
+«ENDREM»
+«DEFINE _StatefulSBCallback FOR MOperation-»
+	«IF emHasTaggedValue("jpaCallback", "external", "false") && 
+		classifier.emHasTaggedValue("ejb3SessionBean", "stateful", "true")-»
+		«IF emHasTaggedValue("jpaCallback", "postActivate", "true")-»
+			@PostActivate
+		«ENDIF-»
+		«IF emHasTaggedValue("jpaCallback", "prePassivate", "true")-»
+			@PrePassivate
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM» 
+	evaluates callback annotations in entity listeners
+«ENDREM»
+«DEFINE _OtherCallback FOR MOperation-»
+	«IF emHasTaggedValue("jpaCallback", "external", "false") && 
+		!classifier.emHasStereotypeAssignment("ejb3PersistentEntity") &&
+		!classifier.emHasStereotypeAssignment("ejb3SessionBean") && 
+		!classifier.emHasStereotypeAssignment("ejb3MessageDrivenBean")-»
+		«IF emHasTaggedValue("jpaCallback", "postPersist", "true")-»
+			@PostPersist
+		«ENDIF-»
+		«IF emHasTaggedValue("jpaCallback", "prePersist", "true")-»
+			@PrePersist
+		«ENDIF-»
+		«IF emHasTaggedValue("jpaCallback", "postUpdate", "true")-»
+			@PostUpdate
+		«ENDIF-»
+		«IF emHasTaggedValue("jpaCallback", "preUpdate", "true")-»
+			@PreUpdate
+		«ENDIF-»	
+		«IF emHasTaggedValue("jpaCallback", "postRemove", "true")-»
+			@PostRemove
+		«ENDIF-»
+		«IF emHasTaggedValue("jpaCallback", "preRemove", "true")-»
+			@PreRemove
+		«ENDIF-»
+		«IF emHasTaggedValue("jpaCallback", "postLoad", "true")-»
+			@PostLoad
+		«ENDIF-»
+		«IF emHasTaggedValue("jpaCallback", "postActivate", "true")-»
+			@PostActivate
+		«ENDIF-»
+		«IF emHasTaggedValue("jpaCallback", "prePassivate", "true")-»
+			@PrePassivate
+		«ENDIF-»
+		«IF emHasTaggedValue("jpaCallback", "postConstruct", "true")-»
+			@PostConstruct
+		«ENDIF-»
+		«IF emHasTaggedValue("jpaCallback", "preDestroy", "true")-»
+			@PreDestroy
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM» 
+	evaluates callback annotations for session beans and message driven beans
+«ENDREM»
+«DEFINE _PersistentEntityCallback FOR MOperation-»
+	«IF emHasTaggedValue("jpaCallback", "external", "false") && 
+		classifier.emHasStereotypeAssignment("ejb3PersistentEntity")»
+		«IF emHasTaggedValue("jpaCallback", "postPersist", "true")-»
+			@PostPersist
+		«ENDIF-»
+		«IF emHasTaggedValue("jpaCallback", "prePersist", "true")-»
+			@PrePersist
+		«ENDIF-»
+		«IF emHasTaggedValue("jpaCallback", "postUpdate", "true")-»
+			@PostUpdate
+		«ENDIF-»
+		«IF emHasTaggedValue("jpaCallback", "preUpdate", "true")-»
+			@PreUpdate
+		«ENDIF-»	
+		«IF emHasTaggedValue("jpaCallback", "postRemove", "true")-»
+			@PostRemove
+		«ENDIF-»
+		«IF emHasTaggedValue("jpaCallback", "preRemove", "true")-»
+			@PreRemove
+		«ENDIF-»
+		«IF emHasTaggedValue("jpaCallback", "postLoad", "true")-»
+			@PostLoad
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM» 
+	evaluate the stereotype ejb3OperationInterceptor 
+«ENDREM»
+«DEFINE _Interceptor FOR MOperation-»
+	«IF emHasStereotypeAssignment("ejb3OperationInterceptor")-»
+		«IF emHasUtilizableTaggedValue("ejb3OperationInterceptor", "interceptors")-»
+			@Interceptors(value={«FOREACH emAllTaggedValues("ejb3OperationInterceptor", "interceptors") AS interceptor SEPARATOR ", "-»
+					«interceptor-».class
+			«ENDFOREACH-»})
+		«ENDIF»
+		«IF emHasTaggedValue("ejb3OperationInterceptor", "aroundInvoke", "true")-»
+			@AroundInvoke
+		«ENDIF-»	
+		«IF emHasTaggedValue("ejb3OperationInterceptor", "excludeClassInterceptors", "true")-»
+			@ExcludeClassInterceptors
+		«ENDIF-»	
+	«ENDIF-»
+«ENDDEFINE»
