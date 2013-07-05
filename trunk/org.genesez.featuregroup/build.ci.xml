@@ -27,7 +27,8 @@
 	<xmltask source="${genesez.feature.file}">
 		<copy property="genesez.feature.version" path="/feature/@version" />
 	</xmltask>
-	<echo message="Building GeneSEZ version ${genesez.feature.version}..." />
+	<propertyregex property="genesez.release.number" regexp="(\d.\d.\d)" select="\1" input="${genesez.feature.version}" />
+	<echo message="Building GeneSEZ release ${genesez.release.number} with version number ${genesez.feature.version}..." />
 	
 	<condition property="latest.build.count" value="${LATEST_BUILD_COUNT}" else="10">
 		<isset property="LATEST_BUILD_COUNT" />
@@ -206,13 +207,13 @@
 					<call path="/aggregator:Aggregation/validationSets[starts-with(@label, '${version}')]">
 						<param name="label" path="@label" default="" />
 						<actions>
-							<echo message="adding GeneSEZ ${version} validation set extending @{label}"></echo>
+							<echo message="adding GeneSEZ ${genesez.release.number} validation set extending @{label}"></echo>
 							
 							<!-- add genesez repo with reference to validation set -->
 							<xmltask source="${b3aggr.file}" dest="${b3aggr.file}">
 								<insert path="/aggregator:Aggregation/validationSets[last()]" position="after">
 									<![CDATA[
-									  <validationSets label="GeneSEZ-@{label}" extends="//@validationSets[label='@{label}']">
+									  <validationSets label="GeneSEZ-${genesez.release.number}_@{label}" extends="//@validationSets[label='@{label}']">
 									    <contributions label="GeneSEZ">
 									      <repositories location="${uri}">
 									      </repositories>
