@@ -9,6 +9,9 @@
 	<!-- import ant contrib for usage -->
 	<import file="lib/antcontrib.xml"/>
 	
+	<!-- import general ci ant targets for usage -->
+	<import file="build.ci.xml"/>
+	
 	<!-- environment qualifier replacements -->
 	<property environment="env"/>
 	<property name="source.repository.url" value="${env.UPDATESITE}"/>
@@ -159,13 +162,6 @@
 			<arg value="-Ddestination.repository.dir=${destination.repository.dir}" />
 			<arg value="-Ddestination.repository.url=${destination.repository.url}" />
 		</exec>
-	</target>
-	
-	<target name="change.permissions" description="Changes permission of the specified directory">
-		<chmod perm="u=rwX,g=rwX,o=" dir="${dir}" includes="**" type="both" parallel="false" />
-		<chgrp group="wwwcln" type="both" parallel="false">
-			<fileset dir="${dir}" includes="**" />
-		</chgrp>
 	</target>
 
 	
