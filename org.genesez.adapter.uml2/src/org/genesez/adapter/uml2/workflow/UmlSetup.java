@@ -1,5 +1,7 @@
 package org.genesez.adapter.uml2.workflow;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -9,10 +11,10 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.mwe.core.ConfigurationException;
+import org.eclipse.emf.mwe.core.resources.ResourceLoaderFactory;
 import org.eclipse.emf.mwe.utils.Mapping;
 import org.eclipse.emf.mwe.utils.SingleGlobalResourceSet;
 import org.eclipse.uml2.uml.UMLPlugin;
-import org.eclipse.uml2.uml.resources.util.UMLResourcesUtil;
 import org.eclipse.xtend.typesystem.emf.EcoreUtil2;
 import org.eclipse.xtend.typesystem.uml2.Setup;
 
@@ -37,9 +39,7 @@ public class UmlSetup extends Setup {
 	
 	@Override
 	public void setStandardUML2Setup(boolean b) {
-		ResourceSet rs = SingleGlobalResourceSet.get();
-		UMLResourcesUtil.init(rs);
-		
+		initUmlPlugin();
 		super.setStandardUML2Setup(b);
 		if (b) {
 			// fill maps if not already manuall done
@@ -67,9 +67,11 @@ public class UmlSetup extends Setup {
 		}
 		
 		// log uml plugin profile locations
-		logger.trace("UML Profile Location Map:");
-		for (Map.Entry<String, URI> me : UMLPlugin.getEPackageNsURIToProfileLocationMap().entrySet()) {
-			logger.trace(me.getKey() + " -> " + me.getValue());
+		if (logger.isTraceEnabled()) {
+			logger.trace("UML Profile Location Map:");
+			for (Map.Entry<String, URI> me : UMLPlugin.getEPackageNsURIToProfileLocationMap().entrySet()) {
+				logger.trace(me.getKey() + " -> " + me.getValue());
+			}
 		}
 	}
 	
@@ -134,6 +136,10 @@ public class UmlSetup extends Setup {
 		}
 	}
 	
+	/**
+	 * Registers mappings for platform plugin uris of UML specific files depending on the specified value.
+	 * @param shallRegister		true if registration should be done
+	 */
 	public void setRegisterPluginUriMapping(boolean shallRegister) {
 		if (shallRegister) {
 			PLUGIN_URI_MAP.put("platform:/plugin/org.eclipse.uml2.uml/model/CMOF20_2_UML.ecore2xml", "model/CMOF20_2_UML.ecore2xml");
@@ -145,10 +151,19 @@ public class UmlSetup extends Setup {
 		}
 	}
 	
+	/**
+	 * Adds the specified uri mapping from a platform plugin uri to a file name relative to a plug-in directory.
+	 * @param map	an mapping from a platform plugin uri to a relative file name
+	 */
 	public void addPluginUriMapping(Mapping map) {
 		PLUGIN_URI_MAP.put(map.getTo(), map.getTo());
 	}
 	
+	/**
+	 * Performs registration of an URI mapping for platform plugin URIs.
+	 * @param from	the platform plugin URI that should be mapped
+	 * @param to	the relative file name to which the URI should be mapped to
+	 */
 	protected void registerPlatformUriMapping(String from, String to) {
 		URI uri = EcoreUtil2.getURI(to);
 		if (uri != null) {
@@ -179,6 +194,37 @@ public class UmlSetup extends Setup {
 			}
 		} catch (ConfigurationException ce) {
 			logger.info("Unable to register EPackage with namespace URI: " + nsUri);
+		}
+	}
+	
+	/**
+	 * Checks if the class {@link UMLResourceUtil} is available (since UML 4.x) and if it calls its method
+	 * {@link UMLResourcesUtil.init()} with the {@link SingleGlobalResourceSet} as parameter.
+	 */
+	protected void initUmlPlugin() {
+		ResourceSet rs = SingleGlobalResourceSet.get();
+		try {
+			Class<?> clazz = ResourceLoaderFactory.createResourceLoader().loadClass("org.eclipse.uml2.uml.resources.util.UMLResourcesUtil");
+			if (clazz == null) {
+				if (logger.isInfoEnabled()) {
+					logger.info("Not able to initialize UML support using class 'UMLResourceUtil', it was not found.");
+				}
+				return;
+			}
+			Method m = clazz.getMethod("init", ResourceSet.class);
+			if (m == null || !Modifier.isStatic(m.getModifiers())) {
+				if (logger.isWarnEnabled()) {
+					logger.warn("The class 'UMLResourceUtil' does not have an 'init' method or is not static!");
+				}
+			}
+			m.invoke(null, rs);
+			if (logger.isInfoEnabled()) {
+				logger.info("UML support was initialized by calling 'UMLResourceUtil.init()'.");
+			}
+		} catch (Exception e) {
+			if (logger.isErrorEnabled()) {
+				logger.error("UML support could not be initialized by calling 'UMLResourceUtil.init()'!", e);
+			}
 		}
 	}
 }
