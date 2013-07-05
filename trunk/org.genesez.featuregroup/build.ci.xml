@@ -124,6 +124,11 @@
 			</fileset>
 			<mapper type="regexp" from="(?:site\.p2)(.*)" to="\1"/>
 		</move>
+		
+		<var name="version" unset="true" />
+		<propertyregex property="version" regexp="(\d.\d).\d" select="\1" input="${uri}" />
+		<symlink action="recreate" resource="${publish.dir}" link="${PUBLISH_DIR}/$(version)-latest"/>
+		
 		<antcall target="change.permissions">
 			<param name="dir" value="${publish.dir}" />
 		</antcall>
