@@ -7,9 +7,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.mwe.core.ConfigurationException;
 import org.eclipse.emf.mwe.utils.Mapping;
+import org.eclipse.emf.mwe.utils.SingleGlobalResourceSet;
 import org.eclipse.uml2.uml.UMLPlugin;
+import org.eclipse.uml2.uml.resources.util.UMLResourcesUtil;
 import org.eclipse.xtend.typesystem.emf.EcoreUtil2;
 import org.eclipse.xtend.typesystem.uml2.Setup;
 
@@ -23,6 +26,7 @@ public class UmlSetup extends Setup {
 	
 	static final Map<String, String> NS_URI_FQN_MAP = new LinkedHashMap<String, String>();
 	static final Map<String, String> NS_URI_URI_MAP = new LinkedHashMap<String, String>();
+	static final Map<String, String> PLUGIN_URI_MAP = new LinkedHashMap<String, String>();
 	
 	private Log logger = LogFactory.getLog(getClass());
 	
@@ -33,6 +37,9 @@ public class UmlSetup extends Setup {
 	
 	@Override
 	public void setStandardUML2Setup(boolean b) {
+		ResourceSet rs = SingleGlobalResourceSet.get();
+		UMLResourcesUtil.init(rs);
+		
 		super.setStandardUML2Setup(b);
 		if (b) {
 			// fill maps if not already manuall done
@@ -42,7 +49,10 @@ public class UmlSetup extends Setup {
 			if (NS_URI_URI_MAP.isEmpty()) {
 				setRegisterProfileLocation(true);
 			}
-			setStandardProfileMapping(true);
+//			setStandardProfileMapping(true);
+			if (PLUGIN_URI_MAP.isEmpty()) {
+				setRegisterPluginUriMapping(true);
+			}
 			
 			// register map contents
 			for (Map.Entry<String, String> me : NS_URI_FQN_MAP.entrySet()) {
@@ -50,6 +60,9 @@ public class UmlSetup extends Setup {
 			}
 			for (Map.Entry<String, String> me : NS_URI_URI_MAP.entrySet()) {
 				UMLPlugin.getEPackageNsURIToProfileLocationMap().put(me.getKey(), URI.createURI(me.getValue()));
+			}
+			for (Map.Entry<String, String> me : PLUGIN_URI_MAP.entrySet()) {
+				registerPlatformUriMapping(me.getKey(), me.getValue());
 			}
 		}
 		
@@ -59,6 +72,7 @@ public class UmlSetup extends Setup {
 			logger.trace(me.getKey() + " -> " + me.getValue());
 		}
 	}
+	
 	
 	/**
 	 * Registers standard UML packages and profile packages depending on specified value.
@@ -117,6 +131,33 @@ public class UmlSetup extends Setup {
 			} catch (ConfigurationException ce) {
 				logger.info("Not running with UML 4 -> not registering mapping for uml standard profile");
 			}
+		}
+	}
+	
+	public void setRegisterPluginUriMapping(boolean shallRegister) {
+		if (shallRegister) {
+			PLUGIN_URI_MAP.put("platform:/plugin/org.eclipse.uml2.uml/model/CMOF20_2_UML.ecore2xml", "model/CMOF20_2_UML.ecore2xml");
+			PLUGIN_URI_MAP.put("platform:/plugin/org.eclipse.uml2.uml/model/CMOF24_2_UML.ecore2xml", "model/CMOF24_2_UML.ecore2xml");
+			PLUGIN_URI_MAP.put("platform:/plugin/org.eclipse.uml2.uml/model/CMOF_2_UML.ecore2xml", "model/CMOF_2_UML.ecore2xml");
+			PLUGIN_URI_MAP.put("platform:/plugin/org.eclipse.uml2.uml/model/UML21_2_UML.ecore2xml", "model/UML21_2_UML.ecore2xml");
+			PLUGIN_URI_MAP.put("platform:/plugin/org.eclipse.uml2.uml/model/UML2_2_UML.ecore2xml", "model/UML2_2_UML.ecore2xml");
+			PLUGIN_URI_MAP.put("platform:/plugin/org.eclipse.uml2.uml/model/UML30_2_UML.ecore2xml", "model/UML30_2_UML.ecore2xml");
+		}
+	}
+	
+	public void addPluginUriMapping(Mapping map) {
+		PLUGIN_URI_MAP.put(map.getTo(), map.getTo());
+	}
+	
+	protected void registerPlatformUriMapping(String from, String to) {
+		URI uri = EcoreUtil2.getURI(to);
+		if (uri != null) {
+			String path = uri.toString();
+			if (path.indexOf(".jar!") != -1) {
+				if (!path.startsWith("jar:"))
+					path = "jar:" + path;
+			}
+			addUriMap(new org.eclipse.xtend.typesystem.emf.Mapping(from, path));
 		}
 	}
 	
