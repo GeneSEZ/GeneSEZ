@@ -1,13 +1,14 @@
 package Bank_Tutorial_Weld_Server.bankgroupServer.entity;
 
-/* PROTECTED REGION ID(Bank_Tutorial_Weld_Server.bankgroupServer.entity._16_0_1_41601a3_1267462905086_648269_462.HomeBean_Imports) ENABLED START */
+/* PROTECTED REGION ID(Bank_Tutorial_Weld_Server.bankgroupServer.entity._16_0_1_41601a3_1267462981134_570566_486.HomeBean_Imports) ENABLED START */
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
-
 import javax.enterprise.context.Conversation;
+import javax.enterprise.inject.New;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import Bank_Tutorial_Weld_Server.bankgroupServer.IEntityBase;
 
 /* PROTECTED REGION END */
 
@@ -196,8 +197,8 @@ public abstract class HomeBean<T extends IEntityBase, E extends EntityManager> i
 		return getEntityManager().createQuery("select OBJECT(o) from " + getClassType().getSimpleName() + " o").getResultList();
 	}
 	
-	/* PROTECTED REGION ID(Bank_Tutorial_Weld_Server.bankgroupServer.entity._16_0_1_41601a3_1267462905086_648269_462.HomeBean_OwnCodeImpl) ENABLED START */
+	/* PROTECTED REGION ID(Bank_Tutorial_Weld_Server.bankgroupServer.entity._16_0_1_41601a3_1267462981134_570566_486.HomeBean_OwnCodeImpl) ENABLED START */
 	/* TODO: put your own source code here */
 	/* PROTECTED REGION END */
-	
+
 }

@@ -1,36 +1,39 @@
 package Bank_Tutorial_Weld_Server.bankgroupServer.entity;
 
-/* 
- *	Do not place import/include statements above this comment, just below. 
- * 	@FILE-ID : (_16_0_1_41601a3_1267462981134_570566_486) 
- */
-import Bank_Tutorial_Weld_Server.bankgroupServer.EntityBase;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
+/* PROTECTED REGION ID(java.type.import._16_0_1_41601a3_1267462981134_570566_486) ENABLED START */
+/* TODO: put your own source code here */
 import java.io.Serializable;
-import javax.persistence.Version;
-
-import javax.persistence.OneToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.CascadeType;
-import javax.persistence.Id;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Version;
+import Bank_Tutorial_Weld_Server.bankgroupServer.IEntityBase;
+
+/* PROTECTED REGION END */
 
 /**
- * Please describe the responsibility of your class in your modeling tool.
  */
+
 @Entity
 @Table(name = "tbl_Bankgroup")
-public class Bankgroup implements EntityBase, Serializable {
+public class Bankgroup implements IEntityBase, Serializable {
 	
-	/** Stores all linked objects of association '<em><b>banks</b></em>' */
-	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.EAGER, mappedBy = "bankgroup")
+	// -- generated attribute, constant + association declarations ----------
+	
+	/** stores associated objects of association BANKS to Bank */
+	@OneToMany(cascade = {
+		CascadeType.MERGE
+	}, fetch = FetchType.EAGER, mappedBy = "bankgroup")
 	private java.util.Set<Bank> banks = new java.util.HashSet<Bank>();
 	
-	/** Stores the linked object of association '<em><b>address</b></em>' */
-	@OneToOne(cascade = {}, fetch = FetchType.EAGER, mappedBy = "bankgroup")
+	/** stores the associated object of association ADDRESS to Address */
+	@OneToOne(cascade = {})
 	private Address address;
 	
 	@Id
@@ -42,28 +45,66 @@ public class Bankgroup implements EntityBase, Serializable {
 	@Version
 	private int version;
 	
+	// -- generated constructors --------------------------------------------
 	/**
-	 * Constructor for class '<em><b>Bankgroup</b></em>'.
+	 * constructor for class '<em><b>Bankgroup</b></em>'
 	 */
-	
 	public Bankgroup() {
 	}
 	
-	/**
-	 * Returns all linked objects of association '<em><b>banks</b></em>'.
-	 */
+	// -- generated method stubs for implementations + derived attributes ---
 	
-	public java.util.Set<Bank> getBanks() {
-		return banks;
+	// -- generated association + attribute accessors -----------------------
+	/**
+	 * getter for the attribute '<em><b>id</b></em>'
+	 */
+	public long getId() {
+		return id;
 	}
 	
 	/**
-	 * Establishes a link to the specified object for association '<em><b>banks</b></em>'.
-	 * @param	banks	the object to associate.
+	 * getter for the attribute '<em><b>name</b></em>'
 	 */
+	public String getName() {
+		return name;
+	}
 	
-	public void addBanks(Bank banks) {
-		if (banks == null || this.banks.contains(banks)) {
+	/**
+	 * documented here {@link getName()}
+	 * @generated	setter method for the attribute '<em><b>name</b></em>'
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	/**
+	 * getter for the attribute '<em><b>version</b></em>'
+	 */
+	public int getVersion() {
+		return version;
+	}
+	
+	/**
+	 * documented here {@link getVersion()}
+	 * @generated	setter method for the attribute '<em><b>version</b></em>'
+	 */
+	public void setVersion(int version) {
+		this.version = version;
+	}
+	
+	/**
+	 * accessor for association to banks
+	 */
+	public java.util.Set<Bank> getBanks() {
+		return this.banks;
+		
+	}
+	
+	/**
+	 * accessor for association to banks
+	 */
+	public void insertInBanks(Bank banks) {
+		if (this.banks.contains(banks)) {
 			return;
 		}
 		this.banks.add(banks);
@@ -71,89 +112,34 @@ public class Bankgroup implements EntityBase, Serializable {
 	}
 	
 	/**
-	 * Removes the link to the specified specified object from association '<em><b>banks</b></em>'.
-	 * @param	banks	the object to remove.
+	 * accessor for association to banks
 	 */
-	
-	public void removeBanks(Bank banks) {
-		if (banks == null || !this.banks.contains(banks)) {
+	public void removeFromBanks(Bank banks) {
+		if (!this.banks.contains(banks)) {
 			return;
 		}
 		this.banks.remove(banks);
-		banks.setBankgroup(null);
 	}
 	
 	/**
-	 * Returns the linked object of association '<em><b>address</b></em>'.
+	 * accessor for association to address
 	 */
-	
 	public Address getAddress() {
 		return address;
 	}
 	
 	/**
-	 * Establishes a link to the specified object for association '<em><b>address</b></em>'.
-	 * @param	address	the object to associate.
+	 * accessor for association to address
 	 */
-	
 	public void setAddress(Address address) {
-		if (this.address == address) {
-			return;
-		}
-		Address former = this.address;
 		this.address = address;
-		if (former != null) {
-			former.setBankgroup(null);
-		}
-		if (address != null) {
-			address.setBankgroup(this);
-		}
 	}
 	
-	/**
-	 * Returns the value of attribute '<em><b>id</b></em>'.
-	 */
+	// -- generated code of other cartridges --------------------------------
 	
-	public long getId() {
-		return id;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>name</b></em>'.
-	 */
-	
-	public String getName() {
-		return name;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>name</b></em>'.
-	 * @param	name	the value to set.
-	 */
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>version</b></em>'.
-	 */
-	
-	public int getVersion() {
-		return version;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>version</b></em>'.
-	 * @param	version	the value to set.
-	 */
-	
-	public void setVersion(int version) {
-		this.version = version;
-	}
-	
+	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_1_41601a3_1267462981134_570566_486) ENABLED START */
-	
+
 	/**
 	 * 
 	 */
@@ -179,4 +165,5 @@ public class Bankgroup implements EntityBase, Serializable {
 	}
 	
 	/* PROTECTED REGION END */
+
 }
