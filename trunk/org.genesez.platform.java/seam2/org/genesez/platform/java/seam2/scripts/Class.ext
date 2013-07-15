@@ -39,7 +39,7 @@ MClassifier addStandardConstructor(MClass this) :
   *	creates a logger attribute if there is no attribute with datatype "Log"
   */
 Void addLoggerAttribute(MClass this) :
-	!this.emHasStereotypeAssignment("jpaPersistentEntity") && this.emHasTaggedValue("seam2Component", "logger", "true") && !this.existLoggerAttribute() 
+	!this.emHasStereotypeAssignment("jpaPersistentEntity") && this.emHasTaggedValue("seam2Component", "logger", "true") && !this.abstract && !this.existLoggerAttribute() 
 		? ensureAttributeExistence( xmiGuid + "_logger", "logger" )
 			.processAttribute( "", false, false )
 			.processProperty( "private", false, createMultiplicity(0, 1) )
