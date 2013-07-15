@@ -118,3 +118,31 @@ List[String] convertStringArrayToList(String this) :
 		? {}
 		: subString(1, length -1).convertToList();
 
+/**
+ * Splits a string with comma separated values into a list of strings optionally removing
+ * the quotes and curly braces at the beginning and end.
+ * 
+ * Examples:
+ * "{1, 2}" -> [1,2]
+ * "[1, 2]" -> [1,2]
+ * "1","2" -> ["1","2"]
+ * 
+ * @param	this	a string with comma separated values
+ * @return	The list of string values or an empty list.
+ * 
+ * @api
+ */
+List[String] valueToList(String this) :
+	this == null || this.trim().length == 0
+		? {}
+		: removeSurrounding("\"{").removeSurrounding("\"[").convertToList();
+
+/**
+ * Removes the surrounding string around the specified string if they exist, else do noting.
+ * If the string starts with the specified string, then its length is removed from both ends.
+ */
+String removeSurrounding(String this, String s) :
+	startsWith(s)
+		? subString(s.length, length -s.length)
+		: this;
+
