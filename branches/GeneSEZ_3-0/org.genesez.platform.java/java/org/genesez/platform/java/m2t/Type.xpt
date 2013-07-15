@@ -62,7 +62,11 @@
 «DEFINE MultiValuedType(MMultiplicity multiplicity, MType type) FOR MElement -»
 	«logTrace("", "Generate multi valued type for [" + multiplicity + ", " + type.name() + "] " + this) -»
 	«IF prHasPrimitiveStereotype() -»
+		«IF MParameter.isInstance(this) && ((MParameter)this).isEllipsePossible() -»
+		«type.mapName().asTypeName() -»«EXPAND GenericUse»...
+		«ELSE -»
 		«type.mapName().asTypeName() -»«EXPAND GenericUse»[]
+		«ENDIF -»
 	«ELSE -»
 		«multiplicity.mapCollection() -»<«type.mapName("Wrapper").asTypeName()»«EXPAND GenericUse»>
 	«ENDIF -»
