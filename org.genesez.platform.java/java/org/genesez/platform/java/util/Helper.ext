@@ -22,15 +22,21 @@ extension org::genesez::metamodel::core::util::AccessElement;
  * @deprecated	use {@link org::genesez::platform::java::util::JavaTypes::isPrimitiveType(MExternal)} instead
  */
 boolean isJavaPrimitiveType(MProperty this) : 
-    switch (this.type.asTypeName().toLowerCase()) {
-    	case "int": true
-    	case "long": true
-    	case "byte": true
-    	case "short": true
-    	case "float": true
-    	case "double": true
-    	default: false
-    };
+	switch (this.type.asTypeName().toLowerCase()) {
+		case "int": true
+		case "long": true
+		case "byte": true
+		case "short": true
+		case "float": true
+		case "double": true
+		default: false
+	};
+
+/**
+ * Returns true if the parameter type could be an ellipse (...), otherwise false.
+ */
+boolean isEllipsePossible(MParameter this) :
+	multiplicity.isMultiValued() && operation.return != this && operation.parameter.last() == this;
 
 /**
  *	returns the modifier for a MProperty
