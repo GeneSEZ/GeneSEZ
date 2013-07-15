@@ -17,6 +17,8 @@ import gcore;
 extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::metamodel::core::util::Conversion;
 
+extension org::genesez::metamodel::core::util::profile::GeneSEZProfileAccessElement;
+
 
 // -- Classifier Checks -------------------------------------------------------------------------------------
 
@@ -111,3 +113,16 @@ context MOperation WARNING "GeneSEZ: Destructor operations cannot have return pa
  */
 context MParameter WARNING "GeneSEZ: Parameters needs to have a type! " + fqmn() + " of " + operation.fqmn() :
 	! ( ( type == null || type == Void ) && direction != "return" );
+
+
+// -- Type Checks -------------------------------------------------------------------------------------------
+
+/**
+ * Checks if an attribute with array type has a fixed upper bound multiplicity.
+ * 
+ * @return	False if the attribute has an array type without default value and without fixed upper bound multiplicity, otherwise true.
+ */
+context MAttribute WARNING "GeneSEZ: Attribute with array type cannot be initialized due to the missing upper bound multiplicity value! " + fqmn() :
+	multiplicity.isMultiValued() && prHasPrimitiveStereotype() && !hasDefaultValue()
+		? multiplicity.hasFixedUpperBoundMultiplicity()
+		: true;
