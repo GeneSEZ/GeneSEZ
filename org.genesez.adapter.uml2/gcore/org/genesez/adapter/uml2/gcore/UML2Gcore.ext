@@ -954,7 +954,8 @@ private create MPrimitiveType makePrimitiveType(Void v) :
  */
 String defaultValue(Property this) :
 	switch {
-		case StringExpression.isInstance( defaultValue ) : value( defaultValue )
+		case LiteralString.isInstance( defaultValue ) : defaultValue.value()
+		case StringExpression.isInstance( defaultValue ) : defaultValue.value()
 		default : getDefault()
 	};
 
@@ -962,10 +963,15 @@ String defaultValue(Property this) :
  * Returns the value of the specified string expression.
  */
 String value(StringExpression this) : 
-	operand.stringValue().toString( symbol ).logTrace("default value string expression: ");
+	operand.value().toString( symbol ).logTrace("default value string expression: ");
 
 String value(ValueSpecification this) :
 	toString();
+
+String value(LiteralString this) :
+	value.startsWith('"')
+		? value
+		: '"' + value + '"';
 
 // - - » property copy helpers - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
