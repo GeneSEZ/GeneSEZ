@@ -238,6 +238,7 @@ private create MPackage make(Package p) :
 	// containment
 	p.nestingPackage != null
 		? p.nestingPackage.make().nestedPackage.add( this )
+		// toh: this could allow dangling packages not contained in resources!
 		: this ->
 	this;
 
@@ -250,7 +251,7 @@ private create MClass make(Class c) :
 	logTrace( "make [ " + metaType + " ] - " + c.fqmn() ) ->
 	transformBasics(c) ->
 	// containment
-	c.package.make().classifier.add( this ) ->
+	c.namespace.make().classifier.add( this ) ->
 	this;
 
 /**
@@ -262,7 +263,7 @@ private create MInterface make(Interface i) :
 	logTrace( "make [ " + metaType + " ] - " + i.fqmn() ) ->
 	transformBasics(i) ->
 	// containment
-	i.package.make().classifier.add( this ) ->
+	i.namespace.make().classifier.add( this ) ->
 	this;
 
 /**
@@ -274,7 +275,7 @@ private create MEnumeration make(Enumeration e) :
 	logTrace( "make [ " + metaType + " ] - " + e.fqmn() ) ->
 	transformBasics(e) ->
 	// containment
-	e.package.make().classifier.add( this ) ->
+	e.namespace.make().classifier.add( this ) ->
 	this;
 
 /**
@@ -286,7 +287,7 @@ private create MDataType make(DataType d) :
 	logTrace( "make [ " + metaType + " ] - " + d.fqmn() ) ->
 	transformBasics(d) ->
 	// containment
-	d.package.make().classifier.add( this ) ->
+	d.namespace.make().classifier.add( this ) ->
 	this;
 
 /**
@@ -323,10 +324,20 @@ private create MAssociationRole makeAssociationRole(Property p) :
  * just a marker for error free templates
  * no GeneSEZ classifier is created, because the GeneSEZ classifier is an abstract class
  * prints a 'severe' log message to report such an transformation
- * @return	void
+ * @return	null
  */
 private MClassifier make(Classifier c) :
 	logFatal("try to construct an MClassifier object from: " + c.fqmn()) ->
+	null;
+
+/**
+ * just a marker for error free templates
+ * no GeneSEZ definition context is created, because the GeneSEZ definition context is an abstract class
+ * prints a 'severe' log message to report such an transformation
+ * @return	null
+ */
+private MDefinitionContext make(Namespace n) :
+	logFatal("try to construct an MDefinitionContext object from: " + n.fqmn()) ->
 	null;
 
 
