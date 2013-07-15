@@ -45,13 +45,12 @@
 	«IF param.multiplicity.isSingleValued() -»
 		«IF !static-»this.«ENDIF-»«param.name» = «IF static-»_«ENDIF-»«param.name»;
 	«ELSE -»
-		«IF emHasStereotypeAssignment("primitive") -»
+		«IF param.emHasStereotypeAssignment("primitive") -»
 			«IF !static-»this.«ENDIF-»«param.name» = new «param.type.mapName().asTypeName() -»[«IF static-»_«ENDIF-»«param.name».length];
-			for (int counter = 0; counter < «IF static-»_«ENDIF-»«param.name».length; counter++) {
-				«IF !static-»this.«ENDIF-»«param.name»[counter] = «IF static-»_«ENDIF-»«param.name»[counter];
-			}
+			System.arraycopy(«IF static-»_«ENDIF-»«param.name», 0, «IF !static-»this.«ENDIF-»«param.name», 0, «IF static-»_«ENDIF-»«param.name».length);
 		«ELSE -»
-			«IF !static-»this.«ENDIF-»«param.name» = «IF static-»_«ENDIF-»«param.name»;
+			«IF !static-»this.«ENDIF-»«param.name».clear();
+			«IF !static-»this.«ENDIF-»«param.name».addAll(«IF static-»_«ENDIF-»«param.name»);
 		«ENDIF-»
 	«ENDIF -»
 	«ENDLET -»
@@ -62,7 +61,7 @@
 «ENDREM»
 «DEFINE AddOperationImpl(MAttribute attr) FOR MOperation -»
 	«LET parameter.first() AS param -»
-		«IF emHasStereotypeAssignment("primitive") -»
+		«IF param.emHasStereotypeAssignment("primitive") -»
 			«PROTECT CSTART "/* " CEND " */" ID ("add.property.access_" + xmiGuid)»
 			// TODO: sorry the template for add operations on arrays is missing, please file a feature request at forge.genesez.org
 			throw new UnsupportedOperationException(
@@ -79,7 +78,7 @@
 «ENDREM»
 «DEFINE RemoveOperationImpl(MAttribute attr) FOR MOperation -»
 	«LET parameter.first() AS param -»
-		«IF emHasStereotypeAssignment("primitive") -»
+		«IF param.emHasStereotypeAssignment("primitive") -»
 			«PROTECT CSTART "/* " CEND " */" ID ("remove.property.access_" + xmiGuid)»
 			// TODO: sorry the template for remove operations on arrays is missing, please file a feature request at forge.genesez.org
 			throw new UnsupportedOperationException(
