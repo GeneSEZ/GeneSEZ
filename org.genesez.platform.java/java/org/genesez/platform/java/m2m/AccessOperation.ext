@@ -88,6 +88,7 @@ MProperty emEnsureGetAccessOperation(MProperty this, MClassifier container) :
 				.ensureReturnParameterExistence( xmiGuid + "_getReturn", asAttribute() )
 				.processParameter( null, "return", multiplicity.cloneMultiplicity() )
 				.wireType( type )
+				.ensureStereotypeAssignment( emGetStereotypeAssignment( prPrimitive() ))
 				.operation
 				.assignGetAccessOperationComment( this )
 				.emEnsureAccessOperationIdentifier(	prGetAccessOperationIdentifier(), this )
@@ -115,6 +116,7 @@ MProperty emEnsureSetAccessOperation(MProperty this, MClassifier container) :
 				.processParameter( null, "in", multiplicity.cloneMultiplicity() )
 				.wireType( type )
 				.assignSetAccessOperationParameterComment( this )
+				.ensureStereotypeAssignment( emGetStereotypeAssignment( prPrimitive() ))
 				.operation
 				.assignSetAccessOperationComment( this )
 				.emEnsureAccessOperationIdentifier(	prSetAccessOperationIdentifier(), this )
@@ -136,6 +138,7 @@ MProperty emEnsureAddAccessOperation(MProperty this, MClassifier container) :
 				.processParameter( null, "in", createMultiplicity( 0, 1 ) )
 				.wireType( type )
 				.assignAddAccessOperationParameterComment( this )
+				.ensureStereotypeAssignment( emGetStereotypeAssignment( prPrimitive() ))
 				.operation
 				.assignAddAccessOperationComment( this )
 				.emEnsureAccessOperationIdentifier(	prAddAccessOperationIdentifier(), this )
@@ -157,6 +160,7 @@ MProperty emEnsureRemoveAccessOperation(MProperty this, MClassifier container) :
 				.processParameter( null, "in", createMultiplicity( 0, 1 ) )
 				.wireType( type )
 				.assignRemoveAccessOperationParameterComment( this )
+				.ensureStereotypeAssignment( emGetStereotypeAssignment( prPrimitive() ))
 				.operation
 				.assignRemoveAccessOperationComment( this )
 				.emEnsureAccessOperationIdentifier(	prRemoveAccessOperationIdentifier(), this )
@@ -268,7 +272,7 @@ MElement emEnsureAccessOperationIdentifier(MElement this, String identifier, MPr
 			.ensureStereotypeExistence( identifier, identifier )
 			.ensureTagExistence( prAccessForPropertyTagName(), prAccessForPropertyTagType() )
 		, property
-	);
+	).owningElement;
 
 /**
  * Returns the identifier to generate get access operations.
