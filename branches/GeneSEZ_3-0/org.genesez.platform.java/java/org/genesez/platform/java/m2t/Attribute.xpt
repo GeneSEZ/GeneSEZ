@@ -194,14 +194,14 @@
 	 = «defaultvalue -»
 	«ENDIF -»
 «ELSEIF multiplicity.isMultiValued() && !final -»
-	«IF prHasPrimitiveStereotype() && !multiplicity.hasFixedUpperBoundMultiplicity() -»
-	 = null
-	«ELSEIF prHasPrimitiveStereotype() && multiplicity.hasFixedUpperBoundMultiplicity() -»
-	«IF hasDefaultValue() -»
+	«IF prHasPrimitiveStereotype() -»
+		«IF hasDefaultValue() -»
 	 = new «type.mapName().asTypeName()»[] {«FOREACH defaultvalue.valueToList() AS it SEPARATOR ", " -»«it»«ENDFOREACH -»}
-	«ELSE -»
+		«ELSEIF multiplicity.hasFixedUpperBoundMultiplicity() -»
 	 = new «type.mapName().asTypeName()»[«multiplicity.upperBound»]
-	«ENDIF -»
+		«ELSE -»
+	 = null
+ 		«ENDIF -»
 	«ELSE -»
 	 = new «mapCollection("Implementation") -»<«type.mapName("Wrapper").asTypeName() -»«EXPAND Type::GenericUse»>()
 	«ENDIF -»
