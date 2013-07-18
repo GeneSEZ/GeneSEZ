@@ -104,28 +104,28 @@ public class Polygon extends AbstractForm implements Form {
 	public Point getCenterOfArea() {
 		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249463754375_944273_708__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
 		double minX, maxX;
-		double minY,maxY;
+		double minY, maxY;
 		// the case, that the Array of Points has size 1 is ignored here because it makes no sense
-		minX = maxX = points[0].getX();		//initial value of the first point in the list
+		minX = maxX = points[0].getX(); //initial value of the first point in the list
 		minY = maxY = points[0].getY();
 		Point tmpPoint = null;
 		double tmpX;
 		double tmpY;
-		for(int i = 1; i < points.length; i++){
+		for (int i = 1; i < points.length; i++) {
 			tmpPoint = points[i];
-			tmpX= tmpPoint.getX();
+			tmpX = tmpPoint.getX();
 			tmpY = tmpPoint.getY();
-			if(tmpX > maxX)  {
+			if (tmpX > maxX) {
 				maxX = tmpX;
-			} else if(tmpX < minX){
+			} else if (tmpX < minX) {
 				minX = tmpX;
 			} else if (tmpY > maxY) {
-				maxY = tmpY;				
+				maxY = tmpY;
 			} else if (tmpY < minY) {
 				minY = tmpY;
 			}
 		}
-		return new Point((minX+maxX)/2, (minY+maxY)/2);		
+		return new Point((minX + maxX) / 2, (minY + maxY) / 2);
 		/* PROTECTED REGION END */
 	}
 	
