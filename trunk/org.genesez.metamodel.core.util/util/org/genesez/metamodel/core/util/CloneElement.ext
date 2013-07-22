@@ -81,6 +81,9 @@ MParameter cloneReturnParameter(MParameter source, MOperation container) :
 		source.logTrace( "cloning return: " + source.metaType + ": " ) ->
 		// clone extended property values
 		clone.processParameter( source.defaultvalue, source.direction, source.multiplicity.cloneMultiplicity() ) ->
+		// clone stereotypes and tagged values
+		cloneStereotypeAssignments(source, clone) ->
+		cloneTaggedValues(source, clone) ->
 		// clone references
 		clone.wireType( source.type ) ->
 		// clone own containments
