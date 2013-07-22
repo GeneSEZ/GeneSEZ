@@ -13,6 +13,7 @@ extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::platform::java::util::Naming;
 extension org::genesez::platform::java::seam2::scripts::Class;
 extension org::genesez::platform::java::seam2::scripts::Attribute;
+extension org::genesez::platform::java::seam2::scripts::Property;
 extension org::genesez::platform::java::seam2::scripts::Operation;
 extension org::genesez::platform::java::seam2::scripts::Interface;
 extension org::genesez::platform::java::seam2::scripts::Package;
@@ -39,6 +40,7 @@ Void additions(MClass this) :
 	checkCreateMethod() ->
 	checkJasyptEncryptionStereotype() ->
 	this.property.typeSelect(MAttribute).additions() ->
+	this.property.typeSelect(MAttribute).additions() ->
 	this.operation.typeSelect(MOperation).additions();
 	
 Void additions(MOperation this) :
@@ -62,7 +64,8 @@ Void modifications(MPackage this) :
 	
 Void modifications(MClass this) :
 	checkAbstractClassesForComponentStereotype() ->
-	this.property.typeSelect(MAttribute).modifications();
+	this.property.typeSelect(MAttribute).modifications() ->
+	this.property.typeSelect(MAssociationRole).modifications();
 	
 Void modifications(MAttribute this) :
 	setupSeamManagedPersistence() ->
@@ -74,6 +77,9 @@ Void modifications(MAttribute this) :
 	checkJasyptEncryptionStereotype() ->
 	checkAttributesWithInjectionStereotype() ->
 	checkAccessStereotypeOfSeamStereotypedAttributes() ->
+	addAccessorStereotype();
+
+Void modifications(MAssociationRole this) :
 	addAccessorStereotype();
 
 Void modifications(MInterface this) :

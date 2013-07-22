@@ -27,24 +27,6 @@ Void checkJasyptEncryptionStereotype(MAttribute this) :
 		: "";
 
 /**
-  *	adds an accessor stereotype for generating get and set methods if
-  *	classifier is a seam component and the attribute does not have an 
-  *	accessor stereotype (do not override modellers choices)
-  *
-  *	@param		this		instance of MClass
-  */
-Void addAccessorStereotype(MAttribute this) :
-	this.classifier.emHasStereotypeAssignment("seam2Component")
-		? (
-			//add an accessor for get and set methods if no accessor 
-			//stereotype exists
-			!this.emHasStereotypeAssignment("accessor")
-				? emAssignGeneSezAccessorStereotype(true, true, false, false)
-				: ""
-		)
-		: "";
-
-/**
  *	checks if an attribute has the stereotype "ejb3EJB" and "seam2Injection"
  *	these stereotypes can create a conflict and "ejb3EJB" will be removed
  */
