@@ -28,7 +28,11 @@
 «DEFINE GetOperationImpl(MAttribute attr) FOR MOperation -»
 	«IF return.multiplicity.isSingleValued() -»
 		«IF return.type.mapName().asTypeName().matches("Date") -»
-			return new Date(«return.name -».getTime());
+			if (this.«return.name -» != null) {
+				return new Date(«return.name -».getTime());
+			} else {
+				return this.«return.name -»;
+			}
 		«ELSE -»
 			return «return.name»;
 		«ENDIF -»
@@ -98,8 +102,12 @@
 «ENDREM»
 «DEFINE GetOperationImpl(MAssociationRole end) FOR MOperation -»
 	«IF return.multiplicity.isSingleValued() -»
-		«IF return.type.mapName().asTypeName().matches("Date") -»
-			return new Date(«return.name -».getTime());
+		«IF return.type.mapName().asTypeName().matches("Date") -»			
+			if (this.«return.name -» != null) {
+				return new Date(«return.name -».getTime());
+			} else {
+				return this.«return.name -»;
+			}
 		«ELSE -»
 			return «return.name»;
 		«ENDIF -»
