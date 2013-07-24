@@ -28,16 +28,20 @@
 «DEFINE GetOperationImpl(MAttribute attr) FOR MOperation -»
 	«IF return.multiplicity.isSingleValued() -»
 		«IF return.type.mapName().asTypeName().matches("Date") -»
-			if (this.«return.name -» != null) {
-				return new Date(«return.name -».getTime());
+			if («IF !static-»this.«ENDIF-»«return.name -» != null) {
+				return new Date(«IF !static-»this.«ENDIF-»«return.name -».getTime());
 			} else {
-				return this.«return.name -»;
+				return «IF !static-»this.«ENDIF-»«return.name -»;
 			}
+		«ELSE -»
+			return «IF !static-»this.«ENDIF-»«return.name»;
+		«ENDIF -»
+	«ELSE -»
+		«IF return.emHasStereotypeAssignment("primitive") -»
+			return «IF !static-»this.«ENDIF-»«return.name-».clone();
 		«ELSE -»
 			return «return.name»;
 		«ENDIF -»
-	«ELSE -»
-		return «return.name»;
 	«ENDIF -»
 «ENDDEFINE»
 
@@ -47,7 +51,15 @@
 «DEFINE SetOperationImpl(MAttribute attr) FOR MOperation -»
 	«LET parameter.first() AS param -»
 	«IF param.multiplicity.isSingleValued() -»
-		«IF !static-»this.«ENDIF-»«param.name» = «IF static-»_«ENDIF-»«param.name»;
+		«IF param.type.mapName().asTypeName().matches("Date") -»
+			if («IF static-»_«ENDIF-»«param.name -» != null) {
+				«IF !static-»this.«ENDIF-»«param.name» = new Date(«IF static-»_«ENDIF-»«param.name -».getTime());
+			} else {
+				«IF !static-»this.«ENDIF-»«param.name» = «IF static-»_«ENDIF-»«param.name -»;
+			}
+		«ELSE -»
+			«IF !static-»this.«ENDIF-»«param.name» = «IF static-»_«ENDIF-»«param.name»;
+		«ENDIF-»
 	«ELSE -»
 		«IF param.emHasStereotypeAssignment("primitive") -»
 			«IF !static-»this.«ENDIF-»«param.name» = new «param.type.mapName().asTypeName() -»[«IF static-»_«ENDIF-»«param.name».length];
