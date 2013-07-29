@@ -21,6 +21,7 @@ extension org::genesez::metamodel::core::util::NavigateElement;
 extension org::genesez::metamodel::core::util::CloneElement;
 extension org::genesez::metamodel::core::util::CreateElement;
 extension org::genesez::metamodel::core::util::Helper;
+extension org::genesez::metamodel::core::util::GlobalVar;
 extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
 extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
 extension org::genesez::platform::java::util::Naming;
@@ -84,7 +85,7 @@ MProperty emEnsureGetAccessOperation(MProperty this, MClassifier container) :
 	!container.operation.exists( o|o.emIsGetAccessOperation(this) )
 		? (
 			container.createOperation( xmiGuid + "_get", asGetter() )
-				.processOperation( "public", false, false, false )
+				.processOperation( visibility(), isStatic(), false, false )
 				.ensureReturnParameterExistence( xmiGuid + "_getReturn", asAttribute() )
 				.processParameter( null, "return", multiplicity.cloneMultiplicity() )
 				.wireType( type )
@@ -111,7 +112,7 @@ MProperty emEnsureSetAccessOperation(MProperty this, MClassifier container) :
 	!container.operation.exists( o|o.emIsSetAccessOperation(this) )
 		? (
 			container.createOperation( xmiGuid + "_set", asSetter() )
-				.processOperation( "public", false, false, false )
+				.processOperation( visibility(), isStatic(), false, false )
 				.ensureParameterExistence( xmiGuid + "_setParam", asAttribute() )
 				.processParameter( null, "in", multiplicity.cloneMultiplicity() )
 				.wireType( type )
@@ -133,7 +134,7 @@ MProperty emEnsureAddAccessOperation(MProperty this, MClassifier container) :
 	multiplicity.isMultiValued() && !container.operation.exists( o|o.emIsAddAccessOperation(this) )
 		? (
 			container.createOperation( xmiGuid + "_add", asAddPropertyAccessOperation() )
-				.processOperation( "public", false, false, false )
+				.processOperation( visibility(), isStatic(), false, false )
 				.ensureParameterExistence( xmiGuid + "_addParam", asAttribute() )
 				.processParameter( null, "in", createMultiplicity( 0, 1 ) )
 				.wireType( type )
@@ -155,7 +156,7 @@ MProperty emEnsureRemoveAccessOperation(MProperty this, MClassifier container) :
 	multiplicity.isMultiValued() && !container.operation.exists( o|o.emIsRemoveAccessOperation(this) )
 		? (
 			container.createOperation( xmiGuid + "_remove", asRemovePropertyAccessOperation() )
-				.processOperation( "public", false, false, false )
+				.processOperation( visibility(), isStatic(), false, false )
 				.ensureParameterExistence( xmiGuid + "_removeParam", asAttribute() )
 				.processParameter( null, "in", createMultiplicity( 0, 1 ) )
 				.wireType( type )
@@ -166,6 +167,19 @@ MProperty emEnsureRemoveAccessOperation(MProperty this, MClassifier container) :
 				.emEnsureAccessOperationIdentifier(	prRemoveAccessOperationIdentifier(), this )
 		) : this ->
 	this;
+
+
+// - - operation modifiers - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+String visibility(MProperty this) :
+	globalVarUsePropertyVisibilityForAccessors()
+		? visibility
+		: "public";
+
+boolean isStatic(MProperty this) :
+	metaType == MAttribute
+		? ((MAttribute)this).static
+		: false;
 
 
 // - - checks for property access operations - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
