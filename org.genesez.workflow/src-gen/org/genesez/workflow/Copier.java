@@ -10,11 +10,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
@@ -202,7 +204,16 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 	public static FileSystem zipFileSystem(final Path zipFile) throws IOException {
 		// create a new zip file system and copy html template from zip
 		URI uri = URI.create("jar:file:" + zipFile.toUri().getPath());
-		FileSystem zfs = FileSystems.newFileSystem(uri, Collections.<String, String> emptyMap());
+		FileSystem zfs = null;
+		try {
+			zfs = FileSystems.newFileSystem(uri, Collections.<String, String> emptyMap());
+		} catch (IOException ioe) {
+			Log logger = LogFactory.getLog(Copier.class);
+			if (logger.isDebugEnabled()) {
+				logger.debug(zipFile + ": readable(" + Files.isReadable(zipFile) + "), executable(" + Files.isExecutable(zipFile) + "), writable(" + Files.isWritable(zipFile) + "), owner(" + Files.getOwner(zipFile, new LinkOption[0]) + ")");
+			}
+			throw ioe;
+		}
 		return zfs;
 	}
 	
