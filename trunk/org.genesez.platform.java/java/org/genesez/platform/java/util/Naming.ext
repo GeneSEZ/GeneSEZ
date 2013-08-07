@@ -12,6 +12,7 @@
 import gcore;
 
 extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::Naming;
 // nihe: This extension include is the wrong place for naming stuff for annotations.
 extension org::genesez::platform::java::m2m::Annotation;
 
@@ -228,19 +229,19 @@ String asEnumLiteral(MAssociationRole this) :
 */
 
 /**
- * formats an attribute name according to the value of it's 'static' and 'final' property
+ * formats an attribute name according to the value of it's 'final' property
  * @context	the attribute to format
  * @return	the formatted attribute name
  */
-String asAttribute(MAttribute this) : static && final || classifier.metaType == MInterface ? asConstant() : asVariable();
+String asAttribute(MAttribute this) : final || classifier.metaType == MInterface ? asConstant() : asVariable();
 
 /**
  * formats an attribute name as a constant
  * @context	the attribute to format
  * @return	the formatted attribute name
  */
-String asConstant(MAttribute this) : name.toUpperCase();
-
+String asConstant(MAttribute this) : this.toUpperPropertyName();
+	
 /**
  * formats an attribute name as a normal attribute
  * @context	the attribute to format
