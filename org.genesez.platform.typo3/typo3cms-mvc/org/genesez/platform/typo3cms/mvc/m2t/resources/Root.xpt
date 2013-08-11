@@ -30,12 +30,6 @@
 
 «REM» Generate "locallang_db.xml" «ENDREM»
 «EXPAND LocallangDbXml::Root -»
-
-«REM» Generate Fluid code «ENDREM»
-«IF globalVarScaffolding() -»
-	«EXPAND FluidLayoutDefaultHtml::Root -»
-	«EXPAND FluidPartialFormErrorsHtml::Root -»
-«ENDIF -»
 «ENDDEFINE»
 
 
@@ -46,17 +40,6 @@
 «IF isEntity() -»
 	«REM» Generate Localization code «ENDREM»
 	«EXPAND LocallangCshXml::Root -»
-	
-	«REM» Generate Fluid code «ENDREM»
-	«IF globalVarScaffolding() && hasT3ExtbaseEntityIsAggregateRoot("true") -»
-		«EXPAND FluidPartialFormFieldsHtml::Root -»
-		«EXPAND FluidPartialPropertiesHtml::Root -»
-		
-		«EXPAND FluidTemplateEditHtml::Root -»
-		«EXPAND FluidTemplateListHtml::Root -»
-		«EXPAND FluidTemplateNewHtml::Root -»
-		«EXPAND FluidTemplateShowHtml::Root -»		
-	«ENDIF -»
 «ELSEIF isValueObject() -»
 	«REM» Generate Localization code «ENDREM»
 	«EXPAND LocallangCshXml::Root -»
