@@ -6,7 +6,6 @@ package org.genesez.platform.typo3.workflow;
  */
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +18,6 @@ import org.eclipse.xtend.expression.ExecutionContextImpl;
 import org.eclipse.xtend.expression.TypeSystemImpl;
 import org.eclipse.xtend.expression.Variable;
 import org.genesez.mapping.name.NameMapper;
-import org.genesez.metamodel.gcore.MModel;
 import org.genesez.workflow.profile.WfDefault;
 import org.genesez.workflow.profile.WfParameter;
 import org.genesez.workflow.xpand.Model2TextComponent;
@@ -33,13 +31,7 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 	private boolean isT3MvcCompliant = false;
 	
 	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
-	private boolean useModelNameAsExtensionKey = false;
-	
-	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String extensionKey;
-	
-	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
-	private boolean scaffolding = false;
 	
 	/**
 	 * Validates the configuration of the component before invocation.
@@ -47,10 +39,6 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 	 */
 	public void checkConfiguration(Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._MHqxkApDEeKxusbn3Pe47g) ENABLED START */
-		// check defaults
-		if (getXtendNamingFile() == null) {
-			setXtendNamingFile(getDefaultXtendNamingFile());
-		}
 		if (getTypeMappingFile().isEmpty()) {
 			for (String tmf : getDefaultTypeMappingFile()) {
 				addTypeMappingFile(tmf);
@@ -58,13 +46,15 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 		}
 		
 		// check extension key
-		if (!useModelNameAsExtensionKey || (extensionKey == null || extensionKey.isEmpty())) {
-			issues.addError(this, "Either workflow parameter 'extensionKey' must be present or 'useModelNameAsExtensionKey' must be set to 'true'", Arrays.<Object> asList(useModelNameAsExtensionKey, extensionKey));
+		if (extensionKey == null || extensionKey.isEmpty()) {
+			issues.addError(this, "Workflow parameter 'extensionKey' must be present.", extensionKey);
+		} else {
+			// add workflow parameter for transformation variables as global variables
+			addGlobalVarDef("extensionKey", extensionKey);
 		}
 		
 		// add workflow parameter for transformation variables as global variables
-		addGlobalVarDef("isT3MvcCompliant", isT3MvcCompliant);
-		addGlobalVarDef("scaffolding", scaffolding);
+		addGlobalVarDef("isT3MVCCompliant", isT3MvcCompliant);
 		
 		// delegate to base class
 		super.checkConfiguration(issues);
@@ -80,13 +70,7 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._MHqxlApDEeKxusbn3Pe47g) ENABLED START */
 		// fetch extension key if not specified
-		if (useModelNameAsExtensionKey) {
-			MModel model = (MModel) context.get(getSlot());
-			extensionKey = model.getName();
-		}
-		addGlobalVarDef("extensionKey", extensionKey);
-		
-		// init naming mapper
+		// init naming mapper (deprecated)
 		Map<String, Variable> globalVars = new HashMap<String, Variable>();
 		for (GlobalVarDef globalVarDef : getGlobalVarDef()) {
 			globalVars.put(globalVarDef.getName(), new Variable(globalVarDef.getName(), globalVarDef.getValue()));
@@ -109,26 +93,11 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 	
 	/**
 	 * Method stub for further implementation.
+	 * @deprecated
 	 */
 	@WfDefault(parameter = "xtendNamingFile")
 	public String getDefaultXtendNamingFile() {
 		return "org::genesez::platform::typo3v4::mvc::convention::Naming";
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "useModelNameAsExtensionKey")
-	public boolean getDefaultUseModelNameAsExtensionKey() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "scaffolding")
-	public boolean getDefaultScaffolding() {
-		return false;
 	}
 	
 	/**
@@ -157,21 +126,6 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>useModelNameAsExtensionKey</b></em>'.
-	 */
-	public boolean getUseModelNameAsExtensionKey() {
-		return useModelNameAsExtensionKey;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>useModelNameAsExtensionKey</b></em>'.
-	 * @param	useModelNameAsExtensionKey	the value to set.
-	 */
-	public void setUseModelNameAsExtensionKey(boolean useModelNameAsExtensionKey) {
-		this.useModelNameAsExtensionKey = useModelNameAsExtensionKey;
-	}
-	
-	/**
 	 * Returns the value of attribute '<em><b>extensionKey</b></em>'.
 	 */
 	public String getExtensionKey() {
@@ -184,21 +138,6 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 	 */
 	public void setExtensionKey(String extensionKey) {
 		this.extensionKey = extensionKey;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>scaffolding</b></em>'.
-	 */
-	public boolean getScaffolding() {
-		return scaffolding;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>scaffolding</b></em>'.
-	 * @param	scaffolding	the value to set.
-	 */
-	public void setScaffolding(boolean scaffolding) {
-		this.scaffolding = scaffolding;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._uBPwkApCEeKxusbn3Pe47g) ENABLED START */
