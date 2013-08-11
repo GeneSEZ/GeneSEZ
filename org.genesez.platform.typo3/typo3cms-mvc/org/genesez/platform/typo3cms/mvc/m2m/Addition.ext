@@ -106,7 +106,7 @@ addSingletonInterface(MClass this) :
 	// checks if the class has a stereotype 
 	hasT3SingletonStereotype()
 		// if true, then create the singleton interface
-		? realization.add( createExternal( navModel(), "T3_LIB_SINGLETON" ) )
+		? realization.add( ensureExternalTypeExistence( navModel(), "T3_LIB_SINGLETON", "T3_LIB_SINGLETON" ) )
 		: Void;
 
 
@@ -129,9 +129,9 @@ Void injectConfigurationManagerType(MClass this) :
 	// checks if the configuration manager should be generated
 	getT3ExtbaseDependencyInjectionInjectConfigurationManagerType() != prT3ExtbaseConfigurationManagerTypeNone()
 		// if true, then create the super controller type which is specified
-		? (	let a = makeInjectAttribute( "configurationManager", createExternal( navModel(), getT3ExtbaseDependencyInjectionInjectConfigurationManagerType() ) ) :
+		? (	let a = makeInjectAttribute( "configurationManager", ensureExternalTypeExistence( navModel(), getT3ExtbaseDependencyInjectionInjectConfigurationManagerType(), getT3ExtbaseDependencyInjectionInjectConfigurationManagerType() ) ) :
 				// add comment to discribe the attribute
-				a.makeComment("TYPO3 Extbase configuration manager") 
+				a.ensureCommentExistence(a.xmiGuid + ".comment", "TYPO3 Extbase configuration manager") 
 		) : Void;
 
 
@@ -140,9 +140,9 @@ Void injectObjectManagerType(MClass this) :
 	// checks if the object manager should be generated
 	getT3ExtbaseDependencyInjectionInjectObjectManagerType() != prT3ExtbaseObjectManagerTypeNone()
 		// if true, then create the super controller type which is specified
-		? (	let a = makeInjectAttribute( "objectManager", createExternal( navModel(), getT3ExtbaseDependencyInjectionInjectObjectManagerType() ) ) :
+		? (	let a = makeInjectAttribute( "objectManager", ensureExternalTypeExistence( navModel(), getT3ExtbaseDependencyInjectionInjectConfigurationManagerType(), getT3ExtbaseDependencyInjectionInjectObjectManagerType() ) ) :
 				// add comment to discribe the attribute
-				a.makeComment("TYPO3 Extbase object manager") 
+				a.ensureCommentExistence(a.xmiGuid + ".comment", "TYPO3 Extbase object manager") 
 		) : Void;
 
 
@@ -151,9 +151,9 @@ Void injectPersistenceManagerType(MClass this) :
 	// checks if the persistence manager should be generated
 	getT3ExtbaseDependencyInjectionInjectPersistenceManagerType() != prT3ExtbasePersistenceManagerTypeNone()
 		// if true, then create the super controller type which is specified
-		? (	let a = makeInjectAttribute( "persistenceManager", createExternal( navModel(), getT3ExtbaseDependencyInjectionInjectPersistenceManagerType() ) ) :
+		? (	let a = makeInjectAttribute( "persistenceManager", ensureExternalTypeExistence( navModel(), getT3ExtbaseDependencyInjectionInjectConfigurationManagerType(), getT3ExtbaseDependencyInjectionInjectPersistenceManagerType() ) ) :
 				// add comment to discribe the attribute
-				a.makeComment("TYPO3 Extbase persistence manager") 
+				a.ensureCommentExistence(a.xmiGuid + ".comment", "TYPO3 Extbase persistence manager") 
 		) : Void;
 
 
@@ -169,8 +169,8 @@ private MAttribute makeInjectAttribute(MClass this, String name, MType dependenc
 		) ->
 		// add stereotype to mark this attribute as dependency injection
 		a.stereotype.add( 
-			let s = makeStereotype( navModel(), prDi(), prDi() ) :
-				a.makeTaggedValue( makeTag( s, prDiSetter(), "Boolean" ), "true" ) ->
+			let s = ensureStereotypeExistence( navModel(), prDi(), prDi() ) :
+				a.ensureTaggedValueExistence( ensureTagExistence( s, prDiSetter(), "Boolean" ), "true" ) ->
 				s
 		) ->
 		a;
@@ -208,7 +208,7 @@ cached MClass makeController(MClass domainObject) :
 		? (	let c = createClass( domainObject.navModel(), domainObject.xmiGuid + ".controller", domainObject.asControllerName() ) :
 				logTrace("create new controller class for domain object: " + domainObject.name) ->
 				c.processController(domainObject)
-		) : domainObject.model().allControllers().selectFirst( c | c.nameS() == domainObject.asControllerName() );
+		) : domainObject.navModel().allControllers().selectFirst( c | c.nameS() == domainObject.asControllerName() );
 
 
 MClass processController(MClass this, MClass domainObject) :
@@ -216,7 +216,7 @@ MClass processController(MClass this, MClass domainObject) :
 	// (visibility, abstract, final)
 	processClassifier("public", false, false) ->
 	// add comment to discribe the controller
-	makeComment("Controller for a domain object.") ->
+	ensureCommentExistence(xmiGuid + ".comment", "Controller for a domain object.") ->
 	// add super controller type
 	addControllerType() ->
 	// add property to inject the repository
@@ -231,7 +231,7 @@ MClass processController(MClass this, MClass domainObject) :
 	addControllerDeleteAction(domainObject) ->
 	// add stereotype to mark this class as controller
 	stereotype.add( 
-		makeStereotype( navModel(), prT3ExtbaseController(), prT3ExtbaseController() ) 
+		ensureStereotypeExistence( navModel(), prT3ExtbaseController(), prT3ExtbaseController() ) 
 	) ->
 	this;
 
@@ -250,15 +250,15 @@ Void addControllerType(MClass this) :
 					case controllerType == prT3ExtbaseControllerTypeNone() :
 						Void
 					case controllerType == prT3ExtbaseControllerTypeExtbaseControllerInterface() :
-						realization.add( createExternal( navModel(), controllerType ) )
+						realization.add( ensureExternalTypeExistence( navModel(), controllerType, controllerType ) )
 					case generalization.isEmpty :
-						generalization.add( createExternal( navModel(), controllerType ) )
+						generalization.add( ensureExternalTypeExistence( navModel(), controllerType, controllerType ) )
 					default : Void
 				}
 		)
 		// else create the default one
 		: (	generalization.isEmpty 
-				? generalization.add( createExternal( navModel(), prT3ExtbaseControllerTypeExtbaseActionController() ) )
+				? generalization.add( ensureExternalTypeExistence( navModel(), prT3ExtbaseControllerTypeExtbaseActionController(), prT3ExtbaseControllerTypeExtbaseActionController() ) )
 				: Void
 		);
 
@@ -270,15 +270,15 @@ Void addControllerRepository(MClass this, MClass domainObject) :
 		// (defaultvalue, static, final)
 		a.processAttribute("", false, false) ->
 		// add comment to discribe the attribute
-		a.makeComment("Repository for a domain objects") ->
+		a.ensureCommentExistence(a.xmiGuid + ".comment", "Repository for a domain objects") ->
 		// add repository type
 		a.setType(
 			makeRepository(domainObject) 
 		) ->
 		// add stereotype to mark this attribute as dependency injection
 		a.stereotype.add( 
-			let s = makeStereotype( model(), prDi(), prDi() ) :
-				a.makeTaggedValue( makeTag( s, prDiSetter(), "Boolean" ), "true" ) ->
+			let s = ensureStereotypeExistence( navModel(), prDi(), prDi() ) :
+				a.ensureTaggedValueExistence( ensureTagExistence( s, prDiSetter(), "Boolean" ), "true" ) ->
 				s
 		);
 
@@ -330,7 +330,7 @@ Void addControllerGetErrorFlashMessage(MClass this) :
 				) ->
 				// add stereotype to mark this operation as no controller action
 				o.stereotype.add( 
-					makeStereotype( model(), prT3ExtbaseControllerNoAction(), prT3ExtbaseControllerNoAction() ) 
+					ensureStereotypeExistence( model(), prT3ExtbaseControllerNoAction(), prT3ExtbaseControllerNoAction() ) 
 				)
 		) :  Void;
 
@@ -348,13 +348,13 @@ Void addControllerActionInitializeAction(MOperation this) :
 
 Void addControllerListAction(MClass this, MClass domainObject) :
 	let o = makeControllerAction("listAction") :
-		o.makeComment("Displays a list of domain objects");
+		o.ensureCommentExistence(o.xmiGuid + ".comment", "Displays a list of domain objects");
 
 
 Void addControllerShowAction(MClass this, MClass domainObject) :
 	let o = makeControllerAction("showAction") :
 		// add comment to discribe the operation
-		o.makeComment("Displays one single domain object.") ->
+		o.ensureCommentExistence(o.xmiGuid + ".comment", "Displays one single domain object.") ->
 		o.parameter.add(
 			let p = makeParameter(o, domainObject.name( namingContextObject() ), "", "in", domainObject) :
 				p.makeComment("The existing domain object to display.") ->
@@ -365,7 +365,7 @@ Void addControllerShowAction(MClass this, MClass domainObject) :
 Void addControllerNewAction(MClass this, MClass domainObject) :
 	let o = makeControllerAction("newAction") :
 		// add comment to discribe the operation
-		o.makeComment("Displays a form for creating a new domain object.") ->
+		o.ensureCommentExistence(o.xmiGuid + ".comment", "Displays a form for creating a new domain object.") ->
 		o.parameter.add(
 			let p = makeParameter(o, domainObject.name( namingContextObject() ), "NULL", "in", domainObject) :
 				p.makeComment("A fresh domain object to display.") ->
@@ -376,7 +376,7 @@ Void addControllerNewAction(MClass this, MClass domainObject) :
 Void addControllerCreateAction(MClass this, MClass domainObject) :
 	let o = makeControllerAction("createAction") :
 		// add comment to discribe the operation
-		o.makeComment("Creates a new domain object.") ->
+		o.ensureCommentExistence(o.xmiGuid + ".comment", "Creates a new domain object.") ->
 		o.parameter.add(
 			let p = makeParameter(o, domainObject.name( namingContextObject() ), "", "in", domainObject) :
 				p.makeComment("The new domain object to create.") ->
@@ -387,7 +387,7 @@ Void addControllerCreateAction(MClass this, MClass domainObject) :
 Void addControllerEditAction(MClass this, MClass domainObject) :
 	let o = makeControllerAction("editAction") :
 		// add comment to discribe the operation
-		o.makeComment("Displays a form for editing an existing domain object.") ->
+		o.ensureCommentExistence(o.xmiGuid + ".comment", "Displays a form for editing an existing domain object.") ->
 		o.parameter.add(
 			let p = makeParameter(o, domainObject.name( namingContextObject() ), "", "in", domainObject) :
 				p.makeComment("The existing domain object to display.") ->
@@ -398,7 +398,7 @@ Void addControllerEditAction(MClass this, MClass domainObject) :
 Void addControllerUpdateAction(MClass this, MClass domainObject) :
 	let o = makeControllerAction("updateAction") :
 		// add comment to discribe the operation
-		o.makeComment("Updates an existing domain object.") ->
+		o.ensureCommentExistence(o.xmiGuid + ".comment", "Updates an existing domain object.") ->
 		o.parameter.add(
 			let p = makeParameter(o, domainObject.name( namingContextObject() ), "", "in", domainObject) :
 				p.makeComment("The existing domain object to update") ->
@@ -409,7 +409,7 @@ Void addControllerUpdateAction(MClass this, MClass domainObject) :
 Void addControllerDeleteAction(MClass this, MClass domainObject) :
 	let o = makeControllerAction("deleteAction") :
 		// add comment to discribe the operation
-		o.makeComment("Deletes an existing domain object.") ->
+		o.ensureCommentExistence(o.xmiGuid + ".comment", "Deletes an existing domain object.") ->
 		o.parameter.add(
 			let p = makeParameter(o, domainObject.name( namingContextObject() ), "", "in", domainObject) :
 				p.makeComment("The existing domain object to delete") ->
@@ -426,7 +426,7 @@ private MOperation makeControllerAction(MClass this, String name) :
 				return
 		) ->
 		o.stereotype.add( 
-			makeStereotype( model(), "http://www.genesez.org/TYPO3/TYPO3v4/controller/" + name, "http://www.genesez.org/TYPO3/TYPO3v4/controller/" + name ) 
+			ensureStereotypeExistence( model(), "http://www.genesez.org/TYPO3/TYPO3v4/controller/" + name, "http://www.genesez.org/TYPO3/TYPO3v4/controller/" + name ) 
 		) ->
 		o;
 
@@ -475,13 +475,13 @@ Void addEntityType(MClass this) :
 					case entityType == prT3ExtbaseEntityTypeNone() :
 						Void
 					case generalization.isEmpty :
-						generalization.add( createExternal( navModel(), entityType ) )
+						generalization.add( ensureExternalTypeExistence( navModel(), entityType, entityType ) )
 					default : Void
 				}
 		)
 		// else create the default one
 		: (	generalization.isEmpty 
-				? generalization.add( createExternal( navModel(), prT3ExtbaseEntityTypeExtbaseAbstractEntity() ) )
+				? generalization.add( ensureExternalTypeExistence( navModel(), prT3ExtbaseEntityTypeExtbaseAbstractEntity(), prT3ExtbaseEntityTypeExtbaseAbstractEntity() ) )
 				: Void
 		);
 
@@ -524,13 +524,13 @@ Void addValueObjectType(MClass this) :
 					case valueObjectType == prT3ExtbaseValueObjectTypeNone() :
 						Void
 					case generalization.isEmpty :
-						generalization.add( createExternal( navModel(), valueObjectType ) )
+						generalization.add( ensureExternalTypeExistence( navModel(), valueObjectType, valueObjectType ) )
 					default : Void
 				}
 		)
 		// else create the default one
 		: (	generalization.isEmpty 
-				? generalization.add( createExternal( navModel(), prT3ExtbaseValueObjectTypeExtbaseAbstractValueObject() ) )
+				? generalization.add( ensureExternalTypeExistence( navModel(), prT3ExtbaseValueObjectTypeExtbaseAbstractValueObject(), prT3ExtbaseValueObjectTypeExtbaseAbstractValueObject() ) )
 				: Void 
 		);
 
@@ -568,12 +568,12 @@ MClass processRepository(MClass this, MClass domainObject) :
 	// (visibility, abstract, final)
 	processClassifier("public", false, false) ->
 	// add comment to discribe the controller
-	makeComment("Respository for a domain object.") ->
+	ensureCommentExistence(xmiGuid + ".comment", "Respository for a domain object.") ->
 	// add super repository type
 	addRepositoryType() ->
 	// add stereotype to mark this class as repository
 	stereotype.add( 
-		makeStereotype( model(), prT3ExtbaseRepository(), prT3ExtbaseRepository() ) 
+		ensureStereotypeExistence( navModel(), prT3ExtbaseRepository(), prT3ExtbaseRepository() ) 
 	) ->
 	this;
 
@@ -592,13 +592,13 @@ Void addRepositoryType(MClass this) :
 					case repositoryType == prT3ExtbaseRepositoryTypeNone() :
 						Void
 					case generalization.isEmpty :
-						generalization.add( createExternal( navModel(), repositoryType ) )
+						generalization.add( ensureExternalTypeExistence( navModel(), repositoryType, repositoryType ) )
 					default : Void
 				} 
 		) 
 		// else create the default one
 		: (	generalization.isEmpty 
-				? generalization.add( createExternal( navModel(), prT3ExtbaseRepositoryTypeExtbaseRepository() ) )
+				? generalization.add( ensureExternalTypeExistence( navModel(), prT3ExtbaseRepositoryTypeExtbaseRepository(), prT3ExtbaseRepositoryTypeExtbaseRepository() ) )
 				: Void 
 		);
 
@@ -665,7 +665,7 @@ cached MClass makeValidator(MStereotype stereotype) :
 MType makeValidatorGeneralization(MStereotype this) :
 	isLocalValidator()
 	? makeValidator()
-	: createExternal( model(), name );
+	: ensureExternalTypeExistence( navModel(), name, name );
 
 
 boolean isLocalValidator(MStereotype this) :
@@ -677,14 +677,14 @@ MClass processValidator(MClass this) :
 	// (visibility, abstract, final)
 	processClassifier("public", false, false) ->
 	// add comment to discribe the validator
-	makeComment("Validator for object, property or parameter.") ->
+	ensureCommentExistence(xmiGuid + ".comment", "Validator for object, property or parameter.") ->
 	// add super validator type
 	addValidatorType() ->
 	// add 'isValid'
 	addValidatorIsValid() ->
 	// add stereotype to mark this class as validator
 	stereotype.add( 
-		makeStereotype( navModel(), prT3ExtbaseValidator(), prT3ExtbaseValidator() ) 
+		ensureStereotypeExistence( navModel(), prT3ExtbaseValidator(), prT3ExtbaseValidator() ) 
 	) ->
 	this;
 
@@ -703,17 +703,17 @@ Void addValidatorType(MClass this) :
 					case validatorType == prT3ExtbaseValidatorTypeNone() :
 						Void
 					case validatorType == prT3ExtbaseValidatorTypeExtbaseValidatorInterface() :
-						realization.add( createExternal( navModel(), validatorType ) )
+						realization.add( ensureExternalTypeExistence( navModel(), validatorType, validatorType ) )
 					case validatorType == prT3ExtbaseValidatorTypeExtbaseObjectValidatorInterface() :
-						realization.add( createExternal( navModel(), validatorType ) )
+						realization.add( ensureExternalTypeExistence( navModel(), validatorType, validatorType ) )
 					case generalization.isEmpty :
-						generalization.add( createExternal( navModel(), validatorType ) )
+						generalization.add( ensureExternalTypeExistence( navModel(), validatorType, validatorType ) )
 					default : Void
 				}
 		)
 		// else create the default one
 		: ( generalization.isEmpty 
-				? generalization.add( createExternal( navModel(), prT3ExtbaseValidatorTypeExtbaseAbstractValidator() ) )
+				? generalization.add( ensureExternalTypeExistence( navModel(), prT3ExtbaseValidatorTypeExtbaseAbstractValidator(), prT3ExtbaseValidatorTypeExtbaseAbstractValidator() ) )
 				: Void 
 		);
 
@@ -765,17 +765,17 @@ MInterface processPlugin(MInterface this, MClass domainObject) :
 	// (visibility, abstract, final)
 	processClassifier("public", false, false) ->
 	// add comment to discribe the controller
-	makeComment("Plugin for a domain object.") ->
+	ensureCommentExistence(xmiGuid + ".comment", "Plugin for a domain object.") ->
 	// add stereotype to mark this interface as plugin
 	stereotype.add( 
-		let s = makeStereotype( navModel(), prT3ExtbasePlugin(), prT3ExtbasePlugin() ) :
-			makeTaggedValue( makeTag( s, prT3ExtbasePluginTitle(), "String" ), domainObject.asPluginName() ) ->
+		let s = ensureStereotypeExistence( navModel(), prT3ExtbasePlugin(), prT3ExtbasePlugin() ) :
+			ensureTaggedValueExistence( ensureTagExistence( s, prT3ExtbasePluginTitle(), "String" ), domainObject.asPluginName() ) ->
 			(	let controller = makeController(domainObject) :
-				( 	let controllerActionType = makeTag(s, prT3ExtbasePluginControllerActions(), "Operation") :
+				( 	let controllerActionType = ensureTagExistence(s, prT3ExtbasePluginControllerActions(), "Operation") :
 						controller.operation.select( e | e.isControllerAction() )
 							.addPluginControllerAction(controllerActionType, this)
 				) ->
-				( 	let uncachedControllerActionType = makeTag(s, prT3ExtbasePluginUncachedControllerActions(), "Operation") :
+				( 	let uncachedControllerActionType = ensureTagExistence(s, prT3ExtbasePluginUncachedControllerActions(), "Operation") :
 						controller.operation.select( e | e.isControllerAction() && {"createAction", "updateAction", "deleteAction"}.contains(e.name) )
 							.addPluginControllerAction(uncachedControllerActionType, this)
 				)
@@ -816,13 +816,13 @@ Void addViewHelperType(MClass this) :
 					case viewHelperType == prT3FluidViewHelperTypeNone() :
 						Void
 					case generalization.isEmpty :
-						generalization.add( createExternal( navModel(), viewHelperType ) )
+						generalization.add( ensureExternalTypeExistence( navModel(), viewHelperType, viewHelperType ) )
 					default : Void
 				} 
 		) 
 		// else create the default one
 		: (	generalization.isEmpty 
-				? generalization.add( createExternal( navModel(), prT3FluidViewHelperTypeFluidAbstractViewHelper() ) )
+				? generalization.add( ensureExternalTypeExistence( navModel(), prT3FluidViewHelperTypeFluidAbstractViewHelper(), prT3FluidViewHelperTypeFluidAbstractViewHelper() ) )
 				: Void 
 		);
 
