@@ -2,7 +2,6 @@
  * Simplifies access to workflow informations.
  * 
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date	2011-08-11
  */
 
 
@@ -28,21 +27,10 @@ String globalVarOutputDir() :
  *
  * @return	"true" if the model is TYPO3 MVC compiant, otherwise "false"
  */
-boolean globalVarIsT3MVCCompliant() : 
+Boolean globalVarIsT3MVCCompliant() : 
 	GLOBALVAR isT3MVCCompliant == null 
 		? false 
-		: GLOBALVAR isT3MVCCompliant;
-
-
-/**
- * Getter to receive the global workflow variable information for scaffolding.
- *
- * @return	"true" if the the TYPO3 Fluid view should be generated, otherwise "false"
- */
-boolean globalVarScaffolding() : 
-	GLOBALVAR scaffolding == null 
-		? false 
-		: GLOBALVAR scaffolding;
+		: (GLOBALVAR isT3MVCCompliant == "true" ? true : false);
 
 
 /**
@@ -53,4 +41,4 @@ boolean globalVarScaffolding() :
 String globalVarExtensionKey() : 
 	GLOBALVAR extensionKey == null 
 		? "" 
-		: GLOBALVAR extensionKey;
+		: ((String)(GLOBALVAR extensionKey)).replaceAll("'", "");
