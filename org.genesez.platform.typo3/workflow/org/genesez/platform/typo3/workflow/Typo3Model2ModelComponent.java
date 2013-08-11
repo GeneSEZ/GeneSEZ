@@ -6,7 +6,6 @@ package org.genesez.platform.typo3.workflow;
  */
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +18,6 @@ import org.eclipse.xtend.expression.ExecutionContextImpl;
 import org.eclipse.xtend.expression.TypeSystemImpl;
 import org.eclipse.xtend.expression.Variable;
 import org.genesez.mapping.name.NameMapper;
-import org.genesez.metamodel.gcore.MModel;
 import org.genesez.workflow.profile.WfDefault;
 import org.genesez.workflow.profile.WfParameter;
 import org.genesez.workflow.xpand.Model2ModelComponent;
@@ -28,9 +26,6 @@ import org.genesez.workflow.xpand.Model2ModelComponent;
  * Please describe the responsibility of your class in your modeling tool.
  */
 public class Typo3Model2ModelComponent extends Model2ModelComponent {
-	
-	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
-	private boolean useModelNameAsExtensionKey = false;
 	
 	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean isT3MvcCompliant = false;
@@ -44,18 +39,16 @@ public class Typo3Model2ModelComponent extends Model2ModelComponent {
 	 */
 	public void checkConfiguration(Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._zhoXUAo_EeKxusbn3Pe47g) ENABLED START */
-		// check default values
-		if (getXtendNamingFile() == null) {
-			setXtendNamingFile(getDefaultXtendNamingFile());
-		}
-		
 		// check extension key
-		if (!useModelNameAsExtensionKey || (extensionKey == null || extensionKey.isEmpty())) {
-			issues.addError(this, "Either workflow parameter 'extensionKey' must be present or 'useModelNameAsExtensionKey' must be set to 'true'", Arrays.<Object> asList(useModelNameAsExtensionKey, extensionKey));
+		if (extensionKey == null || extensionKey.isEmpty()) {
+			issues.addError(this, "Workflow parameter 'extensionKey' must be present.", extensionKey);
+		} else {
+			// add workflow parameter for transformation variables as global variables
+			addGlobalVarDef("extensionKey", extensionKey);
 		}
 		
 		// add workflow parameter for transformation variables as global variables
-		addGlobalVarDef("isT3MvcCompliant", isT3MvcCompliant);
+		addGlobalVarDef("isT3MVCCompliant", isT3MvcCompliant);
 		
 		// delegate to base class
 		super.checkConfiguration(issues);
@@ -70,14 +63,7 @@ public class Typo3Model2ModelComponent extends Model2ModelComponent {
 	 */
 	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._zhoXVAo_EeKxusbn3Pe47g) ENABLED START */
-		// fetch extension key if not specified
-		if (useModelNameAsExtensionKey) {
-			MModel model = (MModel) context.get(getSlot());
-			extensionKey = model.getName();
-		}
-		addGlobalVarDef("extensionKey", extensionKey);
-		
-		// init naming mapper
+		// init naming mapper (deprecated)
 		Map<String, Variable> globalVars = new HashMap<String, Variable>();
 		for (GlobalVarDef globalVarDef : getGlobalVarDef()) {
 			globalVars.put(globalVarDef.getName(), new Variable(globalVarDef.getName(), globalVarDef.getValue()));
@@ -93,14 +79,6 @@ public class Typo3Model2ModelComponent extends Model2ModelComponent {
 	/**
 	 * Method stub for further implementation.
 	 */
-	@WfDefault(parameter = "useModelNameAsExtensionKey")
-	public boolean getDefaultUseModelNameAsExtensionKey() {
-		return false;
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
 	@WfDefault(parameter = "isT3MvcCompliant")
 	public boolean getDefaultIsT3MvcCompliant() {
 		return false;
@@ -108,25 +86,11 @@ public class Typo3Model2ModelComponent extends Model2ModelComponent {
 	
 	/**
 	 * Method stub for further implementation.
+	 * @deprecated
 	 */
 	@WfDefault(parameter = "xtendNamingFile")
 	public String getDefaultXtendNamingFile() {
 		return "org::genesez::platform::typo3v4::mvc::convention::Naming";
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>useModelNameAsExtensionKey</b></em>'.
-	 */
-	public boolean getUseModelNameAsExtensionKey() {
-		return useModelNameAsExtensionKey;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>useModelNameAsExtensionKey</b></em>'.
-	 * @param	useModelNameAsExtensionKey	the value to set.
-	 */
-	public void setUseModelNameAsExtensionKey(boolean useModelNameAsExtensionKey) {
-		this.useModelNameAsExtensionKey = useModelNameAsExtensionKey;
 	}
 	
 	/**
