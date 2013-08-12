@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 import gcore;
 
 extension org::genesez::metamodel::core::util::AccessElement;
@@ -29,7 +35,7 @@ Void addSessionBeanInterfaces(MClassifier this) :
 							let interface = createInterface(this.navPackage(), this.emGetTaggedValue("ejb3Remote", "name"), this.emGetTaggedValue("ejb3Remote", "name")) : 
 								this.realization.add(interface) ->
 								interface.addRemoteStereotype("") ->
-								this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor() && !(e.isSetter() && e.static) ).cloneOperation(interface) ->
+								this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor() ).cloneSessionBeanOperation(interface) ->
 								this.emRemoveStereotypeAssignment(this.emGetStereotypeAssignment("ejb3Remote"))
 						)
 						: ""
@@ -39,7 +45,7 @@ Void addSessionBeanInterfaces(MClassifier this) :
 						this.realization.add(interface) ->
 						interface.addRemoteStereotype("") ->
 						interface.navModel().externalTypes.remove("I"+asTypeName()+"Remote") ->
-						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor() && !(e.isSetter() && e.static) ).cloneOperation(interface) ->
+						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor() ).cloneSessionBeanOperation(interface) ->
 						this.emRemoveStereotypeAssignment(this.emGetStereotypeAssignment("ejb3Remote"))
 				)
 		) 
@@ -53,7 +59,7 @@ Void addSessionBeanInterfaces(MClassifier this) :
 							let interface = createInterface(this.navPackage(), this.emGetTaggedValue("ejb3Local", "name"), this.emGetTaggedValue("ejb3Local", "name")) : 
 								this.realization.add(interface) ->
 								interface.addLocalStereotype("") ->
-								this.operation.select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface) ->
+								this.operation.select(e|e.visibility == "public" && !e.isConstructor()).cloneSessionBeanOperation(interface) ->
 								this.emRemoveStereotypeAssignment(this.emGetStereotypeAssignment("ejb3Local"))
 						)
 						: ""
@@ -63,12 +69,12 @@ Void addSessionBeanInterfaces(MClassifier this) :
 						this.realization.add(interface) ->
 						interface.addLocalStereotype("") ->
 						interface.navModel().externalTypes.remove("I"+asTypeName()+"Local") ->
-						this.operation.select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface) ->
+						this.operation.select(e|e.visibility == "public" && !e.isConstructor()).cloneSessionBeanOperation(interface) ->
 						this.emRemoveStereotypeAssignment(this.emGetStereotypeAssignment("ejb3Local"))
 				)
 		)
 		: "";
-
+		
 /**
  *	checks whether a remote session bean interface should be created
  */		
@@ -84,3 +90,14 @@ boolean isLocalInterfaceNeeded(MClassifier this) :
 	this.emHasStereotypeAssignment("ejb3SessionBean") && this.emHasStereotypeAssignment("ejb3Local")
 		? true
 		: false;
+		
+/**
+ *	clone an operation of a session bean for the business interface
+ *	clone also the stereotypes and tagged values (especially primitive and accessor)
+ *
+ *	@TODO: just clone the stereotype primitive and accessor by using special operations
+ */		
+private MOperation cloneSessionBeanOperation(MOperation source, MInterface container) :
+	let operation = source.cloneOperation(container) :
+		cloneStereotypeAssignments(source.return, operation.return) ->
+		cloneTaggedValues(source.return, operation.return);
