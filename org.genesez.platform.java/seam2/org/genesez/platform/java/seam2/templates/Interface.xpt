@@ -29,26 +29,4 @@
 «ENDREM»
 «DEFINE Annotation FOR MInterface-»
 	«EXPAND Element::Remoting-»
-«ENDDEFINE» 
-
-«REM»
-	generate getter- and setter-operations in session beans with "seam2Component"-stereotype
-	
-	TODO: this should be solved by m2m transformation after org::genesez::platform::java::m2m::AccessOperation::prepare
-«ENDREM»
-«DEFINE GetterSetterForSessionBeans FOR MInterface-»
-	«FOREACH this.navPackage().classifier.select(e|e.emHasStereotypeAssignment("ejb3SessionBean") && e.emHasStereotypeAssignment("seam2Component")) AS c-»
-		«FOREACH c.realization AS r-»	
-			«IF r.name() == this.name-»
-				«FOREACH c.property AS p-»
-					«IF p.emGenerateGetAccess()-»
-						«EXPAND org::genesez::platform::java::m2t::Attribute::_DerivedDeclaration FOR (MAttribute) p-»
-					«ENDIF-»
-					«IF p.emGenerateSetAccess()-»
-						«EXPAND org::genesez::platform::java::seam2::templates::Attribute::_SetterDeclaration FOR (MAttribute) p-»
-					«ENDIF-»
-				«ENDFOREACH-»
-			«ENDIF-»
-		«ENDFOREACH-»
-	«ENDFOREACH-»
-«ENDDEFINE» 
+«ENDDEFINE»

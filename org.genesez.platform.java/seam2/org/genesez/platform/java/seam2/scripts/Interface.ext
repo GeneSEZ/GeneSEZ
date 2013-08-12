@@ -1,25 +1,48 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 import gcore;
 
 extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::metamodel::core::util::CreateElement;
 extension org::genesez::metamodel::core::util::NavigateElement;
 extension org::genesez::platform::java::m2m::AccessOperation;
+extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
 extension org::genesez::platform::java::util::JavaTypes;
+extension org::genesez::util::logging::Logging;
 
 
 Void addGetterAndSetterOperations(MInterface this) :
-	let c = getSessionBeanSeamComponent() :
-		c != null
-			? (
-				c.property.typeSelect(MAttribute).emEnsureGetAccessOperation( c ) ->
-				c.property.typeSelect(MAttribute).emEnsureGetAccessOperation( c )
-			)
-			: "";
-		
-MClass getSessionBeanSeamComponent(MInterface this) :
 	this.emHasStereotypeAssignment("ejb3Local") || this.emHasStereotypeAssignment("ejb3Remote")
-		? allNestedClassifiers(this.navModel()).typeSelect(MClass).selectFirst(e|e.emHasStereotypeAssignment("ejb3SessionBean") && e.emHasStereotypeAssignment("seam2Component") && e.realization.contains(this))
-		: null;
+		? (
+			let c = getSessionBeanSeamComponent() :
+				c != null
+					? c.property.typeSelect(MAttribute).select( p|!p.static ).createAccessorOperations( this ) 
+					: "" // there is no corresponding session bean seam component
+		)
+		: "";
+
+private MAttribute createAccessorOperations(MAttribute this, MInterface container) :
+	emGenerateGetAccess() && !( final && multiplicity.isSingleValued() && hasDefaultValue())
+		? emEnsureGetAccessOperation( container )
+		: this ->
+	!( final && multiplicity.isSingleValued() && hasDefaultValue() ) 
+	&& emGenerateSetAccess() 
+		? emEnsureSetAccessOperation( container )
+		: this ->	
+	/**
+	 * 	create only setter for multi-valued attributes, 
+	 *	adder/remover are not supported by bean specification
+	 */
+	multiplicity.isMultiValued() && !emGenerateSetAccess() && emGenerateAddAccess() && emGenerateRemoveAccess() 
+		? emEnsureSetAccessOperation( container )
+		: this;
+
+private MClass getSessionBeanSeamComponent(MInterface this) :
+	allNestedClassifiers(this.navModel()).typeSelect(MClass).selectFirst(e|e.emHasStereotypeAssignment("ejb3SessionBean") && e.emHasStereotypeAssignment("seam2Component") && e.realization.contains(this));
 
 MClassifier addConverter(MClassifier this) :
 	this.emHasStereotypeAssignment("seam2Converter")  
