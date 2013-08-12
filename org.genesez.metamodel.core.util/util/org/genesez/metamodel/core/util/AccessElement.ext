@@ -302,7 +302,16 @@ List[MProperty] owningInitializableProperties(MClassifier this) :
 	owningInitializableAttributes().addAll(
 		owningInitializableAssociationRoles() 
 	);
+	
+boolean isFinal(MProperty this) : 
+	metaType == MAttribute
+		? ((MAttribute) this).final
+		: false;
 
+boolean isStatic(MProperty this) :
+	metaType == MAttribute
+		? ((MAttribute) this).static
+		: false;
 
 // -- Attributes --------------------------------------------------------------------------------------------
 
