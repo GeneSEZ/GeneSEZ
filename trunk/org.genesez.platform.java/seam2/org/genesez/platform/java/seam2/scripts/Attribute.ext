@@ -1,8 +1,15 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 import gcore;
 
 extension org::genesez::util::logging::Logging;
 extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
+extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
 extension org::genesez::metamodel::core::util::RemoveElement;
 extension org::genesez::platform::java::seam2::scripts::Stereotypes;
 extension org::genesez::platform::java::jbv::scripts::Stereotypes;
@@ -16,6 +23,8 @@ extension org::genesez::platform::java::util::ExtensionMechanism;
   *	jhvType to the attribute and remove stereotype seam2JasyptEncryption
   * (it is no longer needed, adding jhvTypeDef stereotype to class should 
   * be done before calling this method)
+  *
+  *	@api
   */
 Void checkJasyptEncryptionStereotype(MAttribute this) :
 	this.emHasStereotypeAssignment("seam2JasyptEncryption") &&
@@ -29,36 +38,31 @@ Void checkJasyptEncryptionStereotype(MAttribute this) :
 /**
  *	checks if an attribute has the stereotype "ejb3EJB" and "seam2Injection"
  *	these stereotypes can create a conflict and "ejb3EJB" will be removed
+  *
+  *	@api
  */
 Void checkAttributesWithInjectionStereotype(MAttribute this) :
-	this.emHasStereotypeAssignment("seam2Injection")
-		? (
-			this.emHasStereotypeAssignment("ejb3EJB")
-				? this.stereotype.remove(this.stereotype.selectFirst(e|e.name == "ejb3EJB"))
-				: ""
-		)
+	this.emHasStereotypeAssignment("seam2Injection") &&
+	this.emHasStereotypeAssignment("ejb3EJB")
+		? this.stereotype.remove(this.stereotype.selectFirst(e|e.name == "ejb3EJB"))
 		: "";
 
 /**
   *	if the attribute has the stereotype "seam2Logger", "seam2Injection", "seam2Outjection"
   *	"seam2DataModel", "seam2Selection" or "seam2SelectionIndex" there is no need for getter/setter
   *	user defined accessor stereotypes have higher priority
+  *
+  *	@api
   */
 Void checkAccessStereotypeOfSeamStereotypedAttributes(MAttribute this) : 
-	//check if the attribute has one of the named stereotypes
 	this.emHasStereotypeAssignment("seam2Logger") ||
 	this.emHasStereotypeAssignment("seam2Injection") ||
 	this.emHasStereotypeAssignment("seam2Outjection") ||
 	this.emHasStereotypeAssignment("seam2DataModel") ||
 	this.emHasStereotypeAssignment("seam2Selection") ||
-	this.emHasStereotypeAssignment("seam2SelectionIndex") 
-		? (
-			//add an accessor for no get and set methods if no accessor 
-			//stereotype exists
-			!this.emHasStereotypeAssignment("accessor")
-				? emAssignGeneSezAccessorStereotype(false, false, false, false)
-				: ""
-		)
+	this.emHasStereotypeAssignment("seam2SelectionIndex") && 
+	!this.emHasStereotypeAssignment( prAccessor() )
+		? emAssignGeneSezAccessorStereotype(false, false, false, false)
 		: "";
 
 /**
@@ -70,13 +74,15 @@ Void addFactoryMethodForDataModelAttributes(MAttribute this) :
 		? (
 			!this.hasFactoryMethodForAttribute()
 				? this.classifier.addFactoryMethod(this.emGetTaggedValue("seam2Factory", "autoCreate"), this.emGetTaggedValue("seam2Factory", "scope"), !this.emHasUtilizableTaggedValue("seam2Factory", "value") ? this.name : this.emGetTaggedValue("seam2Factory", "value"))
-				: logInfo("There is already a factory method for the attribute "+this.name.asTypeName()+" in class "+this.classifier.name.asTypeName()+". Stereotype 'seam2Factory' will be ignored.")
+				: logWarn("There is already a factory method for the attribute "+this.name.asTypeName()+" in class "+this.classifier.name.asTypeName()+". Stereotype 'seam2Factory' will be ignored.")
 		)
 		: "";
 		
 
 /**
   * check if there is a factory method for this attribute
+  *
+  *	@api
   */
 Boolean hasFactoryMethodForAttribute(MAttribute this) :
 	this.classifier.operation.exists(e|e.emHasTaggedValue("seam2Factory", "value", this.name))
@@ -87,21 +93,19 @@ Boolean hasFactoryMethodForAttribute(MAttribute this) :
 /**
   *	use attribute name for value of tagged value "value" of stereotype "seam2DataModel" if no value is available
   *	attribute name should be in plural but should not have a special plural form 
+  *
+  *	@api
   */
 Void addDataModelValue(MAttribute this) :
-	/*warn(this.name.asTypeName()+":") ->
-	warn("DataModel-Value (vorher): "+this.emGetTaggedValue("seam2DataModel", "value")) ->
-	warn("Boolscher Wert: "+this.emHasStereotypeAssignment("seam2DataModel")+", "+!this.emHasUtilizableTaggedValue("seam2DataModel", "value")+": "+(this.emHasStereotypeAssignment("seam2DataModel") && !this.emHasUtilizableTaggedValue("seam2DataModel", "value"))) ->*/
 	this.emHasStereotypeAssignment("seam2DataModel") && !this.emHasUtilizableTaggedValue("seam2DataModel", "value") 
-		? ( 
-			this.setTaggedValue("seam2DataModel", "value", this.name.asTypeName())
-		)
-		: "" ;/*->
-	warn("DataModel-Value (nachher): "+this.emGetTaggedValue("seam2DataModel", "value"));*/
+		? this.setTaggedValue("seam2DataModel", "value", this.name.asTypeName())
+		: "" ;
 
 /**
   *	use attribute name for value of tagged value "value" of stereotype "seam2Selection" if no value is available
   *	attribute name has to have the format: selected<NameOfDataModelAttributeInSingular>
+  *
+  *	@api
   */
 Void addDataModelSelectionValue(MAttribute this) : 
 	this.emHasStereotypeAssignment("seam2Selection") && !this.emHasUtilizableTaggedValue("seam2Selection", "value") 
@@ -111,6 +115,8 @@ Void addDataModelSelectionValue(MAttribute this) :
 /**
   *	use attribute name for value of tagged value "value" of stereotype "seam2SelectionIndex" if no value is available
   *	attribute name has to have the format: selected<NameOfDataModelAttributeInSingular>Index
+  *
+  *	@api
   */
 Void addDataModelSelectionIndexValue(MAttribute this) :
 	this.emHasStereotypeAssignment("seam2SelectionIndex") && !this.emHasUtilizableTaggedValue("seam2SelectionIndex", "value") 
@@ -123,7 +129,8 @@ Void addDataModelSelectionIndexValue(MAttribute this) :
   *	of the stereotype "seam2Component" is true (use of Seam Managed Persistence), delete "jpaPersistenceContext"
   *	stereotype (implementation in XPAND at the moment) and add "seam2Injecion" stereotype
   *	if there is no accessor stereotype no getter and setter will be created for this attribute 
-  *	
+  *
+  *	@api
   */
 Void setupSeamManagedPersistence(MAttribute this) :
 	this.emHasStereotypeAssignment("jpaPersistenceContext") && 
@@ -141,6 +148,8 @@ Void setupSeamManagedPersistence(MAttribute this) :
 /**
   *	if there is an attribute with name "logger" and datatype "Log" the stereotype
   *	"seam2Logger" will be added to this attribute
+  *
+  *	@api
   */
 Void checkLogger(MAttribute this) :
 	(this.type.asTypeName().matches("Log") 
@@ -153,6 +162,8 @@ Void checkLogger(MAttribute this) :
 /**
   *	if there is an attribute with name "identity" and datatype "Identity" the stereotype
   *	"seam2Injection" will be added to this attribute
+  *
+  *	@api
   */
 Void checkIdentity(MAttribute this) :
 	this.type.asTypeName().matches("Identity") && this.name.matches("identity") &&
@@ -163,6 +174,8 @@ Void checkIdentity(MAttribute this) :
 /**
   *	if there is an attribute with name "facesMessages" and datatype "FacesMessages" the stereotype
   *	"seam2Injection" will be added to this attribute
+  *
+  *	@api
   */
 Void checkFacesMessages(MAttribute this) :
 	this.type.asTypeName().matches("FacesMessages") && this.name.matches("facesMessages") &&
@@ -173,6 +186,8 @@ Void checkFacesMessages(MAttribute this) :
 /**
   *	if there is an attribute with name "events" and datatype "Events" the stereotype
   *	"seam2Injection" will be added to this attribute
+  *
+  *	@api
   */
 Void checkEvents(MAttribute this) :
 	this.type.asTypeName().matches("Events") && this.name.matches("events") &&
@@ -183,6 +198,8 @@ Void checkEvents(MAttribute this) :
 /**
   *	if there is an attribute with name "credentials" and datatype "Credentials" the stereotype
   *	"seam2Injection" will be added to this attribute
+  *
+  *	@api
   */
 Void checkCredentials(MAttribute this) :
 	this.type.asTypeName().matches("Credentials") && this.name.matches("credentials") &&

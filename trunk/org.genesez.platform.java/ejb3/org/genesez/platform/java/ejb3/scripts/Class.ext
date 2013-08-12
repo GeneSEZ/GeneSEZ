@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 import gcore;
 
 extension org::genesez::util::logging::Logging;
@@ -54,17 +60,12 @@ Void transformWAMStereotypes(MClass this) :
 				.wireType(
 					navModel().ensureExternalTypeExistence("TimerService", "TimerService")
 				) ->
-//	old impl:
-//			this.makeAttribute("timerService", "TimerService", "public") ->
 			(
 				this.ensureOperationExistence( this.xmiGuid + ".executeTask", "executeTask" )
 					.processOperation( "public", false, false, false )
 					.ensureParameterExistence( this.xmiGuid + ".executeTask.timer", "timer" )
 						.processParameter( "", "in", createMultiplicity(0, 1) )
 						.wireType( this.navModel().typeTimer() )
-//	old impl:
-//				let op = this.makeOperation("executeTask", "public", false, false, false) :				
-//					op.parameter.add(op.makeParameter("timer", "", "in", this.navModel().typeTimer) )
 			)
 		)
 		: "" ;
@@ -106,9 +107,6 @@ MClassifier addMessageListener(MClass this) :
 						.ensureParameterExistence( xmiGuid + ".onMessage.message", "message" )
 							.processParameter( "", "in", createMultiplicity(0, 1) )
 							.wireType( this.navModel().typeMessage() )
-//	old impl:
-//					let o = makeOperation("onMessage", "public") :
-//						o.parameter.add(o.makeParameter("message", "in", this.navModel().typeMessage() ))
 				)
 				: ""
 		)
@@ -240,20 +238,6 @@ Void addEntityManager(MClass this, String type) :
 					)
 			default : ""
 		})
-//	old impl:
-//		? (type.matches("EntityManager")
-//			? makeAttribute("entityManager", "EntityManager", "private")
-//			: (type.matches("EntityManager_Extended")
-//				? makeAttribute("entityManager", "EntityManager", "private")
-//				: (type.matches("Session")
-//					? makeAttribute("session", "Session", "private")
-//					: (type.matches("Session_Extended")
-//						? makeAttribute("session", "Session", "private")
-//						: ""
-//					)	
-//				)
-//			)
-//		)
 		: "" ->
 	"";
 
