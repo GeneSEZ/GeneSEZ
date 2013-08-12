@@ -1,10 +1,15 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 import gcore;
 
 /**
  * 	modificates the metamodel before generation of the source code  
  *  
- * @author	andre pflueger
- * @date	2013-07-22
+ * @author	andre pflueger <andre.pflueger@fh-zwickau.de>
  */
  
 extension org::genesez::util::logging::Logging;
@@ -14,6 +19,7 @@ extension org::genesez::platform::java::util::Naming;
 extension org::genesez::platform::java::util::ExtensionMechanism;
 extension org::genesez::platform::java::jpa::scripts::Stereotypes;
 extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
+extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
 
 /**
   *	adds an accessor stereotype for generating get, set, add or remove methods if
@@ -23,16 +29,15 @@ extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
   *	@param		this		instance of MProperty
   */	 	
 Void addAccessorStereotype(MProperty this) :
-	 this.classifier.emHasStereotypeAssignment("jpaPersistentEntity")
+	this.classifier.emHasStereotypeAssignment("jpaPersistentEntity")
+	&& !this.emHasStereotypeAssignment( prAccessor() )
 		? (
-			//add an accessor for get and set methods if no accessor 
-			//stereotype exists
-			!this.emHasStereotypeAssignment("accessor")
+			this.multiplicity.isSingleValued()
 				? (
-					this.multiplicity.isSingleValued()
-						? emAssignGeneSezAccessorStereotype(true, true, false, false)
-						: emAssignGeneSezAccessorStereotype(true, false, true, true)
+					isFinal()
+						? emAssignGeneSezAccessorStereotype(true, false, false, false)
+						: emAssignGeneSezAccessorStereotype(true, true, false, false)
 				)
-				: ""
+				: emAssignGeneSezAccessorStereotype(true, false, true, true)
 		)
 		: "";

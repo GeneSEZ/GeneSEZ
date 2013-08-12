@@ -12,7 +12,7 @@
 	@see	org::genesez::platform::java::m2m::AccessOperation
 	
 	@author	nico herbig
-	@author andre pflueger
+	@author andre pflueger <andre.pflueger@fh-zwickau.de>
 	@author	tobias haubold <toh@fh-zwickau.de>
 «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::AccessElement»
@@ -52,21 +52,21 @@
 	«LET parameter.first() AS param -»
 	«IF param.multiplicity.isSingleValued() -»
 		«IF param.type.mapName().asTypeName().matches("Date") -»
-			if («IF static-»_«ENDIF-»«param.name -» != null) {
-				«IF !static-»this.«ENDIF-»«param.name» = new Date(«IF static-»_«ENDIF-»«param.name -».getTime());
+			if («param.name -» != null) {
+				«IF !static-»this.«ENDIF-»«param.name» = new Date(«param.name -».getTime());
 			} else {
 				«IF !static-»this.«ENDIF-»«param.name» = null;
 			}
 		«ELSE -»
-			«IF !static-»this.«ENDIF-»«param.name» = «IF static-»_«ENDIF-»«param.name»;
+			«IF !static-»this.«ENDIF-»«param.name» = «param.name»;
 		«ENDIF-»
 	«ELSE -»
 		«IF param.emHasStereotypeAssignment("primitive") -»
-			«IF !static-»this.«ENDIF-»«param.name» = new «param.type.mapName().asTypeName() -»[«IF static-»_«ENDIF-»«param.name».length];
-			System.arraycopy(«IF static-»_«ENDIF-»«param.name», 0, «IF !static-»this.«ENDIF-»«param.name», 0, «IF static-»_«ENDIF-»«param.name».length);
+			«IF !static-»this.«ENDIF-»«param.name» = new «param.type.mapName().asTypeName() -»[«param.name».length];
+			System.arraycopy(«param.name», 0, «IF !static-»this.«ENDIF-»«param.name», 0, «param.name».length);
 		«ELSE -»
 			«IF !static-»this.«ENDIF-»«param.name».clear();
-			«IF !static-»this.«ENDIF-»«param.name».addAll(«IF static-»_«ENDIF-»«param.name»);
+			«IF !static-»this.«ENDIF-»«param.name».addAll(«param.name»);
 		«ENDIF-»
 	«ENDIF -»
 	«ENDLET -»
@@ -84,7 +84,7 @@
 					"The implementation of the property access operation add for multi valued attribute '«param.name»' is missing!");
 			«ENDPROTECT»
 		«ELSE -»
-			«IF !static-»this.«ENDIF-»«param.name».add(«IF static-»_«ENDIF-»«param.name»);
+			«IF !static-»this.«ENDIF-»«param.name».add(«param.name»);
 		«ENDIF -»
 	«ENDLET -»
 «ENDDEFINE»
@@ -101,7 +101,7 @@
 					"The implementation of the property access operation remove for multi valued attribute '«param.name»' is missing!");
 			«ENDPROTECT»
 		«ELSE -»
-			«IF !static-»this.«ENDIF-»«param.name».remove(«IF static-»_«ENDIF-»«param.name»);
+			«IF !static-»this.«ENDIF-»«param.name».remove(«param.name»);
 		«ENDIF -»
 	«ENDLET -»
 «ENDDEFINE»
@@ -170,12 +170,12 @@
 		«ENDIF -»
 	«ELSE -»
 		«IF emHasStereotypeAssignment("primitive") -»
-			«IF !static-»this.«ENDIF-»«param.name» = new «param.type.mapName().asTypeName() -»[«IF static-»_«ENDIF-»«param.name».length];
-			for (int counter = 0; counter < «IF static-»_«ENDIF-»«param.name».length; counter++) {
-				«IF !static-»this.«ENDIF-»«param.name»[counter] = «IF static-»_«ENDIF-»«param.name»[counter];
+			«IF !static-»this.«ENDIF-»«param.name» = new «param.type.mapName().asTypeName() -»[«param.name».length];
+			for (int counter = 0; counter < «param.name».length; counter++) {
+				«IF !static-»this.«ENDIF-»«param.name»[counter] = «param.name»[counter];
 			}
 		«ELSE -»
-			«IF !static-»this.«ENDIF-»«param.name» = «IF static-»_«ENDIF-»«param.name»;
+			«IF !static-»this.«ENDIF-»«param.name» = «param.name»;
 		«ENDIF-»
 	«ENDIF -»
 	«ENDIF -»
