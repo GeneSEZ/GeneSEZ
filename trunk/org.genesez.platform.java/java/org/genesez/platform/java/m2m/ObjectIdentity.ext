@@ -9,12 +9,13 @@ import gcore;
 /**
  * Provides support for the operations hashCode() and equals() based on the stereotype «java5EqualsOperation».
  * 
- * @author	andre pflueger
+ * @author	andre pflueger <andre.pflueger@fh-zwickau.de>
  * @author	tobias haubold <toh@fh-zwickau.de>
  */
 extension org::genesez::metamodel::core::util::NavigateElement;
 extension org::genesez::metamodel::core::util::CreateElement;
 extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::util::logging::Logging;
 
 extension org::genesez::platform::java::util::JavaTypes;
 
@@ -24,16 +25,10 @@ extension org::genesez::platform::java::util::JavaTypes;
  * if stereotype «java5EqualsOperation» is assigned and those operations are not available.
  */
 MClass identity(MClass this) :
-	(
-		emHasStereotypeAssignment("java5EqualsOperation")
-		&& (
-			generalization.typeSelect(MClass).size > 0
-			// [toh] i guess it should check the complete inheritance hierarchy, not only the base class
-			&& !allGeneralizations().typeSelect(MClass).exists( c|c.emHasStereotypeAssignment("java5EqualsOperation") )
-			//&& !generalization.typeSelect(MClass).first().emHasStereotypeAssignment("java5EqualsOperation")
-		)
-		&& !property.exists( p|p.emHasStereotypeAssignment("java5EqualsProperty") )
-	)
+	emHasStereotypeAssignment("java5EqualsOperation")
+	&& generalization.typeSelect(MClass).size > 0
+	&& !allGeneralizations().typeSelect(MClass).exists( c|c.emHasStereotypeAssignment("java5EqualsOperation") )
+	&& !property.exists( p|p.emHasStereotypeAssignment("java5EqualsProperty") )
 		? (
 			!operation.exists( o|o.name == "equals" )
 				? (
@@ -44,6 +39,7 @@ MClass identity(MClass this) :
 							.wireType( navModel().typeObject() )
 							.operation
 						.ensureReturnParameterExistence( xmiGuid + "_equals.return", "" )
+							.processParameter( "", "out",  createMultiplicity(1, 1) )
 							.wireType( navModel().typeBooleanPrimitive() )
 				)
 				: this ->
@@ -52,6 +48,7 @@ MClass identity(MClass this) :
 					ensureOperationExistence( xmiGuid + "_hashCode", "hashCode" )
 						.processOperation( "public", false, false, false )
 						.ensureReturnParameterExistence( xmiGuid + "_hashCode.return", "" )
+							.processParameter( "", "out",  createMultiplicity(1, 1) )
 							.wireType( navModel().typeIntPrimitive() )
 				)
 				: this
