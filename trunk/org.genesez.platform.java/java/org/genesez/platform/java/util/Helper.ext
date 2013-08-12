@@ -1,16 +1,23 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+ 
 /**
  * Helper functions for java
  * 
- * @author  andre pflueger
- * @date    2011-12-26
+ * @author	André Pflüger <andre.pflueger@fh-zwickau.de>
+ * @author	Tobias Haubold <tobias.haubold@fh-zwickau.de> 
  */
-
 
 // based on genesez meta model
 import gcore;
 
 extension org::genesez::platform::java::util::Naming;
 extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::util::logging::Logging;
 
 /**
  * checks if property is a java primitive data type
@@ -23,6 +30,7 @@ extension org::genesez::metamodel::core::util::AccessElement;
  */
 boolean isJavaPrimitiveType(MProperty this) : 
 	switch (this.type.asTypeName().toLowerCase()) {
+		case "boolean": true
 		case "int": true
 		case "long": true
 		case "byte": true
@@ -31,6 +39,22 @@ boolean isJavaPrimitiveType(MProperty this) :
 		case "double": true
 		default: false
 	};
+
+/**
+ * Checks if the specified property is an immutable type.
+ * 
+ * @return 	True, if it is an primitive type, String, BigDecimal, otherwise false.
+ * @todo: add more immutable java types
+ */
+boolean isImmutableType(MProperty this) : 
+	isJavaPrimitiveType() || 
+	(
+		switch (this.type.asTypeName().toLowerCase()) {
+			case "string": true
+			case "bigdecimal": true
+			default: false
+		}
+	);
 
 /**
  * Returns true if the parameter type could be an ellipse (...), otherwise false.

@@ -12,7 +12,7 @@ import gcore;
  * - singleton design pattern
  * - unifies information to generate java annotation types
  * 
- * @author	andre pflueger
+ * @author	andre pflueger <andre.pflueger@fh-zwickau.de>
  * @author	tobias haubold <toh@fh-zwickau.de>
  */
 extension org::genesez::platform::java::m2m::AccessOperation;
@@ -102,9 +102,8 @@ MClassifier modification(MClassifier this) :
  * @return	the context object itself
  */
 MAttribute modification(MAttribute this) :
-	emAccessorForStaticFinalAttribute() ->
-	//createGetterOperation(this.classifier) ->
-	//createSetterOperation(this.classifier) ->
+	optimizeFinalAttributes() ->
+	emAccessorForFinalAttribute() ->
 	this;
 
 /**
@@ -112,6 +111,4 @@ MAttribute modification(MAttribute this) :
  * @return	the context object itself
  */
 MAssociationRole modification(MAssociationRole this) :
-	//createGetterOperation(this.classifier);// ->
-	//createSetterOperation();
 	this;
