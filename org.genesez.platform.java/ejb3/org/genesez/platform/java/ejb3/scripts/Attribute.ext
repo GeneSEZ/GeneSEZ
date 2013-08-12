@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 import gcore;
 
 extension org::genesez::util::logging::Logging;
@@ -34,10 +40,6 @@ boolean isSessionBean(MAttribute this, MModel model) :
 	type.metaType == MClass
 		? ((MClass)type).emHasStereotypeAssignment("ejb3SessionBean")
 		: false;
-//	TODO: according the comment, the above impl should do the same as below but more efficiently, please check!
-//	allNestedClassifiers(model).typeSelect(MClass).exists(e|e.name == type.asTypeName() && e.emHasStereotypeAssignment("ejb3SessionBean"))
-//		? true
-//		: false;
 
 /**
   *	adds the stereotype "ejb3EJB" if the attribute data type
@@ -143,7 +145,3 @@ boolean isSessionBeanInterface(MAttribute this, MModel model):
 				i.emHasStereotypeAssignment("ejb3Local") || i.emHasStereotypeAssignment("ejb3Remote")
 		)
 		: false;
-//	TODO: according the comment, the above impl should do the same as below but more efficiently, please check!
-//	allNestedClassifiers(model).typeSelect(MInterface).exists(e|
-//		(e.emHasStereotypeAssignment("ejb3Local") || e.emHasStereotypeAssignment("ejb3Remote")) && 
-//		e.name().asTypeName() == type.name().asTypeName());
