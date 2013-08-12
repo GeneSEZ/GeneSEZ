@@ -1,12 +1,16 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+import gcore;
+
 /**
  * 	modificates the metamodel before generation of the source code  
  *  
- * @author	andre pflueger
- * @date	2009-03-17
+ * 	@author	andre pflueger <andre.pflueger@fh-zwickau.de>
  */
-
-// based on genesez meta model
-import gcore;
 
 extension org::genesez::util::logging::Logging;
 extension org::genesez::metamodel::core::util::AccessElement;
@@ -16,7 +20,6 @@ extension org::genesez::platform::java::seam2::scripts::Attribute;
 extension org::genesez::platform::java::seam2::scripts::Property;
 extension org::genesez::platform::java::seam2::scripts::Operation;
 extension org::genesez::platform::java::seam2::scripts::Interface;
-extension org::genesez::platform::java::seam2::scripts::Package;
 
 MModel additions(MModel this) :
 	this.nestedPackage.additions() ->
@@ -25,13 +28,10 @@ MModel additions(MModel this) :
 
 Void additions(MPackage this) :
 	this.nestedPackage.additions() ->
-	//this.addNamespace() ->
 	this.classifier.typeSelect(MClass).additions();
 	
 Void additions(MClass this) :
 	addStandardConstructor() ->
-	//addEntityHome() ->
-	//addQueryHome() ->
 	addValidator() -> 
 	addConverter() ->
 	addFilter() ->
@@ -39,7 +39,6 @@ Void additions(MClass this) :
 	checkDestroyMethod() ->
 	checkCreateMethod() ->
 	checkJasyptEncryptionStereotype() ->
-	this.property.typeSelect(MAttribute).additions() ->
 	this.property.typeSelect(MAttribute).additions() ->
 	this.operation.typeSelect(MOperation).additions();
 	
@@ -81,6 +80,18 @@ Void modifications(MAttribute this) :
 
 Void modifications(MAssociationRole this) :
 	addAccessorStereotype();
-
+	
 Void modifications(MInterface this) :
-	""; //addGetterAndSetterOperations();
+	"";
+
+MModel getterSetter(MModel this) :
+	this.nestedPackage.getterSetter() ->
+	this.classifier.typeSelect(MInterface).getterSetter() ->
+	this;
+
+Void getterSetter(MPackage this) :
+	this.nestedPackage.getterSetter() ->
+	this.classifier.typeSelect(MInterface).getterSetter();
+
+Void getterSetter(MInterface this) :
+	addGetterAndSetterOperations();
