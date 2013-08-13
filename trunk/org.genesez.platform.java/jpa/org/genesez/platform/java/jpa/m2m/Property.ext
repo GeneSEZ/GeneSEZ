@@ -1,0 +1,43 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+import gcore;
+
+/**
+ * 	modificates the metamodel before generation of the source code  
+ *  
+ * @author	andre pflueger <andre.pflueger@fh-zwickau.de>
+ */
+ 
+extension org::genesez::util::logging::Logging;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::platform::java::util::Naming;
+extension org::genesez::platform::java::util::ExtensionMechanism;
+extension org::genesez::platform::java::jpa::m2m::Stereotypes;
+extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
+extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
+
+/**
+  *	adds an accessor stereotype for generating get, set, add or remove methods if
+  *	classifier of the property is a persistent entity and the attribute does not 
+  *	have an accessor stereotype (do not override modellers choices)
+  *
+  *	@param		this		instance of MProperty
+  */	 	
+Void addAccessorStereotype(MProperty this) :
+	this.classifier.emHasStereotypeAssignment("jpaPersistentEntity")
+	&& !this.emHasStereotypeAssignment( prAccessor() )
+		? (
+			this.multiplicity.isSingleValued()
+				? (
+					isFinal()
+						? emAssignGeneSezAccessorStereotype(true, false, false, false)
+						: emAssignGeneSezAccessorStereotype(true, true, false, false)
+				)
+				: emAssignGeneSezAccessorStereotype(true, false, true, true)
+		)
+		: "";

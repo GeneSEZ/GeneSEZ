@@ -1,0 +1,56 @@
+«IMPORT gcore»
+
+«REM»
+	Template for jpa-Aspects
+	
+	@author	andre pflueger
+	@date	2009-04-20
+«ENDREM»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	aspects for Hibernate
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	
+«REM»
+	include import statements in import-proReg of java5 cartridge
+«ENDREM»
+«AROUND org::genesez::platform::java::m2t::Import::_OtherImports FOR MClassifier-»
+	«EXPAND Import::ImportStatements-»	
+	«targetDef.proceed()»
+«ENDAROUND»
+
+«REM»
+	annotations for classes
+«ENDREM»
+«AROUND org::genesez::platform::java::m2t::Class::Annotation FOR MClass-»
+	«EXPAND Class::Annotation»
+	«targetDef.proceed()-»
+«ENDAROUND»
+
+«REM»
+	annotations for operations (used for return type, parameters and operations)
+«ENDREM»
+«AROUND org::genesez::platform::java::m2t::Operation::Annotation FOR MOperation-»
+	«EXPAND Operation::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for attributes
+«ENDREM»
+«AROUND org::genesez::platform::java::m2t::Attribute::Annotation FOR MAttribute-»
+	«EXPAND Attribute::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for associations
+«ENDREM»
+«AROUND org::genesez::platform::java::m2t::Association::Annotation FOR MAssociationRole-»
+	«EXPAND Association::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
