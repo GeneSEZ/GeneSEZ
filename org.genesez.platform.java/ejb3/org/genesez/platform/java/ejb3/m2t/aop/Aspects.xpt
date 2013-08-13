@@ -1,0 +1,81 @@
+«IMPORT gcore»
+
+«REM»
+	Template for ejb3-Aspects
+	
+	@author	andre pflueger
+	@date	2009-02-22
+«ENDREM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION org::genesez::util::logging::Logging»
+
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
+«EXTENSION org::genesez::platform::java::util::Imports»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
+
+«EXTENSION org::genesez::platform::java::ejb3::m2m::Class»
+«EXTENSION org::genesez::platform::java::ejb3::m2m::Attribute»
+«EXTENSION org::genesez::platform::java::ejb3::m2m::Stereotypes»
+«EXTENSION org::genesez::platform::java::ejb3::m2m::Interface»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	aspects for Enterprise JavaBeans (Version 3)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	override fixed imports because a different association handling 
+	is in use for the ejb3 cartridge
+«ENDREM»
+«AROUND org::genesez::platform::java::m2t::Import::_OtherImports FOR MClassifier-»
+	«EXPAND Import::ImportStatements»
+	«targetDef.proceed()-»
+«ENDAROUND»
+
+«REM»
+	annotations for interfaces
+«ENDREM»
+«AROUND org::genesez::platform::java::m2t::Interface::Annotation FOR MInterface-»
+	«EXPAND Class::RemoteLocal-»
+	«targetDef.proceed()-» 
+«ENDAROUND»	
+
+«REM»
+	annotations for classes
+«ENDREM»
+«AROUND org::genesez::platform::java::m2t::Class::Annotation FOR MClass-»
+	«EXPAND Class::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for operations (used for return type, parameters and operations)
+«ENDREM»
+«AROUND org::genesez::platform::java::m2t::Operation::Annotation FOR MOperation-»
+	«EXPAND Operation::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for attributes
+«ENDREM»
+«AROUND org::genesez::platform::java::m2t::Attribute::Annotation FOR MAttribute-»
+	«EXPAND Attribute::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	add code to the extension area in the java5 class template
+«ENDREM»
+«AROUND org::genesez::platform::java::m2t::Class::Root::_Extension FOR MClass-»
+	«EXPAND Class::AddPublicOperations-»
+	«targetDef.proceed()-»
+«ENDAROUND»

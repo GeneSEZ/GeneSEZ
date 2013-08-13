@@ -1,0 +1,328 @@
+import gcore;
+
+extension org::genesez::util::logging::Logging;
+extension org::genesez::platform::java::jpa::m2m::Stereotypes;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::platform::java::util::Naming;
+extension org::genesez::platform::java::util::ExtensionMechanism;
+extension org::genesez::platform::java::jpa::m2m::Naming;
+
+Void checkAssociationStereotype(MAssociationRole this) :
+	this.classifier.emHasStereotypeAssignment("jpaPersistentEntity")
+		? (
+		this.emHasStereotypeAssignment("jpaAssociation") 
+			? (//Stereotype existiert
+				opposite != null
+					? ( /**
+						even with existing stereotype "jpaAssociation" the tagged value
+						"type" does not have to be set if association is bidirectional.
+						check if opposite has an association stereotype
+						*/
+						!opposite.emHasStereotypeAssignment("jpaAssociation")
+							? ( /**
+								opposite has no stereotype "jpaAssociation"
+								set necessary annotation and add value to tagged value "type" for easy
+								evaluation of the opposite association later in the generation process. 
+								Cannot create stereotype on opposite because it does not work for some reason!!! (eins zu n)
+								*/
+								multiplicity.upperBound == 1
+									? (
+										opposite.multiplicity.upperBound == 1
+											? (
+												setTaggedValue("jpaAssociation", "type", "OneToOne") ->
+												setTaggedValue("jpaAssociation", "mappedBy", "true")
+											)
+											: (
+												setTaggedValue("jpaAssociation", "type", "ManyToOne") ->	
+												setTaggedValue("jpaAssociation", "mappedBy", "false")
+											)
+									)
+									: (
+										opposite.multiplicity.upperBound == 1
+											? (
+												setTaggedValue("jpaAssociation", "type", "OneToMany") ->
+												setTaggedValue("jpaAssociation", "mappedBy", "true")
+											)
+											: (
+												setTaggedValue("jpaAssociation", "type", "ManyToMany") ->
+												setTaggedValue("jpaAssociation", "mappedBy", "true")
+											)
+									)
+							)
+							: (/**
+								only one side of the association (the opposite) have been provided with an stereotype
+								by the user, so let's find out what has to be annotated on this side of the association
+								*/
+								evaluateOppositeStereotype(this, opposite)
+							)
+					)
+					: (	/**
+							unidirectional
+						*/
+						evaluateUnidirectionalAssociation()
+					)
+			)
+			: (/**
+				MAssociationRole has no association stereotype 
+				automatic annotation, not possible for unidirectional association because 
+				opposite attribute is not available and can not be evaluated
+				*/
+				opposite != null
+					? (/**
+							bidirectional
+							check if opposite has an association stereotype
+						*/
+						!opposite.emHasStereotypeAssignment("jpaAssociation")
+							? (/**
+									opposite has no stereotype "jpaAssociation"
+									set necessary annotation and add stereotype to the opposite for easy
+									evaluation of the opposite association later in the generation process. 
+									Generation can not have been there because in this case this association 
+									site would have had a stereotype. Tagged value "mappedBy" is set on this 
+									site thus no "mappedBy" is set to the new stereotype (exception: @ManyToOne)
+								*/
+								multiplicity.upperBound == 1
+									? (
+										opposite.multiplicity.upperBound == 1
+											? (
+												addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", "true") ->
+												addAssociationStereotype(opposite, "OneToOne", "null", "[]", "DEFAULT", "true", "false")
+											)
+											: (
+												addAssociationStereotype(this, "ManyToOne", "null", "[]", "DEFAULT", "true", "false") ->
+												addAssociationStereotype(opposite, "OneToMany", "null", "[]", "DEFAULT", "true", "true")
+											)
+									)
+									: (
+										opposite.multiplicity.upperBound == 1
+											? (
+												addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", "true") ->
+												addAssociationStereotype(opposite, "ManyToOne", "null", "[]", "DEFAULT", "true", "false")
+											)
+											: (
+												addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", "true") ->
+												addAssociationStereotype(opposite, "ManyToMany", "null", "[]", "DEFAULT", "true", "false")
+											)
+									)
+							)
+							: (/**
+									only the opposite of the association have been provided with an stereotype by the
+									user, so let's find out what has to be annotated on this side of the association
+								*/
+								evaluateOppositeStereotype(this, opposite)
+							)
+					)
+					: (/**
+							unidirectional
+						*/
+						evaluateUnidirectionalAssociation()
+					)
+			)
+		)
+		: "";
+
+Void evaluateOppositeStereotype(MAssociationRole this, MAssociationRole op) :
+	/**
+		evaluates stereotype "jpaAssociation", tagged value "type" and "mappedBy"
+	*/
+	op.emHasTaggedValue("jpaAssociation", "type", "AutoDetect") || 
+	!op.emHasUtilizableTaggedValue("jpaAssociation", "type")
+		? (
+			multiplicity.upperBound == 1
+				? (
+					op.multiplicity.upperBound == 1
+						? (
+							!op.emHasTaggedValue("jpaAssociation", "mappedBy", "true")
+								? (
+									emHasStereotypeAssignment("jpaAssociation")
+										? (
+											setTaggedValue("jpaAssociation", "mappedBy", "true") ->
+											setTaggedValue("jpaAssociation", "type", "OneToOne")
+										)
+										: addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", "true")
+								)
+								: (
+									emHasStereotypeAssignment("jpaAssociation")
+										? (
+											setTaggedValue("jpaAssociation", "mappedBy", "false") ->
+											setTaggedValue("jpaAssociation", "type", "OneToOne")
+										)
+										: addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", "false")
+								) ->
+							op.setTaggedValue("jpaAssociation", "type", "OneToOne")
+						)
+						: (
+							!emHasStereotypeAssignment("jpaAssociation")
+								? addAssociationStereotype(this, "ManyToOne", "null", "[]", "DEFAULT", "true", "false")
+								: (
+									setTaggedValue("jpaAssociation", "type", "ManyToOne")->
+									setTaggedValue("jpaAssociation", "mappedBy", "false")
+								) ->
+							op.setTaggedValue("jpaAssociation", "type", "OneToMany") ->
+							op.setTaggedValue("jpaAssociation", "mappedBy", "true")
+						)						
+				)
+				: (
+					op.multiplicity.upperBound == 1
+						? (
+							emHasStereotypeAssignment("jpaAssociation")
+								? (
+									setTaggedValue("jpaAssociation", "mappedBy", "true") ->
+									setTaggedValue("jpaAssociation", "type", "OneToMany")
+								)
+								: addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", "true") ->
+							op.setTaggedValue("jpaAssociation", "type", "ManyToOne")
+						)
+						: (
+							!op.emHasTaggedValue("jpaAssociation", "mappedBy", "true")
+								? (
+									emHasStereotypeAssignment("jpaAssociation")
+										? (
+											setTaggedValue("jpaAssociation", "mappedBy", "true") ->
+											setTaggedValue("jpaAssociation", "type", "ManyToMany")
+										)
+										: addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", "true")
+								)
+								: (
+									emHasStereotypeAssignment("jpaAssociation")
+										? (
+											setTaggedValue("jpaAssociation", "mappedBy", "false") ->
+											setTaggedValue("jpaAssociation", "type", "ManyToMany")
+										)
+										: addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", "false") ->
+									op.setTaggedValue("jpaAssociation", "type", "ManyToMany")
+								)
+						)
+				)
+		)
+		: (
+			op.emHasTaggedValue("jpaAssociation", "type", "OneToOne")
+				? (
+					!op.emHasTaggedValue("jpaAssociation", "mappedBy", "true")
+						? (
+							emHasStereotypeAssignment("jpaAssociation")
+								? (
+									setTaggedValue("jpaAssociation", "mappedBy", "true") ->
+									setTaggedValue("jpaAssociation", "type", "OneToOne")
+								)
+								: addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", "true")
+								
+						)
+						: addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", "false")
+				)
+				: (
+					op.emHasTaggedValue("jpaAssociation", "type", "OneToMany")
+						? (
+							!emHasStereotypeAssignment("jpaAssociation")
+								? addAssociationStereotype(this, "ManyToOne", "null", "[]", "DEFAULT", "true", "false")
+								: (
+									setTaggedValue("jpaAssociation", "type", "ManyToOne")->
+									setTaggedValue("jpaAssociation", "mappedBy", "false")
+								)
+						)
+						: (
+							op.emHasTaggedValue("jpaAssociation", "type", "ManyToOne")
+								? (
+									!op.emHasTaggedValue("jpaAssociation", "mappedBy", "true")
+										? (
+											emHasStereotypeAssignment("jpaAssociation")
+												? (
+													setTaggedValue("jpaAssociation", "type", "OneToMany")->
+													setTaggedValue("jpaAssociation", "mappedBy", "true")
+												)
+												: addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", "true")
+										)
+										: (
+											op.setTaggedValue("jpaAssociation", "mappedBy", "false") ->
+											!emHasStereotypeAssignment("jpaAssociation")
+												? addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", "true")
+												: (
+													setTaggedValue("jpaAssociation", "type", "OneToMany")->
+													setTaggedValue("jpaAssociation", "mappedBy", "true")
+												)
+										)
+								)
+								: (
+									op.emHasTaggedValue("jpaAssociation", "type", "ManyToMany")
+										? (
+											!op.emHasTaggedValue("jpaAssociation", "mappedBy", "true")
+												? (
+													emHasStereotypeAssignment("jpaAssociation")
+														? (
+															setTaggedValue("jpaAssociation", "mappedBy", "true") ->
+															setTaggedValue("jpaAssociation", "type", "ManyToMany")
+														)
+														: addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", "true")
+												)
+												: (
+													!emHasStereotypeAssignment("jpaAssociation")
+														? addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", "false")
+														: (
+															setTaggedValue("jpaAssociation", "type", "ManyToMany")->
+															setTaggedValue("jpaAssociation", "mappedBy", "false")
+														)
+												)
+										)
+										: ""
+								)
+						)
+				)
+		);
+
+/**
+	evaluation of an unidirectional association with the help of the attribute "oppositeMultiplicity"
+*/
+Void evaluateUnidirectionalAssociation(MAssociationRole this) :
+	emHasStereotypeAssignment("jpaAssociation")
+		? (
+			/**
+				if association type cannot be used, set the right values
+				by evaluating new attribute oppositeMultiplicity
+			*/
+			emHasTaggedValue("jpaAssociation", "type", "AutoDetect") || 
+			!emHasUtilizableTaggedValue("jpaAssociation", "type")
+				? (
+					multiplicity.upperBound == 1
+						? (
+							oppositeMultiplicity.upperBound == 1
+								? setTaggedValue("jpaAssociation", "type", "OneToOne")
+								: setTaggedValue("jpaAssociation", "type", "ManyToOne")
+						)
+						: (
+							oppositeMultiplicity.upperBound == 1
+								? setTaggedValue("jpaAssociation", "type", "OneToMany")
+								: setTaggedValue("jpaAssociation", "type", "ManyToMany")
+						)
+				)
+				: ""
+		)
+		: (
+			/**
+				evaluate new attribute oppositeMultiplicity
+			*/
+			multiplicity.upperBound == 1
+				? (
+					oppositeMultiplicity.upperBound == 1
+						? addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", "false")
+						: addAssociationStereotype(this, "ManyToOne", "null", "[]", "DEFAULT", "true", "false")
+				)
+				: (
+					oppositeMultiplicity.upperBound == 1
+						? addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", "false")
+						: addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", "false")
+				) 
+		);
+		
+
+		
+/**
+  *	check whether the name of stereotype "jpaJoinTable" has an utilizable value
+  *	if not a name is created by using the table name of the class and the association role name
+  *
+  *	@param		this		instance of MAssociationRole
+  */
+Void checkJoinTableName(MAssociationRole this) :
+	this.emHasStereotypeAssignment("jpaJoinTable") &&
+	!this.emHasUtilizableTaggedValue("jpaJoinTable", "name")
+		? this.setTaggedValue("jpaJoinTable", "name", tableNamePrefix() + this.classifier.name.toFirstUpper() + "_" + tableNamePrefix() + this.name)
+		: "";

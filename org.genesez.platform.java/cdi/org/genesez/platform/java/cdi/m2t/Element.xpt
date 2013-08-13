@@ -1,0 +1,237 @@
+«IMPORT gcore»
+
+«REM»
+	Template for weld annotations according to elements in general
+	
+	@author	nancy doerfel
+	@date	2010-04-16
+«ENDREM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION org::genesez::util::logging::Logging»
+
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
+«EXTENSION org::genesez::platform::java::jpa::m2m::Stereotypes»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» 
+	evaluates the stereotype "cdiApplicationScoped"
+«ENDREM»
+«DEFINE ApplicationScoped FOR MElement-»
+	«IF emHasStereotypeAssignment("cdiApplicationScoped")-»
+		@ApplicationScoped	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "cdiConversationScoped"
+«ENDREM»
+«DEFINE ConversationScoped FOR MElement-»
+	«IF emHasStereotypeAssignment("cdiConversationScoped")-»
+		@ConversationScoped	
+	«ENDIF-»	
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "cdiRequestScoped"
+«ENDREM»
+«DEFINE RequestScoped FOR MElement-»
+	«IF emHasStereotypeAssignment("cdiRequestScoped")-»
+		@RequestScoped	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "cdiSessionScoped"
+«ENDREM»
+«DEFINE SessionScoped FOR MElement-»
+	«IF emHasStereotypeAssignment("cdiSessionScoped")-»
+		@SessionScoped	
+	«ENDIF-»				
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "cdiTyped"
+«ENDREM»
+«DEFINE Typed FOR MElement-»		
+	«IF emHasStereotypeAssignment("cdiTyped")-»
+		@Typed({«FOREACH emAllTaggedValues("cdiTyped", "value") AS name SEPARATOR ","-» «name-».class «ENDFOREACH-»})	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "cdiProduces"
+«ENDREM»
+«DEFINE Produces FOR MElement-»		
+	«IF emHasStereotypeAssignment("cdiProduces")-»
+		@Produces	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "cdiNormalScope"
+«ENDREM»
+«DEFINE NormalScope FOR MElement-»		
+	«IF emHasStereotypeAssignment("cdiNormalScope")-»
+		@NormalScope
+		«IF	emHasUtilizableTaggedValue("cdiNormalScope", "passivating")-»
+			("«emGetTaggedValue("cdiNormalScope", "passivating")-»")
+		«ENDIF-»		
+	«ENDIF-»		
+«ENDDEFINE»	
+
+
+«REM» 
+	evaluates the stereotype "cdiStereotype"
+«ENDREM»
+«DEFINE Stereotype FOR MElement-»		
+	«IF emHasStereotypeAssignment("cdiStereotype")-»
+		@Stereotype	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "cdiNonbinding"
+«ENDREM»
+«DEFINE Nonbinding FOR MElement-»		
+	«IF emHasStereotypeAssignment("cdiNonbinding")-»
+		@Nonbinding	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "cdiAlternative"
+«ENDREM»
+«DEFINE Alternative FOR MElement-»		
+	«IF emHasStereotypeAssignment("cdiAlternative")-»
+		@Alternative	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "cdiAny"
+«ENDREM»
+«DEFINE Any FOR MElement-»		
+	«IF emHasStereotypeAssignment("cdiAny")-»
+		@Any	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "cdiDefault"
+«ENDREM»
+«DEFINE Default FOR MElement-»		
+	«IF emHasStereotypeAssignment("cdiDefault")-»
+		@Default	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "cdiDisposes"
+«ENDREM»
+«DEFINE Disposes FOR MElement-»		
+	«IF emHasStereotypeAssignment("cdiDisposes")-»
+		@Disposes	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "cdiDependend"
+«ENDREM»
+«DEFINE Dependent FOR MElement-»		
+	«IF emHasStereotypeAssignment("cdiDependent")-»
+		@Dependent	
+	«ENDIF-»		
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype "cdiModel"
+«ENDREM»
+«DEFINE Model FOR MElement-»		
+	«IF emHasStereotypeAssignment("cdiModel")-»
+		@Model	
+	«ENDIF-»		
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype "cdiSpecializes"
+«ENDREM»
+«DEFINE Specializes FOR MElement-»		
+	«IF emHasStereotypeAssignment("cdiSpecializes")-»
+		@Specializes	
+	«ENDIF-»		
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype "cdiNew"
+«ENDREM»
+«DEFINE New FOR MElement-»		
+	«IF emHasStereotypeAssignment("cdiNew")-»
+		@New	
+		«IF	emHasUtilizableTaggedValue("cdiNew", "value")-»
+			("«emGetTaggedValue("cdiNew", "value")-»")
+		«ENDIF-»			
+	«ENDIF-»		
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype "cdiDecoratorDelegate"
+«ENDREM»
+«DEFINE DecoratorDelegate FOR MElement-»		
+	«IF emHasStereotypeAssignment("cdiDecoratorDelegate")-»
+		@Delegate	
+	«ENDIF-»		
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype "cdiDecorator"
+«ENDREM»
+«DEFINE Decorator FOR MElement-»		
+	«IF emHasStereotypeAssignment("cdiDecorator")-»
+		@Decorator	
+	«ENDIF-»		
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype "cdiObserves"
+«ENDREM»
+«DEFINE Observes FOR MElement-»		
+	«IF emHasStereotypeAssignment("cdiObserves")-»
+		@Observes(
+			«IF	emHasUtilizableTaggedValue("cdiObserves", "during")-»
+				during=«emGetTaggedValue("cdiObserves", "during")-»
+				«IF emHasUtilizableTaggedValue("cdiObserves", "notifyObserver")-»
+				    ,notifyObserver=«emGetTaggedValue("cdiObserves", "notifyObserver")-»
+				«ENDIF-»
+		    «ELSE-»
+		        «IF emHasUtilizableTaggedValue("cdiObserves", "notifyObserver")-»
+                    notifyObserver=«emGetTaggedValue("cdiObserves", "notifyObserver")-»
+                «ENDIF-»  
+			«ENDIF-»		
+		)
+	«ENDIF-»		
+«ENDDEFINE»

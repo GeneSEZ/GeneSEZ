@@ -1,0 +1,67 @@
+import gcore;
+
+/**
+ * 	modificates the metamodel before generation of the source code  
+ *  
+ * @author	andre pflueger
+ * @date	2009-03-17
+ */
+
+extension org::genesez::platform::java::jpa::m2m::Attribute;
+extension org::genesez::platform::java::jpa::m2m::Association;
+extension org::genesez::platform::java::jpa::m2m::Class;
+extension org::genesez::platform::java::jpa::m2m::Property;
+extension org::genesez::platform::java::util::Naming;
+
+MModel additions(MModel this) :
+	this.nestedPackage.additions() ->
+	this.classifier.typeSelect(MClass).additions() ->
+	this;
+
+Void additions(MPackage this) :
+	this.nestedPackage.additions() ->
+	this.classifier.typeSelect(MClass).additions();
+	
+Void additions(MClass this) :
+	transformJacobsonStereotypes() ->
+	transformWAMStereotypes() ->
+	addStandardConstructor() ->
+	addSerializable() ->
+	checkPrimaryKeyAttributeAndOrStereotype() -> 
+	addOptimisticLocking();
+
+MModel modifications(MModel this) :
+	this.nestedPackage.modifications() ->
+	this.classifier.typeSelect(MClass).modifications() ->
+	this;
+	
+Void modifications(MPackage this) :
+	this.nestedPackage.modifications() ->
+	this.classifier.typeSelect(MClass).modifications();
+	
+Void modifications(MClass this) :
+	//checkInheritanceStereotype() -> 
+	checkInheritance()-> 
+	this.property.typeSelect(MAssociationRole).modifications() ->
+	this.property.typeSelect(MAttribute).modifications() ->
+	this.operation.typeSelect(MOperation).modifications() ->		
+	this.checkEqualsProperties() ->
+	this.property.typeSelect(MAssociationRole).addAccessorStereotype() ->
+	this.property.typeSelect(MAttribute).addAccessorStereotype(); // ->
+	//addAccessorStereotype();
+	
+Void modifications(MAssociationRole this) :
+	checkAssociationStereotype() ->
+	checkJoinTableName();
+	
+Void modifications(MAttribute this) :
+	checkAttributeName() ->
+	checkPersistenceStereotypes() ->
+	checkOptimisticLockingStereotype() ->
+	checkPrimaryKey();
+
+Void modifications(MOperation this) :
+	checkPrimaryKey();
+
+Void modifications(MInterface this) :
+	Void;
