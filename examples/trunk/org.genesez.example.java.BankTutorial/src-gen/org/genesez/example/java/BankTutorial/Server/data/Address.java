@@ -78,7 +78,7 @@ public class Address implements Serializable {
 	 */
 	
 	public String getStreet() {
-		return street;
+		return this.street;
 	}
 	
 	/**
@@ -95,7 +95,7 @@ public class Address implements Serializable {
 	 */
 	
 	public String getHouseNumber() {
-		return houseNumber;
+		return this.houseNumber;
 	}
 	
 	/**
@@ -112,7 +112,7 @@ public class Address implements Serializable {
 	 */
 	
 	public String getZipCode() {
-		return zipCode;
+		return this.zipCode;
 	}
 	
 	/**
@@ -129,7 +129,7 @@ public class Address implements Serializable {
 	 */
 	
 	public String getCity() {
-		return city;
+		return this.city;
 	}
 	
 	/**
@@ -146,7 +146,7 @@ public class Address implements Serializable {
 	 */
 	
 	public int getId() {
-		return id;
+		return this.id;
 	}
 	
 	/**
@@ -163,7 +163,7 @@ public class Address implements Serializable {
 	 */
 	
 	public int getVersion() {
-		return version;
+		return this.version;
 	}
 	
 	/**

@@ -121,7 +121,7 @@ public class Bank implements Serializable {
 	 */
 	
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	
 	/**
@@ -138,7 +138,7 @@ public class Bank implements Serializable {
 	 */
 	
 	public int getSortCode() {
-		return sortCode;
+		return this.sortCode;
 	}
 	
 	/**
@@ -155,7 +155,7 @@ public class Bank implements Serializable {
 	 */
 	
 	public int getId() {
-		return id;
+		return this.id;
 	}
 	
 	/**
@@ -172,7 +172,7 @@ public class Bank implements Serializable {
 	 */
 	
 	public int getVersion() {
-		return version;
+		return this.version;
 	}
 	
 	/**

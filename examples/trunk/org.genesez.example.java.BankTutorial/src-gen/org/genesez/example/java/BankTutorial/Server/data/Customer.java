@@ -146,7 +146,7 @@ public class Customer implements Serializable {
 	 */
 	
 	public String getFirstname() {
-		return firstname;
+		return this.firstname;
 	}
 	
 	/**
@@ -163,7 +163,7 @@ public class Customer implements Serializable {
 	 */
 	
 	public String getSurname() {
-		return surname;
+		return this.surname;
 	}
 	
 	/**
@@ -180,7 +180,7 @@ public class Customer implements Serializable {
 	 */
 	
 	public int getId() {
-		return id;
+		return this.id;
 	}
 	
 	/**
@@ -197,7 +197,7 @@ public class Customer implements Serializable {
 	 */
 	
 	public int getVersion() {
-		return version;
+		return this.version;
 	}
 	
 	/**

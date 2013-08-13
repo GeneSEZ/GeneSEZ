@@ -152,7 +152,7 @@ public abstract class Account implements Serializable {
 	 */
 	
 	public BigDecimal getBalance() {
-		return balance;
+		return this.balance;
 	}
 	
 	/**
@@ -169,7 +169,7 @@ public abstract class Account implements Serializable {
 	 */
 	
 	public float getInterestRate() {
-		return interestRate;
+		return this.interestRate;
 	}
 	
 	/**
@@ -186,7 +186,7 @@ public abstract class Account implements Serializable {
 	 */
 	
 	public long getInterestPeriod() {
-		return interestPeriod;
+		return this.interestPeriod;
 	}
 	
 	/**
@@ -203,7 +203,7 @@ public abstract class Account implements Serializable {
 	 */
 	
 	public int getId() {
-		return id;
+		return this.id;
 	}
 	
 	/**
@@ -220,7 +220,7 @@ public abstract class Account implements Serializable {
 	 */
 	
 	public int getVersion() {
-		return version;
+		return this.version;
 	}
 	
 	/**

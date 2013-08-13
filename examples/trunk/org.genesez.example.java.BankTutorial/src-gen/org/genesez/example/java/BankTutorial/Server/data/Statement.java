@@ -57,7 +57,11 @@ public class Statement implements Serializable {
 	 */
 	
 	public Date getDate() {
-		return new Date(date.getTime());
+		if (this.date != null) {
+			return new Date(this.date.getTime());
+		} else {
+			return this.date;
+		}
 	}
 	
 	/**
@@ -66,7 +70,11 @@ public class Statement implements Serializable {
 	 */
 	
 	public void setDate(Date date) {
-		this.date = date;
+		if (date != null) {
+			this.date = new Date(date.getTime());
+		} else {
+			this.date = null;
+		}
 	}
 	
 	/**
@@ -74,7 +82,7 @@ public class Statement implements Serializable {
 	 */
 	
 	public String getContent() {
-		return content;
+		return this.content;
 	}
 	
 	/**
@@ -91,7 +99,7 @@ public class Statement implements Serializable {
 	 */
 	
 	public int getId() {
-		return id;
+		return this.id;
 	}
 	
 	/**
@@ -108,7 +116,7 @@ public class Statement implements Serializable {
 	 */
 	
 	public int getVersion() {
-		return version;
+		return this.version;
 	}
 	
 	/**

@@ -79,7 +79,7 @@ public class Contact implements Serializable {
 	 */
 	
 	public String getPhone() {
-		return phone;
+		return this.phone;
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public class Contact implements Serializable {
 	 */
 	
 	public String getMobilePhone() {
-		return mobilePhone;
+		return this.mobilePhone;
 	}
 	
 	/**
@@ -113,7 +113,7 @@ public class Contact implements Serializable {
 	 */
 	
 	public String getTelefax() {
-		return telefax;
+		return this.telefax;
 	}
 	
 	/**
@@ -130,7 +130,7 @@ public class Contact implements Serializable {
 	 */
 	
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
 	
 	/**
@@ -147,7 +147,7 @@ public class Contact implements Serializable {
 	 */
 	
 	public int getId() {
-		return id;
+		return this.id;
 	}
 	
 	/**
@@ -164,7 +164,7 @@ public class Contact implements Serializable {
 	 */
 	
 	public int getVersion() {
-		return version;
+		return this.version;
 	}
 	
 	/**

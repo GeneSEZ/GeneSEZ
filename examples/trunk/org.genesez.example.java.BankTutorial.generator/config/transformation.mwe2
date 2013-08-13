@@ -45,6 +45,16 @@ Workflow {
 		}
 		validator = org.genesez.workflow.SimpleValidator {
 			script = "org::genesez::platform::java::validation::Syntax"
+			parameter = {
+				name = "accessorsForStereotypes"
+				value = "entity"
+			}
+		}
+		validator = org.genesez.workflow.SimpleValidator {
+			script = "org::genesez::platform::java::jpa::validation::Syntax"
+		}
+		validator = org.genesez.workflow.SimpleValidator {
+			script = "org::genesez::platform::java::ejb3::validation::Syntax"
 		}
 	}
 	// prepare gcore model for java source code generation
@@ -54,20 +64,24 @@ Workflow {
 		aopScript = "Naming"
 		
 		model2model = org.genesez.workflow.SimpleScript {
-			script = "org::genesez::platform::java::jpa::scripts::Functionality::additions"
+			script = "org::genesez::platform::java::jpa::m2m::Functionality::additions"
 		}
 		model2model = org.genesez.workflow.SimpleScript {
-			script = "org::genesez::platform::java::jpa::scripts::Functionality::modifications"
+			script = "org::genesez::platform::java::jpa::m2m::Functionality::modifications"
 		}
 		model2model = org.genesez.workflow.SimpleScript {
-			script = "org::genesez::platform::java::ejb3::scripts::Functionality::additions"
+			script = "org::genesez::platform::java::ejb3::m2m::Functionality::additions"
 		}
 		model2model = org.genesez.workflow.SimpleScript {
-			script = "org::genesez::platform::java::ejb3::scripts::Functionality::modifications"
+			script = "org::genesez::platform::java::ejb3::m2m::Functionality::modifications"
 		}
 		// annotation definition and usage, singleton design pattern and hashCode + equals operations
 		model2model = org.genesez.workflow.SimpleScript {
 			script = "org::genesez::platform::java::m2m::Prepare::prepare"
+			parameter = {
+				name = "accessorsForStereotypes"
+				value = "entity"
+			}
 		}
 		// cares about property access operations
 		model2model = org.genesez.workflow.SimpleScript {
@@ -75,6 +89,10 @@ Workflow {
 			parameter = {
 				name = "accessorsForStereotypes"
 				value = "entity"
+			}
+			parameter = {
+				name = "usePropertyVisibilityForAccessors"
+				value = false
 			}
 		}
 		// automatically implement abstract and interface operations in classes
@@ -127,7 +145,7 @@ Workflow {
 			*/
 			typeMappingFile = "typemapping-bankTutorial.xml"
 			
-			aopTemplate = "org::genesez::platform::java::ejb3::templates::AspectsAll"
+			aopTemplate = "org::genesez::platform::java::ejb3::m2t::aop::AspectsAll"
 			// adjust default templates using aspects, see XPand AOP-Feature
 			aopTemplate = "Attrib"
 			// adjust default xtend scripts with aspects, see Xtend AOP-Feature

@@ -7,6 +7,14 @@
  -->
 <tns:typeMapping xmlns:tns="http://www.genesez.org/typemapping"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<!-- if you want to overwrite default multi value type mapping from java platform  
+		do not include the java platform type mapping in this file because in this 
+		case the settings of the included file are preferred and settings can not be
+		override in this customized type mapping file 
+		For overwriting java specific type mappings add the java platform type
+		mapping file to the component 'Model2TextSupport' in the transformation file 
+		by using 'typeMappingFile = "org/genesez/platform/java/typemapping/typemapping.xml"'
+		You can add other type mapping files like this one by using the same parameter -->
 	<tns:include>
 		<tns:file>org/genesez/platform/java/typemapping/typemapping.xml</tns:file>
 	</tns:include>
@@ -43,6 +51,8 @@
 		</tns:type>
 		<tns:type from="Object">
 			<tns:to>Object</tns:to>
+			<!-- 	if you do not want to add any imports for this external type
+					just skip '<tns:context name="Import></tns:context>'  -->
 		</tns:type>
 	</tns:externalTypes>
 </tns:typeMapping>
