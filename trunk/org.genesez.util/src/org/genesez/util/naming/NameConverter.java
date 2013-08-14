@@ -18,46 +18,44 @@ public final class NameConverter {
 	}
 	
 	/**
-	 * 	This method splits the name by every capital letter, 
-	 *	transforms every token to lower case and adds underscores 
-	 *	between of them. 
-	 *	For instance: 'relatedPosts' -> 'related_posts'.
+	 * Splits a string by every capital letter, transforms every token to lower case 
+	 * and adds underscores between of them. 
+	 * For instance: 'relatedPosts' -> 'related_posts'.
 	 * 
-	 * 	@param 		name	string which should be converted 
-	 * 	@return 	name in lower case and with underscores
+	 * @param 	string	A string which should be converted. 
+	 * @return 	The string in lower case and with underscores.
 	 */
-	public static String toLowerPropertyName(String name) {
-		return getPropertName(name, false);
+	public static String toLowerUnderscore(String string) {
+		return getUnderscoredString(string, false);
 	}
 	
 	/**
-	 * 	This method splits the given String by every capital letter, 
-	 *	transforms every token to upper case and adds underscores 
-	 *	between of them. 
-	 *	For instance: 'relatedPosts' -> 'RELATED_POSTS'.
+	 * Splits a string by every capital letter, transforms every token to upper case 
+	 * and adds underscores between of them. 
+	 * For instance: 'relatedPosts' -> 'RELATED_POSTS'.
 	 * 
-	 * 	@param 		name	string which should be converted
-	 * 	@return 	name in upper case and with underscores
+	 * @param 	string	A string which should be converted.
+	 * @return 	The string in upper case and with underscores.
 	 */
-	public static String toUpperPropertyName(String name) {
+	public static String toUpperUnderscore(String string) {
 		// ignore naming if name consists just of capital letters and underlines
-		if (name.matches("[A-Z_]*")) {
-			return name;
+		if (string.matches("[A-Z_]*")) {
+			return string;
 		}
-		return getPropertName(name, true);
+		return getUnderscoredString(string, true);
 	}
 	
-	private static String getPropertName(String name, boolean upper) {
+	private static String getUnderscoredString(String string, boolean upperCase) {
 	    StringBuffer propertyName = new StringBuffer();
 	    String[] propertyNameParts;
 	    
-	    propertyNameParts = name.split("(?=[A-Z])");
+	    propertyNameParts = string.split("(?=[A-Z])");
 	    for (int i = 0; i < propertyNameParts.length; i++) {
 	    	// don't let the name start with an underscore
 	    	if (i == 0 && propertyNameParts[i].isEmpty()) {
 	    		continue;
 	    	}
-	    	if (upper) {
+	    	if (upperCase) {
 	    		propertyName.append(propertyNameParts[i].toUpperCase());
 	    	} else {
 		        propertyName.append(propertyNameParts[i].toLowerCase());
