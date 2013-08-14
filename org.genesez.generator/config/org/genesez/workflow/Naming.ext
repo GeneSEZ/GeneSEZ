@@ -15,12 +15,14 @@ import gcore;
  */
 extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::platform::java::m2m::Annotation;
+extension org::genesez::platform::java::util::Naming;
+extension org::genesez::util::logging::Logging;
 
 
 /**
  * Returns the prefix for java annotation types during their type definition.
  */
-around org::genesez::platform::java::util::Naming::prefix(MInterface this) :
+around org::genesez::platform::java::util::Naming::prefixAnnotation(MInterface this) :
 	emHasStereotypeAssignment( prJavaAnnotationStereotype() )
 		? "Wf"
 		: ctx.proceed();
@@ -32,3 +34,9 @@ around org::genesez::platform::java::util::Naming::prefix(MStereotype this) :
 	emHasStereotypeAssignment( prJavaAnnotationStereotype() )
 		? "Wf"
 		: ctx.proceed();
+
+/**
+ * Replace the naming of final attributes as constants by using variable
+ */
+around org::genesez::platform::java::util::Naming::asAttribute(MAttribute this) :
+	(static && final) || classifier.metaType == MInterface ? asConstant() : asVariable();
