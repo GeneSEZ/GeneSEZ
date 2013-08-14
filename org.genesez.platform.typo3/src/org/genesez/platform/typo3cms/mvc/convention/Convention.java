@@ -8,6 +8,9 @@ package org.genesez.platform.typo3cms.mvc.convention;
  */
 public class Convention {
 
+	private Convention() {
+	}
+	
 	/**
 	 * Create the TYPO3 CMS MVC extension name by a given extension key. This method
 	 * splits the extension key at the underscores and transform every token to
