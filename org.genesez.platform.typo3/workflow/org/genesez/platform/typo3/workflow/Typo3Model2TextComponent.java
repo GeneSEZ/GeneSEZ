@@ -93,15 +93,6 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @deprecated
-	 */
-	@WfDefault(parameter = "xtendNamingFile")
-	public String getDefaultXtendNamingFile() {
-		return "org::genesez::platform::typo3v4::mvc::convention::Naming";
-	}
-	
-	/**
-	 * Method stub for further implementation.
 	 */
 	@WfDefault(parameter = "typeMappingFile")
 	public java.util.Set<String> getDefaultTypeMappingFile() {
@@ -114,7 +105,7 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 	 * Returns the value of attribute '<em><b>isT3MvcCompliant</b></em>'.
 	 */
 	public boolean getIsT3MvcCompliant() {
-		return isT3MvcCompliant;
+		return this.isT3MvcCompliant;
 	}
 	
 	/**
@@ -129,7 +120,7 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 	 * Returns the value of attribute '<em><b>extensionKey</b></em>'.
 	 */
 	public String getExtensionKey() {
-		return extensionKey;
+		return this.extensionKey;
 	}
 	
 	/**
