@@ -1,0 +1,82 @@
+«IMPORT gcore»
+«REM»
+	Entry point for generating TYPO3 MVC fluid template "Show.html".
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-08-24
+«ENDREM»
+
+«REM» use TYPO3 naming context and common naming scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
+«EXTENSION org::genesez::platform::typo3cms::mvc::convention::NamingContext»
+
+«REM» use TYPO3 MVC conversion scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Conversion»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the generation of "Show.html" for the backend and frontend.
+«ENDREM»
+«DEFINE Root FOR MClass -»
+«EXPAND ContextSettings -»
+
+«EXPAND BackendRoot -»
+«EXPAND FrontendRoot -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Sets the naming context for this part of generation.
+	The type mapping context is not needed for this part. 
+«ENDREM»
+«DEFINE ContextSettings FOR MClass -»
+«setInternalNamingContext( namingContextObject() ) -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the generation of "Show.html" for the backend.
+«ENDREM»
+«DEFINE BackendRoot FOR MClass -»
+«FILE showHTMLBackendFileNamePath() -»
+«EXPAND ShowContent -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the generation of "Show.html" for the frontend.
+«ENDREM»
+«DEFINE FrontendRoot FOR MClass -»
+«FILE showHTMLFrontendFileNamePath() -»
+«EXPAND ShowContent -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«DEFINE ShowContent FOR MClass -»
+<f:layout name="Default" />
+
+<f:section name="main">
+	<h1>Show «name( namingContextPHPCompliant() ) -»</h1>
+
+	<f:flashMessages />
+
+	<f:render partial="«name( namingContextPHPCompliant() ) -»/Properties" arguments="{«name() -»:«name() -»}" />
+	
+	<f:link.action action="list">Back to list</f:link.action><br />
+	<f:link.action action="new">New «name( namingContextPHPCompliant() ) -»</f:link.action>
+</f:section>
+«ENDDEFINE»
