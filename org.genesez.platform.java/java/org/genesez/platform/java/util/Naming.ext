@@ -229,18 +229,18 @@ String asEnumLiteral(MAssociationRole this) :
 */
 
 /**
- * formats an attribute name according to the value of it's 'final' property
+ * formats an attribute name according to the value of it's 'static' and 'final' property
  * @context	the attribute to format
  * @return	the formatted attribute name
  */
-String asAttribute(MAttribute this) : final || classifier.metaType == MInterface ? asConstant() : asVariable();
+String asAttribute(MAttribute this) : (static && final) || classifier.metaType == MInterface ? asConstant() : asVariable();
 
 /**
  * formats an attribute name as a constant
  * @context	the attribute to format
  * @return	the formatted attribute name
  */
-String asConstant(MAttribute this) : name.toUpperName();
+String asConstant(MAttribute this) : name.toUpperUnderscore();
 	
 /**
  * formats an attribute name as a normal attribute
