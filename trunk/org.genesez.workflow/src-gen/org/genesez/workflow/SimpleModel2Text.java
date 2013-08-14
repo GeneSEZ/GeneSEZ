@@ -44,7 +44,7 @@ public class SimpleModel2Text extends AbstractTransformable implements Model2Tex
 	 * Returns the value of attribute '<em><b>template</b></em>'.
 	 */
 	public String getTemplate() {
-		return template;
+		return this.template;
 	}
 	
 	/**

@@ -116,7 +116,7 @@ public class ProfileGenerator extends SimpleModel2Text {
 	 * Returns the value of attribute '<em><b>xtendFilePath</b></em>'.
 	 */
 	public String getXtendFilePath() {
-		return xtendFilePath;
+		return this.xtendFilePath;
 	}
 	
 	/**
@@ -131,7 +131,7 @@ public class ProfileGenerator extends SimpleModel2Text {
 	 * Returns the value of attribute '<em><b>profileFileName</b></em>'.
 	 */
 	public String getProfileFileName() {
-		return profileFileName;
+		return this.profileFileName;
 	}
 	
 	/**
@@ -146,7 +146,7 @@ public class ProfileGenerator extends SimpleModel2Text {
 	 * Returns the value of attribute '<em><b>accessHelperFileName</b></em>'.
 	 */
 	public String getAccessHelperFileName() {
-		return accessHelperFileName;
+		return this.accessHelperFileName;
 	}
 	
 	/**
@@ -161,7 +161,7 @@ public class ProfileGenerator extends SimpleModel2Text {
 	 * Returns the value of attribute '<em><b>stereotypeNamePrefix</b></em>'.
 	 */
 	public String getStereotypeNamePrefix() {
-		return stereotypeNamePrefix;
+		return this.stereotypeNamePrefix;
 	}
 	
 	/**
@@ -176,7 +176,7 @@ public class ProfileGenerator extends SimpleModel2Text {
 	 * Returns the value of attribute '<em><b>enumerationNamePrefix</b></em>'.
 	 */
 	public String getEnumerationNamePrefix() {
-		return enumerationNamePrefix;
+		return this.enumerationNamePrefix;
 	}
 	
 	/**

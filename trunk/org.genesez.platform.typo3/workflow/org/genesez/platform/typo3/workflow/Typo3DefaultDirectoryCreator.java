@@ -56,7 +56,7 @@ public class Typo3DefaultDirectoryCreator extends SimpleScript {
 	 * Returns the value of attribute '<em><b>outputDir</b></em>'.
 	 */
 	public String getOutputDir() {
-		return outputDir;
+		return this.outputDir;
 	}
 	
 	/**

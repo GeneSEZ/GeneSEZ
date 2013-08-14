@@ -44,7 +44,7 @@ public class SimpleScript extends AbstractTransformable implements Model2Model {
 	 * Returns the value of attribute '<em><b>script</b></em>'.
 	 */
 	public String getScript() {
-		return script;
+		return this.script;
 	}
 	
 	/**

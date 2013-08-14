@@ -162,7 +162,7 @@ public class TraceabilityComponent extends AbstractSlotWorkflowComponent {
 	 * Returns the value of attribute '<em><b>gcoreModelSlot</b></em>'.
 	 */
 	public String getGcoreModelSlot() {
-		return gcoreModelSlot;
+		return this.gcoreModelSlot;
 	}
 	
 	/**
@@ -177,7 +177,7 @@ public class TraceabilityComponent extends AbstractSlotWorkflowComponent {
 	 * Returns the value of attribute '<em><b>greqModelSlot</b></em>'.
 	 */
 	public String getGreqModelSlot() {
-		return greqModelSlot;
+		return this.greqModelSlot;
 	}
 	
 	/**
@@ -192,7 +192,7 @@ public class TraceabilityComponent extends AbstractSlotWorkflowComponent {
 	 * Returns the value of attribute '<em><b>gtraceModelSlot</b></em>'.
 	 */
 	public String getGtraceModelSlot() {
-		return gtraceModelSlot;
+		return this.gtraceModelSlot;
 	}
 	
 	/**
@@ -207,7 +207,7 @@ public class TraceabilityComponent extends AbstractSlotWorkflowComponent {
 	 * Returns the value of attribute '<em><b>gcoreModelFile</b></em>'.
 	 */
 	public String getGcoreModelFile() {
-		return gcoreModelFile;
+		return this.gcoreModelFile;
 	}
 	
 	/**
@@ -222,7 +222,7 @@ public class TraceabilityComponent extends AbstractSlotWorkflowComponent {
 	 * Returns the value of attribute '<em><b>greqModelFile</b></em>'.
 	 */
 	public String getGreqModelFile() {
-		return greqModelFile;
+		return this.greqModelFile;
 	}
 	
 	/**
@@ -237,7 +237,7 @@ public class TraceabilityComponent extends AbstractSlotWorkflowComponent {
 	 * Returns the value of attribute '<em><b>gtraceModelFile</b></em>'.
 	 */
 	public String getGtraceModelFile() {
-		return gtraceModelFile;
+		return this.gtraceModelFile;
 	}
 	
 	/**
@@ -252,7 +252,7 @@ public class TraceabilityComponent extends AbstractSlotWorkflowComponent {
 	 * Returns the value of attribute '<em><b>useModelExtensionsForCrossModelNavigation</b></em>'.
 	 */
 	public boolean getUseModelExtensionsForCrossModelNavigation() {
-		return useModelExtensionsForCrossModelNavigation;
+		return this.useModelExtensionsForCrossModelNavigation;
 	}
 	
 	/**
@@ -267,7 +267,7 @@ public class TraceabilityComponent extends AbstractSlotWorkflowComponent {
 	 * Returns the value of attribute '<em><b>useDefaultUriMapping</b></em>'.
 	 */
 	public boolean getUseDefaultUriMapping() {
-		return useDefaultUriMapping;
+		return this.useDefaultUriMapping;
 	}
 	
 	/**

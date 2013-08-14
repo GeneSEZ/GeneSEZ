@@ -98,7 +98,7 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 	 * The source file or directory to copy.
 	 */
 	public String getSource() {
-		return source;
+		return this.source;
 	}
 	
 	/**
@@ -113,7 +113,7 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 	 * The destination file or directory to copy to.
 	 */
 	public String getDestination() {
-		return destination;
+		return this.destination;
 	}
 	
 	/**

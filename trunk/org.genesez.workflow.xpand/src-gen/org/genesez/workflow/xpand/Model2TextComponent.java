@@ -200,7 +200,7 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	 * Returns the value of attribute '<em><b>fileEncoding</b></em>'.
 	 */
 	public String getFileEncoding() {
-		return fileEncoding;
+		return this.fileEncoding;
 	}
 	
 	/**
@@ -215,7 +215,7 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	 * Returns the value of attribute '<em><b>isMultiValueSlot</b></em>'.
 	 */
 	public boolean getIsMultiValueSlot() {
-		return isMultiValueSlot;
+		return this.isMultiValueSlot;
 	}
 	
 	/**
@@ -230,7 +230,7 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	 * Returns the value of attribute '<em><b>prDefaultExcludes</b></em>'.
 	 */
 	public boolean getPrDefaultExcludes() {
-		return prDefaultExcludes;
+		return this.prDefaultExcludes;
 	}
 	
 	/**
@@ -245,7 +245,7 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	 * Returns the value of attribute '<em><b>prExcludes</b></em>'.
 	 */
 	public String getPrExcludes() {
-		return prExcludes;
+		return this.prExcludes;
 	}
 	
 	/**
@@ -352,7 +352,7 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	 * Returns the value of attribute '<em><b>outputDir</b></em>'.
 	 */
 	public String getOutputDir() {
-		return outputDir;
+		return this.outputDir;
 	}
 	
 	/**
@@ -390,7 +390,7 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	 * Returns the value of attribute '<em><b>importPreserverConfig</b></em>'.
 	 */
 	public ImportPreserverConfig getImportPreserverConfig() {
-		return importPreserverConfig;
+		return this.importPreserverConfig;
 	}
 	
 	/**

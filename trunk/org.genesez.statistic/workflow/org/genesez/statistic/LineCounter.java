@@ -219,7 +219,7 @@ public class LineCounter extends FileTreeObserverAdapter {
 	 * Returns the value of attribute '<em><b>withFileDetails</b></em>'.
 	 */
 	public boolean getWithFileDetails() {
-		return withFileDetails;
+		return this.withFileDetails;
 	}
 	
 	/**
@@ -234,7 +234,7 @@ public class LineCounter extends FileTreeObserverAdapter {
 	 * Returns the value of attribute '<em><b>beginProtectedRegionRegExp</b></em>'.
 	 */
 	public String getBeginProtectedRegionRegExp() {
-		return beginProtectedRegionRegExp;
+		return this.beginProtectedRegionRegExp;
 	}
 	
 	/**
@@ -249,7 +249,7 @@ public class LineCounter extends FileTreeObserverAdapter {
 	 * Returns the value of attribute '<em><b>endProtectedRegionRegExp</b></em>'.
 	 */
 	public String getEndProtectedRegionRegExp() {
-		return endProtectedRegionRegExp;
+		return this.endProtectedRegionRegExp;
 	}
 	
 	/**
@@ -264,7 +264,7 @@ public class LineCounter extends FileTreeObserverAdapter {
 	 * Returns the value of attribute '<em><b>singleLineComment</b></em>'.
 	 */
 	public String getSingleLineComment() {
-		return singleLineComment;
+		return this.singleLineComment;
 	}
 	
 	/**
@@ -279,7 +279,7 @@ public class LineCounter extends FileTreeObserverAdapter {
 	 * Returns the value of attribute '<em><b>multiLineStartComment</b></em>'.
 	 */
 	public String getMultiLineStartComment() {
-		return multiLineStartComment;
+		return this.multiLineStartComment;
 	}
 	
 	/**
@@ -294,7 +294,7 @@ public class LineCounter extends FileTreeObserverAdapter {
 	 * Returns the value of attribute '<em><b>documentationStartComment</b></em>'.
 	 */
 	public String getDocumentationStartComment() {
-		return documentationStartComment;
+		return this.documentationStartComment;
 	}
 	
 	/**
@@ -309,7 +309,7 @@ public class LineCounter extends FileTreeObserverAdapter {
 	 * Returns the value of attribute '<em><b>multiLineEndComment</b></em>'.
 	 */
 	public String getMultiLineEndComment() {
-		return multiLineEndComment;
+		return this.multiLineEndComment;
 	}
 	
 	/**
@@ -324,7 +324,7 @@ public class LineCounter extends FileTreeObserverAdapter {
 	 * Returns the value of attribute '<em><b>baseDir</b></em>'.
 	 */
 	public String getBaseDir() {
-		return baseDir;
+		return this.baseDir;
 	}
 	
 	/**
@@ -408,7 +408,7 @@ public class LineCounter extends FileTreeObserverAdapter {
 	 * Returns the value of attribute '<em><b>rootDir</b></em>'.
 	 */
 	public StatDir getRootDir() {
-		return rootDir;
+		return this.rootDir;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._Nx0r8IzJEeKLl_w7vhifuQ) ENABLED START */

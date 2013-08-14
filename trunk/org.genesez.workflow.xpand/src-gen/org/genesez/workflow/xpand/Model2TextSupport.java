@@ -159,7 +159,7 @@ public class Model2TextSupport<T extends Model2TextComponent> extends CompositeC
 	 * Returns the value of attribute '<em><b>preFileTreeWalker</b></em>'.
 	 */
 	public FileTreeWalker getPreFileTreeWalker() {
-		return preFileTreeWalker;
+		return this.preFileTreeWalker;
 	}
 	
 	/**
@@ -174,7 +174,7 @@ public class Model2TextSupport<T extends Model2TextComponent> extends CompositeC
 	 * Returns the value of attribute '<em><b>postFileTreeWalker</b></em>'.
 	 */
 	public FileTreeWalker getPostFileTreeWalker() {
-		return postFileTreeWalker;
+		return this.postFileTreeWalker;
 	}
 	
 	/**
@@ -189,7 +189,7 @@ public class Model2TextSupport<T extends Model2TextComponent> extends CompositeC
 	 * Returns the value of attribute '<em><b>revisionControlSystemFinder</b></em>'.
 	 */
 	public RevisionControlSystemFinder getRevisionControlSystemFinder() {
-		return revisionControlSystemFinder;
+		return this.revisionControlSystemFinder;
 	}
 	
 	/**
@@ -204,7 +204,7 @@ public class Model2TextSupport<T extends Model2TextComponent> extends CompositeC
 	 * Returns the value of attribute '<em><b>fileDeletion</b></em>'.
 	 */
 	public FileDeletion getFileDeletion() {
-		return fileDeletion;
+		return this.fileDeletion;
 	}
 	
 	/**
@@ -219,7 +219,7 @@ public class Model2TextSupport<T extends Model2TextComponent> extends CompositeC
 	 * Returns the value of attribute '<em><b>folderDeletion</b></em>'.
 	 */
 	public FolderDeletion getFolderDeletion() {
-		return folderDeletion;
+		return this.folderDeletion;
 	}
 	
 	/**
@@ -234,7 +234,7 @@ public class Model2TextSupport<T extends Model2TextComponent> extends CompositeC
 	 * Returns the value of attribute '<em><b>contentPreserve</b></em>'.
 	 */
 	public XPandLineContentPreserving getContentPreserve() {
-		return contentPreserve;
+		return this.contentPreserve;
 	}
 	
 	/**
@@ -249,7 +249,7 @@ public class Model2TextSupport<T extends Model2TextComponent> extends CompositeC
 	 * Returns the value of attribute '<em><b>importPreserver</b></em>'.
 	 */
 	public ImportPreserver getImportPreserver() {
-		return importPreserver;
+		return this.importPreserver;
 	}
 	
 	/**
