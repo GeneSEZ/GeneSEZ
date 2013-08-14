@@ -13,7 +13,7 @@ extension org::genesez::platform::typo3cms::mvc::profile::ExtbaseProfile;
 extension org::genesez::platform::typo3cms::mvc::profile::ExtbaseAccessElement;
 
 // use TYPO3 MVC Fluid access helper scripts
-extension org::genesez::platform::typo3cms::mvc::profile::FluidAccessElement;
+//extension org::genesez::platform::typo3cms::mvc::profile::FluidAccessElement;
 
 // use TYPO3 naming context and common naming scripts
 extension org::genesez::metamodel::core::util::mapping::NameMapping;
@@ -730,44 +730,7 @@ List[MStereotype] allAssignedValidators(MElement this) :
 	stereotype.select( s | s.isValidator() );
 	
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 MVC Fluid ViewHelper 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * Checks if a classifier is part of the TYPO3 MVC Fluid view helper package.
- * 
- * @return	true if the classifier is part of the TYPO3 Fluid view helper package, otherwise false
- */
-cached boolean isViewHelperPackageElement(MClassifier this) :
-	// first check if this model is TYPO3 MVC complaint and this classifier is inside the correct package
-	( globalVarIsT3MVCCompliant() && dirPath() == classesViewHelpersPath() ) ||
-	// second check if the package of this classifier has an stereotype
-	owningContext.hasT3FluidViewHelperPackageStereotype() ||
-	// third check if this classifier is a class and is a view helper
-	( MClass.isInstance(this) && ((MClass)this).isViewHelper() );
-
-
-/**
- * Checks if a class is a TYPO3 MVC Fluid view helper.
- *
- * @return	true if the class is a TYPO3 MVC Fluid view helper, otherwise false
- */
-cached boolean isViewHelper(MClass this) :
-	// first check if this model is TYPO3 MVC complaint and this class is inside the correct package
-	( globalVarIsT3MVCCompliant() && dirPath() == classesViewHelpersPath() ) ||
-	// second check if this class has an stereotype
-	hasT3FluidViewHelperStereotype() ||
-	// third check if the package of this class has an stereotype
-	owningContext.hasT3FluidViewHelperPackageStereotype() ||
-	// fourth check if generalization is an TYPO3 MVC Fluid view helper
-	(
-		!generalization.typeSelect(MClass).isEmpty
-			? generalization.typeSelect(MClass).first().isViewHelper()
-			: false
-	);		
+	
 
 
 /*
