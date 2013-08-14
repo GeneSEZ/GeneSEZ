@@ -1,5 +1,5 @@
 
-package org.genesez.util.comment;
+package org.genesez.util.conversion;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
