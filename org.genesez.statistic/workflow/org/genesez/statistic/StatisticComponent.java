@@ -270,7 +270,7 @@ public class StatisticComponent extends Model2TextComponent {
 	 * Returns the value of attribute '<em><b>htmlTemplateDir</b></em>'.
 	 */
 	public String getHtmlTemplateDir() {
-		return htmlTemplateDir;
+		return this.htmlTemplateDir;
 	}
 	
 	/**
@@ -285,7 +285,7 @@ public class StatisticComponent extends Model2TextComponent {
 	 * Returns the value of attribute '<em><b>labelOwnImplCode</b></em>'.
 	 */
 	public String getLabelOwnImplCode() {
-		return labelOwnImplCode;
+		return this.labelOwnImplCode;
 	}
 	
 	/**
@@ -300,7 +300,7 @@ public class StatisticComponent extends Model2TextComponent {
 	 * Returns the value of attribute '<em><b>labelGeneratedCode</b></em>'.
 	 */
 	public String getLabelGeneratedCode() {
-		return labelGeneratedCode;
+		return this.labelGeneratedCode;
 	}
 	
 	/**
@@ -315,7 +315,7 @@ public class StatisticComponent extends Model2TextComponent {
 	 * Returns the value of attribute '<em><b>labelDocumentation</b></em>'.
 	 */
 	public String getLabelDocumentation() {
-		return labelDocumentation;
+		return this.labelDocumentation;
 	}
 	
 	/**
@@ -330,7 +330,7 @@ public class StatisticComponent extends Model2TextComponent {
 	 * Returns the value of attribute '<em><b>labelComments</b></em>'.
 	 */
 	public String getLabelComments() {
-		return labelComments;
+		return this.labelComments;
 	}
 	
 	/**
@@ -345,7 +345,7 @@ public class StatisticComponent extends Model2TextComponent {
 	 * Returns the value of attribute '<em><b>lineCounter</b></em>'.
 	 */
 	public LineCounter getLineCounter() {
-		return lineCounter;
+		return this.lineCounter;
 	}
 	
 	/**
@@ -360,7 +360,7 @@ public class StatisticComponent extends Model2TextComponent {
 	 * Returns the value of attribute '<em><b>title</b></em>'.
 	 */
 	public String getTitle() {
-		return title;
+		return this.title;
 	}
 	
 	/**
