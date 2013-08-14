@@ -10,11 +10,11 @@ import org.apache.commons.logging.LogFactory;
  * @author nico herbig
  * @author tobias haubold <toh@fh-zwickau.de>
  */
-public final class NameConverter {
+public final class StringProcessing {
 
-	private static Log logger = LogFactory.getLog(NameConverter.class);
+	private static Log logger = LogFactory.getLog(StringProcessing.class);
 	
-	private NameConverter() {
+	private StringProcessing() {
 	}
 	
 	/**
