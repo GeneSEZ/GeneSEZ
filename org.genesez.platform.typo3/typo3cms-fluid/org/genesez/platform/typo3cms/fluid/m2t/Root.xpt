@@ -1,0 +1,67 @@
+«IMPORT gcore»
+«REM»
+	Main entry point for generating fluid code.
+	Iterates over the model and delegates the handling.
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-08-20
+«ENDREM»
+
+«REM» use common logging scripts «ENDREM»
+«EXTENSION org::genesez::util::logging::Logging»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the contents of the model.
+«ENDREM»
+«DEFINE Root FOR MModel -»
+«REM» init logger «ENDREM»
+«useLogger("org.genesez.platform.typo3") -» 
+
+«REM» Iterate over all nested packages and classifiers «ENDREM»	
+«EXPAND Root FOREACH nestedPackage -»
+«EXPAND Root FOREACH classifier -»
+
+«REM» Generate extension configuration code «ENDREM»
+«EXPAND org::genesez::platform::typo3cms::mvc::m2t::configuration::Root::Root -»
+
+«REM» Generate extension resources code «ENDREM»
+«EXPAND org::genesez::platform::typo3cms::mvc::m2t::resources::Root::Root -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the contents of a package, delegates the handling of all classifiers.
+«ENDREM»
+«DEFINE Root FOR MPackage -»
+«REM» Iterate over all nested packages and classifiers «ENDREM»	
+«EXPAND Root FOREACH nestedPackage -»
+«EXPAND Root FOREACH classifier -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the contents of a classifier
+«ENDREM»
+«DEFINE Root FOR MClassifier -»
+«REM» Generate extension classes code «ENDREM»
+«EXPAND org::genesez::platform::typo3cms::mvc::m2t::classes::Root::Root -»
+
+«REM» Generate extension configuration code «ENDREM»
+«EXPAND org::genesez::platform::typo3cms::mvc::m2t::configuration::Root::Root -»
+
+«REM» Generate extension resources code «ENDREM»
+«EXPAND org::genesez::platform::typo3cms::mvc::m2t::resources::Root::Root -»
+«ENDDEFINE»
