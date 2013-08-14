@@ -28,14 +28,14 @@ public class ImportPreserverConfig {
 	 * Returns the value of attribute '<em><b>fileExtensionRegExp</b></em>'.
 	 */
 	public String getFileExtensionRegExp() {
-		return fileExtensionRegExp;
+		return this.fileExtensionRegExp;
 	}
 	
 	/**
 	 * Returns the value of attribute '<em><b>importRegExp</b></em>'.
 	 */
 	public String getImportRegExp() {
-		return importRegExp;
+		return this.importRegExp;
 	}
 	
 	/* PROTECTED REGION ID(java.datatype.own.code.implementation._8oUToAm-EeK7rvpt4qDtAg) ENABLED START */
