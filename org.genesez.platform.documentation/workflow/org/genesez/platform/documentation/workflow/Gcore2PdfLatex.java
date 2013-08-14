@@ -101,7 +101,7 @@ public class Gcore2PdfLatex extends Model2TextComponent {
 	 * Returns the value of attribute '<em><b>pdfOutputDir</b></em>'.
 	 */
 	public String getPdfOutputDir() {
-		return pdfOutputDir;
+		return this.pdfOutputDir;
 	}
 	
 	/**
@@ -116,7 +116,7 @@ public class Gcore2PdfLatex extends Model2TextComponent {
 	 * Returns the value of attribute '<em><b>latexRootFile</b></em>'.
 	 */
 	public String getLatexRootFile() {
-		return latexRootFile;
+		return this.latexRootFile;
 	}
 	
 	/**
@@ -131,7 +131,7 @@ public class Gcore2PdfLatex extends Model2TextComponent {
 	 * Returns the value of attribute '<em><b>showPdfLatexLog</b></em>'.
 	 */
 	public boolean getShowPdfLatexLog() {
-		return showPdfLatexLog;
+		return this.showPdfLatexLog;
 	}
 	
 	/**
@@ -146,7 +146,7 @@ public class Gcore2PdfLatex extends Model2TextComponent {
 	 * Returns the value of attribute '<em><b>command</b></em>'.
 	 */
 	public String getCommand() {
-		return command;
+		return this.command;
 	}
 	
 	/**

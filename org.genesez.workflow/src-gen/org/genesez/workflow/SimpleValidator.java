@@ -44,7 +44,7 @@ public class SimpleValidator extends AbstractTransformable implements Model2Mode
 	 * Returns the value of attribute '<em><b>script</b></em>'.
 	 */
 	public String getScript() {
-		return script;
+		return this.script;
 	}
 	
 	/**

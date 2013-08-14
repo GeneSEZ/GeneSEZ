@@ -161,7 +161,7 @@ public class Uml2Gcore extends SimpleScript {
 	 * Returns the value of attribute '<em><b>mapClassesInModelToExternal</b></em>'.
 	 */
 	public boolean getMapClassesInModelToExternal() {
-		return mapClassesInModelToExternal;
+		return this.mapClassesInModelToExternal;
 	}
 	
 	/**
@@ -176,7 +176,7 @@ public class Uml2Gcore extends SimpleScript {
 	 * Returns the value of attribute '<em><b>allowGeneratedXmiGuid</b></em>'.
 	 */
 	public boolean getAllowGeneratedXmiGuid() {
-		return allowGeneratedXmiGuid;
+		return this.allowGeneratedXmiGuid;
 	}
 	
 	/**

@@ -117,7 +117,7 @@ public class Gcore2Php extends SimpleModel2Text {
 	 * Returns the value of attribute '<em><b>generateIncludes</b></em>'.
 	 */
 	public boolean getGenerateIncludes() {
-		return generateIncludes;
+		return this.generateIncludes;
 	}
 	
 	/**
@@ -132,7 +132,7 @@ public class Gcore2Php extends SimpleModel2Text {
 	 * Returns the value of attribute '<em><b>relativeIncludes</b></em>'.
 	 */
 	public boolean getRelativeIncludes() {
-		return relativeIncludes;
+		return this.relativeIncludes;
 	}
 	
 	/**
@@ -147,7 +147,7 @@ public class Gcore2Php extends SimpleModel2Text {
 	 * Returns the value of attribute '<em><b>includeBase</b></em>'.
 	 */
 	public String getIncludeBase() {
-		return includeBase;
+		return this.includeBase;
 	}
 	
 	/**
@@ -162,7 +162,7 @@ public class Gcore2Php extends SimpleModel2Text {
 	 * Returns the value of attribute '<em><b>propertyAccess</b></em>'.
 	 */
 	public String getPropertyAccess() {
-		return propertyAccess;
+		return this.propertyAccess;
 	}
 	
 	/**
@@ -177,7 +177,7 @@ public class Gcore2Php extends SimpleModel2Text {
 	 * Returns the value of attribute '<em><b>accessorStyle</b></em>'.
 	 */
 	public String getAccessorStyle() {
-		return accessorStyle;
+		return this.accessorStyle;
 	}
 	
 	/**

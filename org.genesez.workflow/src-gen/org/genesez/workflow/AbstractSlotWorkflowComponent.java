@@ -42,7 +42,7 @@ public abstract class AbstractSlotWorkflowComponent extends AbstractWorkflowComp
 	 * Returns the value of attribute '<em><b>slot</b></em>'.
 	 */
 	public String getSlot() {
-		return slot;
+		return this.slot;
 	}
 	
 	/**

@@ -37,7 +37,7 @@ public class Parameter {
 	 * Returns the value of attribute '<em><b>name</b></em>'.
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	
 	/**
@@ -52,7 +52,7 @@ public class Parameter {
 	 * Returns the value of attribute '<em><b>value</b></em>'.
 	 */
 	public Object getValue() {
-		return value;
+		return this.value;
 	}
 	
 	/**
