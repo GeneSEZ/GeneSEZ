@@ -1,4 +1,4 @@
-package org.genesez.util.naming;
+package org.genesez.util.conversion;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
