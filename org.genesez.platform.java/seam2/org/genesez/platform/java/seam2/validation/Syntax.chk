@@ -29,3 +29,20 @@ context MAttribute ERROR "GeneSEZ: Annotation @DataModel does only allow scope t
 	|| emGetTaggedValue("seam2DataModel", "scope").matches("SCOPE"))
 		? false
 		: true;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	annotation related things
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks the correct usage of application exception annotation
+ * @return	false generates an error, if class is not an exception and has stereotype "seam2ApplicationException"
+ */
+context MClass WARNING "GeneSEZ: Annotation @ApplicationException can only be used with exceptions: " + fqmn() : 
+	emHasStereotypeAssignment("seam2ApplicationException") &&
+	!this.generalization.exists(e|e.name == "Exception" || e.name == "RuntimeException")
+	
+		? false
+		: true;
