@@ -13,7 +13,37 @@ extension org::genesez::platform::java::m2m::Constructor;
 extension org::genesez::platform::java::seam2::m2m::Stereotypes;
 extension org::genesez::platform::java::jbv::m2m::Stereotypes;
 extension org::genesez::platform::java::seam2::m2m::Operation;
+extension org::genesez::platform::java::seam2::m2m::Naming;
+extension org::genesez::platform::java::seam2::m2m::GlobalVar;
 extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::platform::java::util::ExtensionMechanism;
+
+/**
+ *	adds a JNDI name for seam components if seam version 2.3 is used
+ *	and no JNDI name is already specified for the seam component
+ *
+ *	In Seam 2.3 it is no longer possible to set a general JNDI pattern in 
+ *	components.xml. That is why we have to add a JNDI name for every seam 
+ *	component
+ *
+ *	To specify Seam version use the parameter 'seamVersion' in your 
+ *	generator configuration
+ *
+ *	Generating source code for Seam 2.3 requires customizing the operation
+ *	org::genesez::platform::java::seam2::m2m::Naming::jndiNameProjectName()
+ *	by usig Xtend aspects in the generator configuration 
+ *	to set the name of the project which contains the seam components
+ *
+ *	By default the prefix 'java:app' is used for the name space of the
+ *	seam components. You can change this by customizing the oepration
+ *	org::genesez::platform::java::seam2::m2m::Naming::jndiNamePrefix()
+ */
+Void addJndiNameForSeamComponents(MClass this) :
+	globalVarSeamVersion() == "2.3" &&
+	this.emHasStereotypeAssignment("seam2Component") &&
+	!this.emHasUtilizableTaggedValue("seam2Component", "jndiName")
+		? this.setTaggedValue("seam2Component", "jndiName", jndiNamePrefix() + "/" + jndiNameProjectName() + "/" + this.name)
+		: "";
 
 /**
   *	if there is at least on property with stereotype seam2JasyptEncryption
