@@ -12,6 +12,9 @@
 import gcore;
 
 extension org::genesez::metamodel::core::util::AccessElement;
+// nihe: This extension include is the wrong place for naming stuff for annotations.
+extension org::genesez::platform::java::m2m::Annotation;
+
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -91,6 +94,21 @@ String prefix(MClassifier this) : "";
  */
 String suffix(MClassifier this) : "";
 
+
+/**
+ * getter of the prefix which is added to the name of an annotation interface
+ * @return	the prefix to prepend
+ * @todo	Revise this script.
+ */
+String prefixAnnotation(MInterface this) : "";
+
+/**
+ * getter of the suffix which is added to the name of an annotation interface
+ * @return	the suffix to append
+ * @todo	Revise this script.
+ */
+String suffixAnnotation(MInterface this) : "";
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	type names
@@ -105,9 +123,14 @@ String asTypeName(MClass this) : prefix() + name.toFirstUpper() + suffix();
 
 /**
  * formats the name of an interface using prefix + suffix
- * @return	formatted name of the interface
+ * @return	formatted name of the interface or annoatation interface
+ * @todo	Revise this script.
  */
-String asTypeName(MInterface this) : prefix() + name.toFirstUpper() + suffix();
+String asTypeName(MInterface this) :
+	// check if an interface is a Java annotation or not
+	!emHasStereotypeAssignment( prJavaAnnotationStereotype() )
+		? prefix() + name.toFirstUpper() + suffix()
+		: prefixAnnotation() + name.toFirstUpper() + suffixAnnotation();
 
 /**
  * formats the name of an annotation using prefix + suffix
