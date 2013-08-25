@@ -63,14 +63,6 @@ public class Typo3Model2ModelComponent extends Model2ModelComponent {
 	 */
 	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._zhoXVAo_EeKxusbn3Pe47g) ENABLED START */
-		// init naming mapper (deprecated)
-		Map<String, Variable> globalVars = new HashMap<String, Variable>();
-		for (GlobalVarDef globalVarDef : getGlobalVarDef()) {
-			globalVars.put(globalVarDef.getName(), new Variable(globalVarDef.getName(), globalVarDef.getValue()));
-		}
-		ExecutionContext namingCtx = new ExecutionContextImpl(new TypeSystemImpl(), globalVars);
-		NameMapper.initNameMapper(getXtendNamingFile(), namingCtx, getMetaModel());
-		
 		// start execution
 		super.invokeInternal(context, monitor, issues);
 		/* PROTECTED REGION END */
