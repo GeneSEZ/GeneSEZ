@@ -33,6 +33,9 @@ public class Typo3Model2ModelComponent extends Model2ModelComponent {
 	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String extensionKey;
 	
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
+	private String extensionVendor;
+	
 	/**
 	 * Validates the configuration of the component before invocation.
 	 * @param	issues	Instance to collect all problems during configuration check.
@@ -45,6 +48,14 @@ public class Typo3Model2ModelComponent extends Model2ModelComponent {
 		} else {
 			// add workflow parameter for transformation variables as global variables
 			addGlobalVarDef("extensionKey", extensionKey);
+		}
+		
+		// check extension vendor
+		if (extensionVendor == null || extensionVendor.isEmpty()) {
+			issues.addError(this, "Workflow parameter 'extensionVendor' must be present.", extensionVendor);
+		} else {
+			// add workflow parameter for transformation variables as global variables
+			addGlobalVarDef("extensionVendor", extensionVendor);
 		}
 		
 		// add workflow parameter for transformation variables as global variables
@@ -104,6 +115,21 @@ public class Typo3Model2ModelComponent extends Model2ModelComponent {
 	 */
 	public void setExtensionKey(String extensionKey) {
 		this.extensionKey = extensionKey;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>extensionVendor</b></em>'.
+	 */
+	public String getExtensionVendor() {
+		return this.extensionVendor;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>extensionVendor</b></em>'.
+	 * @param	extensionVendor	the value to set.
+	 */
+	public void setExtensionVendor(String extensionVendor) {
+		this.extensionVendor = extensionVendor;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._esLdUAo9EeKxusbn3Pe47g) ENABLED START */
