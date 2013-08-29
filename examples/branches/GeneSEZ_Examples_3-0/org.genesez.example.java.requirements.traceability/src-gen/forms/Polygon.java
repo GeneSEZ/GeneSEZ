@@ -23,7 +23,7 @@ public class Polygon implements Form {
 	 * constructs a polygon with the specified points
 	 * @param	points	points describing a polygon in the given order
 	 */
-	public Polygon(Point[] points) {
+	public Polygon(Point... points) {
 		/* PROTECTED REGION ID(java.constructor._16_0_b6f02e1_1249463814500_484130_734) ENABLED START */
 		this.points = new Point[points.length];
 		for (int i = 0; i < points.length; i++) {
