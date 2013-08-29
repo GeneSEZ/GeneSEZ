@@ -67,7 +67,7 @@ public class Circle extends AbstractForm implements Form {
 	 */
 	public void rotate(double phi) {
 		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871307421_631477_281__14_0_b6f02e1_1212580097609_734698_127) ENABLED START */
-		center.rotate(phi);		
+		center.rotate(phi);
 		/* PROTECTED REGION END */
 	}
 	
@@ -88,7 +88,7 @@ public class Circle extends AbstractForm implements Form {
 	 */
 	public void repaint(Color color, boolean solid) {
 		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871307421_631477_281__16_0_b6f02e1_1249464738828_388422_1023) ENABLED START */
-		if(theShape != null) {
+		if (theShape != null) {
 			Scene.getBoard().removeShape(theShape);
 		}
 		theShape = Scene.getBoard().drawCircle(center.getX(), center.getY(), radius);

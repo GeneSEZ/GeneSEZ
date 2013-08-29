@@ -92,9 +92,9 @@ public class Point extends AbstractForm implements Form {
 	 */
 	public void rotate(Point center, double phi) {
 		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871095796_723781_254__14_0_b6f02e1_1214478889937_90346_236) ENABLED START */
-		this.move(-1*center.getX(), -1*center.getY());	// moving to center
-		this.rotate(phi);								// rotating
-		this.move(center.getX(), center.getY());		// moving back
+		this.move(-1 * center.getX(), -1 * center.getY()); // moving to center
+		this.rotate(phi); // rotating
+		this.move(center.getX(), center.getY()); // moving back
 		/* PROTECTED REGION END */
 	}
 	
@@ -104,7 +104,7 @@ public class Point extends AbstractForm implements Form {
 	 */
 	public void repaint(Color color, boolean solid) {
 		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871095796_723781_254__16_0_b6f02e1_1249464738828_388422_1023) ENABLED START */
-		if(theShape != null) {
+		if (theShape != null) {
 			Scene.getBoard().removeShape(theShape);
 		}
 		Scene.getBoard().drawPoint(x, y);

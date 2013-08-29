@@ -105,7 +105,7 @@ public class Line extends AbstractForm implements Form {
 	 */
 	public Point getCenterOfArea() {
 		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871374078_396988_308__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
-		return new Point((start.getX()+end.getX())/2, (start.getY()+end.getY())/2);
+		return new Point((start.getX() + end.getX()) / 2, (start.getY() + end.getY()) / 2);
 		/* PROTECTED REGION END */
 	}
 	
