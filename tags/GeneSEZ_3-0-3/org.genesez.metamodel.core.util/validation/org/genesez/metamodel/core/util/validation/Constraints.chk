@@ -1,0 +1,128 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+
+import gcore;
+
+
+/**
+ * Validates a GeneSEZ Core model.
+ * 
+ * @author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
+ */
+
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::Conversion;
+
+extension org::genesez::metamodel::core::util::profile::GeneSEZProfileAccessElement;
+
+
+// -- Classifier Checks -------------------------------------------------------------------------------------
+
+
+/**
+ * Checks if a classifier is not both abstract and final.
+ * 
+ * @return	False if the classifier is both abstract and final, otherwise true.
+ */
+context MClassifier ERROR "GeneSEZ: Classifiers cannot be both final and abstract! " + fqmn() :
+	!( abstract && final );
+
+
+/**
+ * Checks if a non-abstract classifier does not have abstract operations.
+ * 
+ * @return	False if the non-abstract classifier has abstract operations, otherwise true.
+ */
+context MClassifier WARNING "GeneSEZ: Non-abstract classifiers cannot have abstract operations! " + fqmn() :
+	!( !abstract && operation.exists( o | o.abstract == true ) );
+
+
+// -- Interface Checks --------------------------------------------------------------------------------------
+
+
+/**
+ * Checks if an interface does not have realizations.
+ * 
+ * @return	False if the interface has realizations, otherwise true.
+ */
+context MInterface ERROR "GeneSEZ: Interfaces cannot have realizations! " + fqmn() :
+	realization.isEmpty;
+
+
+// -- Association Role Checks -------------------------------------------------------------------------------
+
+
+/**
+ * Checks a bidirectional association does not have a qualifier on the opposite.
+ * 
+ * @return	False if a bidirectional association has a qualifier on the opposite, otherwise true.
+ */
+context MAssociationRole WARNING "GeneSEZ: Bidirectional associations cannot have a qualifier on the opposite! " + fqmn() :
+	opposite == null
+		? true
+		: !( opposite.qualifier != null );
+
+
+// -- Operation Checks --------------------------------------------------------------------------------------
+
+
+/**
+ * Checks if an operation is not both abstract and final.
+ * 
+ * @return	False if the operation is both abstract and final, otherwise true.
+ */
+context MOperation ERROR "GeneSEZ: Operations cannot be both final and abstract! " + fqmn() :
+	!( abstract && final );
+
+
+/**
+ * Checks if an abstract operation is contained within an abstract class.
+ * 
+ * @return	False if the abstract operation is not contained within an abstract class, otherwise true.
+ */
+context MOperation WARNING "GeneSEZ: Abstract operations must be contained in an abstract class! " + fqmn() :
+	!( abstract && !classifier.abstract );
+
+
+/**
+ * Checks if a destructor operation does not have parameters.
+ * 
+ * @return	False if the destructor operation has parameters, otherwise true.
+ */
+context MOperation WARNING "GeneSEZ: Destructor operations cannot have parameters! " + fqmn() :
+	!( isDestructor() && !parameter.isEmpty );
+
+
+/**
+ * Checks if a destructor operation does not have a return parameter.
+ * 
+ * @return	False if the destructor operation has a return parameter, otherwise true.
+ */
+context MOperation WARNING "GeneSEZ: Destructor operations cannot have return parameters! " + fqmn() :
+	!( isDestructor() && return != null );
+
+
+/**
+ * Checks if a parameter has a type.
+ * 
+ * @return	False if the parameter has no type, otherwise true.
+ */
+context MParameter WARNING "GeneSEZ: Parameters needs to have a type! " + fqmn() + " of " + operation.fqmn() :
+	! ( ( type == null || type == Void ) && direction != "return" );
+
+
+// -- Type Checks -------------------------------------------------------------------------------------------
+
+/**
+ * Checks if an attribute with array type has a fixed upper bound multiplicity.
+ * 
+ * @return	False if the attribute has an array type without default value and without fixed upper bound multiplicity, otherwise true.
+ */
+context MAttribute WARNING "GeneSEZ: Attribute with array type cannot be initialized due to the missing upper bound multiplicity value! " + fqmn() :
+	multiplicity.isMultiValued() && prHasPrimitiveStereotype() && !hasDefaultValue()
+		? multiplicity.hasFixedUpperBoundMultiplicity()
+		: true;

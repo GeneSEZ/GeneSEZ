@@ -1,0 +1,88 @@
+«IMPORT gcore»
+
+«REM»
+	Template for operation annotations of the jws platform
+	
+	@author		andre pflueger
+	@date		2009-04-10
+«ENDREM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION org::genesez::util::logging::Logging»
+
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
+
+«REM»
+	generates annotations for java web services (jws)
+	should be seperated in own cartridge cause it depends not on ejb and vice versa
+	there is already a seperation on modell level
+	
+	check for coorect using of the stereotypes jwsWebResult (only for return type) 
+	and jwsWebParam (only for parameter) necessary
+«ENDREM»
+«DEFINE WebMethod FOR MOperation-»
+	«IF classifier.emHasTaggedValue("ejb3SessionBean", "stateful", "false")-»
+		«IF emHasStereotypeAssignment("jwsWebMethod")-»
+			@WebMethod(exclude=«emGetTaggedValue("jwsWebMethod", "exclude")-»
+			«IF emHasUtilizableTaggedValue("jwsWebMethod", "operationName")-»
+				, operationName="«emGetTaggedValue("jwsWebMethod", "operationName")-»"
+			«ENDIF-»
+			«IF emHasUtilizableTaggedValue("jwsWebMethod", "action")-»
+				, action="«emGetTaggedValue("jwsWebMethod", "action")-»"
+			«ENDIF-»)
+		«ENDIF-»
+		«IF emHasTaggedValue("jwsWebMethod", "oneway", "true")-»
+			@Oneway
+		«ENDIF-» 			
+		«IF emHasStereotypeAssignment("jwsWebEndpoint")-»
+			@WebEndpoint(name="«this.classifier.name-»Port")
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM» 
+	evaluate the stereotype "jwsWebParam"
+	should be seperated in own cartridge
+«ENDREM»
+«DEFINE WebParam FOR MElement-»
+	«IF emHasStereotypeAssignment("jwsWebParam")-»
+		@WebParam(header=«emGetTaggedValue("jwsWebParam", "header")-»
+		«IF emHasUtilizableTaggedValue("jwsWebParam", "name")-»
+			, name="«emGetTaggedValue("jwsWebParam", "name")-»"
+		«ENDIF-»
+		«IF emHasUtilizableTaggedValue("jwsWebParam", "partName")-»
+			, partName="«emGetTaggedValue("jwsWebParam", "partName")-»"
+		«ENDIF-»
+		«IF emHasUtilizableTaggedValue("jwsWebParam", "targetNamespace")-»
+			, targetNamespace="«emGetTaggedValue("jwsWebParam", "targetNamespace")-»"
+		«ENDIF-»
+		«IF emHasUtilizableTaggedValue("jwsWebParam", "mode")-»
+			, mode=WebParam.Mode.«emGetTaggedValue("jwsWebParam", "mode")-»
+		«ENDIF-»)
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM» 
+	evaluate the stereotype "jwsWebResult"
+	should be seperated in own cartridge
+«ENDREM»
+«DEFINE WebResult FOR MOperation-»
+	«IF classifier.emHasTaggedValue("ejb3SessionBean", "stateful", "false") && emHasStereotypeAssignment("jwsWebResult")-»
+		@WebResult(header=«emGetTaggedValue("jwsWebResult", "header")-»
+		«IF emHasUtilizableTaggedValue("jwsWebResult", "name")-»
+			name="«emGetTaggedValue("jwsWebResult", "name")-»"
+		«ENDIF-»
+		«IF emHasUtilizableTaggedValue("jwsWebResult", "partName")-»
+			partName="«emGetTaggedValue("jwsWebResult", "partName")-»"
+		«ENDIF-»
+		«IF emHasUtilizableTaggedValue("jwsWebResult", "targetNamespace")-»
+			targetNamespace="«emGetTaggedValue("jwsWebResult", "targetNamespace")-»"
+		«ENDIF-»)
+	«ENDIF»
+«ENDDEFINE»

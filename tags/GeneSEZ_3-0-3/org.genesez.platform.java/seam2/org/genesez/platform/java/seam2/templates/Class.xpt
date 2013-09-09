@@ -1,0 +1,294 @@
+«REM»
+	JBoss Seam Framework cartridge (version 2.1.2)
+	
+	description:
+	The template is based on the ejb cartridge and evaluates several stereotypes
+	to generate annotations of JBoss Seam. Its uses aspects around the methhods
+	of the ejb annotations in the Xpand files of the ejb3 cartridge.
+	
+	@author		andre pflueger
+	@date		2008/10/29
+	@version 	1.0
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION org::genesez::util::logging::Logging»
+
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
+
+«EXTENSION org::genesez::platform::java::util::Conversion»
+«EXTENSION org::genesez::platform::java::seam2::scripts::Naming»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::seam2::scripts::Interface»
+
+«REM»
+	calls every xpand operation for MClass instances
+«ENDREM»
+«DEFINE Annotation FOR MClass-»
+	«EXPAND _Component-»
+	«EXPAND _Role-»
+	«EXPAND _HttpError-»
+	«EXPAND _Redirect-»
+	«EXPAND _Converter-»
+	«EXPAND _Validator-»
+	«EXPAND _ServletContainerIntegration-»
+	«EXPAND _JavaBean-»
+	«EXPAND _Startup-»
+	«EXPAND _Install-»
+	«EXPAND Element::Restrict-»
+	«EXPAND Element::_Permission-»
+	«EXPAND Element::ReadOnly-»
+	«EXPAND Element::Transactional-»
+	«EXPAND _EJB3ApplicationException-»
+«ENDDEFINE»
+
+«REM»
+	evaluates the stereotype seam2Interceptor
+«ENDREM»
+«DEFINE _Interceptor FOR MClass-»
+	«IF emHasStereotypeAssignment("seam2Interceptor")»
+		@Interceptor(stateless=«taggedValue.selectFirst(e|e.tag.name == "stateless").value-»
+		«IF emHasUtilizableTaggedValue("seam2Interceptor", "type") && !emHasTaggedValue("seam2Interceptor", "type", "DEFAULT")-»
+			, type=InterceptorType.«taggedValue.selectFirst(e|e.tag.name == "type").value-»	
+		«ENDIF-»
+		«IF emHasUtilizableTaggedValue("seam2Interceptor", "around")-»
+			, around={«FOREACH emAllTaggedValues("seam2Interceptor", "around") AS values SEPARATOR ", "-»
+				«values-»
+			«ENDFOREACH-»}	
+		«ENDIF-»
+		«IF emHasUtilizableTaggedValue("seam2Interceptor", "within")-»
+			, within={«FOREACH emAllTaggedValues("seam2Interceptor", "within") AS values SEPARATOR ", "-»
+				«values-»
+			«ENDFOREACH-»}	
+		«ENDIF-»)
+	«ENDIF»
+«ENDDEFINE»
+
+«REM»
+	evaluates the JavaBean stereotypes 
+	Warning: Not for usage in ejb3 environment!!!
+«ENDREM»
+«DEFINE _JavaBean FOR MClass-»
+	«IF emHasStereotypeAssignment("seam2JavaBeanInterceptors")-»
+		«IF emHasUtilizableTaggedValue("seam2JavaBeanInterceptors", "value")-»
+			@Interceptors(
+			{«FOREACH emAllTaggedValues("seam2JavaBeanInterceptor", "value") AS values SEPARATOR ", "-»
+				«values-»
+			«ENDFOREACH-»})
+		«ENDIF»	
+		«IF emHasStereotypeAssignment("seam2ApplicationException")-»
+			@ApplicationException(rollback=«emGetTaggedValue("seam2ApplicationException", "rollback")-»
+			«IF emHasTaggedValue("seam2ApplicationException", "end", "true")-»
+				, end=true
+			«ENDIF-»)
+		«ENDIF-»
+	«ENDIF-»	
+«ENDDEFINE»
+
+«REM»
+	add stereotype to ejb3 profile and evaluate in ejb3 cartridge
+«ENDREM»
+«DEFINE _EJB3ApplicationException FOR MClass-»
+	«IF emHasStereotypeAssignment("seam2ApplicationException")-»
+		@ApplicationException(rollback=«emGetTaggedValue("seam2ApplicationException", "rollback")-»)
+	«ENDIF-»
+«ENDDEFINE»
+«REM»
+	evaluates the stereotype seam2Validator
+«ENDREM»
+«DEFINE _Validator FOR MClass-»
+	«IF emHasStereotypeAssignment("seam2Validator")-»
+		@Validator
+		«IF emHasUtilizableTaggedValue("seam2Validator", "id")-»
+			{«taggedValue.selectFirst(e|e.tag.name == "id").value-»)	
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	evaluates the stereotype seam2Converter
+«ENDREM»
+«DEFINE _Converter FOR MClass-»
+	«IF emHasStereotypeAssignment("seam2Converter")-»
+		«IF !emHasUtilizableTaggedValue("seam2Converter", "id")-»
+			@Converter("«name-»"
+		«ELSE»
+			@Converter("«taggedValue.selectFirst(e|e.tag.name == "id").value-»"
+		«ENDIF-»
+		«IF emHasUtilizableTaggedValue("seam2Converter", "forClass")-»
+			, «taggedValue.selectFirst(e|e.tag.name == "forClass").value-»	
+		«ENDIF-»
+		)		
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	evaluates the stereotype seam2ServletContainerIntegration
+«ENDREM»
+«DEFINE _ServletContainerIntegration FOR MClass-»
+	«IF emHasStereotypeAssignment("seam2ServletContainerIntegration")»
+		«IF emHasUtilizableTaggedValue("seam2ServletContainerIntegration", "within") || 
+			emHasUtilizableTaggedValue("seam2ServletContainerIntegration", "around")»
+			@Filter
+			«IF emHasUtilizableTaggedValue("seam2ServletContainerIntegration", "around")-»
+				({«FOREACH emAllTaggedValues("seam2ServletContainerIntegration", "around") AS values SEPARATOR ", "-»
+					"«values-»"
+				«ENDFOREACH-»})	
+			«ENDIF-»
+			«IF emHasUtilizableTaggedValue("seam2ServletContainerIntegration", "within")»
+				({«FOREACH emAllTaggedValues("seam2ServletContainerIntegration", "around") AS values SEPARATOR ", "-»
+					"«values-»"
+				«ENDFOREACH-»})	
+			«ENDIF-»
+		«ENDIF»
+	«ENDIF»
+«ENDDEFINE»
+
+«REM»
+	evaluates the stereotype seam2Redirect
+«ENDREM»
+«DEFINE _Redirect FOR MClass-»
+	«IF emHasStereotypeAssignment("seam2Redirect")-»
+		@Redirect(end=«emGetTaggedValue("seam2Redirect", "end")-»
+		«IF emHasUtilizableTaggedValue("seam2Redirect", "viewId")-»
+			, viewId="«emGetTaggedValue("seam2Redirect", "viewId")-»"
+		«ENDIF-»
+		«IF emHasUtilizableTaggedValue("seam2Redirect", "message")-»
+			, message="«emGetTaggedValue("seam2ExceptionRedirect", "message")-»"
+		«ENDIF-»)
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	evaluates the stereotype seam2HttpError
+«ENDREM»
+«DEFINE _HttpError FOR MClass-»
+	«IF emHasStereotypeAssignment("seam2HttpError")-»
+		@HttpError(end=«emGetTaggedValue("seam2HttpError", "end")-»
+		«IF emHasUtilizableTaggedValue("seam2HttpError", "errorCode") || !emHasTaggedValue("seam2HttpError", "errorCode", "500")-»
+			, errorCode="«emGetTaggedValue("seam2HttpError", "errorCode")-»"
+		«ENDIF-»
+		«IF emHasUtilizableTaggedValue("seam2HttpError", "message")-»
+			, message="«emGetTaggedValue("seam2HttpError", "message")-»"
+		«ENDIF-»)
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	evaluates the stereotype seam2Component
+«ENDREM»
+«DEFINE _Component FOR MClass-»
+	«IF emHasStereotypeAssignment("seam2Component")-»
+		«IF emHasUtilizableTaggedValue("seam2Component", "name")-»
+			@Name("«projectNamespace()-»«emGetTaggedValue("seam2Component", "name")-»")
+		«ELSE-»
+			@Name("«projectNamespace()-»«asTypeName().toFirstLower()-»")
+		«ENDIF-»
+		«IF emHasUtilizableTaggedValue("seam2Component", "scope") && !emHasTaggedValue("seam2Component", "scope", "UNSPECIFIED")-»
+			@Scope(ScopeType.«emGetTaggedValue("seam2Component", "scope")-»)
+		«ENDIF-»
+		«IF emHasUtilizableTaggedValue("seam2Component", "jndiName")-»
+			@JndiName("«emGetTaggedValue("seam2Component", "jndiName")-»")
+		«ENDIF-»
+		«IF emHasTaggedValue("seam2Component", "byPassInterceptor", "true")»
+			@ByPassInterceptor
+		«ENDIF-»
+		«IF emHasTaggedValue("seam2Component", "conversational", "true")»
+			@Conversational
+		«ENDIF-»
+		«IF emHasUtilizableTaggedValue("seam2Component", "synchronizedTimeout") && !emHasTaggedValue("seam2Component", "synchronizedTimeout", "1000")-»
+			@Synchronized(timeout=«emGetTaggedValue("seam2Component", "synchronizedTimeout")-»)
+		«ENDIF-»
+		«IF emHasTaggedValue("seam2Component", "autoCreate", "true")-»
+			@AutoCreate
+		«ENDIF-»	
+	«ENDIF-»	
+«ENDDEFINE»
+
+«REM»
+	evaluates the stereotype seam2Role
+«ENDREM»
+«DEFINE _Role FOR MClass-»
+	«IF emHasStereotypeAssignment("seam2Role") && 
+		(emHasUtilizableTaggedValue("seam2Role", "name") || emHasUtilizableTaggedValue("seam2Role", "scope"))-»
+		@Roles({
+		«FOREACH emAllTaggedValues("seam2Role", "name") AS names SEPARATOR ","-»
+			@Role(name="«names-»"
+			«LET emAllTaggedValues("seam2Role", "scope").indexOf(names) AS index-»
+				«IF !emHasTaggedValue("seam2Role", "scope", "UNSPECIFIED") && emHasUtilizableTaggedValue("seam2Role", "scope")-»
+					, scope=ScopeType.«emAllTaggedValues("seam2Role", "scope").get(index)-»
+				«ENDIF-»
+			«ENDLET-»)
+		«ENDFOREACH-»	
+		})
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	evaluates the stereotype seam2Install
+«ENDREM»
+«DEFINE _Install FOR MClass-»
+	«IF emHasStereotypeAssignment("seam2Install")-»
+		«IF emHasTaggedValue("seam2Install", "value", "false")-»
+			@Install(false)
+		«ENDIF-»		
+		«IF emHasTaggedValue("seam2Install", "value", "true") && 
+			( 
+				emHasTaggedValue("seam2Install", "installDebug", "true") ||
+				emHasUtilizableTaggedValue("seam2Install", "dependencies") ||
+				emHasUtilizableTaggedValue("seam2Install", "genericDependencies") ||
+				emHasUtilizableTaggedValue("seam2Install", "classDependencies") || 
+				(
+					emHasUtilizableTaggedValue("seam2Install", "precedence") && 
+					!emHasTaggedValue("seam2Install", "precedence", "20")
+				)
+			)-»
+			@Install(debug="«emGetTaggedValue("seam2Install", "debug")-»"
+			«IF emHasUtilizableTaggedValue("seam2Install", "dependencies")-»
+				, dependencies={
+				«FOREACH emAllTaggedValues("seam2Install", "dependencies") AS value SEPARATOR ", "-»
+					"«value-»"
+				«ENDFOREACH-»}				
+			«ENDIF-»
+			«IF emHasUtilizableTaggedValue("seam2Install", "genericDependencies")-»
+				, genericDependencies={
+				«FOREACH emAllTaggedValues("seam2Install", "genericDependencies") AS value SEPARATOR ", "-»
+					«value-»
+				«ENDFOREACH-»}	
+			«ENDIF-»
+			«IF emHasUtilizableTaggedValue("seam2Install", "classDependencies")-»
+				, classDependencies={
+				«FOREACH emAllTaggedValues("seam2Install", "classDependencies") AS value SEPARATOR ", "-»
+					"«value-»"
+				«ENDFOREACH-»}	
+			«ENDIF-»
+			«IF emHasTaggedValue("seam2Install", "precedence", "false")-»
+				, precedence=Install.«emGetTaggedValue("seam2Install", "precedence")-»
+			«ENDIF-»)
+		«ENDIF-»	
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	evaluates the stereotype seam2Startup
+«ENDREM»
+«DEFINE _Startup FOR MClass-»
+	«IF emHasStereotypeAssignment("seam2Startup")-»
+		@Startup
+		«IF emHasTaggedValue("seam2Startup", "depends", "true")-»
+			@Startup
+			«IF emHasUtilizableTaggedValue("seam2Startup", "depends")-»
+				(depends={
+				«FOREACH emAllTaggedValues("seam2Startup", "depends") AS value SEPARATOR ", "-»
+					"«value-»"
+				«ENDFOREACH-»})
+			«ENDIF-»
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»

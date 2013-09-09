@@ -1,0 +1,73 @@
+«REM»
+	Template for java5 according to elements in general
+	
+	@author	nancy doerfel
+	@author tobias haubold (last)
+	@date	2010-09-04
+«ENDREM»
+«IMPORT gcore»
+
+«EXTENSION org::genesez::util::logging::Logging»
+
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::mapping::type::TypeMapping»
+«EXTENSION org::genesez::mapping::name::NameMapping»
+
+«EXTENSION org::genesez::platform::java::m2m::Annotation»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Generates the corresponding annotation for each stereotype with the java5 annotation stereotype.
+«ENDREM»
+«DEFINE JavaAnnotation FOR MElement -»
+	«EXPAND Annotation( this ) FOREACH stereotype.select( s|s.emHasStereotypeAssignment( prJavaAnnotationStereotype() ) ) -»
+«ENDDEFINE»
+
+«REM»
+	Generates the corresponding annotation for the given stereotype.
+	Tagged values belonging on the specified element belonging to the given stereotype
+	are transformed into elements of the annotation.
+	
+	Note: here we are currently not really able to generate only annotation elements with a value
+	different from their default value.
+«ENDREM»
+«DEFINE Annotation(MElement e) FOR MStereotype -»
+	@«asTypeName() -»
+	«IF !e.taggedValue.select(e|e.tag.stereotype == this).isEmpty -»
+	(
+		«FOREACH property.select( p | !e.emOwningTaggedValues(name, p.name).isEmpty ) AS p SEPARATOR ", " -»
+			«LET e.emOwningTaggedValues( name, p.name ) AS tvs -»
+			«IF tvs.size > 1 -»
+				«p.name» = { «FOREACH tvs AS tv SEPARATOR ", " -»«tv.value»«ENDFOREACH -» }
+			«ELSE -»
+				«p.name» = «tvs.first().value -»
+			«ENDIF -»
+			«ENDLET -»
+		«ENDFOREACH -»
+	)
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM» nancy's version
+	«FOREACH stereotype.select( s|s.emHasStereotype( java5AnnotationStereotype() ) ) AS s -»
+	@«s.name.toFirstUpper()»
+	«IF !s.taggedValue.isEmpty -»
+		(«taggedValue.value.getElements()»
+		«FOREACH taggedValue AS taggedValue-»
+			«FOREACH taggedValue.value.getElements() AS name SEPARATOR ","-»
+				«name-»
+			«ENDFOREACH -»
+		«ENDFOREACH -»
+		)
+	«ENDIF -»
+	«ENDFOREACH -»
+«ENDREM»
