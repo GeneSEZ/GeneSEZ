@@ -149,6 +149,25 @@ MElement cloneMetaData(MElement source, MElement destination) :
 	source.cloneTaggedValues( destination ) ->
 	destination;
 
+/**
+ * Clones the meta data of the specified stereotypes of the source element to the specified destination element, i.e.
+ * all stereotype assignments and all tagged values of stereotype assignments.
+ * 
+ * Note: Despite the fact cloneTaggedValues() clones stereotype assignments, it does only clone stereotypes
+ *       assignments having tagged values, not those without tagged values.
+ * 
+ * @param 	source		The source element.
+ * @param 	destination	The destination element.
+ * @param 	stereotypes	A list of stereotype names restricting the meta data to clone.
+ * @return	The specified destination element. 
+ */
+MElement cloneMetaData(MElement source, MElement destination, List[String] stereotypes) :
+	source.stereotype.select( s|stereotypes.contains(s.name) ).collect( st|
+		source.cloneStereotypeAssignments( destination, st.name ) ->
+		source.cloneTaggedValues( destination, st.name )
+	) ->
+	destination;
+
 
 // -- Extension Mechanism - Stereotype Assignments ----------------------------------------------------------
 
@@ -162,6 +181,20 @@ MElement cloneMetaData(MElement source, MElement destination) :
  */
 MElement cloneStereotypeAssignments(MElement source, MElement destination) :
 	source.stereotype.collect( s | 
+		destination.ensureStereotypeAssignment( s ) 
+		) ->
+	destination;
+
+/**
+ * Clones the specified stereotype assignment if available.
+ * 
+ * @param 	source		The source element.
+ * @param 	destination	The destination element.
+ * @param 	stereotype	The stereotype name of the stereotype assignment to clone.
+ * @return	The specified destination element. 
+ */
+MElement cloneStereotypeAssignments(MElement source, MElement destination, String stereotype) :
+	source.stereotype.select( s|s.name == stereotype ).collect( s | 
 		destination.ensureStereotypeAssignment( s ) 
 		) ->
 	destination;
@@ -180,6 +213,22 @@ MElement cloneStereotypeAssignments(MElement source, MElement destination) :
  */
 MElement cloneTaggedValues(MElement source, MElement destination) :
 	source.taggedValue.collect( tv | 
+		tv.value != null 
+			? destination.ensureTaggedValueExistence( tv.tag, tv.value ) 
+			: destination.ensureTaggedValueExistence( tv.tag, tv.valueReference) 
+		) ->
+	destination;
+
+/**
+ * Clones all tagged values of the specified stereotype assignment if available.
+ * 
+ * @param 	source		The source element.
+ * @param 	destination	The destination element.
+ * @param 	stereotype	The stereotype all tagged values belonging to.
+ * @return	The specified destination element. 
+ */
+MElement cloneTaggedValues(MElement source, MElement destination, String stereotype) :
+	source.taggedValue.select( tv|tv.owningElement.stereotype.name == stereotype ).collect( tv | 
 		tv.value != null 
 			? destination.ensureTaggedValueExistence( tv.tag, tv.value ) 
 			: destination.ensureTaggedValueExistence( tv.tag, tv.valueReference) 
