@@ -130,6 +130,26 @@ MMultiplicity cloneMultiplicity(MMultiplicity source) :
 	createMultiplicity( source.lowerBound, source.upperBound, source.unique, source.ordered );
 
 
+// -- Extension Mechanism - Meta Data -----------------------------------------------------------------------
+
+
+/**
+ * Clones all meta data of the specified source element to the specified destination element, i.e.
+ * all stereotype assignments and all tagged values of stereotype assignments.
+ * 
+ * Note: Despite the fact cloneTaggedValues() clones stereotype assignments, it does only clone stereotypes
+ *       assignments having tagged values, not those without tagged values.
+ * 
+ * @param 	source		The source element.
+ * @param 	destination	The destination element.
+ * @return	The specified destination element. 
+ */
+MElement cloneMetaData(MElement source, MElement destination) :
+	source.cloneStereotypeAssignments( destination ) ->
+	source.cloneTaggedValues( destination ) ->
+	destination;
+
+
 // -- Extension Mechanism - Stereotype Assignments ----------------------------------------------------------
 
 
