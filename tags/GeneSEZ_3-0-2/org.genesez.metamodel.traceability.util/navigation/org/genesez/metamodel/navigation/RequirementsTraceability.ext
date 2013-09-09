@@ -1,0 +1,62 @@
+import gcore;
+import greq;
+import gtrace;
+
+/**
+ * Provides navigation functions between the metamodels gcore, greq and gtrace:
+ * - gcore to gtrace
+ * - greq to gtrace
+ * - greq to gcore
+ * - gcore to greq
+ * 
+ * @author toh
+ */
+extension org::genesez::workflow::xpand::WorkflowContextSupport;
+extension org::genesez::util::logging::Logging;
+
+// access to models using global variables
+MModel gcore() : getSlot( gcoreModel() );
+RModel greq() : getSlot( greqModel() );
+TTraceModel gtrace() : getSlot( gtraceModel() );
+
+String gcoreModel() : GLOBALVAR gcoreModelSlot;
+String greqModel() : GLOBALVAR greqModelSlot;
+String gtraceModel() : GLOBALVAR gtraceModelSlot;
+
+// direct navigation support
+List[RRequirement] requirement(MElement this) : requirementTrace().requirement;
+List[RScenario] scenario(MClassifier this) : scenarioTrace().scenario;
+List[RScenario] scenario(MStateMachine this) : scenarioTrace().scenario;
+List[RScenarioStep] scenarioStep(MOperation this) : scenarioStepTrace().scenarioStep;
+List[RScenarioStep] scenarioStep(MState this) : scenarioStepTrace().scenarioStep;
+
+List[MElement] element(RRequirement this) : requirementTrace().structuralElement;
+List[MClassifier] classifier(RScenario this) : scenarioTrace().classifier;
+List[MStateMachine] stateMachine(RScenario this) : scenarioTrace().stateMachine;
+List[MOperation] operation(RScenarioStep this) : scenarioStepTrace().operation;
+List[MState] state(RScenarioStep this) : scenarioStepTrace().state;
+
+// navigation to trace model
+cached List[TRequirementTrace] requirementTrace(MElement this) :
+	gtrace().requirementTrace.select(e|e.structuralElement.xmiGuid == xmiGuid).sortBy(e|e.requirement.precedence);
+
+cached List[TScenarioTrace] scenarioTrace(MClassifier this) :
+	gtrace().scenarioTrace.select(e|e.classifier.xmiGuid == xmiGuid).sortBy(e|e.scenario.precedence);
+
+cached List[TScenarioTrace] scenarioTrace(MStateMachine this) :
+	gtrace().scenarioTrace.select(e|e.stateMachine.xmiGuid == xmiGuid).sortBy(e|e.scenario.precedence);
+
+cached List[TScenarioStepTrace] scenarioStepTrace(MOperation this) :
+	gtrace().scenarioStepTrace.select(e|e.operation.xmiGuid == xmiGuid).sortBy(e|e.scenarioStep.scenario.precedence);
+
+cached List[TScenarioStepTrace] scenarioStepTrace(MState this) :
+	gtrace().scenarioStepTrace.select(e|e.state.xmiGuid == xmiGuid).sortBy(e|e.scenarioStep.scenario.precedence);
+
+cached List[TRequirementTrace] requirementTrace(RRequirement this) :
+	gtrace().requirementTrace.select(e|e.requirement.id == id).sortBy(e|e.requirement.precedence);
+
+cached List[TScenarioTrace] scenarioTrace(RScenario this) :
+	gtrace().scenarioTrace.select(e|e.scenario.id == id).sortBy(e|e.scenario.precedence);
+
+cached List[TScenarioStepTrace] scenarioStepTrace(RScenarioStep this) :
+	gtrace().scenarioStepTrace.select(e|e.scenarioStep.id == id).sortBy(e|e.scenarioStep.scenario.precedence);

@@ -1,0 +1,137 @@
+«IMPORT gcore»
+«IMPORT greq»
+
+«IMPORT org::genesez::platform::dashboard::specification»
+«IMPORT org::genesez::platform::dashboard::structure»
+
+«REM»
+	Generates an overview of traceable specification and structure model elements
+	@author tobias haubold
+«ENDREM»
+
+«EXTENSION org::genesez::metamodel::navigation::RequirementsTraceability»
+
+«EXTENSION org::genesez::platform::dashboard::AccessHelper»
+«EXTENSION org::genesez::platform::dashboard::Conversion»
+«EXTENSION org::genesez::platform::dashboard::Dashboard»
+«EXTENSION org::genesez::platform::dashboard::Naming»
+
+
+«DEFINE Root FOR RModel»
+«FILE traceableFileName()»
+	«EXPAND TraceableSpecification -»
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE TraceableSpecification FOR RModel -»
+	<h2>Traceable Specification and Structural Elements</h2>
+	«EXPAND _TraceableSpecificationOverview -»
+	«EXPAND _TraceableScenarios -»
+	«EXPAND _TraceableScenarioSteps -»
+	«EXPAND _TraceableRequirements -»
+«ENDDEFINE»
+
+«DEFINE _TraceableSpecificationOverview FOR RModel -»
+<div>
+	<table class="centerCellsStarting2nd">
+		<tr>
+			<th></th>
+			<th>Total</th>
+			<th>Traceable</th>
+			<th>Rate</th>
+		</tr>
+		«EXPAND _TraceableElement( scenariosWithSatisfaction() ) FOR scenario -»
+		«EXPAND _TraceableElement( scenarioStepsWithSatisfaction() ) FOR scenario.step -»
+		«EXPAND _TraceableElement( requirementsWithSatisfaction() ) FOR requirement -»
+		«EXPAND _TraceableElement( gcore().classifierWithSpecification() ) FOR gcore().allClassifiers() -»
+		«EXPAND _TraceableElement( gcore().associationRolesWithSpecification() ) FOR gcore().allAssociationRoles() -»
+		«EXPAND _TraceableElement( gcore().operationsWithSpecification() ) FOR gcore().allOperations() -»
+		«EXPAND _TraceableElement( gcore().parametersWithSpecification() ) FOR gcore().allParameters() -»
+		«EXPAND _TraceableElement( gcore().attributesWithSpecification() ) FOR gcore().allAttributes() -»
+	</table>
+</div>
+«ENDDEFINE»
+
+«DEFINE _TraceableElement(List[Object] traceable) FOR List[Object] -»
+		<tr>
+			<td>«first().asMetaTypeNamePlural() -»</td>
+			<td>«size -»</td>
+			<td>«traceable.size -»</td>
+			<td>
+			«LET percentage(size, traceable.size) AS p -»
+				«IF p == -1»-«ELSE»«p»% «IF first().isSpecification()»satisfied«ELSE»specified«ENDIF»«ENDIF -»
+			«ENDLET -»
+			</td>
+		</tr>
+«ENDDEFINE»
+
+«DEFINE _TraceableScenarios FOR RModel -»
+«LET scenariosWithSatisfaction() AS scenario -»
+«IF !scenario.isEmpty -»
+<div>
+	<h3>Traceable Scenarios</h3>
+	«FOREACH scenario AS s -»
+	<dl class="list">
+		<dt>«EXPAND GreqCommon::ListItem(false) FOR s -»<dt>
+		<dd>
+			<div class="list">
+			«EXPAND GcoreCommon::ListItem FOREACH s.classifier() -»
+			</div>
+		</dd>
+	</dl>
+	«ENDFOREACH -»
+</div>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+«DEFINE _TraceableScenarioSteps FOR RModel -»
+«LET scenarioStepsWithSatisfaction() AS scenarioStep -»
+«IF !scenarioStep.isEmpty -»
+<div>
+	<h3>Traceable Scenario Steps</h3>
+	<dl class="list">
+	«FOREACH scenarioStep.scenario.toSet() AS s -»
+		<dt>«EXPAND GreqCommon::ListItem(false) FOR s -»</dt>
+		<dd>
+		«FOREACH s.step.select( s|s.isSatisfied() ).sortBy( e|e.sort() ) AS step -»
+			<dl class="list">
+				<dt>«EXPAND GreqCommon::ListItem(false) FOR step -»</dt>
+				<dd>
+					<div class="list">
+						«EXPAND GcoreCommon::ListItem FOREACH step.operation() -»
+					</div>
+				</dd>
+			</dl>
+		«ENDFOREACH -»
+		</dd>
+	«ENDFOREACH -»
+	</dl>
+</div>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+«DEFINE _TraceableRequirements FOR RModel -»
+«LET requirementsWithSatisfaction() AS requirement -»
+«IF !requirement.isEmpty -»
+<div>
+	<h3>Traceable Requirements</h3>
+	«FOREACH requirement AS r -»
+	<dl class="list">
+		<dt>«EXPAND GreqCommon::ListItem(false) FOR r -»</dt>
+		<dd>
+			<div class="list">
+				«EXPAND GcoreCommon::ListItem(true) FOREACH r.element().typeSelect(MClassifier) -»
+				«EXPAND GcoreCommon::ListItem(true) FOREACH r.element().typeSelect(MAssociationRole) -»
+				«EXPAND GcoreCommon::ListItem(true) FOREACH r.element().typeSelect(MOperation) -»
+				«EXPAND GcoreCommon::ListItem(true) FOREACH r.element().typeSelect(MParameter) -»
+				«EXPAND GcoreCommon::ListItem(true) FOREACH r.element().typeSelect(MAttribute) -»
+			</div>
+		</dd>
+	</dl>
+	«ENDFOREACH -»
+</div>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
