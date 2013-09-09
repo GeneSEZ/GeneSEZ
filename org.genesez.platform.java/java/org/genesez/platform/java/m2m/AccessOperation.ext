@@ -12,7 +12,7 @@ import gcore;
  * 
  * @todo	association access operations for associations on realized interfaces
  * 
- * @author	andre pflueger <andre.pflueger@fh-zwickau.de>
+ * @author	andre pflueger
  * @author	tobias haubold <toh@fh-zwickau.de>
  */
 extension org::genesez::metamodel::core::util::AccessElement;
@@ -24,23 +24,9 @@ extension org::genesez::metamodel::core::util::Helper;
 extension org::genesez::metamodel::core::util::GlobalVar;
 extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
 extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
-extension org::genesez::metamodel::core::util::profile::GeneSEZProfileAccessElement;
 extension org::genesez::platform::java::util::Naming;
 extension org::genesez::util::logging::Logging;
 
-
-/**
- *	Checks the accessor stereotype for final attributes.
- *	If a set access operation should be generated, the generation will
- *	be suppressed, else nothing is done
- * 
- * 	@api
- */
-MAttribute emAccessorForFinalAttribute(MAttribute this) :
-	final && this.emHasStereotypeAssignment( prAccessor() )
-	&& emGenerateSetAccess()
-		? prSetAccessorSetter( "false" )
-		: this;
 
 /**
  * Processes property accesss operations by delegating the execution to containment objects.
@@ -189,6 +175,11 @@ String visibility(MProperty this) :
 	globalVarUsePropertyVisibilityForAccessors()
 		? visibility
 		: "public";
+
+boolean isStatic(MProperty this) :
+	metaType == MAttribute
+		? ((MAttribute)this).static
+		: false;
 
 
 // - - checks for property access operations - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

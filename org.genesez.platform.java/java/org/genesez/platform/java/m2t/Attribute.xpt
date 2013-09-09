@@ -86,7 +86,7 @@
 	for 'final' attributes, the generation of setter's is suppressed
 «ENDREM»
 «DEFINE Accessors FOR MClass -»
-«REM»«EXPAND _Getter FOREACH property.typeSelect(MAttribute).select( e| e.emGenerateGetAccess() && e.final && !e.derived ) -»«ENDREM»
+«EXPAND _Getter FOREACH property.typeSelect(MAttribute).select( e| e.emGenerateGetAccess() && e.final && !e.derived ) -»
 «FOREACH property.typeSelect(MAttribute).select( e| !e.final && !e.derived ) AS a -»
 	«REM» «IF a.generateGetter() -»«EXPAND _Getter FOR a -»«ENDIF -» «ENDREM»
 	«REM» «IF a.generateSetter() -»«EXPAND _Setter FOR a -»«ENDIF -» «ENDREM»
