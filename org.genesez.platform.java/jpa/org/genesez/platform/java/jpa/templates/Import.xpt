@@ -1,0 +1,87 @@
+«IMPORT gcore»
+
+«REM»
+	import statements for jpa platform
+	
+	@author		andre pflueger
+	@date		2010-10-11
+«ENDREM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION org::genesez::util::logging::Logging»
+
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
+
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
+«EXTENSION org::genesez::platform::java::jpa::scripts::Naming»
+«EXTENSION org::genesez::platform::java::jpa::scripts::Class»
+
+«REM» 
+	generates import proReg and statements for hibernate classes
+	is used by aspects to extend´import generation of java5 cartridge
+«ENDREM»
+«DEFINE ImportStatements FOR MClassifier-»
+	«IF emHasStereotypeAssignment("jpaPersistentEntity")-»
+		import javax.persistence.Entity;
+		«IF isClass() && (this.generalization.size == 0 || checkAnnotationTableUsage((MClass) this)) -»
+			import javax.persistence.Table;
+		«ENDIF-»
+		«IF !generalization.typeSelect(MClass).exists(e | e.emHasStereotypeAssignment("jpaPersistentEntity")) -»
+			import java.io.Serializable;
+		«ENDIF-»
+	«ENDIF-»
+	«IF property.exists(e|e.emHasStereotypeAssignment("jpaOptimisticLocking")) || operation.exists(e|e.emHasStereotypeAssignment("jpaOptimisticLocking"))-»
+		import javax.persistence.Version;
+	«ENDIF-»
+	«IF emHasStereotypeAssignment("jpaInheritance")-»
+		import javax.persistence.Inheritance;
+		import javax.persistence.InheritanceType;
+	«ENDIF»
+	«IF property.exists(e|e.emHasStereotypeAssignment("jpaPersistenceUnit")) || operation.exists(e|e.emHasStereotypeAssignment("jpaPersistenceUnit"))-»		 
+		import javax.persistence.PersistenceUnit;
+	«ENDIF-»
+	«IF property.exists(e|e.emHasStereotypeAssignment("jpaPersistenceContext")) || operation.exists(e|e.emHasStereotypeAssignment("jpaPersistenceContext"))-»	
+		import javax.persistence.PersistenceContext;
+	«ENDIF-»
+	«IF operation.exists(e|e.emHasTaggedValue("jpaAssociation", "type", "OneToOne")) || property.exists(e|e.emHasTaggedValue("jpaAssociation", "type", "OneToOne"))-»
+		import javax.persistence.OneToOne;
+	«ENDIF-»
+	«IF operation.exists(e|e.emHasTaggedValue("jpaAssociation", "type", "ManyToOne")) || property.exists(e|e.emHasTaggedValue("jpaAssociation", "type", "ManyToOne"))-»
+		import javax.persistence.ManyToOne;
+	«ENDIF-»
+	«IF operation.exists(e|e.emHasTaggedValue("jpaAssociation", "type", "OneToMany")) || property.exists(e|e.emHasTaggedValue("jpaAssociation", "type", "OneToMany"))-»
+		import javax.persistence.OneToMany;
+	«ENDIF-»
+	«IF operation.exists(e|e.emHasTaggedValue("jpaAssociation", "type", "ManyToMany")) || property.exists(e|e.emHasTaggedValue("jpaAssociation", "type", "ManyToMany"))-»
+		import javax.persistence.ManyToMany;
+	«ENDIF-»
+	«IF operation.exists(e|e.emHasUtilizableTaggedValue("jpaAssociation", "cascade")) || property.exists(e|e.emHasUtilizableTaggedValue("jpaAssociation", "cascade"))-»
+		import javax.persistence.CascadeType;
+	«ENDIF-»
+	«IF operation.exists(e|e.emHasStereotypeAssignment("jpaColumn")) || property.exists(e|e.emHasStereotypeAssignment("jpaColumn"))-»
+		import javax.persistence.Column;
+	«ENDIF-»
+	«IF operation.exists(e|e.emHasStereotypeAssignment("jpaPrimaryKey")) || property.exists(e|e.emHasStereotypeAssignment("jpaPrimaryKey"))-»
+		import javax.persistence.Id;
+		import javax.persistence.GeneratedValue;
+		import javax.persistence.GenerationType;
+	«ENDIF»
+	«IF emHasTaggedValue("jpaPrimaryKey", "embeddedId", "true")-»
+		import javax.persistence.EmbeddedId;
+	«ENDIF-»
+	«IF emHasStereotypeAssignment("jpaPrimaryKeyClass")-»
+		import javax.persistence.IdClass;
+	«ENDIF-»
+	«REM» realize as JPA specific type mapping file ?!? «ENDREM»
+	«IF property.exists(e|e.type.mapName().asTypeName() == "EntityManager")-»
+		import javax.persistence.EntityManager;
+	«ENDIF-»
+	«IF property.exists(e|e.type.mapName().asTypeName() == "EntityManagerFactory")-»
+		import javax.persistence.EntityManagerFactory;
+	«ENDIF-»	
+«ENDDEFINE»

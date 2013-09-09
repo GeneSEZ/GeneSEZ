@@ -39,37 +39,13 @@ MClassifier check(MClassifier this) :
 	this;
 
 /**
- * Checks if the specified operation is already realized on the specified classifier, if not it is realized.
+ * Realizes the specified operation on the specified classifier if not already realized.
  */
 MClassifier realize(MOperation realizable, MClassifier this, List[MOperation] realized) :
 	realized.exists( o|o.isRealized(realizable) ).logDebug("Realization check for '" + realizable.fqmn() + "' resolved: ") == true
 		? this
-		: doRealization(realizable, this) ->
+		: realizable.cloneOperation( this ).setAbstract( false ) ->
 	this;
-
-/**
- * Realizes the specified operation on the specified classifier.
- */
-MOperation doRealization(MOperation realizable, MClassifier this) :
-	let realization = realizable.cloneOperation( this ) :
-		realization.setAbstract( false ) ->
-		realizable.cloneMetaData(realization, {"delegate", "primitive"}) ->
-		realizable.parameter != null && !realizable.parameter.isEmpty
-			? cloneMetaData( realizable.parameter, realization.parameter, {"di", "primitive"} )
-			: this ->
-		realizable.return != null
-			? cloneMetaData( realizable.return, realization.return, {"di", "primitive"} )
-			: this ->
-	this;
-
-/**
- * Clones all meta data of the specified list of parameters to the specified list of parameters.
- */
-MOperation cloneMetaData(List[MParameter] source, List[MParameter] destination, List[String] stereotypes) :
-	source.first().cloneMetaData( destination.first(), stereotypes ) ->
-	source.size > 1 && destination.size > 1
-		? source.withoutFirst().cloneMetaData( destination.withoutFirst(), stereotypes )
-		: destination.first().operation;
 
 /**
  * Checks if the first operation is an realization of the second operation.

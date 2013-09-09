@@ -6,13 +6,10 @@ package org.genesez.workflow.profile;
  */
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.CLASS;
-import java.lang.annotation.Target;
-import static java.lang.annotation.ElementType.FIELD;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
  */
-@Target({ FIELD })
 @Retention(CLASS)
 public @interface WfVariable {
 	
