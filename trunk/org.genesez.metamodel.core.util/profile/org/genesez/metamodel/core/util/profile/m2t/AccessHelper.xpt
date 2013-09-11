@@ -28,18 +28,22 @@
 «ENDREM»
 «DEFINE Root FOR MModel -»
 «FILE globalVarAccessHelperFileName() -»
-«EXPAND Comment::AccessHelperFile -»
+«EXPAND Comment::CopyrightNotice -»
 
-// based on genesez core meta model
 import gcore;
 
+
+«EXPAND Comment::AccessHelperFile -»
+
+
 // use metamodel core extension mechanism scripts
-extension org::genesez::metamodel::core::util::ExtensionMechanism;
+extension org::genesez::metamodel::core::util::AccessElement;
 
 // use profile scripts
 extension «globalVarXtendFilePath() -»::«globalVarProfileFileName().replaceFirst(".ext", "") -»;
 
-«EXPAND StereotypeElement FOREACH allNestedClassifiers().typeSelect(MClass).sortBy(e | e.name) -»
+
+«EXPAND StereotypeElement FOREACH allNestedClassifiers().typeSelect(MClass).sortBy( c | c.name ) -»
 «ENDFILE -»
 «ENDDEFINE»
 
@@ -52,13 +56,14 @@ extension «globalVarXtendFilePath() -»::«globalVarProfileFileName().replaceFi
 «EXPAND HasStereotype -»
 «EXPAND HasTaggedValue -»
 «EXPAND HasTaggedValueReference -»
-«FOREACH property.typeSelect(MAttribute).sortBy(e | e.name) AS a -»
+«FOREACH property.typeSelect( MAttribute ).sortBy( a | a.name ) AS a -»
 	«EXPAND Comment::TaggedValueSection FOR a -»
 	
-	«EXPAND HasTaggedValue FOR a -»
 	«EXPAND HasUtilizableTaggedValue FOR a -»
+	«EXPAND HasTaggedValue FOR a -»
+	«EXPAND GetOwningTaggedValues FOR a -»
 	«EXPAND GetTaggedValue FOR a -»
-	«EXPAND SetTaggedValue FOR a -»
+	«REM»«EXPAND SetTaggedValue FOR a -»«ENDREM»«"" -»
 	«REM»«EXPAND IsTaggedValue  FOR a -»«ENDREM»«"" -»
 «ENDFOREACH -»
 «ENDDEFINE»
@@ -73,7 +78,8 @@ extension «globalVarXtendFilePath() -»::«globalVarProfileFileName().replaceFi
 «DEFINE HasStereotype FOR MClass -»
 «EXPAND Comment::HasStereotype -»
 boolean «asAccessHelperHasStereotype() -»(MElement this) :
-	emHasStereotype( «asProfileScriptName() -»() );
+	emHasStereotypeAssignment( «asProfileScriptName() -»() );
+
 
 «ENDDEFINE»
 
@@ -85,7 +91,8 @@ boolean «asAccessHelperHasStereotype() -»(MElement this) :
 «EXPAND Comment::HasTaggedValue -»
 boolean «asAccessHelperHasTaggedValue() -»(MElement this, String tag, String value) :
 	emHasTaggedValue( «asProfileScriptName() -»(), tag, value );
-	
+
+
 «ENDIF -»
 «ENDDEFINE»
 
@@ -97,7 +104,8 @@ boolean «asAccessHelperHasTaggedValue() -»(MElement this, String tag, String v
 «EXPAND Comment::HasTaggedValueReference -»
 boolean «asAccessHelperHasTaggedValue() -»(MElement this, String tag, MElement valueReference) :
 	emHasTaggedValue( «asProfileScriptName() -»(), tag, valueReference );
-	
+
+
 «ENDIF -»
 «ENDDEFINE»
 
@@ -114,6 +122,7 @@ boolean «asAccessHelperHasTaggedValue() -»(MElement this, MElement valueRefere
 	emHasTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»(), valueReference );
 «ENDIF -»
 
+
 «ENDDEFINE»
 
 
@@ -128,6 +137,18 @@ boolean «asAccessHelperHasUtilizableTaggedValue() -»(MElement this) :
 boolean «asAccessHelperHasUtilizableTaggedValue() -»(MElement this) :
 	emHasUtilizableTaggedValueReference( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
 «ENDIF -»
+
+
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE GetOwningTaggedValues FOR MAttribute -»
+«EXPAND Comment::GetOwningTaggedValues -»
+List[MTaggedValue] «asAccessHelperGetOwningTaggedValues() -»(MElement this) : 
+	emOwningTaggedValues( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
+
 
 «ENDDEFINE»
 
@@ -154,11 +175,13 @@ List[MElement] «asAccessHelperGetTaggedValue() -»(MElement this) :
 «ENDIF -»
 «ENDIF -»
 
+
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
+«REM»
 «DEFINE SetTaggedValue FOR MAttribute -»
 «EXPAND Comment::SetTaggedValue -»
 «IF !isTaggedValueReference() -»
@@ -169,18 +192,6 @@ Void «asAccessHelperSetTaggedValue() -»(MElement this, MElement valueReference
 	setTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»(), valueReference );
 «ENDIF -»
 
+
 «ENDDEFINE»
-
-
-«REM»
 «ENDREM»
-«DEFINE IsTaggedValue FOR MAttribute -»
-«IF type.isEnumeration() -»
-«FOREACH ((MEnumeration)type).literal AS l -»
-«EXPAND Comment::IsTaggedValue(l) -»
-boolean «asAccessHelperIsTaggedValue(l) -»(MElement this) :
-	emHasTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»(), «l.asProfileScriptName() -»() );
-
-«ENDFOREACH -»
-«ENDIF -»
-«ENDDEFINE»

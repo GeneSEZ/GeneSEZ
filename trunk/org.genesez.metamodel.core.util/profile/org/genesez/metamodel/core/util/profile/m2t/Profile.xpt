@@ -27,12 +27,14 @@
 «ENDREM»
 «DEFINE Root FOR MModel -»
 «FILE globalVarProfileFileName() -»
+«EXPAND Comment::CopyrightNotice -»
+
+ 
 «EXPAND Comment::ProfileFile -»
 
 
-«REM»
-«ENDREM»
-«EXPAND ProfileElement FOREACH allNestedClassifiers().select( e | e.metaType == MClass || e.metaType == MEnumeration ).sortBy(e | e.name) -»
+«EXPAND ProfileElement FOREACH allNestedClassifiers().typeSelect( MClass ).sortBy( c | c.name ) -»
+«EXPAND ProfileElement FOREACH allNestedClassifiers().typeSelect( MEnumeration ).sortBy( e | e.name ) -»
 «ENDFILE -»
 «ENDDEFINE»
 
@@ -42,11 +44,8 @@
 «DEFINE ProfileElement FOR MClass -»
 «EXPAND Comment::StereotypeSection -»
 
-
-«REM»
-«ENDREM»
 «EXPAND Stereotype -»
-«EXPAND TaggedValue FOREACH property.typeSelect(MAttribute).sortBy(e | e.name) -»
+«EXPAND TaggedValue FOREACH property.typeSelect( MAttribute ).sortBy( a | a.name ) -»
 «ENDDEFINE»
 
 
@@ -56,7 +55,7 @@
 «EXPAND Comment::EnumerationSection -»
 
 «EXPAND Enumeration -»
-«EXPAND Literal FOREACH literal.sortBy(e| e.name) -»
+«EXPAND Literal FOREACH literal.sortBy( l | l.name ) -»
 «ENDDEFINE»
 
 
@@ -77,6 +76,7 @@
 String «asProfileScriptName() -»() :
 	"«name -»";
 
+
 «ENDDEFINE»
 
 
@@ -86,6 +86,7 @@ String «asProfileScriptName() -»() :
 «EXPAND Comment::Enumeration -»
 String «asProfileScriptName() -»() :
 	"«name -»";
+
 
 «ENDDEFINE»
 
@@ -97,6 +98,7 @@ String «asProfileScriptName() -»() :
 String «asProfileScriptName() -»() :
 	"«name -»";
 
+
 «ENDDEFINE»
 
 
@@ -106,5 +108,6 @@ String «asProfileScriptName() -»() :
 «EXPAND Comment::Literal -»
 String «asProfileScriptName() -»() :
 	"«name -»";
+
 
 «ENDDEFINE»
