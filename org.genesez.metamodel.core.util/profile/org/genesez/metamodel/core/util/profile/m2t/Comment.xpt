@@ -23,11 +23,24 @@
 
 «REM»
 «ENDREM»
+«DEFINE CopyrightNotice FOR MModel -»
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+«ENDDEFINE»
+
+«REM»
+«ENDREM»
 «DEFINE ProfileFile FOR MModel -»
 /**
- * Xtend representation of "«name -»" profile 
- * for single point of change.
- *  
+ * Xtend representation of "«name -»" profile for single point of change.
+ * 
+ * HINT: All scripts for profile information are available under the prefix 'pr'.
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
  */
 «ENDDEFINE»
 
@@ -36,9 +49,11 @@
 «ENDREM»
 «DEFINE AccessHelperFile FOR MModel -»
 /**
- * Simplifies access to "«name -»" profile 
- * and makes working with the profile more easier. 
- *  
+ * Simplifies access to "«name -»" profile and makes working with them more easier.
+ * 
+ * HINT: All scripts for extension mechanism are available under the prefix 'em'.
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer) 
  */
 «ENDDEFINE»
 
@@ -47,11 +62,7 @@
 	Generates a stereotype section comment.
 «ENDREM»
 «DEFINE StereotypeSection FOR MClass -»
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	Xtend scripts for stereotype "«name»"
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// -- Xtend scripts for Stereotype "«name»" --
 «ENDDEFINE»
 
 
@@ -59,11 +70,7 @@
 	Generates a enumeration section comment.
 «ENDREM»
 «DEFINE EnumerationSection FOR MEnumeration -»
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	Xtend scripts for enumeration "«name»"
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// -- Xtend scripts for enumeration "«name»" --
 «ENDDEFINE»
 
 
@@ -81,9 +88,7 @@
 «ENDREM»
 «DEFINE Stereotype FOR MClass -»
 /**
- * Returns the name of the stereotype "«name -»".
- * 
- * @return the name of the stereotype
+ * Returns the stereotype name "«name -»".
  */
 «ENDDEFINE»
 
@@ -92,10 +97,7 @@
 «ENDREM»
 «DEFINE TaggedValue FOR MAttribute -»
 /**
- * Returns the name of the tagged value "«name -»"
- * for the stereotype "«classifier.name -»".
- * 
- * @return the name of the tagged value
+ * Returns the tagged value name "«name -»" of the stereotype "«classifier.name -»".
  */
 «ENDDEFINE»
 
@@ -104,9 +106,7 @@
 «ENDREM»
 «DEFINE Enumeration FOR MEnumeration -»
 /**
- * Returns the name of the enumeration "«name -»".
- * 
- * @return the name of the enumeration
+ * Returns the enumeration name "«name -»".
  */
 «ENDDEFINE»
 
@@ -115,10 +115,7 @@
 «ENDREM»
 «DEFINE Literal FOR MLiteral -»
 /**
- * Returns the name of the literal "«name -»"
- * for the enumeration "«owningEnumeration.name -»".
- * 
- * @return the name of the literal
+ * Returns the literal name "«name -»" of the enumeration "«owningEnumeration.name -»".
  */
 «ENDDEFINE»
 
@@ -127,9 +124,9 @@
 «ENDREM»
 «DEFINE HasStereotype FOR MClass -»
 /**
- * Checks if an element is annotated with stereotype "«name -»".
+ * Checks if an element is annotated with the stereotype "«name -»".
  * 
- * @return true if the element has the stereotype, otherwise false
+ * @return	True if the element has the stereotype assigned, otherwise false.
  */
 «ENDDEFINE»
 
@@ -138,12 +135,12 @@
 «ENDREM»
 «DEFINE HasTaggedValue FOR MClass -»
 /**
- * Checks if an element has a value of a specific tagged value 
- * of the stereotype "«name -»".
+ * Checks if an element is annotated with the specified value 
+ * of the specified tagged value of the stereotype "«name -»".
  *
- * @param tag  the name of a tagged value
- * @param value  the value of a tagged value
- * @return true if the element has a tagged value with the given value, otherwise false
+ * @param	tag		The name of a tagged value.
+ * @param	value	The value of a tagged value.
+ * @return	True if the element has a tagged value, otherwise false.
  */
 «ENDDEFINE»
 
@@ -152,30 +149,12 @@
 «ENDREM»
 «DEFINE HasTaggedValueReference FOR MClass -»
 /**
- * Checks if an element has a value reference of a specific tagged value 
- * of the stereotype "«name -»".
+ * Checks if an element is annotated with the specified value reference 
+ * of the specified tagged value of the stereotype "«name -»".
  *
- * @param tag  the name of a tagged value
- * @param valueReference  the value reference of a tagged value
- * @return true if the element has a tagged value with the given value reference, otherwise false
- */
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE HasTaggedValue FOR MAttribute -»
-/**
- * Checks if an element has a value of the tagged value "«name -»" 
- * of the stereotype "«classifier.name -»".
- *
-«IF !isTaggedValueReference() -»
- * @param value  the value of a tagged value
- * @return true if the element has a tagged value with the given value, otherwise false
-«ELSE -»
- * @param valueReference  the value reference of a tagged value
- * @return true if the element has a tagged value with the given value reference, otherwise false
-«ENDIF -»
+ * @param	tag				The name of a tagged value.
+ * @param	valueReference	The value reference of a tagged value.
+ * @return	True if the element has a tagged value, otherwise false.
  */
 «ENDDEFINE»
 
@@ -185,15 +164,17 @@
 «DEFINE HasUtilizableTaggedValue FOR MAttribute -»
 /**
 «IF !isTaggedValueReference() -»
- * Checks if an element has a value of the tagged value "«name -»" 
- * of the stereotype "«classifier.name -»" and the value is utilizable (not empty or null).
+ * Checks if an element has a utilizable value
+ * of the tagged value "«name -»" of the stereotype "«classifier.name -»" 
+ * which is neither empty ('') nor null ('null').
  *
- * @return true if the element has a tagged value with a utilizable value, otherwise false
+ * @return	True if the element has a utilizable tagged value, otherwise false.
 «ELSE -»
- * Checks if an element has a value reference of the tagged value "«name -»" 
- * of the stereotype "«classifier.name -»" and the value reference is utilizable (not null).
+ * Checks if an element has a utilizable value reference
+ * of the tagged value "«name -»" of the stereotype "«classifier.name -»" 
+ * which is not null.
  *
- * @return true if the element has a tagged value with a utilizable value reference, otherwise false
+ * @return	True if the element has a utilizable tagged value, otherwise false.
 «ENDIF -»
  */
 «ENDDEFINE»
@@ -201,13 +182,33 @@
 
 «REM»
 «ENDREM»
-«DEFINE IsTaggedValue(MLiteral l) FOR MAttribute -»
+«DEFINE HasTaggedValue FOR MAttribute -»
 /**
- * Checks if an element has the value "«l.name -»" 
- * of the tagged value "«name -»" 
- * of the stereotype "«classifier.name -»".
+«IF !isTaggedValueReference() -»
+ * Checks if an element is annotated with the specified value 
+ * of the tagged value "«name -»" of the stereotype "«classifier.name -»".
  *
- * @return true if the element has a tagged value with this value, otherwise false
+ * @param	value	The value of a tagged value.
+ * @return	True if the element has a tagged value, otherwise false.
+«ELSE -»
+ * Checks if an element is annotated with the specified value reference
+ * of the tagged value "«name -»" of the stereotype "«classifier.name -»".
+ *
+ * @param	valueReference	The value reference of a tagged value.
+ * @return	True if the element has a tagged value, otherwise false.
+«ENDIF -»
+ */
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE GetOwningTaggedValues FOR MAttribute -»
+/**
+ * Returns the list of owning tagged values 
+ * of the tagged value "«name -»" of the stereotype "«classifier.name -»".
+ * 
+ * @return	The list of tagged values, otherwise an empty list.
  */
 «ENDDEFINE»
 
@@ -218,30 +219,27 @@
 /**
 «IF multiplicity.isSingleValued() -»
 «IF !isTaggedValueReference() -»
- * Returns the value of the tagged value "«name -»"
+ * Returns the value of the single-valued tagged value "«name -»"
+ * of the stereotype "«classifier.name -»".
+ * 
+ * @return	The value of the single-valued tagged value, otherwise an empty string, if the tagged value is not assigned.
 «ELSE -»
- * Returns the value reference of the tagged value "«name -»"
+ * Returns the value reference of the single-valued tagged value "«name -»"
+ * of the stereotype "«classifier.name -»".
+ * 
+ * @return	The value reference of the single-valued tagged value, otherwise null, if the tagged value is not assigned.
 «ENDIF -»
 «ELSE -» 
 «IF !isTaggedValueReference() -»
- * Returns a list of values of the tagged value "«name -»"
-«ELSE -»
- * Returns a list of value references of the tagged value "«name -»"
-«ENDIF -»
-«ENDIF -»
+ * Returns the list of values of the multi-valued tagged value "«name -»"
  * of the stereotype "«classifier.name -»".
- *
-«IF multiplicity.isSingleValued() -»
-«IF !isTaggedValueReference() -»
- * @return the value of the tagged value
+ * 
+ * @return	The list of values of a multi-valued tagged value, otherwise an empty list, if the tagged value is not assigned.
 «ELSE -»
- * @return the value reference of the tagged value
-«ENDIF -»
-«ELSE -»
-«IF !isTaggedValueReference() -»
-* @return the values of the tagged value
-«ELSE -»
-* @return the value references of the tagged value
+ * Returns the list of value references of the multi-valued tagged value "«name -»"
+ * of the stereotype "«classifier.name -»".
+ * @return	The list of value references of a multi-valued tagged value, otherwise an empty list, if the tagged value is not assigned.
+ * 
 «ENDIF -»
 «ENDIF -»
  */
@@ -250,6 +248,7 @@
 
 «REM»
 «ENDREM»
+«REM»
 «DEFINE SetTaggedValue FOR MAttribute -»
 /**
 «IF !isTaggedValueReference() -»
@@ -266,6 +265,23 @@
 «ENDIF -»
  */
 «ENDDEFINE»
+«ENDREM»
+
+
+«REM»
+«ENDREM»
+«REM»
+«DEFINE IsTaggedValue(MLiteral l) FOR MAttribute -»
+/**
+ * Checks if an element has the value "«l.name -»" 
+ * of the tagged value "«name -»" 
+ * of the stereotype "«classifier.name -»".
+ *
+ * @return true if the element has a tagged value with this value, otherwise false
+ */
+«ENDDEFINE»
+«ENDREM»
+
 
 «REM»
 	-- Private templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
