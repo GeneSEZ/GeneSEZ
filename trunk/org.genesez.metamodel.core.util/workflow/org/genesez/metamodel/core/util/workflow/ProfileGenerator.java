@@ -109,7 +109,7 @@ public class ProfileGenerator extends SimpleModel2Text {
 	 */
 	@WfDefault(parameter = "template")
 	public String getDefaultTemplate() {
-		return "org::genesez::platform::common::profile::templates::Root::Root";
+		return "org::genesez::metamodel::core::util::profile::m2t::Root::Root";
 	}
 	
 	/**
