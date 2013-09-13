@@ -6,18 +6,9 @@ package org.genesez.platform.typo3.workflow;
  */
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
-import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
-import org.eclipse.xtend.expression.ExecutionContext;
-import org.eclipse.xtend.expression.ExecutionContextImpl;
-import org.eclipse.xtend.expression.TypeSystemImpl;
-import org.eclipse.xtend.expression.Variable;
-import org.genesez.mapping.name.NameMapper;
 import org.genesez.workflow.profile.WfDefault;
 import org.genesez.workflow.profile.WfParameter;
 import org.genesez.workflow.xpand.Model2TextComponent;
@@ -51,7 +42,7 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 			}
 		}
 		
-		// check extension key
+		// check extension name
 		if (extensionName == null || extensionName.isEmpty()) {
 			issues.addError(this, "Workflow parameter 'extensionName' must be present.", extensionName);
 		} else {
@@ -65,6 +56,14 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 		} else {
 			// add workflow parameter for transformation variables as global variables
 			addGlobalVarDef("extensionVendor", extensionVendor);
+		}
+		
+		// check extension key
+		if (extensionKey == null || extensionKey.isEmpty()) {
+			issues.addError(this, "Workflow parameter 'extensionKey' must be present.", extensionKey);
+		} else {
+			// add workflow parameter for transformation variables as global variables
+			addGlobalVarDef("extensionKey", extensionKey);
 		}
 		
 		// add workflow parameter for transformation variables as global variables
