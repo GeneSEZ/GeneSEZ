@@ -28,10 +28,10 @@ import org.genesez.workflow.xpand.Model2ModelComponent;
 public class Typo3Model2ModelComponent extends Model2ModelComponent {
 	
 	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
-	private boolean isT3MvcCompliant = false;
+	private boolean isT3MVCCompliant = true;
 	
 	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
-	private String extensionKey;
+	private String extensionName;
 	
 	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String extensionVendor;
@@ -43,11 +43,11 @@ public class Typo3Model2ModelComponent extends Model2ModelComponent {
 	public void checkConfiguration(Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._zhoXUAo_EeKxusbn3Pe47g) ENABLED START */
 		// check extension key
-		if (extensionKey == null || extensionKey.isEmpty()) {
-			issues.addError(this, "Workflow parameter 'extensionKey' must be present.", extensionKey);
+		if (extensionName == null || extensionName.isEmpty()) {
+			issues.addError(this, "Workflow parameter 'extensionName' must be present.", extensionName);
 		} else {
 			// add workflow parameter for transformation variables as global variables
-			addGlobalVarDef("extensionKey", extensionKey);
+			addGlobalVarDef("extensionName", extensionName);
 		}
 		
 		// check extension vendor
@@ -59,7 +59,7 @@ public class Typo3Model2ModelComponent extends Model2ModelComponent {
 		}
 		
 		// add workflow parameter for transformation variables as global variables
-		addGlobalVarDef("isT3MVCCompliant", isT3MvcCompliant);
+		addGlobalVarDef("isT3MVCCompliant", isT3MVCCompliant);
 		
 		// delegate to base class
 		super.checkConfiguration(issues);
@@ -82,39 +82,39 @@ public class Typo3Model2ModelComponent extends Model2ModelComponent {
 	/**
 	 * Method stub for further implementation.
 	 */
-	@WfDefault(parameter = "isT3MvcCompliant")
-	public boolean getDefaultIsT3MvcCompliant() {
-		return false;
+	@WfDefault(parameter = "isT3MVCCompliant")
+	public boolean getDefaultIsT3MVCCompliant() {
+		return true;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>isT3MvcCompliant</b></em>'.
+	 * Returns the value of attribute '<em><b>isT3MVCCompliant</b></em>'.
 	 */
-	public boolean getIsT3MvcCompliant() {
-		return this.isT3MvcCompliant;
+	public boolean getIsT3MVCCompliant() {
+		return this.isT3MVCCompliant;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>isT3MvcCompliant</b></em>'.
-	 * @param	isT3MvcCompliant	the value to set.
+	 * Sets the value of attribute '<em><b>isT3MVCCompliant</b></em>'.
+	 * @param	isT3MVCCompliant	the value to set.
 	 */
-	public void setIsT3MvcCompliant(boolean isT3MvcCompliant) {
-		this.isT3MvcCompliant = isT3MvcCompliant;
+	public void setIsT3MVCCompliant(boolean isT3MVCCompliant) {
+		this.isT3MVCCompliant = isT3MVCCompliant;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>extensionKey</b></em>'.
+	 * Returns the value of attribute '<em><b>extensionName</b></em>'.
 	 */
-	public String getExtensionKey() {
-		return this.extensionKey;
+	public String getExtensionName() {
+		return this.extensionName;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>extensionKey</b></em>'.
-	 * @param	extensionKey	the value to set.
+	 * Sets the value of attribute '<em><b>extensionName</b></em>'.
+	 * @param	extensionName	the value to set.
 	 */
-	public void setExtensionKey(String extensionKey) {
-		this.extensionKey = extensionKey;
+	public void setExtensionName(String extensionName) {
+		this.extensionName = extensionName;
 	}
 	
 	/**
