@@ -36,6 +36,9 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String extensionVendor;
 	
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
+	private String extensionKey;
+	
 	/**
 	 * Validates the configuration of the component before invocation.
 	 * @param	issues	Instance to collect all problems during configuration check.
@@ -146,6 +149,21 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 	 */
 	public void setExtensionVendor(String extensionVendor) {
 		this.extensionVendor = extensionVendor;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>extensionKey</b></em>'.
+	 */
+	public String getExtensionKey() {
+		return this.extensionKey;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>extensionKey</b></em>'.
+	 * @param	extensionKey	the value to set.
+	 */
+	public void setExtensionKey(String extensionKey) {
+		this.extensionKey = extensionKey;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._uBPwkApCEeKxusbn3Pe47g) ENABLED START */
