@@ -13,8 +13,8 @@
 	@date	2011-04-22
 «ENDREM»
 
-«REM» use common naming scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
+«REM» use TYPO3 MVC naming scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Naming»
 
 
 «REM»
@@ -28,7 +28,7 @@
 «ENDREM»
 «DEFINE Root FOR MClass -»
 «EXPAND Comment::ClassifierDeclaration -»
-«EXPAND Modifier -»class «name() -»«EXPAND Generalization -»«EXPAND Realization -» {
+«EXPAND Modifier -»class «asGeneralName() -»«EXPAND Generalization -»«EXPAND Realization -» {
 
 	«EXPAND Attribute::Declaration -»
 	«EXPAND Association::Declaration -»
@@ -67,7 +67,7 @@
 «ENDREM»
 «DEFINE Generalization FOR MClass -»
 «IF !generalization.isEmpty -»
- extends «generalization.first().name() -»
+ extends «generalization.first().asGeneralName() -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -77,7 +77,7 @@
 «ENDREM»
 «DEFINE Realization FOR MClass -»
 «IF !realization.isEmpty -»
- implements «FOREACH realization AS r SEPARATOR ", " -»«r.name() -»«ENDFOREACH -»
+ implements «FOREACH realization AS r SEPARATOR ", " -»«r.asGeneralName() -»«ENDFOREACH -»
 «ENDIF -»
 «ENDDEFINE»
 
