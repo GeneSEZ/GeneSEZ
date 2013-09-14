@@ -7,16 +7,16 @@
 
 
 /**
- * General naming conventions for TYPO3 CMS
+ * Naming conventions for TYPO3 CMS.
  * 
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
  */
 
 // use TYPO3 CMS profile
-extension org::genesez::platform::typo3::cms::profile::Profile;
+extension org::genesez::platform::typo3::cms::profile::TYPO3CMSProfile;
 
 
-// -- GENERAL TYPO3 CMS conventions -------------------------------------------------------------------------
+// -- TYPO3 CMS conventions ---------------------------------------------------------------------------------
 
 
 /**
@@ -26,18 +26,18 @@ extension org::genesez::platform::typo3::cms::profile::Profile;
  * @return	The TYPO3 CMS category.
  */
 
-String asT3Category(String category) :
+String asTYPO3Category(String category) :
 	category.toLowerCase();
 
 
 /**
- * Formats a string value into a TYPO3 CMS language value.
+ * Formats a string value into a TYPO3 CMS language key value.
  *
  * @param	language	The language to format.
- * @return	The TYPO3 CMS language.
+ * @return	The TYPO3 CMS language key.
  */
 
-String asT3Language(String language) :
+String asTYPO3LanguageKey(String language) :
 	language.toLowerCase();
 
 
@@ -47,7 +47,7 @@ String asT3Language(String language) :
  * @param	lockType	The lock type to format.
  * @return	The TYPO3 CMS lock type.
  */
-String asT3LockType(String lockType) :
+String asTYPO3LockType(String lockType) :
 	lockType.subString(0, 1);
 
 
@@ -57,9 +57,9 @@ String asT3LockType(String lockType) :
  * @param	priority	The priority to format.
  * @return	The TYPO3 CMS priority.
  */
-String asT3Priority(String priority) :
+String asTYPO3Priority(String priority) :
 	switch (priority) {
-		case prT3PriorityEmpty() :
+		case prTYPO3PriorityEmpty() :
 			""
 		default :
 			priority.toLowerCase()
@@ -72,9 +72,9 @@ String asT3Priority(String priority) :
  * @param	state	The state to format.
  * @return	The TYPO3 CMS state.
  */
-String asT3State(String state) :
+String asTYPO3State(String state) :
 	switch (state) {
-		case prT3StateExcludeFromUpdates() :
+		case prTYPO3StateExcludeFromUpdates() :
 			"excludeFromUpdates"
 		default :
 			state.toLowerCase()
@@ -87,7 +87,7 @@ String asT3State(String state) :
  * @param	mainModule	The main module to format.
  * @return	The TYPO3 CMS main module.
  */
-String asT3MainModul(String mainModule) :
+String asTYPO3MainModul(String mainModule) :
 	mainModule.toLowerCase();
 	
 	
@@ -97,7 +97,7 @@ String asT3MainModul(String mainModule) :
  * @param	accessRole	The access role to format.
  * @return	The TYPO3 CMS access role.
  */
-String asT3AccessRole(String accessRole) :
+String asTYPO3AccessRole(String accessRole) :
 	accessRole.toLowerCase();
 	
 
@@ -107,27 +107,25 @@ String asT3AccessRole(String accessRole) :
  * @param	tcxEvalType	The TCx eval type to format.
  * @return	The TYPO3 CMS TCx eval type.
  */
-String asT3TCxEvalType(String tcxEvalType) :
+String asTYPO3TCxEvalType(String tcxEvalType) :
 	tcxEvalType.toLowerCase();
 	
 
 /**
  * Formats a string value into a TYPO3 CMS associative array item.
  * 
- * Having a trailing comma after the last defined array entry, while unusual, 
- * is a valid syntax. 
+ * Having a trailing comma after the last defined array entry, while unusual, is a valid syntax. 
  * See http://php.net/manual/en/function.array.php
  *
- * When using this latter declaration, we encourage using a trailing comma for 
- * the last item in the array; this minimizes the impact of adding new items 
- * on successive lines, and helps to ensure no parse errors occur due to a 
- * missing comma. 
+ * When using this latter declaration, we encourage using a trailing comma for the last item in the array; 
+ * this minimizes the impact of adding new items on successive lines, and helps to ensure no parse errors 
+ * occur due to a missing comma. 
  * See http://framework.zend.com/manual/en/coding-standard.coding-style.html
  *
  * @param	item	The item to format.
  * @return	The TYPO3 CMS associative array item.
  */
-List[String] asT3AssociativeArrayItem(String item) :
+List[String] asTYPO3AssociativeArrayItem(String item) :
 	item.contains("=")
 		? (	let kv = item.replaceFirst("=", "=>").split("=>") :
 				"'" + kv.get(0).trim() + "' => " + kv.get(1).trim() + ","
