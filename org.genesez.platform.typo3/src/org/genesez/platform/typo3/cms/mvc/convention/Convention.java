@@ -1,4 +1,4 @@
-package org.genesez.platform.typo3cms.mvc.convention;
+package org.genesez.platform.typo3.cms.mvc.convention;
 
 /**
  * Utility class for TYPO3 CMS MVC extension conventions.
