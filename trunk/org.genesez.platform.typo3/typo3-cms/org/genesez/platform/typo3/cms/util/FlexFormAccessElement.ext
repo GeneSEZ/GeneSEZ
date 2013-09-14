@@ -1,0 +1,48 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+
+import gcore;
+
+
+/**
+ * Simplifies access to genesez models + makes working with the genesez metamodel more easier.
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ */
+
+// use TYPO3 CMS profile + access helper scripts
+extension org::genesez::platform::typo3::cms::profile::TYPO3CMSProfile;
+extension org::genesez::platform::typo3::cms::profile::TYPO3CMSProfileAccessElement;
+
+	
+// -- TYPO3 CMS FlexForm ------------------------------------------------------------------------------------
+
+
+/**
+ * Returns the a list of FlexForm sheets for a plugin without the 'DEFAULT' sheet.
+ * 
+ * @return	The list of FlexForm sheets or an empty list.
+ */
+List[String] allFlexFormSheetsWithoutDefault(MInterface this) :
+	let sheets = {} :
+		property.typeSelect(MAttribute).select( e | e.emGetTYPO3FlexFormPropertySheet() != "" ).
+			collect( e | sheets.add( e.emGetTYPO3FlexFormPropertySheet() ) ) ->
+		sheets.toSet() ->
+		sheets.remove( prTYPO3FlexFormSheetDefault() ) ->
+		sheets.sortBy( s | s );
+
+
+/**
+ * Returns the a list of attributes for a FlexForm sheet for a plugin.
+ * 
+ * @param	sheet	The name of the FlexForm sheet.
+ * @return	The list of attributes for a FlexForm sheet or an empty list.
+ */
+List[MAttribute] allFlexFormSheetProperties(MInterface this, String sheet) :
+	sheet == "sDEF"
+		? property.typeSelect(MAttribute).select( e | e.emGetTYPO3FlexFormPropertySheet() == "" || e.emGetTYPO3FlexFormPropertySheet() == prTYPO3FlexFormSheetDefault() )
+		: property.typeSelect(MAttribute).select( e | e.emGetTYPO3FlexFormPropertySheet() == sheet );
