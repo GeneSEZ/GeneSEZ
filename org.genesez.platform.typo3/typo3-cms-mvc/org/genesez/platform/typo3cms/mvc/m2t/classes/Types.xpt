@@ -12,10 +12,6 @@
 «REM» use logging scripts «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«REM» use TYPO3 MVC naming context and common naming scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::NamingContext»
-
 «REM» use TYPO3 MVC conversion scripts «ENDREM»
 «EXTENSION org::genesez::platform::typo3cms::mvc::convention::Conversion»
 
@@ -30,8 +26,6 @@
 	Processes the generation of a type.
 «ENDREM»
 «DEFINE Root FOR MClassifier -»
-«EXPAND ContextSettings -»
-
 «FILE fileNamePath( fileNamePHP() ) -»
 <?php
 
@@ -48,15 +42,6 @@
 	private functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
-
-«REM»
-	Sets the naming and type mapping context for this part of generation. 
-«ENDREM»
-«DEFINE ContextSettings FOR MClassifier -»
-«setInternalNamingContext( namingContextGeneral() ) -»
-«setExternalNamingContext("") -»
-«ENDDEFINE»
-
 
 «REM»
 	Processes the generation of a class.

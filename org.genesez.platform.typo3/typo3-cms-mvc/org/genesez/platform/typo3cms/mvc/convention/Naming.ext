@@ -2,7 +2,6 @@
  * General naming conventions for TYPO3 MVC.
  * 
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date	2011-08-20
  */
 
 // based on genesez meta model
@@ -13,16 +12,19 @@ extension org::genesez::platform::typo3cms::mvc::profile::ExtbaseProfile;
 extension org::genesez::platform::typo3cms::mvc::profile::ExtbaseAccessElement;
 
 // use TYPO3 naming context and common naming scripts
-extension org::genesez::metamodel::core::util::mapping::NameMapping;
-extension org::genesez::platform::typo3cms::mvc::convention::NamingContext;
+extension org::genesez::metamodel::core::util::mapping::TypeMapping;
+//extension org::genesez::metamodel::core::util::mapping::NameMapping;
+//extension org::genesez::platform::typo3cms::mvc::convention::NamingContext;
 
 // use TYPO3 MVC convention scripts
 extension org::genesez::platform::typo3cms::mvc::convention::Convention;
 
 // use TYPO3 MVC access helper scripts which overrides
-// common access helper scripts if script name is equals
+// general access helper scripts if script name is equals
 extension org::genesez::platform::typo3cms::mvc::util::AccessElement;
 extension org::genesez::metamodel::core::util::AccessElement;
+
+extension org::genesez::util::Conversion;
 
 
 /*
@@ -49,6 +51,15 @@ cached String asDefaultName(MElement this) :
  */
 cached String asGeneralName(MElement this) :
 	name;
+	
+/**
+ * Formats the type name 
+ * in 'General' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted type name.
+ */
+cached String asGeneralName(MType this) :
+	"";
 
 
 /**
@@ -126,6 +137,14 @@ cached String asObjectName(MElement this) :
 cached String asGeneralName(MClassifier this) :
 	classifierNameBase() + classifierNameSeperator() + classifierNamePath() + classifierNameSeperator() + classifierNamePrefix() + name.toFirstUpper() + classifierNameSuffix();	
 
+/**
+ * Formats an external name 
+ * in 'General' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted external name.
+ */
+cached String asGeneralName(MExternal this) :
+	mapName();
 
 /**
  * Formats a classifier name 
@@ -252,7 +271,7 @@ cached String asPHPCompliantName(MProperty this) :
  * @return	The formatted attribute or association role name.
  */
 cached String asConfigurationName(MProperty this) :
-	JAVA org.genesez.platform.typo3cms.mvc.convention.Naming.toLowerPropertyName(org.genesez.metamodel.gcore.MProperty);
+	name.toLowerUnderscore();
 
 
 /**
