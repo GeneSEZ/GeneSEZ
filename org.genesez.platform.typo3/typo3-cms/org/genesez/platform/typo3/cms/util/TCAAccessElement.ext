@@ -1,0 +1,35 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+
+import gcore;
+
+
+/**
+ * Simplifies access to genesez models + makes working with the genesez metamodel more easier.
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ */
+
+// use TYPO3 CMS profile access element scripts
+extension org::genesez::platform::typo3::cms::profile::TYPO3CMSProfileAccessElement;
+
+	
+// -- TYPO3 CMS Table Configuration Array (TCA) -------------------------------------------------------------
+
+
+/**
+ * Checks if the advanced configuration of a property should be generated for the 'showitem' field.
+ * 
+ * @return	True, if the advanced configuration of a property should be generated for the 'showitem' field, otherwise false.
+ */
+boolean generateAdvancedTCATypesNumbers(MProperty this) :
+	emGetTYPO3TCAPropertyTypesAltLabel() != "" 
+	|| emGetTYPO3TCAPropertyTypesPaletteNumber() != ""	
+	|| emGetTYPO3TCAPropertyTypesSpecialConfiguration() != "" 
+	|| emGetTYPO3TCAPropertyTypesFormStyleCodes() != ""
+		? true
+		: false;
