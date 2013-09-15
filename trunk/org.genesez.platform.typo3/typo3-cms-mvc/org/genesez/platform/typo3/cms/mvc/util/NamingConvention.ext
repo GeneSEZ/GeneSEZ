@@ -1,0 +1,615 @@
+/**
+ * General naming conventions for TYPO3 MVC.
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+ */
+
+// based on genesez meta model
+import gcore;
+
+// use TYPO3 MVC Extbase profile + access helper scripts	
+extension org::genesez::platform::typo3cms::mvc::profile::ExtbaseProfile;
+extension org::genesez::platform::typo3cms::mvc::profile::ExtbaseAccessElement;
+
+// use TYPO3 naming context and common naming scripts
+extension org::genesez::metamodel::core::util::mapping::TypeMapping;
+//extension org::genesez::metamodel::core::util::mapping::NameMapping;
+//extension org::genesez::platform::typo3cms::mvc::convention::NamingContext;
+
+// use TYPO3 MVC convention scripts
+extension org::genesez::platform::typo3cms::mvc::convention::Convention;
+
+// use TYPO3 MVC access helper scripts which overrides
+// general access helper scripts if script name is equals
+extension org::genesez::platform::typo3cms::mvc::util::AccessElement;
+extension org::genesez::metamodel::core::util::AccessElement;
+
+extension org::genesez::util::Conversion;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 MVC element name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats the element name 
+ * in 'Default' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted element name.
+ */
+cached String asDefaultName(MElement this) :
+	name;
+
+
+/**
+ * Formats the element name 
+ * in 'General' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted element name.
+ */
+cached String asGeneralName(MElement this) :
+	name;
+	
+/**
+ * Formats the type name 
+ * in 'General' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted type name.
+ */
+cached String asGeneralName(MType this) :
+	"";
+
+
+/**
+ * Formats the element name 
+ * in 'PHPComplaint' naming context.
+ * 
+ * @return	The formatted element name.
+ */
+cached String asPHPCompliantName(MElement this) :
+	name;
+
+
+/**
+ * Formats the element name 
+ * in 'Configuration' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted element name.
+ */
+cached String asConfigurationName(MElement this) :
+	name;
+
+
+/**
+ * Formats the element name 
+ * in 'Persistence' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted element name.
+ */
+cached String asPersistenceName(MElement this) :
+	name;
+
+
+/**
+ * Formats the element name 
+ * in 'Localization' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted element name.
+ */
+cached String asLocalizationName(MElement this) :
+	name;
+	
+	
+/**
+ * Formats the element name 
+ * in 'LocalizationCSH' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted element name.
+ */
+cached String asLocalizationCSHName(MElement this) :
+	name;
+
+
+/**
+ * Formats the element name 
+ * in 'Object' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted element name.
+ */
+cached String asObjectName(MElement this) :
+	name;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 MVC classifier name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats a classifier name 
+ * in 'General' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted classifier name.
+ */
+cached String asGeneralName(MClassifier this) :
+	classifierNameBase() + classifierNameSeperator() + classifierNamePath() + classifierNameSeperator() + classifierNamePrefix() + name.toFirstUpper() + classifierNameSuffix();	
+
+/**
+ * Formats an external name 
+ * in 'General' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted external name.
+ */
+cached String asGeneralName(MExternal this) :
+	mapName();
+
+/**
+ * Formats a classifier name 
+ * in 'PHPComplaint' naming context.
+ * 
+ * @return	The formatted classifier name.
+ */
+cached String asPHPCompliantName(MClassifier this) :
+	name.toFirstUpper();
+
+
+/**
+ * Formats a classifier name 
+ * in 'Configuration' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted classifier name.
+ */
+cached String asConfigurationName(MClassifier this) :
+	asGeneralName().toLowerCase();
+	
+
+/**
+ * Formats an interface name 
+ * in 'Configuration' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted interface name.
+ */
+cached String asConfigurationName(MInterface this) :
+	switch {
+		case isPlugin() : 
+			asPHPCompliantName()
+		case isModule() : 
+			fullQualifiedExtensionNameToLowerCase() + extensionNameSeperator() + asPHPCompliantName().toLowerCase()
+		default :
+			asGeneralName().toLowerCase()
+	};
+
+/**
+ * Formats the class name 
+ * in 'Persistence' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted class name.
+ */
+cached String asPersistenceName(MClass this) :
+	hasT3ExtbaseInheritanceStereotype() && getT3ExtbaseInheritanceInheritanceType() == prT3ExtbaseInheritanceTypeSingleTable()
+		? generalization.first().name( namingContextPersistence(), typeMappingContextSQLTableName() )
+		: (	hasT3ExtbaseTableMappingStereotype()
+				? getT3ExtbaseTableMappingTableName()
+				: asConfigurationName()	);
+
+
+/**
+ * Formats a classifier name 
+ * in 'Localization' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted classifier name.
+ */
+cached String asLocalizationName(MClassifier this) :
+	asConfigurationName();
+
+
+/**
+ * Formats an interface name 
+ * in 'Localization' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted interface name.
+ */
+cached String asLocalizationName(MInterface this) :
+	isPlugin() || isModule()
+		? asPHPCompliantName().toLowerCase()
+		: asConfigurationName();
+
+
+/**
+ * Formats a classifier name 
+ * in 'LocalizationCSH' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted classifier name.
+ */
+cached String asLocalizationCSHName(MClassifier this) :
+	asConfigurationName();
+
+
+/**
+ * Formats a classifier name 
+ * in 'Object' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted classifier name.
+ */
+cached String asObjectName(MClassifier this) :
+	name.toFirstLower();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 MVC property name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats an attribute or association role name as a normal attribute
+ * in 'General' naming context.
+ * 
+ * @return	The formatted attribute or association role name.
+ */
+cached String asGeneralName(MProperty this) :
+	name.toFirstLower();
+	
+
+/**
+ * Formats an attribute or association role name as a normal attribute
+ * in 'PHPComplaint' naming context.
+ * 
+ * @return	The formatted attribute or association role name.
+ */
+cached String asPHPCompliantName(MProperty this) :
+	asGeneralName();
+
+
+/**
+ * Formats an attribute or association role name as a normal attribute
+ * in 'Configuration' TYPO3 MVC naming context. 
+ * 
+ * @return	The formatted attribute or association role name.
+ */
+cached String asConfigurationName(MProperty this) :
+	name.toLowerUnderscore();
+
+
+/**
+ * Formats an attribute or association role name as a normal attribute
+ * in 'Persistence' TYPO3 MVC naming context. 
+ * 
+ * @return	The formatted attribute or association role name.
+ */
+cached String asPersistenceName(MProperty this) :
+	hasT3ExtbaseColumnMappingStereotype()
+				? getT3ExtbaseColumnMappingMapOnProperty()
+				: asConfigurationName();
+
+
+/**
+ * Formats an attribute or association role name as a normal attribute
+ * in 'Localization' TYPO3 MVC naming context. 
+ * 
+ * @return	The formatted attribute or association role name.
+ */
+cached String asLocalizationName(MProperty this) :
+	classifier.metaType == MInterface && ( ((MInterface)classifier).isPlugin() || ((MInterface)classifier).isModule() )
+		? asConfigurationName()
+		: classifier.asLocalizationName() + "." + asConfigurationName();
+	
+
+/**
+ * Formats an attribute or association role name as a normal attribute
+ * in 'LocalizationCSH' TYPO3 MVC naming context. 
+ * 
+ * @return	The formatted attribute or association role name.
+ */
+cached String asLocalizationCSHName(MProperty this) :
+	asConfigurationName();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 MVC attribute name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats an attribute name as a normal attribute or constant
+ * in 'General' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted attribute name.
+ */
+cached String asGeneralName(MAttribute this) :
+	final && static && hasDefaultValue()
+		? name.toUpperCase()
+		: name.toFirstLower();
+
+
+/**
+ * Formats an attribute name as a getter method.
+ *
+ * @return	The formatted name of the getter method.
+ */
+cached String asGetterName(MAttribute this) : 
+	getterNamePrefix() + name.toFirstUpper();
+
+
+/**
+ * Formats an attribute name as a setter method.
+ * 
+ * @return	the formatted name of the setter method
+ */
+cached String asSetterName(MAttribute this) : 
+	setterNamePrefix() + name.toFirstUpper();
+
+	
+/**
+ * Formats an attribute name as a 'insert in' method.
+ * 
+ * @return	The formatted name of the 'insert in' method.
+ */
+cached String asInsertInName(MAttribute this) : 
+	insertInNamePrefix() + name.toFirstUpper();
+
+/**
+ * Formats an attribute name as a 'remove from' method.
+ * 
+ * @return	The formatted name of the 'remove from' method.
+ */
+cached String asRemoveFromName(MAttribute this) : 
+	removeFromNamePrefix() + name.toFirstUpper();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 MVC association role name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats an association role name as a normal attribute
+ * in 'General' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted association role name.
+ */
+cached String asGeneralName(MAssociationRole this) :
+	name.toFirstLower();
+	
+
+/**
+ * Formats an association role name as a getter method.
+ *
+ * @return	The formatted name of the getter method.
+ */
+cached String asGetterName(MAssociationRole this) : 
+	getterNamePrefix() + name.toFirstUpper();
+
+
+/**
+ * Formats an association role name as a setter method.
+ * 
+ * @return	The formatted name of the setter method.
+ */
+cached String asSetterName(MAssociationRole this) : 
+	setterNamePrefix() + name.toFirstUpper();
+
+
+/**
+ * Formats an association role name as a 'insert in' method.
+ * 
+ * @return	The formatted name of the 'insert in' method.
+ */
+cached String asInsertInName(MAssociationRole this) : 
+	insertInNamePrefix() + name.toFirstUpper();
+
+/**
+ * Formats an association role name as a 'remove from' method.
+ * 
+ * @return	The formatted name of the 'remove from' method.
+ */
+cached String asRemoveFromName(MAssociationRole this) : 
+	removeFromNamePrefix() + name.toFirstUpper();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 MVC operation name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats an operation name using suffix 
+ * in 'General' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted operation name.
+ */
+cached String asGeneralName(MOperation this) :
+	name.toFirstLower() + operationNameSuffix();
+
+
+/**
+ * Formats an operation name 
+ * in 'PHPComplaint' naming context.
+ * 
+ * @return	The formatted operation name.
+ */
+cached String asPHPCompliantName(MOperation this) :
+	name.toFirstLower();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 MVC parameter name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats a parameter name 
+ * in 'General' TYPO3 MVC naming context.
+ * 
+ * @return	The formatted parameter name.
+ */
+cached String asGeneralName(MParameter this) : 
+	name.toFirstLower();
+	
+
+/**
+ * Formats a parameter name 
+ * in 'PHPComplaint' naming context.
+ * 
+ * @return	The formatted parameter name.
+ */
+cached String asPHPCompliantName(MParameter this) : 
+	asGeneralName();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 MVC controller
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats assigned controller actions of a TYPO3 MVC plugin or module
+ * as list of valid controller actions.
+ *
+ * @param 	operations	The list of operations (controller actions).
+ * @return	The list of valid controller actions.
+ */
+List[String] asControllerActionPairs(List[MOperation] operations) :
+	JAVA org.genesez.platform.typo3cms.mvc.convention.Naming.asControllerActionPairs(java.util.List);
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 MVC validators
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Format assigned stereotype as validator name.
+ *
+ * @return	The formatted validator name.
+ */
+String asAssignedValidatorName(MStereotype this) :
+	// first check is if the stereotype starts with the prefix "T3Extbase" 
+	// and ends with the suffix "Validator". So it is a TYPO3 MVC Extbase validator. 
+	name.startsWith("T3Extbase") && name.endsWith("Validator")
+		? name.replaceFirst("T3Extbase", "").replaceFirst("Validator", "")
+		: model.allValidators().selectFirst( v | name == v.name ).name( namingContextGeneral() );
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 MVC plugins and modules
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String asPluginFlexformName(MInterface this) :
+	extensionNameToLowerCase() + "_" + asPHPCompliantName().toLowerCase();
+	
+
+/**
+ * Formats a string value into a TYPO3 plugin type value.
+ *
+ * @param	pluginType	The plugin type to format.
+ * @return	The TYPO3 plugin type.
+ */
+String asPluginType(String pluginType) :
+	switch (pluginType) {
+		case prT3ExtbasePluginTypeExtbaseContentElement() :
+			"Tx_Extbase_Utility_Extension::PLUGIN_TYPE_CONTENT_ELEMENT"
+		default :
+			"Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN"
+	};
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 MVC persistence
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+
+/**
+ * Returns the intermediate table name for an attribute.
+ * This method needs to be called in SQL context.
+ * 
+ * For instance: The extension key is "blog_example" and we have a
+ * class "Post" which has a 1:n attribute called "tags" to the class "Tag".
+ * Because this is like a 1:n unidirectional association we need a
+ * intermediate table. This method returns "tx_blogexample_post_tag_tags_mm".
+ */
+String asIntermediateTableName(MAttribute this, MClass class) :
+	// tx_blogexample_
+	fullQualifiedExtensionNameToLowerCase() + classifierNameSeperator()
+		// post_
+		+ class.asIntermediateTableName() + classifierNameSeperator()
+			// tag_
+			+ type.asIntermediateTableName() + classifierNameSeperator()
+				// tags
+	 			+ name()
+					// _mm  
+					+ classifierNameSeperator() + "mm";
+
+
+/**
+ * Returns the intermediate table name for a association role.
+ * This method needs to be called in SQL context.
+ * 
+ * For instance: The extension key is "blog_example" and we have a
+ * class "Post" which has a 1:n association role called "tags" to the class "Tag".
+ * Because this is a 1:n association we need a intermediate table. 
+ * This method returns "tx_blogexample_post_tag_tags_mm".
+ */
+String asIntermediateTableName(MAssociationRole this, MClass class) :
+	// tx_blogexample_
+	fullQualifiedExtensionNameToLowerCase() + classifierNameSeperator()
+	+	( !hasOpposite()
+			?	(	// post_
+					class.asIntermediateTableName() + classifierNameSeperator()
+						// tag_
+						+ type.asIntermediateTableName() + classifierNameSeperator()
+							// tags 
+							+ name()
+				)
+			: 	(	// compare the class name and the type name
+					class.name().compareTo( type.name() ) < 0
+						?	(	// post
+								class.asIntermediateTableName() + classifierNameSeperator()
+									// posts
+									+ opposite.name() + classifierNameSeperator()
+										// tag
+										+ type.asIntermediateTableName() + classifierNameSeperator()
+											// tags 
+											+ name()
+							)
+						: 	(	// comment
+								type.asIntermediateTableName() + classifierNameSeperator()
+									// comments
+									+ name() + classifierNameSeperator()
+										// post
+										+ class.asIntermediateTableName() + classifierNameSeperator()
+											// post
+											+ opposite.name()
+							)
+				)
+		)
+	// _mm  
+	+ classifierNameSeperator() + "mm";
+
+
+String asIntermediateTableName(MProperty this, MClass class) :
+	"";
+
+
+private String asIntermediateTableName(MType this) :
+	name().split( classifierNameSeperator() ).last().toLowerCase();
