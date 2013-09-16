@@ -14,11 +14,27 @@ import gcore;
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
  */
 
-// use TYPO3 CMS profile + access helper scripts
+// use TYPO3 CMS profile scripts
 extension org::genesez::platform::typo3::cms::profile::TYPO3CMSProfile;
-extension org::genesez::platform::typo3::cms::profile::TYPO3CMSProfileAccessElement;
+extension org::genesez::platform::typo3::cms::profile::TYPO3CMSAccessElement;
 
 	
+// -- TYPO3 CMS Table Configuration Array (TCA) -------------------------------------------------------------
+
+/**
+ * Checks if the advanced configuration of a property should be generated for the 'showitem' field.
+ * 
+ * @return	True, if the advanced configuration of a property should be generated for the 'showitem' field, otherwise false.
+ */
+boolean generateAdvancedTCATypesNumbers(MProperty this) :
+	emGetTYPO3TCAPropertyTypesAltLabel() != "" 
+	|| emGetTYPO3TCAPropertyTypesPaletteNumber() != ""	
+	|| emGetTYPO3TCAPropertyTypesSpecialConfiguration() != "" 
+	|| emGetTYPO3TCAPropertyTypesFormStyleCodes() != ""
+		? true
+		: false;
+
+
 // -- TYPO3 CMS FlexForm ------------------------------------------------------------------------------------
 
 /**
