@@ -8,8 +8,8 @@
 //	based on genesez meta model
 import gcore;
 
-// use TYPO3 profile scripts
-extension org::genesez::platform::typo3cms::profile::Profile;
+// use TYPO3 CMS profile scripts
+extension org::genesez::platform::typo3::cms::profile::TYPO3CMSProfile;
 
 // use TYPO3 naming context and common naming scripts
 extension org::genesez::metamodel::core::util::mapping::NameMapping;
@@ -33,14 +33,12 @@ extension org::genesez::metamodel::core::util::CreateElement;
 */
 
 Void modelModifications(MModel this) :
-	setInternalNamingContext( namingContextGeneral() ) ->
 	packageModifications();
 
 
 Void packageModifications(MPackage this) :
 	// perform model modifications for all nested packages
 	nestedPackage.packageModifications() ->
-	
 	// perform model modifications for all classes
 	classifier.typeSelect(MClass).classModifications();
 
@@ -70,8 +68,8 @@ Void classModifications(MClass this) :
  * Model modifications for an TYPO3 MVC Extbase entity or value object.
  */
 Void domainObjectModifications(MClass this) :
-	property.changeDomainObjectPropertyVisibility() ->
-	property.typeSelect(MAttribute).changeDomainObjectAttributeMultiplicity();
+	property.changeDomainObjectPropertyVisibility();
+	/*property.typeSelect(MAttribute).changeDomainObjectAttributeMultiplicity()*/
 	
 	
 	
