@@ -1,19 +1,24 @@
-/**
- * Simplifies access to genesez models + makes working with the genesez metamodel more easier.
- * 
- * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date	2011-05-07
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
  */
 
-// based on genesez meta model
 import gcore;
 
-// use TYPO3 MVC Extbase profile + access helper scripts
-extension org::genesez::platform::typo3cms::mvc::profile::ExtbaseProfile;
-extension org::genesez::platform::typo3cms::mvc::profile::ExtbaseAccessElement;
 
-// use TYPO3 MVC Fluid access helper scripts
-//extension org::genesez::platform::typo3cms::mvc::profile::FluidAccessElement;
+/**
+ * Utility scripts to access information about GeneSEZ Core meta model elements.
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ */
+
+// use TYPO3 CMS specific TYPO3 Extbase profile scripts
+extension org::genesez::platform::typo3::cms::mvc::profile::TYPO3CMSExtbaseAccessElement;
+
+// use TYPO3 CMS specific TYPO3 Fluid profile scripts
+extension org::genesez::platform::typo3::cms::mvc::profile::TYPO3CMSFluidAccessElement;
 
 // use TYPO3 naming context and common naming scripts
 extension org::genesez::metamodel::core::util::mapping::NameMapping;
@@ -23,7 +28,7 @@ extension org::genesez::platform::typo3cms::mvc::convention::NamingContext;
 extension org::genesez::platform::typo3cms::mvc::convention::Conversion;
 
 // use TYPO3 MVC workflow global var scripts
-extension org::genesez::platform::typo3cms::mvc::util::GlobalVar;
+extension org::genesez::platform::typo3::cms::mvc::util::GlobalVar;
 
 // use common access helper scripts
 extension org::genesez::metamodel::core::util::AccessElement;
@@ -730,7 +735,41 @@ List[MStereotype] allAssignedValidators(MElement this) :
 	stereotype.select( s | s.isValidator() );
 	
 
-	
+// -- TYPO3 Fluid ViewHelper --------------------------------------------------------------------------------
+
+
+/**
+ * Checks if a classifier is part of the TYPO3 CMS specific Fluid view helper package.
+ * 
+ * @return	true if the classifier is part of the TYPO3 CMS specific Fluid view helper package, otherwise false
+ */
+cached boolean isViewHelperPackageElement(MClassifier this) :
+	// first check if this model is TYPO3 MVC complaint and this classifier is inside the correct package
+	( globalVarIsT3MVCCompliant() && dirPath().startsWith( classesViewHelpersPath() ) ) ||
+	// second check if the package of this classifier has an stereotype
+	owningContext.emHasFluidViewHelperStereotype() ||
+	// third check if this classifier is a class and is a view helper
+	( MClass.isInstance(this) && ((MClass)this).isViewHelper() );
+
+
+/**
+ * Checks if a class is a TYPO3 CMS Fluid view helper.
+ *
+ * @return	true if the class is a TYPO3 CMS Fluid view helper, otherwise false
+ */
+cached boolean isViewHelper(MClass this) :
+	// first check if this model is TYPO3 MVC complaint and this class is inside the correct package
+	( globalVarIsT3MVCCompliant() && dirPath().startsWith( classesViewHelpersPath() ) ) ||
+	// second check if this class has an stereotype
+	emHasFluidViewHelperStereotype() ||
+	// third check if the package of this class has an stereotype
+	owningContext.emHasFluidViewHelperStereotype() ||
+	// fourth check if generalization is an TYPO3 CMS Fluid view helper
+	(
+		!generalization.typeSelect(MClass).isEmpty
+			? generalization.typeSelect(MClass).first().isViewHelper()
+			: false
+	);
 
 
 /*

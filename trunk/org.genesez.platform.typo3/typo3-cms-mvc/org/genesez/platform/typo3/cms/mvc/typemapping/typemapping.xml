@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
-	/*
-	 * (c) GeneSEZ Research Group
-	 * All rights reserved.
-	 *
-	 * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
-	 */
+	(c) GeneSEZ Research Group
+	All rights reserved.
 	
-	/**
-	 * Basic Type Mapping for TYPO3 Extbase.
-	 * 
-	 * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
-	 * @todo	Why do I need to configure all unique / ordered combinations???
-	 */
- -->
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+-->
+
+<!--
+	Type Mapping for TYPO3 CMS Extensions based on TYPO3 Extbase + TYPO3 Fluid.
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+-->
 <tns:typeMapping xmlns:tns="http://www.genesez.org/typemapping"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<tns:include>
@@ -140,7 +137,9 @@
 		<tns:type from="void">
 			<tns:to>void</tns:to>
 		</tns:type>
-	
+		
+		
+				
 		<tns:type from="EXTBASE_ABSTRACT_ENTITY">
 			<tns:to>\TYPO3\CMS\Extbase\DomainObject\AbstractEntity</tns:to>
 		</tns:type>
@@ -156,8 +155,6 @@
 			<tns:to>TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup</tns:to>
 			<tns:context name="SQLTableName">fe_groups</tns:context>
 		</tns:type>
-		<!-- HIER GIBT ES JETZT JEDE MENGE NEUE KLASSEN -->
-		
 		
 		<tns:type from="EXTBASE_REPOSITORY">
 			<tns:to>TYPO3\CMS\Extbase\Persistence\Repository</tns:to>
@@ -169,8 +166,7 @@
 		<tns:type from="EXTBASE_FRONTEND_GROUP_REPOSITORY">
 			<tns:to>TYPO3\CMS\Extbase\Domain\Repository\FrontendUserGroupRepository</tns:to>
 		</tns:type>
-		<!-- HIER GIBT ES JETZT JEDE MENGE NEUE KLASSEN -->
-		
+				
 		<tns:type from="EXTBASE_ABSTRACT_CONTROLLER">
 			<tns:to>TYPO3\CMS\Extbase\Mvc\Controller\AbstractController</tns:to>
 		</tns:type>
@@ -180,12 +176,6 @@
 		<tns:type from="EXTBASE_COMMAND_CONTROLLER">
 			<tns:to>TYPO3\CMS\Extbase\Mvc\Controller\CommandController</tns:to>
 		</tns:type>
-		
-		
-		
-		
-		
-		
 		
 		<tns:type from="EXTBASE_ABSTRACT_VALIDATOR">
 			<tns:to>Tx_Extbase_Validation_Validator_AbstractValidator</tns:to>
@@ -208,7 +198,6 @@
 			<tns:to>Tx_Extbase_Validation_Validator_ObjectValidatorInterface</tns:to>
 		</tns:type>
 		
-		
 		<tns:type from="EXTBASE_CONFIGURATION_MANAGER_INTERFACE">
 			<tns:to>Tx_Extbase_Configuration_ConfigurationManagerInterface</tns:to>
 			<tns:context name="PHPTypeHint">Tx_Extbase_Configuration_ConfigurationManagerInterface</tns:context>
@@ -221,5 +210,17 @@
 			<tns:to>Tx_Extbase_Persistence_ManagerInterface</tns:to>
 			<tns:context name="PHPTypeHint">Tx_Extbase_Persistence_ManagerInterface</tns:context>
 		</tns:type>
+		
+		
+		
+		<tns:type from="AbstractTagBasedViewHelper">
+			<tns:to>AbstractViewHelper</tns:to>
+			<tns:context name="Namespace">TYPO3\CMS\Fluid\Core\ViewHelper</tns:context>
+		</tns:type>
+		<tns:type from="AbstractViewHelper">
+			<tns:to>Tx_Fluid_Core_ViewHelper_AbstractTagBasedViewHelper</tns:to>
+			<tns:context name="Namespace">TYPO3\CMS\Fluid\Core\ViewHelper</tns:context>
+		</tns:type>
+		
 	</tns:externalTypes>
 </tns:typeMapping>
