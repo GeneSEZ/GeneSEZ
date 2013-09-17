@@ -16,8 +16,8 @@ extension org::genesez::metamodel::core::util::NavigateElement;
 extension org::genesez::metamodel::core::util::CreateElement;
 extension org::genesez::metamodel::core::util::Helper;
 extension org::genesez::metamodel::core::util::AccessElement;
-extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
-extension org::genesez::metamodel::core::util::profile::GeneSEZProfileAccessElement;
+extension org::genesez::metamodel::core::util::profile::GeneSEZStandardProfile;
+extension org::genesez::metamodel::core::util::profile::GeneSEZStandardProfileAccessElement;
 extension org::genesez::metamodel::core::util::GlobalVar;
 extension org::genesez::util::logging::Logging;
 
@@ -112,9 +112,9 @@ boolean emGenerateRemoveAccess(MProperty this) :
  * @return	true, if an access operation should be generated, otherwise false
  */
 boolean emGenerateAccessOperation(MProperty this, String accessOperationType):
-	prHasAccessorStereotype()
+	emHasAccessorStereotype()
 		? emGetTaggedBooleanValue( prAccessor(), accessOperationType )
-		: ( classifier.prHasAccessorStereotype()
+		: ( classifier.emHasAccessorStereotype()
 			? classifier.emGetTaggedBooleanValue( prAccessor(), accessOperationType )
 			: ( classifier.stereotype.exists( s|globalVarAccessorsForStereotypes().convertToList().contains( s.name ) )
 				? true
