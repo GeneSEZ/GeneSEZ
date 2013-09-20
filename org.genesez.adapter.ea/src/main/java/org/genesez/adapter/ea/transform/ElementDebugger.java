@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.sparx.Collection;
 import org.sparx.ConnectorConstraint;
 import org.sparx.ConnectorTag;
+import org.sparx.CustomProperty;
 import org.sparx.Issue;
 import org.sparx.Property;
 import org.sparx.TaggedValue;
@@ -132,6 +133,23 @@ public class ElementDebugger {
 		sb.append("\n");
 		sb.append("Client Cardinality: " + connector.GetClientEnd().GetCardinality());
 		sb.append("\n");
+		sb.append("Subtype: " + connector.GetSubtype());
+		sb.append("\n");
+		sb.append("Stateflags: " + connector.GetStateFlags());
+		sb.append("\n");
+		sb.append("Alias: " + connector.GetAlias());
+		sb.append("\n");
+		sb.append("Type: " + connector.GetType());
+		sb.append("\n");
+		sb.append("MetaType: " + connector.GetMetaType());
+		sb.append("\n");
+		sb.append("Eventflags: " + connector.GetEventFlags());
+		sb.append("\n");
+		sb.append("propertieCount: " + connector.GetProperties().GetCount());
+		sb.append("\n");
+		// custom properties
+		sb.append(customPropertiesToString(connector.GetCustomProperties()));
+
 		
 		sb.append("StereoType = " + connector.GetStereotype());
 		sb.append("\n");
@@ -157,8 +175,19 @@ public class ElementDebugger {
 	private String propertiesToString(org.sparx.Properties properties) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1367308475143_100237_1529) ENABLED START */
 		StringBuilder sb = new StringBuilder("Properties:\n");
+		int count = 0;
 		for (Property p : properties) {
-			sb.append("\tName = " + p.GetName() + " ->\tValue = " + p.GetValue());
+			sb.append("\tPropertie " + ++count);
+			sb.append("\n\t\t");
+			sb.append("Name = " + p.GetName());
+			sb.append("\n\t\t");
+			sb.append("Value = " + p.GetValue());
+			sb.append("\n\t\t");
+			sb.append("Type = " + p.GetType());
+			sb.append("\n\t\t");
+			sb.append("Validation = "+ p.GetValidation());
+			sb.append("\n\t\t");
+			sb.append("ObjectType = " + p.GetObjectType());
 			sb.append("\n");
 		}
 		return sb.toString();
@@ -172,6 +201,16 @@ public class ElementDebugger {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363681483226_501411_2064) ENABLED START */
 	
+	private String customPropertiesToString(Collection<CustomProperty> properties) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("CustomProperties:\n\t");
+		for (CustomProperty prop : properties) {
+			sb.append(prop.GetName() + " - " + prop.GetValue());
+			sb.append("\n\t");
+		}
+		return sb.toString();
+	}
+
 	private String taggedValuesToString(Collection<TaggedValue> collection) {
 		StringBuilder sb = new StringBuilder("Tagged Values:\n");
 		for (TaggedValue val : collection) {

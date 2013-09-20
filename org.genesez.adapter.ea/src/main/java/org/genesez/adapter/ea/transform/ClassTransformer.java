@@ -37,10 +37,13 @@ public class ClassTransformer extends AbstractElementTransformer {
 	public Class transform(org.sparx.Element element, Package parent) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363942522238_266030_2282) ENABLED START */
 		LOG.debug("Creating Class " + element.GetName() + ", parent " + parent.getName());
+		// create class
 		Class clazz = UMLFactory.eINSTANCE.createClass();
 		clazz.setName(element.GetName());
 		clazz.setIsLeaf(element.GetIsLeaf());
 		clazz.setIsActive(element.GetIsActive());
+		
+		// is abstract
 		if (element.GetAbstract().equals("0")) {
 			clazz.setIsAbstract(false);
 		} else if (element.GetAbstract().equals("1")) {
