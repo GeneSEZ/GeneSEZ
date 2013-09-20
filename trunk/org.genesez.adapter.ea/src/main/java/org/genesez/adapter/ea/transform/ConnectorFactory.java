@@ -14,11 +14,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Component;
 import org.eclipse.uml2.uml.Connector;
 import org.eclipse.uml2.uml.ConnectorEnd;
 import org.eclipse.uml2.uml.Dependency;
 import org.eclipse.uml2.uml.Element;
+import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.InformationFlow;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.LiteralInteger;
@@ -30,6 +32,7 @@ import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.UMLFactory;
 import org.eclipse.uml2.uml.VisibilityKind;
 import org.genesez.adapter.ea.ElementRegistry;
+import org.sparx.CustomProperty;
 
 /**
  * This class transforms connectors which could not be resolved at runtime.
@@ -77,6 +80,9 @@ public class ConnectorFactory {
 		this.processDelegate();
 		LOG.debug("Starting post processing associations");
 		this.processAssociations();
+		LOG.debug("Starting post processing generalisations");
+		this.processAllGeneralisations();
+		LOG.debug("Starting post processing ");
 		/* PROTECTED REGION END */
 	}
 	
@@ -717,6 +723,23 @@ public class ConnectorFactory {
 	
 	private Map<String, org.sparx.Connector> associationMap = new HashMap<String, org.sparx.Connector>();
 	private Map<String, org.sparx.Connector> associationComponentMap = new HashMap<String, org.sparx.Connector>();
+	
+	// Generalizations
+	private Map<String, org.sparx.Connector> generalisationMap = new HashMap<String, org.sparx.Connector>();
+	
+	public void addGeneralisation(org.sparx.Connector c){
+		this.generalisationMap.put(c.GetConnectorGUID(), c);
+	}
+	
+	private void processAllGeneralisations(){
+		
+		GeneralizationTransformer gf = new GeneralizationTransformer();
+		
+		// go over all generalizations
+		for (org.sparx.Connector connector : generalisationMap.values()) {
+			gf.transform(connector);
+		}
+	}
 	
 	/* PROTECTED REGION END */
 	

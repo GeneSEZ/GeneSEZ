@@ -11,10 +11,12 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.EnumerationLiteral;
+import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Port;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Stereotype;
 import org.genesez.adapter.ea.ContentRegistry;
+import org.genesez.adapter.ea.ElementRegistry;
 import org.genesez.adapter.ea.ProfileRegistry;
 import org.sparx.TaggedValue;
 
@@ -135,10 +137,10 @@ public abstract class AbstractElementTransformer {
 			ConnectorFactory.INSTANCE.addAssociation(c);
 		} else if (connecterType.equals("Realisation")) {
 			LOG.debug("Connector is Realisation");
-			LOG.fatal("Connectors is not implemented!");
+			LOG.fatal("Connectors is Realisation and not implemented yet!");
 		} else if (connecterType.equals("Generalization")) {
 			LOG.debug("Connector is Generalization");
-			LOG.fatal("Connectors is not implemented!");
+			ConnectorFactory.INSTANCE.addGeneralisation(c);		
 		}
 		/* PROTECTED REGION END */
 	}

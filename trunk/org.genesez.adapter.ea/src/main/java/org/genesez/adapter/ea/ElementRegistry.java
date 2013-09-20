@@ -88,9 +88,7 @@ public class ElementRegistry {
 	public void addElement(org.sparx.Connector c, Element e) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363337648329_314069_1914) ENABLED START */
 		this.addElementGuid(c.GetConnectorGUID(), e);
-		// now processed by postprocessor
-		// otherwise error in simulation
-		//this.addElementIdGuid(_c.GetConnectorID(), _c.GetConnectorGUID());
+		this.addElementIdGuid(c.GetConnectorID(), c.GetConnectorGUID());
 		/* PROTECTED REGION END */
 	}
 	
