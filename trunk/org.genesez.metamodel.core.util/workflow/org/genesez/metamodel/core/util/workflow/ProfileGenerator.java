@@ -23,7 +23,7 @@ public class ProfileGenerator extends SimpleModel2Text {
 	private String profileFileName = "Profile.ext";
 	
 	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
-	private String accessHelperFileName = "AccessHelper.ext";
+	private String accessElementFileName = "AccessElement.ext";
 	
 	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String stereotypeNamePrefix = "";
@@ -46,8 +46,8 @@ public class ProfileGenerator extends SimpleModel2Text {
 		if (profileFileName == null) {
 			profileFileName = getDefaultProfileFileName();
 		}
-		if (accessHelperFileName == null) {
-			accessHelperFileName = getDefaultAccessHelperFileName();
+		if (accessElementFileName == null) {
+			accessElementFileName = getDefaultAccessElementFileName();
 		}
 		if (stereotypeNamePrefix == null) {
 			stereotypeNamePrefix = getDefaultStereotypeNamePrefix();
@@ -66,7 +66,7 @@ public class ProfileGenerator extends SimpleModel2Text {
 		java.util.Set<Parameter> result = super.getParameter();
 		result.add(new Parameter("xtendFilePath", xtendFilePath));
 		result.add(new Parameter("profileFileName", profileFileName));
-		result.add(new Parameter("accessHelperFileName", accessHelperFileName));
+		result.add(new Parameter("accessElementFileName", accessElementFileName));
 		result.add(new Parameter("stereotypeNamePrefix", stereotypeNamePrefix));
 		result.add(new Parameter("enumerationNamePrefix", enumerationNamePrefix));
 		return result;
@@ -83,9 +83,9 @@ public class ProfileGenerator extends SimpleModel2Text {
 	/**
 	 * Method stub for further implementation.
 	 */
-	@WfDefault(parameter = "accessHelperFileName")
-	public String getDefaultAccessHelperFileName() {
-		return "AccessHelper.ext";
+	@WfDefault(parameter = "accessElementFileName")
+	public String getDefaultAccessElementFileName() {
+		return "AccessElement.ext";
 	}
 	
 	/**
@@ -143,18 +143,18 @@ public class ProfileGenerator extends SimpleModel2Text {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>accessHelperFileName</b></em>'.
+	 * Returns the value of attribute '<em><b>accessElementFileName</b></em>'.
 	 */
-	public String getAccessHelperFileName() {
-		return this.accessHelperFileName;
+	public String getAccessElementFileName() {
+		return this.accessElementFileName;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>accessHelperFileName</b></em>'.
-	 * @param	accessHelperFileName	the value to set.
+	 * Sets the value of attribute '<em><b>accessElementFileName</b></em>'.
+	 * @param	accessElementFileName	the value to set.
 	 */
-	public void setAccessHelperFileName(String accessHelperFileName) {
-		this.accessHelperFileName = accessHelperFileName;
+	public void setAccessElementFileName(String accessElementFileName) {
+		this.accessElementFileName = accessElementFileName;
 	}
 	
 	/**
