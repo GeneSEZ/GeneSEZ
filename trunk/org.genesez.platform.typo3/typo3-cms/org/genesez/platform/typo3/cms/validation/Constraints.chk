@@ -18,6 +18,9 @@ import gcore;
 extension org::genesez::platform::typo3::cms::profile::TYPO3CMSProfile;
 extension org::genesez::platform::typo3::cms::profile::TYPO3CMSAccessElement;
 
+// use GeneSEZ common conversion scripts
+extension org::genesez::metamodel::core::util::Conversion;
+
 
 // -- Model Checks ------------------------------------------------------------------------------------------
 
@@ -26,7 +29,8 @@ extension org::genesez::platform::typo3::cms::profile::TYPO3CMSAccessElement;
  * 
  * @return	False, if the model hasn't this sterotype, otherwise true.
  */
-context MModel ERROR "GeneSEZ: TYPO3 CMS extension manager stereotype ( stereotype: " + prTYPO3ExtensionManager() + " ) is missing!" :
+context MModel 
+	ERROR "GeneSEZ: TYPO3 CMS extension manager stereotype ( stereotype: " + prTYPO3ExtensionManager() + " ) is missing! See model element: " + fqmn() :
 	emHasTYPO3ExtensionManagerStereotype();
 	
 
@@ -35,7 +39,9 @@ context MModel ERROR "GeneSEZ: TYPO3 CMS extension manager stereotype ( stereoty
  * 
  * @return	False, if the model hasn't this utilizable tagged value, otherwise true.
  */
-context MModel if emHasTYPO3ExtensionManagerStereotype() ERROR "GeneSEZ: The title of the extension for TYPO3 CMS extension manager ( stereotype: " + prTYPO3ExtensionManager() + ", property: " + prTYPO3ExtensionManagerTitle() + " ) is missing or empty!" :
+context MModel 
+	if emHasTYPO3ExtensionManagerStereotype() 
+	ERROR "GeneSEZ: The title of the extension for TYPO3 CMS extension manager ( stereotype: " + prTYPO3ExtensionManager() + ", property: " + prTYPO3ExtensionManagerTitle() + " ) is missing or empty! See model element: " + fqmn() :
 	emGetTYPO3ExtensionManagerTitle() != "";
 
 
@@ -44,5 +50,7 @@ context MModel if emHasTYPO3ExtensionManagerStereotype() ERROR "GeneSEZ: The tit
  * 
  * @return	False, if the model hasn't this utilizable tagged value, otherwise true.
  */
-context MModel if emHasTYPO3ExtensionManagerStereotype() ERROR "GeneSEZ: The description of the extension for TYPO3 CMS extension manager ( stereotype: " + prTYPO3ExtensionManager() + ", property: " + prTYPO3ExtensionManagerDescription() + " ) is missing or empty!" : 
+context MModel 
+	if emHasTYPO3ExtensionManagerStereotype() 
+	ERROR "GeneSEZ: The description of the extension for TYPO3 CMS extension manager ( stereotype: " + prTYPO3ExtensionManager() + ", property: " + prTYPO3ExtensionManagerDescription() + " ) is missing or empty! See model element: " + fqmn() : 
 	emGetTYPO3ExtensionManagerDescription() != "";
