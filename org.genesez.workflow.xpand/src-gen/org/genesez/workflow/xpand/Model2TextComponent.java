@@ -471,7 +471,7 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	private void prepareDelegate() {
 		compositeGenerator = new CompositeComponent(getClass().getName());
 		for (Model2Text m2t : model2text) {
-			Generator gen = new Generator();
+			Generator gen = new XpandGenerator();
 			gen.setSkipOnErrors(getAbortOnError());
 			for (MetaModel mm : getMetaModel()) {
 				gen.addMetaModel(mm);

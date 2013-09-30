@@ -52,7 +52,7 @@
       <property xsi:type="gcore:MAttribute" name="parameter" xmiGuid="_nJE9cIdKEeK1Y67SYGPJ1A" visibility="private" type="//@externalTypes.6">
         <multiplicity unique="true" lowerBound="1" upperBound="1"/>
       </property>
-      <property xsi:type="gcore:MAssociationRole" name="base_Operation" xmiGuid="_PWVCkP3lEeGA35ujkRyC6w" visibility="public" type="//@externalTypes.21" association="_PWVCkf3lEeGA35ujkRyC6w">
+      <property xsi:type="gcore:MAssociationRole" name="base_Operation" xmiGuid="_PWVCkP3lEeGA35ujkRyC6w" visibility="public" type="//@externalTypes.24" association="_PWVCkf3lEeGA35ujkRyC6w">
         <multiplicity unique="true" lowerBound="1" upperBound="1"/>
         <oppositeMultiplicity unique="true" upperBound="1"/>
       </property>
@@ -1036,6 +1036,59 @@
         <multiplicity unique="true" ordered="true" upperBound="-1"/>
       </property>
     </classifier>
+    <classifier xsi:type="gcore:MClass" name="XpandGenerator" xmiGuid="_kHHrACmuEeOSCvB50Wk7Pw" visibility="public" generalization="//@externalTypes.21">
+      <ownedComment xmiGuid="_V27ZgCnHEeOSCvB50Wk7Pw" annotation="Provides access to XPand generator internals especially the protected regions."/>
+      <operation name="invokeInternal" xmiGuid="_p5hckCmwEeOSCvB50Wk7Pw" visibility="protected">
+        <ownedComment xmiGuid="_p5hckSmwEeOSCvB50Wk7Pw" annotation="Invokes the execution of the component."/>
+        <parameter name="context" xmiGuid="_p5hckimwEeOSCvB50Wk7Pw" direction="in" type="//@externalTypes.3" operation="_p5hckCmwEeOSCvB50Wk7Pw">
+          <ownedComment xmiGuid="_p5hckymwEeOSCvB50Wk7Pw" annotation="The context of workflow execution."/>
+          <multiplicity unique="true" lowerBound="1" upperBound="1"/>
+        </parameter>
+        <parameter name="monitor" xmiGuid="_p5hclCmwEeOSCvB50Wk7Pw" direction="in" type="//@externalTypes.4" operation="_p5hckCmwEeOSCvB50Wk7Pw">
+          <ownedComment xmiGuid="_p5hclSmwEeOSCvB50Wk7Pw" annotation="Instance to report any activity to."/>
+          <multiplicity unique="true" lowerBound="1" upperBound="1"/>
+        </parameter>
+        <parameter name="issues" xmiGuid="_p5hclimwEeOSCvB50Wk7Pw" direction="in" type="//@externalTypes.5" operation="_p5hckCmwEeOSCvB50Wk7Pw">
+          <ownedComment xmiGuid="_p5hclymwEeOSCvB50Wk7Pw" annotation="Instance to collect all problems during execution."/>
+          <multiplicity unique="true" lowerBound="1" upperBound="1"/>
+        </parameter>
+      </operation>
+      <operation name="getProtectedRegion" xmiGuid="_7lonECmyEeOSCvB50Wk7Pw" visibility="public" static="true">
+        <parameter name="id" xmiGuid="_MwmeQCmzEeOSCvB50Wk7Pw" direction="in" type="//@externalTypes.6" operation="_7lonECmyEeOSCvB50Wk7Pw">
+          <multiplicity unique="true" lowerBound="1" upperBound="1"/>
+        </parameter>
+        <return xmiGuid="_ObXW8CmzEeOSCvB50Wk7Pw" direction="return" type="//@externalTypes.22" operation="_7lonECmyEeOSCvB50Wk7Pw">
+          <multiplicity unique="true" lowerBound="1" upperBound="1"/>
+        </return>
+      </operation>
+      <operation name="getProtecedContent" xmiGuid="_QlJt8CmzEeOSCvB50Wk7Pw" visibility="public" static="true" raisedException="//@externalTypes.23">
+        <ownedComment xmiGuid="_UqkJgCnGEeOSCvB50Wk7Pw" annotation="Returns the protected content of the given protected region id with the given start and end comment."/>
+        <parameter name="id" xmiGuid="_Beg0ECm1EeOSCvB50Wk7Pw" direction="in" type="//@externalTypes.6" operation="_QlJt8CmzEeOSCvB50Wk7Pw">
+          <multiplicity unique="true" lowerBound="1" upperBound="1"/>
+        </parameter>
+        <parameter name="startComment" xmiGuid="_co5MoCmzEeOSCvB50Wk7Pw" direction="in" type="//@externalTypes.6" operation="_QlJt8CmzEeOSCvB50Wk7Pw">
+          <multiplicity unique="true" lowerBound="1" upperBound="1"/>
+        </parameter>
+        <parameter name="endComment" xmiGuid="_d_-UUCmzEeOSCvB50Wk7Pw" direction="in" type="//@externalTypes.6" operation="_QlJt8CmzEeOSCvB50Wk7Pw">
+          <multiplicity unique="true" lowerBound="1" upperBound="1"/>
+        </parameter>
+        <return xmiGuid="_hEBesCm0EeOSCvB50Wk7Pw" direction="return" type="//@externalTypes.6" operation="_QlJt8CmzEeOSCvB50Wk7Pw">
+          <multiplicity unique="true" lowerBound="1" upperBound="1"/>
+        </return>
+      </operation>
+      <operation name="getProtecedContent" xmiGuid="_xB0_MCm0EeOSCvB50Wk7Pw" visibility="public" static="true" raisedException="//@externalTypes.23">
+        <ownedComment xmiGuid="_FEEVwCnGEeOSCvB50Wk7Pw" annotation="Returns the protected content with first and last line removed.&#xD;&#xA;In case these lines could not be removed the whole protected content is returned (the same as {@link #getProtectedContent(id, &quot;&quot;, &quot;&quot;}).&#xD;&#xA;@see #getProtectedContent(String, String, String)"/>
+        <parameter name="id" xmiGuid="__fhX0Cm0EeOSCvB50Wk7Pw" direction="in" type="//@externalTypes.6" operation="_xB0_MCm0EeOSCvB50Wk7Pw">
+          <multiplicity unique="true" lowerBound="1" upperBound="1"/>
+        </parameter>
+        <return xmiGuid="_xB0_Mym0EeOSCvB50Wk7Pw" direction="return" type="//@externalTypes.6" operation="_xB0_MCm0EeOSCvB50Wk7Pw">
+          <multiplicity unique="true" lowerBound="1" upperBound="1"/>
+        </return>
+      </operation>
+      <property xsi:type="gcore:MAttribute" name="current" xmiGuid="_MRvC4CmxEeOSCvB50Wk7Pw" visibility="private" type="_kHHrACmuEeOSCvB50Wk7Pw" static="true">
+        <multiplicity unique="true" lowerBound="1" upperBound="1"/>
+      </property>
+    </classifier>
   </nestedPackage>
   <nestedPackage name="org.genesez.adapter.uml2.workflow" xmiGuid="_orH9AP6oEeGciM7nbRm1bw">
     <classifier xsi:type="gcore:MClass" name="Uml2Gcore" xmiGuid="_F6MosP3MEeGcKvbUXThvRw" visibility="public" generalization="_tZUAsIcvEeKkPZ9HV4VaKQ">
@@ -1270,7 +1323,7 @@
         <multiplicity unique="true" lowerBound="1" upperBound="1"/>
       </property>
     </classifier>
-    <classifier xsi:type="gcore:MClass" name="GeneSezJavaPostProcessor" xmiGuid="_4JuPUIZrEeKi-fAVJTcXlg" visibility="public" generalization="//@externalTypes.22">
+    <classifier xsi:type="gcore:MClass" name="GeneSezJavaPostProcessor" xmiGuid="_4JuPUIZrEeKi-fAVJTcXlg" visibility="public" generalization="//@externalTypes.25">
       <operation name="" xmiGuid="_5_CuUIeAEeK1Y67SYGPJ1A" stereotype="Create" visibility="public"/>
       <property xsi:type="gcore:MAttribute" name="configFile" xmiGuid="_Zj88AIeAEeK1Y67SYGPJ1A" stereotype="_GV9OQP3lEeGA35ujkRyC6w" visibility="private" type="//@externalTypes.6" defaultvalue="&quot;org/genesez/platform/java/workflow/eclipse.java.formatter.settings.xml&quot;">
         <multiplicity unique="true" lowerBound="1" upperBound="1"/>
@@ -1746,10 +1799,10 @@
       </operation>
       <operation name="generatePieChart" xmiGuid="_AaKNoIzREeKLl_w7vhifuQ" visibility="protected">
         <ownedComment xmiGuid="_PW0vUIzTEeKLl_w7vhifuQ" annotation="Generates a pie chart and saves it as png file."/>
-        <parameter name="data" xmiGuid="_b09V4IzREeKLl_w7vhifuQ" direction="in" type="//@externalTypes.23" operation="_AaKNoIzREeKLl_w7vhifuQ">
+        <parameter name="data" xmiGuid="_b09V4IzREeKLl_w7vhifuQ" direction="in" type="//@externalTypes.26" operation="_AaKNoIzREeKLl_w7vhifuQ">
           <multiplicity unique="true" lowerBound="1" upperBound="1"/>
         </parameter>
-        <parameter name="file" xmiGuid="_eKRK8IzSEeKLl_w7vhifuQ" direction="in" type="//@externalTypes.24" operation="_AaKNoIzREeKLl_w7vhifuQ">
+        <parameter name="file" xmiGuid="_eKRK8IzSEeKLl_w7vhifuQ" direction="in" type="//@externalTypes.27" operation="_AaKNoIzREeKLl_w7vhifuQ">
           <multiplicity unique="true" lowerBound="1" upperBound="1"/>
         </parameter>
         <parameter name="issues" xmiGuid="_iN0f8IzSEeKLl_w7vhifuQ" direction="in" type="//@externalTypes.5" operation="_AaKNoIzREeKLl_w7vhifuQ">
@@ -1849,7 +1902,7 @@
       </operation>
       <operation name="readFile" xmiGuid="_Y8qXAI1pEeKY9prllV7Cvw" visibility="public">
         <ownedComment xmiGuid="_cvB_EI5eEeKyCamEQX9tYw" annotation="Reads the specified file and counts the lines."/>
-        <parameter name="file" xmiGuid="_b0OyUI1vEeKY9prllV7Cvw" direction="in" type="//@externalTypes.24" operation="_Y8qXAI1pEeKY9prllV7Cvw">
+        <parameter name="file" xmiGuid="_b0OyUI1vEeKY9prllV7Cvw" direction="in" type="//@externalTypes.27" operation="_Y8qXAI1pEeKY9prllV7Cvw">
           <multiplicity unique="true" lowerBound="1" upperBound="1"/>
         </parameter>
         <parameter name="isGenerated" xmiGuid="_i0-RMI1vEeKY9prllV7Cvw" direction="in" type="//@externalTypes.0" operation="_Y8qXAI1pEeKY9prllV7Cvw">
@@ -1977,7 +2030,7 @@
         <taggedValue value="true" tag="//@anyStereotype.1/@property.3"/>
         <multiplicity unique="true" ordered="true" upperBound="-1"/>
       </property>
-      <property xsi:type="gcore:MAttribute" name="rootDir" xmiGuid="_iZ2JgI1xEeKY9prllV7Cvw" stereotype="_14_0_b6f02e1_1212567706968_503410_178" visibility="private" type="//@externalTypes.25">
+      <property xsi:type="gcore:MAttribute" name="rootDir" xmiGuid="_iZ2JgI1xEeKY9prllV7Cvw" stereotype="_14_0_b6f02e1_1212567706968_503410_178" visibility="private" type="//@externalTypes.28">
         <taggedValue value="true" tag="//@anyStereotype.1/@property.0"/>
         <taggedValue value="false" tag="//@anyStereotype.1/@property.1"/>
         <taggedValue value="true" tag="//@anyStereotype.1/@property.2"/>
@@ -2160,7 +2213,7 @@
       <property xsi:type="gcore:MAttribute" name="slot" xmiGuid="_9OWZwI8REeKpNoiOVa6Abg" stereotype="_GV9OQP3lEeGA35ujkRyC6w" visibility="private" type="//@externalTypes.6" defaultvalue="&quot;tracemodel&quot;">
         <multiplicity unique="true" lowerBound="1" upperBound="1"/>
       </property>
-      <property xsi:type="gcore:MAttribute" name="templateSource" xmiGuid="_dJQQUI83EeKpNoiOVa6Abg" visibility="private" type="//@externalTypes.24">
+      <property xsi:type="gcore:MAttribute" name="templateSource" xmiGuid="_dJQQUI83EeKpNoiOVa6Abg" visibility="private" type="//@externalTypes.27">
         <multiplicity unique="true" lowerBound="1" upperBound="1"/>
       </property>
     </classifier>
@@ -2295,13 +2348,15 @@
   <externalTypes name="CompositeComponent"/>
   <externalTypes name="Outlet"/>
   <externalTypes name="PostProcessor"/>
+  <externalTypes specialization="_kHHrACmuEeOSCvB50Wk7Pw" name="Generator"/>
+  <externalTypes name="ProtectedRegion"/>
+  <externalTypes name="ProtectedRegionSyntaxException"/>
   <externalTypes name="Operation"/>
   <externalTypes specialization="_4JuPUIZrEeKi-fAVJTcXlg" name="JavaBeautifier"/>
   <externalTypes name="PieDataset"/>
   <externalTypes name="Path"/>
   <externalTypes name="StatDir"/>
   <externalTypes name="CheckComponent"/>
-  <externalTypes name="Generator"/>
   <externalTypes name="XtendComponent"/>
   <externalTypes name="Class"/>
 </gcore:MModel>
