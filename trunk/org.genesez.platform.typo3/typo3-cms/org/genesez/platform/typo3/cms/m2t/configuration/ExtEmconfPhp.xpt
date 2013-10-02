@@ -15,7 +15,7 @@
 «ENDREM»
 
 «REM» use TYPO3 CMS profile scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3::cms::profile::TYPO3CMSAccessElement»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
 
 «REM» use TYPO3 CMS file system convention scripts «ENDREM»
 «EXTENSION org::genesez::platform::typo3::cms::util::FileSystemConvention»
@@ -32,7 +32,7 @@
 	Processes the generation of "ext_emconf.php".
 «ENDREM»
 «DEFINE Root FOR MModel -»
-«FILE filePathExtEmconfPHP() -»
+«FILE filePathExtEmconfPhp() -»
 <?php
 
 «EXPAND ExtensionManagerConfiguration -»
@@ -59,8 +59,7 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
-	Generates the single information fields which are needed to connect a 
-	TYPO3 CMS extension to TYPO3 CMS. 
+	Generates the single information fields which are needed to connect a TYPO3 CMS extension to TYPO3 CMS.
 «ENDREM»
 «DEFINE ExtensionManagerProperties FOR MModel -»
 	«EXPAND Title -»
@@ -87,7 +86,7 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'title' field.
 «ENDREM»
 «DEFINE Title FOR MModel -»
-	'title' => '«emGetTYPO3ExtensionManagerTitle() -»',
+	'title' => '«emGetTypo3ExtensionManagerTitle() -»',
 «ENDDEFINE»
 
 
@@ -95,7 +94,7 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'description' field.
 «ENDREM»
 «DEFINE Description FOR MModel -»
-	'description' => '«emGetTYPO3ExtensionManagerDescription() -»',
+	'description' => '«emGetTypo3ExtensionManagerDescription() -»',
 «ENDDEFINE»
 
 
@@ -103,7 +102,7 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'category' field.
 «ENDREM»
 «DEFINE Category FOR MModel -»
-	'category' => '«emGetTYPO3ExtensionManagerCategory().asTYPO3Category() -»',
+	'category' => '«emGetTypo3ExtensionManagerCategory().asTypo3Category() -»',
 «ENDDEFINE»
 
 
@@ -111,7 +110,7 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'author' field.
 «ENDREM»
 «DEFINE Author FOR MModel -»
-	'author' => '«emGetTYPO3ExtensionManagerAuthor() -»',
+	'author' => '«emGetTypo3ExtensionManagerAuthor() -»',
 «ENDDEFINE»
 
 
@@ -119,7 +118,7 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'author_email' field.
 «ENDREM»
 «DEFINE AuthorEMail FOR MModel -»
-	'author_email' => '«emGetTYPO3ExtensionManagerAuthorEMail() -»',
+	'author_email' => '«emGetTypo3ExtensionManagerAuthorEMail() -»',
 «ENDDEFINE»
 
 
@@ -127,7 +126,7 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'author_company' field.
 «ENDREM»
 «DEFINE AuthorCompany FOR MModel -»
-	'author_company' => '«emGetTYPO3ExtensionManagerAuthorCompany() -»', 
+	'author_company' => '«emGetTypo3ExtensionManagerAuthorCompany() -»', 
 «ENDDEFINE»
 
 
@@ -135,7 +134,7 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'shy' field.
 «ENDREM»
 «DEFINE Shy FOR MModel -»
-	'shy' => «emGetTYPO3ExtensionManagerShy() -»,
+	'shy' => «emGetTypo3ExtensionManagerShy().asTypo3Boolean() -»,
 «ENDDEFINE»
 
 
@@ -143,7 +142,7 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'priority' field.
 «ENDREM»
 «DEFINE Priority FOR MModel -»
-	'priority' => '«emGetTYPO3ExtensionManagerPriority().asTYPO3Priority() -»',
+	'priority' => '«emGetTypo3ExtensionManagerPriority().asTypo3Priority() -»',
 «ENDDEFINE»
 
 
@@ -151,7 +150,7 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'state' field.
 «ENDREM»
 «DEFINE State FOR MModel -»
-	'state' => '«emGetTYPO3ExtensionManagerState().asTYPO3State() -»',
+	'state' => '«emGetTypo3ExtensionManagerState().asTypo3State() -»',
 «ENDDEFINE»
 
 
@@ -159,7 +158,7 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'internal' field.
 «ENDREM»
 «DEFINE Internal FOR MModel -»
-	'internal' => «emGetTYPO3ExtensionManagerInternal() -»,
+	'internal' => «emGetTypo3ExtensionManagerInternal().asTypo3Boolean() -»,
 «ENDDEFINE»
 
 
@@ -167,7 +166,7 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'uploadfolder' field.
 «ENDREM»
 «DEFINE UploadFolder FOR MModel -»
-	'uploadfolder' => «emGetTYPO3ExtensionManagerUploadFolder() -»,
+	'uploadfolder' => «emGetTypo3ExtensionManagerUploadFolder().asTypo3Boolean() -»,
 «ENDDEFINE»
 
 
@@ -175,7 +174,7 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'createDirs' field.
 «ENDREM»
 «DEFINE CreateDirs FOR MModel -»
-	'createDirs' => '«FOREACH emGetTYPO3ExtensionManagerCreateDirs() AS dir SEPARATOR ", " -»«dir -»«ENDFOREACH -»',
+	'createDirs' => '«FOREACH emGetTypo3ExtensionManagerCreateDirs() AS dir SEPARATOR ", " -»«dir -»«ENDFOREACH -»',
 «ENDDEFINE»
 
 
@@ -183,7 +182,7 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'modify_tables' field.
 «ENDREM»
 «DEFINE ModifyTables FOR MModel -»
-	'modify_tables' => '«FOREACH emGetTYPO3ExtensionManagerModifyTables() AS table SEPARATOR ", " -»«table -»«ENDFOREACH -»',
+	'modify_tables' => '«FOREACH emGetTypo3ExtensionManagerModifyTables() AS table SEPARATOR ", " -»«table -»«ENDFOREACH -»',
 «ENDDEFINE»
 
 
@@ -191,7 +190,7 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'lockType' field.
 «ENDREM»
 «DEFINE LockType FOR MModel -»
-	'lockType' => '«FOREACH emGetTYPO3ExtensionManagerLockType() AS lockType SEPARATOR ", " -»«lockType.asTYPO3LockType() -»«ENDFOREACH -»',
+	'lockType' => '«FOREACH emGetTypo3ExtensionManagerLockType() AS lockType SEPARATOR ", " -»«lockType.asTypo3LockType() -»«ENDFOREACH -»',
 «ENDDEFINE»
 
 
@@ -199,7 +198,7 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'clearCacheOnLoad' field.
 «ENDREM»
 «DEFINE ClearCacheOnLoad FOR MModel -»
-	'clearCacheOnLoad' => «emGetTYPO3ExtensionManagerClearCacheOnLoad() -»,
+	'clearCacheOnLoad' => «emGetTypo3ExtensionManagerClearCacheOnLoad().asTypo3Boolean() -»,
 «ENDDEFINE»
 
 
@@ -207,7 +206,7 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'version' field.
 «ENDREM»
 «DEFINE Version FOR MModel -»
-	'version' => '«emGetTYPO3ExtensionManagerVersion() -»',
+	'version' => '«emGetTypo3ExtensionManagerVersion() -»',
 «ENDDEFINE»
 
 
@@ -228,8 +227,8 @@ $EM_CONF[$_EXTKEY] = array(
 «ENDREM»
 «DEFINE Depends FOR MModel -»
 		'depends' => array(
-		«FOREACH emGetTYPO3ExtensionManagerDependencies() AS dependency -»
-			«asTYPO3AssociativeArrayItem( dependency )»
+		«FOREACH emGetTypo3ExtensionManagerDependencies() AS dependency -»
+			«asTypo3AssociativeArrayItem( dependency )»
 		«ENDFOREACH -»
 		),
 «ENDDEFINE»
@@ -240,8 +239,8 @@ $EM_CONF[$_EXTKEY] = array(
 «ENDREM»
 «DEFINE Conflicts FOR MModel -»
 		'conflicts' => array(
-		«FOREACH emGetTYPO3ExtensionManagerConflicts() AS conflict -»
-			«asTYPO3AssociativeArrayItem( conflict )»
+		«FOREACH emGetTypo3ExtensionManagerConflicts() AS conflict -»
+			«asTypo3AssociativeArrayItem( conflict )»
 		«ENDFOREACH -»
 		),
 «ENDDEFINE»
@@ -252,8 +251,8 @@ $EM_CONF[$_EXTKEY] = array(
 «ENDREM»
 «DEFINE Suggests FOR MModel -»
 		'suggests' => array(
-		«FOREACH emGetTYPO3ExtensionManagerSuggests() AS suggest -»
-			«asTYPO3AssociativeArrayItem( suggest )»
+		«FOREACH emGetTypo3ExtensionManagerSuggests() AS suggest -»
+			«asTypo3AssociativeArrayItem( suggest )»
 		«ENDFOREACH -»
 		),
 «ENDDEFINE»
