@@ -15,8 +15,8 @@ import gcore;
  */
 
 // use TYPO3 CMS profile scripts
-extension org::genesez::platform::typo3::cms::profile::TYPO3CMSProfile;
-extension org::genesez::platform::typo3::cms::profile::TYPO3CMSAccessElement;
+extension org::genesez::platform::typo3::cms::profile::Typo3CmsProfile;
+extension org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement;
 
 	
 // -- TYPO3 CMS Table Configuration Array (TCA) -------------------------------------------------------------
@@ -26,11 +26,11 @@ extension org::genesez::platform::typo3::cms::profile::TYPO3CMSAccessElement;
  * 
  * @return	True, if the advanced configuration of a property should be generated for the 'showitem' field, otherwise false.
  */
-boolean generateAdvancedTCATypesNumbers(MProperty this) :
-	emGetTYPO3TCAPropertyTypesAltLabel() != "" 
-	|| emGetTYPO3TCAPropertyTypesPaletteNumber() != ""	
-	|| emGetTYPO3TCAPropertyTypesSpecialConfiguration() != "" 
-	|| emGetTYPO3TCAPropertyTypesFormStyleCodes() != ""
+Boolean generateAdvancedTcaTypesNumbers(MProperty this) :
+	emGetTypo3TcaPropertyTypesAltLabel() != "" 
+	|| emGetTypo3TcaPropertyTypesPaletteNumber() != ""	
+	|| emGetTypo3TcaPropertyTypesSpecialConfiguration() != "" 
+	|| emGetTypo3TcaPropertyTypesFormStyleCodes() != ""
 		? true
 		: false;
 
@@ -44,10 +44,10 @@ boolean generateAdvancedTCATypesNumbers(MProperty this) :
  */
 List[String] allFlexFormSheetsWithoutDefault(MInterface this) :
 	let sheets = {} :
-		property.typeSelect(MAttribute).select( e | e.emGetTYPO3FlexFormPropertySheet() != "" ).
-			collect( e | sheets.add( e.emGetTYPO3FlexFormPropertySheet() ) ) ->
+		property.typeSelect(MAttribute).select( e | e.emGetTypo3FlexFormPropertySheet() != "" ).
+			collect( e | sheets.add( e.emGetTypo3FlexFormPropertySheet() ) ) ->
 		sheets.toSet() ->
-		sheets.remove( prTYPO3FlexFormSheetDefault() ) ->
+		sheets.remove( prTypo3FlexFormSheetDefault() ) ->
 		sheets.sortBy( s | s );
 
 
@@ -59,5 +59,5 @@ List[String] allFlexFormSheetsWithoutDefault(MInterface this) :
  */
 List[MAttribute] allFlexFormSheetProperties(MInterface this, String sheet) :
 	sheet == "sDEF"
-		? property.typeSelect(MAttribute).select( e | e.emGetTYPO3FlexFormPropertySheet() == "" || e.emGetTYPO3FlexFormPropertySheet() == prTYPO3FlexFormSheetDefault() )
-		: property.typeSelect(MAttribute).select( e | e.emGetTYPO3FlexFormPropertySheet() == sheet );
+		? property.typeSelect(MAttribute).select( e | e.emGetTypo3FlexFormPropertySheet() == "" || e.emGetTypo3FlexFormPropertySheet() == prTypo3FlexFormSheetDefault() )
+		: property.typeSelect(MAttribute).select( e | e.emGetTypo3FlexFormPropertySheet() == sheet );
