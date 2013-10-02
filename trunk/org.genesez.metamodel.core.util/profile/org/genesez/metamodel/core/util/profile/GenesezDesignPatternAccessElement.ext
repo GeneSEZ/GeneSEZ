@@ -1,0 +1,162 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+
+import gcore;
+
+
+/**
+ * Simplifies access to "GeneSEZ Design Pattern Profile" profile and makes working with them more easier.
+ * 
+ * HINT: All scripts for extension mechanism are available under the prefix 'em'.
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer) 
+ */
+
+// use profile scripts
+extension org::genesez::metamodel::core::util::profile::GenesezDesignPatternProfile;
+
+// use GeneSEZ common extension mechanism scripts
+extension org::genesez::metamodel::core::util::AccessElement;
+
+
+// -- Xtend scripts for Stereotype "di" --
+
+/**
+ * Checks if an element is annotated with the stereotype "di".
+ * 
+ * @return	True if the element has the stereotype assigned, otherwise false.
+ */
+boolean emHasDiStereotype(MElement this) :
+	emHasStereotypeAssignment( prDi() );
+
+
+/**
+ * Checks if an element is annotated with the specified value 
+ * of the specified tagged value of the stereotype "di".
+ *
+ * @param	tag		The name of a tagged value.
+ * @param	value	The value of a tagged value.
+ * @return	True if the element has a tagged value, otherwise false.
+ */
+boolean emHasDiTaggedValue(MElement this, String tag, String value) :
+	emHasTaggedValue( prDi(), tag, value );
+
+
+/**
+ * Checks if an element is annotated with the specified value reference 
+ * of the specified tagged value of the stereotype "di".
+ *
+ * @param	tag				The name of a tagged value.
+ * @param	valueReference	The value reference of a tagged value.
+ * @return	True if the element has a tagged value, otherwise false.
+ */
+boolean emHasDiTaggedValue(MElement this, String tag, MElement valueReference) :
+	emHasTaggedValue( prDi(), tag, valueReference );
+
+
+// -- "constructor" --
+	
+/**
+ * Checks if an element has a utilizable value
+ * of the tagged value "constructor" of the stereotype "di" 
+ * which is neither empty ('') nor null ('null').
+ *
+ * @return	True if the element has a utilizable tagged value, otherwise false.
+ */
+boolean emHasDiUtilizableConstructor(MElement this) :
+	emHasUtilizableTaggedValue( prDi(), prDiConstructor() );
+
+
+/**
+ * Checks if an element is annotated with the specified value 
+ * of the tagged value "constructor" of the stereotype "di".
+ *
+ * @param	value	The value of a tagged value.
+ * @return	True if the element has a tagged value, otherwise false.
+ */
+boolean emHasDiConstructor(MElement this, String value) :
+	emHasTaggedValue( prDi(), prDiConstructor(), value );
+
+
+/**
+ * Returns the list of owning tagged values 
+ * of the tagged value "constructor" of the stereotype "di".
+ * 
+ * @return	The list of tagged values, otherwise an empty list.
+ */
+List[MTaggedValue] emGetDiOwningConstructor(MElement this) : 
+	emOwningTaggedValues( prDi(), prDiConstructor() );
+
+
+/**
+ * Returns the value of the single-valued tagged value "constructor"
+ * of the stereotype "di".
+ * 
+ * @return	The value of the single-valued tagged value, otherwise an empty string, if the tagged value is not assigned.
+ */
+String emGetDiConstructor(MElement this) :
+	emGetTaggedValue( prDi(), prDiConstructor() );
+
+
+// -- "setter" --
+	
+/**
+ * Checks if an element has a utilizable value
+ * of the tagged value "setter" of the stereotype "di" 
+ * which is neither empty ('') nor null ('null').
+ *
+ * @return	True if the element has a utilizable tagged value, otherwise false.
+ */
+boolean emHasDiUtilizableSetter(MElement this) :
+	emHasUtilizableTaggedValue( prDi(), prDiSetter() );
+
+
+/**
+ * Checks if an element is annotated with the specified value 
+ * of the tagged value "setter" of the stereotype "di".
+ *
+ * @param	value	The value of a tagged value.
+ * @return	True if the element has a tagged value, otherwise false.
+ */
+boolean emHasDiSetter(MElement this, String value) :
+	emHasTaggedValue( prDi(), prDiSetter(), value );
+
+
+/**
+ * Returns the list of owning tagged values 
+ * of the tagged value "setter" of the stereotype "di".
+ * 
+ * @return	The list of tagged values, otherwise an empty list.
+ */
+List[MTaggedValue] emGetDiOwningSetter(MElement this) : 
+	emOwningTaggedValues( prDi(), prDiSetter() );
+
+
+/**
+ * Returns the value of the single-valued tagged value "setter"
+ * of the stereotype "di".
+ * 
+ * @return	The value of the single-valued tagged value, otherwise an empty string, if the tagged value is not assigned.
+ */
+String emGetDiSetter(MElement this) :
+	emGetTaggedValue( prDi(), prDiSetter() );
+
+
+// -- Xtend scripts for Stereotype "singleton" --
+
+/**
+ * Checks if an element is annotated with the stereotype "singleton".
+ * 
+ * @return	True if the element has the stereotype assigned, otherwise false.
+ */
+boolean emHasSingletonStereotype(MElement this) :
+	emHasStereotypeAssignment( prSingleton() );
+
+
+// PROTECTED REGION ID(accesselement.own.code.implementation._17_0_6_8a7027a_1350577766645_237015_1526) ENABLED START
+// TODO: put your further code implementations here
+// PROTECTED REGION END
