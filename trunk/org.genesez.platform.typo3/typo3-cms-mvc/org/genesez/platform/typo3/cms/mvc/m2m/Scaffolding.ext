@@ -1,58 +1,81 @@
-/**
- * Scaffolding of the model before generation of source code.  
- *  
- * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
  */
 
-//	based on genesez meta model
 import gcore;
 
-// use common logging scripts
-extension org::genesez::util::logging::Logging;
 
-// use TYPO3 MVC Extbase profile + access helper scripts
-extension org::genesez::platform::typo3::cms::mvc::profile::ExtbaseProfile;
-extension org::genesez::platform::typo3cms::mvc::profile::ExtbaseAccessElement;
+/**
+ * Scaffolding before generation of source code begins.
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ */
 
-// use TYPO3 MVC access helper scripts which overrides
-// common access helper scripts if script name is equal 
-extension org::genesez::platform::typo3cms::mvc::util::AccessElement;
-extension org::genesez::metamodel::core::util::AccessElement;
+// use TYPO3 CMS specific Extbase profile scripts
+extension org::genesez::platform::typo3::cms::mvc::profile::Typo3CmsExtbaseProfile;
 
-// use TYPO3 MVC workflow globalvar scripts
-extension org::genesez::platform::typo3cms::mvc::util::GlobalVar;
+// use GeneSEZ common Domain Driven Design profile scripts
+extension org::genesez::metamodel::core::util::profile::GenesezDomainDrivenDesignAccessElement;
 
-// use common model navigation scripts
-extension org::genesez::metamodel::core::util::NavigateElement;
-// use common make element scripts
+
+// use TYPO3 CMS specific Extbase + Fluid access element scripts
+extension org::genesez::platform::typo3::cms::mvc::util::AccessElement;
+
+
+// use GeneSEZ common create element scripts
 extension org::genesez::metamodel::core::util::CreateElement;
 
+// use GeneSEZ common conversion scripts
+extension org::genesez::metamodel::core::util::Conversion;
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	MPackage (MModel)
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// use GeneSEZ common navigate element scripts
+extension org::genesez::metamodel::core::util::NavigateElement;
 
-Void modelScaffolding(MModel this) :
-	useLogger("org.genesez.platform.typo3") ->
-	// perform scaffolding for all entities which are aggregate roots
-	allEntities().entityScaffolding();
+// use GeneSEZ common logging scripts
+extension org::genesez::util::logging::Logging;
 
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 MVC Extbase Model entity scaffolding
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// -- Interation over Model and Package Structures ----------------------------------------------------------
 
-Void entityScaffolding(MClass this) :
-	// perform scaffolding for all aggreagate roots
-	hasT3ExtbaseEntityIsAggregateRoot("true")
-		? (	logTrace( "Scaffolding for entity: " + name() ) ->
-			( let s = createStereotype( navModel(), prT3ExtbaseDomainObject(), prT3ExtbaseDomainObject() ) :
-				  createTaggedValue( createTag( s, prT3ExtbaseDomainObjectCreateController(), "Boolean" ), "true" ) ->
-				  createTaggedValue( createTag( s, prT3ExtbaseDomainObjectCreateRepository(), "Boolean" ), "true" ) ->
-				  createTaggedValue( createTag( s, prT3ExtbaseDomainObjectCreatePlugin(), "Boolean" ), "true" )
+MModel modelScaffolding(MModel this) :
+	useLogger( "org.genesez.platform.typo3" ) ->
+	packageScaffolding();
+
+
+MPackage packageScaffolding(MPackage this) :
+	// perform model scaffolding for all classes
+	classifier.typeSelect( MClass ).classScaffolding() ->
+	// perform model scaffolding for all nested packages
+	nestedPackage.packageScaffolding() ->
+	this;
+
+
+// -- Selection of scaffolding Classes ----------------------------------------------------------------------
+
+MClass classScaffolding(MClass this) :
+	switch {
+		case isEntity() :
+			entityScaffolding()
+		default :
+			Void
+	} ->
+	this;
+
+
+// -- Scaffolding of Entities -------------------------------------------------------------------------------
+
+MClass entityScaffolding(MClass this) :
+	// perform scaffolding for all aggregate roots
+	emHasAggregateRootStereotype()
+		? (	logTrace( "GeneSEZ: Scaffolding for aggregate root! Model element: " + fqmn() ) ->
+			(	let extbaseDomainObjectStereotype = navModel().ensureStereotypeExistence( prExtbaseDomainObject(), prExtbaseDomainObject() ) :
+					ensureStereotypeAssignment( extbaseDomainObjectStereotype ).
+					ensureSingleTaggedValueExistence( extbaseDomainObjectStereotype.ensureTagExistence( prExtbaseDomainObjectCreateController(), "Boolean" ), "true" ).owningElement.
+					ensureSingleTaggedValueExistence( extbaseDomainObjectStereotype.ensureTagExistence( prExtbaseDomainObjectCreateRepository(), "Boolean" ), "true" ).owningElement.
+					ensureSingleTaggedValueExistence( extbaseDomainObjectStereotype.ensureTagExistence( prExtbaseDomainObjectCreatePlugin(), "Boolean" ), "true" )
 			)
-		) : Void;
+		) : Void ->
+	this;
