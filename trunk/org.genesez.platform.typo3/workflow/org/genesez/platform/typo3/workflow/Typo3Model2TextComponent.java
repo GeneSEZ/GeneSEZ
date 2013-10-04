@@ -36,14 +36,6 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 			}
 		}
 		
-		// check extension name
-		if (extensionName == null || extensionName.isEmpty()) {
-			issues.addError(this, "Workflow parameter 'extensionName' must be present.", extensionName);
-		} else {
-			// add workflow parameter for transformation variables as global variables
-			addGlobalVarDef("extensionName", extensionName);
-		}
-		
 		// check extension vendor
 		if (extensionVendor == null || extensionVendor.isEmpty()) {
 			issues.addError(this, "Workflow parameter 'extensionVendor' must be present.", extensionVendor);
@@ -59,9 +51,6 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 			// add workflow parameter for transformation variables as global variables
 			addGlobalVarDef("extensionKey", extensionKey);
 		}
-		
-		// add workflow parameter for transformation variables as global variables
-		addGlobalVarDef("isT3MVCCompliant", isT3MVCCompliant);
 		
 		// delegate to base class
 		super.checkConfiguration(issues);
