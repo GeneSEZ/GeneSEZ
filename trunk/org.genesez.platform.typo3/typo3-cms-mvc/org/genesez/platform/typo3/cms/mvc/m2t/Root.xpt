@@ -1,68 +1,72 @@
-«IMPORT gcore»
 «REM»
-	Main entry point for generating TYPO3 CMS Extbase + Fluid code.
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+«IMPORT org::genesez::platform::typo3::cms::mvc::m2t»
+
+
+«REM»
+	Main entry point for generating TYPO3 CMS specific Extbase + Fluid code.
 	Iterates over the model and delegates the handling.
 	
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
 «ENDREM»
 
-«REM» use general logging scripts «ENDREM»
+«REM» use GeneSEZ common logging scripts «ENDREM»
 «EXTENSION org::genesez::util::logging::Logging»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
 «ENDREM»
 
 «REM»
-	Processes the contents of the model.
+	Processes the contents of a model, delegates the handling of all classifiers and nested packages.
 «ENDREM»
 «DEFINE Root FOR MModel -»
-«REM» init logger «ENDREM»
+«REM» init GeneSEZ common logger «ENDREM»
 «useLogger("org.genesez.platform.typo3") -» 
 
-«REM» Iterate over all nested packages and classifiers «ENDREM»
-«EXPAND Root FOREACH nestedPackage -»
+«REM» Generate TYPO3 CMS Extension Configuration code «ENDREM»
+«EXPAND configuration::Root::Root -»
+
+«REM» Generate TYPO3 CMS Extension Resources code «ENDREM»
+«EXPAND resources::Root::Root -»
+
+«REM» Iterate over all classifiers and nested packages «ENDREM»
 «EXPAND Root FOREACH classifier -»
-
-«REM» Generate extension configuration code «ENDREM»
-«REM»«EXPAND org::genesez::platform::typo3::cms::mvc::m2t::configuration::Root::Root -»«ENDREM»
-
-«REM» Generate extension resources code «ENDREM»
-«REM»
-«EXPAND org::genesez::platform::typo3cms::mvc::m2t::resources::Root::Root -»
-«ENDREM»
+«EXPAND Root FOREACH nestedPackage -»
 «ENDDEFINE»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
 «ENDREM»
 
 «REM»
-	Processes the contents of a package, delegates the handling of all classifiers.
+	Processes the contents of a package, delegates the handling of all classifiers and nested packages.
 «ENDREM»
 «DEFINE Root FOR MPackage -»
-«REM» Iterate over all nested packages and classifiers «ENDREM»	
+«REM» Iterate over all classifier and nested packages «ENDREM»
+«EXPAND Root FOREACH classifier -»	
 «EXPAND Root FOREACH nestedPackage -»
-«EXPAND Root FOREACH classifier -»
 «ENDDEFINE»
 
 
 «REM»
-	Processes the contents of a classifier
+	Processes the contents of a classifier.
 «ENDREM»
 «DEFINE Root FOR MClassifier -»
-«REM» Generate extension classes code «ENDREM»
-«EXPAND org::genesez::platform::typo3::cms::mvc::m2t::classes::Root::Root -»
+«REM» Generate classifier specific TYPO3 CMS Extension Classes code «ENDREM»
+«EXPAND classes::Root::Root -»
 
-«REM» Generate extension configuration code «ENDREM»
-«REM»«EXPAND org::genesez::platform::typo3cms::mvc::m2t::configuration::Root::Root -»«ENDREM»
+«REM» Generate classifier specific TYPO3 CMS Extension Configuration code «ENDREM»
+«EXPAND configuration::Root::Root -»
 
-«REM» Generate extension resources code «ENDREM»
-«REM»«EXPAND org::genesez::platform::typo3cms::mvc::m2t::resources::Root::Root -»«ENDREM»
+«REM» Generate classifier specific TYPO3 CMS Extension Resources code «ENDREM»
+«EXPAND resources::Root::Root -»
 «ENDDEFINE»
