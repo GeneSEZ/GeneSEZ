@@ -1,24 +1,31 @@
-«IMPORT gcore»
 «REM»
-	Main entry point for generating extbase class code.
-	Iterates over the model and delegates the handling of classifiers.
+	(c) GeneSEZ Research Group
+	All rights reserved.
 	
-	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
-	@date	2011-04-26
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
 «ENDREM»
 
-«REM» use TYPO3 MVC access helper scripts «ENDREM»
+«IMPORT gcore»
+
+
+«REM»
+	Entry point for generating TYPO3 CMS specific Extbase + Fluid Classes code.
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+«ENDREM»
+
+«IMPORT gcore»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
 «EXTENSION org::genesez::platform::typo3::cms::mvc::util::AccessElement»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
 «ENDREM»
 
 «REM»
-	Processes the contents of a classifier
+	Processes the contents of a classifier.
 «ENDREM»
 «DEFINE Root FOR MClassifier -»
 «EXPAND Types::Root -»
@@ -26,9 +33,10 @@
 
 
 «REM»
-	Processes the contents of an interface, if it is not an element of:
-	- plugin
-	- module
+	Processes the contents of an interface, but exclude interfaces with:
+	
+	* stereotype 'ExtbasePlugin' 
+	* stereotype 'ExtbaseModule'
 «ENDREM»
 «DEFINE Root FOR MInterface -»
 «IF !isPlugin() && !isModule() -»
@@ -38,9 +46,5 @@
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
 «ENDREM»
-
-
