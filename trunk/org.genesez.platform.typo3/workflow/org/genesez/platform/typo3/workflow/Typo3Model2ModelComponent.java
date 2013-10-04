@@ -9,7 +9,6 @@ import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
-import org.genesez.workflow.profile.WfDefault;
 import org.genesez.workflow.profile.WfParameter;
 import org.genesez.workflow.xpand.Model2ModelComponent;
 
@@ -30,14 +29,6 @@ public class Typo3Model2ModelComponent extends Model2ModelComponent {
 	 */
 	public void checkConfiguration(Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._zhoXUAo_EeKxusbn3Pe47g) ENABLED START */
-		// check extension name
-		if (extensionName == null || extensionName.isEmpty()) {
-			issues.addError(this, "Workflow parameter 'extensionName' must be present.", extensionName);
-		} else {
-			// add workflow parameter for transformation variables as global variables
-			addGlobalVarDef("extensionName", extensionName);
-		}
-		
 		// check extension vendor
 		if (extensionVendor == null || extensionVendor.isEmpty()) {
 			issues.addError(this, "Workflow parameter 'extensionVendor' must be present.", extensionVendor);
@@ -53,9 +44,6 @@ public class Typo3Model2ModelComponent extends Model2ModelComponent {
 			// add workflow parameter for transformation variables as global variables
 			addGlobalVarDef("extensionKey", extensionKey);
 		}
-		
-		// add workflow parameter for transformation variables as global variables
-		addGlobalVarDef("isT3MVCCompliant", isT3MVCCompliant);
 		
 		// delegate to base class
 		super.checkConfiguration(issues);
