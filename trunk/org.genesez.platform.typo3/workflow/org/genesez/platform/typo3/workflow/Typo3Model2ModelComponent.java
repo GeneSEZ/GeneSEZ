@@ -19,12 +19,6 @@ import org.genesez.workflow.xpand.Model2ModelComponent;
 public class Typo3Model2ModelComponent extends Model2ModelComponent {
 	
 	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
-	private boolean isT3MVCCompliant = true;
-	
-	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
-	private String extensionName;
-	
-	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String extensionVendor;
 	
 	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
@@ -79,44 +73,6 @@ public class Typo3Model2ModelComponent extends Model2ModelComponent {
 		// start execution
 		super.invokeInternal(context, monitor, issues);
 		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	@WfDefault(parameter = "isT3MVCCompliant")
-	public boolean getDefaultIsT3MVCCompliant() {
-		return true;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>isT3MVCCompliant</b></em>'.
-	 */
-	public boolean getIsT3MVCCompliant() {
-		return this.isT3MVCCompliant;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>isT3MVCCompliant</b></em>'.
-	 * @param	isT3MVCCompliant	the value to set.
-	 */
-	public void setIsT3MVCCompliant(boolean isT3MVCCompliant) {
-		this.isT3MVCCompliant = isT3MVCCompliant;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>extensionName</b></em>'.
-	 */
-	public String getExtensionName() {
-		return this.extensionName;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>extensionName</b></em>'.
-	 * @param	extensionName	the value to set.
-	 */
-	public void setExtensionName(String extensionName) {
-		this.extensionName = extensionName;
 	}
 	
 	/**
