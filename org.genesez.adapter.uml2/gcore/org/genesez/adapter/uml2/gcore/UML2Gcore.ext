@@ -188,6 +188,7 @@ private MClassifier transform(Classifier c, MDefinitionContext this) :
 	} ->
 	this;
 
+
 /**
  * transforms the uml type into an GeneSEZ type
  * distincts uml types and determines the correct GeneSEZ type for an uml type 
@@ -782,13 +783,16 @@ private create MTag makeTag(Property p) :
 private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
 	logTrace("make tagged value: " + o + " for tag: " + t.name) ->
 	setTag(t) ->
-	switch (o.metaType) {
-		case NamedElement : setValue( ((NamedElement)o).name )
-		case EnumerationLiteral : setValue( ((EnumerationLiteral)o).name )
-		case Class : setValueReference( ((Class)o).make() )
-		case Operation : setValueReference( ((Operation)o).make() )
-		case Property : setValueReference( ((MElement)((Property)o).association == null ? ((Property)o).makeAttribute() : ((Property)o).makeAssociationRole()) )
+	switch (true) {
+		// check types
+		case Classifier.isInstance(o) : setValueReference( ((Class)o).make() )
 		
+		case Operation.isInstance(o) : setValueReference( ((Operation)o).make() )
+		case Property.isInstance(o) : setValueReference( ((MElement)((Property)o).association == null ? ((Property)o).makeAttribute() : ((Property)o).makeAssociationRole()) )
+		
+		// check instances
+		case EnumerationLiteral.isInstance(o) : setValue( ((EnumerationLiteral)o).name )
+		case NamedElement.isInstance(o) : setValue( ((NamedElement)o).name )
 		default : setValue( o.toString() )
 	} ->
 //	setOwningElement(owner)
@@ -845,7 +849,7 @@ private Object getTaggedValue(Element this, Stereotype s, String tag) :
  */
 private create MGeneric makeGeneric(ClassifierTemplateParameter c) :
 	setSpecification( ((Class)c.ownedParameteredElement).name ) ->
-	constraint.addAll( c.constrainingClassifier.make() ) ->
+	constraint.addAll( c.constrainingClassifier.makeType() ) ->
 	c.ownedDefault != null
 		? c.ownedDefault.transformDefault( this )
 		: this ->
