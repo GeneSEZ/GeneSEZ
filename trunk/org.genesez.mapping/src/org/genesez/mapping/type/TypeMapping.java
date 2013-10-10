@@ -56,6 +56,18 @@ public class TypeMapping {
 	}
 	
 	/**
+	 * Returns true if a mapping for the specified multi typed type with the specified context exists, otherwise false.
+	 * 
+	 * @param unique	True if duplicate items in the multi valued type are not allowed, otherwise false.
+	 * @param ordered	True if the items in the multi valued type are ordered, otherwise false.
+	 * @param context	The context in which the type should be mapped.
+	 * @return	True if a type mapping exists, otherwise false.
+	 */
+	public static boolean hasMultiValuedTypeMapping(Boolean unique, Boolean ordered, String context) {
+		return getTypeMapper().hasMultiValuedTypeMapping(unique, ordered, context);
+	}
+	
+	/**
 	 * Returns the name of the multi-valued type if a mapping entry exists, 
 	 * otherwise an empty string will be returned.
 	 * 
