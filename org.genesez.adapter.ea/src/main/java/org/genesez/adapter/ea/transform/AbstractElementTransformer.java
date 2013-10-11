@@ -4,27 +4,22 @@ package org.genesez.adapter.ea.transform;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_5_12d203c6_1357563324577_635875_1695) 
  */
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.EnumerationLiteral;
-import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Port;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Stereotype;
 import org.genesez.adapter.ea.ContentRegistry;
-import org.genesez.adapter.ea.ElementRegistry;
 import org.genesez.adapter.ea.ProfileRegistry;
-import org.sparx.TaggedValue;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author christian
+ * @author Christian
  */
-
 public abstract class AbstractElementTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -39,7 +34,6 @@ public abstract class AbstractElementTransformer {
 	/**
 	 * Method stub for further implementation.
 	 */
-	
 	protected void transformAttributes() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1357565403570_546712_1773) ENABLED START */
 		for (org.sparx.Attribute a : this.eaElement.GetAttributes()) {
@@ -51,7 +45,6 @@ public abstract class AbstractElementTransformer {
 	/**
 	 * Method stub for further implementation.
 	 */
-	
 	protected void transformConnectors() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1357565410361_791740_1776) ENABLED START */
 		for (org.sparx.Connector c : this.eaElement.GetConnectors()) {
@@ -63,7 +56,6 @@ public abstract class AbstractElementTransformer {
 	/**
 	 * Method stub for further implementation.
 	 */
-	
 	protected void transformOperations() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1357565416366_597788_1779) ENABLED START */
 		for (org.sparx.Method m : this.eaElement.GetMethods()) {
@@ -75,7 +67,6 @@ public abstract class AbstractElementTransformer {
 	/**
 	 * Method stub for further implementation.
 	 */
-	
 	protected void transformElements() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363080056207_931839_1949) ENABLED START */
 		for (org.sparx.Element e : this.eaElement.GetElements()) {
@@ -86,9 +77,7 @@ public abstract class AbstractElementTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	a	
 	 */
-	
 	protected void transformAttribute(org.sparx.Attribute a) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363080688547_362826_1967) ENABLED START */
 		LOG.fatal("Transforming attributes is not implemented!");
@@ -97,9 +86,7 @@ public abstract class AbstractElementTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	e	
 	 */
-	
 	protected void transformElement(org.sparx.Element e) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363080696863_169046_1970) ENABLED START */
 		LOG.fatal("Transforming elements is not implemented!");
@@ -108,9 +95,7 @@ public abstract class AbstractElementTransformer {
 	
 	/**
 	 * Depending on the type of the connector the methods to transform are called
-	 * @param	c	
 	 */
-	
 	protected void transformConnector(org.sparx.Connector c) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363081551636_874988_1977) ENABLED START */
 		final String connecterType = c.GetType();
@@ -140,16 +125,14 @@ public abstract class AbstractElementTransformer {
 			LOG.fatal("Connectors is Realisation and not implemented yet!");
 		} else if (connecterType.equals("Generalization")) {
 			LOG.debug("Connector is Generalization");
-			ConnectorFactory.INSTANCE.addGeneralisation(c);		
+			ConnectorFactory.INSTANCE.addGeneralisation(c);
 		}
 		/* PROTECTED REGION END */
 	}
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	m	
 	 */
-	
 	protected void transformMethod(org.sparx.Method m) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363082244430_575349_1987) ENABLED START */
 		LOG.fatal("Transforming methods is not implemented!");
@@ -159,7 +142,6 @@ public abstract class AbstractElementTransformer {
 	/**
 	 * Method stub for further implementation.
 	 */
-	
 	protected void applyStereotypes() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363082262737_224445_1990) ENABLED START */
 		LOG.debug("Applying stereotypes");
@@ -182,9 +164,7 @@ public abstract class AbstractElementTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	st	
 	 */
-	
 	private void applyTaggedValues(Stereotype st) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363082297954_439260_1993) ENABLED START */
 		LOG.debug("Applying tagged values");
@@ -206,8 +186,7 @@ public abstract class AbstractElementTransformer {
 	 * @param	p	The property of the tagged value
 	 * @param	t	The tagged value from the model
 	 */
-	
-	private void applyTaggedValue(Stereotype st, Property p, TaggedValue t) {
+	private void applyTaggedValue(Stereotype st, Property p, org.sparx.TaggedValue t) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363082373669_76011_2000) ENABLED START */
 		LOG.debug("Set tagged value " + p.getName() + " to " + t.GetValue());
 		if (p.getType().getName().equals("String")) {
@@ -229,7 +208,7 @@ public abstract class AbstractElementTransformer {
 	
 	// -- generated association + attribute accessors -----------------------
 	
-	// -- generated code of other cartridges --------------------------------
+	// -- generated code  ---------------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1357563324577_635875_1695) ENABLED START */
@@ -237,5 +216,4 @@ public abstract class AbstractElementTransformer {
 	// :)
 	
 	/* PROTECTED REGION END */
-	
 }
