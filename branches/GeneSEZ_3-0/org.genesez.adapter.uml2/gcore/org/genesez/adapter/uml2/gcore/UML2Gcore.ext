@@ -3,9 +3,9 @@
  * Transforms UML class models into GeneSEZ models.
  * 
  * To transform the model there are some distinctions:
- * - transformation of model (non containment) references should call make() functions
+ * - transformation of model (non containment) references should call make() functions or makeType()
  *   (they ensure identification by name and xmi id as well as serialization by a containment)
- * - transformation of model containment references should call transform() functions
+ * - transformation of model containment references should call transform() or make().transform() functions
  *   (transform properties of model elements, call transform functions for containment + make() for non containment references)
  * - furthermore there are functions to distict transformation
  * - functions to transform the properties of model elements
@@ -378,7 +378,7 @@ private create MLiteral transform(EnumerationLiteral l) :
  * @param	o	an uml operation
  * @return	the GeneSEZ operation
  */
-create MOperation transform(Operation o) :
+MOperation transform(MOperation this, Operation o) :
 	logTrace( "transform [ " + metaType + " ] - " + o.fqmn() ) ->
 	// set the unique xmiId and name
 	transformBasics(o) ->
@@ -514,7 +514,7 @@ private create MParameter make(Void v) :
  * @param	p	an uml property
  * @return	the GeneSEZ attribute
  */
-private create MAttribute transformAttribute(Property p) :
+private MAttribute transform(MAttribute this, Property p) :
 	// set the unique xmiId and name
 	transformBasics(p) ->
 	// properties
@@ -541,7 +541,7 @@ private create MAttribute transformAttribute(Property p) :
  * @param	aend	an uml property
  * @return	the GeneSEZ association role
  */
-private create MAssociationRole transformAssociationRole(Property aend) :
+private MAssociationRole transform(MAssociationRole this, Property aend) :
 	logTrace("make [" + metaType + "] - " + aend.fqmn()) ->
 	// set the unique xmiId and name
 	setXmiGuid( xmiId(aend) ) ->
@@ -591,7 +591,9 @@ private create MAssociation transformAssociation(Association a) :
 	// associations ends: filter non navigable association ends 
 	// non navigable association ends do not have the class refernce set, except the association object is an association class, then the association class is itself set as class
 	logTrace("featuring classifiers: " + a.memberEnd.featuringClassifier.fqmn() ) ->
-	end.addAll( a.memberEnd.select( e| !e.featuringClassifier.isEmpty && !e.featuringClassifier.contains(a) ).transformAssociationRole() ) ->
+	end.addAll(
+		a.memberEnd.select( e| !e.featuringClassifier.isEmpty && !e.featuringClassifier.contains(a) ).select( ar|ar.makeAssociationRole().transform( ar ) )
+	) ->
 	logTrace("link ends: " + end) ->
 	linkEnds() ->
 	// transform association class
@@ -1127,10 +1129,10 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
 	// add comment to classifier
 	ownedComment.addAll( c.ownedComment.typeSelect(Comment).transform() ) ->
 	// add attributes and association ends
-	property.addAll( c.attribute.reject( p|p.association != null ).transformAttribute() ) ->
-	property.addAll( c.attribute.reject( p|p.association == null ).transformAssociationRole() ) ->
+	c.attribute.reject( p|p.association != null ).forAll( a|a.makeAttribute().transform( a ) -> true ) ->
+	c.attribute.reject( p|p.association == null ).forAll( ar|ar.makeAssociationRole().transform(ar) -> true ) ->
 	// add operations
-	operation.addAll( c.getOperations().transform() ) ->
+	c.getOperations().forAll( o|o.make().transform(o) -> true ) ->
 	// add nested classifiers
 	c.ownedElement.typeSelect(Classifier).select(
 		e | {Class, Interface, Enumeration, DataType}.contains(e.metaType)
