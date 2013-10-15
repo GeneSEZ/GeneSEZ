@@ -4,7 +4,6 @@ package org.genesez.adapter.ea.transform;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_5_12d203c6_1363340874505_454681_2106) 
  */
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -22,9 +21,8 @@ import org.genesez.adapter.ea.ElementRegistry;
 
 /**
  * transforms activity components
- * @author christian
+ * @author Christian
  */
-
 public class ActivityTransformer extends AbstractElementTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -40,11 +38,7 @@ public class ActivityTransformer extends AbstractElementTransformer {
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
-	 * @param	e	
-	 * @param	parent	
-	 * @return	
 	 */
-	
 	public Activity transform(org.sparx.Element e, BehavioredClassifier parent) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363361825736_383301_3017) ENABLED START */
 		LOG.debug("Creating Activity " + e.GetName() + ", parent " + parent.getName());
@@ -59,11 +53,7 @@ public class ActivityTransformer extends AbstractElementTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	e	
-	 * @param	parent	
-	 * @return	
 	 */
-	
 	public Activity transform(org.sparx.Element e, Package parent) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362090688_873925_3031) ENABLED START */
 		LOG.debug("Creating Activity " + e.GetName() + ", parent " + parent.getName());
@@ -80,9 +70,7 @@ public class ActivityTransformer extends AbstractElementTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	e	
 	 */
-	
 	private void transform(org.sparx.Element e) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362122387_219403_3036) ENABLED START */
 		this.eaElement = e;
@@ -97,7 +85,6 @@ public class ActivityTransformer extends AbstractElementTransformer {
 	/**
 	 * Method stub for further implementation.
 	 */
-	
 	protected void transformConnectors() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362146580_726370_3039) ENABLED START */
 		for (org.sparx.Element e : this.eaElement.GetElements()) {
@@ -115,9 +102,7 @@ public class ActivityTransformer extends AbstractElementTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	c	
 	 */
-	
 	protected void transformConnector(org.sparx.Connector c) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362168230_485022_3042) ENABLED START */
 		LOG.debug("Transforming connector " + c.GetName());
@@ -132,9 +117,7 @@ public class ActivityTransformer extends AbstractElementTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	e	
 	 */
-	
 	protected void transformElement(org.sparx.Element e) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362203391_514284_3045) ENABLED START */
 		LOG.debug("Transforming element " + e.GetName());
@@ -167,10 +150,7 @@ public class ActivityTransformer extends AbstractElementTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	c	
-	 * @param	edge	
 	 */
-	
 	private void addActivityEdge(org.sparx.Connector c, ActivityEdge edge) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362233555_701061_3048) ENABLED START */
 		this.edges.put(c.GetConnectorGUID(), edge);
@@ -197,10 +177,7 @@ public class ActivityTransformer extends AbstractElementTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	e	
-	 * @param	node	
 	 */
-	
 	private void applyActivityEdges(org.sparx.Element e, ActivityNode node) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362273681_9146_3053) ENABLED START */
 		// Apply node as source
@@ -223,10 +200,7 @@ public class ActivityTransformer extends AbstractElementTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	e	
-	 * @return	
 	 */
-	
 	private boolean isForkNode(org.sparx.Element e) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362375949_303244_3062) ENABLED START */
 		int i = 0;
@@ -241,10 +215,7 @@ public class ActivityTransformer extends AbstractElementTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	e	
-	 * @return	
 	 */
-	
 	private boolean isJoinNode(org.sparx.Element e) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363340960011_961298_2134) ENABLED START */
 		int i = 0;
@@ -259,10 +230,7 @@ public class ActivityTransformer extends AbstractElementTransformer {
 	
 	/**
 	 * transforms some StateNode, depending on its subtype
-	 * @param	subType	
-	 * @return	
 	 */
-	
 	private IActivityTransformable selectStateNodeTransformer(int subType) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1367313330094_43476_1703) ENABLED START */
 		IActivityTransformable activityTransformer = null;
@@ -282,10 +250,7 @@ public class ActivityTransformer extends AbstractElementTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	eaElement	
-	 * @return	
 	 */
-	
 	private IActivityTransformable selectTransformer(org.sparx.Element eaElement) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1367329350065_457718_1906) ENABLED START */
 		IActivityTransformable activityTransformer = null;
@@ -328,7 +293,7 @@ public class ActivityTransformer extends AbstractElementTransformer {
 	
 	// -- generated association + attribute accessors -----------------------
 	
-	// -- generated code of other cartridges --------------------------------
+	// -- generated code  ---------------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363340874505_454681_2106) ENABLED START */
@@ -336,5 +301,4 @@ public class ActivityTransformer extends AbstractElementTransformer {
 	private Map<Integer, Set<String>> edgeSources = new HashMap<Integer, Set<String>>();
 	private Map<Integer, Set<String>> edgeTargets = new HashMap<Integer, Set<String>>();
 	/* PROTECTED REGION END */
-	
 }

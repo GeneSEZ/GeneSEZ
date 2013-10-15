@@ -121,11 +121,15 @@ public abstract class AbstractElementTransformer {
 			// eaElement.GetElementID());
 			ConnectorFactory.INSTANCE.addAssociation(c);
 		} else if (connecterType.equals("Realisation")) {
-			LOG.debug("Connector is Realisation");
-			LOG.fatal("Connectors is Realisation and not implemented yet!");
+			LOG.debug("Connector is Realization");
+			ElementDebugger.INSTANCE.printConnector(c);
+			// add realization to factory because the elements might not exist yet
+			ConnectorFactory.INSTANCE.addRealisation(c);
 		} else if (connecterType.equals("Generalization")) {
-			LOG.debug("Connector is Generalization");
-			ConnectorFactory.INSTANCE.addGeneralisation(c);
+			LOG.debug("Connector is Generalization (" + c.GetName() + ") adding to ConnectorFactory");
+			ConnectorFactory.INSTANCE.addGeneralization(c);
+		} else {
+			LOG.error("theh connector -> " + connecterType + " has not been implemented yet!");
 		}
 		/* PROTECTED REGION END */
 	}

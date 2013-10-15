@@ -4,7 +4,6 @@ package org.genesez.adapter.ea.transform;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_5_12d203c6_1363942855327_489308_2295) 
  */
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.uml2.uml.Component;
@@ -14,9 +13,8 @@ import org.genesez.adapter.ea.ElementRegistry;
 
 /**
  * transforms all components
- * @author christian
+ * @author Christian
  */
-
 public class ComponentTransformer extends AbstractElementTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -28,11 +26,7 @@ public class ComponentTransformer extends AbstractElementTransformer {
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * the actual component transformer the returns the emf uml component
-	 * @param	element	
-	 * @param	parent	
-	 * @return	
 	 */
-	
 	public Component transform(org.sparx.Element element, Package parent) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363942926653_742441_2323) ENABLED START */
 		Component component = UMLFactory.eINSTANCE.createComponent();
@@ -87,10 +81,7 @@ public class ComponentTransformer extends AbstractElementTransformer {
 	
 	/**
 	 * transforms all components recursive that exist in the component
-	 * @param	element	
-	 * @param	nextComponent	
 	 */
-	
 	private void transformRecursive(org.sparx.Element element, Component nextComponent) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363942990449_85663_2329) ENABLED START */
 		LOG.debug("Transforming element " + element.GetName() + ", type: " + element.GetType() + ", id: " + element.GetElementID());
@@ -137,9 +128,7 @@ public class ComponentTransformer extends AbstractElementTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	element	
 	 */
-	
 	protected void transformElement(org.sparx.Element element) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363943088050_105798_2336) ENABLED START */
 		this.transformRecursive(element, (Component) this.umlElement);
@@ -148,9 +137,7 @@ public class ComponentTransformer extends AbstractElementTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	connector	
 	 */
-	
 	protected void transformConnector(org.sparx.Connector connector) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363943111360_75028_2339) ENABLED START */
 		LOG.debug("Transforming connector " + connector.GetName() + ", type: " + connector.GetType());
@@ -174,11 +161,10 @@ public class ComponentTransformer extends AbstractElementTransformer {
 	
 	// -- generated association + attribute accessors -----------------------
 	
-	// -- generated code of other cartridges --------------------------------
+	// -- generated code  ---------------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363942855327_489308_2295) ENABLED START */
 	
 	/* PROTECTED REGION END */
-	
 }

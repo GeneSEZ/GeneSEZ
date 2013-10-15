@@ -4,7 +4,6 @@ package org.genesez.adapter.ea;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_12d203c6_1328866883977_778148_1923) 
  */
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -13,9 +12,11 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Port;
+import org.sparx.Connector;
 
 /**
  * Collect all identifiable elements created during model transformation
@@ -27,9 +28,8 @@ import org.eclipse.uml2.uml.Port;
  * 
  * @author Gerrit Beine
  *  
- * @author christian
+ * @author Christian
  */
-
 public class ElementRegistry {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -42,7 +42,6 @@ public class ElementRegistry {
 	/**
 	 * Just to make constructor private
 	 */
-	
 	private ElementRegistry() {
 		/* PROTECTED REGION ID(java.constructor._17_0_5_12d203c6_1363105844828_326154_2977) ENABLED START */
 		
@@ -55,11 +54,9 @@ public class ElementRegistry {
 	/**
 	 * Initializes (or reset) the ElementRegistry
 	 */
-	
 	public void initialize() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363105865366_58090_2980) ENABLED START */
-		this.elements = new HashMap<String, Element>();
-		this.idGuidMap = new HashMap<Integer, String>();
+		this.guidUmlElementMap = new HashMap<String, Element>();
 		this.interfaceMap = new HashMap<String, Interface>();
 		this.classMap = new HashMap<Port, Class>();
 		/* PROTECTED REGION END */
@@ -67,53 +64,45 @@ public class ElementRegistry {
 	
 	/**
 	 * Add an Enterprise Architect attribute and the corresponding element
-	 * @param	a	The Enterprise Architect attribute
-	 * @param	e	The UMLl model element
 	 */
-	
-	public void addElement(org.sparx.Attribute a, Element e) {
+	public void addAttribute(org.sparx.Attribute eaAttribute, Element umlElement) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363105231599_701004_2972) ENABLED START */
-		this.addElementGuid(a.GetAttributeGUID(), e);
-		// TODO is this needed
-		//this.addElementIdGuid(_a.GetAttributeID(), _a.GetAttributeGUID());
+		// TODO warum ordne ich einem Attribut ein uml Element zu
+		this.guidAttributeMap.put(eaAttribute.GetAttributeGUID(), umlElement);
+		this.idAttributeMap.put(eaAttribute.GetAttributeID(), umlElement);
 		/* PROTECTED REGION END */
 	}
 	
 	/**
 	 * Add an Enterprise Architect connector and the corresponding element
-	 * @param	c	The Enterprise Architect connector
-	 * @param	e	The UML model element
 	 */
-	
-	public void addElement(org.sparx.Connector c, Element e) {
+	public void addConnector(org.sparx.Connector eaConnector, Element umlElement) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363337648329_314069_1914) ENABLED START */
-		this.addElementGuid(c.GetConnectorGUID(), e);
-		this.addElementIdGuid(c.GetConnectorID(), c.GetConnectorGUID());
+		this.idUmlConnectorMap.put(eaConnector.GetConnectorID(), umlElement);
+		this.idEaConnectorMap.put(eaConnector.GetConnectorID(), eaConnector);
 		/* PROTECTED REGION END */
 	}
 	
 	/**
 	 * Add an Enterprise Architect element and the corresponding element
-	 * @param	x	The UML model element
-	 * @param	e	The Enterprise Architect element
 	 */
-	
-	public void addElement(org.sparx.Element x, Element e) {
+	public void addElement(org.sparx.Element eaElement, Element umlElement) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363106001295_163796_2983) ENABLED START */
-		this.addElementGuid(x.GetElementGUID(), e);
-		this.addElementIdGuid(x.GetElementID(), x.GetElementGUID());
+		addElementGuid(eaElement.GetElementGUID(), umlElement);
+		// meta information
+		this.idUmlElementMap.put(eaElement.GetElementID(), umlElement);
+		this.idEaElementMap.put(eaElement.GetElementID(), eaElement);
 		/* PROTECTED REGION END */
 	}
 	
 	/**
 	 * Add an Enterprise Architect package and the corresponding element
-	 * @param	p	The UML model element
-	 * @param	e	The Enterprise Architect package
 	 */
-	
-	public void addElement(org.sparx.Package p, Element e) {
+	public void addPackage(org.sparx.Package eaPackage, Element umlElement) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363337816728_599082_1920) ENABLED START */
-		this.addElementGuid(p.GetPackageGUID(), e);
+		//this.addElementGuid(eaPackage.GetPackageGUID(), umlElement);
+		// TODO maybe an own package map
+		//		this.idElementMap.put(eaPackage.GetPackageID(), eaPackage);
 		// TODO is this needed?		
 		//		this.addElementIdGuid(_p.GetPackageID(), _p.GetPackageGUID());
 		/* PROTECTED REGION END */
@@ -122,41 +111,20 @@ public class ElementRegistry {
 	/**
 	 * Add an element and its GUID entry
 	 * @param	guid	The GUID of the element
-	 * @param	e	The UML model element
 	 */
-	
-	public void addElementGuid(String guid, Element e) {
+	private void addElementGuid(String guid, Element umlElement) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363337939964_251840_1924) ENABLED START */
-		if (this.elements.containsKey(guid)) {
+		if (this.guidUmlElementMap.containsKey(guid)) {
 			LOG.fatal("Key " + guid + " already contained -> " + getElement(guid));
 		} else {
-			this.elements.put(guid, e);
-		}
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * Add a GUID to Enterprise Architect ID mapping entry
-	 * @param	id	The Enterprise Architect ID
-	 * @param	guid	The GUID of the element
-	 */
-	
-	private void addElementIdGuid(int id, String guid) {
-		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363337963102_524414_1928) ENABLED START */
-		if (this.idGuidMap.containsKey(id)) {
-			LOG.fatal("Key " + id + " already contained");
-		} else {
-			this.idGuidMap.put(id, guid);
+			this.guidUmlElementMap.put(guid, umlElement);
 		}
 		/* PROTECTED REGION END */
 	}
 	
 	/**
 	 * returns the interface by string
-	 * @param	name	
-	 * @return	
 	 */
-	
 	public Interface getInterfaceByName(String name) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363338075796_836391_1932) ENABLED START */
 		return interfaceMap.get(name);
@@ -166,7 +134,6 @@ public class ElementRegistry {
 	/**
 	 * print all interfaces
 	 */
-	
 	public void printInterfaces() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363338246778_74066_1941) ENABLED START */
 		StringBuilder sb = new StringBuilder("\n");
@@ -182,50 +149,46 @@ public class ElementRegistry {
 	/**
 	 * prints all elements to debug
 	 */
-	
 	public void printElementRegistry() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363338255392_174539_1944) ENABLED START */
-		LOG.debug("Print ElementRegistryMap...");
-		StringBuilder sb = new StringBuilder("\n");
-		for (String s : elements.keySet()) {
-			String id = "";
-			for (Integer key : idGuidMap.keySet()) {
-				String guid = idGuidMap.get(key);
-				if (guid.equals(s)) {
-					id = key.toString();
-				}
-			}
-			sb.append("ID(" + id + ") -> ");
-			sb.append(s + "\t" + (elements.get(s)).toString());
+		StringBuilder sb = new StringBuilder("Print ElementRegistryMap:\n");
+		for (String s : this.guidUmlElementMap.keySet()) {
+			sb.append(s + "\t" + (guidUmlElementMap.get(s)).toString());
 			sb.append("\n");
 		}
+		sb.append("\nId UML Element Map:\n");
+		Classifier classifier = null;
+		for (Integer i : idUmlElementMap.keySet()) {
+			sb.append("\t");
+			classifier = (Classifier) idUmlElementMap.get(i);
+			sb.append(i + "\t-> " + classifier.getName());
+			sb.append("\n");
+		}
+		
 		LOG.debug(sb.toString());
 		/* PROTECTED REGION END */
 	}
 	
 	/**
 	 * Adds an string to interface map
-	 * @param	e	
-	 * @param	iface	
 	 */
-	
 	public void addInterface(org.sparx.Element e, Interface iface) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363338462585_989431_1950) ENABLED START */
 		if (!interfaceMap.containsKey(iface.getName())) {
 			this.interfaceMap.put(iface.getName(), iface);
-			this.addElementGuid(e.GetElementGUID(), iface);
+			// meta
+			this.guidUmlElementMap.put(e.GetElementGUID(), iface);
+			this.idUmlElementMap.put(e.GetElementID(), iface);
+			this.idEaElementMap.put(e.GetElementID(), e);
 		} else {
-			LOG.error("interface already contained in map");
+			LOG.error("interface already contained in map -> " + iface.getName());
 		}
 		/* PROTECTED REGION END */
 	}
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	port	
-	 * @param	clazz	
 	 */
-	
 	public void addClass(Port port, Class clazz) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363338496439_432362_1954) ENABLED START */
 		if (!this.classMap.containsKey(port)) {
@@ -238,10 +201,7 @@ public class ElementRegistry {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	port	
-	 * @return	
 	 */
-	
 	public Class getClassByPort(Port port) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363338538677_862516_1966) ENABLED START */
 		return this.classMap.get(port);
@@ -251,7 +211,6 @@ public class ElementRegistry {
 	/**
 	 * Method stub for further implementation.
 	 */
-	
 	public void printClassMap() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363338565967_83196_1970) ENABLED START */
 		StringBuilder sb = new StringBuilder("ClassMap:\n");
@@ -265,73 +224,83 @@ public class ElementRegistry {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	id	
-	 * @return	
 	 */
-	
 	public Element getElementById(int id) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363344171017_955579_2242) ENABLED START */
 		LOG.debug("Return Element with ID " + id);
-		//		if (this.idGuidMap.containsKey(id)) {
-		return this.getElement(this.idGuidMap.get(id));
-		//		}
-		//		return null;
+		return this.idUmlElementMap.get(id);
 		/* PROTECTED REGION END */
 	}
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	guid	
-	 * @return	
 	 */
-	
 	public Element getElement(String guid) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363344210202_541794_2246) ENABLED START */
 		LOG.debug("Return Element with GUID " + guid);
-		return this.elements.get(guid);
+		return this.guidUmlElementMap.get(guid);
 		/* PROTECTED REGION END */
 	}
 	
 	/**
 	 * Verifies if an element exists in the registry using its GUID
-	 * @param	guid	
-	 * @return	
 	 */
-	
 	public boolean isExisting(String guid) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363940404793_936262_2092) ENABLED START */
-		return this.elements.containsKey(guid);
+		return this.guidUmlElementMap.containsKey(guid);
 		/* PROTECTED REGION END */
 	}
 	
 	// -- generated association + attribute accessors -----------------------
-	/**
-	 * Returns the value of attribute '<em><b>INSTANCE</b></em>'
-	 */
-	public static final ElementRegistry getInstance() {
-		return INSTANCE;
-	}
 	
-	/**
-	 * Returns the value of attribute '<em><b>LOG</b></em>'
-	 */
-	public static final Log getLog() {
-		return LOG;
-	}
-	
-	// -- generated code of other cartridges --------------------------------
+	// -- generated code  ---------------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_12d203c6_1328866883977_778148_1923) ENABLED START */
-	private Map<String, Element> elements = new HashMap<String, Element>();
-	private Map<Integer, String> idGuidMap = new HashMap<Integer, String>();
 	
+	/**
+	 *  saving converted uml elements
+	 */
+	private Map<String, Element> guidUmlElementMap = new HashMap<String, Element>();
+	private Map<Integer, Element> idUmlElementMap = new HashMap<Integer, Element>();
+	/**
+	 * saving all elements by their id
+	 */
+	private Map<Integer, org.sparx.Element> idEaElementMap = new HashMap<Integer, org.sparx.Element>();
+	
+	/**
+	 * saving all ea connectors 
+	 */
+	private Map<Integer, Connector> idEaConnectorMap = new HashMap<Integer, Connector>();
+	private Map<Integer, Element> idUmlConnectorMap = new HashMap<Integer, Element>();
+	
+	/**
+	 * attribute GUID map
+	 */
+	private Map<String, Element> guidAttributeMap = new HashMap<String, Element>();
+	private Map<Integer, Element> idAttributeMap = new HashMap<Integer, Element>();
+	
+	/**
+	 * 
+	 */
+	public org.sparx.Element getEaElementById(String id) {
+		LOG.debug("Return Element with ID " + id);
+		return this.idEaElementMap.get(Integer.valueOf(id));
+	}
+	
+	public Connector getConnectorById(String id) {
+		LOG.debug("Return Connector with ID " + id);
+		return this.idEaConnectorMap.get(id);
+	}
+	
+	// saving interfaces
 	private Map<String, Interface> interfaceMap = new HashMap<String, Interface>();
+	
+	// saving class for every port
 	private Map<Port, Class> classMap = new HashMap<Port, Class>();
 	
 	public Set<Entry<String, Element>> getElements() {
-		return this.elements.entrySet();
+		return this.guidUmlElementMap.entrySet();
 	}
 	/* PROTECTED REGION END */
-	
 }

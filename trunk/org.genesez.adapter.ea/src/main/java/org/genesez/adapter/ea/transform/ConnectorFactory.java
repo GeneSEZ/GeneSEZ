@@ -41,6 +41,8 @@ public class ConnectorFactory {
 	
 	public static final ConnectorFactory INSTANCE = new ConnectorFactory();
 	
+	public static final String NAVIGABLE_STRING = "Navigable";
+	
 	// -- generated constructors --------------------------------------------
 	/**
 	 * Constructor for class '<em><b>ConnectorFactory</b></em>'.
@@ -61,6 +63,8 @@ public class ConnectorFactory {
 	 */
 	public void startProcessingConnectors() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363676933605_87329_1881) ENABLED START */
+		LOG.debug("Starting post processing ");
+		
 		LOG.debug("Starting post processing remaining dependencies");
 		this.processDependencies();
 		LOG.debug("Starting post processing information flows");
@@ -69,9 +73,12 @@ public class ConnectorFactory {
 		this.processDelegate();
 		LOG.debug("Starting post processing associations");
 		this.processAssociations();
-		LOG.debug("Starting post processing generalisations");
-		this.processAllGeneralisations();
-		LOG.debug("Starting post processing ");
+		LOG.debug("Starting post processing generalizations");
+		this.processAllGeneralizations();
+		
+		LOG.debug("Starting post processing interface realizations");
+		this.processAllRealizations();
+		
 		/* PROTECTED REGION END */
 	}
 	
@@ -174,7 +181,7 @@ public class ConnectorFactory {
 				end.setRole(p);
 			}
 			
-			ElementRegistry.INSTANCE.addElementGuid(guid, connector);
+//			ElementRegistry.INSTANCE.addElement(, connector);
 		}
 		/* PROTECTED REGION END */
 	}
@@ -253,7 +260,7 @@ public class ConnectorFactory {
 			nearestPackage.getPackagedElements().add(dependency);
 			
 			// add informationFlow to registry
-			ElementRegistry.INSTANCE.addElementGuid(guid, dependency);
+//			ElementRegistry.INSTANCE.addConnector(eaConnector, umlElement);(guid, dependency);
 		}
 		/* PROTECTED REGION END */
 	}
@@ -328,7 +335,7 @@ public class ConnectorFactory {
 			MultiplicityTransformer mt = new MultiplicityTransformer();
 			
 			mt.transform(property, supplierEnd);
-			//			createLowerUpperCardinality(property, supplierEnd);
+			// createLowerUpperCardinality(property, supplierEnd);
 			
 			// second association memberEnd
 			if (clientEnd.GetNavigable().equals(NAVIGABLE_STRING)) {
@@ -339,7 +346,7 @@ public class ConnectorFactory {
 			}
 			
 			LOG.debug("Creating cardinality of client.");
-			//			createLowerUpperCardinality(property, clientEnd);
+			// createLowerUpperCardinality(property, clientEnd);
 			mt.transform(property, clientEnd);
 			
 			// apply stereotypes
@@ -411,7 +418,7 @@ public class ConnectorFactory {
 			flow.getInformationSources().add(sourceClazz);
 			flow.getInformationTargets().add(targetClazz);
 			// add informationFlow to registry
-			ElementRegistry.INSTANCE.addElementGuid(guid, flow);
+//			ElementRegistry.INSTANCE.addElementGuid(guid, flow);
 		}
 		/* PROTECTED REGION END */
 	}
@@ -497,6 +504,50 @@ public class ConnectorFactory {
 		/* PROTECTED REGION END */
 	}
 	
+	/**
+	 * Method stub for further implementation.
+	 */
+	public void addRealisation(org.sparx.Connector connector) {
+		/* PROTECTED REGION ID(java.implementation._17_0_4_1_df50335_1381844144383_465714_3679) ENABLED START */
+		realizationMap.put(connector.GetConnectorGUID(), connector);
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	private void processAllRealizations() {
+		/* PROTECTED REGION ID(java.implementation._17_0_4_1_df50335_1381844172463_385230_3682) ENABLED START */
+		RealizationTransformer t = new RealizationTransformer();
+		for (org.sparx.Connector connector : realizationMap.values()) {
+			t.transform(connector);
+		}
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	public void addGeneralization(org.sparx.Connector c) {
+		/* PROTECTED REGION ID(java.implementation._17_0_4_1_df50335_1381844190419_692437_3685) ENABLED START */
+		this.generalisationMap.put(c.GetConnectorGUID(), c);
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	private void processAllGeneralizations() {
+		/* PROTECTED REGION ID(java.implementation._17_0_4_1_df50335_1381844233069_724877_3689) ENABLED START */
+		GeneralizationTransformer gf = new GeneralizationTransformer();
+		
+		// go over all generalizations
+		for (org.sparx.Connector connector : generalisationMap.values()) {
+			gf.transform(connector);
+		}
+		/* PROTECTED REGION END */
+	}
+	
 	// -- generated association + attribute accessors -----------------------
 	
 	// -- generated code  ---------------------------------------------------
@@ -510,28 +561,16 @@ public class ConnectorFactory {
 	private Map<String, List<Integer>> dependencyMap = new HashMap<String, List<Integer>>();
 	private Map<String, List<Integer>> delegateMap = new HashMap<String, List<Integer>>();
 	
-	//	private Map<String, org.sparx.Connector> informationFlowMap = new HashMap<String, org.sparx.Connector>();	
+	// private Map<String, org.sparx.Connector> informationFlowMap = new HashMap<String, org.sparx.Connector>();
 	
 	private Map<String, org.sparx.Connector> associationMap = new HashMap<String, org.sparx.Connector>();
 	private Map<String, org.sparx.Connector> associationComponentMap = new HashMap<String, org.sparx.Connector>();
 	
+	// interface realizations
+	private Map<String, org.sparx.Connector> realizationMap = new HashMap<String, org.sparx.Connector>();
+	
 	// Generalizations
 	private Map<String, org.sparx.Connector> generalisationMap = new HashMap<String, org.sparx.Connector>();
 	
-	public void addGeneralisation(org.sparx.Connector c) {
-		this.generalisationMap.put(c.GetConnectorGUID(), c);
-	}
-	
-	private void processAllGeneralisations() {
-		
-		GeneralizationTransformer gf = new GeneralizationTransformer();
-		
-		// go over all generalizations
-		for (org.sparx.Connector connector : generalisationMap.values()) {
-			gf.transform(connector);
-		}
-	}
-	public static final String NAVIGABLE_STRING = "Navigable";
-
 	/* PROTECTED REGION END */
 }
