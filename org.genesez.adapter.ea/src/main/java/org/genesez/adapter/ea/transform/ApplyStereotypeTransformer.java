@@ -4,7 +4,6 @@ package org.genesez.adapter.ea.transform;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_5_12d203c6_1363362878863_904654_3091) 
  */
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.ecore.EObject;
@@ -17,13 +16,11 @@ import org.eclipse.uml2.uml.Type;
 import org.genesez.adapter.ea.ContentRegistry;
 import org.genesez.adapter.ea.ProfileRegistry;
 import org.sparx.ConnectorTag;
-import org.sparx.TaggedValue;
 
 /**
  * Class for applying stereotypes
- * @author christian
+ * @author Christian
  */
-
 public class ApplyStereotypeTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -36,7 +33,6 @@ public class ApplyStereotypeTransformer {
 	/**
 	 * private constructor for singleton
 	 */
-	
 	private ApplyStereotypeTransformer() {
 		/* PROTECTED REGION ID(java.constructor._17_0_5_12d203c6_1363363248225_847078_3134) ENABLED START */
 		// :)
@@ -47,11 +43,7 @@ public class ApplyStereotypeTransformer {
 	/**
 	 * overwrites the default method to apply the stereotypes, because SPARX
 	 * allows only one stereotype for connectors
-	 * @param	eaConnector	
-	 * @param	umlElement	
-	 * @return	
 	 */
-	
 	public Element applyStereotypes(org.sparx.Connector eaConnector, Element umlElement) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362966451_255649_3119) ENABLED START */
 		LOG.debug("Applying stereotypes for connectors");
@@ -82,9 +74,7 @@ public class ApplyStereotypeTransformer {
 	 * @param	eaConnector	EA connector
 	 * @param	umlElement	the UML element
 	 * @param	st	The stereotype
-	 * @return	
 	 */
-	
 	private Element applyTaggedValuesConnector(org.sparx.Connector eaConnector, Element umlElement, Stereotype st) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363363036802_861473_3124) ENABLED START */
 		LOG.debug("Applying tagged values");
@@ -103,13 +93,8 @@ public class ApplyStereotypeTransformer {
 	
 	/**
 	 * Applies one tagged value of a stereotype to the element
-	 * @param	umlElement	
-	 * @param	st	
-	 * @param	p	
 	 * @param	t	The tagged value from the model
-	 * @return	
 	 */
-	
 	private Element applyTaggedValueConnector(Element umlElement, Stereotype st, Property p, org.sparx.ConnectorTag t) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363363073292_705579_3129) ENABLED START */
 		LOG.debug("Set tagged value " + p.getName() + " to " + t.GetValue());
@@ -126,11 +111,7 @@ public class ApplyStereotypeTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	eaElement	
-	 * @param	umlElement	
-	 * @return	
 	 */
-	
 	public Element applyStereotypes(org.sparx.Element eaElement, Element umlElement) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363363500708_64081_3152) ENABLED START */
 		LOG.debug("Applying stereotypes for elements");
@@ -155,11 +136,7 @@ public class ApplyStereotypeTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	eaElement	
-	 * @param	umlElement	
-	 * @param	st	
 	 */
-	
 	private void applyTaggedValuesElement(org.sparx.Element eaElement, Element umlElement, Stereotype st) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363363532753_365707_3157) ENABLED START */
 		LOG.debug("Applying tagged values");
@@ -182,8 +159,7 @@ public class ApplyStereotypeTransformer {
 	 * @param	p	UML property
 	 * @param	t	the EA tagged value
 	 */
-	
-	private void applyTaggedValueElement(Element umlElement, Stereotype st, Property p, TaggedValue t) {
+	private void applyTaggedValueElement(Element umlElement, Stereotype st, Property p, org.sparx.TaggedValue t) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363363756025_154382_3164) ENABLED START */
 		LOG.debug("Set tagged value " + p.getName() + " to " + t.GetValue());
 		
@@ -201,7 +177,6 @@ public class ApplyStereotypeTransformer {
 	 * @param	typeName	The name of the Tag.
 	 * @return	The identified object. If not recognized, NULL is returned.
 	 */
-	
 	private Object getObjectFromTypeName(Property property, String typeName) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1365775148844_86200_1966) ENABLED START */
 		Type type = property.getType();
@@ -226,11 +201,10 @@ public class ApplyStereotypeTransformer {
 	
 	// -- generated association + attribute accessors -----------------------
 	
-	// -- generated code of other cartridges --------------------------------
+	// -- generated code  ---------------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363362878863_904654_3091) ENABLED START */
 	
 	/* PROTECTED REGION END */
-	
 }

@@ -4,7 +4,6 @@ package org.genesez.adapter.ea;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_12d203c6_1328866942146_682558_2063) 
  */
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -25,9 +24,8 @@ import org.eclipse.uml2.uml.Stereotype;
  * Note: at the moment all the stereotypes must have unique names
  * 
  * @author gerbe
- * @author christian
+ * @author Christian
  */
-
 public class ProfileRegistry {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -40,7 +38,6 @@ public class ProfileRegistry {
 	/**
 	 * Constructor for class '<em><b>ProfileRegistry</b></em>'.
 	 */
-	
 	private ProfileRegistry() {
 		/* PROTECTED REGION ID(java.constructor._17_0_5_12d203c6_1363354598163_164014_2506) ENABLED START */
 		// :)
@@ -53,7 +50,6 @@ public class ProfileRegistry {
 	 * @param	name	The profiles name
 	 * @param	p	The UML2 profile
 	 */
-	
 	public void register(String name, Profile p) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363354609817_156087_2509) ENABLED START */
 		LOG.debug("Register Profile " + name);
@@ -70,9 +66,7 @@ public class ProfileRegistry {
 	
 	/**
 	 * Returns all profiles as a set
-	 * @return	
 	 */
-	
 	public java.util.Set<Profile> getProfiles() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363354647261_214569_2517) ENABLED START */
 		return new HashSet<Profile>(this.profiles.values());
@@ -82,9 +76,7 @@ public class ProfileRegistry {
 	/**
 	 * Returns a stereotype via its name
 	 * @param	name	The name of the stereotype
-	 * @return	
 	 */
-	
 	public Stereotype getStereotype(String name) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363354697734_844268_2523) ENABLED START */
 		LOG.debug("Searching for stereotype " + name);
@@ -100,12 +92,18 @@ public class ProfileRegistry {
 	
 	// -- generated association + attribute accessors -----------------------
 	
-	// -- generated code of other cartridges --------------------------------
+	// -- generated code  ---------------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_12d203c6_1328866942146_682558_2063) ENABLED START */
 	private Map<String, Profile> profiles = new HashMap<String, Profile>();
 	private Map<String, Stereotype> stereotypes = new HashMap<String, Stereotype>();
-	/* PROTECTED REGION END */
 	
+	public void printProfileKeys() {
+		LOG.debug("Keys in stereotypes");
+		for (String s : stereotypes.keySet()) {
+			LOG.debug(s);
+		}
+	}
+	/* PROTECTED REGION END */
 }

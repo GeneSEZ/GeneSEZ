@@ -4,7 +4,6 @@ package org.genesez.adapter.ea.transform;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_5_12d203c6_1363939050176_299079_1974) 
  */
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.ecore.EObject;
@@ -18,9 +17,8 @@ import org.genesez.adapter.ea.ProfileRegistry;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author christian
+ * @author Christian
  */
-
 public class FlowFinalNodeTransformer extends AbstractActivityNodeTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -32,11 +30,7 @@ public class FlowFinalNodeTransformer extends AbstractActivityNodeTransformer {
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
-	 * @param	element	
-	 * @param	parent	
-	 * @return	
 	 */
-	
 	public FlowFinalNode transform(org.sparx.Element element, Activity parent) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363939120424_322431_2005) ENABLED START */
 		LOG.debug("Creating FlowFinalNode " + element.GetName() + ", parent " + parent.getName());
@@ -54,9 +48,7 @@ public class FlowFinalNodeTransformer extends AbstractActivityNodeTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	element	
 	 */
-	
 	private void applyStereotypes(org.sparx.Element element) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363939192783_730094_2010) ENABLED START */
 		for (String s : element.GetStereotypeList().split(",")) {
@@ -75,11 +67,10 @@ public class FlowFinalNodeTransformer extends AbstractActivityNodeTransformer {
 	
 	// -- generated association + attribute accessors -----------------------
 	
-	// -- generated code of other cartridges --------------------------------
+	// -- generated code  ---------------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363939050176_299079_1974) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-	
 }

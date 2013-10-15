@@ -4,7 +4,6 @@ package org.genesez.adapter.ea.transform;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_5_12d203c6_1363943420695_851822_2343) 
  */
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.uml2.uml.AggregationKind;
@@ -15,9 +14,8 @@ import org.genesez.adapter.ea.ElementRegistry;
 
 /**
  * transforms all ports
- * @author christian
+ * @author Christian
  */
-
 public class PortTransformer extends AbstractElementTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -30,11 +28,7 @@ public class PortTransformer extends AbstractElementTransformer {
 	/**
 	 * transforms the element to port, create a class for the port
 	 * and add provided and required interfaces to the post processor 
-	 * @param	element	
-	 * @param	parent	
-	 * @return	
 	 */
-	
 	public Port transform(org.sparx.Element element, Component parent) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363943542848_757460_2372) ENABLED START */
 		LOG.debug("Creating Port " + element.GetName() + ", parent " + parent.getName());
@@ -77,9 +71,7 @@ public class PortTransformer extends AbstractElementTransformer {
 	
 	/**
 	 * transform the element, if it's an provided or required interface
-	 * @param	element	
 	 */
-	
 	protected void transformElement(org.sparx.Element element) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363943583183_582940_2377) ENABLED START */
 		LOG.debug("Transforming element " + element.GetName() + ", type: " + element.GetType());
@@ -100,11 +92,10 @@ public class PortTransformer extends AbstractElementTransformer {
 	
 	// -- generated association + attribute accessors -----------------------
 	
-	// -- generated code of other cartridges --------------------------------
+	// -- generated code  ---------------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363943420695_851822_2343) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-	
 }

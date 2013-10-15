@@ -4,7 +4,6 @@ package org.genesez.adapter.ea.transform;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_5_12d203c6_1363340173835_292420_2022) 
  */
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.URI;
@@ -23,9 +22,8 @@ import org.genesez.adapter.ea.ProfileRegistry;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author christian
+ * @author Christian
  */
-
 public class ModelTransformer extends AbstractPackageTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -35,10 +33,7 @@ public class ModelTransformer extends AbstractPackageTransformer {
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
-	 * @param	p	
-	 * @return	
 	 */
-	
 	public Model transform(org.sparx.Package p) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363340285003_348934_2050) ENABLED START */
 		LOG.debug("Creating Model " + p.GetName());
@@ -51,7 +46,7 @@ public class ModelTransformer extends AbstractPackageTransformer {
 		this.applyProfiles();
 		this.transformPackages();
 		
-		ElementRegistry.INSTANCE.addElement(p, model);
+		ElementRegistry.INSTANCE.addPackage(p, model);
 		return model;
 		/* PROTECTED REGION END */
 	}
@@ -59,7 +54,6 @@ public class ModelTransformer extends AbstractPackageTransformer {
 	/**
 	 * applies profiles to the transforming model
 	 */
-	
 	private void applyProfiles() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363340400038_468116_2059) ENABLED START */
 		for (Profile p : ProfileRegistry.INSTANCE.getProfiles()) {
@@ -71,10 +65,7 @@ public class ModelTransformer extends AbstractPackageTransformer {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	uri	
-	 * @return	
 	 */
-	
 	protected static Package load(URI uri) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363340418177_894154_2062) ENABLED START */
 		LOG.fatal("LOADING PACKAGE URI -> " + uri.toFileString());
@@ -104,7 +95,7 @@ public class ModelTransformer extends AbstractPackageTransformer {
 	
 	// -- generated association + attribute accessors -----------------------
 	
-	// -- generated code of other cartridges --------------------------------
+	// -- generated code  ---------------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363340173835_292420_2022) ENABLED START */
@@ -112,5 +103,4 @@ public class ModelTransformer extends AbstractPackageTransformer {
 	// :)
 	
 	/* PROTECTED REGION END */
-	
 }

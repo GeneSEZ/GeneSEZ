@@ -10,6 +10,7 @@ import org.eclipse.uml2.uml.LiteralInteger;
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.UMLFactory;
+import org.sparx.Attribute;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -52,9 +53,8 @@ public class MultiplicityTransformer {
 	/**
 	 * Method stub for further implementation.
 	 */
-	private void setCardinality(org.sparx.ConnectorEnd connectorEnd) {
+	private void setCardinality(String cardinality) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363677509656_617682_1926) ENABLED START */
-		String cardinality = connectorEnd.GetCardinality();
 		LOG.debug("Origin: " + cardinality);
 		// if string is empty
 		if (cardinality.equals("")) {
@@ -124,12 +124,10 @@ public class MultiplicityTransformer {
 	 */
 	private void createLowerUpperCardinality(Property property, org.sparx.ConnectorEnd end) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363677239565_889873_1901) ENABLED START */
-		setCardinality(end);
+		final String cardinality = end.GetCardinality();
+		setCardinality(cardinality);
 		
-		// lower value
-		property.setLowerValue(getLiteralInteger(lower));
-		// upper value
-		property.setUpperValue(getLiteralUnlimitedNatural(upper));
+		addLiteralsToProperty(property);
 		/* PROTECTED REGION END */
 	}
 	
@@ -140,5 +138,20 @@ public class MultiplicityTransformer {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_4_1_df50335_1380024548865_144156_3654) ENABLED START */
 	
+	private void addLiteralsToProperty(Property property) {
+		// lower value
+		property.setLowerValue(getLiteralInteger(lower));
+		// upper value
+		property.setUpperValue(getLiteralUnlimitedNatural(upper));
+	}
+	
+	public Property transform(Property property, Attribute attribute) {
+		final String cardinality = attribute.GetLowerBound() + ".." + attribute.GetUpperBound();
+		
+		setCardinality(cardinality);
+		
+		addLiteralsToProperty(property);
+		return property;
+	}
 	/* PROTECTED REGION END */
 }
