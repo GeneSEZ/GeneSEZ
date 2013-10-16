@@ -359,10 +359,5 @@ public class ElementDebugger {
 		return sb.toString();
 	}
 	
-	// private String parameterToString(Parameter parameter){
-	// StringBuilder sb = new StringBuilder();
-	// return "";
-	// }
-	
 	/* PROTECTED REGION END */
 }

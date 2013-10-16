@@ -181,7 +181,7 @@ public class ConnectorFactory {
 				end.setRole(p);
 			}
 			
-//			ElementRegistry.INSTANCE.addElement(, connector);
+			//			ElementRegistry.INSTANCE.addElement(, connector);
 		}
 		/* PROTECTED REGION END */
 	}
@@ -260,7 +260,7 @@ public class ConnectorFactory {
 			nearestPackage.getPackagedElements().add(dependency);
 			
 			// add informationFlow to registry
-//			ElementRegistry.INSTANCE.addConnector(eaConnector, umlElement);(guid, dependency);
+			//			ElementRegistry.INSTANCE.addConnector(eaConnector, umlElement);(guid, dependency);
 		}
 		/* PROTECTED REGION END */
 	}
@@ -418,7 +418,7 @@ public class ConnectorFactory {
 			flow.getInformationSources().add(sourceClazz);
 			flow.getInformationTargets().add(targetClazz);
 			// add informationFlow to registry
-//			ElementRegistry.INSTANCE.addElementGuid(guid, flow);
+			//			ElementRegistry.INSTANCE.addElementGuid(guid, flow);
 		}
 		/* PROTECTED REGION END */
 	}
@@ -507,7 +507,7 @@ public class ConnectorFactory {
 	/**
 	 * Method stub for further implementation.
 	 */
-	public void addRealisation(org.sparx.Connector connector) {
+	public void addRealization(org.sparx.Connector connector) {
 		/* PROTECTED REGION ID(java.implementation._17_0_4_1_df50335_1381844144383_465714_3679) ENABLED START */
 		realizationMap.put(connector.GetConnectorGUID(), connector);
 		/* PROTECTED REGION END */

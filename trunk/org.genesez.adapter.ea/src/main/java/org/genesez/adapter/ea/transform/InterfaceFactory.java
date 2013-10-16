@@ -73,7 +73,7 @@ public class InterfaceFactory {
 				iface.setPackage(getInterfacePackage());
 				// UML 2.3 superstructure says one interface realization to one
 				// interface
-				// create interface realization
+				// create interface realization with the name of the interface
 				clazz.createInterfaceRealization(iface.getName(), iface);
 			}
 		}
