@@ -124,7 +124,7 @@ public abstract class AbstractElementTransformer {
 			LOG.debug("Connector is Realization");
 			ElementDebugger.INSTANCE.printConnector(c);
 			// add realization to factory because the elements might not exist yet
-			ConnectorFactory.INSTANCE.addRealisation(c);
+			ConnectorFactory.INSTANCE.addRealization(c);
 		} else if (connecterType.equals("Generalization")) {
 			LOG.debug("Connector is Generalization (" + c.GetName() + ") adding to ConnectorFactory");
 			ConnectorFactory.INSTANCE.addGeneralization(c);

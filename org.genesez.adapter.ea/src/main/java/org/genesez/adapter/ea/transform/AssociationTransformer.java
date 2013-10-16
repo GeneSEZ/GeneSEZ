@@ -98,8 +98,8 @@ public class AssociationTransformer {
 		nearestPackage.getPackagedElements().add(association);
 		
 		association = (Association) ApplyStereotypeTransformer.INSTANCE.applyStereotypes(connector, association);
-		ElementRegistry.INSTANCE.addConnector(connector, association);
 		
+		ElementRegistry.INSTANCE.addConnector(connector, association);
 		return association;
 		/* PROTECTED REGION END */
 	}
