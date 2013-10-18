@@ -5,6 +5,8 @@ package org.genesez.util.sysenv;
  * 	@FILE-ID : (_17_0_1_8e00291_1324545543496_662372_2045) 
  */
 import java.util.Date;
+import java.util.TimeZone;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
@@ -48,6 +50,17 @@ public class DateTimeHelper {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1324545745428_162639_2103) ENABLED START */
 		return String.valueOf(new Date().getTime() * 1000L);
 		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Returns the current timestamp in ISO 8601 "yyyy-MM-dd'T'HH:mm'Z'" format.
+	 * 
+	 * @return	The string representation of the current timestamp.
+	 */
+	public static String getIso8601TimeStamp() {
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+	    df.setTimeZone( TimeZone.getTimeZone("UTC") );
+	    return df.format( new Date() );
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_1_8e00291_1324545543496_662372_2045) ENABLED START */
