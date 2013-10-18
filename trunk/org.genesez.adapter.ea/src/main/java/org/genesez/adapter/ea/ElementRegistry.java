@@ -44,9 +44,7 @@ public class ElementRegistry {
 	 */
 	private ElementRegistry() {
 		/* PROTECTED REGION ID(java.constructor._17_0_5_12d203c6_1363105844828_326154_2977) ENABLED START */
-		
 		// nothing to do here ;-)
-		
 		/* PROTECTED REGION END */
 	}
 	
@@ -67,8 +65,7 @@ public class ElementRegistry {
 	 */
 	public void addAttribute(org.sparx.Attribute eaAttribute, Element umlElement) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363105231599_701004_2972) ENABLED START */
-		// TODO warum ordne ich einem Attribut ein uml Element zu
-		this.guidAttributeMap.put(eaAttribute.GetAttributeGUID(), umlElement);
+		this.guidUmlElementMap.put(eaAttribute.GetAttributeGUID(), umlElement);
 		this.idAttributeMap.put(eaAttribute.GetAttributeID(), umlElement);
 		/* PROTECTED REGION END */
 	}
@@ -227,7 +224,11 @@ public class ElementRegistry {
 	 */
 	public Element getElementById(int id) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363344171017_955579_2242) ENABLED START */
-		LOG.debug("Return Element with ID " + id);
+		if (idUmlElementMap.containsKey(id)) {
+			LOG.debug("Return Element with ID " + id);
+		} else {
+			LOG.debug("Element with ID " + id + " is not in registry");
+		}
 		return this.idUmlElementMap.get(id);
 		/* PROTECTED REGION END */
 	}
@@ -277,7 +278,6 @@ public class ElementRegistry {
 	/**
 	 * attribute GUID map
 	 */
-	private Map<String, Element> guidAttributeMap = new HashMap<String, Element>();
 	private Map<Integer, Element> idAttributeMap = new HashMap<Integer, Element>();
 	
 	/**
@@ -288,7 +288,7 @@ public class ElementRegistry {
 		return this.idEaElementMap.get(Integer.valueOf(id));
 	}
 	
-	public Connector getConnectorById(String id) {
+	public Connector getConnectorById(int id) {
 		LOG.debug("Return Connector with ID " + id);
 		return this.idEaConnectorMap.get(id);
 	}

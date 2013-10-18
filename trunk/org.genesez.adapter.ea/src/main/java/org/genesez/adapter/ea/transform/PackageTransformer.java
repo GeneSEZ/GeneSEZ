@@ -11,45 +11,56 @@ import org.eclipse.uml2.uml.UMLFactory;
 import org.genesez.adapter.ea.ElementRegistry;
 
 /**
- * This class transforms packages to EMF UML. Other Elements are identified 
- * which are contained in these packages and their transformation classes are
- * called.
+ * This class transforms packages to EMF UML. Other Elements are identified which are contained in these packages and
+ * their transformation classes are called.
  * 
  * @author Gerrit Beine
  * @author Christian
  */
 public class PackageTransformer extends AbstractPackageTransformer {
-	
+
 	// -- generated attribute, constant + association declarations ----------
-	
+
 	private static final Log LOG = LogFactory.getLog(PackageTransformer.class);
-	
+
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
 	 */
 	public Package transform(org.sparx.Package p, Package parent) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363947164598_385019_2609) ENABLED START */
-		LOG.debug("Creating Package " + p.GetName());
-		
-		this.umlPackage = parent.createNestedPackage(p.GetName(), UMLFactory.eINSTANCE.createPackage().eClass());
+		LOG.debug("Creating Package '" + p.GetName() + "'");
+
+		// TODO for development
+		ElementDebugger.INSTANCE.printPackage(p);
+
+		// TODO only for genesez, the namesapce package is not transformed
+		if (p.GetIsNamespace()) {
+			this.umlPackage = parent;
+		} else {
+			this.umlPackage = parent.createNestedPackage(p.GetName(),
+					UMLFactory.eINSTANCE.createPackage().eClass());
+		}
+
 		this.eaPackage = p;
-		
+
 		this.transformPackages();
 		this.transformElements();
-		
+
 		ElementRegistry.INSTANCE.addPackage(p, this.umlPackage);
 		return this.umlPackage;
 		/* PROTECTED REGION END */
 	}
-	
+
 	/**
 	 * Method stub for further implementation.
 	 */
 	protected void transformElement(org.sparx.Element element) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363947923410_360235_2625) ENABLED START */
-		LOG.debug("Transforming element " + element.GetName() + ", type: " + element.GetType() + ", Stereotype Extension: " + element.GetStereotypeEx());
-		
+		LOG.debug("Transforming element " + element.GetName() + ", type: "
+				+ element.GetType() + ", Stereotype Extension: "
+				+ element.GetStereotypeEx());
+
 		if (element.GetType().equals("Actor")) {
 			LOG.debug("Element is an Actor");
 			LOG.error("not implemented yet!");
@@ -66,18 +77,14 @@ public class PackageTransformer extends AbstractPackageTransformer {
 			ComponentTransformer t = new ComponentTransformer();
 			t.transform(element, this.umlPackage);
 		} else if (element.GetType().equals("Class")) {
-			// if element is an enumeration
 			if (element.GetStereotypeEx().equals("enumeration")) {
 				LOG.debug("Element is an Enumeration");
 				EnumerationTransformer t = new EnumerationTransformer();
 				t.transform(element, this.umlPackage);
 			} else {
-				// it's a class
-				LOG.debug("Element is a Class");
 				ClassTransformer t = new ClassTransformer();
 				t.transform(element, this.umlPackage);
 			}
-			
 		} else if (element.GetType().equals("Interface")) {
 			LOG.debug("Element is a Interface");
 			InterfaceTransformer t = new InterfaceTransformer();
@@ -91,13 +98,13 @@ public class PackageTransformer extends AbstractPackageTransformer {
 		}
 		/* PROTECTED REGION END */
 	}
-	
+
 	// -- generated association + attribute accessors -----------------------
-	
-	// -- generated code  ---------------------------------------------------
-	
+
+	// -- generated code ---------------------------------------------------
+
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363361205362_720789_2943) ENABLED START */
-	// TODO: put your own implementation code here
+
 	/* PROTECTED REGION END */
 }

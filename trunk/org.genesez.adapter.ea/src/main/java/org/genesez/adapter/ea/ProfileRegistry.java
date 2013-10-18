@@ -79,7 +79,7 @@ public class ProfileRegistry {
 	 */
 	public Stereotype getStereotype(String name) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363354697734_844268_2523) ENABLED START */
-		LOG.debug("Searching for stereotype " + name);
+		LOG.debug("Searching for stereotype Name(" + name + ")");
 		Stereotype s = null;
 		
 		if (this.stereotypes.containsKey(name)) {

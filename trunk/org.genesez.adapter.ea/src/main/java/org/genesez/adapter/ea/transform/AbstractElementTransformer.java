@@ -117,12 +117,9 @@ public abstract class AbstractElementTransformer {
 			ConnectorFactory.INSTANCE.addInformationFlow(c, eaElement.GetParentID());
 		} else if (connecterType.equals("Association")) {
 			LOG.debug("Connector is Association");
-			// ConnectorFactory.instance.addAssociation(_c.GetConnectorGUID(),
-			// eaElement.GetElementID());
 			ConnectorFactory.INSTANCE.addAssociation(c);
 		} else if (connecterType.equals("Realisation")) {
 			LOG.debug("Connector is Realization");
-			ElementDebugger.INSTANCE.printConnector(c);
 			// add realization to factory because the elements might not exist yet
 			ConnectorFactory.INSTANCE.addRealization(c);
 		} else if (connecterType.equals("Generalization")) {

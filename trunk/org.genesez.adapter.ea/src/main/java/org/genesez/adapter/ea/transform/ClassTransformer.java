@@ -28,37 +28,45 @@ public class ClassTransformer extends AbstractElementTransformer {
 	 */
 	public Class transform(org.sparx.Element element, Package parent) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363942522238_266030_2282) ENABLED START */
-		LOG.debug("Creating Class " + element.GetName() + ", parent "
-				+ parent.getName());
 
-		// TODO for development
-		ElementDebugger.INSTANCE.printElement(element);
+		Class clazzType = null;
 
-		// create class
-		Class clazz = UMLFactory.eINSTANCE.createClass();
-		clazz.setName(element.GetName());
-		clazz.setIsLeaf(element.GetIsLeaf());
-		clazz.setIsActive(element.GetIsActive());
+		final String metaType = element.GetMetaType();
+
+		if (metaType.equals(CLASS_META_TYPE)) {
+			LOG.debug("Creating Class " + element.GetName() + ", parent "
+					+ parent.getName());
+			clazzType = UMLFactory.eINSTANCE.createClass();
+		} else if (metaType.equals(ASSOCIATION_CLASS_META_TYPE)) {
+			LOG.debug("Creating AssociationClass " + element.GetName() + ", parent " + parent.getName());
+			clazzType = UMLFactory.eINSTANCE.createAssociationClass();
+		} else {
+			LOG.error("meta type is not implemented yet! -> " + metaType);
+		}
+
+		clazzType.setName(element.GetName());
+		clazzType.setIsLeaf(element.GetIsLeaf());
+		clazzType.setIsActive(element.GetIsActive());
 
 		// is abstract
 		if (element.GetAbstract().equals("1")) {
-			clazz.setIsAbstract(true);
+			clazzType.setIsAbstract(true);
 		} else {
-			clazz.setIsAbstract(false);
+			clazzType.setIsAbstract(false);
 		}
 
 		// get description (in EA called notes) from class
 		if (element.GetNotes().length() != 0) {
-			clazz.createOwnedComment().setBody(element.GetNotes());
+			clazzType.createOwnedComment().setBody(element.GetNotes());
 		}
 
 		// set visibility
-		clazz.setVisibility(VisibilityTransformer.INSTANCE
+		clazzType.setVisibility(VisibilityTransformer.INSTANCE
 				.getVisibilityKind(element));
 
-		parent.getPackagedElements().add(clazz);
+		parent.getPackagedElements().add(clazzType);
 
-		this.umlElement = clazz;
+		this.umlElement = clazzType;
 		this.eaElement = element;
 
 		this.transformConnectors();
@@ -66,10 +74,11 @@ public class ClassTransformer extends AbstractElementTransformer {
 		this.transformOperations();
 
 		// apply stereotypes
-		ApplyStereotypeTransformer.INSTANCE.applyStereotypes(element, clazz);
+		ApplyStereotypeTransformer.INSTANCE
+				.applyStereotypes(element, clazzType);
 
-		ElementRegistry.INSTANCE.addElement(element, clazz);
-		return clazz;
+		ElementRegistry.INSTANCE.addElement(element, this.umlElement);
+		return clazzType;
 		/* PROTECTED REGION END */
 	}
 
@@ -78,8 +87,7 @@ public class ClassTransformer extends AbstractElementTransformer {
 	 */
 	protected void transformAttribute(org.sparx.Attribute eaAttribute) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363942550717_486719_2287) ENABLED START */
-		((Class) this.umlElement).getOwnedAttributes().add(
-				AttributeTransformer.INSTANCE.transform(eaAttribute));
+		AttributeTransformer.INSTANCE.transform(eaAttribute, umlElement);
 		/* PROTECTED REGION END */
 	}
 
@@ -90,6 +98,7 @@ public class ClassTransformer extends AbstractElementTransformer {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363942597915_721139_2291) ENABLED START */
 		((Class) this.umlElement).getOwnedOperations().add(
 				OperationTransformer.INSTANCE.transform(eaMethod));
+		// TODO add stereotype
 		/* PROTECTED REGION END */
 	}
 
@@ -100,5 +109,8 @@ public class ClassTransformer extends AbstractElementTransformer {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363942476721_653989_2257) ENABLED START */
 	// :)
+	private static final String CLASS_META_TYPE = "Class";
+	private static final String ASSOCIATION_CLASS_META_TYPE = "AssociationClass";
+
 	/* PROTECTED REGION END */
 }

@@ -10,7 +10,6 @@ import org.eclipse.uml2.uml.LiteralInteger;
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.UMLFactory;
-import org.sparx.Attribute;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -22,9 +21,21 @@ public class MultiplicityTransformer {
 	
 	private static final Log LOG = LogFactory.getLog(MultiplicityTransformer.class);
 	
+	public static final MultiplicityTransformer INSTANCE = new MultiplicityTransformer();
+	
 	private int lower;
 	
 	private int upper;
+	
+	// -- generated constructors --------------------------------------------
+	/**
+	 * Constructor for class '<em><b>MultiplicityTransformer</b></em>'.
+	 */
+	private MultiplicityTransformer() {
+		/* PROTECTED REGION ID(java.constructor._17_0_4_1_df50335_1381925859535_663336_3776) ENABLED START */
+		// :)
+		/* PROTECTED REGION END */
+	}
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
@@ -32,9 +43,7 @@ public class MultiplicityTransformer {
 	 */
 	public Property transform(Property property, org.sparx.ConnectorEnd connectorEnd) {
 		/* PROTECTED REGION ID(java.implementation._17_0_4_1_df50335_1380024632341_159987_3677) ENABLED START */
-		
 		createLowerUpperCardinality(property, connectorEnd);
-		
 		return property;
 		/* PROTECTED REGION END */
 	}
@@ -131,6 +140,32 @@ public class MultiplicityTransformer {
 		/* PROTECTED REGION END */
 	}
 	
+	/**
+	 * Method stub for further implementation.
+	 */
+	private void addLiteralsToProperty(Property property) {
+		/* PROTECTED REGION ID(java.implementation._17_0_4_1_df50335_1381926175117_122673_3783) ENABLED START */
+		// lower value
+		property.setLowerValue(getLiteralInteger(lower));
+		// upper value
+		property.setUpperValue(getLiteralUnlimitedNatural(upper));
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	public Property transform(Property property, org.sparx.Attribute eaAttribute) {
+		/* PROTECTED REGION ID(java.implementation._17_0_4_1_df50335_1381926201434_561629_3786) ENABLED START */
+		final String cardinality = eaAttribute.GetLowerBound() + ".." + eaAttribute.GetUpperBound();
+		
+		setCardinality(cardinality);
+		
+		addLiteralsToProperty(property);
+		return property;
+		/* PROTECTED REGION END */
+	}
+	
 	// -- generated association + attribute accessors -----------------------
 	
 	// -- generated code  ---------------------------------------------------
@@ -138,20 +173,5 @@ public class MultiplicityTransformer {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_4_1_df50335_1380024548865_144156_3654) ENABLED START */
 	
-	private void addLiteralsToProperty(Property property) {
-		// lower value
-		property.setLowerValue(getLiteralInteger(lower));
-		// upper value
-		property.setUpperValue(getLiteralUnlimitedNatural(upper));
-	}
-	
-	public Property transform(Property property, Attribute attribute) {
-		final String cardinality = attribute.GetLowerBound() + ".." + attribute.GetUpperBound();
-		
-		setCardinality(cardinality);
-		
-		addLiteralsToProperty(property);
-		return property;
-	}
 	/* PROTECTED REGION END */
 }

@@ -6,10 +6,13 @@ package org.genesez.adapter.ea.transform;
  */
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.UMLFactory;
+import org.genesez.adapter.ea.ElementRegistry;
+import org.genesez.adapter.ea.PostProcessor;
 import org.genesez.adapter.ea.ResourceRegistry;
 
 /**
@@ -65,9 +68,11 @@ public class OperationTransformer {
 		final String returnType = method.GetReturnType();
 		if (returnType.length() != 0) {
 			if (returnType.equals("Integer") || returnType.equals("Boolean") || returnType.equals("String")) {
+				LOG.debug("Creating primitve return type -> " + returnType);
 				operation.createReturnResult(null, ResourceRegistry.INSTANCE.importPrimitiveType(returnType));
 			} else {
-				LOG.error("return type not known yet -> " + returnType);
+				LOG.debug("return type not known yet type(" + returnType + ") putting to postprocessor elements");
+				// TODO implement this
 			}
 			
 		}
@@ -89,19 +94,31 @@ public class OperationTransformer {
 		// find classifier id
 		final int classiefierId = Integer.valueOf(parameter.GetClassifierID());
 		
+		// check if parameter is an internal element
 		if (classiefierId != 0) {
-			LOG.debug("type is an class or element of the model with classiefierID -> " + classiefierId);
-			// PostProcessor.INSTANCE
-			// .addAttributeProperty(operation, classiefierId);
-			LOG.fatal("will not be precessed yet...");
-			LOG.debug("added to post processor attribute properties");
-		}
-		
-		PrimitiveType type = ResourceRegistry.INSTANCE.importPrimitiveType(parameter.GetType());
-		
-		// if type is primitive type
-		if (type != null) {
-			umlParameter = this.operation.createOwnedParameter(parameter.GetName(), type);
+			LOG.debug("type is an class or element of the model with classifierID -> " + classiefierId + " in operation -> " + this.operation.getName());
+			Classifier classifier = (Classifier) ElementRegistry.INSTANCE.getElementById(classiefierId);
+			if (classifier != null) {
+				this.operation.createOwnedParameter(parameter.GetName(), classifier);
+			} else {
+				LOG.debug("parameter type not known yet, added to post processor");
+				PostProcessor.INSTANCE.addParameter(this.operation, parameter);
+			}
+		} else {
+			
+			final String parameterType = parameter.GetType();
+			
+			// first check if it is an primitive type
+			PrimitiveType type = ResourceRegistry.INSTANCE.importPrimitiveType(parameterType);
+			
+			// if primitive type is found by import
+			if (type != null) {
+				LOG.debug("PrimitiveType is = " + type.getName());
+				umlParameter = this.operation.createOwnedParameter(parameter.GetName(), type);
+			} else {
+				LOG.error("type is not known! -> " + parameterType);
+			}
+			
 		}
 		return umlParameter;
 		/* PROTECTED REGION END */
@@ -114,5 +131,10 @@ public class OperationTransformer {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_4_1_df50335_1381922309548_908585_3655) ENABLED START */
 	// :)
+	
+	public Parameter transform(Operation umlOperation, org.sparx.Parameter eaParameter) {
+		this.operation = umlOperation;
+		return transform(eaParameter);
+	}
 	/* PROTECTED REGION END */
 }

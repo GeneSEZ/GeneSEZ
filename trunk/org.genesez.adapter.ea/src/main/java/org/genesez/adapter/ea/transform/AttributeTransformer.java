@@ -6,9 +6,13 @@ package org.genesez.adapter.ea.transform;
  */
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Element;
+import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.UMLFactory;
+import org.genesez.adapter.ea.ElementRegistry;
 import org.genesez.adapter.ea.PostProcessor;
 import org.genesez.adapter.ea.ResourceRegistry;
 
@@ -40,16 +44,22 @@ public class AttributeTransformer {
 	/**
 	 * Method stub for further implementation.
 	 */
-	public Property transform(org.sparx.Attribute eaAttribute) {
+	public Property transform(org.sparx.Attribute eaAttribute, Element umlElement) {
 		/* PROTECTED REGION ID(java.implementation._17_0_4_1_df50335_1381923684867_489159_3735) ENABLED START */
 		LOG.debug("Transforming attribute " + eaAttribute.GetName() + ", type: " + eaAttribute.GetType());
-		
-		// TODO for development
-		ElementDebugger.INSTANCE.printAttribute(eaAttribute);
 		
 		// create property
 		property = UMLFactory.eINSTANCE.createProperty();
 		property.setName(eaAttribute.GetName());
+		
+		// add property to belonging element 
+		if (umlElement instanceof Class) {
+			((Class)umlElement).getOwnedAttributes().add(property);
+		}else if (umlElement instanceof org.eclipse.uml2.uml.Interface ){
+			((Interface) umlElement).getOwnedAttributes().add(property);
+		} else {
+			LOG.error("attribute can not be added to " + umlElement.toString() + " because it's not implemented yet");
+		}
 		
 		// set visibility
 		property.setVisibility(VisibilityTransformer.INSTANCE.getVisibilityKind(eaAttribute));
@@ -63,6 +73,7 @@ public class AttributeTransformer {
 		// find classifier id
 		final int classiefierId = Integer.valueOf(eaAttribute.GetClassifierID());
 		
+		// check if element is an internal element
 		if (classiefierId != 0) {
 			LOG.debug("type is an class or element of the model with classiefierID -> " + classiefierId);
 			PostProcessor.INSTANCE.addAttributeProperty(property, classiefierId);
@@ -71,8 +82,6 @@ public class AttributeTransformer {
 			
 			final String attributeType = eaAttribute.GetType();
 			// set type
-			// TODO search for existing classes, then external classes and then primitves
-			// maybe create a map with imported primitive types
 			PrimitiveType type = ResourceRegistry.INSTANCE.importPrimitiveType(attributeType);
 			if (type != null) {
 				LOG.debug("PrimitiveType is = " + type.getName());
@@ -93,10 +102,20 @@ public class AttributeTransformer {
 			}
 		}
 		
-		// transform multiplicity
-		MultiplicityTransformer mt = new MultiplicityTransformer();
-		mt.transform(property, eaAttribute);
+		// transform comment
+		final String notes = eaAttribute.GetNotes();
+		if (notes.length() != 0) {
+			property.createOwnedComment().setBody(notes);
+		}
 		
+		// transform multiplicity
+		MultiplicityTransformer.INSTANCE.transform(property, eaAttribute);
+		
+		// apply stereotypes
+		// object has to be element of classifier, otherwise stereotype cannot be applied
+		ApplyStereotypeTransformer.INSTANCE.applyStereotypes(eaAttribute, property);
+		
+		ElementRegistry.INSTANCE.addAttribute(eaAttribute, property);
 		return property;
 		/* PROTECTED REGION END */
 	}

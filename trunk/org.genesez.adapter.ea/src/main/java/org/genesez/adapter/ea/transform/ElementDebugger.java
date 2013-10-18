@@ -59,6 +59,8 @@ public class ElementDebugger {
 		sb.append("\n");
 		sb.append("Classifier = " + element.GetClassifierID());
 		sb.append("\n");
+		sb.append("ClassifierType = " + element.GetClassifierType());
+		sb.append("\n");
 		sb.append("Abstract = " + element.GetAbstract());
 		sb.append("\n");
 		sb.append("Complexity = " + element.GetComplexity());
@@ -69,8 +71,25 @@ public class ElementDebugger {
 		sb.append("\n");
 		sb.append("Persistance = " + element.GetPersistence());
 		sb.append("\n");
-		sb.append("ClassifierType = " + element.GetClassifierType());
+		
+		sb.append("MetaType = " + element.GetMetaType());
 		sb.append("\n");
+		sb.append("ObjectType = " + element.GetObjectType());
+		sb.append("\n");
+		
+		sb.append("ActionFlags = " + element.GetActionFlags());
+		sb.append("\n");
+		sb.append("ExtensionPoints = " + element.GetExtensionPoints());
+		sb.append("\n");
+		sb.append("Header1 = " + element.GetHeader1());
+		sb.append("\n");
+		sb.append("Header2 = " + element.GetHeader2());
+		sb.append("\n");
+		
+		sb.append("Phase = " + element.GetPhase());
+		sb.append("\n");
+		
+		// boolean values
 		sb.append("IsNew = " + element.GetIsNew());
 		sb.append("\n");
 		sb.append("IsSpec = " + element.GetIsSpec());
@@ -148,6 +167,12 @@ public class ElementDebugger {
 		sb.append("\n");
 		sb.append("propertieCount: " + connector.GetProperties().GetCount());
 		sb.append("\n");
+		
+		sb.append("supplierEnd Aggregation: " + connector.GetSupplierEnd().GetAggregation());
+		sb.append("\n");
+		sb.append("clientEnd Aggregation: " + connector.GetClientEnd().GetAggregation());
+		sb.append("\n");
+		
 		// custom properties
 		sb.append(customPropertiesToString(connector.GetCustomProperties()));
 		
@@ -357,6 +382,40 @@ public class ElementDebugger {
 			sb.append("\n");
 		}
 		return sb.toString();
+	}
+	
+	public void printPackage(org.sparx.Package p) {
+		StringBuilder sb = new StringBuilder("Package:\n");
+		sb.append("Name = " + p.GetName());
+		sb.append("\n");
+		sb.append("Flags = " + p.GetFlags());
+		sb.append("\n");
+		sb.append("Packages = " + p.GetPackages());
+		sb.append("\n");
+		sb.append("Alias = " + p.GetAlias());
+		sb.append("\n");
+		sb.append("Owner" + p.GetOwner());
+		sb.append("\n");
+		sb.append("UMLVersion = " + p.GetUMLVersion());
+		sb.append("\n");
+		sb.append("ObjectType = " + p.GetObjectType());
+		sb.append("\n");
+		
+		// boolean
+		sb.append("IsControlled = " + p.GetIsControlled());
+		sb.append("\n");
+		sb.append("IsModel = " + p.GetIsModel());
+		sb.append("\n");
+		sb.append("IsNamespace = " + p.GetIsNamespace());
+		sb.append("\n");
+		sb.append("IsProtected = " + p.GetIsProtected());
+		sb.append("\n");
+		sb.append("IsVersionControlled = " + p.GetIsVersionControlled());
+		sb.append("\n");
+		
+		sb.append("Treepostion = " + p.GetTreePos());
+		sb.append("\n");
+		LOG.debug(sb.toString());
 	}
 	
 	/* PROTECTED REGION END */
