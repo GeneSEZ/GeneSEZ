@@ -271,11 +271,10 @@ public class ConnectorFactory {
 	public void processAssociations() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363677142924_423112_1894) ENABLED START */
 		AssociationTransformer at = new AssociationTransformer();
-		for (String guid : associationMap.keySet()) {
-			
-			at.transform(associationMap.get(guid));
-			
+		for (org.sparx.Connector connector : associationMap.values()) {
+			at.transform(connector);
 		}
+		
 		// now run all component associations, because they are handled
 		// different
 		this.processComponentAssociations();
@@ -332,10 +331,7 @@ public class ConnectorFactory {
 			}
 			
 			LOG.debug("Creating cardinality of supplier.");
-			MultiplicityTransformer mt = new MultiplicityTransformer();
-			
-			mt.transform(property, supplierEnd);
-			// createLowerUpperCardinality(property, supplierEnd);
+			MultiplicityTransformer.INSTANCE.transform(property, supplierEnd);
 			
 			// second association memberEnd
 			if (clientEnd.GetNavigable().equals(NAVIGABLE_STRING)) {
@@ -346,8 +342,7 @@ public class ConnectorFactory {
 			}
 			
 			LOG.debug("Creating cardinality of client.");
-			// createLowerUpperCardinality(property, clientEnd);
-			mt.transform(property, clientEnd);
+			MultiplicityTransformer.INSTANCE.transform(property, clientEnd);
 			
 			// apply stereotypes
 			association = (Association) ApplyStereotypeTransformer.INSTANCE.applyStereotypes(eaElement, association);

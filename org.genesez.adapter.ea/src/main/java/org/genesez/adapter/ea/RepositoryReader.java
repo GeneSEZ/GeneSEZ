@@ -158,6 +158,15 @@ public class RepositoryReader extends AbstractWorkflowComponent {
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_12d203c6_1328866954886_446698_2086) ENABLED START */
+	private boolean ignoreNameSpacePackages = false;
+	
+	public void setignoreNameSpacePackages(boolean ignoreNameSpacePackages) {
+		this.ignoreNameSpacePackages = ignoreNameSpacePackages;
+	}
+	
+	public boolean isIgnoreNameSpacePackages() {
+		return this.ignoreNameSpacePackages;
+	}
 	
 	/* PROTECTED REGION END */
 }

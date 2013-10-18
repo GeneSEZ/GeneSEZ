@@ -47,6 +47,15 @@ public class VisibilityTransformer {
 	/**
 	 * Method stub for further implementation.
 	 */
+	public VisibilityKind getVisibilityKind(org.sparx.ConnectorEnd eaConnectorEnd) {
+		/* PROTECTED REGION ID(java.implementation._17_0_4_1_df50335_1382082746708_98084_3809) ENABLED START */
+		return getVisibilityKind(eaConnectorEnd.GetVisibility());
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
 	private VisibilityKind getVisibilityKind(String visibility) {
 		/* PROTECTED REGION ID(java.implementation._17_0_4_1_df50335_1381481290238_787058_3716) ENABLED START */
 		if (visibility.equals("Public")) {

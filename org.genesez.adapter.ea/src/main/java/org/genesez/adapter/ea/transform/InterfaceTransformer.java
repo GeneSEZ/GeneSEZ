@@ -49,7 +49,7 @@ public class InterfaceTransformer extends AbstractElementTransformer {
 	 */
 	protected void transformAttribute(org.sparx.Attribute eaAttribute) {
 		/* PROTECTED REGION ID(java.implementation._17_0_4_1_df50335_1381924876600_609433_3760) ENABLED START */
-		((Interface) this.umlElement).getOwnedAttributes().add(AttributeTransformer.INSTANCE.transform(eaAttribute));
+		AttributeTransformer.INSTANCE.transform(eaAttribute,umlElement);
 		/* PROTECTED REGION END */
 	}
 	
@@ -59,6 +59,7 @@ public class InterfaceTransformer extends AbstractElementTransformer {
 	protected void transformMethod(org.sparx.Method eaMethod) {
 		/* PROTECTED REGION ID(java.implementation._17_0_4_1_df50335_1381924909267_923566_3763) ENABLED START */
 		((Interface) this.umlElement).getOwnedOperations().add(OperationTransformer.INSTANCE.transform(eaMethod));
+		// TODO apply stereotypes
 		/* PROTECTED REGION END */
 	}
 	
