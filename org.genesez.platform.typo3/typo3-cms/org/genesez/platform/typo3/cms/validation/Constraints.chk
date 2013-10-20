@@ -12,6 +12,7 @@ import gcore;
  * Validation rules for TYPO3 CMS.
  *  
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ * @todo	Check if context Void is also possible.
  */
 
 // use TYPO3 CMS profile scripts
@@ -19,8 +20,49 @@ extension org::genesez::platform::typo3::cms::profile::Typo3CmsProfile;
 extension org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement;
 
 
+// use TYPO3 MVC workflow global var scripts
+extension org::genesez::platform::typo3::cms::util::GlobalVar;
+
+
 // use GeneSEZ common conversion scripts
 extension org::genesez::metamodel::core::util::Conversion;
+
+
+// -- Extension Key + Vendor Name Checks --------------------------------------------------------------------
+
+context MModel
+	ERROR "GeneSEZ: TYPO3 CMS extension key starts with an illegal prefix! Not allowed prefixes are 'tx', 'pages', 'tt_', 'sys_', 'ts_language_' and 'csh_'! See workflow configuration: " + globalVarExtensionKey() :
+	!globalVarExtensionKey().startsWith("tx") 
+	&& !globalVarExtensionKey().startsWith("pages")
+	&& !globalVarExtensionKey().startsWith("tt_")
+	&& !globalVarExtensionKey().startsWith("sys_")
+	&& !globalVarExtensionKey().startsWith("ts_language_")
+	&& !globalVarExtensionKey().startsWith("csh");
+
+
+context MModel
+	ERROR "GeneSEZ: TYPO3 CMS extension key contains illegal characters! Allowed characters are a-z (lowercase), 0-9 and '_' (underscore)! See workflow configuration: " + globalVarExtensionKey() :
+	!globalVarExtensionKey().matches("[a-z0-9_]");
+
+
+context MModel
+	ERROR "GeneSEZ: TYPO3 CMS extension key is to short and needs a minimum of 3 characters, not counting underscores! See workflow configuration: " + globalVarExtensionKey() :
+	globalVarExtensionKey().replaceAll("_", "").length >= 3;
+
+
+context MModel
+	ERROR "GeneSEZ: TYPO3 CMS extension key is to long and needs a maximum of 30 characters, not counting underscores! See workflow configuration: " + globalVarExtensionKey() :
+	globalVarExtensionKey().replaceAll("_", "").length <= 30;
+
+
+context MModel
+	WARNING "GeneSEZ: TYPO3 CMS extension key contains '_' (underscore) characters. Following TYPO3 CMS best practices the usage of underscores in extension keys should be avoided! See workflow configuration: " + globalVarExtensionKey() :
+	!globalVarExtensionKey().contains("_");
+
+
+context MModel
+	WARNING "GeneSEZ: TYPO3 CMS extension cannot be registered as general extension in TYPO3 Extension Repository (TER) because the extension key starts with prefix 'user_'! See workflow configuration: " + globalVarExtensionKey() :
+	!globalVarExtensionKey().startsWith("user_");
 
 
 // -- Model Checks ------------------------------------------------------------------------------------------
@@ -31,7 +73,7 @@ extension org::genesez::metamodel::core::util::Conversion;
  * @return	False, if the model hasn't this sterotype, otherwise true.
  */
 context MModel 
-	ERROR "GeneSEZ: TYPO3 CMS extension manager stereotype ( stereotype: " + prTypo3ExtensionManager() + " ) is missing! See model element: " + fqmn() :
+	ERROR "GeneSEZ: TYPO3 CMS extension manager stereotype (stereotype: " + prTypo3ExtensionManager() + ") is missing! See model element: " + fqmn() :
 	emHasTypo3ExtensionManagerStereotype();
 	
 
@@ -42,7 +84,7 @@ context MModel
  */
 context MModel 
 	if emHasTypo3ExtensionManagerStereotype() 
-	ERROR "GeneSEZ: The title of the extension for TYPO3 CMS extension manager ( stereotype: " + prTypo3ExtensionManager() + ", property: " + prTypo3ExtensionManagerTitle() + " ) is missing or empty! See model element: " + fqmn() :
+	ERROR "GeneSEZ: The title of the extension for TYPO3 CMS extension manager (stereotype: " + prTypo3ExtensionManager() + ", property: " + prTypo3ExtensionManagerTitle() + ") is missing or empty! See model element: " + fqmn() :
 	emGetTypo3ExtensionManagerTitle() != "";
 
 
@@ -53,5 +95,5 @@ context MModel
  */
 context MModel 
 	if emHasTypo3ExtensionManagerStereotype() 
-	ERROR "GeneSEZ: The description of the extension for TYPO3 CMS extension manager ( stereotype: " + prTypo3ExtensionManager() + ", property: " + prTypo3ExtensionManagerDescription() + " ) is missing or empty! See model element: " + fqmn() : 
+	ERROR "GeneSEZ: The description of the extension for TYPO3 CMS extension manager (stereotype: " + prTypo3ExtensionManager() + ", property: " + prTypo3ExtensionManagerDescription() + ") is missing or empty! See model element: " + fqmn() : 
 	emGetTypo3ExtensionManagerDescription() != "";
