@@ -1,35 +1,41 @@
-«IMPORT gcore»
 «REM»
-	Performs the generation of classes.
+	(c) GeneSEZ Research Group
+	All rights reserved.
 	
-	currently handled:
-	- comments
-	- extends, implements
-	- attributes
-	- associations
-	- operations
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+
+«REM»
+	Entry point for generating classes.
 	
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
-	@date	2011-04-22
 «ENDREM»
 
-«REM» use TYPO3 MVC naming scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Naming»
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
 «ENDREM»
 
 «REM»
-	Processes a class.
+	Processes the generation of a class.
 «ENDREM»
 «DEFINE Root FOR MClass -»
-«EXPAND Comment::ClassifierDeclaration -»
-«EXPAND Modifier -»class «asGeneralName() -»«EXPAND Generalization -»«EXPAND Realization -» {
+<?php
+«EXPAND Type::Namespace -»
 
+«EXPAND Type::OwnUseImports("php.class.own.use.imports." + xmiGuid) -»
+
+«EXPAND Comment::CopyrightNotice -»
+
+«EXPAND Comment::ClassifierInformationBlock -»
+«EXPAND Modifier -»class «asShortGeneralName() -»«EXPAND Generalization -»«EXPAND Realization -» {
+	
 	«EXPAND Attribute::Declaration -»
 	«EXPAND Association::Declaration -»
 	«EXPAND Operation::Constructor -»
@@ -41,19 +47,19 @@
 	«EXPAND Attribute::Accessors -»
 	«EXPAND Association::Accessors -»
 	«EXPAND OwnCodeImplementation("php.class.own.code.implementation." + xmiGuid) -»
-
+	
 }
+
+?>
 «ENDDEFINE»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
 «ENDREM»
 
 «REM»
-	Processes the modifiers of a class.
+	Generates the modifiers of a class.
 	A class can be either abstract or final, not both!
 «ENDREM»
 «DEFINE Modifier FOR MClass -»

@@ -1,66 +1,72 @@
-«IMPORT gcore»
 «REM»
-	Performs the generation of interfaces.
+	(c) GeneSEZ Research Group
+	All rights reserved.
 	
-	currently handled:
-	- extends
-	- attributes
-	- associations
-	- operations
-	- comments
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+
+«REM»
+	Entry point for generating interfaces.
 	
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
-	@date	2011-03-21
 «ENDREM»
 
-«REM» use common naming scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
 «ENDREM»
 
 «REM»
-	Processes an interface.
+	Processes the generation of an interface.
 «ENDREM»
 «DEFINE Root FOR MInterface -»
-«EXPAND Comment::ClassifierDeclaration -»
-interface «name() -»«EXPAND Generalization -» {
+<?php
+«EXPAND Type::Namespace -»
+
+«EXPAND Type::OwnUseImports("php.interface.own.use.imports." + xmiGuid) -»
+
+«EXPAND Comment::CopyrightNotice -»
+
+«EXPAND Comment::ClassifierInformationBlock -»
+interface «asShortGeneralName() -»«EXPAND Generalization -» {
 	
 	«EXPAND Attribute::Declaration -»
 	«EXPAND Association::Declaration -»
 	«EXPAND Operation::Declaration -»
 	«EXPAND Association::Accessors -»
 	«EXPAND OwnCodeDeclaration("php.interface.own.code.declaration." + xmiGuid) -»
-
+	
 }
+
+?>
 «ENDDEFINE»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
 «ENDREM»
 
 «REM»
-	Generates the generalization of a class.
-	Only single inheritance is allowed.
+	Generates the generalization of an interface.
 «ENDREM»
 «DEFINE Generalization FOR MInterface -»
 «IF !generalization.isEmpty -»
- extends «FOREACH generalization AS g SEPARATOR ", " -»«g.name() -»«ENDFOREACH -»
+ extends «FOREACH generalization AS g SEPARATOR ", " -»«g.asGeneralName() -»«ENDFOREACH -»
 «ENDIF -»
 «ENDDEFINE»
+
 
 «REM»
 	Generates a region for own code declarations.
 «ENDREM»
 «DEFINE OwnCodeDeclaration(String id) FOR MInterface -»
-	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+	«PROTECT CSTART '/* ' CEND ' */' ID (id) »
 	// TODO: put your further code declarations here
 	«ENDPROTECT»
 «ENDDEFINE»

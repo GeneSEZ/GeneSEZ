@@ -1,65 +1,74 @@
-«IMPORT gcore»
 «REM»
-	Generating TYPO3 MVC PHP code annotations.
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+
+«REM»
+	Entry point for generating annotations.
 	
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
-	@date	2011-08-26
 «ENDREM»
 
-«REM» use GeneSEZ profile access helper scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::profile::GeneSEZProfileAccessElement»
+«REM» use GeneSEZ common Design Pattern profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezDesignPatternAccessElement»
 
-«REM» use TYPO3 MVC Extbase profile + access helper scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::profile::ExtbaseAccessElement»
-«EXTENSION org::genesez::platform::typo3cms::mvc::profile::ExtbaseProfile»
+«REM» use GeneSEZ common Persistence profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezPersistenceProfile»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezPersistenceAccessElement»
 
-«REM» use TYPO3 naming context and common naming scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
-«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::NamingContext»
+«REM» use GeneSEZ common Standard profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezStandardAccessElement»
 
-«REM» use TYPO3 MVC naming scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Naming»
+«REM» use GeneSEZ common Validation profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezValidationAccessElement»
 
-«REM» use TYPO3 MVC access helper scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::util::AccessElement»
 
-«REM» use common access helper scripts «ENDREM»
+«REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::AccessElement»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
+
+
+«REM» use GeneSEZ common access element scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::AccessElement»
 
-«REM» use common conversion scripts «ENDREM»
+«REM» use GeneSEZ common conversion scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::Conversion»
 
+«REM» use GeneSEZ common type mapping scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
 «ENDREM»
 
-«REM» - - MClassifier - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
 «REM»
-	Generates a classifier annotations (class scope).
+	Generates the annotations for a classifier.
 «ENDREM»
-«DEFINE ClassifierDeclaration FOR MClassifier -»
+«DEFINE ClassifierInformationBlock FOR MClassifier -»
 «EXPAND Version -»
 «EXPAND Copyright -»
 «EXPAND License -»
 «ENDDEFINE»
 
 
-«REM» - - MProperty - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
-
 «REM»
-	Generates the annotation for an property.
+	Generates the annotations for a property.
 «ENDREM»
 «DEFINE Property FOR MProperty -»
 «IF multiplicity.isSingleValued() -»
-	 * @var «type.name()»
+	 * @var «type.asGeneralName()»
 «ELSE -»
-«IF classifier.isModelPackageElement() && !prHasPrimitiveStereotype() -»
-	 * @var «mapCollection( typeMappingContextModel() ) -»<«type.name() -»>
+«IF classifier.isModelPackageElement() && !emHasPrimitiveStereotype() -»
+	 * @var «mapCollection( collectionMappingContextModel() ) -»<«type.asGeneralName() -»>
 «ELSE -»
 	 * @var «mapCollection() -»
 «ENDIF -» 
@@ -71,12 +80,15 @@
 «ENDDEFINE»
 
 
-«DEFINE Getter FOR MProperty -»
+«REM»
+	Generates the annotations for a get accesor method of a property.
+«ENDREM»
+«DEFINE GetAccessor FOR MProperty -»
 «IF multiplicity.isSingleValued() -»
-	 * @return «type.name()-» «comment("; ", "")»
+	 * @return «type.asGeneralName() -» «comment("; ", "")»
 «ELSE -»
-«IF classifier.isModelPackageElement() && !prHasPrimitiveStereotype() -»
-	 * @return «mapCollection( typeMappingContextModel() ) -»<«type.name() -»> «comment("; ", "")»
+«IF classifier.isModelPackageElement() && !emHasPrimitiveStereotype() -»
+	 * @return «mapCollection( collectionMappingContextModel() ) -»<«type.asGeneralName() -»> «comment("; ", "")»
 «ELSE -»
 	 * @return «mapCollection() -» «comment("; ", "")»
 «ENDIF -»
@@ -84,36 +96,43 @@
 «ENDDEFINE»
 
 
-«DEFINE Setter FOR MProperty -»
+«REM»
+	Generates the annotations for a set accessor method of a property.
+«ENDREM»
+«DEFINE SetAccessor FOR MProperty -»
 «IF multiplicity.isSingleValued() -»
-	 * @param «type.name() -» $«name() -» «comment("; ", "")»
+	 * @param «type.asGeneralName() -» $«asGeneralName() -» «comment("; ", "")»
 «ELSE -»
-«IF classifier.isModelPackageElement() && !prHasPrimitiveStereotype() -»
-	 * @param «mapCollection( typeMappingContextModel() ) -»<«type.name() -»> $«name() -» «comment("; ", "")»
+«IF classifier.isModelPackageElement() && !emHasPrimitiveStereotype() -»
+	 * @param «mapCollection( collectionMappingContextModel() ) -»<«type.asGeneralName() -»> $«asGeneralName() -» «comment("; ", "")»
 «ELSE -»
-	 * @param «mapCollection() -» $«name() -» «comment("; ", "")»
+	 * @param «mapCollection() -» $«asGeneralName() -» «comment("; ", "")»
 «ENDIF -» 
 «ENDIF -»
 	 * @return void
 «ENDDEFINE»
 
 
-«DEFINE InsertIn FOR MProperty -»
-	 * @param «type.name() -» $toAdd «comment("; ", "")»
+«REM»
+	Generates the annotations for an add accessor method of a property.
+«ENDREM»
+«DEFINE AddAccessor FOR MProperty -»
+	 * @param «type.asGeneralName() -» $toAdd «comment("; ", "")»
 	 * @return void
 «ENDDEFINE»
 
-
-«DEFINE RemoveFrom FOR MProperty -»
-	 * @param «type.name() -» $toRemove «comment("; ", "")»
-	 * @return void
-«ENDDEFINE»
-
-
-«REM» - - MOperation  - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
 «REM»
-	Generates the annotation for a constructor.
+	Generates the annotations for a remove accessor method of a property.
+«ENDREM»
+«DEFINE RemoveAccessor FOR MProperty -»
+	 * @param «type.asGeneralName() -» $toRemove «comment("; ", "")»
+	 * @return void
+«ENDDEFINE»
+
+
+«REM»
+	Generates the annotations for a constructor operation.
 «ENDREM»
 «DEFINE Constructor FOR MOperation -»
 	«EXPAND Param FOREACH parameter -»
@@ -121,62 +140,58 @@
 
 
 «REM»
-	Generates the annotation for a destructor.
+	Generates the annotations for a destructor operation.
 «ENDREM»
 «DEFINE Destructor FOR MOperation -»
 «ENDDEFINE»
 
 
 «REM»
-	Generates the annotation for an operation.
+	Generates the annotations for an operation.
 «ENDREM»
 «DEFINE Operation FOR MOperation -»
 	«EXPAND Param FOREACH parameter -»
 	«EXPAND Return -»
-	«EXPAND DontValidate FOREACH parameter -»
+	«EXPAND IgnoreValidation FOREACH parameter -»
 	«EXPAND DontVerifyRequestHash -»
 «ENDDEFINE»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
 «ENDREM»
-
-«REM» - - MClassifier - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
 «DEFINE Version FOR MClassifier -»
  * @version $Id$
 «ENDDEFINE»
 
+
 «DEFINE Copyright FOR MClassifier -»
  * @copyright Copyright belongs to the respective authors
 «ENDDEFINE»
+
 
 «DEFINE License FOR MClassifier -»
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
 «ENDDEFINE»
 
 
-«REM» - - MProperty - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
-
 «DEFINE Cascade FOR MProperty -»
-«IF hasT3ExtbaseAssociationCascadeType( prT3ExtbaseCascadeTypeRemove() ) -»
+«IF emHasAssociationCascadeType( prCascadeTypeRemove() ) -»
 	 * @cascade remove
 «ENDIF -»
 «ENDDEFINE»
 
 
 «DEFINE Fetch FOR MProperty -»
-«IF hasT3ExtbaseAssociationFetchType( prT3ExtbaseFetchTypeLazy() ) -»
+«IF emHasAssociationFetchType( prFetchTypeLazy() ) -»
 	 * @lazy
 «ENDIF -»
 «ENDDEFINE»
 
 
 «DEFINE Inject FOR MProperty -»
-«IF prHasDiSetter("true") -»
+«IF emHasDiSetter("true") -»
 	 * @inject
 «ENDIF -»
 «ENDDEFINE»
@@ -184,18 +199,16 @@
 
 «DEFINE Validate FOR MProperty -»
 «IF !allAssignedValidators().isEmpty -»
-	 * @validate «FOREACH allAssignedValidators() AS v SEPARATOR ", " -»«v.asAssignedValidatorName() -»«IF !v.property.select( p | emGetTaggedValue( v.name, p.name ) != "" ).isEmpty -»(«FOREACH v.property.select( p | emGetTaggedValue( v.name, p.name ) != "" ) AS p SEPARATOR ", "-»«p.name -» = «emGetTaggedValue(v.name, p.name) -»«ENDFOREACH -»)«ENDIF -»«ENDFOREACH»
+«REM»	 * @validate «FOREACH allAssignedValidators() AS v SEPARATOR ", " -»«v.asAssignedValidatorName() -»«IF !v.property.select( p | emGetTaggedValue( v.name, p.name ) != "" ).isEmpty -»(«FOREACH v.property.select( p | emGetTaggedValue( v.name, p.name ) != "" ) AS p SEPARATOR ", "-»«p.name -» = «emGetTaggedValue(v.name, p.name) -»«ENDFOREACH -»)«ENDIF -»«ENDFOREACH»«ENDREM»
 «ENDIF -»
 «ENDDEFINE»
 
 
-«REM» - - MOperation  - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
-
 «DEFINE Param FOR MParameter -»
 «IF multiplicity.isSingleValued() -»
-	 * @param «type.name() -» $«name() -» «comment("; ", "")»
+	 * @param «type.asGeneralName() -» $«asGeneralName() -» «comment("; ", "")»
 «ELSE -»
-	 * @param «mapCollection() -» $«name() -» «comment("; ", "")»
+	 * @param «mapCollection() -» $«asGeneralName() -» «comment("; ", "")»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -203,10 +216,10 @@
 «DEFINE Return FOR MOperation -»
 «IF hasReturn() -»
 «IF return.multiplicity.isSingleValued() -»
-	 * @return «return.type.name() -» «return.comment("; ", "")»
+	 * @return «return.type.asGeneralName() -» «return.comment("; ", "")»
 «ELSE -»
-«IF classifier.isRepositoryPackageElement() && !prHasPrimitiveStereotype() -»
-	 * @return «return.mapCollection( typeMappingContextRepository() ) -»<«return.type.name() -»> «return.comment("; ", "")»
+«IF classifier.isRepositoryPackageElement() && !emHasPrimitiveStereotype() -»
+	 * @return «return.mapCollection( collectionMappingContextModel() ) -»<«return.type.asGeneralName() -»> «return.comment("; ", "")»
 «ELSE -»
 	 * @return «return.mapCollection() -» «return.comment("; ", "")»
 «ENDIF -»
@@ -217,15 +230,15 @@
 «ENDDEFINE»
 
 
-«DEFINE DontValidate FOR MParameter -»
-«IF hasT3ExtbaseDontValidateStereotype() -»
-	 * @dontvalidate $«name()»
+«DEFINE IgnoreValidation FOR MParameter -»
+«IF emHasIgnoreValidationStereotype() -»
+	 * @ignorevalidation $«asGeneralName()»
 «ENDIF -»
 «ENDDEFINE»
 
 
 «DEFINE DontVerifyRequestHash FOR MOperation -»
-«IF hasT3ExtbaseDontVerifyRequestHashStereotype() -»
+«IF emHasIgnoreValidationStereotype() -»
 	 * @dontverifyrequesthash
 «ENDIF -»
 «ENDDEFINE»
