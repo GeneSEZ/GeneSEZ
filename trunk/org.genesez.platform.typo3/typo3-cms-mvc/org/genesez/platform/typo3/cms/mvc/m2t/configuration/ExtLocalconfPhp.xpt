@@ -1,48 +1,46 @@
+«REM»
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
 «IMPORT gcore»
+
+
 «REM»
 	Entry point for generating "ext_localconf.php".
 	
-	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
-	@date	2011-07-20
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
 «ENDREM»
 
-«REM» use TYPO3 MVC Extbase profile access helper scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::profile::ExtbaseAccessElement»
+«REM» use TYPO3 CMS specific Extbase profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::profile::Typo3CmsExtbaseAccessElement»
 
-«REM» use TYPO3 naming context and common naming scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::NamingContext»
 
-«REM» use TYPO3 MVC conversion scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Conversion»
+«REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::AccessElement»
 
-«REM» use TYPO3 MVC naming scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Naming»
+«REM» use TYPO3 CMS specific Extbase + Fluid file system convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::FileSystemConvention»
 
-«REM» use TYPO3 MVC access helper scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::util::AccessElement»
-
-«REM» use common conversion scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
 «ENDREM»
 
 «REM»
 	Processes the generation of "ext_localconf.php".
 «ENDREM»
 «DEFINE Root FOR MModel -»
-«EXPAND ContextSettings -»
-
-«FILE extLocalconfPHPFileNamePath() -»
+«FILE filePathExtLocalconfPhp() -»
 <?php
 
 «EXPAND AccessDenied -»
-«EXPAND ConfigurePlugin FOREACH allPlugins().sortBy( e | e.name ) -»
+«EXPAND PluginConfiguration -»
 «EXPAND CommandControllerConfiguration -»
 «EXPAND OwnCodeImplementation("ext_localconf.php.own.code.implementation." + xmiGuid) -»
 
@@ -52,23 +50,11 @@
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
 «ENDREM»
-
-«REM»
-	Sets the naming context for this part of generation.
-	The type mapping context is not needed for this part. 
-«ENDREM»
-«DEFINE ContextSettings FOR MModel -»
-«setInternalNamingContext( namingContextConfiguration() ) -»
-«ENDDEFINE»
-
 
 «REM»
 	TYPO3 access control to check if this file is called from the outside of TYPO3. 
-	If so then the script dies.
 «ENDREM»
 «DEFINE AccessDenied FOR MElement -»
 if (!defined ('TYPO3_MODE')) {
@@ -79,33 +65,52 @@ if (!defined ('TYPO3_MODE')) {
 
 
 «REM»
+«ENDREM»
+«DEFINE PluginConfiguration FOR MModel -»
+«IF !allPlugins().isEmpty -»
+«EXPAND ConfigurePlugin FOREACH allPlugins().sortBy( p | p.asTypo3PluginName() ) -»
+«ENDIF -»
+«EXPAND OwnPluginCodeImplementation("ext_localconf.php.own.plugin.code.implementation." + xmiGuid) -»
+
+«ENDDEFINE»
+
+
+«REM»
 	Configure all TYPO3 Extbase plugins by using "configurePlugin" from class 
-	"Tx_Extbase_Utility_Extension".	First the name of the plugin is set. After 
-	that the cached and uncached controller actions are generated. Finally the 
-	plugin is registered as plugin or as content element.
+	"\TYPO3\CMS\Extbase\Utility\ExtensionUtility".
 «ENDREM»
 «DEFINE ConfigurePlugin FOR MInterface -»
-Tx_Extbase_Utility_Extension::configurePlugin(
-	$_EXTKEY,
-	'«name() -»',
-	array(«FOREACH asControllerActionPairs( getT3ExtbasePluginControllerActions() ) AS controllerAction SEPARATOR ", "»
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+	'«extensionVendorName() -».' . $_EXTKEY,
+	'«asTypo3PluginName() -»',
+	array(«FOREACH asExtbaseControllerActionPairs( emGetExtbasePluginControllerActions() ) AS controllerAction SEPARATOR ", "»
 		«controllerAction -»«ENDFOREACH»
 	),
-	array(«FOREACH asControllerActionPairs( getT3ExtbasePluginUncachedControllerActions() ) AS uncachedControllerAction SEPARATOR ", "»
+	array(«FOREACH asExtbaseControllerActionPairs( emGetExtbasePluginUncachedControllerActions() ) AS uncachedControllerAction SEPARATOR ", "»
 		«uncachedControllerAction -»«ENDFOREACH»
 	),
-	«getT3ExtbasePluginPluginType().asPluginType()»
+	«emGetExtbasePluginPluginType().asExtbasePluginType()»
 );
 
 «ENDDEFINE»
+
+
+«REM»
+	generates a region for own plugin code implementations
+«ENDREM»
+«DEFINE OwnPluginCodeImplementation(String id) FOR MModel -»
+«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+// TODO: put your further plugin code implementations here
+«ENDPROTECT»
+«ENDDEFINE»
+
 
 «REM»
 «ENDREM»
 «DEFINE CommandControllerConfiguration FOR MModel -»
 if (TYPO3_MODE === 'BE') {
 «IF !allCommandControllers().isEmpty -»
-
-	«EXPAND RegisterCommandController FOREACH allCommandControllers().sortBy( e | e.name ) -»
+	«EXPAND RegisterCommandController FOREACH allCommandControllers().sortBy( cc | cc.asGeneralName() ) -»
 «ENDIF -»
 	«EXPAND OwnCommandControllerCodeImplementation("ext_localconf.php.own.command.controller.code.implementation." + xmiGuid) -»
 }
@@ -116,7 +121,7 @@ if (TYPO3_MODE === 'BE') {
 «REM»
 «ENDREM»
 «DEFINE RegisterCommandController FOR MClass -»
-	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = '«name( namingContextGeneral() ) -»';
+	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = '«asGeneralName() -»';
 	
 «ENDDEFINE»
 
