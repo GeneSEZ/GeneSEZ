@@ -4,16 +4,19 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
-Tx_Extbase_Utility_Extension::configurePlugin(
-	$_EXTKEY,
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+	'GeneSEZ.' . $_EXTKEY,
 	'List',
 	array(
 		'Inventory' => 'list'
 	),
 	array(
 	),
-	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
+	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::PLUGIN_TYPE_PLUGIN
 );
+
+/* PROTECTED REGION ID(ext_localconf.php.own.plugin.code.implementation.eee_1045467100313_135436_1) ENABLED START */
+/* PROTECTED REGION END */
 
 if (TYPO3_MODE === 'BE') {
 	/* PROTECTED REGION ID(ext_localconf.php.own.command.controller.code.implementation.eee_1045467100313_135436_1) ENABLED START */
