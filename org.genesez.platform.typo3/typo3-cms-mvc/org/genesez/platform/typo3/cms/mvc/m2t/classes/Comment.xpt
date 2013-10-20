@@ -1,61 +1,91 @@
-«IMPORT gcore»
 «REM»
-	Generating extbase php code comments.
+	(c) GeneSEZ Research Group
+	All rights reserved.
 	
-	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
-	@date	2011-04-26
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
 «ENDREM»
 
-«REM» use GeneSEZ profile access helper scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::profile::GeneSEZProfileAccessElement»
+«IMPORT gcore»
 
-«REM» use TYPO3 profile access helper scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::profile::AccessElement»
 
-«REM» use common naming scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
+«REM»
+	Entry point for generating comments.
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+«ENDREM»
 
-«REM» use common access helper scripts «ENDREM»
+«REM» use TYPO3 CMS profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
+
+
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
+
+
+«REM» use GeneSEZ common access element scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::AccessElement»
 
-«REM» use common conversion scripts «ENDREM»
+«REM» use GeneSEZ common conversion scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::Conversion»
 
-«REM» use model navigation scripts «ENDREM»
+«REM» use GeneSEZ common navigate element scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::NavigateElement»
 
-«REM» use common user date helper scripts «ENDREM»
+«REM» use GeneSEZ common date time helper scripts «ENDREM»
 «EXTENSION org::genesez::util::sysenv::DateTimeHelper»
 
-«REM» use common user info helper scripts «ENDREM»
+«REM» use GeneSEZ common user info helper scripts «ENDREM»
 «EXTENSION org::genesez::util::sysenv::UserInfoHelper»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
 «ENDREM»
-
-«REM» - - MClassifier - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
 «REM»
-	Generates a classifier comment (class scope).
+	Every PHP file needs to have this license information.
 «ENDREM»
-«DEFINE ClassifierDeclaration FOR MClassifier -»
-«EXPAND GeneralPublicLicense -»
+«DEFINE CopyrightNotice FOR MClassifier -»
+/***************************************************************
+ *  Copyright notice
+ *
+ *  (c) «EXPAND CopyrightYear -» «EXPAND CopyrightAuthor -»
+ *  All rights reserved
+ *  
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *  A copy is found in the textfile GPL.txt and important notices to the license
+ *  from the author is found in LICENSE.txt distributed with these scripts.
+ *  
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
+«ENDDEFINE»
 
+
+«REM»
+	Generates the documentation for a classifier.
+«ENDREM»
+«DEFINE ClassifierInformationBlock FOR MClassifier -»
 /**
 «IF hasComment() -»
 «formatComment() -»
 «ENDIF -»
  * 
-«EXPAND Annotation::ClassifierDeclaration -»
+«EXPAND Annotation::ClassifierInformationBlock -»
  */
 «ENDDEFINE»
 
-
-«REM» - - MAttribute  - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
 «REM»
 	Generates the documentation for an attribute.
@@ -72,57 +102,55 @@
 
 
 «REM»
-	Generates the documentation for an attribute getter method.
+	Generates the documentation for a get accessor method of an attribute.
 «ENDREM»
-«DEFINE Getter FOR MAttribute -»
+«DEFINE GetAccessor FOR MAttribute -»
 	/**
-	 * Getter for «name()»
+	 * Get accessor for «asGeneralName() -».
 	 *
-	«EXPAND Annotation::Getter -»
+	«EXPAND Annotation::GetAccessor -»
 	 */
 «ENDDEFINE»
 
 
 «REM»
-	Generates the documentation for a setter method of an attribute.
+	Generates the documentation for a set accessor method of an attribute.
 «ENDREM»
-«DEFINE Setter FOR MAttribute -»
+«DEFINE SetAccessor FOR MAttribute -»
 	/**
-	 * Setter for «name()»
+	 * Set accessor for «asGeneralName() -».
 	 *
-	«EXPAND Annotation::Setter -»
+	«EXPAND Annotation::SetAccessor -»
 	 */
 «ENDDEFINE»
 
 
 «REM»
-	Generates the documentation for the 'insert in' method of an attribute with a collection type.
+	Generates the documentation for an add accessor method of an attribute.
 «ENDREM»
-«DEFINE InsertIn FOR MAttribute -»
+«DEFINE AddAccessor FOR MAttribute -»
 	/**
-	 * InsertIn for «name()»
+	 * Add accessor for «asGeneralName() -».
 	 *
-	«EXPAND Annotation::InsertIn -»
+	«EXPAND Annotation::AddAccessor -»
 	 */
 «ENDDEFINE»
 
 
 «REM»
-	Generates the documentation for the 'remove from' method of an attribute with a collection type.
+	Generates the documentation for a remove accessor method of an attribute.
 «ENDREM»
-«DEFINE RemoveFrom FOR MAttribute -»
+«DEFINE RemoveAccessor FOR MAttribute -»
 	/**
-	 * RemoveFrom for «name()»
+	 * Remove accessor for «asGeneralName() -».
 	 *
-	«EXPAND Annotation::RemoveFrom -»
+	«EXPAND Annotation::RemoveAccessor -»
 	 */
 «ENDDEFINE»
 
 
-«REM» - - MAssocationRole - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
-
 «REM»
-	Generates the documentation for an association attribute.
+	Generates the documentation for an association role.
 «ENDREM»
 «DEFINE Association FOR MAssociationRole -»
 	/**
@@ -136,57 +164,55 @@
 
 
 «REM»
-	Generates the documentation for an association getter method.
+	Generates the documentation for a get accessor method of an association role.
 «ENDREM»
-«DEFINE Getter FOR MAssociationRole -»
+«DEFINE GetAccessor FOR MAssociationRole -»
 	/**
-	 * Getter for «name()»
+	 * Get accessor for «asGeneralName() -».
 	 *
-	«EXPAND Annotation::Getter -»
+	«EXPAND Annotation::GetAccessor -»
 	 */
 «ENDDEFINE»
 
 
 «REM»
-	Generates the documentation for a setter method of an association.
+	Generates the documentation for a set accessor method of an association role.
 «ENDREM»
-«DEFINE Setter FOR MAssociationRole -»
+«DEFINE SetAccessor FOR MAssociationRole -»
 	/**
-	 * Setter for «name()»
+	 * Set accessor for «asGeneralName() -».
 	 *
-	«EXPAND Annotation::Setter -»
+	«EXPAND Annotation::SetAccessor -»
 	 */
 «ENDDEFINE»
 
 
 «REM»
-	Generates the documentation for the 'insert in' method of an association with a collection type.
+	Generates the documentation for an add accessor method of an association role.
 «ENDREM»
-«DEFINE InsertIn FOR MAssociationRole -»
+«DEFINE AddAccessor FOR MAssociationRole -»
 	/**
-	 * InsertIn for «name()»
+	 * Add accessor for «asGeneralName() -».
 	 *
-	«EXPAND Annotation::InsertIn -»
+	«EXPAND Annotation::AddAccessor -»
 	 */
 «ENDDEFINE»
 
 
 «REM»
-	Generates the documentation for the 'remove from' method of an association with a collection type.
+	Generates the documentation for a remove accessor method of an association role.
 «ENDREM»
-«DEFINE RemoveFrom FOR MAssociationRole -»
+«DEFINE RemoveAccessor FOR MAssociationRole -»
 	/**
-	 * RemoveFrom for «name()»
+	 * Remove accessor for «asGeneralName() -».
 	 *
-	«EXPAND Annotation::RemoveFrom -»
+	«EXPAND Annotation::RemoveAccessor -»
 	 */
 «ENDDEFINE»
 
 
-«REM» - - MOperation  - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
-
 «REM»
-	Generates the constructor documentation.
+	Generates the documentation for a constructor operation.
 «ENDREM»
 «DEFINE Constructor FOR MOperation -»
 	/**
@@ -200,7 +226,7 @@
 
 
 «REM»
-	Generates the destructor documentation.
+	Generates the documentation for a destructor operation.
 «ENDREM»
 «DEFINE Destructor FOR MOperation -»
 	/**
@@ -228,37 +254,18 @@
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
 «ENDREM»
-
-«REM» - - MClassifier - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
 «REM»
-	Every php file needs to have this license information.
 «ENDREM»
-«DEFINE GeneralPublicLicense FOR MClassifier -»
-/***************************************************************
- *  Copyright notice
- *
- *  (c) «getTimeStamp("yyyy") -» «IF navModel().getT3ExtensionManagerAuthor() != "" -»«navModel().getT3ExtensionManagerAuthor() -»«ELSE -»«getUserAccountName() -»«ENDIF»
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- **************************************************************/
+«DEFINE CopyrightYear FOR MClassifier -»
+«getTimeStamp("yyyy") -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE CopyrightAuthor FOR MClassifier -»
+«IF navModel().emHasTypo3ExtensionManagerUtilizableAuthor() -»«navModel().emGetTypo3ExtensionManagerAuthor() -»«ELSE -»«getUserAccountName() -»«ENDIF»
 «ENDDEFINE»

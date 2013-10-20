@@ -1,35 +1,39 @@
-«IMPORT gcore»
 «REM»
-	Handles everything about attriutes.
+	(c) GeneSEZ Research Group
+	All rights reserved.
 	
-	currently implemented:
-	- 
-	
-	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
-	@date	2011-03-21
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
 «ENDREM»
 
-«REM» use GeneSEZ profile access helper scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::profile::GeneSEZProfileAccessElement»
-
-«REM» use TYPO3 naming context and common naming scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
-«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::NamingContext»
-
-«REM» use TYPO3 MVC naming scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Naming»
-
-«REM» use TYPO3 MVC access helper scripts which overrides «ENDREM»
-«REM» common access helper scripts if script name is equal «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::util::AccessElement»
-«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«IMPORT gcore»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	Entry point for generating attributes + attribute accessors.
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+«ENDREM»
+
+«REM» use GeneSEZ common Standard profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezStandardAccessElement»
+
+
+«REM» TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::AccessElement»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
+
+
+«REM» use GeneSEZ common access element scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+
+«REM» use GeneSEZ common type mapping scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+
+
+«REM»
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
 «ENDREM»
 
 «REM»
@@ -37,67 +41,65 @@
 	Order: constants (static + final), static, non static
 «ENDREM»
 «DEFINE Declaration FOR MClassifier -»
-	«EXPAND Const FOREACH property.typeSelect(MAttribute).select( e | e.final && e.static && e.hasDefaultValue() ) -»
-	«EXPAND Declaration FOREACH property.typeSelect(MAttribute).select( e | e.static && !e.final && !e.derived ) -»
-	«EXPAND Declaration FOREACH property.typeSelect(MAttribute).select( e | !e.static && !e.final && !e.derived ) -»
+	«EXPAND Const FOREACH property.typeSelect(MAttribute).select( a | !a.derived && a.static && a.final && a.hasDefaultValue() ) -»
+	«EXPAND Declaration FOREACH property.typeSelect(MAttribute).select( a | !a.derived && a.static && !a.final ) -»
+	«EXPAND Declaration FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static && !a.final ) -»
 «ENDDEFINE»
 
 
 «REM»
-	Processes the derived attributes of a classifier.
+	Processes the derived attributes of a class.
 	Order: static, non static
 «ENDREM»
 «DEFINE Derived FOR MClass -»
-	«EXPAND Derived FOREACH property.typeSelect(MAttribute).select( e | e.static && e.derived ) -»
-	«EXPAND Derived FOREACH property.typeSelect(MAttribute).select( e | !e.static && e.derived ) -»
+	«EXPAND Derived FOREACH property.typeSelect(MAttribute).select( a | a.derived && a.static ) -»
+	«EXPAND Derived FOREACH property.typeSelect(MAttribute).select( a | a.derived && !a.static ) -»
 «ENDDEFINE»
 
 
 «REM»
-	Processes the accessors for attributes of a classifier.
+	Processes the accessor methods for attributes of a classifier.
 «ENDREM»
 «DEFINE Accessors FOR MClass -»
-«FOREACH property.typeSelect(MAttribute).select( e | !e.final && !e.derived ) AS attribute -»
-	«EXPAND Getter FOR attribute -»
-	«EXPAND Setter FOR attribute -»
-	«EXPAND InsertIn FOR attribute -»
-	«EXPAND RemoveFrom FOR attribute -»
+«FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.final ) AS attribute -»
+	«EXPAND GetAccessor FOR attribute -»
+	«EXPAND SetAccessor FOR attribute -»
+	«EXPAND AddAccessor FOR attribute -»
+	«EXPAND RemoveAccessor FOR attribute -»
 «ENDFOREACH -»
 «ENDDEFINE»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
 «ENDREM»
 
 «REM»
-	Generates an attribute declaration as a class constant.
+	Generates the constant declaration of an attribute.
 «ENDREM»
 «DEFINE Const FOR MAttribute -»
 	«EXPAND Comment::Attribute -»
-	const «name() -»«EXPAND DefaultValue -»;
+	const «asGeneralName() -»«EXPAND DefaultValue -»;
 	
 «ENDDEFINE»
 
 
 «REM»
-	Generates an attribute declaration.
+	Generates the declaration of an attribute.
 «ENDREM»
 «DEFINE Declaration FOR MAttribute -»
 	«EXPAND Comment::Attribute -»
-	«EXPAND Modifier -» $«name() -»«EXPAND DefaultValue -»;
+	«EXPAND Modifier -» $«asGeneralName() -»«EXPAND DefaultValue -»;
 	
 «ENDDEFINE»
 
 
 «REM»
-	Generates the accessor method for an derived attribute.
+	Generates the get accessor method for an derived attribute.
 «ENDREM»
 «DEFINE Derived FOR MAttribute -»
-	«EXPAND Comment::Getter -»
-	«EXPAND ModifierAccessor -» function «asGetterName() -»() {
+	«EXPAND Comment::GetAccessor -»
+	«EXPAND ModifierAccessor -» function «asGetAccessorName() -»() {
 		«EXPAND OwnCodeImplementation("php.derived.attribute.implementation." + xmiGuid) -»
 	}
 	
@@ -105,13 +107,13 @@
 
 
 «REM»
-	Generates the getter method for an attribute.
+	Generates the get accessor method for an attribute.
 «ENDREM»
-«DEFINE Getter FOR MAttribute -»
-«IF !prHasAccessorGetter("false") -»
-	«EXPAND Comment::Getter -»
-	«EXPAND ModifierAccessor -» function «asGetterName() -»() {
-		return $this->«name() -»;
+«DEFINE GetAccessor FOR MAttribute -»
+«IF !emHasAccessorGetter("false") -»
+	«EXPAND Comment::GetAccessor -»
+	«EXPAND ModifierAccessor -» function «asGetAccessorName() -»() {
+		return $this->«asGeneralName() -»;
 	}
 	
 «ENDIF -»
@@ -119,13 +121,13 @@
 
 
 «REM»
-	Generates the setter method for an attribute.
+	Generates the set accessor method for an attribute.
 «ENDREM»
-«DEFINE Setter FOR MAttribute -»
-«IF !prHasAccessorSetter("false") && !prHasDiSetter("true") -»
-	«EXPAND Comment::Setter -»
-	«EXPAND ModifierAccessor -» function «asSetterName() -»(«EXPAND TypeHintSetter -»$«name() -») {
-		$this->«name() -» = $«name() -»;
+«DEFINE SetAccessor FOR MAttribute -»
+«IF !emHasAccessorSetter("false") -»
+	«EXPAND Comment::SetAccessor -»
+	«EXPAND ModifierAccessor -» function «asSetAccessorName() -»(«EXPAND TypeHintSetAccessor -»$«asGeneralName() -») {
+		$this->«asGeneralName() -» = $«asGeneralName() -»;
 	}
 
 «ENDIF -»
@@ -133,27 +135,13 @@
 
 
 «REM»
-	Generates the insert in method for an attribute with a collection type.
+	Generates the add accessor method for an attribute.
 «ENDREM»
-«DEFINE InsertIn FOR MAttribute -»
-«IF multiplicity.isMultiValued() -»
-	«EXPAND Comment::InsertIn -»
-	«EXPAND ModifierAccessor -» function «asInsertInName() -»(«EXPAND TypeHintInsertInRemoveFrom -»$toAdd) {
-		$this->«name() -»->attach($toAdd);
-	}
-	
-«ENDIF -»
-«ENDDEFINE»
-
-
-«REM»
-	Generates the remove from method for an attribute with a collection type.
-«ENDREM»
-«DEFINE RemoveFrom FOR MAttribute -»
-«IF multiplicity.isMultiValued() -»
-	«EXPAND Comment::RemoveFrom -»
-	«EXPAND ModifierAccessor -» function «asRemoveFromName() -»(«EXPAND TypeHintInsertInRemoveFrom -»$toRemove) {
-		$this->«name() -»->detach($toRemove);
+«DEFINE AddAccessor FOR MAttribute -»
+«IF multiplicity.isMultiValued() && !emHasAccessorAdd("false") -»
+	«EXPAND Comment::AddAccessor -»
+	«EXPAND ModifierAccessor -» function «asAddAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toAdd) {
+		$this->«asGeneralName() -»->attach($toAdd);
 	}
 	
 «ENDIF -»
@@ -161,7 +149,21 @@
 
 
 «REM»
-	Processes the modifiers of an attribute.
+	Generates the remove accessor method for an attribute.
+«ENDREM»
+«DEFINE RemoveAccessor FOR MAttribute -»
+«IF multiplicity.isMultiValued() && ! emHasAccessorRemove("false") -»
+	«EXPAND Comment::RemoveAccessor -»
+	«EXPAND ModifierAccessor -» function «asRemoveAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toRemove) {
+		$this->«asGeneralName() -»->detach($toRemove);
+	}
+	
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the modifiers of an attribute.
 «ENDREM»
 «DEFINE Modifier FOR MAttribute -»
 	«visibility -»«IF static -» static«ENDIF -»
@@ -169,7 +171,7 @@
 
 
 «REM»
-	Processes the modifiers of an attribute accessor method.
+	Generates the modifiers of an attribute accessor method.
 «ENDREM»
 «DEFINE ModifierAccessor FOR MAttribute -»
 	public«IF static -» static«ENDIF -»
@@ -177,27 +179,27 @@
 
 
 «REM»
-	Generates type hints for setter methods.
+	Generates type hint for set accessor methods.
 «ENDREM»
-«DEFINE TypeHintSetter FOR MAttribute -»
+«DEFINE TypeHintSetAccessor FOR MAttribute -»
 «IF multiplicity.isSingleValued() -»
-«IF generatePHPTypeHint(type) -»«type.name(getInternalNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
+«IF generatePhpTypeHint( type.asGeneralName() ) -»«type.asGeneralName() -» «ENDIF -»
 «ELSE -»
-«IF classifier.isModelPackageElement() && !prHasPrimitiveStereotype() -»«mapCollection( typeMappingContextModel() ) -» «ELSE -»«mapCollection() -» «ENDIF -»
+«IF classifier.isModelPackageElement() && !emHasPrimitiveStereotype() -»«mapCollection( collectionMappingContextModel() ) -» «ELSE -»«mapCollection() -» «ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
-	Generates type hints for insert in and remove from methods.
+	Generates type hint for add and remove accessor methods.
 «ENDREM»
-«DEFINE TypeHintInsertInRemoveFrom FOR MAttribute -»
-«IF generatePHPTypeHint(type) -»«type.name(getInternalNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
+«DEFINE TypeHintAddRemoveAccessor FOR MAttribute -»
+«IF generatePhpTypeHint( type.asGeneralName() ) -»«type.asGeneralName() -» «ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
-	Processes the default value of an attribute.
+	Generates the default value of an attribute.
 «ENDREM»
 «DEFINE DefaultValue FOR MAttribute -»
 «IF hasDefaultValue() -» = «defaultvalue -»«ENDIF -»
@@ -206,12 +208,10 @@
 
 «REM»
 	Generates the protected region of an operation.
-	
-	@param	id	protected region id
 «ENDREM»
 «DEFINE OwnCodeImplementation(String id) FOR MAttribute -»
 		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: implementation of method «asGetterName() -» for class «classifier.name()»
-		throw new Exception('The implementation of the method «asGetterName() -» for class «classifier.name() -» is missing !');
+		// TODO: implementation of method «asGetAccessorName() -» for class «classifier.asShortGeneralName()»
+		throw new Exception('The implementation of the method «asGetAccessorName() -» for class «classifier.asShortGeneralName() -» is missing !');
 		«ENDPROTECT»
 «ENDDEFINE»

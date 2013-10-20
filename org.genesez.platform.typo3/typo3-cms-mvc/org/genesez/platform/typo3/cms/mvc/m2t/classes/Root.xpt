@@ -14,10 +14,18 @@
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
 «ENDREM»
 
-«IMPORT gcore»
-
 «REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
 «EXTENSION org::genesez::platform::typo3::cms::mvc::util::AccessElement»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid file system convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::FileSystemConvention»
+
+
+«REM» use GeneSEZ common conversion scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+
+«REM» use GeneSEZ common logging scripts «ENDREM»
+«EXTENSION org::genesez::util::logging::Logging»
 
 
 «REM»
@@ -25,10 +33,12 @@
 «ENDREM»
 
 «REM»
-	Processes the contents of a classifier.
+	Processes the generation of a class.
 «ENDREM»
-«DEFINE Root FOR MClassifier -»
-«EXPAND Types::Root -»
+«DEFINE Root FOR MClass -»
+«FILE filePath( fileNamePhp() ) -»
+«EXPAND Class::Root -»
+«ENDFILE -»
 «ENDDEFINE»
 
 
@@ -40,8 +50,34 @@
 «ENDREM»
 «DEFINE Root FOR MInterface -»
 «IF !isPlugin() && !isModule() -»
-	«EXPAND Types::Root -»
+«FILE filePath( fileNamePhp() ) -»
+«EXPAND Interface::Root -»
+«ENDFILE -»
 «ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the generation of an enumeration.
+«ENDREM»
+«DEFINE Root FOR MEnumeration -»
+	«logFatal("GeneSEZ: Generation of 'MEnumeration's is currently not supported.")»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the generation of a data type.
+«ENDREM»
+«DEFINE Root FOR MDataType -»
+	«logFatal("GeneSEZ: Generation of 'MDataType's is currently not supported.")»
+«ENDDEFINE»
+
+
+«REM»
+	Because the fact, 'MClassifier' is abstract, an object of type MClassifier cannot exist!
+«ENDREM»
+«DEFINE Root FOR MClassifier -»
+	«logFatal("GeneSEZ: Generation of 'MClassifier's is currently not supported.")»
 «ENDDEFINE»
 
 

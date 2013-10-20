@@ -1,100 +1,103 @@
-«IMPORT gcore»
 «REM»
-	Handles the implementation of associations. 
+	(c) GeneSEZ Research Group
+	All rights reserved.
 	
-	currently implemented:
-	- 
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+
+«REM»
+	Entry point for generating association roles + association role accessors.
 	
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
-	@date	2011-03-21
 «ENDREM»
 
-«REM» use GeneSEZ profile access helper scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::profile::GeneSEZProfileAccessElement»
+«REM» use GeneSEZ common Standard profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezStandardAccessElement»
 
-«REM» use TYPO3 naming context and common naming scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
-«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::NamingContext»
 
-«REM» use TYPO3 MVC naming scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Naming»
+«REM» TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::AccessElement»
 
-«REM» use TYPO3 MVC access helper scripts which overrides «ENDREM»
-«REM» common access helper scripts if script name is equal «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::util::AccessElement»
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
+
+
+«REM» use GeneSEZ common access element scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::AccessElement»
 
+«REM» use GeneSEZ common type mapping scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
 «ENDREM»
 
 «REM»
-	Processes the declaration of association role.
+	Processes the association roles of classifier.
 «ENDREM»
 «DEFINE Declaration FOR MClassifier -»
-	«EXPAND Declaration FOREACH owningInitializableAssociationRoles() -»
+	«EXPAND Declaration FOREACH property.typeSelect(MAssociationRole).select( ar | ar.derived ) -»
 «ENDDEFINE»
 
 
 «REM»
-	Processes the derived attributes of a class.
-	Order: static, non static
+	Processes the derived association roles of a class.
 «ENDREM»
 «DEFINE Derived FOR MClass -»
-	«EXPAND Derived FOREACH property.typeSelect(MAssociationRole).select( e | e.derived ) -»
+	«EXPAND Derived FOREACH property.typeSelect(MAssociationRole).select( ar | ar.derived ) -»
 «ENDDEFINE»
 
 
 «REM»
-	Processes the implementation of accessor methods for an association role.
+	Processes the implementation of the accessor methods for an association role.
 «ENDREM»
 «DEFINE Accessors FOR MClass -»
-	«FOREACH owningInitializableAssociationRoles() AS assocationRole -»
-		«EXPAND GetterImplemementation FOR assocationRole -»
-		«EXPAND SetterImplemementation FOR assocationRole -»
-		«EXPAND InsertInImplemementation FOR assocationRole -»
-		«EXPAND RemoveFromImplemementation FOR assocationRole -»
+	«FOREACH property.typeSelect(MAssociationRole).select( ar | ar.derived ) AS assocationRole -»
+		«EXPAND GetAccessorImplemementation FOR assocationRole -»
+		«EXPAND SetAccessorImplemementation FOR assocationRole -»
+		«EXPAND AddAccessorImplemementation FOR assocationRole -»
+		«EXPAND RemoveAccessorImplemementation FOR assocationRole -»
 	«ENDFOREACH -»
 «ENDDEFINE»
 
 
 «REM»
-	Processes the declaration of accessor methods for an association role.
+	Processes the declaration of the accessor methods for an association role.
 «ENDREM»
 «DEFINE Accessors FOR MInterface -»
-	«FOREACH owningInitializableAssociationRoles() AS assocationRole -»
-		«EXPAND GetterDeclaration FOR assocationRole -»
-		«EXPAND SetterDeclaration FOR assocationRole -»
-		«EXPAND InsertInDeclaration FOR assocationRole -»
-		«EXPAND RemoveFromDeclaration FOR assocationRole -»
+	«FOREACH property.typeSelect(MAssociationRole).select( ar | ar.derived ) AS assocationRole -»
+		«EXPAND GetAccessorDeclaration FOR assocationRole -»
+		«EXPAND SetAccessorDeclaration FOR assocationRole -»
+		«EXPAND AddAccessorDeclaration FOR assocationRole -»
+		«EXPAND RemoveAccessorDeclaration FOR assocationRole -»
 	«ENDFOREACH -»
 «ENDDEFINE»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
 «ENDREM»
 
 «REM»
-	Generates the declaration of an association attribute.
+	Generates the declaration of an association role.
 «ENDREM»
 «DEFINE Declaration FOR MAssociationRole -»
 	«EXPAND Comment::Association -»
-	«EXPAND Modifier -» $«name() -»;
+	«EXPAND Modifier -» $«asGeneralName() -»;
 	
 «ENDDEFINE»
 
 
 «REM»
-	Generates the accessor method for an derived association attribute.
+	Generates the get accessor method for an derived association role.
 «ENDREM»
 «DEFINE Derived FOR MAssociationRole -»
-	«EXPAND Comment::Getter -»
-	«EXPAND ModifierAccessor -» function «asGetterName() -»() {
+	«EXPAND Comment::GetAccessor -»
+	«EXPAND ModifierAccessor -» function «asGetAccessorName() -»() {
 		«EXPAND OwnCodeImplementation("php.derived.association.implementation." + xmiGuid) -»
 	}
 	
@@ -102,69 +105,25 @@
 
 
 «REM»
-	Generates the declaration of a getter method for an association attribute.
+	Generates the declaration of a get accessor method for an association role.
 «ENDREM»
-«DEFINE GetterDeclaration FOR MAssociationRole -»
-	«EXPAND Comment::Getter -»
-	«EXPAND ModifierAccessor -» function «asGetterName() -»();
-	
-«ENDDEFINE»
-
-
-«REM»
-	Generates the implementation of a getter method for an association attribute.
-«ENDREM»
-«DEFINE GetterImplemementation FOR MAssociationRole -»
-	«EXPAND Comment::Getter -»
-	«EXPAND ModifierAccessor -» function «asGetterName() -»() {
-		return $this->«name() -»;
-	}
-	
-«ENDDEFINE»
-
-
-«REM»
-	Generates the declaration of a setter method for an association attribute.
-«ENDREM»
-«DEFINE SetterDeclaration FOR MAssociationRole -»
-	«EXPAND Comment::Setter -»
-	«EXPAND ModifierAccessor -» function «asSetterName() -»(«EXPAND TypeHintSetter -»$«name() -»);
-	
-«ENDDEFINE»
-
-
-«REM»
-	Generates the implementation of a setter method for an association attribute.
-«ENDREM»
-«DEFINE SetterImplemementation FOR MAssociationRole -»
-	«EXPAND Comment::Setter -»
-	«EXPAND ModifierAccessor -» function «asSetterName() -»(«EXPAND TypeHintSetter -»$«name() -») {
-		$this->«name() -» = $«name() -»;
-	}
-	
-«ENDDEFINE»
-
-
-«REM»
-	Generates the declaration of the 'insert in' method for an association attribute.
-«ENDREM»
-«DEFINE InsertInDeclaration FOR MAssociationRole -»
-«IF multiplicity.isMultiValued() -»
-	«EXPAND Comment::InsertIn -»
-	«EXPAND ModifierAccessor -» function «asInsertInName() -»(«EXPAND TypeHintInsertInRemoveFrom -»$toAdd);
+«DEFINE GetAccessorDeclaration FOR MAssociationRole -»
+«IF !emHasAccessorGetter("false") -»
+	«EXPAND Comment::GetAccessor -»
+	«EXPAND ModifierAccessor -» function «asGetAccessorName() -»();
 	
 «ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
-	Generates the 'insert in' method for an association attribute with a collection type.
+	Generates the implementation of a get accessor method for an association role.
 «ENDREM»
-«DEFINE InsertInImplemementation FOR MAssociationRole -»
-«IF multiplicity.isMultiValued() -»
-	«EXPAND Comment::InsertIn -»
-	«EXPAND ModifierAccessor -» function «asInsertInName() -»(«EXPAND TypeHintInsertInRemoveFrom -»$toAdd) {
-		$this->«name() -»->attach($toAdd);
+«DEFINE GetAccessorImplemementation FOR MAssociationRole -»
+«IF !emHasAccessorGetter("false") -»
+	«EXPAND Comment::GetAccessor -»
+	«EXPAND ModifierAccessor -» function «asGetAccessorName() -»() {
+		return $this->«asGeneralName() -»;
 	}
 	
 «ENDIF -»
@@ -172,25 +131,25 @@
 
 
 «REM»
-	Generates the declaration of the 'remove from' method for an association attribute.
+	Generates the declaration of a set accessor method for an association role.
 «ENDREM»
-«DEFINE RemoveFromDeclaration FOR MAssociationRole -»
-«IF multiplicity.isMultiValued() -»
-	«EXPAND Comment::RemoveFrom -»
-	«EXPAND ModifierAccessor -» function «asRemoveFromName() -»(«EXPAND TypeHintInsertInRemoveFrom -»$toRemove);
+«DEFINE SetAccessorDeclaration FOR MAssociationRole -»
+«IF !emHasAccessorSetter("false") -»
+	«EXPAND Comment::SetAccessor -»
+	«EXPAND ModifierAccessor -» function «asSetAccessorName() -»(«EXPAND TypeHintSetAccessor -»$«asGeneralName() -»);
 	
 «ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
-	Generates the 'remove from' method for an association attribute with a collection type.
+	Generates the implementation of a set accessor method for an association role.
 «ENDREM»
-«DEFINE RemoveFromImplemementation FOR MAssociationRole -»
-«IF multiplicity.isMultiValued() -»
-	«EXPAND Comment::RemoveFrom -»
-	«EXPAND ModifierAccessor -» function «asRemoveFromName() -»(«EXPAND TypeHintInsertInRemoveFrom -»$toRemove) {
-		$this->«name() -»->detach($toRemove);
+«DEFINE SetAccessorImplemementation FOR MAssociationRole -»
+«IF !emHasAccessorSetter("false") -»
+	«EXPAND Comment::SetAccessor -»
+	«EXPAND ModifierAccessor -» function «asSetAccessorName() -»(«EXPAND TypeHintSetAccessor -»$«asGeneralName() -») {
+		$this->«asGeneralName() -» = $«asGeneralName() -»;
 	}
 	
 «ENDIF -»
@@ -198,7 +157,59 @@
 
 
 «REM»
-	Processes the modifiers of an association role.
+	Generates the declaration of the add accessor method for an association role.
+«ENDREM»
+«DEFINE AddAccessorDeclaration FOR MAssociationRole -»
+«IF multiplicity.isMultiValued() && !emHasAccessorAdd("false") -»
+	«EXPAND Comment::AddAccessor -»
+	«EXPAND ModifierAccessor -» function «asAddAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toAdd);
+	
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the implementation of the add accessor method for an association role.
+«ENDREM»
+«DEFINE AddAccessorImplemementation FOR MAssociationRole -»
+«IF multiplicity.isMultiValued() && !emHasAccessorAdd("false") -»
+	«EXPAND Comment::AddAccessor -»
+	«EXPAND ModifierAccessor -» function «asAddAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toAdd) {
+		$this->«asGeneralName() -»->attach($toAdd);
+	}
+	
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the declaration of the remove accessor method for an association role.
+«ENDREM»
+«DEFINE RemoveAccessorDeclaration FOR MAssociationRole -»
+«IF multiplicity.isMultiValued() && ! emHasAccessorRemove("false") -»
+	«EXPAND Comment::RemoveAccessor -»
+	«EXPAND ModifierAccessor -» function «asRemoveAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toRemove);
+	
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the implementation of the remove accessor method for an association role.
+«ENDREM»
+«DEFINE RemoveAccessorImplemementation FOR MAssociationRole -»
+«IF multiplicity.isMultiValued() && ! emHasAccessorRemove("false") -»
+	«EXPAND Comment::RemoveAccessor -»
+	«EXPAND ModifierAccessor -» function «asRemoveAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toRemove) {
+		$this->«asGeneralName() -»->detach($toRemove);
+	}
+	
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the modifiers of an association role.
 «ENDREM»
 «DEFINE Modifier FOR MAssociationRole -»
 	«visibility -»
@@ -206,7 +217,7 @@
 
 
 «REM»
-	Processes the modifiers of an association role accessor method.
+	Generates the modifiers of an association role accessor method.
 «ENDREM»
 «DEFINE ModifierAccessor FOR MAssociationRole -»
 	public«"" -»
@@ -214,33 +225,31 @@
 
 
 «REM»
-	Generates type hints for setter methods.
+	Generates type hint for set accessor methods.
 «ENDREM»
-«DEFINE TypeHintSetter FOR MAssociationRole -»
+«DEFINE TypeHintSetAccessor FOR MAssociationRole -»
 «IF multiplicity.isSingleValued() -»
-«IF generatePHPTypeHint(type) -»«type.name(getInternalNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
+«IF generatePhpTypeHint( type.asGeneralName() ) -»«type.asGeneralName() -» «ENDIF -»
 «ELSE -»
-«IF classifier.isModelPackageElement() && !prHasPrimitiveStereotype() -»«mapCollection( typeMappingContextModel() ) -» «ELSE -»«mapCollection() -» «ENDIF -»
+«IF classifier.isModelPackageElement() && !emHasPrimitiveStereotype() -»«mapCollection( collectionMappingContextModel() ) -» «ELSE -»«mapCollection() -» «ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
-	Generates type hints for insert in and remove from methods.
+	Generates type hint for add and remove accessor methods.
 «ENDREM»
-«DEFINE TypeHintInsertInRemoveFrom FOR MAssociationRole -»
-«IF generatePHPTypeHint(type) -»«type.name(getInternalNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
+«DEFINE TypeHintAddRemoveAccessor FOR MAssociationRole -»
+«IF generatePhpTypeHint( type.asGeneralName() ) -»«type.asGeneralName() -» «ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
 	Generates the protected region of an operation.
-	
-	@param	id	protected region id
 «ENDREM»
 «DEFINE OwnCodeImplementation(String id) FOR MAssociationRole -»
 		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: implementation of method «asGetterName() -» for class «classifier.name()»
-		throw new Exception('The implementation of the method «asGetterName() -» for class «classifier.name() -» is missing !');
+		// TODO: implementation of method «asGetAccessorName() -» for class «classifier.asShortGeneralName()»
+		throw new Exception('The implementation of the method «asGetAccessorName() -» for class «classifier.asShortGeneralName() -» is missing !');
 		«ENDPROTECT»
 «ENDDEFINE»

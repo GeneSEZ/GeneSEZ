@@ -1,39 +1,46 @@
-«IMPORT gcore»
 «REM»
-	Handles everything about Operations.
-	Performs the generation of operations, constructors, destructors.
+	(c) GeneSEZ Research Group
+	All rights reserved.
 	
-	currently implemented:
-	- 
-	
-	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
-	@date	2011-03-21
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
 «ENDREM»
 
-«REM» use TYPO3 naming context and common naming scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
-«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::NamingContext»
-
-«REM» use TYPO3 MVC access helper scripts which overrides «ENDREM»
-«REM» php access helper scripts which overrides «ENDREM»
-«REM» common access helper scripts if script name is equal «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::util::AccessElement»
-«EXTENSION org::genesez::platform::php::util::AccessHelper»
-«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«IMPORT gcore»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	Entry point for generating classes.
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+«ENDREM»
+
+«REM» TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::AccessElement»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
+
+
+«REM» use GeneSEZ PHP access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::php::util::AccessHelper»
+
+
+«REM» use GeneSEZ common access element scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+
+«REM» use GeneSEZ common type mapping scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+
+
+«REM»
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
 «ENDREM»
 
 «REM»
 	Processes all constructors.
 «ENDREM»
 «DEFINE Constructor FOR MClassifier -»
-	«EXPAND Constructor FOREACH uniqueOperations().select( e | e.isConstructor() ) -»
+	«EXPAND Constructor FOREACH uniqueOperations().select( o | o.isConstructor() ) -»
 «ENDDEFINE»
 
 
@@ -41,7 +48,7 @@
 	Processes all destructors.
 «ENDREM»
 «DEFINE Destructor FOR MClassifier -»
-	«EXPAND Destructor FOREACH uniqueOperations().select( e | e.isDestructor() ) -»
+	«EXPAND Destructor FOREACH uniqueOperations().select( o | o.isDestructor() ) -»
 «ENDDEFINE»
 
 
@@ -58,8 +65,8 @@
 	Order: realized operations from interfaces first
 «ENDREM»
 «DEFINE Declaration FOR MClassifier -»
-	«EXPAND Declaration FOREACH uniqueOperations().select( e | !e.isConstructor() && !e.isDestructor() && e.abstract && realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
-	«EXPAND Declaration FOREACH uniqueOperations().select( e | !e.isConstructor() && !e.isDestructor() && e.abstract && !realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
+	«EXPAND Declaration FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && o.abstract && realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
+	«EXPAND Declaration FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && o.abstract && !realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
 «ENDDEFINE»
 
 
@@ -68,15 +75,13 @@
 	Order: realized operations from interfaces first
 «ENDREM»
 «DEFINE Implementation FOR MClassifier -»
-	«EXPAND Implementation FOREACH uniqueOperations().select( e | !e.isConstructor() && !e.isDestructor() && !e.abstract && realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
-	«EXPAND Implementation FOREACH uniqueOperations().select( e | !e.isConstructor() && !e.isDestructor() && !e.abstract && !realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
+	«EXPAND Implementation FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && !o.abstract && realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
+	«EXPAND Implementation FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && !o.abstract && !realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
 «ENDDEFINE»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
 «ENDREM»
 
 «REM»
@@ -108,7 +113,7 @@
 «ENDREM»
 «DEFINE Declaration FOR MOperation -»
 	«EXPAND Comment::Operation -»
-	«EXPAND Modifier -» function «name() -»(«EXPAND Params -»);
+	«EXPAND Modifier -» function «asGeneralName() -»(«EXPAND Params -»);
 	
 «ENDDEFINE»
 
@@ -118,7 +123,7 @@
 «ENDREM»
 «DEFINE Implementation FOR MOperation -»
 	«EXPAND Comment::Operation -»
-	«EXPAND Modifier -» function «name() -»(«EXPAND Params -») {
+	«EXPAND Modifier -» function «asGeneralName() -»(«EXPAND Params -») {
 		«EXPAND OwnCodeImplementation("php.implementation." + xmiGuid) -»
 	}
 	
@@ -149,7 +154,7 @@
 «ENDREM»
 «DEFINE TypeHint FOR MParameter -»
 «IF multiplicity.isSingleValued() -»
-«IF generatePHPTypeHint(type) -»«type.name(getInternalNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
+«IF generatePhpTypeHint( type.asGeneralName() ) -»«type.asGeneralName() -» «ENDIF -»
 «ELSE -»«mapCollection() -» «ENDIF -»
 «ENDDEFINE»
 
@@ -158,7 +163,7 @@
 	Generates the parameter name.
 «ENDREM»
 «DEFINE Parameter FOR MParameter -»
-$«name() -»«EXPAND DefaultValue -»
+$«asGeneralName() -»«EXPAND DefaultValue -»
 «ENDDEFINE»
 
 
@@ -172,15 +177,13 @@ $«name() -»«EXPAND DefaultValue -»
 
 «REM»
 	Generates the protected region of an operation.
-	
-	@param	id	protected region id
 «ENDREM»
 «DEFINE OwnCodeImplementation(String id) FOR MOperation -»
 «IF isConstructor() -»
 		«EXPAND OwnCodeImplementationConstructor(id) -»
 «ELSEIF isDestructor() -»
 		«EXPAND OwnCodeImplementationDestructor(id) -»
-«ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/showAction") -»
+«REM»«ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/showAction") -»
 		«EXPAND OwnCodeImplementationControllerShowAction -»
 «ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/listAction") -»
 		«EXPAND OwnCodeImplementationControllerListAction -»
@@ -193,7 +196,7 @@ $«name() -»«EXPAND DefaultValue -»
 «ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/updateAction") -»
 		«EXPAND OwnCodeImplementationControllerUpdateAction -»
 «ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/deleteAction") -»
-		«EXPAND OwnCodeImplementationControllerDeleteAction -»
+		«EXPAND OwnCodeImplementationControllerDeleteAction -»«ENDREM»
 «ELSE -»
 		«EXPAND OwnCodeImplementationOperation(id) -»
 «ENDIF -»
@@ -202,20 +205,28 @@ $«name() -»«EXPAND DefaultValue -»
 
 «DEFINE OwnCodeImplementationConstructor(String id) FOR MOperation -»
 		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: implementation of destructor for class «classifier.name()»
-		throw new Exception('The implementation of the destructor for class «classifier.name() -» is missing !');
+		// TODO: implementation of destructor for class «classifier.asShortGeneralName()»
+		throw new Exception('The implementation of the destructor for class «classifier.asShortGeneralName() -» is missing !');
 		«ENDPROTECT»
 «ENDDEFINE»
 
 
 «DEFINE OwnCodeImplementationDestructor(String id) FOR MOperation -»
 		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: implementation of destructor for class «classifier.name()»
-		throw new Exception('The implementation of the destructor for class «classifier.name() -» is missing !');
+		// TODO: implementation of destructor for class «classifier.asShortGeneralName()»
+		throw new Exception('The implementation of the destructor for class «classifier.asShortGeneralName() -» is missing !');
 		«ENDPROTECT»
 «ENDDEFINE»
 
 
+«DEFINE OwnCodeImplementationOperation(String id) FOR MOperation -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: implementation of method «asGeneralName() -» for class «classifier.asShortGeneralName()»
+		throw new Exception('The implementation of the method «asGeneralName() -» for class «classifier.asShortGeneralName() -» is missing !');
+		«ENDPROTECT»
+«ENDDEFINE»
+
+«REM»
 «DEFINE OwnCodeImplementationControllerShowAction FOR MOperation -»
 		$this->view->assign('«parameter.first().name() -»', $«parameter.first().name() -»);
 «ENDDEFINE»
@@ -256,11 +267,4 @@ $«name() -»«EXPAND DefaultValue -»
 		$this->flashMessageContainer->add('Your existing domain object was removed.');
 		$this->redirect('list');
 «ENDDEFINE»
-
-
-«DEFINE OwnCodeImplementationOperation(String id) FOR MOperation -»
-		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: implementation of method «name -» for class «classifier.name()»
-		throw new Exception('The implementation of the method «name() -» for class «classifier.name() -» is missing !');
-		«ENDPROTECT»
-«ENDDEFINE»
+«ENDREM»
