@@ -14,14 +14,14 @@
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
 «ENDREM»
 
-«REM» use TYPO3 MVC convention scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3::cms::mvc::convention::Convention»
+«REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::AccessElement»
 
-«REM» use TYPO3 MVC conversion scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Conversion»
+«REM» use TYPO3 CMS specific Extbase + Fluid file system convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::FileSystemConvention»
 
-«REM» use TYPO3 MVC access helper scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::util::AccessElement»
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
 
 
 «REM»
@@ -32,11 +32,11 @@
 	Processes the generation of "constants.txt".
 «ENDREM»
 «DEFINE Root FOR MModel -»
-«FILE extTypoScriptConstantsTSFileNamePath() -»
-«LET fullQualifiedExtensionNameToLowerCase() AS extensionName -»
+«FILE filePathTypoScriptConstantsTs() -»
 «LET extensionKey() AS extensionKey -»
-«EXPAND PluginConfiguration(extensionKey, extensionName) -»
-«EXPAND ModuleConfiguration(extensionKey, extensionName) -»
+«LET extensionPrefix() AS extensionPrefix -»
+«EXPAND PluginConfiguration(extensionKey, extensionPrefix) -»
+«EXPAND ModuleConfiguration(extensionKey, extensionPrefix) -»
 «EXPAND OwnCodeDeclaration("constants.txt.own.code.declaration." + xmiGuid) -»
 «ENDLET -»
 «ENDLET -»
@@ -50,12 +50,11 @@
 
 «REM»
 «ENDREM»
-«DEFINE PluginConfiguration(String extensionKey, String extensionName) FOR MModel -»
+«DEFINE PluginConfiguration(String extensionKey, String extensionPrefix) FOR MModel -»
 «IF !allPlugins().isEmpty -»
-plugin.«extensionName -» {
-	«EXPAND PluginFeatures(extensionName) -»
-	«EXPAND PluginPersistence(extensionName) -»
-	«EXPAND PluginView(extensionKey, extensionName) -»
+plugin.«extensionPrefix -» {
+	«EXPAND PluginPersistence(extensionPrefix) -»
+	«EXPAND PluginView(extensionKey, extensionPrefix) -»
 	«EXPAND OwnPluginCodeDeclaration("constants.txt.own.plugin.code.declaration." + xmiGuid) -»
 }
 
@@ -65,19 +64,9 @@ plugin.«extensionName -» {
 
 «REM»
 «ENDREM»
-«DEFINE PluginFeatures(String extensionName) FOR MModel -»
-	features {
-		# cat=plugin.«extensionName -»//a; type=boolean; label=Use rewritten property mapper 
-		rewrittenPropertyMapper = 0
-	}
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE PluginPersistence(String extensionName) FOR MModel -»
+«DEFINE PluginPersistence(String extensionPrefix) FOR MModel -»
 	persistence {
-		# cat=plugin.«extensionName -»//a; type=int+; label=Default storage PID
+		# cat=plugin.«extensionPrefix -»//a; type=string; label=Default storage PID
 		storagePid = 
 	}
 «ENDDEFINE»
@@ -85,14 +74,14 @@ plugin.«extensionName -» {
 
 «REM»
 «ENDREM»
-«DEFINE PluginView(String extensionKey, String extensionName) FOR MModel -»
+«DEFINE PluginView(String extensionKey, String extensionPrefix) FOR MModel -»
 	view {
-		# cat=plugin.«extensionName -»/file; type=string; label=Path to template root (FE)
-		templateRootPath = EXT:«extensionKey -»/«resourcesPrivateTemplatesPath()»/
-		# cat=plugin.«extensionName -»/file; type=string; label=Path to template partials (FE)
-		partialRootPath = EXT:«extensionKey -»/«resourcesPrivatePartialsPath()»/
-		# cat=plugin.«extensionName -»/file; type=string; label=Path to template layouts (FE)
-		layoutRootPath = EXT:«extensionKey -»/«resourcesPrivateLayoutsPath()»/
+		# cat=plugin.«extensionPrefix -»/file; type=string; label=Path to template root (FE)
+		templateRootPath = EXT:«extensionKey -»/«dirPathResourcesPrivateTemplates() -»/
+		# cat=plugin.«extensionPrefix -»/file; type=string; label=Path to template partials (FE)
+		partialRootPath = EXT:«extensionKey -»/«dirPathResourcesPrivatePartials() -»/
+		# cat=plugin.«extensionPrefix -»/file; type=string; label=Path to template layouts (FE)
+		layoutRootPath = EXT:«extensionKey -»/«dirPathResourcesPrivateLayouts() -»/
 	}
 «ENDDEFINE»
 
@@ -109,11 +98,11 @@ plugin.«extensionName -» {
 
 «REM»
 «ENDREM»
-«DEFINE ModuleConfiguration(String extensionKey, String extensionName) FOR MModel -»
+«DEFINE ModuleConfiguration(String extensionKey, String extensionPrefix) FOR MModel -»
 «IF !allModules().isEmpty -»
-module.«extensionName -» {
-	«EXPAND ModulePersistence(extensionName) -»
-	«EXPAND ModuleView(extensionKey, extensionName) -»
+module.«extensionPrefix -» {
+	«EXPAND ModulePersistence(extensionPrefix) -»
+	«EXPAND ModuleView(extensionKey, extensionPrefix) -»
 	«EXPAND OwnPluginCodeDeclaration("constants.txt.own.module.code.declaration." + xmiGuid) -»
 }
 
@@ -123,9 +112,9 @@ module.«extensionName -» {
 
 «REM»
 «ENDREM»
-«DEFINE ModulePersistence(String extensionName) FOR MModel -»
+«DEFINE ModulePersistence(String extensionPrefix) FOR MModel -»
 	persistence {
-		# cat=module.«extensionName -»//a; type=int+; label=Default storage PID
+		# cat=module.«extensionPrefix -»//a; type=string; label=Default storage PID
 		storagePid = 
 	}
 «ENDDEFINE»
@@ -136,11 +125,11 @@ module.«extensionName -» {
 «DEFINE ModuleView(String extensionKey, String extensionName) FOR MModel -»
 	view {
 		# cat=module.«extensionName -»/file; type=string; label=Path to template root (BE)
-		templateRootPath = EXT:«extensionKey -»/«resourcesPrivateBackendTemplatesPath()»/
+		templateRootPath = EXT:«extensionKey -»/«dirPathResourcesPrivateBackendTemplates()»/
 		# cat=module.«extensionName -»/file; type=string; label=Path to template partials (BE)
-		partialRootPath = EXT:«extensionKey -»/«resourcesPrivateBackendPartialsPath()»/
+		partialRootPath = EXT:«extensionKey -»/«dirPathResourcesPrivateBackendPartials()»/
 		# cat=module.«extensionName -»/file; type=string; label=Path to template layouts (BE)
-		layoutRootPath = EXT:«extensionKey -»/«resourcesPrivateBackendLayoutsPath()»/
+		layoutRootPath = EXT:«extensionKey -»/«dirPathResourcesPrivateBackendLayouts()»/
 	}
 «ENDDEFINE»
 
