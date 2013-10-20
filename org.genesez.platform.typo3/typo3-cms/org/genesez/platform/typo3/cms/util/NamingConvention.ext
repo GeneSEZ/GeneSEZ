@@ -16,6 +16,104 @@
 extension org::genesez::platform::typo3::cms::profile::Typo3CmsProfile;
 
 
+// use TYPO3 MVC workflow global var scripts
+extension org::genesez::platform::typo3::cms::util::GlobalVar;
+
+
+// -- TYPO3 CMS extension key + vendor name + package name conventions --------------------------------------
+
+/**
+ * Getter of the extension key. 
+ * This script is only a wrapper for "globalVarExtensionKey()" defined in "GlobalVar.ext".
+ * E.g.: If the extension key is "blog_example" then this method returns the same extension key "blog_example".
+ *
+ * @return	The extension key.
+ */
+String extensionKey() :
+	globalVarExtensionKey();
+
+
+/**
+ * Getter of the extension key without underscores. 
+ * E.g.: Extension key "blog_example" would become "blogexample".
+ *
+ * @return	The extension key without underscores.
+ */
+String extensionKeyWithoutUnderscores() :
+	extensionKey().replaceAll("_", "");
+
+
+/**
+ * Getter of the extension vendor name. 
+ * This script is only a wrapper for "globalVarExtensionVendor()" defined in "GlobalVar.ext".
+ * E.g.: If the extension vendor name is "GeneSEZ" then this method returns the same extension vendor name "GeneSEZ".
+ *
+ * @return	The extension vendor name.
+ */
+String extensionVendorName() :
+	globalVarExtensionVendor();
+
+
+/**
+ * Getter of the extension package name.
+ * The package name corresponds to the extension key which means that underscores in the extension key 
+ * are removed and replaced by upper camel case.
+ * E.g.: Extension key "blog_example" would become "BlogExample" as package name.
+ *
+ * @return	The extension package name.
+ */
+String extensionPackageName() :
+	extensionPackageName( extensionKey() );
+
+
+/**
+ * Getter of the extension package name.
+ *
+ * @param	extensionKey	The extension key.
+ * @return	The extension package name.
+ */
+private cached String extensionPackageName(String extensionKey) :
+		JAVA org.genesez.platform.typo3.cms.convention.NamingConvention.extensionPackageName(java.lang.String);
+
+
+// -- TYPO3 CMS extension prefix conventions ----------------------------------------------------------------
+
+/**
+ * Getter of the extension prefix.
+ * Example for general extensions: If the extension key is "blog_example" then this method returns the prefix "tx_blogexample".
+ * Example for user specific extensions: If the extension key is "user_blog_example" then the method returns the prefix "user_blog_example".
+ *
+ * @return	The prefix to prepend to extensions.
+ */
+String extensionPrefix() :
+	isGeneralExtension()
+		? "tx_" + extensionKeyWithoutUnderscores()
+		: extensionKey();
+
+
+/**
+ * Getter of the extension prefix without underscores.
+ * Example for general extensions: If the extension key is "blog_example" then this method returns the prefix "txblogexample".
+ * Example for user specific extensions: If the extension key is "user_blog_example" then the method returns the prefix "userblogexample".
+ *
+ * @return	The prefix to prepend to extensions.
+ */
+String extensionPrefixWithoutUnderscores() :
+	// checks if the extension is a general or a user specific extension, 
+	// by determination of the extension key if it does start with prefix "user_"
+	isGeneralExtension()
+		? "tx" + extensionKeyWithoutUnderscores()
+		: extensionKeyWithoutUnderscores();
+
+
+/**
+ * Checks if the extension is a general or a user specific extension, 
+ * by determination of the extension key if it does not start with prefix "user_".
+ */
+private Boolean isGeneralExtension() :
+	!extensionKey().startsWith("user_");
+
+
 // -- TYPO3 CMS conventions ---------------------------------------------------------------------------------
 
 /**
@@ -67,7 +165,7 @@ String asTypo3LanguageKey(String language) :
  * @return	The TYPO3 CMS lock type.
  */
 String asTypo3LockType(String lockType) :
-	lockType.subString( 0, 1 );
+	lockType.subString(0, 1);
 
 
 /**
@@ -77,7 +175,7 @@ String asTypo3LockType(String lockType) :
  * @return	The TYPO3 CMS priority.
  */
 String asTypo3Priority(String priority) :
-	switch ( priority ) {
+	switch (priority) {
 		case prTypo3PriorityEmpty() :
 			""
 		default :
@@ -92,7 +190,7 @@ String asTypo3Priority(String priority) :
  * @return	The TYPO3 CMS state.
  */
 String asTypo3State(String state) :
-	switch ( state ) {
+	switch (state) {
 		case prTypo3StateExcludeFromUpdates() :
 			"excludeFromUpdates"
 		default :
@@ -118,17 +216,7 @@ String asTypo3MainModul(String mainModule) :
  */
 String asTypo3AccessRole(String accessRole) :
 	accessRole.toLowerCase();
-	
 
-/**
- * Formats a string value into a TYPO3 CMS TCx eval type value.
- *
- * @param	tcxEvalType	The TCx eval type to format.
- * @return	The TYPO3 CMS TCx eval type.
- */
-//String asTypo3TCxEvalType(String tcxEvalType) :
-//	tcxEvalType.toLowerCase();
-	
 
 /**
  * Formats a string value into a TYPO3 CMS associative array item.
@@ -145,7 +233,9 @@ String asTypo3AccessRole(String accessRole) :
  * @return	The TYPO3 CMS associative array item.
  */
 List[String] asTypo3AssociativeArrayItem(String item) :
-	item.contains( "=" )
-		? (	let kv = item.replaceFirst( "=", "=>" ).split( "=>" ) :
-				"'" + kv.get( 0 ).trim() + "' => " + kv.get( 1 ).trim() + ","
-		) : "";
+	item.contains("=")
+		? (	
+			let kv = item.replaceFirst("=", "=>").split("=>") :
+				"'" + kv.get(0).trim() + "' => " + kv.get(1).trim() + ","
+		) 
+		: "";
