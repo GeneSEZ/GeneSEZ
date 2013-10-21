@@ -12,7 +12,6 @@
 	Entry point for generating "locallang.xlf".
 	
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
-	@todo	Check which properties should be generated (all or only instance properties???)
 «ENDREM»
 
 «REM» use TYPO3 CMS profile scripts «ENDREM»
@@ -28,6 +27,9 @@
 «REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
 «EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
 
+
+«REM» use GeneSEZ common access element scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
 
 «REM» use GeneSEZ common date time helper scripts «ENDREM»
 «EXTENSION org::genesez::util::sysenv::DateTimeHelper»
@@ -102,7 +104,7 @@
 		<body>
 			«FOREACH allEntitiesAndValueObjects().sortBy( do | do.asLocalizationName() ) AS domainObject -»
 				«EXPAND ClassLocalization(languageKey) FOR domainObject -»
-				«EXPAND PropertyLocalization(languageKey) FOREACH domainObject.property.sortBy( p | p.asLocalizationName() ) -»
+				«EXPAND PropertyLocalization(languageKey) FOREACH domainObject.property.select( p | !p.isStatic() ).sortBy( p | p.asLocalizationName() ) -»
 				
 			«ENDFOREACH -»
 			«EXPAND OwnLocalizations(languageKey) -»
