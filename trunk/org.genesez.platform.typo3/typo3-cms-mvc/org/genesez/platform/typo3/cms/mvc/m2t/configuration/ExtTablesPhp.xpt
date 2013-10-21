@@ -51,7 +51,7 @@
 «EXPAND ModuleConfiguration -»
 «EXPAND TypoScriptInclusion -»
 «EXPAND DomainObjectConfiguration -»
-«EXPAND OwnCodeImplementation("ext_tables.php.own.code.implementation." + xmiGuid) -»
+«EXPAND OwnCode("ext_tables.php.own.code." + xmiGuid) -»
 
 ?>
 «ENDFILE -»
@@ -79,7 +79,7 @@ if (!defined ('TYPO3_MODE')) {
 «IF !allPlugins().isEmpty -»
 «EXPAND RegisterPlugin FOREACH allPlugins().sortBy( p | p.asTypo3PluginName() ) -»
 «ENDIF -»
-«EXPAND OwnPluginCodeImplementation("ext_tables.php.own.plugin.code.implementation." + xmiGuid) -»
+«EXPAND OwnPluginCode("ext_tables.php.own.plugin.code." + xmiGuid) -»
 
 «ENDDEFINE»
 
@@ -126,11 +126,11 @@ $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['«asPluginFl
 
 
 «REM»
-	generates a region for own plugin code implementations
+	Generates a region for own plugin code.
 «ENDREM»
-«DEFINE OwnPluginCodeImplementation(String id) FOR MModel -»
+«DEFINE OwnPluginCode(String id) FOR MModel -»
 «PROTECT CSTART '/* ' CEND ' */' ID (id)»
-// TODO: put your further plugin code implementations here
+// TODO: put your further plugin code here
 «ENDPROTECT»
 «ENDDEFINE»
 
@@ -142,7 +142,7 @@ if (TYPO3_MODE === 'BE') {
 «IF !allModules().isEmpty -»
 	«EXPAND RegisterModule FOREACH allModules().sortBy( m | m.asTypo3ModuleName() ) -»
 «ENDIF -»
-	«EXPAND OwnModuleCodeImplementation("ext_tables.php.own.module.code.implementation." + xmiGuid) -»
+	«EXPAND OwnModuleCode("ext_tables.php.own.module.code." + xmiGuid) -»
 }
 
 «ENDDEFINE»
@@ -164,7 +164,7 @@ if (TYPO3_MODE === 'BE') {
 			'access' => '«FOREACH emGetExtbaseModuleAccess() AS accessRole SEPARATOR ", " -»«accessRole.asTypo3AccessRole() -»«ENDFOREACH -»',
 			'icon' => 'EXT:' . $_EXTKEY . '/ext_icon.gif',
 			'labels' => 'LLL:EXT:' . $_EXTKEY . '/«filePathLocallangModuleXlf("") -»',
-			«EXPAND OwnModuleConfigurationCodeImplementation("ext_tables.php.own.module.configuration.code.implementation." + xmiGuid) -»
+			«EXPAND OwnModuleConfigurationCode("ext_tables.php.own.module.configuration.code." + xmiGuid) -»
 		)
 	);
 	
@@ -184,21 +184,21 @@ if (TYPO3_MODE === 'BE') {
 
 
 «REM»
-	generates a region for own module configuration code implementations
+	Generates a region for own module configuration code.
 «ENDREM»
-«DEFINE OwnModuleConfigurationCodeImplementation(String id) FOR MInterface -»
+«DEFINE OwnModuleConfigurationCode(String id) FOR MInterface -»
 			«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-			// TODO: put your further module configuration code implementations here
+			// TODO: put your further module configuration code here
 			«ENDPROTECT»
 «ENDDEFINE»
 
 
 «REM»
-	generates a region for own modules code implementations
+	Generates a region for own module code.
 «ENDREM»
-«DEFINE OwnModuleCodeImplementation(String id) FOR MModel -»
+«DEFINE OwnModuleCode(String id) FOR MModel -»
 	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-	// TODO: put your further module code implementations here
+	// TODO: put your further module code here
 	«ENDPROTECT»
 «ENDDEFINE»
 
@@ -209,17 +209,17 @@ if (TYPO3_MODE === 'BE') {
 «DEFINE TypoScriptInclusion FOR MModel -»
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, '«dirPathConfigurationTypoScript() -»', '«extensionVendorName() -» «extensionPackageName() -» Setup');
 
-«EXPAND OwnTypoScriptCodeImplementation("ext_tables.php.own.typoscript.code.implementation." + xmiGuid) -»
+«EXPAND OwnTypoScriptCode("ext_tables.php.own.typoscript.code." + xmiGuid) -»
 
 «ENDDEFINE»
 
 
 «REM»
-	generates a region for own TypoScript code implementations
+	Generates a region for own TypoScript code.
 «ENDREM»
-«DEFINE OwnTypoScriptCodeImplementation(String id) FOR MModel -»
+«DEFINE OwnTypoScriptCode(String id) FOR MModel -»
 «PROTECT CSTART '/* ' CEND ' */' ID (id)»
-// TODO: put your further TypoScript code implementations here
+// TODO: put your further TypoScript code here
 «ENDPROTECT»
 «ENDDEFINE»
 
@@ -236,8 +236,7 @@ if (TYPO3_MODE === 'BE') {
 
 
 «REM»
-	Generates a link the the context sensitive help of an entity or value 
-	object.
+	Generates a link to the context sensitive help of an entity or value object.
 «ENDREM»
 «DEFINE ContextSensitiveHelpInclusion FOR MClass -»
 «FOREACH allGeneralizations().typeSelect(MClass) AS g -»
@@ -251,11 +250,10 @@ if (TYPO3_MODE === 'BE') {
 
 
 «REM»
-	Generates a link the the context sensitive help of an entity or value 
-	object.
+	Generates a link to the context sensitive help of an entity or value object.
 «ENDREM»
 «DEFINE ContextSensitiveHelpInclusion(MClass class) FOR MClass -»
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('«class.asLocalizationCshName() -»', 'EXT:' . $_EXTKEY . '/«filePathLocallangCshXlf("") -»');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('«class.asLocalizationCshName() -»', 'EXT:' . $_EXTKEY . '/«filePathLocallangCshXlf() -»');
 «ENDDEFINE»
 
 
@@ -269,10 +267,10 @@ if (TYPO3_MODE === 'BE') {
 
 
 «REM»
-	generates a region for own code implementations
+	Generates a region for own code.
 «ENDREM»
-«DEFINE OwnCodeImplementation(String id) FOR MModel -»
+«DEFINE OwnCode(String id) FOR MModel -»
 «PROTECT CSTART '/* ' CEND ' */' ID (id)»
-// TODO: put your further code implementations here
+// TODO: put your further code here
 «ENDPROTECT»
 «ENDDEFINE»
