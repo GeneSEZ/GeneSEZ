@@ -1,0 +1,149 @@
+import gcore;
+
+extension org::genesez::util::logging::Logging;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
+extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
+extension org::genesez::platform::java::util::Naming;
+extension org::genesez::platform::java::util::JavaTypes;
+extension org::genesez::platform::java::ejb3::scripts::Stereotypes;
+extension org::genesez::platform::java::ejb3::scripts::Interface;
+extension org::genesez::platform::java::ejb3::scripts::Class;
+	
+Void checkTimerStereotype(MOperation this) :
+	parameter.exists(e|e.type.asTypeName() == "Timer") && parameter.size == 1 &&
+	(classifier.emHasStereotypeAssignment("ejb3MessageDrivenBean") || classifier.emHasTaggedValue("ejb3SessionBean", "stateful", "false"))
+		? addTimerStereotype()
+		: "";
+		
+Void checkTimerServiceStereotype(MAttribute this) :
+	!this.emHasStereotypeAssignment("ejb3Resource") && this.type.asTypeName() == "TimerService"
+		? (
+			this.addResourceStereotype("", "", "", true)
+		)
+		: "";
+
+/**
+  *	checks if the data type of an attribute is a session bean
+  *
+  *	@param	this	instance of MAttribute
+  *	@param	model	instance of MModel as base for the search
+  */
+boolean isSessionBean(MAttribute this, MModel model) :
+	type.metaType == MClass
+		? ((MClass)type).emHasStereotypeAssignment("ejb3SessionBean")
+		: false;
+//	TODO: according the comment, the above impl should do the same as below but more efficiently, please check!
+//	allNestedClassifiers(model).typeSelect(MClass).exists(e|e.name == type.asTypeName() && e.emHasStereotypeAssignment("ejb3SessionBean"))
+//		? true
+//		: false;
+
+/**
+  *	adds the stereotype "ejb3EJB" if the attribute data type
+  *	is a session bean interface and there is no such stereotype
+  */
+Void checkEJBStereotype(MAttribute this) :
+	multiplicity.isSingleValued()
+		&& (classifier.emHasStereotypeAssignment("ejb3SessionBean") || classifier.emHasStereotypeAssignment("ejb3MessageDrivenBean"))
+		&& !emHasStereotypeAssignment("ejb3EJB")
+		&& isSessionBeanInterface(this.navModel())
+			? this.addEJBStereotype("", "", "", "", "")
+			: "";
+
+/**
+  *	method for changing the datatype of an session bean attribute
+  *	session beans can only be accessed by business interfaces
+  *	for an easy use the modeler can use the session bean datatype in the model
+  *	and at this point the datatype is changed
+  *	if there is no accessor, one will be added for generating no getter/setter
+  *	I do not know a scenario in which getter/setter are needed
+  *
+  *	optional feature: self modelled business interface has to have a stereotype "ejb3Local" 
+  *	or "ejb3Remote", this cartridge do not check the stereotypes at the session bean and compares
+  *	with realization; would be a nice feature because ejb supports this way too
+  *	
+  */
+Void changeSessionBeanAttributeDatatype(MAttribute this) :
+	//optimization: check no multi value and primitve datatypes
+	multiplicity.isSingleValued() && !this.type.isPrimitiveType()
+		? (
+			//warn("Datentyp: "+this.type.asTypeName()) ->
+			//if this attribute data type is a session bean
+			isSessionBean(this.classifier.navModel()) 
+				? (
+					//check for realization of the session bean which are business interfaces
+					let s = allNestedClassifiers(this.classifier.navModel()).typeSelect(MClass).selectFirst(e|e.name == this.type.asTypeName() && e.emHasStereotypeAssignment("ejb3SessionBean")) :
+						//warn("SB: "+s) ->
+						//warn("SB Interfaces: "+s.realization.name()) ->
+						s.realization.typeSelect(MInterface).exists(e|e.emHasStereotypeAssignment("ejb3Local"))
+							? (
+								//use this interface as new datatype for the attribute
+								//warn("BI: "+s.realization.typeSelect(MInterface).selectFirst(e|e.emHasStereotypeAssignment("ejb3Local"))) ->
+								this.setType(s.realization.typeSelect(MInterface).selectFirst(e|e.emHasStereotypeAssignment("ejb3Local")))
+							)
+							: "" ->
+						s.realization.typeSelect(MInterface).exists(e|e.emHasStereotypeAssignment("ejb3Remote"))
+							? (
+								/*
+									use this interface as new datatype for the attribute if there is
+									no local business interface or there is one but the attribute has
+									the stereotype "ejb3Remote"
+								*/
+								!s.realization.typeSelect(MInterface).exists(e|e.emHasStereotypeAssignment("ejb3Local"))  
+								|| (s.realization.typeSelect(MInterface).exists(e|e.emHasStereotypeAssignment("ejb3Local")) && this.emHasStereotypeAssignment("ejb3Remote"))
+									? this.setType(s.realization.typeSelect(MInterface).selectFirst(e|e.emHasStereotypeAssignment("ejb3Remote")))
+									: ""
+							)
+							: "" ->
+					//datatype has been changed, annotate this attribute with stereotype "ejb3EJB"
+					!this.emHasStereotypeAssignment("ejb3EJB")
+						? this.addEJBStereotype("", "", "", "", "")
+						: ""
+				)
+				: (
+					//containing class is not a session bean, do nothing
+					""
+				)
+		)
+		: (
+			//attribute is a multi value and/or primitve, do nothing
+			""
+		) ->
+	"";	
+	
+/**
+  *	adds the stereotype "accessor" to an attribute with stereotype
+  *	"ejb3Resource" or "ejb3EJB" to suppress generating getter and setter 
+  *	accessor stereotype is added only if there is no accessor 
+  *	stereotype available
+  *
+  *	@param		this		instance of MAttribute
+  *
+  */
+Void checkAccessorForEJBStereotypes(MAttribute this) :
+	!this.emHasStereotypeAssignment("accessor") && 
+	(this.emHasStereotypeAssignment("ejb3Resource") ||
+	this.emHasStereotypeAssignment("ejb3EJB"))
+		? emAssignGeneSezAccessorStereotype(false, false, false, false)
+		: "";
+	
+/**
+ *	evaluates whether the data type of an attribute is 
+ *	a session bean interface
+ *
+ *	@param	attribute	instance of a MAttribute
+ *
+ *	@return				true, if the attribute data type is a session bean interface
+ */
+boolean isSessionBeanInterface(MAttribute this, MModel model):
+	type.metaType == MInterface
+		? (
+			let i = (MInterface)type :
+				i.emHasStereotypeAssignment("ejb3Local") || i.emHasStereotypeAssignment("ejb3Remote")
+		)
+		: false;
+//	TODO: according the comment, the above impl should do the same as below but more efficiently, please check!
+//	allNestedClassifiers(model).typeSelect(MInterface).exists(e|
+//		(e.emHasStereotypeAssignment("ejb3Local") || e.emHasStereotypeAssignment("ejb3Remote")) && 
+//		e.name().asTypeName() == type.name().asTypeName());

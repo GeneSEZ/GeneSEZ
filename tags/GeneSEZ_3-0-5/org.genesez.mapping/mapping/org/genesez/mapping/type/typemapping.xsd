@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Liquid XML Studio 1.0.8.0 (http://www.liquid-technologies.com) -->
+<xs:schema xmlns:tm="http://www.genesez.org/typemapping" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.genesez.org/typemapping">
+  <xs:element name="typeMapping" type="tm:typeMappingType"/>
+  <xs:element name="include" type="tm:includeType">
+    <xs:annotation>
+      <xs:documentation>include element contains the references to other typemapping files and includes the content.
+      	TODO:problem with element which could be overwritten</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="file" type="tm:fileType"/>
+  <xs:element name="multiValuedTypes" type="tm:multiValuedTypesType"/>
+  <xs:element name="externalTypes" type="tm:typesType"/>
+  <xs:element name="multiValuedType" type="tm:multiValuedTypeType"/>
+  <xs:element name="default" type="tm:defaultType"/>
+  <xs:element name="context" type="tm:contextType"/>
+  <xs:element name="type" type="tm:typeType"/>
+  <xs:element name="to" type="tm:toType"/>
+  <xs:complexType name="typeMappingType">
+    <xs:annotation>
+      <xs:documentation>Root element of the typemapping file</xs:documentation>
+    </xs:annotation>
+    <xs:sequence maxOccurs="1" minOccurs="1">
+      <xs:element maxOccurs="1" minOccurs="0" ref="tm:include"/>
+      <xs:element maxOccurs="1" minOccurs="0" ref="tm:multiValuedTypes"/>
+      <xs:element maxOccurs="1" minOccurs="0" ref="tm:externalTypes"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="includeType">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" ref="tm:file"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="fileType">
+    <xs:annotation>
+      <xs:documentation>element which contains the string of the reference to another typemapping file</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="preserve"/>
+      <xs:maxLength value="255"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="multiValuedTypesType">
+    <xs:annotation>
+      <xs:documentation>former known as collectionTypes.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" ref="tm:multiValuedType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="typesType">
+    <xs:annotation>
+      <xs:documentation>former known as primtiveTypes as well as externalTypes</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" ref="tm:type"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="multiValuedTypeType">
+    <xs:sequence maxOccurs="1" minOccurs="1">
+      <xs:element ref="tm:default"/>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" minOccurs="0" ref="tm:context"/>
+      </xs:sequence>
+    </xs:sequence>
+    <xs:attributeGroup ref="tm:multiValuedAttributes"/>
+  </xs:complexType>
+  <xs:complexType name="contextType">
+    <xs:simpleContent>
+      <xs:extension base="xs:token">
+        <xs:attribute name="name" type="xs:token" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="typeType">
+    <xs:sequence maxOccurs="1" minOccurs="0">
+      <xs:sequence maxOccurs="1" minOccurs="0">
+        <xs:element ref="tm:to"/>
+      </xs:sequence>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" minOccurs="0" ref="tm:context"/>
+      </xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="from" type="xs:token" use="required"/>
+  </xs:complexType>
+  <xs:simpleType name="toType">
+    <xs:restriction base="xs:token"/>
+  </xs:simpleType>
+  <xs:simpleType name="defaultType">
+    <xs:restriction base="xs:token"/>
+  </xs:simpleType>
+  <xs:attributeGroup name="multiValuedAttributes">
+    <xs:annotation>
+      <xs:documentation>should attributes be referenced or should they be typebound?</xs:documentation>
+    </xs:annotation>
+    <xs:attribute default="true" name="unique">
+      <xs:annotation>
+        <xs:documentation>predicates the unambiguousness of an element/object in a multivalued type (like in a set)</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+        <xs:restriction base="xs:boolean">
+          <xs:pattern value="(true|false)"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute default="false" name="ordered">
+      <xs:annotation>
+        <xs:documentation>predicates if the multivalued type is sorted (like in a ArrayList) or elements/objects are available at random (like in a set)</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+        <xs:restriction base="xs:boolean">
+          <xs:pattern value="(true|false)"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+</xs:schema>
