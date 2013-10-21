@@ -1,0 +1,117 @@
+
+/**
+ * Provides the information for the two requirements traceability charts of the dashboard.
+ * @author tobias haubold
+ */
+
+extension org::genesez::platform::dashboard::Conversion;
+extension org::genesez::util::logging::Logging;
+extension org::genesez::metamodel::navigation::RequirementsTraceability;
+extension org::genesez::platform::dashboard::AccessHelper;
+extension org::genesez::platform::dashboard::traceability::OutdatedTraceabilityLinks;
+
+// -- requirements traceability state chart - - - - - - - - - - - - - - - - - -
+
+String rtStateSize() : "700x300";
+String rtStateData() : collectRtStateData().collect(e|e == -1 ? 0 : e).toString(",");
+String rtStateBarColor() : {
+		barColorGreq(), barColorGreq(), barColorGreq(),
+		barColorGcore(), barColorGcore(), barColorGcore(), barColorGcore(), barColorGcore()
+	}.toString("|");
+String rtStateXLabels() : "Scenarios|Scenario+Steps|Requirements|Classifier|Association%20Roles|Operations|Parameters|Attributes";
+String rtStateYLabels() : "0%|25%|50%|75%|100%";
+String rtStateTitle() : "Satisfaction-+and+Specification+Rate";
+String rtStateDataLabels() : rtStateDataLabel().toString("|");
+
+/*
+	returns the data list for the chart
+*/
+cached List[Real] collectRtStateData() : {
+	value(greq().scenario.size, greq().scenariosWithSatisfaction().size),
+	value(greq().scenario.step.size, greq().scenarioStepsWithSatisfaction().size),
+	value(greq().requirement.size, greq().requirementsWithSatisfaction().size),
+	value(gcore().allClassifiers().size, gcore().classifierWithSpecification().size),
+	value(gcore().allAssociationRoles().size, gcore().associationRolesWithSpecification().size),
+	value(gcore().allOperations().size, gcore().operationsWithSpecification().size),
+	value(gcore().allParameters().size, gcore().parametersWithSpecification().size),
+	value(gcore().allAttributes().size, gcore().attributesWithSpecification().size)
+};
+
+/*
+	returns the list of labels for the chart
+*/
+List[String] rtStateDataLabel() : 
+	{0,1,2,3,4,5,6,7}.collect(e|"N*p0*" + e.rtStateLabelText() + "," + collectRtStateData().get(e).rtStateLabelColor() + ",0," + e + ",12");
+
+/*
+	returns the label color based on the value of the data point
+ */
+String rtStateLabelColor(Real this) :
+	switch (true) {
+		case 0.0 <= this && this <= 0.2 : "f44646"
+		case 0.8 <= this && this <= 1.0 : "4be14b"
+		default : "000000"
+	};
+
+/*
+	returns the additional label text based on the data point position
+ */
+String rtStateLabelText(Integer this) :
+	switch (true) {
+		case this < 3 : "+satisfied"
+		default : "+specified"
+	};
+
+
+// -- recently revised specification + affected elements chart - - - - - - - -
+
+String rtUpSize() : "700x300";
+String rtUpData() : collectRtUpData().collect(e|e == -1 ? 0 : e).toString(",");
+String rtUpBarColor() : {
+		barColorGreq(), barColorGreq(), barColorGreq(),
+		barColorGcore(), barColorGcore(), barColorGcore(), barColorGcore(), barColorGcore()
+	}.toString("|");
+String rtUpXLabels() : {"0%", "25%", "50%", "75%", "100%"}.toString("|");
+String rtUpYLabels() : {"Scenarios", "Scenario+Steps", "Requirements", "Classifier", "Association+Roles", "Operations", "Parameters", "Attributes"}.reverse().toString("|");
+String rtUpTitle() : "Recently+Revised+Specification+and+affected+Structural+Elements";
+String rtUpDataLabels() : rtUpDataLabel().toString("|");
+
+cached List[Real] collectRtUpData() : {
+	value(greq().scenario.size, greq().scenario.reject( s|s.scenarioTrace().exists( st|st.isOutdated() ) ).size),
+	value(greq().scenario.step.size, greq().scenario.step.reject( ss|ss.scenarioStepTrace().exists( sst|sst.isOutdated() ) ).size),
+	value(greq().requirement.size, greq().requirement.reject( r|r.requirementTrace().exists( e|e.isOutdated() ) ).size),
+	value(gcore().classifierWithSpecification().size, gcore().classifierWithSpecification().reject(
+		c|c.scenarioTrace().exists( st|st.isOutdated() ) || c.requirementTrace().exists( rt|rt.isOutdated() ) ).size),
+	value(gcore().associationRolesWithSpecification().size, gcore().associationRolesWithSpecification().reject( ar|ar.requirementTrace().exists( rt|rt.isOutdated() ) ).size),
+	value(gcore().operationsWithSpecification().size, gcore().operationsWithSpecification().reject(
+		o|o.scenarioStepTrace().exists( sst|sst.isOutdated() ) || o.requirementTrace().exists( rt|rt.isOutdated() ) ).size),
+	value(gcore().parametersWithSpecification().size, gcore().parametersWithSpecification().reject( p|p.requirementTrace().exists( rt|rt.isOutdated() ) ).size),
+	value(gcore().attributesWithSpecification().size, gcore().attributesWithSpecification().reject( a|a.requirementTrace().exists( rt|rt.isOutdated() ) ).size)
+};
+
+List[String] rtUpDataLabel() : 
+	{0,1,2,3,4,5,6,7}.collect(e|"N*p0*" + e.rtUpLabelText(collectRtUpData().get(e)) + "," + collectRtUpData().get(e).rtUpLabelColor() + ",0," + e + ",12");
+
+String rtUpLabelColor(Real this) :
+	switch (true) {
+		case this <= 0.25 : "f44646" // red
+		case this >= 0.75 : "4be14b" // green
+		default : "000000"
+	};
+
+String rtUpLabelText(Integer index, Real value) :
+	switch (true) {
+		case value == -1 : "+no+traceability+information+available"
+		default : "+up+to+date"
+	};
+
+
+// -- common helper functions - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Real value(Integer total, Integer part) :
+	total == 0
+	? -1
+	: part.asDouble() / total.asDouble();
+
+String barColorGreq() : "4d89f9";
+String barColorGcore() : "c6d9fd";

@@ -1,0 +1,162 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+import gcore;
+
+/**
+ * Provides support to deal with java specific stereotypes and their tagged values.
+ * 
+ * @author	andre pflueger
+ * @author  nancy doerfel
+ * @author	tobias haubold <toh@fh-zwickau.de>
+ */
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::RemoveElement;
+
+
+/**
+ * Unifies/completes the properties of the stereotype to identify java annotation types.
+ * 
+ * Tagged values to be used for the @Target annotation:
+ * Association roles whose names starting with 'base_' refer to those uml meta classes, the annotation type can be used on.
+ * All such association roles are checked, combined with existing tagged values and eventually removed.
+ * 
+ * If any value for the annotation @Retention is set, it is preserved, else the default is set.
+ * If the annotation @Documented is present (tagged value is true), it is preserved, else the default is set.
+ * 
+ * @param this the MInterface which later represents an annotation (@interface)
+ */
+MInterface emUnifyAnnotationStereotype(MInterface this) :
+	!property.typeSelect(MAssociationRole).select( e|e.name.startsWith("base_") ).isEmpty || emHasStereotypeAssignment( prJavaAnnotationStereotype() )
+		? (
+			emAssignTargetAnnotationValues(
+				emHasTargetAnnotationValue("ANNOTATION_TYPE") || emHasMetaTypeExtension("Stereotype") || emHasMetaTypeExtension("Element"),
+				emHasTargetAnnotationValue("TYPE") || emHasMetaTypeExtension("Type") || emHasMetaTypeExtension("Element") || emHasMetaTypeExtension("Class") || emHasMetaTypeExtension("Interface") || emHasMetaTypeExtension("Enumeration"),
+				emHasTargetAnnotationValue("CONSTRUCTOR") || emHasMetaTypeExtension("Element"),
+				emHasTargetAnnotationValue("METHOD") || emHasMetaTypeExtension("Operation") || emHasMetaTypeExtension("Element"),
+				emHasTargetAnnotationValue("FIELD") || emHasMetaTypeExtension("Property") || emHasMetaTypeExtension("Element"),
+				emHasTargetAnnotationValue("LOCAL_VARIABLE") || emHasMetaTypeExtension("Element"),
+				emHasTargetAnnotationValue("PARAMETER") || emHasMetaTypeExtension("Parameter") || emHasMetaTypeExtension("Element"),
+				emHasTargetAnnotationValue("PACKAGE") || emHasMetaTypeExtension("Package") || emHasMetaTypeExtension("Element")
+			)
+			.emAssignRetentionAnnotationValue( emGetTaggedValue( prJavaAnnotationStereotype(), prJavaAnnotationStereotypeRetentionTag() ) )
+			.emAssignDocumentedAnnotationValue( emGetTaggedBooleanValue( prJavaAnnotationStereotype(), prJavaAnnotationStereotypeDocumentedTag() ) ) ->
+			
+			// all association roles with 'base_*' are made from uml::Extension relationship from stereotypes to uml meta classes
+			// and are only there for the above reason, so remove them now
+			property.removeAll(
+				property.typeSelect(MAssociationRole).select( e|e.name.startsWith("base_") )
+			)
+		) : this ->
+	this;
+
+/**
+ * Assigns the stereotype to identify java annotation types.
+ * It assigns the default tagged values to be used for the annotations @Target, @Retention and @Documented too.
+ */
+MInterface emAssignAnnotationStereotype(MElement this) :
+	emAssignTargetAnnotationValues( true, true, true, true, true, true, true, true )
+	.emAssignRetentionAnnotationValue( "CLASS" )
+	.emAssignDocumentedAnnotationValue( false );
+
+/**
+ * Assigns or removes the specified values for the tag 'target' of the annotation stereotype.
+ * 
+ * @param  onAnnotationType	annotation type can be used on annotation types
+ * @param  onType			annotation type can be used on java types
+ * @param  onConstructor	annotation type can be used on constructors
+ * @param  onMethod			annotation type can be used on methods
+ * @param  onField			annotation type can be used on fields
+ * @param  onLocalVariable	annotation type can be used on local variables
+ * @param  onParameter		annotation type can be used on parameters
+ * @param  onPackage		annotation type can be used on packages
+ */
+MElement emAssignTargetAnnotationValues(MElement this, boolean onAnnotationType, boolean onType, boolean onConstructor,
+		boolean onMethod, boolean onField, boolean onLocalVariable, boolean onParameter, boolean onPackage) :
+		
+	let tag = navModel().emEnsureAnnotationStereotype().emGetTag( prJavaAnnotationStereotypeTargetTag() ) :
+		onAnnotationType ? ensureTaggedValueExistence( tag, "ANNOTATION_TYPE" ) : emRemoveTaggedValue( tag, "ANNOTATION_TYPE" ) ->
+		onType ? ensureTaggedValueExistence( tag, "TYPE" ) : emRemoveTaggedValue( tag, "TYPE" ) ->
+		onConstructor ? ensureTaggedValueExistence( tag, "CONSTRUCTOR" ) : emRemoveTaggedValue( tag, "CONSTRUCTOR" ) ->
+		onMethod ? ensureTaggedValueExistence( tag, "METHOD" ) : emRemoveTaggedValue( tag, "METHOD" ) ->
+		onField ? ensureTaggedValueExistence( tag, "FIELD" ) : emRemoveTaggedValue( tag, "FIELD" ) ->
+		onLocalVariable ? ensureTaggedValueExistence( tag, "LOCAL_VARIABLE" ) : emRemoveTaggedValue( tag, "LOCAL_VARIABLE" ) ->
+		onParameter ? ensureTaggedValueExistence( tag, "PARAMETER" ) : emRemoveTaggedValue( tag, "PARAMETER" ) ->
+		onPackage ? ensureTaggedValueExistence( tag, "PACKAGE" ) : emRemoveTaggedValue( tag, "PACKAGE" ) ->
+	this;
+
+/**
+ * Assigns the specified value for the tag 'retention' of the annotation stereotype.
+ * Possible values are: "source", "class", "runtime", default is "class" for unrecognized values.
+ * The assignment of the stereotype to the model element is ensured.
+ */
+MElement emAssignRetentionAnnotationValue(MElement this, String retentionPolicy) :
+	ensureTaggedValueExistence(
+		navModel().emEnsureAnnotationStereotype().emGetTag( prJavaAnnotationStereotypeRetentionTag() ),
+		switch {
+			case retentionPolicy.toUpperCase() == "SOURCE" : "SOURCE"
+			case retentionPolicy.toUpperCase() == "RUNTIME" : "RUNTIME"
+			default : "CLASS"
+		}
+	).owningElement;
+
+/**
+ * Assigns the specified value for the tag 'documented' of the annotation stereotype.
+ * The assignment of the stereotype to the model element is ensured.
+ */
+MElement emAssignDocumentedAnnotationValue(MElement this, boolean isDocumented) :
+	ensureTaggedValueExistence(
+		navModel().emEnsureAnnotationStereotype().emGetTag( prJavaAnnotationStereotypeDocumentedTag() ),
+		isDocumented.toString()
+	).owningElement;
+
+/**
+ * Returns the stereotype used to identify java annotation types.
+ * The stereotype is additionally used to specify the values of the annotations @Target, @Retention and @Documented.
+ */
+MStereotype emEnsureAnnotationStereotype(MModel this) :
+	ensureStereotypeExistence( "org.genesez.java.profile.annotation", prJavaAnnotationStereotype() )
+		.ensureTagExistence( prJavaAnnotationStereotypeTargetTag(), "String" ).stereotype
+		.ensureTagExistence( prJavaAnnotationStereotypeRetentionTag(), "String" ).stereotype
+		.ensureTagExistence( prJavaAnnotationStereotypeDocumentedTag(), "Boolean" ).stereotype;
+
+/**
+ * Returns the name of the stereotype used to mark java5 annotation types.
+ */
+String prJavaAnnotationStereotype() : "java5Annotation";
+
+/**
+ * Returns the name of tag 'target' of the annotation stereotype.
+ */
+String prJavaAnnotationStereotypeTargetTag() : "target";
+
+/**
+ * Returns the name of tag 'retention' of the annotation stereotype.
+ */
+String prJavaAnnotationStereotypeRetentionTag() : "retention";
+
+/**
+ * Returns the name of tag 'documented' of the annotation stereotype.
+ */
+String prJavaAnnotationStereotypeDocumentedTag() : "documented";
+
+
+/**
+ * Returns true if the element has the specified target annotation value.
+ */
+boolean emHasTargetAnnotationValue(MElement this, String value) :
+	emHasTaggedValue( prJavaAnnotationStereotype(), prJavaAnnotationStereotypeTargetTag(), value );
+
+/**
+ * Returns true if the specified type has an uml::Extension relationship to the specified uml meta type.
+ * 
+ * Note: The uml::Extension releationships from stereotypes to uml meta classes are stored as 
+ * association ends whose name starts with 'base_'
+ */
+boolean emHasMetaTypeExtension(MInterface this, String metaType) :
+	!(owningInitializableAssociationRoles().select( e|e.name.matches("base_"+metaType) ).isEmpty);

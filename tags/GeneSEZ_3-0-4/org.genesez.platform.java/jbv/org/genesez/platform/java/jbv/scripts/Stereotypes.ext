@@ -1,0 +1,102 @@
+/**
+ * 	functions for creating new MStereotypes, MTags, MTaggedValues and for changing the value
+ *	of an MTaggedValue 
+ * 
+ * 
+ * @author	andre pflueger
+ * @date	2012-03-17
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
+
+/**
+ *	function to add an "jhvType" stereotype to a MOperation
+ *	default values are not set by this function!
+ *
+ *	@param		this		instance of MAttribute
+ *	@param		type		value for tagged value "type"
+ *	@param		names		value for tagged value "names"
+ *	@param		values		value for tagged value "values"
+ *
+ */
+Void addTypeStereotype(MOperation this, String type, List[String] names, String values) :
+	let s = makeTypeStereotype(this.navPackage()) :
+		this.stereotype.add(s) ->
+		createTaggedValue(this, createTag(s, "type", "String"), type) ->
+		names.addTags(this, createTag(s, "parameterNames", "String")) ->
+		values.addTags(this, createTag(s, "parameterValues", "String"));
+
+Void addTags(String value, MElement elem, MTag tag) :
+	createTaggedValue(elem, tag, value);
+
+/**
+ *	function to add an "jhvType" stereotype to a MAttribute
+ *	default values are not set by this function!
+ *
+ *	@param		this		instance of MAttribute
+ *	@param		type		value for tagged value "type"
+ *	@param		names		value for tagged value "names"
+ *	@param		values		value for tagged value "values"
+ *
+ */
+Void addTypeStereotype(MAttribute this, String type, List[String] names, List[String] values) :
+	let s = makeTypeStereotype(this.navPackage()) :
+		this.stereotype.add(s) ->
+		createTaggedValue(this, createTag(s, "type", "String"), type) ->
+		names.addTags(this, createTag(s, "parameterNames", "String")) ->
+		values.addTags(this, createTag(s, "parameterValues", "String"));
+
+/**
+ *	function to create an "jhvType" stereotype
+ *	default values are not set by this function!
+ *	function adds MStereotype only to anyStereotype list of MModel
+ *
+ *	@param		container		instance of MPackage
+ *
+ */
+MStereotype makeTypeStereotype(MPackage container) :
+	let s = createStereotype(container.navModel(), "jhvType", "jhvType") :
+		s.property.add(createTag(s, "type", "String")) ->
+		s.property.add(createTag(s, "parameterNames", "String")) ->
+		s.property.add(createTag(s, "parameterValues", "String")) ->
+		s;
+
+/**
+ *	function to add an "jhvTypeDef" stereotype to a MElement
+ *	default values are not set by this function!
+ *
+ *	@param		this		instance of MElement
+ *	@param		name		value for tagged value "name"
+ *	@param		typeClass	value for tagged value "typeClass"
+ *	@param		names		value for tagged value "names"
+ *	@param		values		value for tagged value "values"
+ *
+ */
+Void addTypeDefStereotype(MClass this, String name, String typeClass, List[String] names, List[String] values) :
+	let s = makeTypeDefStereotype(this.navPackage()) :
+		this.stereotype.add(s) ->
+		createTaggedValue(this, createTag(s, "name", "String"), name) ->
+		createTaggedValue(this, createTag(s, "typeClass", "String"), typeClass) ->
+		names.addTags(this, createTag(s, "parameterNames", "String")) ->
+		values.addTags(this, createTag(s, "parameterValues", "String"));
+
+/**
+ *	function to create an "jhvTypeDef" stereotype
+ *	default values are not set by this function!
+ *	function adds MStereotype only to anyStereotype list of MModel
+ *
+ *	@param		container		instance of MPackage
+ *
+ */
+MStereotype makeTypeDefStereotype(MPackage container) :
+	let s = createStereotype(container.navModel(), "jhvTypeDef", "jhvTypeDef") :
+		s.property.add(createTag(s, "name", "String")) ->
+		s.property.add(createTag(s, "typeClass", "String")) ->
+		s.property.add(createTag(s, "parameterNames", "String")) ->
+		s.property.add(createTag(s, "parameterValues", "String")) ->
+		s;

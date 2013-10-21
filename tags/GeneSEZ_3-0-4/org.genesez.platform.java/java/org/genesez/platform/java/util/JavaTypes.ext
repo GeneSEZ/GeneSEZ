@@ -1,0 +1,150 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+import gcore;
+
+/**
+ * Provides java core types as external types and checks for java primitive types.
+ * 
+ * @author	tobias haubold <toh@fh-zwickau.de> (maintainer)
+ */
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::mapping::TypeMapping;
+
+
+/**
+ * Checks if the specified external type is a primitive type.
+ * 
+ * @return 	True, if the specified type is a java primitive type, otherwise false.
+ */
+boolean isPrimitiveType(MExternal this) : 
+	mapName() == "boolean" || (switch (mapName().toLowerCase()) {
+		case "int": true
+		case "long": true
+		case "byte": true
+		case "short": true
+		case "float": true
+		case "double": true
+		default: false
+	});
+
+/**
+ * Checks if any type except an external type is a primitive type.
+ * 
+ * @return	False, only an external type can be primitive.
+ */
+boolean isPrimitiveType(MType this) : false;
+
+/**
+ * Returns the primitive type boolean.
+ */
+MExternal typeBooleanPrimitive(MModel this) : ensureExternalTypeExistence("boolean", "boolean");
+
+/**
+ * Returns the primitive type int.
+ */
+MExternal typeIntPrimitive(MModel this) : ensureExternalTypeExistence("int", "int");
+
+/**
+ * Returns the primitive type long.
+ */
+MExternal typeLongPrimitive(MModel this) : ensureExternalTypeExistence("long", "long");
+
+
+// -- java.lang.*
+
+/**
+ * Returns the type 'java.lang.Object'.
+ */
+MExternal typeObject(MModel this) : ensureExternalTypeExistence("java.lang.Object", "Object");
+
+
+// -- java.util.*
+
+/**
+ * Returns the type 'java.util.HashSet'.
+ */
+MExternal typeHashSet(MModel this) : ensureExternalTypeExistence("java.util.HashSet", "HashSet");
+
+/**
+ * Returns the type 'java.util.HashMap'.
+ */
+MExternal typeHashMap(MModel this) : ensureExternalTypeExistence("java.util.HashMap", "HashMap");
+
+/**
+ * Returns the type 'java.util.Timer'.
+ */
+MExternal typeTimer(MModel this) : ensureExternalTypeExistence("java.util.Timer", "Timer");
+
+
+// -- java.io.*
+
+/**
+ * Returns the type 'java.io.Serializable'.
+ */
+MExternal typeSerializable(MModel this) : ensureExternalTypeExistence("java.io.Serializable", "Serializable");
+
+
+// -- javax.*
+
+/**
+ * Returns the type 'javax.persistence.EntityManager'.
+ */
+MExternal typeEntityManager(MModel this) : ensureExternalTypeExistence("javax.persistence.EntityManager", "EntityManager");
+
+/**
+ * Returns the type 'javax.jms.Message'.
+ */
+MExternal typeMessage(MModel this) : ensureExternalTypeExistence("javax.jms.Message", "Message");
+
+/**
+ * Returns the type 'javax.jms.MessageListener'.
+ */
+MExternal typeMessageListener(MModel this) : ensureExternalTypeExistence("javax.jms.MessageListener", "MessageListener");
+
+/**
+ * Returns the type 'javax.xml.ws.Service'.
+ */
+MExternal typeService(MModel this) : ensureExternalTypeExistence("javax.xml.ws.Service", "Service");
+
+/**
+ * Returns the type 'javax.xml.ws.handler.soap.SOAPHandler<SOAPMessageContext>'.
+ * TODO: use base type with generic type parameter instead
+ */
+MExternal typeSOAPHandlerSOAPMessageContext(MModel this) : ensureExternalTypeExistence("javax.xml.ws.handler.soap.SOAPHandler<SOAPMessageContext>", "SOAPHandler<SOAPMessageContext>");
+
+/**
+ * Returns the type 'javax.xml.ws.handler.soap.SOAPMessageContext'.
+ */
+MExternal typeSOAPMessageContext(MModel this) : ensureExternalTypeExistence("javax.xml.ws.handler.soap.SOAPMessageContext", "SOAPMessageContext");
+
+/**
+ * Returns the type 'javax.xml.namespace.QName'.
+ */
+MExternal typeQName(MModel this) : ensureExternalTypeExistence("javax.xml.namespace.QName", "QName");
+
+/**
+ * Returns the type 'javax.xml.ws.handler.MessageContext'.
+ */
+MExternal typeMessageContext(MModel this) : ensureExternalTypeExistence("javax.xml.ws.handler.MessageContext", "MessageContext");
+
+
+// -- org.jboss.*
+
+/**
+ * Returns the type 'org.jboss.seam.annotations.faces.Converter'.
+ */
+MExternal typeConverter(MModel this) : ensureExternalTypeExistence("org.jboss.seam.annotations.faces.Converter", "Converter");
+
+/**
+ * Returns the type 'org.jboss.seam.annotations.faces.Validator'.
+ */
+MExternal typeValidator(MModel this) : ensureExternalTypeExistence("org.jboss.seam.annotations.faces.Validator", "Validator");
+
+/**
+ * Returns the type 'org.jboss.seam.annotations.web.Filter'.
+ */
+MExternal typeFilter(MModel this) : ensureExternalTypeExistence("org.jboss.seam.annotations.web.Filter", "Filter");

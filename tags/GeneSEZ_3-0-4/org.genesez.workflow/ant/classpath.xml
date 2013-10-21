@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+<project name="org.genesez.workflow.classpath" basedir=".." default="verify.config">
+	
+	<dirname property="ant.dir.org.genesez.workflow.classpath" file="${ant.file.org.genesez.workflow.classpath}" />
+	<property file="${ant.dir.org.genesez.workflow.classpath}/environment.properties" />
+	
+	<condition property="org.genesez.workflow.classpath.configuration.check">
+		<and>
+			<available file="${ECLIPSE_HOME}" />
+			<available file="${EMF_PLUGIN_DIR}" />
+			<available file="${UML2_PLUGIN_DIR}" />
+			<available file="${M2T_PLUGIN_DIR}" />
+			<available file="${MWE_PLUGIN_DIR}" />
+			<available file="${MWE2_PLUGIN_DIR}" />
+		</and>
+	</condition>
+	
+	<target name="verify.config" unless="org.genesez.workflow.classpath.configuration.check">
+		<echo level="warning">
+The classpath settings to execute mwe + mwe2 workflows are not properly configured!
+Please configure the file 'classpath.properties' in org.genesez.workflow/ant to execute workflows using ant.
+		</echo>
+	</target>
+	
+	<path id="org.genesez.workflow.classpath">
+		<fileset dir="${ECLIPSE_HOME}/plugins">
+			<include name="org.apache.commons.logging_*.jar" />
+			<!-- i don't think log4j is coming from eclipse, but it's within my eclipse plugin dir -->
+			<include name="org.apache.log4j_*.jar" />
+			<include name="org.eclipse.jdt.core_*.jar" />
+			<include name="org.eclipse.jdt.compiler.apt_*.jar" />
+			<include name="org.eclipse.jdt.compiler.tool_*.jar" />
+			<include name="org.eclipse.jface_*.jar" />
+			<include name="org.eclipse.jface.text_*.jar" />
+			<include name="org.eclipse.text_*.jar" />
+			<include name="org.eclipse.equinox.common_*.jar" />
+			<include name="org.eclipse.core.filebuffers_*.jar" />
+			<include name="org.eclipse.core.runtime_*.jar" />
+			<include name="org.eclipse.core.jobs_*.jar" />
+			<include name="org.eclipse.core.resources_*.jar" />
+			<include name="org.eclipse.osgi_*.jar" />
+			<include name="org.eclipse.ui.editors_*.jar" />
+			<include name="org.eclipse.ui.views_*.jar" />
+			<include name="org.eclipse.ui.workbench_*.jar" />
+			<include name="org.eclipse.ui.workbench.texteditor_*.jar" />
+			<include name="org.eclipse.swt_*.jar" />
+			<include name="org.eclipse.swt.*.jar" />
+			<include name="com.ibm.icu_*.jar" />
+			<include name="javax.inject_*.jar" />
+		</fileset>
+		<fileset dir="${EMF_PLUGIN_DIR}">
+			<include name="org.eclipse.emf.common_*.jar" />
+			<include name="org.eclipse.emf.ecore.xmi_*.jar" />
+			<include name="org.eclipse.emf.ecore_*.jar" />
+			<include name="org.eclipse.emf.mapping.ecore2xml_*.jar" />
+		</fileset>
+		<fileset dir="${UML2_PLUGIN_DIR}">
+			<include name="org.eclipse.uml2.uml_*.jar" />
+			<include name="org.eclipse.uml2.common_*.jar" />
+			<include name="org.eclipse.uml2.types_*.jar" />
+			<include name="org.eclipse.uml2.uml.resources_*.jar" />
+		</fileset>
+		<fileset dir="${MWE_PLUGIN_DIR}">
+			<include name="com.google.collect_*.jar" />
+			<include name="com.google.inject_*.jar" />
+			<include name="org.apache.log4j_*.jar" />
+			<include name="org.apache.commons.cli_*.jar" />
+	        <include name="org.eclipse.emf.mwe.core_*.jar" />
+	        <include name="org.eclipse.emf.mwe.utils_*.jar" />
+			<include name="org.eclipse.emf.mwe2.runtime_*.jar" />
+		</fileset>
+		<fileset dir="${MWE2_PLUGIN_DIR}">
+			<include name="com.google.collect_*.jar" />
+			<include name="com.google.inject_*.jar" />
+			<include name="com.google.guava_*.jar" />
+			<include name="org.eclipse.emf.mwe2.runtime_*.jar" />
+			<include name="org.eclipse.emf.mwe2.launch_*.jar" />
+			<include name="org.eclipse.emf.mwe2.language_*.jar" />
+			<include name="org.eclipse.xtext_*.jar" />
+			<include name="org.eclipse.xtext.common.types_*.jar" />
+			<include name="org.eclipse.xtext.util_*.jar" />
+		</fileset>
+		<fileset dir="${M2T_PLUGIN_DIR}">
+	        <include name="org.eclipse.xpand_*.jar" />
+	        <include name="org.eclipse.xtend_*.jar" />
+	        <include name="org.eclipse.xtend.typesystem.emf_*.jar" />
+	        <include name="org.eclipse.xtend.typesystem.uml2_*.jar" />
+	        <include name="org.eclipse.xtend.typesystem.xsd_*.jar" />
+	        <include name="org.eclipse.xtend.util.stdlib_*.jar" />
+			<include name="org.apache.commons.cli_*.jar" />
+			<include name="org.antlr.runtime_*.jar" />
+			<include name="org.apache.log4j_*.jar" />
+		</fileset>
+	</path>
+</project>

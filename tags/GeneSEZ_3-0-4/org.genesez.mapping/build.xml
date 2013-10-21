@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="org.genesez.mapping" basedir="." default="typemapping.schema2java">
+	
+	<path id="classpath">
+		<fileset dir="lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+	<property name="src-gen.dir" value="src-gen" />
+	<property name="schema.dir" value="mapping/org/genesez/mapping/type" />
+	<property name="xjb.file" value="${schema.dir}/typemapping.xjb" />
+	
+	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask" classpathref="classpath" 
+			description="xml schema to java compiler task" />
+	
+	<target name="typemapping.schema2java"
+		description="generates the java type mapping types from xml schema">
+		
+		<echo message="Compiling the schema..." />
+		<mkdir dir="${src-gen.dir}"/>
+		<xjc destdir="${src-gen.dir}" removeOldOutput="yes" extension="true"
+				binding="${xjb.file}"
+				package="org.genesez.mapping.type.types">
+			<produces dir="${src-gen.dir}/org/genesez/mapping/type/types" includes="**/*" />
+			<schema dir="${schema.dir}">
+				<include name="typemapping.xsd" />
+			</schema>
+			<arg value="-mark-generated" />
+			<arg value="-verbose" />
+		</xjc>
+	</target>
+	
+	<!--target name="typemapping.test">
+		<junit printsummary="true" showoutput="true">
+			<classpath>
+				<pathelement location="bin" />
+				<path path="${java.class.path}" />
+			</classpath>
+			<formatter type="plain" usefile="false" />
+			<test name="org.genesez.mapping.type.AllTypeMappingTestsSuite"></test>
+		</junit>
+	</target-->
+</project>
