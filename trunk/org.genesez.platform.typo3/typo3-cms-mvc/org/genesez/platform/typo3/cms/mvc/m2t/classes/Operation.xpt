@@ -183,20 +183,6 @@ $«asGeneralName() -»«EXPAND DefaultValue -»
 		«EXPAND OwnCodeConstructor(id) -»
 «ELSEIF isDestructor() -»
 		«EXPAND OwnCodeDestructor(id) -»
-«REM»«ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/showAction") -»
-		«EXPAND OwnCodeImplementationControllerShowAction -»
-«ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/listAction") -»
-		«EXPAND OwnCodeImplementationControllerListAction -»
-«ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/newAction") -»
-		«EXPAND OwnCodeImplementationControllerNewAction -»
-«ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/createAction") -»
-		«EXPAND OwnCodeImplementationControllerCreateAction -»
-«ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/editAction") -»
-		«EXPAND OwnCodeImplementationControllerEditAction -»
-«ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/updateAction") -»
-		«EXPAND OwnCodeImplementationControllerUpdateAction -»
-«ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/deleteAction") -»
-		«EXPAND OwnCodeImplementationControllerDeleteAction -»«ENDREM»
 «ELSE -»
 		«EXPAND OwnCodeOperation(id) -»
 «ENDIF -»
@@ -225,46 +211,3 @@ $«asGeneralName() -»«EXPAND DefaultValue -»
 		throw new Exception('The implementation of the method «asGeneralName() -» for class «classifier.asShortGeneralName() -» is missing!');
 		«ENDPROTECT»
 «ENDDEFINE»
-
-«REM»
-«DEFINE OwnCodeImplementationControllerShowAction FOR MOperation -»
-		$this->view->assign('«parameter.first().name() -»', $«parameter.first().name() -»);
-«ENDDEFINE»
-		
-		
-«DEFINE OwnCodeImplementationControllerListAction FOR MOperation -»
-		$list = $this->«classifier.property.typeSelect(MAttribute).first().name() -»->findAll();
-		$this->view->assign('list', $list);
-«ENDDEFINE»
-
-
-«DEFINE OwnCodeImplementationControllerNewAction FOR MOperation -»
-		$this->view->assign('«parameter.first().name() -»', $«parameter.first().name() -»);
-«ENDDEFINE»
-
-
-«DEFINE OwnCodeImplementationControllerCreateAction FOR MOperation -»
-		$this->«classifier.property.typeSelect(MAttribute).first().name() -»->add($«parameter.first().name() -»);
-		$this->flashMessageContainer->add('Your new domain object was created.');
-		$this->redirect('list');
-«ENDDEFINE»
-
-
-«DEFINE OwnCodeImplementationControllerEditAction FOR MOperation -»
-		$this->view->assign('«parameter.first().name() -»', $«parameter.first().name() -»);
-«ENDDEFINE»
-
-
-«DEFINE OwnCodeImplementationControllerUpdateAction FOR MOperation -»
-		$this->«classifier.property.typeSelect(MAttribute).first().name() -»->update($«parameter.first().name() -»);
-		$this->flashMessageContainer->add('Your existing domain object was updated.');
-		$this->redirect('list');
-«ENDDEFINE»
-
-
-«DEFINE OwnCodeImplementationControllerDeleteAction FOR MOperation -»
-		$this->«classifier.property.typeSelect(MAttribute).first().name() -»->remove($«parameter.first().name() -»);
-		$this->flashMessageContainer->add('Your existing domain object was removed.');
-		$this->redirect('list');
-«ENDDEFINE»
-«ENDREM»
