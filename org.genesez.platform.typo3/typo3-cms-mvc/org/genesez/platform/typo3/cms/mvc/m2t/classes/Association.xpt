@@ -40,7 +40,7 @@
 	Processes the association roles of classifier.
 «ENDREM»
 «DEFINE Declaration FOR MClassifier -»
-	«EXPAND Declaration FOREACH property.typeSelect(MAssociationRole).select( ar | ar.derived ) -»
+	«EXPAND Declaration FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived ) -»
 «ENDDEFINE»
 
 
@@ -56,7 +56,7 @@
 	Processes the implementation of the accessor methods for an association role.
 «ENDREM»
 «DEFINE Accessors FOR MClass -»
-	«FOREACH property.typeSelect(MAssociationRole).select( ar | ar.derived ) AS assocationRole -»
+	«FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived ) AS assocationRole -»
 		«EXPAND GetAccessorImplemementation FOR assocationRole -»
 		«EXPAND SetAccessorImplemementation FOR assocationRole -»
 		«EXPAND AddAccessorImplemementation FOR assocationRole -»
@@ -69,7 +69,7 @@
 	Processes the declaration of the accessor methods for an association role.
 «ENDREM»
 «DEFINE Accessors FOR MInterface -»
-	«FOREACH property.typeSelect(MAssociationRole).select( ar | ar.derived ) AS assocationRole -»
+	«FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived ) AS assocationRole -»
 		«EXPAND GetAccessorDeclaration FOR assocationRole -»
 		«EXPAND SetAccessorDeclaration FOR assocationRole -»
 		«EXPAND AddAccessorDeclaration FOR assocationRole -»
@@ -98,7 +98,7 @@
 «DEFINE Derived FOR MAssociationRole -»
 	«EXPAND Comment::GetAccessor -»
 	«EXPAND ModifierAccessor -» function «asGetAccessorName() -»() {
-		«EXPAND OwnCodeImplementation("php.derived.association.implementation." + xmiGuid) -»
+		«EXPAND OwnCode("php.derived.association.own.code." + xmiGuid) -»
 	}
 	
 «ENDDEFINE»
@@ -229,7 +229,7 @@
 «ENDREM»
 «DEFINE TypeHintSetAccessor FOR MAssociationRole -»
 «IF multiplicity.isSingleValued() -»
-«IF generatePhpTypeHint( type.asGeneralName() ) -»«type.asGeneralName() -» «ENDIF -»
+«IF !isPhpPrimitiveType( type.asGeneralName() ) -»«type.asGeneralName() -» «ENDIF -»
 «ELSE -»
 «IF classifier.isModelPackageElement() && !emHasPrimitiveStereotype() -»«mapCollection( collectionMappingContextModel() ) -» «ELSE -»«mapCollection() -» «ENDIF -»
 «ENDIF -»
@@ -240,16 +240,16 @@
 	Generates type hint for add and remove accessor methods.
 «ENDREM»
 «DEFINE TypeHintAddRemoveAccessor FOR MAssociationRole -»
-«IF generatePhpTypeHint( type.asGeneralName() ) -»«type.asGeneralName() -» «ENDIF -»
+«IF !isPhpPrimitiveType( type.asGeneralName() ) -»«type.asGeneralName() -» «ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
 	Generates the protected region of an operation.
 «ENDREM»
-«DEFINE OwnCodeImplementation(String id) FOR MAssociationRole -»
+«DEFINE OwnCode(String id) FOR MAssociationRole -»
 		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
 		// TODO: implementation of method «asGetAccessorName() -» for class «classifier.asShortGeneralName()»
-		throw new Exception('The implementation of the method «asGetAccessorName() -» for class «classifier.asShortGeneralName() -» is missing !');
+		throw new Exception('The implementation of the method «asGetAccessorName() -» for class «classifier.asShortGeneralName() -» is missing!');
 		«ENDPROTECT»
 «ENDDEFINE»

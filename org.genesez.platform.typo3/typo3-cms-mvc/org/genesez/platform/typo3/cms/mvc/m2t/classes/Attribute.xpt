@@ -41,9 +41,9 @@
 	Order: constants (static + final), static, non static
 «ENDREM»
 «DEFINE Declaration FOR MClassifier -»
-	«EXPAND Const FOREACH property.typeSelect(MAttribute).select( a | !a.derived && a.static && a.final && a.hasDefaultValue() ) -»
+	«EXPAND Const       FOREACH property.typeSelect(MAttribute).select( a | !a.derived && a.static && a.final && a.hasDefaultValue() ) -»
 	«EXPAND Declaration FOREACH property.typeSelect(MAttribute).select( a | !a.derived && a.static && !a.final ) -»
-	«EXPAND Declaration FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static && !a.final ) -»
+	«EXPAND Declaration FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static ) -»
 «ENDDEFINE»
 
 
@@ -58,10 +58,17 @@
 
 
 «REM»
-	Processes the accessor methods for attributes of a classifier.
+	Processes the accessor methods for attributes of a class.
+	Order: static, non static
 «ENDREM»
 «DEFINE Accessors FOR MClass -»
-«FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.final ) AS attribute -»
+«FOREACH property.typeSelect(MAttribute).select( a | !a.derived && a.static && !a.final ) AS attribute -»
+	«EXPAND GetAccessor FOR attribute -»
+	«EXPAND SetAccessor FOR attribute -»
+	«EXPAND AddAccessor FOR attribute -»
+	«EXPAND RemoveAccessor FOR attribute -»
+«ENDFOREACH -»
+«FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static ) AS attribute -»
 	«EXPAND GetAccessor FOR attribute -»
 	«EXPAND SetAccessor FOR attribute -»
 	«EXPAND AddAccessor FOR attribute -»
@@ -100,7 +107,7 @@
 «DEFINE Derived FOR MAttribute -»
 	«EXPAND Comment::GetAccessor -»
 	«EXPAND ModifierAccessor -» function «asGetAccessorName() -»() {
-		«EXPAND OwnCodeImplementation("php.derived.attribute.implementation." + xmiGuid) -»
+		«EXPAND OwnCode("php.derived.attribute.own.code." + xmiGuid) -»
 	}
 	
 «ENDDEFINE»
@@ -183,7 +190,7 @@
 «ENDREM»
 «DEFINE TypeHintSetAccessor FOR MAttribute -»
 «IF multiplicity.isSingleValued() -»
-«IF generatePhpTypeHint( type.asGeneralName() ) -»«type.asGeneralName() -» «ENDIF -»
+«IF !isPhpPrimitiveType( type.asGeneralName() ) -»«type.asGeneralName() -» «ENDIF -»
 «ELSE -»
 «IF classifier.isModelPackageElement() && !emHasPrimitiveStereotype() -»«mapCollection( collectionMappingContextModel() ) -» «ELSE -»«mapCollection() -» «ENDIF -»
 «ENDIF -»
@@ -194,7 +201,7 @@
 	Generates type hint for add and remove accessor methods.
 «ENDREM»
 «DEFINE TypeHintAddRemoveAccessor FOR MAttribute -»
-«IF generatePhpTypeHint( type.asGeneralName() ) -»«type.asGeneralName() -» «ENDIF -»
+«IF !isPhpPrimitiveType( type.asGeneralName() ) -»«type.asGeneralName() -» «ENDIF -»
 «ENDDEFINE»
 
 
@@ -209,9 +216,9 @@
 «REM»
 	Generates the protected region of an operation.
 «ENDREM»
-«DEFINE OwnCodeImplementation(String id) FOR MAttribute -»
+«DEFINE OwnCode(String id) FOR MAttribute -»
 		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
 		// TODO: implementation of method «asGetAccessorName() -» for class «classifier.asShortGeneralName()»
-		throw new Exception('The implementation of the method «asGetAccessorName() -» for class «classifier.asShortGeneralName() -» is missing !');
+		throw new Exception('The implementation of the method «asGetAccessorName() -» for class «classifier.asShortGeneralName() -» is missing!');
 		«ENDPROTECT»
 «ENDDEFINE»
