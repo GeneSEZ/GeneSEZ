@@ -37,7 +37,7 @@
 «LET extensionPrefix() AS extensionPrefix -»
 «EXPAND PluginConfiguration(extensionKey, extensionPrefix) -»
 «EXPAND ModuleConfiguration(extensionKey, extensionPrefix) -»
-«EXPAND OwnCodeDeclaration("constants.txt.own.code.declaration." + xmiGuid) -»
+«EXPAND OwnCode("constants.txt.own.code." + xmiGuid) -»
 «ENDLET -»
 «ENDLET -»
 «ENDFILE -»
@@ -55,7 +55,7 @@
 plugin.«extensionPrefix -» {
 	«EXPAND PluginPersistence(extensionPrefix) -»
 	«EXPAND PluginView(extensionKey, extensionPrefix) -»
-	«EXPAND OwnPluginCodeDeclaration("constants.txt.own.plugin.code.declaration." + xmiGuid) -»
+	«EXPAND OwnPluginCode("constants.txt.own.plugin.code." + xmiGuid) -»
 }
 
 «ENDIF -»
@@ -87,11 +87,11 @@ plugin.«extensionPrefix -» {
 
 
 «REM»
-	Generates a region for own plugin TypoScript declarations.
+	Generates a region for own plugin code.
 «ENDREM»
-«DEFINE OwnPluginCodeDeclaration(String id) FOR MModel -»
+«DEFINE OwnPluginCode(String id) FOR MModel -»
 	«PROTECT CSTART '// ' CEND '' ID (id)»
-	// TODO: put your further plugin code declarations here
+	// TODO: put your further plugin code here
 	«ENDPROTECT»
 «ENDDEFINE»
 
@@ -103,7 +103,7 @@ plugin.«extensionPrefix -» {
 module.«extensionPrefix -» {
 	«EXPAND ModulePersistence(extensionPrefix) -»
 	«EXPAND ModuleView(extensionKey, extensionPrefix) -»
-	«EXPAND OwnPluginCodeDeclaration("constants.txt.own.module.code.declaration." + xmiGuid) -»
+	«EXPAND OwnModuleCode("constants.txt.own.module.code." + xmiGuid) -»
 }
 
 «ENDIF -»
@@ -135,20 +135,20 @@ module.«extensionPrefix -» {
 
 
 «REM»
-	Generates a region for own module TypoScript declarations.
+	Generates a region for own module code.
 «ENDREM»
-«DEFINE OwnModuleCodeDeclaration(String id) FOR MModel -»
+«DEFINE OwnModuleCode(String id) FOR MModel -»
 	«PROTECT CSTART '// ' CEND '' ID (id)»
-	// TODO: put your further module code declarations here
+	// TODO: put your further module code here
 	«ENDPROTECT»
 «ENDDEFINE»
 
 
 «REM»
-	Generates a region for own TypoScript declarations.
+	Generates a region for own code.
 «ENDREM»
-«DEFINE OwnCodeDeclaration(String id) FOR MModel -»
+«DEFINE OwnCode(String id) FOR MModel -»
 «PROTECT CSTART '// ' CEND '' ID (id)»
-// TODO: put your further code declarations here
+// TODO: put your further code here
 «ENDPROTECT»
 «ENDDEFINE»
