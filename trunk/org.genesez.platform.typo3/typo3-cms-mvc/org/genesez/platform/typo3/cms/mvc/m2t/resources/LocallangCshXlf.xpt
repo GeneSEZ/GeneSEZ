@@ -12,7 +12,6 @@
 	Entry point for generating "locallang_csh_<table name of domain object>.xlf".
 	
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
-	@todo	Check which properties should be generated (all or only instance properties???)
 «ENDREM»
 
 «REM» use TYPO3 CMS profile scripts «ENDREM»
@@ -28,6 +27,9 @@
 «REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
 «EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
 
+
+«REM» use GeneSEZ common access element scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
 
 «REM» use GeneSEZ common navigate element scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::NavigateElement»
@@ -103,7 +105,7 @@
 
 «DEFINE Body(String languageKey) FOR MClass -»
 		<body>
-			«EXPAND PropertyLocalization(languageKey) FOREACH property.sortBy( p | p.asLocalizationCshName() ) -»
+			«EXPAND PropertyLocalization(languageKey) FOREACH property.select( p | !p.derived && !p.isStatic() ).sortBy( p | p.asLocalizationCshName() ) -»
 			
 			«EXPAND OwnLocalizations(languageKey) -»
 		</body>
