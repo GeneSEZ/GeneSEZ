@@ -542,7 +542,7 @@ private MAttribute transform(MAttribute this, Property p) :
  * @return	the GeneSEZ association role
  */
 private MAssociationRole transform(MAssociationRole this, Property aend) :
-	logTrace("make [" + metaType + "] - " + aend.fqmn()) ->
+	logTrace("transform [" + metaType + "] - " + aend.fqmn()) ->
 	// set the unique xmiId and name
 	setXmiGuid( xmiId(aend) ) ->
 	setName( assocEndName(aend) ) ->
@@ -579,7 +579,7 @@ private MAssociationRole transform(MAssociationRole this, Property aend) :
  * @return	the GeneSEZ association
  */
 private create MAssociation transformAssociation(Association a) :
-	logTrace("make [" + metaType + "] - " + a) ->
+	logTrace("transform [" + metaType + "] - " + a) ->
 	// set the unique xmiId and name
 	setXmiGuid( xmiId(a) ) ->
 	setName( assocName(a) ) ->
@@ -590,11 +590,11 @@ private create MAssociation transformAssociation(Association a) :
 	ownedComment.addAll( a.ownedComment.typeSelect(Comment).transform() ) ->
 	// associations ends: filter non navigable association ends 
 	// non navigable association ends do not have the class refernce set, except the association object is an association class, then the association class is itself set as class
-	logTrace("featuring classifiers: " + a.memberEnd.featuringClassifier.fqmn() ) ->
+	logTrace("   featuring classifiers: " + a.memberEnd.featuringClassifier.fqmn() ) ->
 	end.addAll(
-		a.memberEnd.select( e| !e.featuringClassifier.isEmpty && !e.featuringClassifier.contains(a) ).select( ar|ar.makeAssociationRole().transform( ar ) )
+		a.memberEnd.select( e| !e.featuringClassifier.isEmpty && !e.featuringClassifier.contains(a) ).makeAssociationRole()
 	) ->
-	logTrace("link ends: " + end) ->
+	logTrace("   link ends: " + end) ->
 	linkEnds() ->
 	// transform association class
 	transformAssociationClass(a) ->
