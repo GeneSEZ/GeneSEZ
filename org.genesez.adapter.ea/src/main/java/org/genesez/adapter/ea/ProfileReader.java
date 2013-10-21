@@ -4,6 +4,7 @@ package org.genesez.adapter.ea;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_12d203c6_1328866934865_740501_2040) 
  */
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,22 +25,27 @@ import org.eclipse.uml2.uml.UMLPackage;
  * 
  * The profile reader imports a number of UML profiles and make these profiles
  * available for applying them to a transformed UML model.
- * @author Christian
+ * @author christian
  */
+
 public class ProfileReader extends AbstractWorkflowComponent {
 	
 	// -- generated attribute, constant + association declarations ----------
 	
 	private static final Log LOG = LogFactory.getLog(ProfileReader.class);
 	
-	private String profileDirectory = "null";
+	private String profileDirectory = null;
 	
 	private String profileExtension = "profile.uml";
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
+	 * @param	ctx	
+	 * @param	pm	
+	 * @param	issues	
 	 */
+	
 	protected void invokeInternal(WorkflowContext ctx, ProgressMonitor pm, Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363353664639_712434_2442) ENABLED START */
 		for (String s : this.profileFiles.keySet()) {
@@ -67,7 +73,9 @@ public class ProfileReader extends AbstractWorkflowComponent {
 	
 	/**
 	 * Method stub for further implementation.
+	 * @param	i	
 	 */
+	
 	public void checkConfiguration(Issues i) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363353670969_632812_2447) ENABLED START */
 		
@@ -78,7 +86,9 @@ public class ProfileReader extends AbstractWorkflowComponent {
 	
 	/**
 	 * Add profile names
+	 * @param	value	
 	 */
+	
 	public void addProfile(String value) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363353990924_467227_2459) ENABLED START */
 		String file = this.profileDirectory + "/" + value + this.profileExtension;
@@ -87,28 +97,26 @@ public class ProfileReader extends AbstractWorkflowComponent {
 		/* PROTECTED REGION END */
 	}
 	
+	// -- generated association + attribute accessors -----------------------
 	/**
-	 * Sets the value of attribute '<em><b>profileDirectory</b></em>'.
-	 * @param	profileDirectory	the value to set.
+	 * Sets the value of attribute '<em><b>profileDirectory</b></em>'
 	 */
 	public void setProfileDirectory(String profileDirectory) {
 		this.profileDirectory = profileDirectory;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>profileExtension</b></em>'.
-	 * @param	profileExtension	the value to set.
+	 * Sets the value of attribute '<em><b>profileExtension</b></em>'
 	 */
 	public void setProfileExtension(String profileExtension) {
 		this.profileExtension = profileExtension;
 	}
 	
-	// -- generated association + attribute accessors -----------------------
-	
-	// -- generated code  ---------------------------------------------------
+	// -- generated code of other cartridges --------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_12d203c6_1328866934865_740501_2040) ENABLED START */
 	private Map<String, String> profileFiles = new HashMap<String, String>();
 	/* PROTECTED REGION END */
+	
 }

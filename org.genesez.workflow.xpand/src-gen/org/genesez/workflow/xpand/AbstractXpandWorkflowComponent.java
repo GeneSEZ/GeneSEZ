@@ -207,7 +207,7 @@ public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflo
 	 * Returns the value of attribute '<em><b>xtendNamingFile</b></em>'.
 	 */
 	public String getXtendNamingFile() {
-		return this.xtendNamingFile;
+		return xtendNamingFile;
 	}
 	
 	/**

@@ -3,9 +3,9 @@
  * Transforms UML class models into GeneSEZ models.
  * 
  * To transform the model there are some distinctions:
- * - transformation of model (non containment) references should call make() functions or makeType()
+ * - transformation of model (non containment) references should call make() functions
  *   (they ensure identification by name and xmi id as well as serialization by a containment)
- * - transformation of model containment references should call transform() or make().transform() functions
+ * - transformation of model containment references should call transform() functions
  *   (transform properties of model elements, call transform functions for containment + make() for non containment references)
  * - furthermore there are functions to distict transformation
  * - functions to transform the properties of model elements
@@ -378,7 +378,7 @@ private create MLiteral transform(EnumerationLiteral l) :
  * @param	o	an uml operation
  * @return	the GeneSEZ operation
  */
-MOperation transform(MOperation this, Operation o) :
+create MOperation transform(Operation o) :
 	logTrace( "transform [ " + metaType + " ] - " + o.fqmn() ) ->
 	// set the unique xmiId and name
 	transformBasics(o) ->
@@ -514,7 +514,7 @@ private create MParameter make(Void v) :
  * @param	p	an uml property
  * @return	the GeneSEZ attribute
  */
-private MAttribute transform(MAttribute this, Property p) :
+private create MAttribute transformAttribute(Property p) :
 	// set the unique xmiId and name
 	transformBasics(p) ->
 	// properties
@@ -541,7 +541,7 @@ private MAttribute transform(MAttribute this, Property p) :
  * @param	aend	an uml property
  * @return	the GeneSEZ association role
  */
-private MAssociationRole transform(MAssociationRole this, Property aend) :
+private create MAssociationRole transformAssociationRole(Property aend) :
 	logTrace("make [" + metaType + "] - " + aend.fqmn()) ->
 	// set the unique xmiId and name
 	setXmiGuid( xmiId(aend) ) ->
@@ -591,9 +591,7 @@ private create MAssociation transformAssociation(Association a) :
 	// associations ends: filter non navigable association ends 
 	// non navigable association ends do not have the class refernce set, except the association object is an association class, then the association class is itself set as class
 	logTrace("featuring classifiers: " + a.memberEnd.featuringClassifier.fqmn() ) ->
-	end.addAll(
-		a.memberEnd.select( e| !e.featuringClassifier.isEmpty && !e.featuringClassifier.contains(a) ).select( ar|ar.makeAssociationRole().transform( ar ) )
-	) ->
+	end.addAll( a.memberEnd.select( e| !e.featuringClassifier.isEmpty && !e.featuringClassifier.contains(a) ).transformAssociationRole() ) ->
 	logTrace("link ends: " + end) ->
 	linkEnds() ->
 	// transform association class
@@ -897,7 +895,7 @@ private create MExternal makeExternal(String name, String xmiGuid) :
  */
 private MExternal makeExternal(ValueSpecification v) :
 	logTrace("make [MExternal] - " + v.fqmn()) ->
-	makeExternal( v.stringValue() ).transformMetaData(v);
+	makeExternal( v.stringValue() );
 
 /**
  * creates a GeneSEZ external type from an uml classifier
@@ -912,8 +910,6 @@ private MExternal makeExternal(Classifier c) :
 			? e.genericParameter.addAll( 
 				c.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).makeGeneric() )
 			: e ->
-		// meta data
-		e.transformMetaData(c) ->
 		e);
 
 /**
@@ -923,7 +919,7 @@ private MExternal makeExternal(Classifier c) :
  */
 private MExternal makeExternal(PrimitiveType p) :
 	logTrace("make [MExternal] - " + p.fqmn()) ->
-	makeExternal( p.name ).transformMetaData(p);
+	makeExternal( p.name );
 
 /**
  * Returns the multilicity properties of the specified multiplicity element.
@@ -941,7 +937,7 @@ private MPrimitiveType makePrimitiveType(DataType d) :
 	// delegate
 	makePrimitiveType(null);
  */
-
+	
 /**
  * polymorphic exception handling for the oaw type Void / null
  * simply creaets a GeneSEZ primitive type 'void'
@@ -1131,10 +1127,10 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
 	// add comment to classifier
 	ownedComment.addAll( c.ownedComment.typeSelect(Comment).transform() ) ->
 	// add attributes and association ends
-	c.attribute.reject( p|p.association != null ).forAll( a|a.makeAttribute().transform( a ) -> true ) ->
-	c.attribute.reject( p|p.association == null ).forAll( ar|ar.makeAssociationRole().transform(ar) -> true ) ->
+	property.addAll( c.attribute.reject( p|p.association != null ).transformAttribute() ) ->
+	property.addAll( c.attribute.reject( p|p.association == null ).transformAssociationRole() ) ->
 	// add operations
-	c.getOperations().forAll( o|o.make().transform(o) -> true ) ->
+	operation.addAll( c.getOperations().transform() ) ->
 	// add nested classifiers
 	c.ownedElement.typeSelect(Classifier).select(
 		e | {Class, Interface, Enumeration, DataType}.contains(e.metaType)
@@ -1146,16 +1142,6 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
 		: this ->
 	// set tagged values
 	taggedValue.addAll( makeTaggedValues(c) ) ->
-	this;
-
-/**
- * Transforms the meta data, i.e. stereotypes and tagged values.
- */
-MElement transformMetaData(MElement this, Element e) :
-	// set stereotype
-	stereotype.addAll( e.getAppliedStereotypes().make() ) ->
-	// set tagged values
-	taggedValue.addAll( makeTaggedValues(e) ) ->
 	this;
 
 /**
