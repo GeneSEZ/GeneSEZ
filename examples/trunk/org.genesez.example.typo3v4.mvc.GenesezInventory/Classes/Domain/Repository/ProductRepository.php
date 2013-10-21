@@ -37,7 +37,8 @@ namespace GeneSEZ\GszInventory\Domain\Repository;
  */
 class ProductRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	
-	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_6_8a7027a_1381750844906_293278_2324) ENABLED START */
+	/* PROTECTED REGION ID(php.class.own.code._17_0_6_8a7027a_1381750844906_293278_2324) ENABLED START */
+	// TODO: put your further code here
 	/* PROTECTED REGION END */
 	
 }

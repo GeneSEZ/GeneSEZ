@@ -58,7 +58,7 @@ class Product extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param int $quantity 
 	 */
 	public function __construct($name = '', $description = '', $quantity = 0) {
-		/* PROTECTED REGION ID(php.constructor._17_0_2_8a7027a_1314363787787_15072_2350) ENABLED START */
+		/* PROTECTED REGION ID(php.constructor.own.code._17_0_2_8a7027a_1314363787787_15072_2350) ENABLED START */
 		$this->setName($name);
 		$this->setDescription($description);
 		$this->setQuantity($quantity);
@@ -122,7 +122,8 @@ class Product extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		$this->quantity = $quantity;
 	}
 
-	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466) ENABLED START */
+	/* PROTECTED REGION ID(php.class.own.code._17_0_1_8a7027a_1306344238376_116675_2466) ENABLED START */
+	// TODO: put your further code here
 	/* PROTECTED REGION END */
 	
 }
