@@ -91,7 +91,7 @@ public abstract class AbstractTraceabilityTransformable {
 	 * Returns the value of attribute '<em><b>gcoreModelSlot</b></em>'.
 	 */
 	public String getGcoreModelSlot() {
-		return this.gcoreModelSlot;
+		return gcoreModelSlot;
 	}
 	
 	/**
@@ -106,7 +106,7 @@ public abstract class AbstractTraceabilityTransformable {
 	 * Returns the value of attribute '<em><b>greqModelSlot</b></em>'.
 	 */
 	public String getGreqModelSlot() {
-		return this.greqModelSlot;
+		return greqModelSlot;
 	}
 	
 	/**
@@ -121,7 +121,7 @@ public abstract class AbstractTraceabilityTransformable {
 	 * Returns the value of attribute '<em><b>gtraceModelSlot</b></em>'.
 	 */
 	public String getGtraceModelSlot() {
-		return this.gtraceModelSlot;
+		return gtraceModelSlot;
 	}
 	
 	/**
@@ -136,7 +136,7 @@ public abstract class AbstractTraceabilityTransformable {
 	 * Returns the value of attribute '<em><b>template</b></em>'.
 	 */
 	public String getTemplate() {
-		return this.template;
+		return template;
 	}
 	
 	/**

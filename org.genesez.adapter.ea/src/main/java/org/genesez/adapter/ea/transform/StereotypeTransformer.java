@@ -4,6 +4,7 @@ package org.genesez.adapter.ea.transform;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_5_12d203c6_1363954598956_480056_2810) 
  */
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.uml2.uml.Generalization;
@@ -14,8 +15,9 @@ import org.genesez.adapter.ea.PostProcessor;
 
 /**
  * applies stereotypes that have been read from profile-files to the elements 
- * @author Christian
+ * @author christian
  */
+
 public class StereotypeTransformer extends AbstractElementTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -25,7 +27,11 @@ public class StereotypeTransformer extends AbstractElementTransformer {
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
+	 * @param	element	
+	 * @param	parent	
+	 * @return	
 	 */
+	
 	public Stereotype transform(org.sparx.Element element, Profile parent) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363954738823_497759_2867) ENABLED START */
 		LOG.debug("Creating Stereotype " + element.GetName() + ", parent " + parent.getName() + ", abstract(" + element.GetAbstract() + ")");
@@ -45,7 +51,9 @@ public class StereotypeTransformer extends AbstractElementTransformer {
 	
 	/**
 	 * Method stub for further implementation.
+	 * @param	attribute	
 	 */
+	
 	protected void transform(org.sparx.Attribute attribute) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363954712293_596056_2863) ENABLED START */
 		LOG.debug("Transforming attribute " + attribute.GetName());
@@ -63,7 +71,9 @@ public class StereotypeTransformer extends AbstractElementTransformer {
 	
 	/**
 	 * Method stub for further implementation.
+	 * @param	connector	
 	 */
+	
 	protected void transformConnector(org.sparx.Connector connector) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363954836637_459802_2875) ENABLED START */
 		LOG.debug("Transforming connector " + connector.GetName());
@@ -83,10 +93,11 @@ public class StereotypeTransformer extends AbstractElementTransformer {
 	
 	// -- generated association + attribute accessors -----------------------
 	
-	// -- generated code  ---------------------------------------------------
+	// -- generated code of other cartridges --------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363954598956_480056_2810) ENABLED START */
 	// :)
 	/* PROTECTED REGION END */
+	
 }

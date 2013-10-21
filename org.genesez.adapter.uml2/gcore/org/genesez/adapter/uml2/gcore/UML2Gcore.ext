@@ -897,7 +897,7 @@ private create MExternal makeExternal(String name, String xmiGuid) :
  */
 private MExternal makeExternal(ValueSpecification v) :
 	logTrace("make [MExternal] - " + v.fqmn()) ->
-	makeExternal( v.stringValue() ).transformMetaData(v);
+	makeExternal( v.stringValue() );
 
 /**
  * creates a GeneSEZ external type from an uml classifier
@@ -912,8 +912,6 @@ private MExternal makeExternal(Classifier c) :
 			? e.genericParameter.addAll( 
 				c.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).makeGeneric() )
 			: e ->
-		// meta data
-		e.transformMetaData(c) ->
 		e);
 
 /**
@@ -923,7 +921,7 @@ private MExternal makeExternal(Classifier c) :
  */
 private MExternal makeExternal(PrimitiveType p) :
 	logTrace("make [MExternal] - " + p.fqmn()) ->
-	makeExternal( p.name ).transformMetaData(p);
+	makeExternal( p.name );
 
 /**
  * Returns the multilicity properties of the specified multiplicity element.
@@ -941,7 +939,7 @@ private MPrimitiveType makePrimitiveType(DataType d) :
 	// delegate
 	makePrimitiveType(null);
  */
-
+	
 /**
  * polymorphic exception handling for the oaw type Void / null
  * simply creaets a GeneSEZ primitive type 'void'
@@ -1146,16 +1144,6 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
 		: this ->
 	// set tagged values
 	taggedValue.addAll( makeTaggedValues(c) ) ->
-	this;
-
-/**
- * Transforms the meta data, i.e. stereotypes and tagged values.
- */
-MElement transformMetaData(MElement this, Element e) :
-	// set stereotype
-	stereotype.addAll( e.getAppliedStereotypes().make() ) ->
-	// set tagged values
-	taggedValue.addAll( makeTaggedValues(e) ) ->
 	this;
 
 /**
