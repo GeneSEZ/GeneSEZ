@@ -42,7 +42,7 @@
 «EXPAND AccessDenied -»
 «EXPAND PluginConfiguration -»
 «EXPAND CommandControllerConfiguration -»
-«EXPAND OwnCodeImplementation("ext_localconf.php.own.code.implementation." + xmiGuid) -»
+«EXPAND OwnCode("ext_localconf.php.own.code." + xmiGuid) -»
 
 ?>
 «ENDFILE -»
@@ -70,7 +70,7 @@ if (!defined ('TYPO3_MODE')) {
 «IF !allPlugins().isEmpty -»
 «EXPAND ConfigurePlugin FOREACH allPlugins().sortBy( p | p.asTypo3PluginName() ) -»
 «ENDIF -»
-«EXPAND OwnPluginCodeImplementation("ext_localconf.php.own.plugin.code.implementation." + xmiGuid) -»
+«EXPAND OwnPluginCode("ext_localconf.php.own.plugin.code." + xmiGuid) -»
 
 «ENDDEFINE»
 
@@ -96,11 +96,11 @@ if (!defined ('TYPO3_MODE')) {
 
 
 «REM»
-	generates a region for own plugin code implementations
+	Generates a region for own plugin code.
 «ENDREM»
-«DEFINE OwnPluginCodeImplementation(String id) FOR MModel -»
+«DEFINE OwnPluginCode(String id) FOR MModel -»
 «PROTECT CSTART '/* ' CEND ' */' ID (id)»
-// TODO: put your further plugin code implementations here
+// TODO: put your further plugin code here
 «ENDPROTECT»
 «ENDDEFINE»
 
@@ -112,7 +112,7 @@ if (TYPO3_MODE === 'BE') {
 «IF !allCommandControllers().isEmpty -»
 	«EXPAND RegisterCommandController FOREACH allCommandControllers().sortBy( cc | cc.asGeneralName() ) -»
 «ENDIF -»
-	«EXPAND OwnCommandControllerCodeImplementation("ext_localconf.php.own.command.controller.code.implementation." + xmiGuid) -»
+	«EXPAND OwnCommandControllerCode("ext_localconf.php.own.command.controller.code." + xmiGuid) -»
 }
 
 «ENDDEFINE»
@@ -127,20 +127,20 @@ if (TYPO3_MODE === 'BE') {
 
 
 «REM»
-	generates a region for own command controller code implementations
+	Generates a region for own command controller code.
 «ENDREM»
-«DEFINE OwnCommandControllerCodeImplementation(String id) FOR MModel -»
+«DEFINE OwnCommandControllerCode(String id) FOR MModel -»
 	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-	// TODO: put your further command controller code implementations here
+	// TODO: put your further command controller code here
 	«ENDPROTECT»
 «ENDDEFINE»
 
 
 «REM»
-	Generates a region for own code implementations.
+	Generates a region for own code.
 «ENDREM»
-«DEFINE OwnCodeImplementation(String id) FOR MModel -»
+«DEFINE OwnCode(String id) FOR MModel -»
 «PROTECT CSTART '/* ' CEND ' */' ID (id)»
-// TODO: put your further code implementations here
+// TODO: put your further code here
 «ENDPROTECT»
 «ENDDEFINE»
