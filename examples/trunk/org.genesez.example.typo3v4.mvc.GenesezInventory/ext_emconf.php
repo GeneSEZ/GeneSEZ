@@ -22,15 +22,24 @@ $EM_CONF[$_EXTKEY] = array(
 			'typo3' => '6.2.0-0.0.0',
 			'extbase' => '6.2.0-0.0.0',
 			'fluid' => '6.2.0-0.0.0',
+			/* PROTECTED REGION ID(ext_emconf.php.own.depends.constraint.eee_1045467100313_135436_1) ENABLED START */
+			// TODO: put your further depends constraints here
+			/* PROTECTED REGION END */
 		),
 		'conflicts' => array(
+			/* PROTECTED REGION ID(ext_emconf.php.own.conflicts.constraint.eee_1045467100313_135436_1) ENABLED START */
+			// TODO: put your further conflicts constraints here
+			/* PROTECTED REGION END */
 		),
 		'suggests' => array(
+			/* PROTECTED REGION ID(ext_emconf.php.own.suggests.constraint.eee_1045467100313_135436_1) ENABLED START */
+			// TODO: put your further suggests constraints here
+			/* PROTECTED REGION END */
 		),
 	),
+	/* PROTECTED REGION ID(ext_emconf.php.own.code.eee_1045467100313_135436_1) ENABLED START */
+	// TODO: put your further code here
+	/* PROTECTED REGION END */
 );
-
-/* PROTECTED REGION ID(ext_emconf.php.own.code.implementation.eee_1045467100313_135436_1) ENABLED START */
-/* PROTECTED REGION END */
 
 ?>
