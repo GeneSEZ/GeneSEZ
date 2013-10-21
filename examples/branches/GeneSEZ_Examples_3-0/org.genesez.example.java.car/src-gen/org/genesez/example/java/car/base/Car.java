@@ -23,11 +23,14 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	
 	/** Defines an identifier for each association, used by the association handling library */
 	public enum Associations implements RelatedAssociationRole {
-		SPARE, LICENSE, LICENSEPLATE, ENGINE, WHEELS
+		WHEELS, SPARE, LICENSE, LICENSEPLATE, ENGINE
 	}
 	
 	/** Stores the association management objects */
 	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object, ? extends Object>>();
+	
+	/** Stores all linked objects of association '<em><b>wheels</b></em>' */
+	private java.util.Set<Wheel> wheels = new java.util.HashSet<Wheel>();
 	
 	/** Stores the linked object of association '<em><b>spare</b></em>' */
 	private Wheel spare;
@@ -43,9 +46,6 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	
 	/** Stores the linked object of association '<em><b>engine</b></em>' */
 	private Engine engine;
-	
-	/** Stores all linked objects of association '<em><b>wheels</b></em>' */
-	private java.util.Set<Wheel> wheels = new java.util.HashSet<Wheel>();
 	
 	/**
 	 * describes the maximum speed of a car
@@ -100,6 +100,7 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	
 	// initialization block for association management objects
 	{
+		association.put(Associations.WHEELS, new ManyAssociation<Car, Wheel>(this, wheels, Wheel.Associations.MYCAR));
 		association.put(Associations.SPARE, new OneAssociation<Car, Wheel>(this, new Accessor<Wheel>() {
 			public Wheel get() {
 				return spare;
@@ -144,7 +145,6 @@ public class Car extends AbstractVehicle implements AssociationRole {
 				engine = referenced;
 			}
 		}, Engine.Associations.CAR));
-		association.put(Associations.WHEELS, new ManyAssociation<Car, Wheel>(this, wheels, Wheel.Associations.MYCAR));
 	}
 	
 	/**
@@ -155,6 +155,14 @@ public class Car extends AbstractVehicle implements AssociationRole {
 		if (association.containsKey(role))
 			return association.get(role);
 		throw new RuntimeException("the class doesn't have the association you specified!");
+	}
+	
+	/**
+	 * reference to normal wheels on a car
+	 */
+	@SuppressWarnings("unchecked")
+	public Association<Car, Wheel> wheels() {
+		return (Association<Car, Wheel>) association.get(Associations.WHEELS);
 	}
 	
 	/**
@@ -187,14 +195,6 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	@SuppressWarnings("unchecked")
 	public Association<Car, Engine> engine() {
 		return (Association<Car, Engine>) association.get(Associations.ENGINE);
-	}
-	
-	/**
-	 * reference to normal wheels on a car
-	 */
-	@SuppressWarnings("unchecked")
-	public Association<Car, Wheel> wheels() {
-		return (Association<Car, Wheel>) association.get(Associations.WHEELS);
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1177945913718_872802_139) ENABLED START */

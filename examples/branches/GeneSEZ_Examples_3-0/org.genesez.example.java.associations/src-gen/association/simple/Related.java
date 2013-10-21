@@ -19,11 +19,11 @@ public class Related implements Relatable {
 	/** Stores all linked objects of association '<em><b>bidiManyToMany</b></em>' */
 	public java.util.Set<Hub> bidiManyToMany = new java.util.HashSet<Hub>();
 	
-	/** Stores all linked objects of association '<em><b>bidiSelfrefOneToMany</b></em>' */
-	public java.util.Set<Related> bidiSelfrefOneToMany = new java.util.HashSet<Related>();
-	
 	/** Stores the linked object of association '<em><b>bidiSelfrefManyToOne</b></em>' */
 	public Related bidiSelfrefManyToOne;
+	
+	/** Stores all linked objects of association '<em><b>bidiSelfrefOneToMany</b></em>' */
+	public java.util.Set<Related> bidiSelfrefOneToMany = new java.util.HashSet<Related>();
 	
 	/**
 	 * Returns the linked object of association '<em><b>bidiIfManyToOne</b></em>'.
@@ -107,6 +107,31 @@ public class Related implements Relatable {
 	}
 	
 	/**
+	 * Returns the linked object of association '<em><b>bidiSelfrefManyToOne</b></em>'.
+	 */
+	public Related getBidiSelfrefManyToOne() {
+		return bidiSelfrefManyToOne;
+	}
+	
+	/**
+	 * Establishes a link to the specified object for association '<em><b>bidiSelfrefManyToOne</b></em>'.
+	 * @param	bidiSelfrefManyToOne	the object to associate.
+	 */
+	public void setBidiSelfrefManyToOne(Related bidiSelfrefManyToOne) {
+		if (this.bidiSelfrefManyToOne == bidiSelfrefManyToOne) {
+			return;
+		}
+		Related former = this.bidiSelfrefManyToOne;
+		this.bidiSelfrefManyToOne = bidiSelfrefManyToOne;
+		if (former != null) {
+			former.removeBidiSelfrefOneToMany(this);
+		}
+		if (bidiSelfrefManyToOne != null) {
+			bidiSelfrefManyToOne.addBidiSelfrefOneToMany(this);
+		}
+	}
+	
+	/**
 	 * Returns all linked objects of association '<em><b>bidiSelfrefOneToMany</b></em>'.
 	 */
 	public java.util.Set<Related> getBidiSelfrefOneToMany() {
@@ -135,31 +160,6 @@ public class Related implements Relatable {
 		}
 		this.bidiSelfrefOneToMany.remove(bidiSelfrefOneToMany);
 		bidiSelfrefOneToMany.setBidiSelfrefManyToOne(null);
-	}
-	
-	/**
-	 * Returns the linked object of association '<em><b>bidiSelfrefManyToOne</b></em>'.
-	 */
-	public Related getBidiSelfrefManyToOne() {
-		return bidiSelfrefManyToOne;
-	}
-	
-	/**
-	 * Establishes a link to the specified object for association '<em><b>bidiSelfrefManyToOne</b></em>'.
-	 * @param	bidiSelfrefManyToOne	the object to associate.
-	 */
-	public void setBidiSelfrefManyToOne(Related bidiSelfrefManyToOne) {
-		if (this.bidiSelfrefManyToOne == bidiSelfrefManyToOne) {
-			return;
-		}
-		Related former = this.bidiSelfrefManyToOne;
-		this.bidiSelfrefManyToOne = bidiSelfrefManyToOne;
-		if (former != null) {
-			former.removeBidiSelfrefOneToMany(this);
-		}
-		if (bidiSelfrefManyToOne != null) {
-			bidiSelfrefManyToOne.addBidiSelfrefOneToMany(this);
-		}
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._QFz0IJh3EeKA2py9a1_A4A) ENABLED START */
