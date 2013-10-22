@@ -41,7 +41,7 @@ extension org::genesez::util::logging::Logging;
 // -- Interation over Model and Package Structures ----------------------------------------------------------
 
 MModel modelScaffolding(MModel this) :
-	useLogger( "org.genesez.platform.typo3" ) ->
+	useLogger("org.genesez.platform.typo3") ->
 	packageScaffolding();
 
 
@@ -72,10 +72,10 @@ MClass entityScaffolding(MClass this) :
 	emHasAggregateRootStereotype()
 		? (	logTrace( "GeneSEZ: Scaffolding for aggregate root! Model element: " + fqmn() ) ->
 			(	let extbaseDomainObjectStereotype = navModel().ensureStereotypeExistence( prExtbaseDomainObject(), prExtbaseDomainObject() ) :
-					ensureStereotypeAssignment( extbaseDomainObjectStereotype ).
-					ensureSingleTaggedValueExistence( extbaseDomainObjectStereotype.ensureTagExistence( prExtbaseDomainObjectCreateController(), "Boolean" ), "true" ).owningElement.
-					ensureSingleTaggedValueExistence( extbaseDomainObjectStereotype.ensureTagExistence( prExtbaseDomainObjectCreateRepository(), "Boolean" ), "true" ).owningElement.
-					ensureSingleTaggedValueExistence( extbaseDomainObjectStereotype.ensureTagExistence( prExtbaseDomainObjectCreatePlugin(), "Boolean" ), "true" )
+					ensureStereotypeAssignment(extbaseDomainObjectStereotype)
+						.ensureSingleTaggedValueExistence( extbaseDomainObjectStereotype.ensureTagExistence( prExtbaseDomainObjectCreateController(), "Boolean" ), "true" ).owningElement
+						.ensureSingleTaggedValueExistence( extbaseDomainObjectStereotype.ensureTagExistence( prExtbaseDomainObjectCreateRepository(), "Boolean" ), "true" ).owningElement
+						.ensureSingleTaggedValueExistence( extbaseDomainObjectStereotype.ensureTagExistence( prExtbaseDomainObjectCreatePlugin(), "Boolean" ), "true" )
 			)
 		) : Void ->
 	this;
