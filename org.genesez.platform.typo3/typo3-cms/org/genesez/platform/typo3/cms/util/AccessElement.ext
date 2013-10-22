@@ -44,5 +44,5 @@ List[String] allFlexFormSheetsWithoutSdef(MInterface this) :
  */
 List[MAttribute] allFlexFormSheetProperties(MInterface this, String sheet) :
 	sheet == "sDEF"
-		? property.typeSelect(MAttribute).select( a | a.emGetTypo3FlexFormPropertyFlexFormSheet() == "" || a.emGetTypo3FlexFormPropertyFlexFormSheet() == prTypo3FlexFormSheetSdef() )
+		? property.typeSelect(MAttribute).select( a | !a.emHasTypo3FlexFormPropertyUtilizableFlexFormSheet() || a.emGetTypo3FlexFormPropertyFlexFormSheet() == prTypo3FlexFormSheetSdef() )
 		: property.typeSelect(MAttribute).select( a | a.emGetTypo3FlexFormPropertyFlexFormSheet() == sheet );
