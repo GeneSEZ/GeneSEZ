@@ -12,8 +12,6 @@ import gcore;
  * Model modifications before generation of source code begins.
  * 
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
- * @todo	Add stereotype "accesssor" and set property "setter" to "false" if stereotype "di" is assigned.
- * @todo	Transform first character of package name to upper case.  
  */
 
 // use TYPO3 CMS specific Extbase profile scripts
@@ -53,11 +51,18 @@ extension org::genesez::util::logging::Logging;
 MModel modelModifications(MModel this) :
 	useLogger("org.genesez.platform.typo3") ->
 	logTrace( "GeneSEZ: Modifications for Model! Model element: " + fqmn() ) ->
-	packageModifications();
+	
+	// perform modifications for all classes
+	classifier.typeSelect(MClass).classModifications() ->
+	// perform modifications for all nested packages
+	nestedPackage.packageModifications() ->
+	this;
 
 
 MPackage packageModifications(MPackage this) :
 	logTrace( "GeneSEZ: Modifications for Package! Model element: " + fqmn() ) ->
+	packageChangePackageNameToFirstUpper() ->
+	
 	// perform modifications for all classes
 	classifier.typeSelect(MClass).classModifications() ->
 	// perform modifications for all nested packages
@@ -87,6 +92,19 @@ MClass classModifications(MClass this) :
 		default :
 			Void
 	} ->
+	this;
+
+
+// -- Modification of Packages ------------------------------------------------------------------------------
+
+/**
+ * @todo: should maybe performed by a check validation rule
+ */
+MPackage packageChangePackageNameToFirstUpper(MPackage this) :
+	name.matches("^[a-z].*")
+		? (	logTrace( "GeneSEZ: Change package name to first upper! Model element: " + fqmn() ) ->
+			setName( name.toFirstUpper() )
+		) : Void ->
 	this;
 
 
@@ -180,12 +198,12 @@ MOperation controllerAddInitializeAction(MOperation this) :
  * Modification of an TYPO3 CMS specific TYPO3 Extbase Entity or Value Object.
  */
 MClass domainObjectModifications(MClass this) :
-	property.domainObjectChangePropertyVisibility() ->
+	property.domainObjectChangePropertyVisibilityToProtected() ->
 	/*property.typeSelect(MAttribute).changeDomainObjectAttributeMultiplicity()*/
 	this;
 
 
-MProperty domainObjectChangePropertyVisibility(MProperty this) :
+MProperty domainObjectChangePropertyVisibilityToProtected(MProperty this) :
 	visibility != "protected"
 		? ( logTrace( "GeneSEZ: Change visibility to 'protected' for domain object property! Model element: " + fqmn() ) ->
 			setVisibility("protected")
