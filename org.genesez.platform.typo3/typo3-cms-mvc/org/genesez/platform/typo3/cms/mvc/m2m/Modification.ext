@@ -1,83 +1,200 @@
-/**
- * 	Modifications of the model before generation of source code.  
- *  
- * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date	2011-05-19
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
  */
 
-//	based on genesez meta model
 import gcore;
 
-// use TYPO3 CMS profile scripts
-extension org::genesez::platform::typo3::cms::profile::TYPO3CMSProfile;
 
-// use TYPO3 naming context and common naming scripts
-extension org::genesez::metamodel::core::util::mapping::NameMapping;
-extension org::genesez::platform::typo3cms::mvc::convention::NamingContext;
+/**
+ * Model modifications before generation of source code begins.
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ * @todo	Add stereotype "accesssor" and set property "setter" to "false" if stereotype "di" is assigned.
+ * @todo	Transform first character of package name to upper case.  
+ */
 
-// use TYPO3 MVC access helper scripts which overrides
-// common access helper scripts if script name is equals
-extension org::genesez::platform::typo3cms::mvc::util::AccessElement;
-extension org::genesez::metamodel::core::util::AccessElement;
+// use TYPO3 CMS specific Extbase profile scripts
+extension org::genesez::platform::typo3::cms::mvc::profile::Typo3CmsExtbaseProfile;
+extension org::genesez::platform::typo3::cms::mvc::profile::Typo3CmsExtbaseAccessElement;
 
-extension org::genesez::metamodel::core::util::NavigateElement;
 
-// use common create template scripts
+// use GeneSEZ Design Pattern profile scripts
+extension org::genesez::metamodel::core::util::profile::GenesezDesignPatternAccessElement;
+
+// use GeneSEZ Standard profile scripts
+extension org::genesez::metamodel::core::util::profile::GenesezStandardProfile;
+
+
+// use TYPO3 CMS specific Extbase + Fluid access element scripts
+extension org::genesez::platform::typo3::cms::mvc::util::AccessElement;
+
+// use TYPO3 CMS specific Extbase + Fluid naming convention scripts
+extension org::genesez::platform::typo3::cms::mvc::util::NamingConvention;
+
+
+// use GeneSEZ common create element scripts
 extension org::genesez::metamodel::core::util::CreateElement;
 
+// use GeneSEZ common conversion scripts
+extension org::genesez::metamodel::core::util::Conversion;
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	MPackage (MModel)
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// use GeneSEZ common navigate element scripts
+extension org::genesez::metamodel::core::util::NavigateElement;
 
-Void modelModifications(MModel this) :
+// use GeneSEZ common logging scripts
+extension org::genesez::util::logging::Logging;
+
+
+// -- Interation over Model and Package Structures ----------------------------------------------------------
+
+MModel modelModifications(MModel this) :
+	useLogger("org.genesez.platform.typo3") ->
+	logTrace( "GeneSEZ: Modifications for Model! Model element: " + fqmn() ) ->
 	packageModifications();
 
 
-Void packageModifications(MPackage this) :
-	// perform model modifications for all nested packages
+MPackage packageModifications(MPackage this) :
+	logTrace( "GeneSEZ: Modifications for Package! Model element: " + fqmn() ) ->
+	// perform modifications for all classes
+	classifier.typeSelect(MClass).classModifications() ->
+	// perform modifications for all nested packages
 	nestedPackage.packageModifications() ->
-	// perform model modifications for all classes
-	classifier.typeSelect(MClass).classModifications();
+	this;
 
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	MClass
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// -- Selection of manipulating Classes ---------------------------------------------------------------------
 
-Void classModifications(MClass this) :
+MClass classModifications(MClass this) :
+	logTrace( "GeneSEZ: Modifications for Class! Model element: " + fqmn() ) ->
+	classAddTypo3SingletonInterface() ->
+	property.classNoSetAccessorIfDependencyInjectionIsSet() ->
 	switch {
-		case isEntity() || isValueObject() :
-			domainObjectModifications()
+		case isController() :
+			controllerModifications()
+		case isEntity() :
+			( domainObjectModifications() -> entityModifications() )
+		case isValueObject() :
+			( domainObjectModifications() -> valueObjectModifications() )
+		case isRepository() :
+			repositoryModifications()
+		case isValidator() :
+			validatorModifications()
+		case isViewHelper() :
+			viewHelperModifications()
 		default :
 			Void
-	};	
+	} ->
+	this;
+
+
+// -- Modification of Classes -------------------------------------------------------------------------------
+
+MClass classAddTypo3SingletonInterface(MClass this) :
+	emHasSingletonStereotype()
+		? (	logTrace( "GeneSEZ: Add TYPO3 CMS singleton interface! Model element: " + fqmn() ) ->
+			realization.add( navModel().ensureExternalTypeExistence("SingletonInterface", "SingletonInterface") )
+		) : Void ->
+	this;
+
+
+MProperty classNoSetAccessorIfDependencyInjectionIsSet(MProperty this) :
+	emHasDiSetter("true")
+		? (	logTrace( "GeneSEZ: Add 'accessor' stereotype and set its 'setter' property to 'false', because the property is injected by dependency injection! Model element: " + fqmn() ) ->
+			(	let genesezAccessorStereotype = navModel().ensureStereotypeExistence( prAccessor(), prAccessor() ) :
+					ensureStereotypeAssignment(genesezAccessorStereotype)
+						.ensureSingleTaggedValueExistence( genesezAccessorStereotype.ensureTagExistence( prAccessorSetter(), "Boolean" ), "false" )
+			)
+		) : Void ->
+	this;
+	
+
+// -- Modification of Controllers ---------------------------------------------------------------------------
+
+/**
+ * Modification of an TYPO3 CMS specific TYPO3 Extbase Controller.
+ * @todo	getErrorFlashMessage 
+ */
+MClass controllerModifications(MClass this) :
+	// add default generalizazion if hook is registered by AOP
+	controllerHookAddGeneralization() ->
+	
+	controllerAddInitializeAction() ->
+	controllerAddErrorAction() ->
+	operation.controllerAddInitializeAction();
+
+
+MClass controllerHookAddGeneralization(MClass this) :
+	this;
+
+
+MClass controllerAddGeneralization(MClass this) :
+	!generalization.isEmpty
+		? (	logTrace( "GeneSEZ: Add default generalization to controller class! Model element: " + fqmn() ) ->
+			generalization.add( navModel().ensureExternalTypeExistence("ActionController", "ActionController") )
+		) : Void ->
+	this;
+
+
+MClass controllerAddInitializeAction(MClass this) :
+	// checks if the 'initalizeAction' operation should be created and does not already exists
+	emHasExtbaseControllerCreateInitializeAction("true") && !operation.exists( o | o.asGeneralName() == "initializeAction" )
+		? ( logTrace( "GeneSEZ: Add 'initializeAction' operation to controller class! Model element: " + fqmn() ) ->
+			ensureOperationExistence(this.xmiGuid + ".initializeAction", "initalizeAction")
+				.processOperation("protected", false, false, false)
+				.ensureCommentExistence(this.xmiGuid + ".initializeAction.comment", "Override initalizeAction to solve tasks which all actions have in common.")
+		) : Void ->
+	this;
+
+
+MClass controllerAddErrorAction(MClass this) :
+	// checks if the 'errorAction' operation should be created and does not already exists
+	emHasExtbaseControllerCreateErrorAction("true") && !operation.exists( o | o.asGeneralName() == "errorAction" )
+		? ( logTrace( "GeneSEZ: Add 'errorAction' operation to controller class! Model element: " + fqmn() ) ->
+			ensureOperationExistence(this.xmiGuid + ".errorAction", "errorAction")
+				.processOperation("protected", false, false, false)
+				.ensureCommentExistence(this.xmiGuid + ".errorAction.comment", "Override errorAction to show that errors happend.")
+		) : Void ->
+	this;
+
+
+
+MOperation controllerAddInitializeAction(MOperation this) :
+	// checks if the 'initalize<Controller Action>' operation should be created and does not already exists
+	emHasExtbaseControllerActionCreateInitializeAction("true") && !classifier.operation.exists( o | o.asGeneralName() == "initialize" + asGeneralName().toFirstUpper() )
+		? ( logTrace( "GeneSEZ: Add 'initialize<Controller Action>' operation to controller action! Model element: " + fqmn() ) ->
+			classifier.ensureOperationExistence( this.xmiGuid + ".initializeAction", "initialize" + asGeneralName().toFirstUpper() )
+				.processOperation("protected", false, false, false)
+				.ensureCommentExistence(this.xmiGuid + ".initializeAction.comment", "Define initialize" + asGeneralName().toFirstUpper() + " to solve tasks before the action is called.")
+		) : Void ->
+	this;
+
+
+
+
+// -- Modification of Entities and Value Objects ------------------------------------------------------------
+
+/**
+ * Modification of an TYPO3 CMS specific TYPO3 Extbase Entity or Value Object.
+ */
+MClass domainObjectModifications(MClass this) :
+	property.domainObjectChangePropertyVisibility() ->
+	/*property.typeSelect(MAttribute).changeDomainObjectAttributeMultiplicity()*/
+	this;
+
+
+MProperty domainObjectChangePropertyVisibility(MProperty this) :
+	visibility != "protected"
+		? ( logTrace( "GeneSEZ: Change visibility to 'protected' for domain object property! Model element: " + fqmn() ) ->
+			setVisibility("protected")
+		) : Void ->
+	this;
 
 
 /*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 MVC Extbase Model modifications
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * Model modifications for an TYPO3 MVC Extbase entity or value object.
- */
-Void domainObjectModifications(MClass this) :
-	property.changeDomainObjectPropertyVisibility();
-	/*property.typeSelect(MAttribute).changeDomainObjectAttributeMultiplicity()*/
-	
-	
-	
-Void changeDomainObjectPropertyVisibility(MProperty this) :
-	setVisibility("protected");
-
-
-Void changeDomainObjectAttributeMultiplicity(MAttribute this) :
+MAttribute domainObjectChangeAttributeMultiplicity(MAttribute this) :
 	!isClassifier(type) && multiplicity.isMultiValued()
 		? (	stereotype.add(
 				let s = createStereotype( navModel(), prT3TCxMinitems(), prT3TCxMinitems() ) :
@@ -93,5 +210,144 @@ Void changeDomainObjectAttributeMultiplicity(MAttribute this) :
 			multiplicity.setUpperBound(1)
 		)
 		: Void;
-		
+*/		
+
+
+// -- Modification of Entities ------------------------------------------------------------------------------
+
+/**
+ * Modification of an TYPO3 CMS specific TYPO3 Extbase Entity.
+ */
+MClass entityModifications(MClass this) :
+	// add default generalizazion if hook is registered by AOP
+	entityHookAddGeneralization() ->
 	
+	this;
+
+
+MClass entityHookAddGeneralization(MClass this) :
+	this;
+
+
+MClass entityAddGeneralization(MClass this) :
+	!generalization.isEmpty
+		? (	logTrace( "GeneSEZ: Add default generalization to entity class! Model element: " + fqmn() ) ->
+			generalization.add( navModel().ensureExternalTypeExistence("AbstractEntity", "AbstractEntity") )
+		) : Void ->
+	this;
+
+
+// -- Modification of Value Objects -------------------------------------------------------------------------
+
+/**
+ * Modification of an TYPO3 CMS specific TYPO3 Extbase Value Objects.
+ */
+MClass valueObjectModifications(MClass this) :
+	// add default generalizazion if hook is registered by AOP
+	valueObjectHookAddGeneralization() ->
+	
+	this;
+
+
+MClass valueObjectHookAddGeneralization(MClass this) :
+	this;
+
+
+MClass valueObjectAddGeneralization(MClass this) :
+	!generalization.isEmpty
+		? (	logTrace( "GeneSEZ: Add default generalization to value object class! Model element: " + fqmn() ) ->
+			generalization.add( navModel().ensureExternalTypeExistence("AbstractValueObject", "AbstractValueObject") )
+		) : Void ->
+	this;
+
+
+// -- Modification of Repositories --------------------------------------------------------------------------
+
+/**
+ * Modification of an TYPO3 CMS specific TYPO3 Extbase Repositories.
+ */
+MClass repositoryModifications(MClass this) :
+	// add default generalizazion if hook is registered by AOP
+	repositoryHookAddGeneralization() ->
+	
+	this;
+
+
+MClass repositoryHookAddGeneralization(MClass this) :
+	this;
+
+
+MClass repositoryAddGeneralization(MClass this) :
+	!generalization.isEmpty
+		? (	logTrace( "GeneSEZ: Add default generalization to repository class! Model element: " + fqmn() ) ->
+			generalization.add( navModel().ensureExternalTypeExistence("Repository", "Repository") )
+		) : Void ->
+	this;
+
+
+// -- Modification of Validators ----------------------------------------------------------------------------
+
+/**
+ * Modification of an TYPO3 CMS specific TYPO3 Extbase Validators.
+ */
+MClass validatorModifications(MClass this) :
+	// add default generalizazion if hook is registered by AOP
+	validatorHookAddGeneralization() ->
+	
+	validatorAddIsValid() ->
+	this;
+
+
+MClass validatorHookAddGeneralization(MClass this) :
+	this;
+
+
+MClass validatorAddGeneralization(MClass this) :
+	!generalization.isEmpty
+		? (	logTrace( "GeneSEZ: Add default generalization to validator class! Model element: " + fqmn() ) ->
+			generalization.add( navModel().ensureExternalTypeExistence("AbstractValidator", "AbstractValidator") )
+		) : Void ->
+	this;
+
+
+MClass validatorAddIsValid(MClass this) :
+	// checks if the 'isValid' operation does not already exists
+	!operation.exists( o | o.asGeneralName() == "isValid" )
+		? ( logTrace( "GeneSEZ: Add 'isValid' operation to validator class! Model element: " + fqmn() ) ->
+			ensureOperationExistence(this.xmiGuid + ".isValid", "isValid")
+				.processOperation("public", false, false, false)
+				.ensureCommentExistence(this.xmiGuid + ".isValid.comment", "Checks if the given value is valid according to the validator.").owningElement
+				// add 'isValid' parameter
+				.ensureParameterExistence(this.xmiGuid + ".isValid.value", "value")
+					.wireType( navModel().ensureExternalTypeExistence("mixed", "mixed") )
+					.ensureCommentExistence(this.xmiGuid + ".isValid.value.comment", "The value that should be validated.").owningElement
+				// add return parameter
+				.ensureReturnParameterExistence(this.xmiGuid + ".isValid.return", "")
+					.wireType( navModel().ensureExternalTypeExistence("boolean", "boolean") )
+					.ensureCommentExistence(this.xmiGuid + ".isValid.return.comment", "TRUE if the value is valid, FALSE if an error occured.")
+		) : Void ->
+	this;
+
+
+// -- Modification of View Helpers --------------------------------------------------------------------------
+
+/**
+ * Modification of an TYPO3 CMS specific TYPO3 Fluid View Helper.
+ */
+MClass viewHelperModifications(MClass this) :
+	// add default generalizazion if hook is registered by AOP
+	viewHelperHookAddGeneralization() ->
+	
+	this;
+
+
+MClass viewHelperHookAddGeneralization(MClass this) :
+	this;
+
+
+MClass viewHelperAddGeneralization(MClass this) :
+	!generalization.isEmpty
+		? (	logTrace( "GeneSEZ: Add default generalization to view helper class! Model element: " + fqmn() ) ->
+			generalization.add( navModel().ensureExternalTypeExistence("AbstractViewHelper", "AbstractViewHelper") )
+		) : Void ->
+	this;
