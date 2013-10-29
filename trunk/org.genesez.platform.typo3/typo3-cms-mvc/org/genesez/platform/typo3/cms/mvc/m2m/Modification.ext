@@ -25,6 +25,9 @@ extension org::genesez::metamodel::core::util::profile::GenesezDesignPatternAcce
 // use GeneSEZ Standard profile scripts
 extension org::genesez::metamodel::core::util::profile::GenesezStandardProfile;
 
+// use GeneSEZ Validation profile scripts
+extension org::genesez::metamodel::core::util::profile::GenesezValidationProfile;
+
 
 // use TYPO3 CMS specific Extbase + Fluid access element scripts
 extension org::genesez::platform::typo3::cms::mvc::util::AccessElement;
@@ -51,6 +54,9 @@ extension org::genesez::util::logging::Logging;
 MModel modelModifications(MModel this) :
 	useLogger("org.genesez.platform.typo3") ->
 	logTrace( "GeneSEZ: Modifications for Model! Model element: " + fqmn() ) ->
+	
+	// perform modifications for all stereotypes
+	anyStereotype.stereotypeModifications() ->
 	
 	// perform modifications for all classes
 	classifier.typeSelect(MClass).classModifications() ->
@@ -89,6 +95,21 @@ MClass classModifications(MClass this) :
 			validatorModifications()
 		case isViewHelper() :
 			viewHelperModifications()
+		default :
+			Void
+	} ->
+	this;
+	
+
+// -- Selection of manipulating Stereotypes -----------------------------------------------------------------
+
+MStereotype stereotypeModifications(MStereotype this) :
+	logTrace( "GeneSEZ: Modifications for Stereotype! Model element: " + fqmn() ) ->
+	switch {
+		case name == prNumberRangeValidator() :
+			numberRangeValidatorModifications()
+		case name == prStringLengthValidator() :
+			stringLengthValidatorModifications()
 		default :
 			Void
 	} ->
@@ -132,7 +153,7 @@ MProperty classNoSetAccessorIfDependencyInjectionIsSet(MProperty this) :
 // -- Modification of Controllers ---------------------------------------------------------------------------
 
 /**
- * Modification of an TYPO3 CMS specific TYPO3 Extbase Controller.
+ * Modification of an TYPO3 CMS specific Extbase Controller.
  * @todo	getErrorFlashMessage 
  */
 MClass controllerModifications(MClass this) :
@@ -150,7 +171,7 @@ MClass controllerHookAddGeneralization(MClass this) :
 
 MClass controllerAddGeneralization(MClass this) :
 	!generalization.isEmpty
-		? (	logTrace( "GeneSEZ: Add default generalization to controller class! Model element: " + fqmn() ) ->
+		? (	logTrace( "GeneSEZ: Add default generalization for controller class! Model element: " + fqmn() ) ->
 			generalization.add( navModel().ensureExternalTypeExistence("ActionController", "ActionController") )
 		) : Void ->
 	this;
@@ -159,7 +180,7 @@ MClass controllerAddGeneralization(MClass this) :
 MClass controllerAddInitializeAction(MClass this) :
 	// checks if the 'initalizeAction' operation should be created and does not already exists
 	emHasExtbaseControllerCreateInitializeAction("true") && !operation.exists( o | o.asGeneralName() == "initializeAction" )
-		? ( logTrace( "GeneSEZ: Add 'initializeAction' operation to controller class! Model element: " + fqmn() ) ->
+		? ( logTrace( "GeneSEZ: Add 'initializeAction' operation for controller class! Model element: " + fqmn() ) ->
 			ensureOperationExistence(this.xmiGuid + ".initializeAction", "initalizeAction")
 				.processOperation("protected", false, false, false)
 				.ensureCommentExistence(this.xmiGuid + ".initializeAction.comment", "Override initalizeAction to solve tasks which all actions have in common.")
@@ -170,7 +191,7 @@ MClass controllerAddInitializeAction(MClass this) :
 MClass controllerAddErrorAction(MClass this) :
 	// checks if the 'errorAction' operation should be created and does not already exists
 	emHasExtbaseControllerCreateErrorAction("true") && !operation.exists( o | o.asGeneralName() == "errorAction" )
-		? ( logTrace( "GeneSEZ: Add 'errorAction' operation to controller class! Model element: " + fqmn() ) ->
+		? ( logTrace( "GeneSEZ: Add 'errorAction' operation for controller class! Model element: " + fqmn() ) ->
 			ensureOperationExistence(this.xmiGuid + ".errorAction", "errorAction")
 				.processOperation("protected", false, false, false)
 				.ensureCommentExistence(this.xmiGuid + ".errorAction.comment", "Override errorAction to show that errors happend.")
@@ -182,7 +203,7 @@ MClass controllerAddErrorAction(MClass this) :
 MOperation controllerAddInitializeAction(MOperation this) :
 	// checks if the 'initalize<Controller Action>' operation should be created and does not already exists
 	emHasExtbaseControllerActionCreateInitializeAction("true") && !classifier.operation.exists( o | o.asGeneralName() == "initialize" + asGeneralName().toFirstUpper() )
-		? ( logTrace( "GeneSEZ: Add 'initialize<Controller Action>' operation to controller action! Model element: " + fqmn() ) ->
+		? ( logTrace( "GeneSEZ: Add 'initialize<Controller Action>' operation for controller action! Model element: " + fqmn() ) ->
 			classifier.ensureOperationExistence( this.xmiGuid + ".initializeAction", "initialize" + asGeneralName().toFirstUpper() )
 				.processOperation("protected", false, false, false)
 				.ensureCommentExistence(this.xmiGuid + ".initializeAction.comment", "Define initialize" + asGeneralName().toFirstUpper() + " to solve tasks before the action is called.")
@@ -195,10 +216,11 @@ MOperation controllerAddInitializeAction(MOperation this) :
 // -- Modification of Entities and Value Objects ------------------------------------------------------------
 
 /**
- * Modification of an TYPO3 CMS specific TYPO3 Extbase Entity or Value Object.
+ * Modification of an TYPO3 CMS specific Extbase Entity or Value Object.
  */
 MClass domainObjectModifications(MClass this) :
 	property.domainObjectChangePropertyVisibilityToProtected() ->
+	//property.domainObjectAddNotEmptyStereotype() ->
 	/*property.typeSelect(MAttribute).changeDomainObjectAttributeMultiplicity()*/
 	this;
 
@@ -209,6 +231,14 @@ MProperty domainObjectChangePropertyVisibilityToProtected(MProperty this) :
 			setVisibility("protected")
 		) : Void ->
 	this;
+
+
+//MProperty domainObjectAddNotEmptyStereotype(MProperty this) :
+//	multiplicity.lowerBound >= 1 && !stereotype.exists( s | s.name == prNotEmptyValidator() )
+//		? ( logTrace( "GeneSEZ: Add 'NotEmptyValidator' stereotype for domain object property! Model element: " + fqmn() ) ->
+//			ensureStereotypeAssignment( navModel().ensureStereotypeExistence( prNotEmptyValidator(), prNotEmptyValidator() ) )
+//		) : Void ->
+//	this;
 
 
 /*
@@ -234,7 +264,7 @@ MAttribute domainObjectChangeAttributeMultiplicity(MAttribute this) :
 // -- Modification of Entities ------------------------------------------------------------------------------
 
 /**
- * Modification of an TYPO3 CMS specific TYPO3 Extbase Entity.
+ * Modification of an TYPO3 CMS specific Extbase Entity.
  */
 MClass entityModifications(MClass this) :
 	// add default generalizazion if hook is registered by AOP
@@ -258,7 +288,7 @@ MClass entityAddGeneralization(MClass this) :
 // -- Modification of Value Objects -------------------------------------------------------------------------
 
 /**
- * Modification of an TYPO3 CMS specific TYPO3 Extbase Value Objects.
+ * Modification of an TYPO3 CMS specific Extbase Value Objects.
  */
 MClass valueObjectModifications(MClass this) :
 	// add default generalizazion if hook is registered by AOP
@@ -282,7 +312,7 @@ MClass valueObjectAddGeneralization(MClass this) :
 // -- Modification of Repositories --------------------------------------------------------------------------
 
 /**
- * Modification of an TYPO3 CMS specific TYPO3 Extbase Repositories.
+ * Modification of an TYPO3 CMS specific Extbase Repositories.
  */
 MClass repositoryModifications(MClass this) :
 	// add default generalizazion if hook is registered by AOP
@@ -306,7 +336,7 @@ MClass repositoryAddGeneralization(MClass this) :
 // -- Modification of Validators ----------------------------------------------------------------------------
 
 /**
- * Modification of an TYPO3 CMS specific TYPO3 Extbase Validators.
+ * Modification of an TYPO3 CMS specific Extbase Validators.
  */
 MClass validatorModifications(MClass this) :
 	// add default generalizazion if hook is registered by AOP
@@ -350,7 +380,7 @@ MClass validatorAddIsValid(MClass this) :
 // -- Modification of View Helpers --------------------------------------------------------------------------
 
 /**
- * Modification of an TYPO3 CMS specific TYPO3 Fluid View Helper.
+ * Modification of an TYPO3 CMS specific Fluid View Helper.
  */
 MClass viewHelperModifications(MClass this) :
 	// add default generalizazion if hook is registered by AOP
@@ -367,5 +397,57 @@ MClass viewHelperAddGeneralization(MClass this) :
 	!generalization.isEmpty
 		? (	logTrace( "GeneSEZ: Add default generalization to view helper class! Model element: " + fqmn() ) ->
 			generalization.add( navModel().ensureExternalTypeExistence("AbstractViewHelper", "AbstractViewHelper") )
+		) : Void ->
+	this;
+
+
+// -- Modification of Validator Stereotypes -----------------------------------------------------------------
+
+/**
+ * Modification of an TYPO3 CMS specific Extbase 'NumberRangeValidator' Validator.
+ */
+MStereotype numberRangeValidatorModifications(MStereotype this) :
+	numberRangeValidatorChangePropertyStartRangeToMinimum() ->
+	numberRangeValidatorChangePropertyEndRangeToMaximum() ->
+	this;
+
+
+MStereotype numberRangeValidatorChangePropertyStartRangeToMinimum(MStereotype this) :
+	property.exists( p | p.name == prNumberRangeValidatorStartRange() ) 
+		? (	logTrace( "GeneSEZ: Change name of property 'startRange' to 'mimimum' for 'NumberRangeValidator' stereotype! Model element: " + fqmn() ) ->
+			property.select( p | p.name == prNumberRangeValidatorStartRange() ).setName("minimum")
+		) : Void ->
+	this;
+
+
+MStereotype numberRangeValidatorChangePropertyEndRangeToMaximum(MStereotype this) :
+	property.exists( p | p.name == prNumberRangeValidatorEndRange() ) 
+		? (	logTrace( "GeneSEZ: Change name of property 'endRange' to 'maximum' for 'NumberRangeValidator' stereotype! Model element: " + fqmn() ) ->
+			property.select( p | p.name == prNumberRangeValidatorEndRange() ).setName("maximum")
+		) : Void ->
+	this;
+
+
+/**
+ * Modification of an TYPO3 CMS specific Extbase 'StringLengthValidator' Validator.
+ */
+MStereotype stringLengthValidatorModifications(MStereotype this) :
+	stringLengthValidatorChangePropertyMinLengthToMinimum() ->
+	stringLengthValidatorChangePropertyMaxLengthToMaximum() ->
+	this;
+
+
+MStereotype stringLengthValidatorChangePropertyMinLengthToMinimum(MStereotype this) :
+	property.exists( p | p.name == prStringLengthValidatorMinLength() ) 
+		? (	logTrace( "GeneSEZ: Change name of property 'minLength' to 'mimimum' for 'StringLengthValidator' stereotype! Model element: " + fqmn() ) ->
+			property.select( p | p.name == prStringLengthValidatorMinLength() ).setName("minimum")
+		) : Void ->
+	this;
+
+
+MStereotype stringLengthValidatorChangePropertyMaxLengthToMaximum(MStereotype this) :
+	property.exists( p | p.name == prStringLengthValidatorMaxLength() ) 
+		? (	logTrace( "GeneSEZ: Change name of property 'maxLength' to 'maximum' for 'StringLengthValidator' stereotype! Model element: " + fqmn() ) ->
+			property.select( p | p.name == prStringLengthValidatorMaxLength() ).setName("maximum")
 		) : Void ->
 	this;
