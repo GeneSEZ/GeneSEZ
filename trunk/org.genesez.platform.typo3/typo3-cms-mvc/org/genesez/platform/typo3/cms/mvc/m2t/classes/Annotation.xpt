@@ -199,7 +199,7 @@
 
 «DEFINE Validate FOR MProperty -»
 «IF !allAssignedValidators().isEmpty -»
-«REM»	 * @validate «FOREACH allAssignedValidators() AS v SEPARATOR ", " -»«v.asAssignedValidatorName() -»«IF !v.property.select( p | emGetTaggedValue( v.name, p.name ) != "" ).isEmpty -»(«FOREACH v.property.select( p | emGetTaggedValue( v.name, p.name ) != "" ) AS p SEPARATOR ", "-»«p.name -» = «emGetTaggedValue(v.name, p.name) -»«ENDFOREACH -»)«ENDIF -»«ENDFOREACH»«ENDREM»
+	 * @validate «FOREACH allAssignedValidators() AS v SEPARATOR ", " -»«v.asAssignedValidatorName() -»«IF v.property.exists( p | emGetTaggedValue( v.name, p.name ) != "" ) -»(«FOREACH v.property.select( p | emGetTaggedValue( v.name, p.name ) != "" ) AS p SEPARATOR ", "-»«p.name -» = «emGetTaggedValue(v.name, p.name) -»«ENDFOREACH -»)«ENDIF -»«ENDFOREACH»
 «ENDIF -»
 «ENDDEFINE»
 
