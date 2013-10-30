@@ -26,7 +26,7 @@ extension org::genesez::platform::typo3::cms::mvc::util::NamingConvention;
 extension org::genesez::metamodel::core::util::Conversion;
 
 
-// -- TYPO3 CMS specific Extbase + Fluid file name conventions ----------------------------------------------
+// -- TYPO3 CMS specific Extbase + Fluid file name + path conventions ---------------------------------------
 
 /**
  * Formats the file name of a classifier as PHP file.
@@ -47,12 +47,30 @@ String fileNameFlexFormXml(MInterface this) :
 
 
 /**
+ * Gets the file path of "flexform_<plugin name>.xml".
+ *
+ * @return	The file path of "flexform_<plugin name>.xml". 
+ */
+String filePathFlexFormXml(MInterface this) :
+	dirPathConfigurationFlexForms() + dirPathSeparator() + fileNameFlexFormXml();
+
+
+/**
  * Gets the file name of "<table name of domain object>.php".
  *
  * @return	The file name of "<table name of domain object>.php". 
  */
 String fileNameTcaPhp(MClass this) :
 	asConfigurationName() + fileExtensionPhp();
+
+
+/**
+ * Gets the file path of "<table name of domain object>.php".
+ *
+ * @return	The file path of "<table name of domain object>.php". 
+ */
+String filePathTcaPhp(MClass this) :
+	dirPathConfigurationTCA() + dirPathSeparator() + fileNameTcaPhp();
 
 
 /**
@@ -65,6 +83,15 @@ String fileNameTypoScriptConstantsTs() :
 
 
 /**
+ * Gets the file path of "constants.txt".
+ *
+ * @return	The file path of "constants.txt". 
+ */
+String filePathTypoScriptConstantsTs() :
+	dirPathConfigurationTypoScript() + dirPathSeparator() + fileNameTypoScriptConstantsTs();
+
+
+/**
  * Gets the file name of "setup.txt".
  *
  * @return	The file name of "setup.txt". 
@@ -73,8 +100,13 @@ String fileNameTypoScriptSetupTs() :
 	"setup" + fileExtensionTs();
 
 
-cached String languageKeyPrefix(String languageKey) :
-	languageKey + ".";	
+/**
+ * Gets the file path of "setup.txt".
+ *
+ * @return	The file path of "setup.txt". 
+ */
+String filePathTypoScriptSetupTs() :
+	dirPathConfigurationTypoScript() + dirPathSeparator() + fileNameTypoScriptSetupTs();
 
 
 /**
@@ -87,12 +119,30 @@ String fileNameLocallangXlf() :
 
 
 /**
- * Gets the file name of "locallang.xlf".
+ * Gets the file path of "locallang.xlf".
  *
- * @return	The file name of "locallang.xlf". 
+ * @return	The file path of "locallang.xlf". 
+ */
+String filePathLocallangXlf() :
+	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangXlf();
+
+
+/**
+ * Gets the file name of "<language key>.locallang.xlf".
+ *
+ * @return	The file name of "<language key>.locallang.xlf". 
  */
 String fileNameLocallangXlf(String languageKey) :
-	languageKeyPrefix(languageKey) + fileNameLocallangXlf();
+	languageKey + "." + fileNameLocallangXlf();
+
+
+/**
+ * Gets the file path of "<language key>.locallang.xlf".
+ *
+ * @return	The file path of "<language key>.locallang.xlf". 
+ */
+String filePathLocallangXlf(String languageKey) :
+	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangXlf(languageKey);
 
 
 /**
@@ -105,12 +155,30 @@ String fileNameLocallangTcaXlf() :
 
 
 /**
- * Gets the file name of "locallang_tca.xlf".
+ * Gets the file path of "locallang_tca.xlf".
  *
- * @return	The file name of "locallang_tca.xlf". 
+ * @return	The file path of "locallang_tca.xlf". 
+ */
+String filePathLocallangTcaXlf() :
+	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangTcaXlf();
+
+
+/**
+ * Gets the file name of "<language key>.locallang_tca.xlf".
+ *
+ * @return	The file name of "<language key>.locallang_tca.xlf". 
  */
 String fileNameLocallangTcaXlf(String languageKey) :
-	languageKeyPrefix(languageKey) + fileNameLocallangTcaXlf();
+	languageKey + "." + fileNameLocallangTcaXlf();
+
+
+/**
+ * Gets the file path of "<language key>.locallang_tca.xlf".
+ *
+ * @return	The file path of "<language key>.locallang_tca.xlf". 
+ */
+String filePathLocallangTcaXlf(String languageKey) :
+	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangTcaXlf(languageKey);
 
 
 /**
@@ -123,12 +191,30 @@ String fileNameLocallangCshXlf(MClass this) :
 
 
 /**
- * Gets the file name of "locallang_csh_<table name of domain object>.xlf".
+ * Gets the file path of "locallang_csh_<table name of domain object>.xlf".
  *
- * @return	The file name of "locallang_csh_<table name of domain object>.xlf". 
+ * @return	The file path of "locallang_csh_<table name of domain object>.xlf". 
+ */
+String filePathLocallangCshXlf(MClass this) :
+	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangCshXlf();
+
+
+/**
+ * Gets the file name of "<language key>.locallang_csh_<table name of domain object>.xlf".
+ *
+ * @return	The file name of "<language key>.locallang_csh_<table name of domain object>.xlf". 
  */
 String fileNameLocallangCshXlf(MClass this, String languageKey) :
-	languageKeyPrefix(languageKey) + fileNameLocallangCshXlf();
+	languageKey + "." + fileNameLocallangCshXlf();
+
+
+/**
+ * Gets the file path of "<language key>.locallang_csh_<table name of domain object>.xlf".
+ *
+ * @return	The file path of "<language key>.locallang_csh_<table name of domain object>.xlf". 
+ */
+String filePathLocallangCshXlf(MClass this, String languageKey) :
+	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangCshXlf(languageKey);
 
 
 /**
@@ -141,12 +227,30 @@ String fileNameLocallangPluginXlf(MInterface this) :
 
 
 /**
- * Gets the file name of "locallang_plugin_<plugin name>.xlf".
+ * Gets the file path of "locallang_plugin_<plugin name>.xlf".
  *
- * @return	The file name of "locallang_plugin_<plugin name>.xlf". 
+ * @return	The file path of "locallang_plugin_<plugin name>.xlf". 
+ */
+String filePathLocallangPluginXlf(MInterface this) :
+	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangPluginXlf();
+
+
+/**
+ * Gets the file name of "<language key>.locallang_plugin_<plugin name>.xlf".
+ *
+ * @return	The file name of "<language key>.locallang_plugin_<plugin name>.xlf". 
  */
 String fileNameLocallangPluginXlf(MInterface this, String languageKey) :
-	languageKeyPrefix(languageKey) + fileNameLocallangPluginXlf();
+	languageKey + "." + fileNameLocallangPluginXlf();
+
+
+/**
+ * Gets the file path of "<language key>.locallang_plugin_<plugin name>.xlf".
+ *
+ * @return	The file path of "<language key>.locallang_plugin_<plugin name>.xlf". 
+ */
+String filePathLocallangPluginXlf(MInterface this, String languageKey) :
+	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangPluginXlf(languageKey);
 
 
 /**
@@ -159,12 +263,30 @@ String fileNameLocallangModuleXlf(MInterface this) :
 
 
 /**
- * Gets the file name of "locallang_module_<module name>.xlf".
+ * Gets the file path of "locallang_module_<module name>.xlf".
  *
- * @return	The file name of "locallang_module_<module name>.xlf". 
+ * @return	The file path of "locallang_module_<module name>.xlf". 
+ */
+String filePathLocallangModuleXlf(MInterface this) :
+	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangModuleXlf();
+
+
+/**
+ * Gets the file name of "<language key>.locallang_module_<module name>.xlf".
+ *
+ * @return	The file name of "<language key>.locallang_module_<module name>.xlf". 
  */
 String fileNameLocallangModuleXlf(MInterface this, String languageKey) :
-	languageKeyPrefix(languageKey) + fileNameLocallangModuleXlf();
+	languageKey + "." + fileNameLocallangModuleXlf();
+
+
+/**
+ * Gets the file path of "<language key>.locallang_module_<module name>.xlf".
+ *
+ * @return	The file path of "<language key>.locallang_module_<module name>.xlf". 
+ */
+String filePathLocallangModuleXlf(MInterface this, String languageKey) :
+	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangModuleXlf(languageKey);
 
 
 // -- TYPO3 CMS specific TYPO3 Extbase + TYPO3 Fluid directory path conventions -----------------------------
@@ -283,132 +405,3 @@ String dirPathResourcesPublic() :
 
 String dirPathResourcesPublicIcons() :
 	"Resources/Public/Icons";
-
-
-// -- TYPO3 CMS specific TYPO3 Extbase + TYPO3 Fluid file path conventions ----------------------------------
-
-/**
- * Gets the file path of "flexform_<plugin name>.xml".
- *
- * @return	The file path of "flexform_<plugin name>.xml". 
- */
-String filePathFlexFormXml(MInterface this) :
-	dirPathConfigurationFlexForms() + dirPathSeparator() + fileNameFlexFormXml();
-
-
-/**
- * Gets the file path of "<table name of domain object>.php".
- *
- * @return	The file path of "<table name of domain object>.php". 
- */
-String filePathTcaPhp(MClass this) :
-	dirPathConfigurationTCA() + dirPathSeparator() + fileNameTcaPhp();
-
-
-
-/**
- * Gets the file path of "constants.txt".
- *
- * @return	The file path of "constants.txt". 
- */
-String filePathTypoScriptConstantsTs() :
-	dirPathConfigurationTypoScript() + dirPathSeparator() + fileNameTypoScriptConstantsTs();	
-
-
-/**
- * Gets the file path of "setup.txt".
- *
- * @return	The file path of "setup.txt". 
- */
-String filePathTypoScriptSetupTs() :
-	dirPathConfigurationTypoScript() + dirPathSeparator() + fileNameTypoScriptSetupTs();
-
-
-/**
- * Gets the file path of "locallang.xlf".
- *
- * @return	The file path of "locallang.xlf". 
- */
-String filePathLocallangXlf() :
-	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangXlf();
-
-
-/**
- * Gets the file path of "locallang.xlf".
- *
- * @return	The file path of "locallang.xlf". 
- */
-String filePathLocallangXlf(String languageKey) :
-	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangXlf(languageKey);
-
-
-/**
- * Gets the file path of "locallang_tca.xlf".
- *
- * @return	The file path of "locallang_tca.xlf". 
- */
-String filePathLocallangTcaXlf() :
-	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangTcaXlf();
-
-
-/**
- * Gets the file path of "locallang_tca.xlf".
- *
- * @return	The file path of "locallang_tca.xlf". 
- */
-String filePathLocallangTcaXlf(String languageKey) :
-	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangTcaXlf(languageKey);
-
-
-/**
- * Gets the file path of "locallang_csh_<table name of domain object>.xlf".
- *
- * @return	The file path of "locallang_csh_<table name of domain object>.xlf". 
- */
-String filePathLocallangCshXlf(MClass this) :
-	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangCshXlf();
-
-
-/**
- * Gets the file path of "locallang_csh_<table name of domain object>.xlf".
- *
- * @return	The file path of "locallang_csh_<table name of domain object>.xlf". 
- */
-String filePathLocallangCshXlf(MClass this, String languageKey) :
-	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangCshXlf(languageKey);
-
-
-/**
- * Gets the file path of "locallang_plugin_<plugin name>.xlf".
- *
- * @return	The file path of "locallang_plugin_<plugin name>.xlf". 
- */
-String filePathLocallangPluginXlf(MInterface this) :
-	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangPluginXlf();
-
-
-/**
- * Gets the file path of "locallang_plugin_<plugin name>.xlf".
- *
- * @return	The file path of "locallang_plugin_<plugin name>.xlf". 
- */
-String filePathLocallangPluginXlf(MInterface this, String languageKey) :
-	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangPluginXlf(languageKey);
-
-
-/**
- * Gets the file path of "locallang_module_<module name>.xlf".
- *
- * @return	The file path of "locallang_module_<module name>.xlf". 
- */
-String filePathLocallangModuleXlf(MInterface this) :
-	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangModuleXlf();
-
-
-/**
- * Gets the file path of "locallang_module_<module name>.xlf".
- *
- * @return	The file path of "locallang_module_<module name>.xlf". 
- */
-String filePathLocallangModuleXlf(MInterface this, String languageKey) :
-	dirPathResourcesPrivateLanguage() + dirPathSeparator() + fileNameLocallangModuleXlf(languageKey);
