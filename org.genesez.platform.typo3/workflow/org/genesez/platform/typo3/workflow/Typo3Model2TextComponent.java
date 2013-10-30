@@ -19,7 +19,7 @@ import org.genesez.workflow.xpand.Model2TextComponent;
 public class Typo3Model2TextComponent extends Model2TextComponent {
 	
 	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
-	private String extensionVendor;
+	private String extensionVendorName;
 	
 	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String extensionKey;
@@ -36,12 +36,12 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 			}
 		}
 		
-		// check extension vendor
-		if (extensionVendor == null || extensionVendor.isEmpty()) {
-			issues.addError(this, "Workflow parameter 'extensionVendor' must be present.", extensionVendor);
+		// check extension vendor name
+		if (extensionVendorName == null || extensionVendorName.isEmpty()) {
+			issues.addError(this, "Workflow parameter 'extensionVendorName' must be present.", extensionVendorName);
 		} else {
 			// add workflow parameter for transformation variables as global variables
-			addGlobalVarDef("extensionVendor", extensionVendor);
+			addGlobalVarDef("extensionVendorName", extensionVendorName);
 		}
 		
 		// check extension key
@@ -81,18 +81,18 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>extensionVendor</b></em>'.
+	 * Returns the value of attribute '<em><b>extensionVendorName</b></em>'.
 	 */
-	public String getExtensionVendor() {
-		return this.extensionVendor;
+	public String getExtensionVendorName() {
+		return this.extensionVendorName;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>extensionVendor</b></em>'.
-	 * @param	extensionVendor	the value to set.
+	 * Sets the value of attribute '<em><b>extensionVendorName</b></em>'.
+	 * @param	extensionVendorName	the value to set.
 	 */
-	public void setExtensionVendor(String extensionVendor) {
-		this.extensionVendor = extensionVendor;
+	public void setExtensionVendorName(String extensionVendorName) {
+		this.extensionVendorName = extensionVendorName;
 	}
 	
 	/**
