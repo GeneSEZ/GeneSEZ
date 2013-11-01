@@ -1,0 +1,566 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+
+import gcore;
+
+
+/**
+ * Utility scripts to convert GeneSEZ Core meta model elements to make code generation more easier.
+ * 
+ * @author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ */
+
+// include and reexport super Xtend scripts
+extension org::genesez::util::Conversion reexport;
+
+extension org::genesez::metamodel::core::util::NavigateElement;
+
+
+// -- Comment Conversions -----------------------------------------------------------------------------------
+
+
+/**
+ * Builds the comment text of an element by placing an empty line between the comments and nested comments.
+ * 
+ * @return	The comment string.
+ * @see		comment(MElement, String, String)
+ * @api
+ */
+String comment(MElement this) :
+	comment( "\n\n", "\n\n" );
+
+
+/**
+ * Builds the comment text of an element by placing the specified seperators between the comments and nested comments. 
+ * 
+ * @param	commentSeparator		A separator which is placed between comments.
+ * @param	nestedCommentSeparator	A separator which is placed between a comment and its nested comment.
+ * @return	The comment string.
+ * @api
+ */
+String comment(MElement this, String commentSeparator, String nestedCommentSeparator) :
+	JAVA org.genesez.metamodel.core.util.CommentProcessing.comment(org.genesez.metamodel.gcore.MElement, java.lang.String, java.lang.String);
+
+
+/**
+ * Formats the comment text of an element by placing an empty line between the comments and nested comments
+ * and adding the asterix (' * ') as prefix and the newline ('\n') as suffix to each line within the comment text.
+ * 
+ * @return	The formatted comment text.
+ * @see		comment(MElement)
+ * @see		formatCommentAsterix(String)
+ * @api
+ */
+String formatCommentAsterix(MElement this) : 
+	comment().formatCommentAsterix();
+
+
+/**
+ * Formats the comment text of an element by placing an empty line between the comments and nested comments
+ * and adding two slashes  ('// ') as prefix and the newline ('\n') as suffix to each line within the comment text.
+ * 
+ * @return	The formatted comment text.
+ * @see		comment(MElement)
+ * @see		formatCommentSlashSlash(String)
+ * @api
+ */
+String formatCommentSlashSlash(MElement this) : 
+	comment().formatCommentSlashSlash();
+
+
+/**
+ * Formats the comment text of an element by placing an empty line between the comments and nested comments
+ * and adding the asterix (' * ') as prefix and the newline ('\n') as suffix to each line within the comment text.
+ * 
+ * @return	The formatted comment text.
+ * @see		comment(MElement)
+ * @see		formatComment(String)
+ * @api
+ */
+String formatComment(MElement this) : 
+	comment().formatComment();
+
+
+/**
+ * Formats the comment text of an element by placing an empty line between the comments and nested comments
+ * and adding the specified prefix and suffix to each line within the comment text.
+ * 
+ * @param	linePrefix	A prefix which is prepended to each line.
+ * @param	lineSuffix	A suffix which is appended to each line.
+ * @return	The formatted comment text.
+ * @see		comment(MElement)
+ * @see		formatComment(String, String, String)
+ * @api
+ */
+String formatComment(MElement this, String linePrefix, String lineSuffix) :
+	comment().formatComment( linePrefix, lineSuffix );
+
+
+/**
+ * Formats the comment text of an element by placing the specified seperators between the comments and nested comments
+ * and adding the specified prefix and suffix to each line within the comment text.
+ * 
+ * @param	commentSeparator		A separator which is placed between comments.
+ * @param	nestedCommentSeparator	A separator which is placed between a comment and its nested comment.
+ * @param	linePrefix				A prefix which is prepended to each line.
+ * @param	lineSuffix				A suffix which is appended to each line.
+ * @return	The formatted comment string.
+ * @see		comment(MElement, String, String)
+ * @see		formatComment(String, String, String)
+ * @api
+ */
+String formatComment(MElement this, String commentSeparator, String nestedCommentSeparator, String linePrefix, String lineSuffix) :
+	comment( commentSeparator, nestedCommentSeparator ).formatComment( linePrefix, lineSuffix );
+
+
+// -- Directory Name and Path Conversions ------------------------------------------------------------------- 
+
+
+/**
+ * Getter for the directory name of a classifier.
+ * For instance if the classifier is located inside the package path '/path/to/classifier'
+ * then only the last package name 'classifier' is returned as directory name. 
+ *
+ * @return	The name of the directory.
+ * @api
+ */
+String dirName(MClassifier this) : 
+	navPackage().name;
+
+
+/**
+ * Getter for the directory path of a classifier based on its namespace.
+ * For instance if the classifier is located inside the package path '/path/to/classifier'
+ * then the full package path '/path/to/classifier' is returned as directory path. 
+ * 
+ * @return	The path of the directory.
+ * @api
+ */
+String dirPath(MClassifier this) : 
+	navPackage().qn( dirPathSeparator() );
+
+
+/**
+ * Getter for the directory path of a classifier based on its namespace and specified base path.
+ * For instance if the classifier is located inside the package path '/path/to/classifier' and the specified base path is 'my/base'
+ * then the base path including the full package path 'my/base/path/to/classifier' is returned as directory path.
+ * 
+ * @param	basePath	The base path of a classifier.
+ * @return	The path of the directory.
+ * @see		dirPath(MClassifier)
+ * @api
+ */
+String dirPath(MClassifier this, String basePath) :
+	basePath != ""
+		? basePath + dirPathSeparator() + dirPath()
+		: dirPath();
+
+
+// -- File Name and Path Conversions ------------------------------------------------------------------------
+
+
+/**
+ * Getter for the file name of a classifier.
+ * For instance if the classifier is located inside the package path '/path/to/classifier', the name is 'MyClassifier' and the specified file extension is 'java'
+ * then the name of the classifier including the file extension 'MyClassifier.java' is returned as file name.
+ *
+ * @param	fileExtension	The file extension of a classifier.
+ * @return	The name of the file.
+ * @api
+ */
+String fileName(MClassifier this, String fileExtension) : 
+	name + fileExtensionSeparator() + fileExtension;
+
+
+/**
+ * Getter for the file path of a classifier based on its namespace.
+ * For instance if the classifier is located inside the package path '/path/to/classifier' and the file name is 'MyClassifier.java'
+ * then the full package path including the file name '/path/to/classifier/MyClassifier.java' is returned as file path.
+ *  
+ * @param	filename	The file name of a classifier.
+ * @return	The path of the file.
+ * @see		dirPath(MClassifier)
+ * @api
+ */
+String filePath(MClassifier this, String filename) :
+	dirPath() + dirPathSeparator() + filename;
+
+
+/**
+ * Getter for the file path of a classifier based on its namespace and specified base path.
+ * For instance if the classifier is located inside the package path '/path/to/classifier', the file name is 'MyClassifier.java' and the specified base path is 'my/base'
+ * then the base path including the full package path and the file name 'my/base/path/to/classifier/MyClassifier.java' is returned as file path.
+ *
+ * @param	filename	The file name of a classifier.
+ * @param	basePath	The base path of a classifier.
+ * @return	The path of the file.
+ * @see		dirPath(MClassifier, String)
+ * @api
+ */
+String filePath(MClassifier this, String filename, String basePath) :
+	dirPath( basePath ) + dirPathSeparator() + filename;
+
+
+/**
+ * Getter for the file path of a package based on its namespace.
+ * For instance if the package is located inside the package path '/path/to/package' and the package name is 'mypackage'
+ * then the full package path including the package name '/path/to/package/mypackage' is returned as file path.
+ * 
+ * @return	The path of the file.
+ * @api 
+ */
+String filePath(MPackage this) :
+	qn( dirPathSeparator() );
+
+
+/**
+ * Getter for the file path of a package based on its namespace and specified base path.
+ * For instance if the package is located inside the package path '/path/to/package', the package name is 'mypackage' and the specified base path is 'my/base'
+ * then the base path including the full package path and name 'my/base/path/to/package/mypackage' is returned as file path.
+ * 
+ * @param	basePath	The base path of a package.
+ * @return	The path of the file.
+ * @api 
+ */
+String filePath(MPackage this, String basePath) :
+	basePath != ""
+		? basePath + dirPathSeparator() + filePath()
+		: filePath();
+
+
+// -- String Splitting and List Merging Conversions ---------------------------------------------------------
+
+
+/**
+ * Merges a list of generics into a comma blank (', ') seperated list of generic specifications.
+ * If the specified list contains no elements an empty string is returned. 
+ * 
+ * @param	list	A list of generics.
+ * @return	The comma blank (', ') separated list of generic specifications, otherwise an empty string.
+ * @api
+ */
+String convertToString(List[MGeneric] list) :
+	list.specification.toString( ", " );
+
+
+// -- Full Qualified Model Name Conversions -----------------------------------------------------------------
+
+
+/**
+ * Getter for the full qualified model name separator character.
+ *
+ * @return	The full qualified model name separator character ('::').
+ * @api
+ */
+String fqmnSeparator() : 
+	"::";
+
+
+/**
+ * Returns the human readable full qualified model name of a model.
+ * 
+ * @api
+ */
+String fqmn(MModel this) :
+	name + " [" + xmiGuid + "]";
+
+
+/**
+ * Returns the human readable full qualified model name of an element.
+ * 
+ * @api
+ */
+String fqmn(MElement this) :
+	getQMBase() + fqmnSeparator() + getQMName();
+
+
+/**
+ * Private getter for the qualified model base (the model name).
+ * 
+ * @return	The qualified model base.
+ */
+private String getQMBase(MElement this) :
+	navModel().name;
+
+
+/**
+ * Private getter for the qualified model name (the element name and xmiGuid).
+ * 
+ * @return	The qualified model name.
+ */
+private String getQMName(MElement this) :
+	qn( fqmnSeparator() ) + " [" + xmiGuid + "]";
+
+
+// -- Qualified Name Conversions ----------------------------------------------------------------------------
+
+
+/**
+ * Getter for the qualified name separator character.
+ *
+ * @return	The qualified name separator character ('::').
+ * @api
+ */
+String qualifiedNameSeparator() : 
+	"::";
+
+
+/**
+ * Returns the qualified name of a model which is an empty string.
+ * 
+ * @param	separator	A separator used between the names.
+ * @param	modelName	The alternative name of a model.
+ * @return	The qualified name which is an empty string.
+ * @api
+ */
+String qn(MModel this, String separator, String modelName) : 
+	"";
+
+
+/**
+ * Returns the qualified name of a model which is an empty string.
+ * 
+ * @param	separator	A separator used between the names.
+ * @param	modelName	The alternative name of a model.
+ * @param	baseQN		A base qualified name to prepend.
+ * @return	The qualified name which is an empty string.
+ * @api
+ */
+String qn(MModel this, String separator, String modelName, String baseQN) : 
+	"";
+
+
+/**
+ * Returns the qualified name of a package.
+ * 
+ * @return	The qualified name.
+ * @see		qn(MPackage, String)
+ * @api
+ */
+String qn(MPackage this) :
+	qn( qualifiedNameSeparator() );
+
+
+/**
+ * Returns the qualified name of a package.
+ * 
+ * @param	separator	A separator used between the names.
+ * @return	The qualified name.
+ * @see		qn(MPackage, String, String)
+ * @api
+ */
+String qn(MPackage this, String separator) :
+	qn( separator, name );
+
+
+/**
+ * Returns the qualified name of a package.
+ * 
+ * @param	separator	A separator used between the names.
+ * @param	packageName	The alternative name of a package.
+ * @return	The qualified name.
+ * @api
+ */
+String qn(MPackage this, String separator, String packageName) :
+	nestingPackage != null && nestingPackage.metaType != MModel
+		? nestingPackage.qn( separator ) + separator + packageName
+		: packageName;
+
+
+/**
+ * Returns the qualified name of a package.
+ * 
+ * @param	separator	A separator used between the names.
+ * @param	packageName	The alternative name of a package.
+ * @param	baseQN		A base qualified name to prepend.
+ * @return	The qualified name.
+ * @see		qn(MPackage, String, String)
+ * @api
+ */
+String qn(MPackage this, String separator, String packageName, String baseQN) :
+	baseQN != ""
+		? baseQN + separator + qn( separator, packageName )
+		: qn( separator, packageName );
+
+
+/**
+ * Returns the qualified name of a classifier.
+ * 
+ * @return	The qualified name.
+ * @see		qn(MClassifier, String)
+ * @api
+ */
+String qn(MClassifier this) :
+	qn( qualifiedNameSeparator() );
+
+
+/**
+ * Returns the qualified name of a classifier.
+ * 
+ * @param	separator	A separator used between the names.
+ * @return	The qualified name.
+ * @see		qn(MClassifier, String, String)
+ * @api
+ */
+String qn(MClassifier this, String separator) :
+	qn( separator, name );
+
+
+/**
+ * Returns the qualified name of a classifier.
+ * 
+ * @param	separator		A separator used between the names.
+ * @param	classifierName	The alternative name of a classifier.
+ * @return	The qualified name.
+ * @api
+ */
+String qn(MClassifier this, String separator, String classifierName) :
+	owningContext != null && owningContext.metaType != MModel
+		? owningContext.qn( separator ) + separator + classifierName 
+		: classifierName;
+
+
+/**
+ * Returns the qualified name of a classifier.
+ * 
+ * @param	separator		A separator used between the names.
+ * @param	classifierName	The alternative name of a classifier.
+ * @param	baseQN			A base qualified name to prepend.
+ * @return	The qualified name.
+ * @see		qn(MClassifier, String, String)
+ * @api
+ */
+String qn(MClassifier this, String separator, String classifierName, String baseQN) :
+	baseQN != ""
+		? baseQN + separator + qn( separator, classifierName )
+		: qn( separator, classifierName );
+
+
+/**
+ * Returns the qualified name of a property.
+ * 
+ * @return	The qualified name.
+ * @see		qn(MProperty, String)
+ * @api
+ */
+String qn(MProperty this) :
+	qn( qualifiedNameSeparator() );
+
+
+/**
+ * Returns the qualified name of a property.
+ * 
+ * @param	separator	A separator used between the names.
+ * @return	The qualified name.
+ * @see		qn(MProperty, String, String)
+ * @api
+ */
+String qn(MProperty this, String separator) :
+	qn( separator, name );
+
+
+/**
+ * Returns the qualified name of a property.
+ * 
+ * @param	separator		A separator used between the names.
+ * @param	propertyName	The alternative name of a property.
+ * @return	The qualified name.
+ * @api
+ */
+String qn(MProperty this, String separator, String propertyName) :
+	classifier.qn( separator ) + separator + propertyName;
+
+
+/**
+ * Returns the qualified name of a property.
+ * 
+ * @param	separator		A separator used between the names.
+ * @param	propertyName	The alternative name of a property.
+ * @param	baseQN			A base qualified name to prepend.
+ * @return	The qualified name.
+ * @see		qn(MProperty, String, String)
+ * @api
+ */
+String qn(MProperty this, String separator, String propertyName, String baseQN) :
+	baseQN != ""
+		? baseQN + separator + qn( separator, propertyName )
+		: qn( separator, propertyName );
+
+
+/**
+ * Returns the qualified name of an operation.
+ * 
+ * @return	The qualified name.
+ * @see		qn(MOperation, String)
+ * @api
+ */
+String qn(MOperation this) :
+	qn( qualifiedNameSeparator() );
+
+
+/**
+ * Returns the qualified name of an operation.
+ * 
+ * @param	separator	A separator used between the names.
+ * @return	The qualified name.
+ * @see		qn(MOperation, String, String)
+ * @api
+ */
+String qn(MOperation this, String separator) :
+	qn( separator, name );
+
+
+/**
+ * Returns the qualified name of an operation.
+ * 
+ * @param	separator		A separator used between the names.
+ * @param	operationName	The alternative name of an operation.
+ * @return	The qualified name.
+ * @api
+ */
+String qn(MOperation this, String separator, String operationName) :
+	classifier.qn( separator ) + separator + operationName + "(" + parameter.name.toString(", ") + ")";
+
+
+/**
+ * Returns the qualified name of an operation.
+ * 
+ * @param	separator		A separator used between the names.
+ * @param	operationName	The alternative name of an operation.
+ * @param	baseQN			A base qualified name to prepend.
+ * @return	The qualified name.
+ * @see		qn(MOperation, String, String)
+ * @api
+ */
+String qn(MOperation this, String separator, String operationName, String baseQN) :
+	baseQN != ""
+		? baseQN + separator + qn( separator, operationName )
+		: qn( separator, operationName );
+
+
+/**
+ * Returns the qualified name of an element.
+ * 
+ * @return	The qualified name.
+ * @see		qn(MElement, String)
+ * @api
+ */
+String qn(MElement this) : 
+	name;
+
+
+/**
+ * Returns the qualified name of an element.
+ * 
+ * @param	separator	A separator used between the names.
+ * @return	The qualified name.
+ * @see		qn(MElement, String)
+ * @api
+ */
+String qn(MElement this, String separator) : 
+	name;

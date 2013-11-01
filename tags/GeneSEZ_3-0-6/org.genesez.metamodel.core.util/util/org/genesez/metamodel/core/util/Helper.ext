@@ -1,0 +1,97 @@
+/**
+ * Helper function for M2T Transformations
+ * 
+ * currently provided:
+ * - filter for lists of packages to simply exclude packages from code generation
+ * - the base package which is used for generation
+ * - flag to use the model name as base package for generation
+ * - flag which indicates if section comments are generated or not
+ * - distinctions if accessors are generated or not
+ * 
+ * @author	tobias haubold
+ * @date	2008-04-18
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension org::genesez::metamodel::core::util::Conversion;
+extension org::genesez::metamodel::core::util::NavigateElement;
+extension org::genesez::metamodel::core::util::GlobalVar;
+
+extension org::genesez::util::logging::Logging;
+
+
+/**
+ * getter for the 'base path' based on the 'base package'
+ * @return	value of the base path
+ */
+String basePath(MClassifier this) : navPackage().basePath();
+
+/**
+ * getter for the 'base path' based on the 'base package'
+ * @return	value of the base path
+ */
+String basePath(MPackage this) : basePackage().replaceAll("\\.", "/");
+
+/**
+ * getter for the 'base package' which is used for generation
+ * evaluates the global variables 'useModelNameAsBasePackage' and 'basePackage',
+ * which are configured in the workflow component
+ * @return	the base package to use for code generation or an empty string
+ */
+String basePackage(MClassifier this) : navPackage().basePackage(); 
+
+/**
+ * getter for the 'base package' which is used for generation
+ * evaluates the global variables 'useModelNameAsBasePackage' and 'basePackage',
+ * which are configured in the workflow component
+ * @return	the base package to use for code generation or an empty string
+ */
+String basePackage(MPackage this) : 
+	globalVarUseModelNameAsBasePackage()
+		? navModel().name
+		: ( GLOBALVAR basePackage == null ? "" : GLOBALVAR basePackage );
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	filters a list of packages to exclude them from code generation
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+
+/**
+ * Rejects all packages contained in the 'excludePackages' variable from the specified list of packages.
+ * 
+ * @context	list of packages to filter
+ * @return	list of packages without the packages to ignore
+ */
+List[MPackage] rejectIgnoredPackages(List[MPackage] this) : this.select( p|!p.isRejected() );
+
+/**
+ * Returns true if the specified model should be ignored/excluded, otherwise false.
+ */
+boolean isRejected(MModel this) :
+	globalVarExcludePackage().convertToList().contains( "." );
+
+/**
+ * Returns true if the specified package should be ignored/excluded, otherwise false.
+ */
+boolean isRejected(MPackage this) :
+	globalVarExcludePackage().convertToList().exists( ip|ip == qn() )
+		? (logDebug("Reject '" + qn() + "'") -> true)
+		: false;
+
+/**
+ * Returns true if the contents of the specified model should be ignored, otherwise false.
+ */
+boolean isIgnoredContentPackage(MModel this) :
+	globalVarExcludePackageContent().convertToList().contains( "." );
+
+/**
+ * Returns true if the contents of the specified package should be ignored, otherwise false.
+ */
+boolean isIgnoredContentPackage(MPackage this) :
+	globalVarExcludePackageContent().convertToList().exists( p|p == qn() )
+		? (logDebug("Reject content of '" + qn() + "'") -> true)
+		: false;

@@ -1,0 +1,68 @@
+«IMPORT gcore»
+
+«REM»
+	Template for ejb3 attributes
+	
+	@author		andre pflueger
+	@date		2009-02-22
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION org::genesez::util::logging::Logging»
+
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+
+«EXTENSION org::genesez::platform::java::util::Naming»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» 
+	evaluate stereotypes for attributes 
+«ENDREM»
+«DEFINE Annotation FOR MAttribute»
+	«EXPAND _Resource-»
+	«EXPAND Element::EJB-»	
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	evaluates the stereotype ejb3Resource
+«ENDREM»
+«DEFINE _Resource FOR MAttribute-»
+	«IF emHasStereotypeAssignment("ejb3Resource")-»
+		@Resource«IF emHasUtilizableTaggedValue("ejb3Resource", "name") || 
+			emHasUtilizableTaggedValue("ejb3Resource", "description") || 
+			emHasUtilizableTaggedValue("ejb3Resource", "mappedName") || 
+			(emHasUtilizableTaggedValue("ejb3Resource", "shareable") &&
+			!this.emGetTaggedBooleanValue("ejbResource", "shareable"))-»(
+			«IF emHasUtilizableTaggedValue("ejb3Resource", "name")-»
+				name="«emGetTaggedValue("ejb3Resource", "name")-»"«IF emHasUtilizableTaggedValue("ejb3Resource", "description") || 
+					emHasUtilizableTaggedValue("ejb3Resource", "mappedName") || 
+					(emHasUtilizableTaggedValue("ejb3Resource", "shareable") && 
+					!this.emGetTaggedBooleanValue("ejbResource", "shareable"))-», «ENDIF-»
+			«ENDIF-»
+			«IF emHasUtilizableTaggedValue("ejb3Resource", "description")-»
+				description="«emGetTaggedValue("ejb3Resource", "description")-»"«IF emHasUtilizableTaggedValue("ejb3Resource", "mappedName") || 
+					(emHasUtilizableTaggedValue("ejb3Resource", "shareable") && !this.emGetTaggedBooleanValue("ejbResource", "shareable"))-», «ENDIF-»
+			«ENDIF-»
+			«IF emHasUtilizableTaggedValue("ejb3Resource", "mappedName")-»
+				mappedName="«emGetTaggedValue("ejb3Resource", "mappedName")-»"«IF emHasUtilizableTaggedValue("ejb3Resource", "shareable") && !this.emGetTaggedBooleanValue("ejbResource", "shareable")-», «ENDIF-»
+			«ENDIF-»
+			«IF emHasUtilizableTaggedValue("ejb3Resource", "shareable") && !this.emGetTaggedBooleanValue("ejbResource", "shareable")-»
+				shareable=«emGetTaggedValue("ejb3Resource", "shareable")-»
+			«ENDIF-»)
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
