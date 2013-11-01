@@ -157,7 +157,7 @@ MProperty classNoSetAccessorIfDependencyInjectionIsSet(MProperty this) :
  * @todo	getErrorFlashMessage 
  */
 MClass controllerModifications(MClass this) :
-	// add default generalizazion if hook is registered by AOP
+	// add default generalization if hook is registered by AOP
 	controllerHookAddGeneralization() ->
 	
 	controllerAddInitializeAction() ->
@@ -221,7 +221,6 @@ MOperation controllerAddInitializeAction(MOperation this) :
 MClass domainObjectModifications(MClass this) :
 	property.domainObjectChangePropertyVisibilityToProtected() ->
 	//property.domainObjectAddNotEmptyStereotype() ->
-	/*property.typeSelect(MAttribute).changeDomainObjectAttributeMultiplicity()*/
 	this;
 
 
@@ -239,26 +238,6 @@ MProperty domainObjectChangePropertyVisibilityToProtected(MProperty this) :
 //			ensureStereotypeAssignment( navModel().ensureStereotypeExistence( prNotEmptyValidator(), prNotEmptyValidator() ) )
 //		) : Void ->
 //	this;
-
-
-/*
-MAttribute domainObjectChangeAttributeMultiplicity(MAttribute this) :
-	!isClassifier(type) && multiplicity.isMultiValued()
-		? (	stereotype.add(
-				let s = createStereotype( navModel(), prT3TCxMinitems(), prT3TCxMinitems() ) :
-					createTaggedValue(this, createTag( s, prT3TCxMinitemsMinitems(), "Integer" ), multiplicity.lowerBound.toString() ) ->
-					s
-				) ->
-			stereotype.add(
-				let s = createStereotype( navModel(), prT3TCxMaxitems(), prT3TCxMaxitems() ) :
-					createTaggedValue(this, createTag( s, prT3TCxMaxitemsMaxitems(), "Integer" ), multiplicity.upperBound.toString() ) ->
-					s
-			) ->
-			multiplicity.hasFixedLowerBoundMultiplicity() && multiplicity.lowerBound == 1 ? multiplicity.setLowerBound(1) : multiplicity.setLowerBound(0) ->
-			multiplicity.setUpperBound(1)
-		)
-		: Void;
-*/		
 
 
 // -- Modification of Entities ------------------------------------------------------------------------------
