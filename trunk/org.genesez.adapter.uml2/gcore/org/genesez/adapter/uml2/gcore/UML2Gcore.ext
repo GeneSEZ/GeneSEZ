@@ -134,9 +134,12 @@ MModel transform(Profile this) :
 	getAllAppliedProfiles().logUnresolvedUmlProfile() ->
 	logTrace( "transform profile [ " + metaType + " ] - " + this ) ->
 	// make profile without containment (it's the root)
-	(let p = make().transformProfile( this ) :
+	(let p = make() :
+		coremodel( p ) ->
+		p.transformProfile( this ) ->
 		// stereotypes into classes
 		p.classifier.addAll( ownedStereotype.transformClass() ) ->
+		// TODO stereotype in packages are not transformed!
 	p);
 
 
@@ -1061,8 +1064,6 @@ private MPackage transformProfile(MPackage this, Profile p) :
 	p.ownedElement.typeSelect(Classifier).reject(
 		e|{Activity, Actor, Association, Extension, Stereotype}.contains(e.metaType) 
 	).transform( this ) ->
-	// stereotypes into classes
-//	classifier.addAll( p.ownedStereotype.transformClass() ) ->
 	this;
 
 /**
