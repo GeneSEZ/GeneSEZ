@@ -30,19 +30,6 @@ extension org::genesez::metamodel::core::util::Conversion;
  * @return	False, if the visibility is not 'protected', otherwise true.
  */
 context MProperty 
-	if classifier.metaType == MClass && ( ((MClass) classifier).isEntity() || ((MClass) classifier).isValueObject() ) 
+	if classifier.isEntity() || classifier.isValueObject() 
 	WARNING "GeneSEZ: The visibility of the property from the domain object is not protected! See model element: " + fqmn() :
 	visibility == "protected";
-
-
-// -- Attribute Checks --------------------------------------------------------------------------------------
-
-/**
- * Checks if the multiplicity of attributes with type is no classifier is '0' or '1' of TYPO3 MVC Extbase entities or value objects.
- * 
- * @return	False, if the multiplicity is not '0' or '1', otherwise true.
- */	
-//context MAttribute WARNING "GeneSEZ: Could not handle multi valued attributes for types which are no classifier!" :
-//	classifier.metaType == MClass && ( ((MClass)classifier).isEntity() || ((MClass)classifier).isValueObject() ) && !type.isClassifier()
-//		? multiplicity.isSingleValued()
-//		: true;
