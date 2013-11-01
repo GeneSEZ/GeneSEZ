@@ -1,0 +1,72 @@
+
+import uml;
+import gcore;
+
+extension org::genesez::adapter::uml2::Helper;
+extension org::genesez::util::logging::Logging;
+extension org::genesez::util::GlobalObjectStorage;
+
+
+// - - » access to the source + target model of the transformation - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+/**
+ * Saves the uml model in the global store.
+ * @return	the saved uml model
+ */
+Model uml2model(Model this) : 
+	globalObjectSet("uml2model", this);
+
+/**
+ * Retrieves the uml model from the global store.
+ * @return	the saved uml model
+ */
+Model uml2model() : 
+	globalObjectGet("uml2model");
+
+/**
+ * Saves the GeneSEZ model in the global store.
+ * @return	the saved GeneSEZ model
+ */
+MModel coremodel(MModel this) : 
+	globalObjectSet("coremodel", this);
+
+/**
+ * Retrieves the GeneSEZ model from the global store.
+ * @return	the saved GeneSEZ model
+ */
+MModel coremodel() : 
+	globalObjectGet("coremodel");
+
+
+// - - » name + xmi guid transformation - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+private boolean allowGeneratedXmiGuID() :
+	GLOBALVAR allowGeneratedXmiGuid == null
+		? false
+		: GLOBALVAR allowGeneratedXmiGuid;
+
+
+/**
+ * processes the transformation of an uml named element to a GeneSEZ element
+ * @param	c	an uml named element
+ * @return	the GeneSEZ element
+ */
+MElement transformBasics(MElement this, NamedElement n) :
+	// set the unique xmiId and name
+	let id = xmiId(n) :
+	allowGeneratedXmiGuID() == true
+		? ( id == null
+			? ( logDebug("Generate XmiId for: " + n.qualifiedName) ->
+				setXmiGuid( generateID(n) ))
+			: setXmiGuid( id ))
+		: setXmiGuid( id ) ->
+	setName( n.name ) ->
+	this;
+
+/**
+ * Returns a new generated id for the specified element.
+ */
+cached String generateID (Element obj) :
+	JAVA org.genesez.adapter.uml2.TransformationHelper.generateXmiId(org.eclipse.emf.ecore.EObject);
