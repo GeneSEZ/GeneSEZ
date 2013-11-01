@@ -111,7 +111,7 @@ String extensionPrefixWithoutUnderscores() :
  * Checks if the extension is a general or a user specific extension, 
  * by determination of the extension key if it does not start with prefix "user_".
  */
-private Boolean isGeneralExtension() :
+Boolean isGeneralExtension() :
 	!extensionKey().startsWith("user_");
 
 
@@ -212,6 +212,24 @@ String asTypo3State(String state) :
 
 
 /**
+ * Formats an interface name into a TYPO3 CMS plugin name.
+ *
+ * @return	The TYPO3 CMS plugin name.
+ */
+String asTypo3PluginName(MInterface this):
+	name.toFirstUpper();
+
+
+/**
+ * Formats an interface name into a TYPO3 CMS module name.
+ *
+ * @return	The TYPO3 CMS module name.
+ */
+String asTypo3ModuleName(MInterface this) :
+	extensionPrefixWithoutUnderscores() + "_"  + name.toLowerCase();
+
+
+/**
  * Formats a string value into a TYPO3 CMS main module value.
  *
  * @param	mainModule	The main module to format.
@@ -229,24 +247,6 @@ String asTypo3MainModul(String mainModule) :
  */
 String asTypo3AccessRole(String accessRole) :
 	accessRole.toLowerCase();
-
-
-/**
- * Formats an interface name into a TYPO3 CMS plugin name.
- *
- * @return	The TYPO3 CMS plugin name.
- */
-String asTypo3PluginName(MInterface this):
-	name.toFirstUpper();
-
-
-/**
- * Formats an interface name into a TYPO3 CMS module name.
- *
- * @return	The TYPO3 CMS module name.
- */
-String asTypo3ModuleName(MInterface this) :
-	extensionPrefixWithoutUnderscores() + "_"  + name.toLowerCase();
 
 
 // -- PHP conventions ---------------------------------------------------------------------------------------
