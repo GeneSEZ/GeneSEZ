@@ -14,21 +14,14 @@
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
 «ENDREM»
 
-«REM» use TYPO3 MVC Extbase access helper scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::profile::ExtbaseAccessElement»
+«REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::AccessElement»
 
-«REM» use TYPO3 naming context and common naming scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::NamingContext»
+«REM» use TYPO3 CMS specific Extbase + Fluid file system convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::FileSystemConvention»
 
-«REM» use TYPO3 MVC convention scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Convention»
-
-«REM» use TYPO3 MVC conversion scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Conversion»
-
-«REM» use TYPO3 MVC access helper scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::util::AccessElement»
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
 
 
 «REM»
@@ -39,14 +32,12 @@
 	Processes the generation of "ext_typoscript_setup.txt".
 «ENDREM»
 «DEFINE Root FOR MModel -»
-«EXPAND ContextSettings -»
-
-«FILE extTypoScriptSetupTSFileNamePath() -»
-«LET fullQualifiedExtensionNameToLowerCase() AS extensionName -»
-«EXPAND PluginConfiguration(extensionName) -»
-«EXPAND ModuleConfiguration(extensionName) -»
+«FILE filePathTypoScriptSetupTs() -»
+«LET extensionPrefix() AS extensionPrefix -»
+«EXPAND PluginConfiguration(extensionPrefix) -»
+«EXPAND ModuleConfiguration(extensionPrefix) -»
 «EXPAND PersistenceClassesMapping -»
-«EXPAND OwnCodeDeclaration("setup.txt.own.code.declaration." + xmiGuid) -»
+«EXPAND OwnCode("setup.txt.own.code." + xmiGuid) -»
 «ENDLET -»
 «ENDFILE -»
 «ENDDEFINE»
@@ -57,23 +48,13 @@
 «ENDREM»
 
 «REM»
-	Sets the naming context for this part of generation.
-	The type mapping context is not needed for this part. 
 «ENDREM»
-«DEFINE ContextSettings FOR MModel -»
-«setInternalNamingContext( namingContextConfiguration() ) -»
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE PluginConfiguration(String extensionName) FOR MModel -»
+«DEFINE PluginConfiguration(String extensionPrefix) FOR MModel -»
 «IF !allPlugins().isEmpty -»
-plugin.«extensionName -» {
-	«EXPAND PluginFeature(extensionName) -»
-	«EXPAND PluginPersistence(extensionName) -»
-	«EXPAND PluginView(extensionName) -»
-	«EXPAND OwnPluginCodeDeclaration("setup.txt.own.plugin.code.declaration." + xmiGuid) -»
+plugin.«extensionPrefix -» {
+	«EXPAND PluginPersistence(extensionPrefix) -»
+	«EXPAND PluginView(extensionPrefix) -»
+	«EXPAND OwnPluginCode("setup.txt.own.plugin.code." + xmiGuid) -»
 }
 
 «ENDIF -»
@@ -82,51 +63,43 @@ plugin.«extensionName -» {
 
 «REM»
 «ENDREM»
-«DEFINE PluginFeature(String extensionName) FOR MModel -»
-	features {
-		rewrittenPropertyMapper = {$plugin.«extensionName -».features.rewrittenPropertyMapper}
-	}
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE PluginPersistence(String extensionName) FOR MModel -»
+«DEFINE PluginPersistence(String extensionPrefix) FOR MModel -»
 	persistence {
-		storagePid = {$plugin.«extensionName -».persistence.storagePid}
+		storagePid = {$plugin.«extensionPrefix -».persistence.storagePid}
 	}
 «ENDDEFINE»
 
 
 «REM»
+	@todo	Support of templateRootPaths
 «ENDREM»
-«DEFINE PluginView(String extensionName) FOR MModel -»
+«DEFINE PluginView(String extensionPrefix) FOR MModel -»
 	view {
-		templateRootPath = {$plugin.«extensionName -».view.templateRootPath}
-		partialRootPath = {$plugin.«extensionName -».view.partialRootPath}
-		layoutRootPath = {$plugin.«extensionName -».view.layoutRootPath}
+		templateRootPath = {$plugin.«extensionPrefix -».view.templateRootPath}
+		partialRootPath = {$plugin.«extensionPrefix -».view.partialRootPath}
+		layoutRootPath = {$plugin.«extensionPrefix -».view.layoutRootPath}
 	}
 «ENDDEFINE»
 
 
 «REM»
-	Generates a region for own plugin TypoScript declarations.
+	Generates a protected region for own plugin code.
 «ENDREM»
-«DEFINE OwnPluginCodeDeclaration(String id) FOR MModel -»
+«DEFINE OwnPluginCode(String id) FOR MModel -»
 	«PROTECT CSTART '// ' CEND '' ID (id)»
-	// TODO: put your further plugin code declarations here
+	// TODO: put your further plugin code here
 	«ENDPROTECT»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE ModuleConfiguration(String extensionName) FOR MModel -»
+«DEFINE ModuleConfiguration(String extensionPrefix) FOR MModel -»
 «IF !allModules().isEmpty -»
-module.«extensionName -» {
-	«EXPAND ModulePersistence(extensionName) -»
-	«EXPAND ModuleView(extensionName) -»
-	«EXPAND OwnModuleCodeDeclaration("setup.txt.own.module.code.declaration." + xmiGuid) -»
+module.«extensionPrefix -» {
+	«EXPAND ModulePersistence(extensionPrefix) -»
+	«EXPAND ModuleView(extensionPrefix) -»
+	«EXPAND OwnModuleCode("setup.txt.own.module.code." + xmiGuid) -»
 }
 
 «ENDIF -»
@@ -135,30 +108,30 @@ module.«extensionName -» {
 
 «REM»
 «ENDREM»
-«DEFINE ModulePersistence(String extensionName) FOR MModel -»
+«DEFINE ModulePersistence(String extensionPrefix) FOR MModel -»
 	persistence {
-		storagePid = {$module.«extensionName -».persistence.storagePid}
+		storagePid = {$module.«extensionPrefix -».persistence.storagePid}
 	}
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE ModuleView(String extensionName) FOR MModel -»
+«DEFINE ModuleView(String extensionPrefix) FOR MModel -»
 	view {
-		templateRootPath = {$module.«extensionName -».view.templateRootPath}
-		partialRootPath = {$module.«extensionName -».view.partialRootPath}
-		layoutRootPath = {$module.«extensionName -».view.layoutRootPath}
+		templateRootPath = {$module.«extensionPrefix -».view.templateRootPath}
+		partialRootPath = {$module.«extensionPrefix -».view.partialRootPath}
+		layoutRootPath = {$module.«extensionPrefix -».view.layoutRootPath}
 	}
 «ENDDEFINE»
 
 
 «REM»
-	Generates a region for own module TypoScript declarations.
+	Generates a protected region for own module code.
 «ENDREM»
-«DEFINE OwnModuleCodeDeclaration(String id) FOR MModel -»
-	«PROTECT CSTART '// ' CEND '' ID (id)»
-	// TODO: put your further module code declarations here
+«DEFINE OwnModuleCode(String id) FOR MModel -»
+	«PROTECT CSTART '// ' CEND '' ID (id) »
+	// TODO: put your further module code here
 	«ENDPROTECT»
 «ENDDEFINE»
 
@@ -166,27 +139,23 @@ module.«extensionName -» {
 «REM»
 «ENDREM»
 «DEFINE PersistenceClassesMapping FOR MModel -»
-«setInternalNamingContext( namingContextGeneral() ) -»
-«setExternalNamingContext( typeMappingContextGeneral() ) -»
 «IF !allPersistenceClassMappings().isEmpty -»
 config.tx_extbase {
 	persistence {
 		classes {
-			«EXPAND PersistenceClassMapping FOREACH allPersistenceClassMappings().sortBy( e | e.name() ) -»
+			«EXPAND PersistenceClassMapping FOREACH allPersistenceClassMappings().sortBy( e | e.asGeneralName() ) -»
 		}
 	}
 }
 
 «ENDIF -»
-«revertInternalNamingContext() -»
-«revertExternalNamingContext() -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
 «DEFINE PersistenceClassMapping FOR MClass -»
-			«name() -» {
+			«asGeneralName() -» {
 				mapping {
 					«EXPAND PersistenceClassMappingTableName -»
 					«EXPAND PersistenceClassMappingRecordType -»
@@ -200,7 +169,7 @@ config.tx_extbase {
 «REM»
 «ENDREM»
 «DEFINE PersistenceClassMapping FOR MType -»
-			«name() -» {
+			«asGeneralName() -» {
 				«EXPAND PersistenceSubclasses -»
 			}
 «ENDDEFINE»
@@ -209,14 +178,14 @@ config.tx_extbase {
 «REM»
 «ENDREM»
 «DEFINE PersistenceClassMappingTableName FOR MClass -»
-					tableName = «name( namingContextPersistence() )»
+					tableName = «asPersistenceName()»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
 «DEFINE PersistenceClassMappingRecordType FOR MClass -»
-					recordType = «name()»
+					recordType = «asGeneralName()»
 «ENDDEFINE»
 
 
@@ -225,7 +194,7 @@ config.tx_extbase {
 «DEFINE PersistenceColumnsMapping FOR MClass -»
 «IF !owningPersistencePropertyMappings().isEmpty -»
 					columns {
-						«EXPAND PersistenceColumnMapping FOREACH owningPersistencePropertyMappings().sortBy( e | e.name ) -»
+						«EXPAND PersistenceColumnMapping FOREACH owningPersistencePropertyMappings().sortBy( p | p.asGeneralName() ) -»
 					}
 «ENDIF -»
 «ENDDEFINE»
@@ -234,7 +203,7 @@ config.tx_extbase {
 «REM»
 «ENDREM»
 «DEFINE PersistenceColumnMapping FOR MProperty -»
-						«name( namingContextPersistence() ) -».mapOnProperty = «name()»
+						«asPersistenceName() -».mapOnProperty = «asGeneralName()»
 «ENDDEFINE»
 
 
@@ -243,7 +212,7 @@ config.tx_extbase {
 «DEFINE PersistenceSubclasses FOR MType -»
 «IF !owningSingleTableInheritanceSpecializations().isEmpty -»
 				subclasses {
-					«EXPAND PersistenceSubclass FOREACH owningSingleTableInheritanceSpecializations().sortBy( e | e.name ) -»						
+					«EXPAND PersistenceSubclass FOREACH owningSingleTableInheritanceSpecializations().sortBy( c | c.asGeneralName() ) -»						
 				}
 «ENDIF -»
 «ENDDEFINE»
@@ -252,15 +221,15 @@ config.tx_extbase {
 «REM»
 «ENDREM»
 «DEFINE PersistenceSubclass FOR MClass -»
-					«name() -» = «name()»
+					«asGeneralName() -» = «asGeneralName()»
 «ENDDEFINE»
 
 
 «REM»
-	Generates a region for own TypoScript declarations.
+	Generates a protected region for own code.
 «ENDREM»
-«DEFINE OwnCodeDeclaration(String id) FOR MModel -»
+«DEFINE OwnCode(String id) FOR MModel -»
 «PROTECT CSTART '// ' CEND '' ID (id)»
-// TODO: put your further code declarations here
+// TODO: put your further code here
 «ENDPROTECT»
 «ENDDEFINE»
