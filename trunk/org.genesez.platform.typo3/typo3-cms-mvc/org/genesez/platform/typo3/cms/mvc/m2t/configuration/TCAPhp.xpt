@@ -1,56 +1,53 @@
-«IMPORT gcore»
 «REM»
-	Entry point for generating "ext_tables.php".
+	(c) GeneSEZ Research Group
+	All rights reserved.
 	
-	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
-	@date	2011-07-14
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
 «ENDREM»
 
+«IMPORT gcore»
 
-«REM» use TYPO3 profile access helper scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::profile::AccessElement»
 
-«REM» use TYPO3 naming context and common naming scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::NamingContext»
+«REM»
+	Entry point for generating "<table name of domain object>.php".
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+«ENDREM»
 
-«REM» use TYPO3 MVC convention scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Convention»
+«REM» use TYPO3 CMS profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
 
-«REM» use TYPO3 MVC conversion scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Conversion»
 
-«REM» use TYPO3 MVC naming scripts which overrides «ENDREM»
-«REM» TYPO3 naming scripts if script name is equals «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Naming»
-«EXTENSION org::genesez::platform::typo3cms::convention::Naming»
+«REM» use GeneSEZ common GUI profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezGuiAccessElement»
 
-«REM» use TYPO3 MVC access helper scripts which overrides «ENDREM»
-«REM» common access helper scripts if script name is equals «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::util::AccessElement»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::AccessElement»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid file system convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::FileSystemConvention»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
+
+
+«REM» use GeneSEZ common access element scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::AccessElement»
 
-«REM» use TYPO3 TCx access helper scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::util::TCxAccessElement»
-
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
 «ENDREM»
 
 «REM»
+	Processes the generation of "<table name of domain object>.php".
 «ENDREM»
 «DEFINE Root FOR MClass -»
-«EXPAND ContextSettings -»
-
-«FILE tcaPHPFileNamePath() -»
+«FILE filePathTcaPhp() -»
 <?php
 
-«EXPAND AccessDenied -»
 «EXPAND TableConfigurationArray -»
-«EXPAND OwnCodeImplementation("tca.php.own.code.implementation." + xmiGuid) -»
 
 ?>
 «ENDFILE -»
@@ -58,239 +55,359 @@
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
 «ENDREM»
-
-«REM»
-	Sets the naming and type mapping context for this part of generation. 
-«ENDREM»
-«DEFINE ContextSettings FOR MClass -»
-«setInternalNamingContext( namingContextConfiguration() ) -»
-«setExternalNamingContext( typeMappingContextTYPO3TCx() ) -»
-«ENDDEFINE»
-
-
-«REM»
-	TYPO3 access control to check if this file is called from the outside of TYPO3. 
-	If so then the script dies.
-«ENDREM»
-«DEFINE AccessDenied FOR MElement -»
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
-
-«ENDDEFINE»
-
 
 «REM»
 «ENDREM»
 «DEFINE TableConfigurationArray FOR MClass -»
-$TCA['«name() -»'] = array (
-	«EXPAND TCACtrlSection -»
-	«EXPAND TCAInterfaceSection -»
-	«EXPAND TCATypesSection -»
-	«EXPAND TCAPalettesSection -»
-	«EXPAND TCAColumnsSection -»
+return array(
+	«EXPAND CtrlSection -»
+	«EXPAND InterfaceSection -»
+	«EXPAND ColumnsSection -»
+	«EXPAND TypesSection -»
+	«EXPAND PalettesSection -»
+	«EXPAND OwnCode("tca.php.own.code." + xmiGuid) -»
 );
 
 «ENDDEFINE»
 
 
+«REM» -- 'Ctrl' Section -- «ENDREM»
+
 «REM»
 «ENDREM»
-«DEFINE TCACtrlSection FOR MClass -»
-	'ctrl' => $TCA['«name() -»']['ctrl'],
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAInterfaceSection FOR MClass -»
-	'interface' => array(
-		«EXPAND TCAInterfaceShowRecordFieldList -»
-		«EXPAND TCAInterfaceAdditions -»
-		«EXPAND OwnTCAInterfaceSectionCodeImplementation("tca.php.own.tca.interface.section.code.implementation." + xmiGuid) -»
+«DEFINE CtrlSection FOR MClass -»
+	'ctrl' => array(
+		«EXPAND CtrlTitle -»
+		«EXPAND CtrlLabel -»
+		«EXPAND CtrlLabelAlt -»
+		«EXPAND CtrlLabelAltForce -»
+		«EXPAND CtrlType -»
+		«EXPAND CtrlIconFile -»
+		«EXPAND CtrlSortBy -»
+		«EXPAND CtrlTstamp -»
+		«EXPAND CtrlCrdate -»
+		«EXPAND CtrlCruserId -»
+		«EXPAND CtrlOrigUid -»
+		«EXPAND CtrlDelete -»
+		«EXPAND CtrlEnablecolumns -»
+		«EXPAND CtrlSearchFields -»
+		«EXPAND CtrlLocalization -»
+		«EXPAND CtrlVersioning -»
+		«EXPAND OwnCtrlSectionCode("tca.php.own.ctrl.section.code." + xmiGuid) -»
 	),
 «ENDDEFINE»
 
 
 «REM»
+	Contains the system name of the table. Is used for display in the backend.
 «ENDREM»
-«DEFINE TCAInterfaceShowRecordFieldList FOR MClass -»
-		'showRecordFieldList' => '«FOREACH allInstanceProperties() AS p SEPARATOR ", " -»«p.name() -»«ENDFOREACH»',
+«DEFINE CtrlTitle FOR MClass-»
+		'title' => 'LLL:EXT:«extensionKey() -»/«filePathLocallangTcaXlf() -»:«asLocalizationName() -»',
 «ENDDEFINE»
 
 
 «REM»
+	Points to the field name of the table which should be used as the "title" when the record is displayed in the system.
 «ENDREM»
-«DEFINE TCAInterfaceAdditions FOR MClass -»
-«IF !getT3TCAClassInterfaceSectionAdditions().isEmpty -»
-«FOREACH getT3TCAClassInterfaceSectionAdditions() AS tcaAddition -»
-		«asT3AssociativeArrayItem(tcaAddition)»
-«ENDFOREACH -»
+«DEFINE CtrlLabel FOR MClass -»
+		'label'	=> '«IF emHasTypo3TcaUtilizableCtrlLabel() -»«emGetTypo3TcaCtrlLabel().asConfigurationName() -»«ELSEIF property.typeSelect(MAttribute).exists( a | !a.derived && !a.static ) -»«property.typeSelect(MAttribute).selectFirst( a | !a.derived && !a.static ).asConfigurationName() -»«ELSE -»uid«ENDIF -»',
+«ENDDEFINE»
+
+
+«REM»
+	Comma-separated list of field names, which are holding alternative values to the value from the field pointed to by "label" (see above) if that value is empty. May not be used consistently in the system, but should apply in most cases.
+«ENDREM»
+«DEFINE CtrlLabelAlt FOR MClass -»
+«IF emHasTypo3TcaUtilizableCtrlLabelAlt() -»
+		'label_alt' => '«FOREACH emGetTypo3TcaCtrlLabelAlt() AS labelAlt SEPARATOR ", " -»«labelAlt.asConfigurationName() -»«ENDFOREACH -»',
 «ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
-	generates a region for own TCA Interface Section code implementations
+	If set, then the "label_alt" fields are always shown in the title separated by comma.
 «ENDREM»
-«DEFINE OwnTCAInterfaceSectionCodeImplementation(String id) FOR MClass -»
-		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: put your further TCA Interface Section code implementations here
-		«ENDPROTECT»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCATypesSection FOR MClass -»
-	'types' => array(
-		«EXPAND TCATypesNumbers -»
-		«EXPAND TCATypesAdditions -»
-		«EXPAND OwnTCATypesSectionCodeImplementation("tca.php.own.tca.types.section.code.implementation." + xmiGuid) -»
-	),
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCATypesNumbers FOR MClass -»
-«IF allSingleTableInheritanceSpecializations().isEmpty -»
-	«EXPAND TCATypesNumbersConcrete -»
-«ELSE -»
-	«EXPAND TCATypesNumbersSingle -»
-«ENDIF -»
-«ENDDEFINE»
-
-
-«DEFINE TCATypesNumbersConcrete FOR MClass -»
-		'1' => array('showitem'	=> '«IF createLocalizationFields() -»sys_language_uid, «ENDIF -»«IF createHiddenField() -»hidden, «ENDIF -»«IF createStarttimeField() -»starttime, «ENDIF -»«IF createEndtimeField() -»endtime, «ENDIF -»«EXPAND TCATypesNumbersShowitem FOREACH allInstanceProperties() SEPARATOR ", " -»'),
-«ENDDEFINE»
-
-
-«DEFINE TCATypesNumbersSingle FOR MClass -»
-		'0' => array('showitem'	=> '«getPersistenceRecordTypeColumnName() -»'),
-		'«name( namingContextGeneral() ) -»' => array('showitem'	=> '«getPersistenceRecordTypeColumnName() -», «IF createLocalizationFields() -»sys_language_uid, «ENDIF -»«IF createHiddenField() -»hidden, «ENDIF -»«IF createStarttimeField() -»starttime, «ENDIF -»«IF createEndtimeField() -»endtime, «ENDIF -»«EXPAND TCATypesNumbersShowitem FOREACH allInstanceProperties() SEPARATOR ", " -»'),
-		«FOREACH allSingleTableInheritanceSpecializations() AS s -»
-		'«s.name( namingContextGeneral() ) -»' => array('showitem'	=> '«getPersistenceRecordTypeColumnName() -», «IF s.createLocalizationFields() -»sys_language_uid, «ENDIF -»«IF createHiddenField() -»hidden, «ENDIF -»«IF s.createStarttimeField() -»starttime, «ENDIF -»«IF s.createEndtimeField() -»endtime, «ENDIF -»«EXPAND TCATypesNumbersShowitem FOREACH s.allInstanceProperties() SEPARATOR ", " -»'),
-		«ENDFOREACH -»
-«ENDDEFINE»
-
-
-
-«DEFINE TCATypesNumbersShowitem FOR MProperty -»
-«name() -»«IF generateAdvancedTCATypesNumbers() -»;«getT3TCAPropertyTypesAltLabel() -»;«getT3TCAPropertyTypesPaletteNumber() -»;«getT3TCAPropertyTypesSpecialConfiguration() -»;«getT3TCAPropertyTypesFormStyleCodes() -»«ENDIF -»
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE TCATypesAdditions FOR MClass -»
-«IF !getT3TCAClassTypesSectionAdditions().isEmpty -»
-«FOREACH getT3TCAClassTypesSectionAdditions() AS tcaAddition -»
-		«asT3AssociativeArrayItem(tcaAddition)»
-«ENDFOREACH -»
+«DEFINE CtrlLabelAltForce FOR MClass -»
+«IF emHasTypo3TcaUtilizableCtrlLabelAlt() -»
+		'label_alt_force' => «emGetTypo3TcaCtrlLabelAltForce().asTypo3Boolean() -»,
 «ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
-	generates a region for own TCA Types Section code implementations
+	Field name, which defines the "record type".
 «ENDREM»
-«DEFINE OwnTCATypesSectionCodeImplementation(String id) FOR MClass -»
-		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: put your further TCA Types Section code implementations here
-		«ENDPROTECT»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAPalettesSection FOR MClass -»
-	'palettes' => array(
-		«EXPAND TCAPalettesNumbers -»
-		«EXPAND TCAPalettesAdditions -»
-		«EXPAND OwnTCAPalettesSectionCodeImplementation("tca.php.own.tca.palettes.section.code.implementation." + xmiGuid) -»
-	),
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAPalettesNumbers FOR MClass -»
-		'1' => array('showitem'	=> ''),
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE TCAPalettesAdditions FOR MClass -»
-«IF !getT3TCAClassPalettesSectionAdditions().isEmpty -»
-«FOREACH getT3TCAClassPalettesSectionAdditions() AS tcaAddition -»
-		«asT3AssociativeArrayItem(tcaAddition)»
-«ENDFOREACH -»
+«DEFINE CtrlType FOR MClass -»
+«IF !owningSingleTableInheritanceSpecializations().isEmpty -»
+		'type' => '«getPersistenceRecordTypeColumnName() -»',
 «ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
-	generates a region for own TCA Palettes Section code implementations
+	Pointing to the icon file to use for the table.
+	@todo	check if this statement should be generated
 «ENDREM»
-«DEFINE OwnTCAPalettesSectionCodeImplementation(String id) FOR MClass -»
-		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: put your further TCA Palettes Section code implementations here
-		«ENDPROTECT»
+«DEFINE CtrlIconFile FOR MClass -»
+		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . '«dirPathResourcesPublicIcons() -»/«asConfigurationName() -».gif',
 «ENDDEFINE»
 
 
-«REM» 
+«REM»
+	Field name, which is used to manage the order of the records.
 «ENDREM»
-«DEFINE TCAColumnsSection FOR MClass -»
-	'columns' => array(
-		«EXPAND TCAColumnsLocalizationColumns -»
-		«EXPAND TCAColumnsRecordTypeColumn -»
-		«EXPAND TCAColumnsAccessControlColumns -»
-		«EXPAND TCAColumnsVersioningColumns -»
-		«EXPAND TCAColumnsAttributeColumn(this) FOREACH allInstanceAttributes() -»
-		«FOREACH allSingleTableInheritanceSpecializations() AS s -»
-			«EXPAND TCAColumnsAttributeColumn(s) FOREACH s.owningInitializableAttributes() -»
-		«ENDFOREACH -»
-		«EXPAND TCAColumnsAssociationColumn(this) FOREACH allInstanceAssociationRoles() -»
-		«FOREACH allSingleTableInheritanceSpecializations() AS s -»
-			«EXPAND TCAColumnsAssociationColumn(s) FOREACH s.owningInitializableAssociationRoles() -»
-		«ENDFOREACH -»
-		«EXPAND OwnTCAColumnsSectionCodeImplementation("tca.php.own.tca.columns.section.code.implementation." + xmiGuid) -»
-	),
+«DEFINE CtrlSortBy FOR MClass -»
+«IF createSortingField() -»
+		'sortby' => 'sorting',
+«ENDIF -»
 «ENDDEFINE»
 
 
-«REM» 
+«REM»
+	Field name, which is automatically updated to the current timestamp (UNIX-time in seconds) each time the record is updated/saved in the system.
 «ENDREM»
-«DEFINE TCAColumnsLocalizationColumns FOR MClass -»
+«DEFINE CtrlTstamp FOR MClass -»
+		'tstamp' => 'tstamp',
+«ENDDEFINE»
+
+
+«REM»
+	Field name, which is automatically set to the current timestamp when the record is created. Is never modified again.
+«ENDREM»
+«DEFINE CtrlCrdate FOR MClass -»
+		'crdate' => 'crdate',
+«ENDDEFINE»
+
+
+«REM»
+	Field name, which is automatically set to the uid of the backend user (be_users) who originally created the record. Is never modified again.
+«ENDREM»
+«DEFINE CtrlCruserId FOR MClass -»
+		'cruser_id' => 'cruser_id',
+«ENDDEFINE»
+
+
+«REM»
+	Fieldname, which will contain the UID of the original record in case a record is created as a copy or new version of another record.
+«ENDREM»
+«DEFINE CtrlOrigUid FOR MClass -»
+		'origUid' => 't3_origuid',
+«ENDDEFINE»
+
+
+«REM»
+	Field name, which indicates if a record is considered deleted or not.
+«ENDREM»
+«DEFINE CtrlDelete FOR MClass -»
+		'delete' => 'deleted',
+«ENDDEFINE»
+
+
+«REM»
+	Specifies which publishing control features are automatically implemented for the table.
+	@todo	support of fe_group
+«ENDREM»
+«DEFINE CtrlEnablecolumns FOR MClass -»
+«IF createHiddenField() || createStarttimeField() || createEndtimeField() || createAccessControlField() -»
+		'enablecolumns' => array(
+			«EXPAND CtrlEnablecolumnsDisabled -»
+			«EXPAND CtrlEnablecolumnsStarttime -»
+			«EXPAND CtrlEnablecolumnsEndtime -»
+			«EXPAND CtrlEnablecolumnsFeGroup -»
+		),
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE CtrlEnablecolumnsDisabled FOR MClass -»
+«IF createHiddenField() -»
+			'disabled' => 'hidden',
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE CtrlEnablecolumnsStarttime FOR MClass -»
+«IF createStarttimeField() -»
+			'starttime' => 'starttime',
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE CtrlEnablecolumnsEndtime FOR MClass -»
+«IF createEndtimeField() -»
+			'endtime' => 'endtime',
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE CtrlEnablecolumnsFeGroup FOR MClass -»
+«IF createAccessControlField() -»
+			'fe_group' => 'fe_group',
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE CtrlSearchFields FOR MClass -»
+		'searchFields' => '«IF emHasTypo3TcaUtilizableCtrlSearchFields() -»«FOREACH emGetTypo3TcaCtrlSearchFields() AS searchFields SEPARATOR ", " -»«searchFields.asConfigurationName() -»«ENDFOREACH -»«ELSE -»«FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static ) AS searchFields SEPARATOR ", " -»«searchFields.asConfigurationName() -»«ENDFOREACH -»«ENDIF -»',
+«ENDDEFINE»
+
+
+«DEFINE CtrlLocalization FOR MClass -»
 «IF createLocalizationFields() -»
-	«EXPAND TCAColumnsSysLanguageUidColumn -»
-	«EXPAND TCAColumnsl10nParentColumn -»
-	«EXPAND TCAColumnsl10nDiffsourceColumn -»
+		«EXPAND CtrlLocalizationLanguageField -»
+		«EXPAND CtrlLocalizationTransOrigPointerField -»
+		«EXPAND CtrlLocalizationTransOrigDiffSourceField -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Field name which contains the pointer to the language of the record's content. Language for a record is defined by an integer pointing to a “sys_language” record (found in the page tree root).
+«ENDREM»
+«DEFINE CtrlLocalizationLanguageField FOR MClass -»
+		'languageField'	=> 'sys_language_uid',
+«ENDDEFINE»
+
+
+«REM»
+	Name of the field used by translations to point back to the original record (i.e. the record in the default language of which they are a translation).
+«ENDREM»
+«DEFINE CtrlLocalizationTransOrigPointerField FOR MClass -»
+		'transOrigPointerField' => 'l10n_parent',
+«ENDDEFINE»
+
+
+«REM»
+	Field name which will be updated with the value of the original language record whenever the translation record is updated. This information is later used to compare the current values of the default record with those stored in this field and if they differ there will be a display in the form of the difference visually. This is a big help for translators so they can quickly grasp the changes that happened to the default language text.
+«ENDREM»
+«DEFINE CtrlLocalizationTransOrigDiffSourceField FOR MClass -»
+		'transOrigDiffSourceField' => 'l10n_diffsource',
+«ENDDEFINE»
+
+
+«DEFINE CtrlVersioning FOR MClass -»
+«IF createVersioningFields() -»
+		«EXPAND CtrlVersioningVersioningWs -»
+		«EXPAND CtrlVersioningVersioningFollowPages -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	If set, versioning is enabled for this table. If integer it indicates a version number of versioning features.
+«ENDREM»
+«DEFINE CtrlVersioningVersioningWs FOR MClass -»
+		'versioningWS' => 2,
+«ENDDEFINE»
+
+
+«REM»
+	If set, content from this table will get copied along when a new version of a page is created.
+«ENDREM»
+«DEFINE CtrlVersioningVersioningFollowPages FOR MClass -»
+		'versioning_followPages' => TRUE,
+«ENDDEFINE»
+
+
+«REM»
+	Generates a region for own TCA Ctrl Section code.
+«ENDREM»
+«DEFINE OwnCtrlSectionCode(String id) FOR MClass -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: put your further 'ctrl' section code here
+		«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM» -- 'Interface' Section -- «ENDREM»
+
+«REM» 
+«ENDREM»
+«DEFINE InterfaceSection FOR MClass -»
+	'interface' => array(
+		«EXPAND InterfaceShowRecordFieldList -»
+		«EXPAND OwnInterfaceSectionCode("tca.php.own.interface.section.code." + xmiGuid) -»
+	),
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE InterfaceShowRecordFieldList FOR MClass -»
+		'showRecordFieldList' => '«FOREACH allProperties().select( p | !p.derived && !p.isStatic() ) AS p SEPARATOR ", " -»«p.asConfigurationName() -»«ENDFOREACH»',
+«ENDDEFINE»
+
+
+«REM»
+	Generates a region for own TCA Interface Section code.
+«ENDREM»
+«DEFINE OwnInterfaceSectionCode(String id) FOR MClass -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: put your further 'interface' section code here
+		«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM» -- 'Columns' Section -- «ENDREM»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnsSection FOR MClass -»
+	'columns' => array(
+		«EXPAND ColumnsLocalizationColumns -»
+		«EXPAND ColumnsRecordTypeColumn -»
+		«EXPAND ColumnsAccessControlColumns -»
+		«EXPAND ColumnsVersioningColumns -»
+		«EXPAND ColumnsAttributeColumn(this) FOREACH allAttributes().select( a | !a.derived && !a.static ) -»
+«FOREACH allSingleTableInheritanceSpecializations() AS s -»
+		«EXPAND ColumnsAttributeColumn(s) FOREACH s.property.typeSelect(MAttribute).select( a | !a.derived && !a.static ) -»
+«ENDFOREACH -»
+		«EXPAND ColumnsAssociationColumn(this) FOREACH allAssociationRoles().select( ar | !ar.derived ) -»
+«FOREACH allSingleTableInheritanceSpecializations() AS s -»
+		«EXPAND ColumnsAssociationColumn(s) FOREACH s.property.typeSelect(MAssociationRole).select( ar | !ar.derived ) -»
+«ENDFOREACH -»
+		«EXPAND OwnColumnsSectionCode("tca.php.own.columns.section.code." + xmiGuid) -»
+	),
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnsLocalizationColumns FOR MClass -»
+«IF createLocalizationFields() -»
+	«EXPAND ColumnsSysLanguageUidColumn -»
+	«EXPAND Columnsl10nParentColumn -»
+	«EXPAND Columnsl10nDiffsourceColumn -»
 «ENDIF -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsSysLanguageUidColumn FOR MClass -»
+«DEFINE ColumnsSysLanguageUidColumn FOR MClass -»
 		'sys_language_uid' => array(
-			'exclude' => true,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
+			'exclude' => TRUE,
+			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'sys_language',
 				'foreign_table_where' => 'ORDER BY sys_language.title',
 				'items' => array(
-					array('LLL:EXT:lang/locallang_general.php:LGL.allLanguages', -1),
-					array('LLL:EXT:lang/locallang_general.php:LGL.default_value', 0)
+					array('LLL:EXT:lang/locallang_general.xlf:LGL.allLanguages', -1),
+					array('LLL:EXT:lang/locallang_general.xlf:LGL.default_value', 0)
 				),
 			),
 		),
@@ -299,18 +416,18 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsl10nParentColumn FOR MClass -»
+«DEFINE Columnsl10nParentColumn FOR MClass -»
 		'l10n_parent' => array(
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
-			'exclude' => true,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
+			'exclude' => TRUE,
+			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.l18n_parent',
 			'config' => array(
 				'type' => 'select',
 				'items'	=> array(
 					array('', 0),
 				),
-				'foreign_table' => '«name() -»',
-				'foreign_table_where' => 'AND «name() -».uid=###REC_FIELD_l10n_parent### AND «name() -».sys_language_uid IN (-1,0)',
+				'foreign_table' => '«asConfigurationName() -»',
+				'foreign_table_where' => 'AND «asConfigurationName() -».pid=###CURRENT_PID### AND «asConfigurationName() -».sys_language_uid IN (-1,0)',
 			),
 		),
 «ENDDEFINE»
@@ -318,7 +435,7 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsl10nDiffsourceColumn FOR MClass -»
+«DEFINE Columnsl10nDiffsourceColumn FOR MClass -»
 		'l10n_diffsource' => array(
 			'config' =>array(
 				'type' =>'passthrough',
@@ -329,7 +446,7 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsRecordTypeColumn FOR MClass -»
+«DEFINE ColumnsRecordTypeColumn FOR MClass -»
 «IF !allSingleTableInheritanceSpecializations().isEmpty -»
 		'«getPersistenceRecordTypeColumnName() -»' => array(
 			'label' => 'Type',
@@ -337,9 +454,9 @@ $TCA['«name() -»'] = array (
 				'type' =>'select',
 				'items' => array(
 					array('undefined', '0'),
-					array('«name( namingContextPHPCompliant() ) -»', '«name( namingContextGeneral() ) -»'),
+					array('«asShortGeneralName() -»', '«asGeneralName() -»'),
 					«FOREACH allSingleTableInheritanceSpecializations() AS s -»
-					array('«s.name( namingContextPHPCompliant() ) -»', '«s.name( namingContextGeneral() ) -»'),
+					array('«s.asShortGeneralName() -»', '«s.asGeneralName() -»'),
 					«ENDFOREACH -»
 				),
 				'default' => '0',
@@ -351,20 +468,20 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsAccessControlColumns FOR MClass -»
-«EXPAND TCAColumnsHiddenColumn -»
-«EXPAND TCAColumnsStarttimeColumn -»
-«EXPAND TCAColumnsEndtimeColumn -»
+«DEFINE ColumnsAccessControlColumns FOR MClass -»
+«EXPAND ColumnsHiddenColumn -»
+«EXPAND ColumnsStarttimeColumn -»
+«EXPAND ColumnsEndtimeColumn -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsHiddenColumn FOR MClass -»
+«DEFINE ColumnsHiddenColumn FOR MClass -»
 «IF createHiddenField() -»
 		'hidden' => array(
-			'exclude' => true,
-			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'exclude' => TRUE,
+			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
 			'config' => array(
 				'type' => 'check',
 			),
@@ -375,18 +492,18 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsStarttimeColumn FOR MClass -»
+«DEFINE ColumnsStarttimeColumn FOR MClass -»
 «IF createStarttimeField() -»
 		'starttime' => array(
-			'exclude' => true,
+			'exclude' => TRUE,
 			'l10n_mode' => 'mergeIfNotBlank',
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.starttime',
+			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.starttime',
 			'config' => array(
 				'type' => 'input',
 				'size' => 13,
 				'max' => 20,
 				'eval' => 'datetime',
-				'checkbox' => false,
+				'checkbox' => FALSE,
 				'default' => 0,
 				'range' => array(
 					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
@@ -399,18 +516,18 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsEndtimeColumn FOR MClass -»
+«DEFINE ColumnsEndtimeColumn FOR MClass -»
 «IF createEndtimeField() -»
 		'endtime' => array(
-			'exclude' => true,
+			'exclude' => TRUE,
 			'l10n_mode' => 'mergeIfNotBlank',
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.endtime',
+			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.endtime',
 			'config' => array(
 				'type' => 'input',
 				'size' => 13,
 				'max' => 20,
 				'eval' => 'datetime',
-				'checkbox' => false,
+				'checkbox' => FALSE,
 				'default' => 0,
 				'range' => array(
 					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
@@ -423,570 +540,615 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsVersioningColumns FOR MClass -»
+«DEFINE ColumnsVersioningColumns FOR MClass -»
 «IF createVersioningFields() -»
-	«EXPAND TCAColumnsT3VerLabelColumn -»
+	«EXPAND ColumnsT3VerLabelColumn -»
 «ENDIF -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsT3VerLabelColumn FOR MClass -»
+«DEFINE ColumnsT3VerLabelColumn FOR MClass -»
 		't3ver_label' => array(
-			'displayCond' => 'FIELD:t3ver_label:REQ:true',
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.versionLabel',
+			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.versionLabel',
 			'config' => array(
-				'type' =>'none',
-				'cols' => 27,
-			),
+				'type' => 'input',
+				'size' => 30,
+				'max' => 255,
+			)
 		),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsAttributeColumn(MClass class) FOR MAttribute -»
-		'«name() -»' => array(
-			«EXPAND TCAColumnsExclude -»
-			«EXPAND TCAColumnsLabel -»
-			«EXPAND TCAColumnsDefaultExtras -»
-			«EXPAND TCAColumnsAdditions -»
-			«EXPAND OwnTCAColumnCodeImplementation("tca.php.own.tca.column.code.implementation." + class.xmiGuid + "." + xmiGuid) -»
-			«EXPAND TCAColumnsConfig(class) -»
+«DEFINE ColumnsAttributeColumn(MClass class) FOR MAttribute -»
+		'«asConfigurationName() -»' => array(
+			«EXPAND ColumnExclude -»
+			«EXPAND ColumnLabel -»
+			«EXPAND ColumnDefaultExtras -»
+			«EXPAND OwnColumnCode("tca.php.own.columns.section.column.code." + class.xmiGuid + "." + xmiGuid) -»
+			«EXPAND ColumnConfig(class) -»
 		),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsAssociationColumn(MClass class) FOR MAssociationRole -»
-		'«name() -»' => array(
-			«EXPAND TCAColumnsExclude -»
-			«EXPAND TCAColumnsLabel -»
-			«EXPAND TCAColumnsDefaultExtras -»
-			«EXPAND TCAColumnsAdditions -»
-			«EXPAND OwnTCAColumnCodeImplementation("tca.php.own.tca.column.code.implementation." + class.xmiGuid + "." + xmiGuid) -»
-			«EXPAND TCAColumnsConfig(class) -»
+«DEFINE ColumnsAssociationColumn(MClass class) FOR MAssociationRole -»
+		'«asConfigurationName() -»' => array(
+			«EXPAND ColumnExclude -»
+			«EXPAND ColumnLabel -»
+			«EXPAND ColumnDefaultExtras -»
+			«EXPAND OwnColumnCode("tca.php.own.columns.section.column.code." + class.xmiGuid + "." + xmiGuid) -»
+			«EXPAND ColumnConfig(class) -»
 		),
 «ENDDEFINE»
 
 
 «REM»
-	generates a region for own TCA Columns Section code implementations
+	Generates a region for own TCA Columns Section code.
 «ENDREM»
-«DEFINE OwnTCAColumnsSectionCodeImplementation(String id) FOR MClass -»
+«DEFINE OwnColumnsSectionCode(String id) FOR MClass -»
 		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: put your further TCA Columns Section code implementations here
+		// TODO: put your further 'columns' section code here
 		«ENDPROTECT»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsExclude FOR MProperty -»
-			'exclude' => «hasT3TCAPropertyColumnsExclude("true") -»,
+«DEFINE ColumnExclude FOR MProperty -»
+			'exclude' => «emHasTypo3TcaPropertyColumnsExclude("true").asTypo3Boolean() -»,
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsLabel FOR MProperty -»
-			'label' => 'LLL:EXT:«extensionKey() -»/«locallangDbXMLFileNamePath() -»:«name( namingContextLocalization() ) -»',
+«DEFINE ColumnLabel FOR MProperty -»
+			'label' => 'LLL:EXT:«extensionKey() -»/«filePathLocallangTcaXlf() -»:«asLocalizationName() -»',
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsDefaultExtras FOR MProperty -»
-«IF getT3TCAPropertyColumnsDefaultExtras() != "" -»
-			'defaultExtras' => '«getT3TCAPropertyColumnsDefaultExtras() -»',
+«DEFINE ColumnDefaultExtras FOR MProperty -»
+«IF emHasTypo3TcaPropertyUtilizableColumnsDefaultExtras() -»
+			'defaultExtras' => '«emGetTypo3TcaPropertyColumnsDefaultExtras() -»',
 «ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
+	Generates a region for own TCA Columns Section column code.
 «ENDREM»
-«DEFINE TCAColumnsAdditions FOR MProperty -»
-«IF !getT3TCAPropertyColumnsSectionAdditions().isEmpty -»
-«FOREACH getT3TCAPropertyColumnsSectionAdditions() AS tcaAddition -»
-			«asT3AssociativeArrayItem(tcaAddition)»
-«ENDFOREACH -»
-«ENDIF -»
-«ENDDEFINE»
-
-
-«REM»
-	generates a region for own TCA Column code implementations
-«ENDREM»
-«DEFINE OwnTCAColumnCodeImplementation(String id) FOR MProperty -»
+«DEFINE OwnColumnCode(String id) FOR MProperty -»
 			«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-			// TODO: put your further TCA Column code implementations here
+			// TODO: put your further column code here
 			«ENDPROTECT»
 «ENDDEFINE»
 
 
-«REM» 
+«REM»
 «ENDREM»
-«DEFINE TCAColumnsConfig(MClass class) FOR MAttribute -»
+«DEFINE ColumnConfig(MClass class) FOR MAttribute -»
 			'config' => array(
-«IF !type.isClassifier() -»
-			«IF type.name() == "Input" -»
-				«EXPAND TCAColumnsConfigTypeInput -»
-			«ELSEIF type.name() == "String" -»
-				«EXPAND TCAColumnsConfigTypeString -»
-			«ELSEIF type.name() == "Integer" -»
-				«EXPAND TCAColumnsConfigTypeInteger -»
-			«ELSEIF type.name() == "Float" -»
-				«EXPAND TCAColumnsConfigTypeFloat -»
-			«ELSEIF type.name() == "DateTime" -»
-				«EXPAND TCAColumnsConfigTypeDateTime -»	
-			«ELSEIF type.name() == "Text" -»
-				«EXPAND TCAColumnsConfigTypeText -»
-			«ELSEIF type.name() == "Check" -»
-				«EXPAND TCAColumnsConfigTypeCheck -»
-			«ELSEIF type.name() == "Boolean" -»
-				«EXPAND TCAColumnsConfigTypeBoolean -»
-			«ELSEIF type.name() == "Radio" -»
-				«EXPAND TCAColumnsConfigTypeRadio -»
-			«ELSEIF type.name() == "Select" -»
-				«EXPAND TCAColumnsConfigTypeSelect -»
-			«ELSEIF type.name() == "File" -»
-				«EXPAND TCAColumnsConfigTypeFile -»
-			«ELSEIF type.name() == "FileReference" -»
-				«EXPAND TCAColumnsConfigTypeFileReference -»
-			«ELSEIF type.name() == "Image" -»
-				«EXPAND TCAColumnsConfigTypeImage -»
-			«ELSEIF type.name() == "ImageReference" -»
-				«EXPAND TCAColumnsConfigTypeImageReference -»
-			«ELSEIF type.name() == "Database" -»
-				«EXPAND TCAColumnsConfigTypeDatabase -»
-			«ELSEIF type.name() == "Folder" -»
-				«EXPAND TCAColumnsConfigTypeFolder -»
-			«ELSEIF type.name() == "None" -»
-				«EXPAND TCAColumnsConfigTypeNone -»
+«IF isTypo3PrimitiveType( type.asGeneralName() ) && type.asGuiType() != "Association" -»
+			«IF type.asGuiType() == "Input" -»
+				«EXPAND ColumnConfigTypeInput -»
+			«ELSEIF type.asGuiType() == "Integer" -»
+				«EXPAND ColumnConfigTypeInteger -»
+			«ELSEIF type.asGuiType() == "Float" -»
+				«EXPAND ColumnConfigTypeFloat -»
+			«ELSEIF type.asGuiType() == "DateTime" -»
+				«EXPAND ColumnConfigTypeDateTime -»	
+			«ELSEIF type.asGuiType() == "Date" -»
+				«EXPAND ColumnConfigTypeDate -»	
+			«ELSEIF type.asGuiType() == "Time" -»
+				«EXPAND ColumnConfigTypeTime -»	
+			«ELSEIF type.asGuiType() == "TimeSec" -»
+				«EXPAND ColumnConfigTypeTimeSec -»	
+			«ELSEIF type.asGuiType() == "String" -»
+				«EXPAND ColumnConfigTypeString -»
+			«ELSEIF type.asGuiType() == "Password" -»
+				«EXPAND ColumnConfigTypePassword -»
+			«ELSEIF type.asGuiType() == "Text" -»
+				«EXPAND ColumnConfigTypeText -»
+			«ELSEIF type.asGuiType() == "RichText" -»
+				«EXPAND ColumnConfigTypeRichText -»
+			«ELSEIF type.asGuiType() == "Check" -»
+				«EXPAND ColumnConfigTypeCheck -»
+			«ELSEIF type.asGuiType() == "Boolean" -»
+				«EXPAND ColumnConfigTypeBoolean -»
+			«ELSEIF type.asGuiType() == "Radio" -»
+				«EXPAND ColumnConfigTypeRadio -»
+			«ELSEIF type.asGuiType() == "Select" -»
+				«EXPAND ColumnConfigTypeSelect -»
+			«ELSEIF type.asGuiType() == "File" -»
+				«EXPAND ColumnConfigTypeFile -»
+			«ELSEIF type.asGuiType() == "FileReference" -»
+				«EXPAND ColumnConfigTypeFileReference -»
+			«ELSEIF type.asGuiType() == "Image" -»
+				«EXPAND ColumnConfigTypeImage -»
+			«ELSEIF type.asGuiType() == "ImageReference" -»
+				«EXPAND ColumnConfigTypeImageReference -»
+			«ELSEIF type.asGuiType() == "Folder" -»
+				«EXPAND ColumnConfigTypeFolder -»
+			«ELSEIF type.asGuiType() == "Database" -»
+				«EXPAND ColumnConfigTypeDatabase -»
+			«ELSEIF type.asGuiType() == "None" -»
+				«EXPAND ColumnConfigTypeNone -»
 			«ELSE -»
-				«EXPAND TCAColumnsConfigTypeOther( type.name() ) -»
+				«EXPAND ColumnConfigTypeOther( type.asGuiType() ) -»
 			«ENDIF -»
 «ELSE -»
-			«IF isOneToOneUnidirectional() -»
-				«EXPAND TCAColumnsConfigOneToOneUnidirectional(class) -»
+			«IF multiplicity.isSingleValued() -»
+				«EXPAND ColumnConfigToOneUnidirectional(class) -»
 			«ELSE -»
-				«EXPAND TCAColumnsConfigOneToManyUnidirectional(class) -»
+				«EXPAND ColumnConfigToManyUnidirectional(class) -»
 			«ENDIF -»
-«ENDIF-»
-			«EXPAND TCAColumnsConfigAdditions -»
-			«EXPAND OwnTCAColumnConfigCodeImplementation("tca.php.own.tca.column.config.code.implementation." + class.xmiGuid + "." + xmiGuid) -»
-			),
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeInput FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("input") -»
-«EXPAND TCAColumnsConfigSize(30) -»
-«EXPAND TCAColumnsConfigEval({}) -»
-«EXPAND TCAColumnsConfigDefault(null) -»
-«EXPAND TCAColumnsConfigMax(null) -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeString FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("input") -»
-«EXPAND TCAColumnsConfigSize(30) -»
-«EXPAND TCAColumnsConfigEval({"trim"}) -»
-«EXPAND TCAColumnsConfigDefault(null) -»
-«EXPAND TCAColumnsConfigMax(null) -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeInteger FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("input") -»
-«EXPAND TCAColumnsConfigSize(30) -»
-«EXPAND TCAColumnsConfigEval({"int"}) -»
-«EXPAND TCAColumnsConfigDefault(null) -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeFloat FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("input") -»
-«EXPAND TCAColumnsConfigSize(30) -»
-«EXPAND TCAColumnsConfigEval({"double2"}) -»
-«EXPAND TCAColumnsConfigDefault(null) -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeDateTime FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("input") -»
-«EXPAND TCAColumnsConfigSize(12) -»
-«EXPAND TCAColumnsConfigEval({"datetime"}) -»
-«EXPAND TCAColumnsConfigDefault("time()") -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeText FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("text") -»
-«EXPAND TCAColumnsConfigCols(40) -»
-«EXPAND TCAColumnsConfigRows(15) -»
-«EXPAND TCAColumnsConfigEval({"trim"}) -»
-«EXPAND TCAColumnsConfigDefault(null) -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeCheck FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("check") -»
-«EXPAND TCAColumnsConfigCols(5) -»
-«EXPAND TCAColumnsConfigEval({"unique"}) -»
-«EXPAND TCAColumnsConfigItems -»
-«EXPAND TCAColumnsConfigDefault(null) -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeBoolean FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("check") -»
-«EXPAND TCAColumnsConfigDefault(null) -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeRadio FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("radio") -»
-«EXPAND TCAColumnsConfigDefault("") -»
-«EXPAND TCAColumnsConfigItems -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeSelect FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("select") -»
-«EXPAND TCAColumnsConfigSize(1) -»
-«EXPAND TCAColumnsConfigAutoMaxSize(null) -»
-«EXPAND TCAColumnsConfigEval({}) -»
-«EXPAND TCAColumnsConfigMinitems(0) -»
-«EXPAND TCAColumnsConfigMaxitems(1) -»
-«EXPAND TCAColumnsConfigItems -»
-«EXPAND TCAColumnsConfigDefault(null) -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeFile FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("group") -»
-«EXPAND TCAColumnsConfigInternalType("file") -»
-«EXPAND TCAColumnsConfigSize(1) -»
-«EXPAND TCAColumnsConfigAutoMaxSize(null) -»
-«EXPAND TCAColumnsConfigMinitems(0) -»
-«EXPAND TCAColumnsConfigMaxitems(1) -»
-«EXPAND TCAColumnsConfigAllowed("*") -»
-«EXPAND TCAColumnsConfigDisallowed("php") -»
-«EXPAND TCAColumnsConfigMaxSize(null) -»
-«EXPAND TCAColumnsConfigShowThumbs(true) -»
-«EXPAND TCAColumnsConfigUploadfolder("uploads/" + fullQualifiedExtensionNameToLowerCase()) -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeFileReference FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("group") -»
-«EXPAND TCAColumnsConfigInternalType("file_reference") -»
-«EXPAND TCAColumnsConfigSize(1) -»
-«EXPAND TCAColumnsConfigAutoMaxSize(null) -»
-«EXPAND TCAColumnsConfigMinitems(0) -»
-«EXPAND TCAColumnsConfigMaxitems(1) -»
-«EXPAND TCAColumnsConfigAllowed("*") -»
-«EXPAND TCAColumnsConfigDisallowed("php") -»
-«EXPAND TCAColumnsConfigMaxSize(null) -»
-«EXPAND TCAColumnsConfigShowThumbs(true) -»
-«EXPAND TCAColumnsConfigUploadfolder("uploads/" + fullQualifiedExtensionNameToLowerCase()) -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeImage FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("group") -»
-«EXPAND TCAColumnsConfigInternalType("file") -»
-«EXPAND TCAColumnsConfigSize(1) -»
-«EXPAND TCAColumnsConfigAutoMaxSize(null) -»
-«EXPAND TCAColumnsConfigMinitems(0) -»
-«EXPAND TCAColumnsConfigMaxitems(1) -»
-«EXPAND TCAColumnsConfigAllowed("gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai") -»
-«EXPAND TCAColumnsConfigDisallowed("") -»
-«EXPAND TCAColumnsConfigMaxSize(null) -»
-«EXPAND TCAColumnsConfigShowThumbs(true) -»
-«EXPAND TCAColumnsConfigUploadfolder("uploads/" + fullQualifiedExtensionNameToLowerCase()) -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeImageReference FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("group") -»
-«EXPAND TCAColumnsConfigInternalType("file_reference") -»
-«EXPAND TCAColumnsConfigSize(1) -»
-«EXPAND TCAColumnsConfigAutoMaxSize(null) -»
-«EXPAND TCAColumnsConfigMinitems(0) -»
-«EXPAND TCAColumnsConfigMaxitems(1) -»
-«EXPAND TCAColumnsConfigAllowed("gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai") -»
-«EXPAND TCAColumnsConfigDisallowed("") -»
-«EXPAND TCAColumnsConfigMaxSize(null) -»
-«EXPAND TCAColumnsConfigShowThumbs(true) -»
-«EXPAND TCAColumnsConfigUploadfolder("uploads/" + fullQualifiedExtensionNameToLowerCase()) -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeDatabase FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("group") -»
-«EXPAND TCAColumnsConfigInternalType("db") -»
-«EXPAND TCAColumnsConfigSize(1) -»
-«EXPAND TCAColumnsConfigAutoMaxSize(null) -»
-«EXPAND TCAColumnsConfigMinitems(0) -»
-«EXPAND TCAColumnsConfigMaxitems(1) -»
-«EXPAND TCAColumnsConfigAllowed("*") -»
-«EXPAND TCAColumnsConfigShowThumbs(true) -»
-«EXPAND TCAColumnsConfigPrependTname(null) -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeFolder FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("group") -»
-«EXPAND TCAColumnsConfigInternalType("folder") -»
-«EXPAND TCAColumnsConfigSize(1) -»
-«EXPAND TCAColumnsConfigAutoMaxSize(null) -»
-«EXPAND TCAColumnsConfigMinitems(0) -»
-«EXPAND TCAColumnsConfigMaxitems(1) -»
-«EXPAND TCAColumnsConfigShowThumbs(true) -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeNone FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("none") -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigTypeOther(String otherPropertyType) FOR MAttribute -»
-«ENDDEFINE»
-
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigOneToOneUnidirectional(MClass class) FOR MAttribute -»
-«EXPAND TCAColumnsConfigType -»
-«EXPAND TCAColumnsConfigForeignTable -»
-«EXPAND TCAColumnsConfigForeignTableWhere -»
-«EXPAND TCAColumnsConfigMinitems -»
-«EXPAND TCAColumnsConfigMaxitems -»
-«EXPAND TCAColumnsConfigWizards -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigOneToManyUnidirectional(MClass class) FOR MAttribute -»
-«EXPAND TCAColumnsConfigType -»
-«EXPAND TCAColumnsConfigForeignTable -»
-«EXPAND TCAColumnsConfigForeignSortBy -»
-«EXPAND TCAColumnsConfigForeignTableWhere -»
-«EXPAND TCAColumnsConfigMM(class) -»
-«EXPAND TCAColumnsConfigMinitems -»
-«EXPAND TCAColumnsConfigMaxitems -»
-«EXPAND TCAColumnsConfigMultiple -»
-«EXPAND TCAColumnsConfigWizards -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfig(MClass class) FOR MAssociationRole -»
-			'config' => array(
-			«IF isOneToOneUnidirectional() -»			
-				«EXPAND TCAColumnsConfigOneToOneUnidirectional(class) -»
-			«ELSEIF isOneToOneBidirectional() -»
-				«EXPAND TCAColumnsConfigOneToOneBidirectional(class) -»
-			«ELSEIF isOneToManyUnidirectional() -»
-				«EXPAND TCAColumnsConfigOneToManyUnidirectional(class) -»
-			«ELSEIF isOneToManyBidirectional() -»		
-				«EXPAND TCAColumnsConfigOneToManyBidirectional(class) -»
-			«ELSEIF isManyToOneUnidirectional() -»
-				«EXPAND TCAColumnsConfigManyToOneUnidirectional(class) -»
-			«ELSEIF isManyToOneBidirectional() -»
-				«EXPAND TCAColumnsConfigManyToOneBidirectional(class) -»
-			«ELSEIF isManyToManyUnidirectional() -»
-				«EXPAND TCAColumnsConfigManyToManyUnidirectional(class) -»
-			«ELSEIF isManyToManyBidirectional() -»
-				«EXPAND TCAColumnsConfigManyToManyBidirectional(class) -»
-			«ENDIF -»
-			«EXPAND TCAColumnsConfigAdditions -»
-			«EXPAND OwnTCAColumnConfigCodeImplementation("tca.php.own.tca.column.config.code.implementation." + class.xmiGuid + "." + xmiGuid) -»
-			),
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigOneToOneUnidirectional(MClass class) FOR MAssociationRole -»
-«EXPAND TCAColumnsConfigType -»
-«EXPAND TCAColumnsConfigForeignTable -»
-«EXPAND TCAColumnsConfigForeignTableWhere -»
-«EXPAND TCAColumnsConfigMinitems -»
-«EXPAND TCAColumnsConfigMaxitems -»
-«EXPAND TCAColumnsConfigAppearance -»
-«EXPAND TCAColumnsConfigWizards -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigOneToOneBidirectional(MClass class) FOR MAssociationRole -»
-«EXPAND TCAColumnsConfigType -»
-«EXPAND TCAColumnsConfigForeignTable -»
-«EXPAND TCAColumnsConfigForeignTableWhere -»
-«EXPAND TCAColumnsConfigMinitems -»
-«EXPAND TCAColumnsConfigMaxitems -»
-«EXPAND TCAColumnsConfigAppearance -»
-«EXPAND TCAColumnsConfigWizards -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigOneToManyUnidirectional(MClass class) FOR MAssociationRole -»
-«EXPAND TCAColumnsConfigType -»
-«EXPAND TCAColumnsConfigForeignTable -»
-«EXPAND TCAColumnsConfigForeignSortBy -»
-«EXPAND TCAColumnsConfigForeignTableWhere -»
-«EXPAND TCAColumnsConfigMM(class) -»
-«EXPAND TCAColumnsConfigMinitems -»
-«EXPAND TCAColumnsConfigMaxitems -»
-«EXPAND TCAColumnsConfigMultiple -»
-«EXPAND TCAColumnsConfigAppearance -»
-«EXPAND TCAColumnsConfigWizards -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigOneToManyBidirectional(MClass class) FOR MAssociationRole -»
-«EXPAND TCAColumnsConfigType -»
-«EXPAND TCAColumnsConfigForeignTable -»
-«EXPAND TCAColumnsConfigForeignField -»
-«REM»«EXPAND TCAColumnsConfigForeignSortBy -»«ENDREM»
-«EXPAND TCAColumnsConfigForeignTableWhere -»
-«EXPAND TCAColumnsConfigMinitems -»
-«EXPAND TCAColumnsConfigMaxitems -»
-«EXPAND TCAColumnsConfigMultiple -»
-«EXPAND TCAColumnsConfigAppearance -»
-«EXPAND TCAColumnsConfigWizards -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigManyToOneUnidirectional(MClass class) FOR MAssociationRole -»
-«EXPAND TCAColumnsConfigType -»
-«EXPAND TCAColumnsConfigForeignTable -»
-«EXPAND TCAColumnsConfigForeignTableWhere -»
-«EXPAND TCAColumnsConfigMinitems -»
-«EXPAND TCAColumnsConfigMaxitems -»
-«EXPAND TCAColumnsConfigAppearance -»
-«EXPAND TCAColumnsConfigWizards -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigManyToOneBidirectional(MClass class) FOR MAssociationRole -»
-«EXPAND TCAColumnsConfigType -»
-«EXPAND TCAColumnsConfigForeignTable -»
-«EXPAND TCAColumnsConfigForeignTableWhere -»
-«EXPAND TCAColumnsConfigMinitems -»
-«EXPAND TCAColumnsConfigMaxitems -»
-«EXPAND TCAColumnsConfigAppearance -»
-«EXPAND TCAColumnsConfigWizards -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigManyToManyUnidirectional(MClass class) FOR MAssociationRole -»
-«EXPAND TCAColumnsConfigType -»
-«EXPAND TCAColumnsConfigForeignTable -»
-«EXPAND TCAColumnsConfigForeignSortBy -»
-«EXPAND TCAColumnsConfigForeignTableWhere -»
-«EXPAND TCAColumnsConfigMM(class) -»
-«EXPAND TCAColumnsConfigMinitems -»
-«EXPAND TCAColumnsConfigMaxitems -»
-«EXPAND TCAColumnsConfigMultiple -»
-«EXPAND TCAColumnsConfigAppearance -»
-«EXPAND TCAColumnsConfigWizards -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfigManyToManyBidirectional(MClass class) FOR MAssociationRole -»
-«EXPAND TCAColumnsConfigType -»
-«EXPAND TCAColumnsConfigForeignTable -»
-«EXPAND TCAColumnsConfigForeignSortBy -»
-«EXPAND TCAColumnsConfigForeignTableWhere -»
-«EXPAND TCAColumnsConfigMM(class) -»
-«EXPAND TCAColumnsConfigMinitems -»
-«EXPAND TCAColumnsConfigMaxitems -»
-«EXPAND TCAColumnsConfigMultiple -»
-«EXPAND TCAColumnsConfigAppearance -»
-«EXPAND TCAColumnsConfigWizards -»
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE TCAColumnsConfigAllowed(String defaultAllowed) FOR MProperty -»
-«LET getT3TCxAllowedAllowed() AS allowed -» 
-«IF allowed != "" || defaultAllowed != null -»
-				'allowed' => '«IF allowed != "" -»«allowed -»«ELSE -»«defaultAllowed -»«ENDIF -»',
 «ENDIF -»
-«ENDLET -»
+			«EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+			),
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigAppearance FOR MAssociationRole -»
+«DEFINE ColumnConfigTypeInput FOR MAttribute -»
+«EXPAND ColumnConfigType("input") -»
+«EXPAND ColumnConfigSize(30) -»
+«EXPAND ColumnConfigEval(null) -»
+«EXPAND ColumnConfigDefault(null) -»
+«EXPAND ColumnConfigMax(null) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeInteger FOR MAttribute -»
+«EXPAND ColumnConfigType("input") -»
+«EXPAND ColumnConfigSize(30) -»
+«EXPAND ColumnConfigEval({"int"}) -»
+«EXPAND ColumnConfigDefault(null) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeFloat FOR MAttribute -»
+«EXPAND ColumnConfigType("input") -»
+«EXPAND ColumnConfigSize(30) -»
+«EXPAND ColumnConfigEval({"double2"}) -»
+«EXPAND ColumnConfigDefault(null) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeDateTime FOR MAttribute -»
+«EXPAND ColumnConfigType("input") -»
+«EXPAND ColumnConfigSize(16) -»
+«EXPAND ColumnConfigEval({"datetime"}) -»
+«EXPAND ColumnConfigDefault("time()") -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeDate FOR MAttribute -»
+«EXPAND ColumnConfigType("input") -»
+«EXPAND ColumnConfigSize(20) -»
+«EXPAND ColumnConfigEval({"date"}) -»
+«EXPAND ColumnConfigDefault("time()") -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeTime FOR MAttribute -»
+«EXPAND ColumnConfigType("input") -»
+«EXPAND ColumnConfigSize(5) -»
+«EXPAND ColumnConfigEval({"time"}) -»
+«EXPAND ColumnConfigDefault("time()") -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeTimeSec FOR MAttribute -»
+«EXPAND ColumnConfigType("input") -»
+«EXPAND ColumnConfigSize(8) -»
+«EXPAND ColumnConfigEval({"timesec"}) -»
+«EXPAND ColumnConfigDefault("time()") -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeString FOR MAttribute -»
+«EXPAND ColumnConfigType("input") -»
+«EXPAND ColumnConfigSize(30) -»
+«EXPAND ColumnConfigEval({"trim"}) -»
+«EXPAND ColumnConfigDefault(null) -»
+«EXPAND ColumnConfigMax(null) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypePassword FOR MAttribute -»
+«EXPAND ColumnConfigType("input") -»
+«EXPAND ColumnConfigSize(30) -»
+«EXPAND ColumnConfigEval({"password"}) -»
+«EXPAND ColumnConfigDefault(null) -»
+«EXPAND ColumnConfigMax(null) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeText FOR MAttribute -»
+«EXPAND ColumnConfigType("text") -»
+«EXPAND ColumnConfigCols(40) -»
+«EXPAND ColumnConfigRows(15) -»
+«EXPAND ColumnConfigEval({"trim"}) -»
+«EXPAND ColumnConfigDefault(null) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeRichText FOR MAttribute -»
+«EXPAND ColumnConfigType("text") -»
+«EXPAND ColumnConfigCols(40) -»
+«EXPAND ColumnConfigRows(15) -»
+«EXPAND ColumnConfigEval({"trim"}) -»
+«EXPAND ColumnConfigDefault(null) -»
+«REM»«EXPAND ColumnDefaultExtras("'richtext:rte_transform[flag=rte_enabled|mode=ts]'") -»«ENDREM»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeCheck FOR MAttribute -»
+«EXPAND ColumnConfigType("check") -»
+«EXPAND ColumnConfigCols(5) -»
+«EXPAND ColumnConfigEval({"unique"}) -»
+«EXPAND ColumnConfigItems -»
+«EXPAND ColumnConfigDefault(null) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeBoolean FOR MAttribute -»
+«EXPAND ColumnConfigType("check") -»
+«EXPAND ColumnConfigDefault(null) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeRadio FOR MAttribute -»
+«EXPAND ColumnConfigType("radio") -»
+«EXPAND ColumnConfigDefault("") -»
+«EXPAND ColumnConfigItems -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeSelect FOR MAttribute -»
+«EXPAND ColumnConfigType("select") -»
+«EXPAND ColumnConfigSize(1) -»
+«EXPAND ColumnConfigAutoMaxSize(null) -»
+«EXPAND ColumnConfigEval({}) -»
+«EXPAND ColumnConfigMinitems(0) -»
+«EXPAND ColumnConfigMaxitems(1) -»
+«EXPAND ColumnConfigItems -»
+«EXPAND ColumnConfigDefault(null) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeFile FOR MAttribute -»
+«EXPAND ColumnConfigType("group") -»
+«EXPAND ColumnConfigInternalType("file") -»
+«EXPAND ColumnConfigSize(1) -»
+«EXPAND ColumnConfigAutoMaxSize(null) -»
+«EXPAND ColumnConfigMinitems(0) -»
+«EXPAND ColumnConfigMaxitems(1) -»
+«EXPAND ColumnConfigAllowed("*") -»
+«EXPAND ColumnConfigDisallowed("php") -»
+«EXPAND ColumnConfigMaxSize(null) -»
+«EXPAND ColumnConfigShowThumbs(true) -»
+«EXPAND ColumnConfigUploadfolder( "uploads/" + extensionPrefixWithoutUnderscores() ) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeFileReference FOR MAttribute -»
+«EXPAND ColumnConfigType("group") -»
+«EXPAND ColumnConfigInternalType("file_reference") -»
+«EXPAND ColumnConfigSize(1) -»
+«EXPAND ColumnConfigAutoMaxSize(null) -»
+«EXPAND ColumnConfigMinitems(0) -»
+«EXPAND ColumnConfigMaxitems(1) -»
+«EXPAND ColumnConfigAllowed("*") -»
+«EXPAND ColumnConfigDisallowed("php") -»
+«EXPAND ColumnConfigMaxSize(null) -»
+«EXPAND ColumnConfigShowThumbs(true) -»
+«EXPAND ColumnConfigUploadfolder( "uploads/" + extensionPrefixWithoutUnderscores() ) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeImage FOR MAttribute -»
+«EXPAND ColumnConfigType("group") -»
+«EXPAND ColumnConfigInternalType("file") -»
+«EXPAND ColumnConfigSize(1) -»
+«EXPAND ColumnConfigAutoMaxSize(null) -»
+«EXPAND ColumnConfigMinitems(0) -»
+«EXPAND ColumnConfigMaxitems(1) -»
+«EXPAND ColumnConfigAllowed("gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai") -»
+«EXPAND ColumnConfigDisallowed("") -»
+«EXPAND ColumnConfigMaxSize(null) -»
+«EXPAND ColumnConfigShowThumbs(true) -»
+«EXPAND ColumnConfigUploadfolder( "uploads/" + extensionPrefixWithoutUnderscores() ) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeImageReference FOR MAttribute -»
+«EXPAND ColumnConfigType("group") -»
+«EXPAND ColumnConfigInternalType("file_reference") -»
+«EXPAND ColumnConfigSize(1) -»
+«EXPAND ColumnConfigAutoMaxSize(null) -»
+«EXPAND ColumnConfigMinitems(0) -»
+«EXPAND ColumnConfigMaxitems(1) -»
+«EXPAND ColumnConfigAllowed("gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai") -»
+«EXPAND ColumnConfigDisallowed("") -»
+«EXPAND ColumnConfigMaxSize(null) -»
+«EXPAND ColumnConfigShowThumbs(true) -»
+«EXPAND ColumnConfigUploadfolder( "uploads/" + extensionPrefixWithoutUnderscores() ) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeFolder FOR MAttribute -»
+«EXPAND ColumnConfigType("group") -»
+«EXPAND ColumnConfigInternalType("folder") -»
+«EXPAND ColumnConfigSize(1) -»
+«EXPAND ColumnConfigAutoMaxSize(null) -»
+«EXPAND ColumnConfigMinitems(0) -»
+«EXPAND ColumnConfigMaxitems(1) -»
+«EXPAND ColumnConfigShowThumbs(true) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeDatabase FOR MAttribute -»
+«EXPAND ColumnConfigType("group") -»
+«EXPAND ColumnConfigInternalType("db") -»
+«EXPAND ColumnConfigSize(1) -»
+«EXPAND ColumnConfigAutoMaxSize(null) -»
+«EXPAND ColumnConfigMinitems(0) -»
+«EXPAND ColumnConfigMaxitems(1) -»
+«EXPAND ColumnConfigAllowed("*") -»
+«EXPAND ColumnConfigShowThumbs(true) -»
+«EXPAND ColumnConfigPrependTname(null) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeNone FOR MAttribute -»
+«EXPAND ColumnConfigType("none") -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeOther(String otherPropertyType) FOR MAttribute -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigToOneUnidirectional(MClass class) FOR MAttribute -»
+«EXPAND ColumnConfigType -»
+«EXPAND ColumnConfigForeignTable -»
+«EXPAND ColumnConfigForeignTableWhere -»
+«EXPAND ColumnConfigMinitems -»
+«EXPAND ColumnConfigMaxitems -»
+«EXPAND ColumnConfigWizards -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigToManyUnidirectional(MClass class) FOR MAttribute -»
+«EXPAND ColumnConfigType -»
+«EXPAND ColumnConfigForeignTable -»
+«EXPAND ColumnConfigForeignSortBy -»
+«EXPAND ColumnConfigForeignTableWhere -»
+«EXPAND ColumnConfigMM(class) -»
+«EXPAND ColumnConfigMinitems -»
+«EXPAND ColumnConfigMaxitems -»
+«EXPAND ColumnConfigMultiple -»
+«EXPAND ColumnConfigWizards -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfig(MClass class) FOR MAssociationRole -»
+			'config' => array(
+			«IF isOneToOne() && !hasOpposite() -»			
+				«EXPAND ColumnConfigOneToOneUnidirectional(class) -»
+			«ELSEIF isOneToOne() && hasOpposite() -»
+				«EXPAND ColumnConfigOneToOneBidirectional(class) -»
+			«ELSEIF isOneToMany() && !hasOpposite() -»
+				«EXPAND ColumnConfigOneToManyUnidirectional(class) -»
+			«ELSEIF isOneToMany() && hasOpposite() -»		
+				«EXPAND ColumnConfigOneToManyBidirectional(class) -»
+			«ELSEIF isManyToOne() && !hasOpposite() -»
+				«EXPAND ColumnConfigManyToOneUnidirectional(class) -»
+			«ELSEIF isManyToOne() && hasOpposite() -»
+				«EXPAND ColumnConfigManyToOneBidirectional(class) -»
+			«ELSEIF isManyToMany() && !hasOpposite() -»
+				«EXPAND ColumnConfigManyToManyUnidirectional(class) -»
+			«ELSEIF isManyToMany() && hasOpposite() -»
+				«EXPAND ColumnConfigManyToManyBidirectional(class) -»
+			«ENDIF -»
+			«EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+			),
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigOneToOneUnidirectional(MClass class) FOR MAssociationRole -»
+«EXPAND ColumnConfigType -»
+«EXPAND ColumnConfigForeignTable -»
+«EXPAND ColumnConfigForeignTableWhere -»
+«EXPAND ColumnConfigMinitems -»
+«EXPAND ColumnConfigMaxitems -»
+«EXPAND ColumnConfigAppearance -»
+«EXPAND ColumnConfigWizards -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigOneToOneBidirectional(MClass class) FOR MAssociationRole -»
+«EXPAND ColumnConfigType -»
+«EXPAND ColumnConfigForeignTable -»
+«EXPAND ColumnConfigForeignTableWhere -»
+«EXPAND ColumnConfigMinitems -»
+«EXPAND ColumnConfigMaxitems -»
+«EXPAND ColumnConfigAppearance -»
+«EXPAND ColumnConfigWizards -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigOneToManyUnidirectional(MClass class) FOR MAssociationRole -»
+«EXPAND ColumnConfigType -»
+«EXPAND ColumnConfigForeignTable -»
+«EXPAND ColumnConfigForeignSortBy -»
+«EXPAND ColumnConfigForeignTableWhere -»
+«EXPAND ColumnConfigMM(class) -»
+«EXPAND ColumnConfigMinitems -»
+«EXPAND ColumnConfigMaxitems -»
+«EXPAND ColumnConfigMultiple -»
+«EXPAND ColumnConfigAppearance -»
+«EXPAND ColumnConfigWizards -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigOneToManyBidirectional(MClass class) FOR MAssociationRole -»
+«EXPAND ColumnConfigType -»
+«EXPAND ColumnConfigForeignTable -»
+«EXPAND ColumnConfigForeignField -»
+«REM»«EXPAND ColumnConfigForeignSortBy -»«ENDREM»
+«EXPAND ColumnConfigForeignTableWhere -»
+«EXPAND ColumnConfigMinitems -»
+«EXPAND ColumnConfigMaxitems -»
+«EXPAND ColumnConfigMultiple -»
+«EXPAND ColumnConfigAppearance -»
+«EXPAND ColumnConfigWizards -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigManyToOneUnidirectional(MClass class) FOR MAssociationRole -»
+«EXPAND ColumnConfigType -»
+«EXPAND ColumnConfigForeignTable -»
+«EXPAND ColumnConfigForeignTableWhere -»
+«EXPAND ColumnConfigMinitems -»
+«EXPAND ColumnConfigMaxitems -»
+«EXPAND ColumnConfigAppearance -»
+«EXPAND ColumnConfigWizards -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigManyToOneBidirectional(MClass class) FOR MAssociationRole -»
+«EXPAND ColumnConfigType -»
+«EXPAND ColumnConfigForeignTable -»
+«EXPAND ColumnConfigForeignTableWhere -»
+«EXPAND ColumnConfigMinitems -»
+«EXPAND ColumnConfigMaxitems -»
+«EXPAND ColumnConfigAppearance -»
+«EXPAND ColumnConfigWizards -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigManyToManyUnidirectional(MClass class) FOR MAssociationRole -»
+«EXPAND ColumnConfigType -»
+«EXPAND ColumnConfigForeignTable -»
+«EXPAND ColumnConfigForeignSortBy -»
+«EXPAND ColumnConfigForeignTableWhere -»
+«EXPAND ColumnConfigMM(class) -»
+«EXPAND ColumnConfigMinitems -»
+«EXPAND ColumnConfigMaxitems -»
+«EXPAND ColumnConfigMultiple -»
+«EXPAND ColumnConfigAppearance -»
+«EXPAND ColumnConfigWizards -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigManyToManyBidirectional(MClass class) FOR MAssociationRole -»
+«EXPAND ColumnConfigType -»
+«EXPAND ColumnConfigForeignTable -»
+«EXPAND ColumnConfigForeignSortBy -»
+«EXPAND ColumnConfigForeignTableWhere -»
+«EXPAND ColumnConfigMM(class) -»
+«EXPAND ColumnConfigMinitems -»
+«EXPAND ColumnConfigMaxitems -»
+«EXPAND ColumnConfigMultiple -»
+«EXPAND ColumnConfigAppearance -»
+«EXPAND ColumnConfigWizards -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ColumnConfigAllowed(String defaultAllowed) FOR MProperty -»
+«IF emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() || defaultAllowed != null -»
+				'allowed' => '«IF emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»«emGetGuiPropertyAllowedFileExtensionsAllowedFileExtensions() -»«ELSE -»«defaultAllowed -»«ENDIF -»',
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ColumnConfigAppearance FOR MAssociationRole -»
 «IF (composition) -»
 				'appearance' => array(
-					'collapse' => false,
+					'collapse' => FALSE,
 					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => true,
-					'showPossibleLocalizationRecords' => true,
-					'showAllLocalizationLink' => true
+					'showSynchronizationLink' => TRUE,
+					'showPossibleLocalizationRecords' => TRUE,
+					'showAllLocalizationLink' => TRUE
 				),
 «ENDIF -»
 «ENDDEFINE»
@@ -994,29 +1156,32 @@ $TCA['«name() -»'] = array (
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigAutoMaxSize(Integer defaultAutoSizeMax) FOR MProperty -»
-«LET getT3TCxAutoSizeMaxAutoSizeMax() AS autoSizeMax -» 
-«IF autoSizeMax != "" || defaultAutoSizeMax != null -»
-				'autoSizeMax' => «IF autoSizeMax != "" -»«autoSizeMax -»«ELSE -»«defaultAutoSizeMax -»«ENDIF -»,
+«DEFINE ColumnConfigAutoMaxSize(Integer defaultAutoSizeMax) FOR MProperty -»
+«IF defaultAutoSizeMax != null -»
+				'autoSizeMax' => «defaultAutoSizeMax -»,
 «ENDIF -»
-«ENDLET -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigCols(Integer defaultCols) FOR MProperty -»
-«LET getT3TCxColsCols() AS cols -» 
-«IF cols != "" || defaultCols != null -»
-				'cols' => «IF cols != "" -»«cols -»«ELSE -»«defaultCols -»«ENDIF -»,
+«DEFINE ColumnConfigCols(Integer defaultCols) FOR MProperty -»
+«IF emHasGuiPropertyWidthUtilizableWidth() || defaultCols != null -»
+				'cols' => «IF emHasGuiPropertyWidthUtilizableWidth() -»«emGetGuiPropertyWidthWidth() -»«ELSE -»«defaultCols -»«ENDIF -»,
 «ENDIF -»
-«ENDLET -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigDefault(String defaultDefaultValue) FOR MAttribute -»
+«DEFINE ColumnConfigDbType(String dbType) FOR MProperty -»
+				'dbType' => '«dbType -»',
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ColumnConfigDefault(String defaultDefaultValue) FOR MAttribute -»
 «IF hasDefaultValue() || defaultDefaultValue != null -»
 				'default' => «IF hasDefaultValue() -»«defaultvalue -»«ELSE -»«defaultDefaultValue -»«ENDIF -»,
 «ENDIF -»
@@ -1025,41 +1190,39 @@ $TCA['«name() -»'] = array (
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigDisallowed(String defaultDisallowed) FOR MProperty -»
-«LET getT3TCxDisallowedDisallowed() AS disallowed -» 
-«IF disallowed != "" || defaultDisallowed != null -»
-				'disallowed' => '«IF disallowed != "" -»«disallowed -»«ELSE -»«defaultDisallowed -»«ENDIF -»',
-«ENDIF -»
-«ENDLET -»
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE TCAColumnsConfigEval(List[String] defaultEvals) FOR MProperty -»
-«IF !getT3TCxEvalEvals().isEmpty || !defaultEvals.isEmpty -»
-				'eval' => '«FOREACH allTCxEvals(defaultEvals) AS eval SEPARATOR ", "»«eval.asT3TCxEvalType() -»«ENDFOREACH -»',
+«DEFINE ColumnConfigDisallowed(String defaultDisallowed) FOR MProperty -»
+«IF emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() || defaultDisallowed != null -»
+				'disallowed' => '«IF emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»«emGetGuiPropertyDisallowedFileExtensionsDisallowedFileExtensions() -»«ELSE -»«defaultDisallowed -»«ENDIF -»',
 «ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigForeignField FOR MAssociationRole -»
-				'foreign_field' => '«opposite.name() -»',
+«DEFINE ColumnConfigEval(List[String] defaultEvals) FOR MProperty -»
+«IF !defaultEvals.isEmpty -»
+				'eval' => '«FOREACH defaultEvals AS eval SEPARATOR ", "»«eval -»«ENDFOREACH -»',
+«ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigForeignSortBy FOR MAttribute -»
+«DEFINE ColumnConfigForeignField FOR MAssociationRole -»
+				'foreign_field' => '«opposite.asConfigurationName() -»',
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ColumnConfigForeignSortBy FOR MAttribute -»
 				'foreign_sortby' => 'sorting',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigForeignSortBy FOR MAssociationRole -»
+«DEFINE ColumnConfigForeignSortBy FOR MAssociationRole -»
 «IF !hasOpposite() -»
 				'foreign_sortby' => 'sorting',
 «ELSE -»
@@ -1070,31 +1233,31 @@ $TCA['«name() -»'] = array (
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigForeignTable FOR MProperty -»
-				'foreign_table' => '«type.name( namingContextPersistence(), typeMappingContextSQLTableName() ) -»',
+«DEFINE ColumnConfigForeignTable FOR MProperty -»
+				'foreign_table' => '«type.asPersistenceName() -»',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigForeignTableWhere FOR MProperty -»
+«DEFINE ColumnConfigForeignTableWhere FOR MProperty -»
 				'foreign_table_where' => 'AND sys_language_uid IN (-1,0)',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigInternalType(String internalType) FOR MProperty -»
+«DEFINE ColumnConfigInternalType(String internalType) FOR MProperty -»
 				'internal_type' => '«internalType -»',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigItems FOR MProperty -»
-«IF !getT3TCxItemsItems().isEmpty -»
-				'items' => array («FOREACH getT3TCxItemsItems() AS item SEPARATOR "," -»
-					array(«asT3AssociativeArrayItem(item)»)
+«DEFINE ColumnConfigItems FOR MProperty -»
+«IF emHasGuiPropertyItemsUtilizableItems() -»
+				'items' => array(«FOREACH emGetGuiPropertyItemsItems() AS item SEPARATOR "," -»
+					array(«asAssociativeArrayItem(item)»)
 				«ENDFOREACH -»),
 «ENDIF -»
 «ENDDEFINE»
@@ -1103,177 +1266,159 @@ $TCA['«name() -»'] = array (
 «REM»
 hier evtl. versuch über sql type maximum herauszufinden
 «ENDREM»
-«DEFINE TCAColumnsConfigMax(Integer defaultMax) FOR MProperty -»
-«LET getT3TCxMaxMax() AS max -» 
-«IF max != "" || defaultMax != null -»
-				'max' => «IF max != "" -»«max -»«ELSE -»«defaultMax -»«ENDIF -»,
+«DEFINE ColumnConfigMax(Integer defaultMax) FOR MProperty -»
+«IF emHasGuiPropertyMaxLengthUtilizableMaxLength() || defaultMax != null -»
+				'max' => «IF emHasGuiPropertyMaxLengthUtilizableMaxLength() -»«emGetGuiPropertyMaxLengthMaxLength() -»«ELSE -»«defaultMax -»«ENDIF -»,
 «ENDIF -»
-«ENDLET -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigMaxitems(Integer defaultMaxitems) FOR MProperty -»
-«LET getT3TCxMaxitemsMaxitems() AS maxitems -» 
-«IF maxitems != "" || defaultMaxitems != null -»
-				'maxitems' => «IF maxitems != "" -»«maxitems -»«ELSE -»«defaultMaxitems -»«ENDIF -»,
+«DEFINE ColumnConfigMaxitems(Integer defaultMaxitems) FOR MProperty -»
+«IF  emHasGuiPropertyMaxItemsUtilizableMaxItems() || defaultMaxitems != null -»
+				'maxitems' => «IF emHasGuiPropertyMaxItemsUtilizableMaxItems() -»«emGetGuiPropertyMaxItemsMaxItems() -»«ELSE -»«defaultMaxitems -»«ENDIF -»,
 «ENDIF -»
-«ENDLET -»
 «ENDDEFINE»
 
 
-«DEFINE TCAColumnsConfigMaxitems FOR MAttribute -»
+«DEFINE ColumnConfigMaxitems FOR MAttribute -»
 				'maxitems' => «IF multiplicity.hasFixedUpperBoundMultiplicity() -»«multiplicity.upperBound -»«ELSE -»99999«ENDIF -»,
 «ENDDEFINE»
 
 
-«DEFINE TCAColumnsConfigMaxitems FOR MAssociationRole -»
+«DEFINE ColumnConfigMaxitems FOR MAssociationRole -»
 				'maxitems' => «IF multiplicity.hasFixedUpperBoundMultiplicity() -»«multiplicity.upperBound -»«ELSE -»99999«ENDIF -»,
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigMaxSize(Integer defaultMaxSize) FOR MProperty -»
-«LET getT3TCxMaxSizeMaxSize() AS maxSize -» 
-«IF maxSize != "" || defaultMaxSize != null -»
-				'max_size' => «IF maxSize != "" -»«maxSize -»«ELSE -»«defaultMaxSize -»«ENDIF -»,
+«DEFINE ColumnConfigMaxSize(Integer defaultMaxSize) FOR MProperty -»
+«IF emHasGuiPropertyMaxFileSizeUtilizableMaxFileSize() || defaultMaxSize != null -»
+				'max_size' => «IF emHasGuiPropertyMaxFileSizeUtilizableMaxFileSize() -»«emGetGuiPropertyMaxFileSizeMaxFileSize() -»«ELSE -»«defaultMaxSize -»«ENDIF -»,
 «ENDIF -»
-«ENDLET -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigMinitems(Integer defaultMinitems) FOR MProperty -»
-«LET getT3TCxMinitemsMinitems() AS minitems -» 
-«IF minitems != "" || defaultMinitems != null -»
-				'minitems' => «IF minitems != "" -»«minitems -»«ELSE -»«defaultMinitems -»«ENDIF -»,
+«DEFINE ColumnConfigMinitems(Integer defaultMinitems) FOR MProperty -»
+«IF emHasGuiPropertyMinItemsUtilizableMinItems() || defaultMinitems != null -»
+				'minitems' => «IF emHasGuiPropertyMaxItemsUtilizableMaxItems() -»«emGetGuiPropertyMinItemsMinItems() -»«ELSE -»«defaultMinitems -»«ENDIF -»,
 «ENDIF -»
-«ENDLET -»
 «ENDDEFINE»
 
 
-«DEFINE TCAColumnsConfigMinitems FOR MAttribute -»
+«DEFINE ColumnConfigMinitems FOR MAttribute -»
 				'minitems' => «IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»,
 «ENDDEFINE»
 
 
-«DEFINE TCAColumnsConfigMinitems FOR MAssociationRole -»
+«DEFINE ColumnConfigMinitems FOR MAssociationRole -»
 				'minitems' => «IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»,
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigMM(MClass class) FOR MProperty -»
+«DEFINE ColumnConfigMM(MClass class) FOR MProperty -»
 				'MM' => '«asIntermediateTableName(class) -»',
 «ENDDEFINE»
 
 
-«DEFINE TCAColumnsConfigMultiple FOR MProperty -»
+«DEFINE ColumnConfigMultiple FOR MProperty -»
 				'multiple' => «!multiplicity.unique -»,
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigPrependTname(Boolean defaultPrependTname) FOR MProperty -»
-«LET getT3TCxPrependTnamePrependTname() AS prependTname -» 
-«IF prependTname != "" || defaultPrependTname != null -»
-				'prepend_tname' => «IF prependTname != "" -»«prependTname -»«ELSE -»«defaultPrependTname -»«ENDIF -»,
+«DEFINE ColumnConfigPrependTname(Boolean defaultPrependTname) FOR MProperty -»
+«IF defaultPrependTname != null -»
+				'prepend_tname' => «defaultPrependTname.asTypo3Boolean() -»,
 «ENDIF -»
-«ENDLET -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigRows(Integer defaultRows) FOR MProperty -»
-«LET getT3TCxRowsRows() AS rows -» 
-«IF rows != "" || defaultRows != null -»
-				'rows' => «IF rows != "" -»«rows -»«ELSE -»«defaultRows -»«ENDIF -»,
+«DEFINE ColumnConfigRows(Integer defaultRows) FOR MProperty -»
+«IF emHasGuiPropertyHeightUtilizableHeight() || defaultRows != null -»
+				'rows' => «IF emHasGuiPropertyHeightUtilizableHeight() -»«emGetGuiPropertyHeightHeight() -»«ELSE -»«defaultRows -»«ENDIF -»,
 «ENDIF -»
-«ENDLET -»
 «ENDDEFINE»
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigShowThumbs(Boolean defaultShowThumbs) FOR MProperty -»
-«LET getT3TCxShowThumbsShowThumbs() AS showThumbs -» 
-«IF showThumbs != "" || defaultShowThumbs != null -»
-				'show_thumbs' => «IF showThumbs != "" -»«showThumbs -»«ELSE -»«defaultShowThumbs -»«ENDIF -»,
+«DEFINE ColumnConfigShowThumbs(Boolean defaultShowThumbs) FOR MProperty -»
+«IF emHasGuiPropertyShowThumbnailsUtilizableShowThumbnails() || defaultShowThumbs != null -»
+				'show_thumbs' => «IF emHasGuiPropertyShowThumbnailsUtilizableShowThumbnails() -»«emGetGuiPropertyShowThumbnailsShowThumbnails().asTypo3Boolean() -»«ELSE -»«defaultShowThumbs.asTypo3Boolean() -»«ENDIF -»,
 «ENDIF -»
-«ENDLET -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigSize(Integer defaultSize) FOR MProperty -»
-«LET getT3TCxSizeSize() AS size -» 
-«IF size != "" || defaultSize != null -»
-				'size' => «IF size != "" -»«size -»«ELSE -»«defaultSize -»«ENDIF -»,
+«DEFINE ColumnConfigSize(Integer defaultSize) FOR MProperty -»
+«IF emHasGuiPropertyWidthUtilizableWidth() || defaultSize != null -»
+				'size' => «IF emHasGuiPropertyWidthUtilizableWidth() -»«emGetGuiPropertyWidthWidth() -»«ELSE -»«defaultSize -»«ENDIF -»,
 «ENDIF -»
-«ENDLET -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigType(String type) FOR MProperty -»
+«DEFINE ColumnConfigType(String type) FOR MProperty -»
 				'type' => '«type -»',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigType FOR MAttribute -»
+«DEFINE ColumnConfigType FOR MAttribute -»
 				'type' => 'select',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigType FOR MAssociationRole -»
+«DEFINE ColumnConfigType FOR MAssociationRole -»
 				'type' => '«IF (composition) -»inline«ELSE -»select«ENDIF -»',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigUploadfolder(String defaultUploadfolder) FOR MProperty -»
-«LET getT3TCxUploadfolderUploadfolder() AS uploadfolder -» 
-«IF uploadfolder != "" || defaultUploadfolder != null -»
-				'uploadfolder' => '«IF uploadfolder != "" -»«uploadfolder.replaceFirst("EXT", fullQualifiedExtensionNameToLowerCase()) -»«ELSE -»«defaultUploadfolder -»«ENDIF -»',
+«DEFINE ColumnConfigUploadfolder(String defaultUploadfolder) FOR MProperty -»
+«IF emHasGuiPropertyUploadFolderUtilizableUploadFolder() || defaultUploadfolder != null -»
+				'uploadfolder' => '«IF emHasGuiPropertyUploadFolderUtilizableUploadFolder() -»«emGetGuiPropertyUploadFolderUploadFolder() -»«ELSE -»«defaultUploadfolder -»«ENDIF -»',
 «ENDIF -»
-«ENDLET -»
 «ENDDEFINE»
 
 
-«DEFINE TCAColumnsConfigWizards FOR MProperty -»
-«IF hasT3TCAAssociationTypeColumnsConfigWizardAdd("true") || hasT3TCAAssociationTypeColumnsConfigWizardEdit("true")  || hasT3TCAAssociationTypeColumnsConfigWizardSuggest("true") -»
+«DEFINE ColumnConfigWizards FOR MProperty -»
+«IF emHasTypo3TcaAssociationColumnsConfigWizardAdd("true") || emHasTypo3TcaAssociationColumnsConfigWizardEdit("true")  || emHasTypo3TcaAssociationColumnsConfigWizardSuggest("true") -»
 				'wizards' => array(
 					'_PADDING' => 1,
 					'_VERTICAL' => 1,
-					«EXPAND TCAColumnsConfigWizardsAdd -»
-					«EXPAND TCAColumnsConfigWizardsEdit -»
-					«EXPAND TCAColumnsConfigWizardsSuggest -»
+					«EXPAND ColumnConfigWizardsAdd -»
+					«EXPAND ColumnConfigWizardsEdit -»
+					«EXPAND ColumnConfigWizardsSuggest -»
 				),
 «ENDIF -»
 «ENDDEFINE»
 
 
-«DEFINE TCAColumnsConfigWizardsAdd FOR MProperty -»
-«IF hasT3TCAAssociationTypeColumnsConfigWizardAdd("true") -»
+«DEFINE ColumnConfigWizardsAdd FOR MProperty -»
+«IF emHasTypo3TcaAssociationColumnsConfigWizardAdd("true") -»
 					'add' => array(
 						'type' => 'script',
 						'title' => 'Create new',
 						'icon' => 'add.gif',
 						'script' => 'wizard_add.php',
 						'params' => array(
-							'table'=>'«type.name( namingContextPersistence(), typeMappingContextSQLTableName() ) -»',
+							'table'=>'«type.asPersistenceName() -»',
 							'pid' => '###CURRENT_PID###',
 							'setValue' => 'prepend'
 						),
@@ -1282,8 +1427,8 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDDEFINE»
 
 
-«DEFINE TCAColumnsConfigWizardsEdit FOR MProperty -»
-«IF hasT3TCAAssociationTypeColumnsConfigWizardEdit("true") -»
+«DEFINE ColumnConfigWizardsEdit FOR MProperty -»
+«IF emHasTypo3TcaAssociationColumnsConfigWizardEdit("true") -»
 					'edit' => array(
 						'type' => 'popup',
 						'title' => 'Edit',
@@ -1296,8 +1441,8 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDDEFINE»
 
 
-«DEFINE TCAColumnsConfigWizardsSuggest FOR MProperty -»
-«IF hasT3TCAAssociationTypeColumnsConfigWizardSuggest("true") -»
+«DEFINE ColumnConfigWizardsSuggest FOR MProperty -»
+«IF emHasTypo3TcaAssociationColumnsConfigWizardSuggest("true") -»
 					'suggest' => array(
 						'type' => 'suggest',
 					),
@@ -1306,31 +1451,102 @@ hier evtl. versuch über sql type maximum herauszufinden
 
 
 «REM»
+	Generates a region for own TCA Columns Section column config code.
 «ENDREM»
-«DEFINE TCAColumnsConfigAdditions FOR MProperty -»
-«IF !getT3TCAPropertyColumnsConfigAdditions().isEmpty -»
-«FOREACH getT3TCAPropertyColumnsConfigAdditions() AS tcaAddition -»
-				«asT3AssociativeArrayItem(tcaAddition)»
-«ENDFOREACH -»
-«ENDIF -»
-«ENDDEFINE»
-
-
-«REM»
-	generates a region for own TCA Column Config code implementations
-«ENDREM»
-«DEFINE OwnTCAColumnConfigCodeImplementation(String id) FOR MProperty -»
+«DEFINE OwnColumnConfigCode(String id) FOR MProperty -»
 				«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-				// TODO: put your further TCA Column Config code implementations here
+				// TODO: put your further column config code here
 				«ENDPROTECT»
 «ENDDEFINE»
 
 
-«REM»
-	generates a region for own code implementations
+«REM» -- 'Types' Section -- «ENDREM»
+
+«REM» 
 «ENDREM»
-«DEFINE OwnCodeImplementation(String id) FOR MClass -»
-«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-// TODO: put your further code implementations here
-«ENDPROTECT»
+«DEFINE TypesSection FOR MClass -»
+	'types' => array(
+		«EXPAND TypesNumbers -»
+		«EXPAND OwnTypesSectionCode("tca.php.own.types.section.code." + xmiGuid) -»
+	),
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE TypesNumbers FOR MClass -»
+«IF allSingleTableInheritanceSpecializations().isEmpty -»
+	«EXPAND TypesNumbersConcrete -»
+«ELSE -»
+	«EXPAND TypesNumbersSingle -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE TypesNumbersConcrete FOR MClass -»
+		'1' => array('showitem'	=> '«IF createLocalizationFields() -»sys_language_uid, «ENDIF -»«IF createHiddenField() -»hidden, «ENDIF -»«IF createStarttimeField() -»starttime, «ENDIF -»«IF createEndtimeField() -»endtime, «ENDIF -»«EXPAND TypesNumbersShowitem FOREACH allProperties().select( p | !p.derived && !p.isStatic() ) SEPARATOR ", " -»'),
+«ENDDEFINE»
+
+
+«DEFINE TypesNumbersSingle FOR MClass -»
+		'0' => array('showitem'	=> '«getPersistenceRecordTypeColumnName() -»'),
+		'«asGeneralName() -»' => array('showitem' => '«getPersistenceRecordTypeColumnName() -», «IF createLocalizationFields() -»sys_language_uid, «ENDIF -»«IF createHiddenField() -»hidden, «ENDIF -»«IF createStarttimeField() -»starttime, «ENDIF -»«IF createEndtimeField() -»endtime, «ENDIF -»«EXPAND TypesNumbersShowitem FOREACH allProperties().select( p | !p.derived && !p.isStatic() ) SEPARATOR ", " -»'),
+		«FOREACH allSingleTableInheritanceSpecializations() AS s -»
+		'«s.asGeneralName() -»' => array('showitem' => '«getPersistenceRecordTypeColumnName() -», «IF s.createLocalizationFields() -»sys_language_uid, «ENDIF -»«IF createHiddenField() -»hidden, «ENDIF -»«IF s.createStarttimeField() -»starttime, «ENDIF -»«IF s.createEndtimeField() -»endtime, «ENDIF -»«EXPAND TypesNumbersShowitem FOREACH s.allProperties().select( p | !p.derived && !p.isStatic() ) SEPARATOR ", " -»'),
+		«ENDFOREACH -»
+«ENDDEFINE»
+
+
+
+«DEFINE TypesNumbersShowitem FOR MProperty -»
+«asConfigurationName() -»«IF emHasTypo3TcaPropertyUtilizableTypesAltLabel() || emHasTypo3TcaPropertyUtilizableTypesPaletteNumber() || emHasTypo3TcaPropertyUtilizableTypesSpecialConfiguration() || emHasTypo3TcaPropertyUtilizableTypesFormStyleCodes() -»;«emGetTypo3TcaPropertyTypesAltLabel() -»;«emGetTypo3TcaPropertyTypesPaletteNumber() -»;«emGetTypo3TcaPropertyTypesSpecialConfiguration() -»;«emGetTypo3TcaPropertyTypesFormStyleCodes() -»«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a region for own TCA Types Section code.
+«ENDREM»
+«DEFINE OwnTypesSectionCode(String id) FOR MClass -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: put your further 'types' section code here
+		«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM» -- 'Palettes' Section -- «ENDREM»
+
+«REM» 
+«ENDREM»
+«DEFINE PalettesSection FOR MClass -»
+	'palettes' => array(
+		«EXPAND PalettesNumbers -»
+		«EXPAND OwnPalettesSectionCode("tca.php.own.palettes.section.code." + xmiGuid) -»
+	),
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE PalettesNumbers FOR MClass -»
+		'1' => array('showitem'	=> ''),
+«ENDDEFINE»
+
+
+«REM»
+	Generates a region for own TCA Palettes Section code.
+«ENDREM»
+«DEFINE OwnPalettesSectionCode(String id) FOR MClass -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: put your further 'palettes' section code here
+		«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a protected region for own code.
+«ENDREM»
+«DEFINE OwnCode(String id) FOR MClass -»
+	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+	// TODO: put your further code here
+	«ENDPROTECT»
 «ENDDEFINE»
