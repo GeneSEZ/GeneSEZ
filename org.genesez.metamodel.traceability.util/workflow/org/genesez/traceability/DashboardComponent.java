@@ -120,7 +120,7 @@ public class DashboardComponent extends Model2TextComponent {
 	 * Returns the value of attribute '<em><b>templateDir</b></em>'.
 	 */
 	public String getTemplateDir() {
-		return this.templateDir;
+		return templateDir;
 	}
 	
 	/**
@@ -135,7 +135,7 @@ public class DashboardComponent extends Model2TextComponent {
 	 * Returns the value of attribute '<em><b>templateZipFile</b></em>'.
 	 */
 	public String getTemplateZipFile() {
-		return this.templateZipFile;
+		return templateZipFile;
 	}
 	
 	/**

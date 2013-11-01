@@ -12,7 +12,7 @@
 	@see	org::genesez::platform::java::m2m::AccessOperation
 	
 	@author	nico herbig
-	@author andre pflueger <andre.pflueger@fh-zwickau.de>
+	@author andre pflueger
 	@author	tobias haubold <toh@fh-zwickau.de>
 «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::AccessElement»
@@ -28,20 +28,12 @@
 «DEFINE GetOperationImpl(MAttribute attr) FOR MOperation -»
 	«IF return.multiplicity.isSingleValued() -»
 		«IF return.type.mapName().asTypeName().matches("Date") -»
-			if («IF !static-»this.«ENDIF-»«return.name -» != null) {
-				return new Date(«IF !static-»this.«ENDIF-»«return.name -».getTime());
-			} else {
-				return «IF !static-»this.«ENDIF-»«return.name -»;
-			}
-		«ELSE -»
-			return «IF !static-»this.«ENDIF-»«return.name»;
-		«ENDIF -»
-	«ELSE -»
-		«IF return.emHasStereotypeAssignment("primitive") -»
-			return «IF !static-»this.«ENDIF-»«return.name-».clone();
+			return new Date(«return.name -».getTime());
 		«ELSE -»
 			return «return.name»;
 		«ENDIF -»
+	«ELSE -»
+		return «return.name»;
 	«ENDIF -»
 «ENDDEFINE»
 
@@ -51,22 +43,14 @@
 «DEFINE SetOperationImpl(MAttribute attr) FOR MOperation -»
 	«LET parameter.first() AS param -»
 	«IF param.multiplicity.isSingleValued() -»
-		«IF param.type.mapName().asTypeName().matches("Date") -»
-			if («param.name -» != null) {
-				«IF !static-»this.«ENDIF-»«param.name» = new Date(«param.name -».getTime());
-			} else {
-				«IF !static-»this.«ENDIF-»«param.name» = null;
-			}
-		«ELSE -»
-			«IF !static-»this.«ENDIF-»«param.name» = «param.name»;
-		«ENDIF-»
+		«IF !static-»this.«ENDIF-»«param.name» = «IF static-»_«ENDIF-»«param.name»;
 	«ELSE -»
 		«IF param.emHasStereotypeAssignment("primitive") -»
-			«IF !static-»this.«ENDIF-»«param.name» = new «param.type.mapName().asTypeName() -»[«param.name».length];
-			System.arraycopy(«param.name», 0, «IF !static-»this.«ENDIF-»«param.name», 0, «param.name».length);
+			«IF !static-»this.«ENDIF-»«param.name» = new «param.type.mapName().asTypeName() -»[«IF static-»_«ENDIF-»«param.name».length];
+			System.arraycopy(«IF static-»_«ENDIF-»«param.name», 0, «IF !static-»this.«ENDIF-»«param.name», 0, «IF static-»_«ENDIF-»«param.name».length);
 		«ELSE -»
 			«IF !static-»this.«ENDIF-»«param.name».clear();
-			«IF !static-»this.«ENDIF-»«param.name».addAll(«param.name»);
+			«IF !static-»this.«ENDIF-»«param.name».addAll(«IF static-»_«ENDIF-»«param.name»);
 		«ENDIF-»
 	«ENDIF -»
 	«ENDLET -»
@@ -84,7 +68,7 @@
 					"The implementation of the property access operation add for multi valued attribute '«param.name»' is missing!");
 			«ENDPROTECT»
 		«ELSE -»
-			«IF !static-»this.«ENDIF-»«param.name».add(«param.name»);
+			«IF !static-»this.«ENDIF-»«param.name».add(«IF static-»_«ENDIF-»«param.name»);
 		«ENDIF -»
 	«ENDLET -»
 «ENDDEFINE»
@@ -101,7 +85,7 @@
 					"The implementation of the property access operation remove for multi valued attribute '«param.name»' is missing!");
 			«ENDPROTECT»
 		«ELSE -»
-			«IF !static-»this.«ENDIF-»«param.name».remove(«param.name»);
+			«IF !static-»this.«ENDIF-»«param.name».remove(«IF static-»_«ENDIF-»«param.name»);
 		«ENDIF -»
 	«ENDLET -»
 «ENDDEFINE»
@@ -114,12 +98,8 @@
 «ENDREM»
 «DEFINE GetOperationImpl(MAssociationRole end) FOR MOperation -»
 	«IF return.multiplicity.isSingleValued() -»
-		«IF return.type.mapName().asTypeName().matches("Date") -»			
-			if (this.«return.name -» != null) {
-				return new Date(«return.name -».getTime());
-			} else {
-				return this.«return.name -»;
-			}
+		«IF return.type.mapName().asTypeName().matches("Date") -»
+			return new Date(«return.name -».getTime());
 		«ELSE -»
 			return «return.name»;
 		«ENDIF -»
@@ -170,12 +150,12 @@
 		«ENDIF -»
 	«ELSE -»
 		«IF emHasStereotypeAssignment("primitive") -»
-			«IF !static-»this.«ENDIF-»«param.name» = new «param.type.mapName().asTypeName() -»[«param.name».length];
-			for (int counter = 0; counter < «param.name».length; counter++) {
-				«IF !static-»this.«ENDIF-»«param.name»[counter] = «param.name»[counter];
+			«IF !static-»this.«ENDIF-»«param.name» = new «param.type.mapName().asTypeName() -»[«IF static-»_«ENDIF-»«param.name».length];
+			for (int counter = 0; counter < «IF static-»_«ENDIF-»«param.name».length; counter++) {
+				«IF !static-»this.«ENDIF-»«param.name»[counter] = «IF static-»_«ENDIF-»«param.name»[counter];
 			}
 		«ELSE -»
-			«IF !static-»this.«ENDIF-»«param.name» = «param.name»;
+			«IF !static-»this.«ENDIF-»«param.name» = «IF static-»_«ENDIF-»«param.name»;
 		«ENDIF-»
 	«ENDIF -»
 	«ENDIF -»

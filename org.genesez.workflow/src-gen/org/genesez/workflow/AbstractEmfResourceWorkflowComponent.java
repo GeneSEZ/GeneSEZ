@@ -60,7 +60,7 @@ public abstract class AbstractEmfResourceWorkflowComponent extends AbstractSlotW
 	 * Returns the value of attribute '<em><b>useSingleGlobalResourceSet</b></em>'.
 	 */
 	public boolean getUseSingleGlobalResourceSet() {
-		return this.useSingleGlobalResourceSet;
+		return useSingleGlobalResourceSet;
 	}
 	
 	/**
@@ -75,7 +75,7 @@ public abstract class AbstractEmfResourceWorkflowComponent extends AbstractSlotW
 	 * Returns the value of attribute '<em><b>resourceSet</b></em>'.
 	 */
 	public ResourceSet getResourceSet() {
-		return this.resourceSet;
+		return resourceSet;
 	}
 	
 	/**
@@ -90,7 +90,7 @@ public abstract class AbstractEmfResourceWorkflowComponent extends AbstractSlotW
 	 * Returns the value of attribute '<em><b>uri</b></em>'.
 	 */
 	public String getUri() {
-		return this.uri;
+		return uri;
 	}
 	
 	/**
@@ -105,7 +105,7 @@ public abstract class AbstractEmfResourceWorkflowComponent extends AbstractSlotW
 	 * Returns the value of attribute '<em><b>file</b></em>'.
 	 */
 	public String getFile() {
-		return this.file;
+		return file;
 	}
 	
 	/**

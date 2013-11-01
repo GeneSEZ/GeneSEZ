@@ -1,24 +1,18 @@
-/*
- * (c) GeneSEZ Research Group
- * All rights reserved.
- * 
- * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
- */
-import gcore;
-
 /**
  * Validates a model for generation using the java platform
  * 
  * @author	nico herbig
- * @author	tobias haubold
- * @author	andre pflueger
+ * @author	tobias haubold (last)
+ * @date	2007-07-25
  */
+
+//	based genesez meta model
+import gcore;
 
 extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::metamodel::core::util::Conversion;
 extension org::genesez::metamodel::core::util::Helper;
 extension org::genesez::metamodel::core::util::profile::GeneSEZProfileAccessElement;
-extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
 extension org::genesez::util::logging::Logging;
 
 /*
@@ -59,15 +53,6 @@ context MOperation WARNING "GeneSEZ: the modifiers of the interface operation wi
 	other things
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
-
-/**
- * checks if a default set access operation for a final attribute should be generated
- * @return	false generates a warning, if a final attribute owns the accessor stereotype with tagged value setter == true 
- */
-context MAttribute WARNING "GeneSEZ: Generation of a default set access operation for a final attribute makes no sense! Set access operation will not be generated." + fqmn() :
-	final && multiplicity.isSingleValued() && hasDefaultValue() && emGenerateSetAccess()
-		? false
-		: true;
 
 context MProperty WARNING "GeneSEZ: you shouldn't mix generics and arrays! you will dive into some problems, see: joshua block, effective java, generics, http://java.sun.com/docs/books/effective/generics.pdf! " + fqmn() :
 	multiplicity.isMultiValued() && prHasPrimitiveStereotype() && hasGenericRealization()
