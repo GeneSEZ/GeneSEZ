@@ -42,7 +42,7 @@ class InventoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 	 */
 	public function listAction() {
 		/* PROTECTED REGION ID(php.operation.own.code._17_0_2_8a7027a_1314624316079_160741_2229) ENABLED START */
-		$productRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('GeneSEZ\\GszInventory\\Domain\\Repository\\ProductRepository');
+		$productRepository = $this->objectManager->get('GeneSEZ\\GszInventory\\Domain\\Repository\\ProductRepository');
 		$products = $productRepository->findAll();
 		$this->view->assign('products', $products);
 		/* PROTECTED REGION END */
