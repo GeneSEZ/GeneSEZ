@@ -19,9 +19,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'version' => '2.0.0',
 	'constraints' => array(
 		'depends' => array(
-			'typo3' => '6.2.0-0.0.0',
-			'extbase' => '6.2.0-0.0.0',
-			'fluid' => '6.2.0-0.0.0',
+			'typo3' => '6.1.0-0.0.0',
 			/* PROTECTED REGION ID(ext_emconf.php.own.depends.constraints.eee_1045467100313_135436_1) ENABLED START */
 			// TODO: put your further 'depends' constraints here
 			/* PROTECTED REGION END */
