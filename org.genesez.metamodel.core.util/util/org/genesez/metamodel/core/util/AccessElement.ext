@@ -238,16 +238,17 @@ List[MClassifier] allNestedClassifiers(MPackage this) :
  * @api
  */
 List[MClassifier] allSpecializations(MType this):
-	owningSpecializations().addAll(
-		owningSpecializations().allSpecializations()
-	);
+	{}.addAll(
+		specialization.allSpecializations()
+	).addAll( specialization );
 
 
 /**
  * Returns the list of owning specializations of a type.
  * 
  * @return	The list of specializations of the classifier, otherwise an empty list.
- * @todo:	make unidirectional association between generalization and spezialization bidirectional to avoid this script.
+ * @deprecated	This script is deprecated since GeneSEZ release 3.1 and will be removed in 2 versions - use metamodel property "specialization"
+ * @todo		Log this deprecation.
  * @api
  */
 List[MClassifier] owningSpecializations(MType this) :
@@ -567,6 +568,46 @@ boolean hasAssociationClass(MAssociationRole this) :
  */
 MClass getAssociationClass(MAssociationRole this) :
 	association.associationClass;
+
+
+/**
+ * Checks if an association role is one to one (1:1).
+ * 
+ * @return	True if the association role is one to one, otherwise false.
+ * @api
+ */
+boolean isOneToOne(MAssociationRole this) :
+	oppositeMultiplicity.isSingleValued() && multiplicity.isSingleValued();
+
+
+/**
+ * Checks if an association role is one to many (1:n).
+ * 
+ * @return	True if the association role is one to many, otherwise false.
+ * @api
+ */
+boolean isOneToMany(MAssociationRole this) :
+	oppositeMultiplicity.isSingleValued() && multiplicity.isMultiValued();
+	
+
+/**
+ * Checks if an association role is one to one (1:1).
+ * 
+ * @return	True if the association role is one to one, otherwise false.
+ * @api
+ */
+boolean isManyToOne(MAssociationRole this) :
+	oppositeMultiplicity.isMultiValued() && multiplicity.isSingleValued();
+
+
+/**
+ * Checks if an association role is one to one (1:1).
+ * 
+ * @return	True if the association role is one to one, otherwise false.
+ * @api
+ */
+boolean isManyToMany(MAssociationRole this) :
+	oppositeMultiplicity.isMultiValued() && multiplicity.isMultiValued();
 
 
 /**
