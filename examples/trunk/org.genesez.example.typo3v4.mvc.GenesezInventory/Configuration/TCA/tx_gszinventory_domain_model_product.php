@@ -4,11 +4,10 @@ return array(
 	'ctrl' => array(
 		'title' => 'LLL:EXT:gsz_inventory/Resources/Private/Language/locallang_tca.xlf:tx_gszinventory_domain_model_product',
 		'label'	=> 'name',
-		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_gszinventory_domain_model_product.gif',
+		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('gsz_inventory') . 'Resources/Public/Icons/tx_gszinventory_domain_model_product.gif',
 		'tstamp' => 'tstamp',
 		'crdate' => 'crdate',
 		'cruser_id' => 'cruser_id',
-		'origUid' => 't3_origuid',
 		'delete' => 'deleted',
 		'searchFields' => 'name, description, quantity',
 		/* PROTECTED REGION ID(tca.php.own.ctrl.section.code._17_0_1_8a7027a_1306344238376_116675_2466) ENABLED START */
