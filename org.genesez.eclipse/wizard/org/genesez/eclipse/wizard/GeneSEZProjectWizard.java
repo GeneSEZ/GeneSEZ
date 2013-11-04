@@ -38,7 +38,6 @@ import org.genesez.eclipse.wizard.util.WizardConstants;
  * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
  * 
  */
-@SuppressWarnings("restriction")
 public class GeneSEZProjectWizard extends Wizard implements INewWizard {
 
 	private MWindow hostWin;
@@ -47,6 +46,7 @@ public class GeneSEZProjectWizard extends Wizard implements INewWizard {
 	private IWizardPage page2;
 	private IWizardPage page3;
 	private IEclipseContext context;
+	private CreateProjectHandler createProjectHandler;
 
 	@Inject
 	private ECommandService commandService;
@@ -79,10 +79,8 @@ public class GeneSEZProjectWizard extends Wizard implements INewWizard {
 		page2 = new GeneSEZProjectWizardTemplatePage("ChooseTemplate", hostWin);
 		page3 = new GeneSEZProjectWizardWorkflowPage("ChooseWorkflow", hostWin);
 
-		executeCommand = commandService.createCommand("create.projects", null);
-		CreateProjectHandler handler = new CreateProjectHandler();
-		ContextInjectionFactory.inject(handler, context);
-		handlerService.activateHandler("create.projects", handler);
+		createProjectHandler = new CreateProjectHandler();
+		executeCommand = createProjectHandler.createProjectCommand(commandService, handlerService, context);
 	}
 
 	/**
