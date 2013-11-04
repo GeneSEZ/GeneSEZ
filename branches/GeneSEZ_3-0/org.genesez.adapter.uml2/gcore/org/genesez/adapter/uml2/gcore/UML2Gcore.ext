@@ -316,12 +316,8 @@ private create MOperation make(Operation o) :
 /**
  * Creates a GeneSEZ attribute from an uml property.
  */
-private create MAttribute makeAttribute(Property p) :
-	logTrace( "make [ " + metaType + " ] - " + p.fqmn() ) ->
-	transformBasics(p) ->
-	// containment
-	p.featuringClassifier.first().make().property.add( this ) ->
-	this;
+private MAttribute makeAttribute(Property p) :
+	p.makeAttribute( p.featuringClassifier.first().make() );
 
 /**
  * Creates a GeneSEZ attribute from an uml property with the specified containment.
@@ -336,12 +332,8 @@ private create MAttribute makeAttribute(Property p, MClassifier containment) :
 /**
  * Creates a GeneSEZ attribute from an uml property
  */
-private create MAssociationRole makeAssociationRole(Property p) :
-	logTrace( "make [ " + metaType + " ] - " + p.fqmn() ) ->
-	transformBasics(p) ->
-	// containment
-	p.featuringClassifier.first().make().property.add( this ) ->
-	this;
+private MAssociationRole makeAssociationRole(Property p) :
+	p.makeAssociationRole( p.featuringClassifier.first().make() );
 
 /**
  * Creates a GeneSEZ attribute from an uml property
