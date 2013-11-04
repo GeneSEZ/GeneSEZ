@@ -8,6 +8,7 @@ import uml;
 import gcore;
 
 extension org::genesez::adapter::uml2::gcore::UML2Gcore;
+extension org::genesez::adapter::uml2::gcore::Utility;
 extension org::genesez::util::logging::Logging;
 
 /**
@@ -425,10 +426,10 @@ private create MParameter makeEventParameter(Parameter p) :
 	setDirection( "" ) ->
 	setMultiplicity( p.makeMultiplicity() ) ->
 	setType( p.type.makeType() ) ->
-	stereotype.addAll( p.getAppliedStereotypes().makeStereotype() ) ->
+	stereotype.addAll( p.getAppliedStereotypes().make() ) ->
 	// containments
 	// add comment to parameter
-	ownedComment.addAll( p.ownedComment.typeSelect(Comment).makeComment() ) ->
+	ownedComment.addAll( p.ownedComment.typeSelect(Comment).transform() ) ->
 	// set tagged values
 	taggedValue.addAll( makeTaggedValues(this, p) ) ->
 	this;
@@ -444,10 +445,10 @@ private create MParameter makeEventParameter(Property p) :
 	setDirection( "" ) ->
 	setMultiplicity( p.makeMultiplicity() ) ->
 	setType( p.type.makeType() ) ->
-	stereotype.addAll( p.getAppliedStereotypes().makeStereotype() ) ->
+	stereotype.addAll( p.getAppliedStereotypes().make() ) ->
 	// containments
 	// add comment to parameter
-	ownedComment.addAll( p.ownedComment.typeSelect(Comment).makeComment() ) ->
+	ownedComment.addAll( p.ownedComment.typeSelect(Comment).transform() ) ->
 	// set tagged values
 	taggedValue.addAll( makeTaggedValues(this, p) ) ->
 	this;
