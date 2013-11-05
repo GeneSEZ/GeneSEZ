@@ -1,56 +1,54 @@
-«IMPORT gcore»
 «REM»
-	Entry point for generating extbase configuration code.
+	(c) GeneSEZ Research Group
+	All rights reserved.
 	
-	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
-	@date	2011-07-14
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
 «ENDREM»
 
+«IMPORT gcore»
 
-«REM» use TYPO3 MVC access helper scripts «ENDREM»
+
+«REM»
+	Entry point for generating TYPO3 CMS specific Extbase + Fluid Configuration code.
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+«ENDREM»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
 «EXTENSION org::genesez::platform::typo3::cms::mvc::util::AccessElement»
 
+
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
 «ENDREM»
 
 «REM»
-	Processes the generation of configuration code. 
+	Processes the contents of a model.
 «ENDREM»
 «DEFINE Root FOR MModel»
-«REM» Generate "ext_emconf.php" «ENDREM»
-«EXPAND org::genesez::platform::typo3::cms::m2t::configuration::ExtEmconfPhp::Root»
+«REM» Generate TYPO3 CMS Configuration code «ENDREM»
+«EXPAND org::genesez::platform::typo3::cms::m2t::configuration::Root::Root»
 
 «REM» Generate "ext_localconf.php" «ENDREM»
-«REM»
 «EXPAND ExtLocalconfPhp::Root»
-«ENDREM»
 
 «REM» Generate "ext_tables.php" «ENDREM»
-«REM»
 «EXPAND ExtTablesPhp::Root»
-«ENDREM»
 
 «REM» Generate "ext_tables.sql" «ENDREM»
-«REM»
-«EXPAND ExtTablesSql::Root»
-«ENDREM»
+«REM»«EXPAND ExtTablesSql::Root»«ENDREM»
 
 «REM» Generate TypoScript setup and constants code «ENDREM»
-«REM»
 «EXPAND TypoScriptConstantsTS::Root»
 «EXPAND TypoScriptSetupTS::Root»
-«ENDREM»
 «ENDDEFINE»
 
 
 «REM»
-	Processes the generation of configuration code. 
+	Processes the contents of a class. 
 «ENDREM»
 «DEFINE Root FOR MClass»
-«IF ( isEntity() || isValueObject() ) && isConcreteTableInheritance() && !isMappingTable() -»
+«IF ( isEntity() || isValueObject() ) && isConcreteTableInheritance() && !isTableMapping() -»
 	«REM» Generate tca.php «ENDREM»
 	«EXPAND TCAPhp::Root -»
 «ENDIF -»
@@ -58,18 +56,18 @@
 
 
 «REM»
-	Processes the generation of configuration code. 
+	Processes the contents of an interface. 
 «ENDREM»
 «DEFINE Root FOR MInterface -»
-«IF isPlugin() && !property.typeSelect(MAttribute).isEmpty -»
+«REM»«IF isPlugin() && hasAttributes() -»«ENDREM»
 	«REM» Generate Flexform code «ENDREM»
-	«EXPAND FlexformXml::Root -»
-«ENDIF -»
+	«REM»«EXPAND FlexformXml::Root -»«ENDREM»
+«REM»«ENDIF -»«ENDREM»
 «ENDDEFINE»
 
 
 «REM»
-	Processes the generation of configuration code. 
+	Processes the contents of a classifier. 
 «ENDREM»
 «DEFINE Root FOR MClassifier -»
 «ENDDEFINE»
@@ -77,7 +75,5 @@
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
 «ENDREM»
