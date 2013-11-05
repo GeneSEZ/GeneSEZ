@@ -151,7 +151,7 @@ return array(
 	@todo	check if this statement should be generated
 «ENDREM»
 «DEFINE CtrlIconFile FOR MClass -»
-		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . '«dirPathResourcesPublicIcons() -»/«asConfigurationName() -».gif',
+		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('«extensionKey() -»') . '«dirPathResourcesPublicIcons() -»/«asConfigurationName() -».gif',
 «ENDDEFINE»
 
 
@@ -193,7 +193,9 @@ return array(
 	Fieldname, which will contain the UID of the original record in case a record is created as a copy or new version of another record.
 «ENDREM»
 «DEFINE CtrlOrigUid FOR MClass -»
+«IF createVersioningFields() -»
 		'origUid' => 't3_origuid',
+«ENDIF -»
 «ENDDEFINE»
 
 
