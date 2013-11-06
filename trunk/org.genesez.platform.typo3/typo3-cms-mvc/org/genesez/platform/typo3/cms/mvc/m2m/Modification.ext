@@ -229,14 +229,6 @@ MClass domainObjectModifications(MClass this) :
 	this;
 
 
-MProperty domainObjectChangePropertyVisibilityToProtected(MProperty this) :
-	visibility != "protected"
-		? ( logTrace( "GeneSEZ: Change visibility to 'protected' of domain object property! Model element: " + fqmn() ) ->
-			setVisibility("protected")
-		) : Void ->
-	this;
-
-
 MClass domainObjectHookAddNotEmptyValidatorStereotype(MProperty this) :
 	this;
 
@@ -245,6 +237,14 @@ MProperty domainObjectAddNotEmptyValidatorStereotype(MProperty this) :
 	multiplicity.lowerBound >= 1 && !stereotype.exists( s | s.name == prNotEmptyValidator() )
 		? ( logTrace( "GeneSEZ: Add 'NotEmptyValidator' stereotype to domain object property! Model element: " + fqmn() ) ->
 			ensureStereotypeAssignment( navModel().ensureStereotypeExistence( prNotEmptyValidator(), prNotEmptyValidator() ) )
+		) : Void ->
+	this;
+
+
+MProperty domainObjectChangePropertyVisibilityToProtected(MProperty this) :
+	visibility != "protected"
+		? ( logTrace( "GeneSEZ: Change visibility to 'protected' of domain object property! Model element: " + fqmn() ) ->
+			setVisibility("protected")
 		) : Void ->
 	this;
 
