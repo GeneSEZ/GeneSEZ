@@ -17,7 +17,7 @@ import gcore;
 extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::metamodel::core::util::Conversion;
 
-extension org::genesez::metamodel::core::util::profile::GeneSEZProfileAccessElement;
+extension org::genesez::metamodel::core::util::profile::GenesezStandardAccessElement;
 
 
 // -- Classifier Checks -------------------------------------------------------------------------------------
@@ -123,6 +123,6 @@ context MParameter WARNING "GeneSEZ: Parameters needs to have a type! " + fqmn()
  * @return	False if the attribute has an array type without default value and without fixed upper bound multiplicity, otherwise true.
  */
 context MAttribute WARNING "GeneSEZ: Attribute with array type cannot be initialized due to the missing upper bound multiplicity value! " + fqmn() :
-	multiplicity.isMultiValued() && prHasPrimitiveStereotype() && !hasDefaultValue()
+	multiplicity.isMultiValued() && emHasPrimitiveStereotype() && !hasDefaultValue()
 		? multiplicity.hasFixedUpperBoundMultiplicity()
 		: true;
