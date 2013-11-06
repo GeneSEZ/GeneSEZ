@@ -33,13 +33,9 @@
 «ENDREM»
 «DEFINE Root FOR MModel -»
 «FILE filePathTypoScriptConstantsTs() -»
-«LET extensionKey() AS extensionKey -»
-«LET extensionPrefix() AS extensionPrefix -»
-«EXPAND PluginConfiguration(extensionKey, extensionPrefix) -»
-«EXPAND ModuleConfiguration(extensionKey, extensionPrefix) -»
+«EXPAND PluginConfiguration -»
+«EXPAND ModuleConfiguration -»
 «EXPAND OwnCode("constants.txt.own.code." + xmiGuid) -»
-«ENDLET -»
-«ENDLET -»
 «ENDFILE -»
 «ENDDEFINE»
 
@@ -50,11 +46,11 @@
 
 «REM»
 «ENDREM»
-«DEFINE PluginConfiguration(String extensionKey, String extensionPrefix) FOR MModel -»
+«DEFINE PluginConfiguration FOR MModel -»
 «IF !allPlugins().isEmpty -»
-plugin.«extensionPrefix -» {
-	«EXPAND PluginPersistence(extensionPrefix) -»
-	«EXPAND PluginView(extensionKey, extensionPrefix) -»
+plugin.«extensionPrefix() -» {
+	«EXPAND PluginPersistence -»
+	«EXPAND PluginView -»
 	«EXPAND OwnPluginCode("constants.txt.own.plugin.code." + xmiGuid) -»
 }
 
@@ -64,9 +60,9 @@ plugin.«extensionPrefix -» {
 
 «REM»
 «ENDREM»
-«DEFINE PluginPersistence(String extensionPrefix) FOR MModel -»
+«DEFINE PluginPersistence FOR MModel -»
 	persistence {
-		# cat=plugin.«extensionPrefix -»//a; type=string; label=Default storage PID
+		# cat=plugin.«extensionPrefix() -»//a; type=string; label=Default storage PID
 		storagePid = 
 	}
 «ENDDEFINE»
@@ -74,14 +70,14 @@ plugin.«extensionPrefix -» {
 
 «REM»
 «ENDREM»
-«DEFINE PluginView(String extensionKey, String extensionPrefix) FOR MModel -»
+«DEFINE PluginView FOR MModel -»
 	view {
-		# cat=plugin.«extensionPrefix -»/file; type=string; label=Path to template root (FE)
-		templateRootPath = EXT:«extensionKey -»/«dirPathResourcesPrivateTemplates() -»/
-		# cat=plugin.«extensionPrefix -»/file; type=string; label=Path to template partials (FE)
-		partialRootPath = EXT:«extensionKey -»/«dirPathResourcesPrivatePartials() -»/
-		# cat=plugin.«extensionPrefix -»/file; type=string; label=Path to template layouts (FE)
-		layoutRootPath = EXT:«extensionKey -»/«dirPathResourcesPrivateLayouts() -»/
+		# cat=plugin.«extensionPrefix() -»/file; type=string; label=Path to template root (FE)
+		templateRootPath = EXT:«extensionKey() -»/«dirPathResourcesPrivateTemplates() -»/
+		# cat=plugin.«extensionPrefix() -»/file; type=string; label=Path to template partials (FE)
+		partialRootPath = EXT:«extensionKey() -»/«dirPathResourcesPrivatePartials() -»/
+		# cat=plugin.«extensionPrefix() -»/file; type=string; label=Path to template layouts (FE)
+		layoutRootPath = EXT:«extensionKey() -»/«dirPathResourcesPrivateLayouts() -»/
 	}
 «ENDDEFINE»
 
@@ -98,11 +94,11 @@ plugin.«extensionPrefix -» {
 
 «REM»
 «ENDREM»
-«DEFINE ModuleConfiguration(String extensionKey, String extensionPrefix) FOR MModel -»
+«DEFINE ModuleConfiguration FOR MModel -»
 «IF !allModules().isEmpty -»
-module.«extensionPrefix -» {
-	«EXPAND ModulePersistence(extensionPrefix) -»
-	«EXPAND ModuleView(extensionKey, extensionPrefix) -»
+module.«extensionPrefix() -» {
+	«EXPAND ModulePersistence -»
+	«EXPAND ModuleView -»
 	«EXPAND OwnModuleCode("constants.txt.own.module.code." + xmiGuid) -»
 }
 
@@ -112,9 +108,9 @@ module.«extensionPrefix -» {
 
 «REM»
 «ENDREM»
-«DEFINE ModulePersistence(String extensionPrefix) FOR MModel -»
+«DEFINE ModulePersistence FOR MModel -»
 	persistence {
-		# cat=module.«extensionPrefix -»//a; type=string; label=Default storage PID
+		# cat=module.«extensionPrefix() -»//a; type=string; label=Default storage PID
 		storagePid = 
 	}
 «ENDDEFINE»
@@ -122,14 +118,14 @@ module.«extensionPrefix -» {
 
 «REM»
 «ENDREM»
-«DEFINE ModuleView(String extensionKey, String extensionName) FOR MModel -»
+«DEFINE ModuleView FOR MModel -»
 	view {
-		# cat=module.«extensionName -»/file; type=string; label=Path to template root (BE)
-		templateRootPath = EXT:«extensionKey -»/«dirPathResourcesPrivateBackendTemplates()»/
-		# cat=module.«extensionName -»/file; type=string; label=Path to template partials (BE)
-		partialRootPath = EXT:«extensionKey -»/«dirPathResourcesPrivateBackendPartials()»/
-		# cat=module.«extensionName -»/file; type=string; label=Path to template layouts (BE)
-		layoutRootPath = EXT:«extensionKey -»/«dirPathResourcesPrivateBackendLayouts()»/
+		# cat=module.«extensionPrefix() -»/file; type=string; label=Path to template root (BE)
+		templateRootPath = EXT:«extensionKey() -»/«dirPathResourcesPrivateBackendTemplates()»/
+		# cat=module.«extensionPrefix() -»/file; type=string; label=Path to template partials (BE)
+		partialRootPath = EXT:«extensionKey() -»/«dirPathResourcesPrivateBackendPartials()»/
+		# cat=module.«extensionPrefix() -»/file; type=string; label=Path to template layouts (BE)
+		layoutRootPath = EXT:«extensionKey() -»/«dirPathResourcesPrivateBackendLayouts()»/
 	}
 «ENDDEFINE»
 

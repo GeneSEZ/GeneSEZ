@@ -33,12 +33,10 @@
 «ENDREM»
 «DEFINE Root FOR MModel -»
 «FILE filePathTypoScriptSetupTs() -»
-«LET extensionPrefix() AS extensionPrefix -»
-«EXPAND PluginConfiguration(extensionPrefix) -»
-«EXPAND ModuleConfiguration(extensionPrefix) -»
+«EXPAND PluginConfiguration -»
+«EXPAND ModuleConfiguration -»
 «EXPAND PersistenceClassesMapping -»
 «EXPAND OwnCode("setup.txt.own.code." + xmiGuid) -»
-«ENDLET -»
 «ENDFILE -»
 «ENDDEFINE»
 
@@ -49,11 +47,11 @@
 
 «REM»
 «ENDREM»
-«DEFINE PluginConfiguration(String extensionPrefix) FOR MModel -»
+«DEFINE PluginConfiguration FOR MModel -»
 «IF !allPlugins().isEmpty -»
-plugin.«extensionPrefix -» {
-	«EXPAND PluginPersistence(extensionPrefix) -»
-	«EXPAND PluginView(extensionPrefix) -»
+plugin.«extensionPrefix() -» {
+	«EXPAND PluginPersistence -»
+	«EXPAND PluginView -»
 	«EXPAND OwnPluginCode("setup.txt.own.plugin.code." + xmiGuid) -»
 }
 
@@ -63,9 +61,9 @@ plugin.«extensionPrefix -» {
 
 «REM»
 «ENDREM»
-«DEFINE PluginPersistence(String extensionPrefix) FOR MModel -»
+«DEFINE PluginPersistence FOR MModel -»
 	persistence {
-		storagePid = {$plugin.«extensionPrefix -».persistence.storagePid}
+		storagePid = {$plugin.«extensionPrefix() -».persistence.storagePid}
 	}
 «ENDDEFINE»
 
@@ -73,11 +71,11 @@ plugin.«extensionPrefix -» {
 «REM»
 	@todo	Support of templateRootPaths
 «ENDREM»
-«DEFINE PluginView(String extensionPrefix) FOR MModel -»
+«DEFINE PluginView FOR MModel -»
 	view {
-		templateRootPath = {$plugin.«extensionPrefix -».view.templateRootPath}
-		partialRootPath = {$plugin.«extensionPrefix -».view.partialRootPath}
-		layoutRootPath = {$plugin.«extensionPrefix -».view.layoutRootPath}
+		templateRootPath = {$plugin.«extensionPrefix() -».view.templateRootPath}
+		partialRootPath = {$plugin.«extensionPrefix() -».view.partialRootPath}
+		layoutRootPath = {$plugin.«extensionPrefix() -».view.layoutRootPath}
 	}
 «ENDDEFINE»
 
@@ -94,11 +92,11 @@ plugin.«extensionPrefix -» {
 
 «REM»
 «ENDREM»
-«DEFINE ModuleConfiguration(String extensionPrefix) FOR MModel -»
+«DEFINE ModuleConfiguration FOR MModel -»
 «IF !allModules().isEmpty -»
-module.«extensionPrefix -» {
-	«EXPAND ModulePersistence(extensionPrefix) -»
-	«EXPAND ModuleView(extensionPrefix) -»
+module.«extensionPrefix() -» {
+	«EXPAND ModulePersistence -»
+	«EXPAND ModuleView -»
 	«EXPAND OwnModuleCode("setup.txt.own.module.code." + xmiGuid) -»
 }
 
@@ -108,20 +106,20 @@ module.«extensionPrefix -» {
 
 «REM»
 «ENDREM»
-«DEFINE ModulePersistence(String extensionPrefix) FOR MModel -»
+«DEFINE ModulePersistence FOR MModel -»
 	persistence {
-		storagePid = {$module.«extensionPrefix -».persistence.storagePid}
+		storagePid = {$module.«extensionPrefix() -».persistence.storagePid}
 	}
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE ModuleView(String extensionPrefix) FOR MModel -»
+«DEFINE ModuleView FOR MModel -»
 	view {
-		templateRootPath = {$module.«extensionPrefix -».view.templateRootPath}
-		partialRootPath = {$module.«extensionPrefix -».view.partialRootPath}
-		layoutRootPath = {$module.«extensionPrefix -».view.layoutRootPath}
+		templateRootPath = {$module.«extensionPrefix() -».view.templateRootPath}
+		partialRootPath = {$module.«extensionPrefix() -».view.partialRootPath}
+		layoutRootPath = {$module.«extensionPrefix() -».view.layoutRootPath}
 	}
 «ENDDEFINE»
 
