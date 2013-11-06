@@ -14,6 +14,12 @@
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
 «ENDREM»
 
+«REM» use GeneSEZ common conversion scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+
+«REM» use GeneSEZ common logging scripts «ENDREM»
+«EXTENSION org::genesez::util::logging::Logging»
+
 
 «REM»
 	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
@@ -23,5 +29,7 @@
 	Registers aspect to generate "ext_conf_template.txt".
 «ENDREM»
 «AROUND org::genesez::platform::typo3::cms::mt2::configuration::ExtConfTempateTxt::Hook FOR MModel -»
+	«useLogger("org.genesez.platform.typo3") -» 
+	«logTrace( "GeneSEZ: Aspect call to generate 'ext_conf_template.txt'! Model element: " + fqmn() ) -»
 	«EXPAND org::genesez::platform::typo3::cms::mt2::configuration::ExtConfTempateTxt::Root -»
 «ENDAROUND»
