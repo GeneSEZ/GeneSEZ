@@ -46,6 +46,19 @@
 	Processes the generation of "locallang_csh_<table name of domain object>.xlf".
 «ENDREM»
 «DEFINE Root FOR MClass -»
+«IF isEntity() || isValueObject() -»
+«EXPAND LocallangCsh -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
+«ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE LocallangCsh FOR MClass -»
 «EXPAND SourceLanguage -»
 
 «FOREACH navModel().emGetTypo3LocalizationLanguageKeys() AS targetLanguageKey -»
@@ -53,10 +66,6 @@
 «ENDFOREACH -»
 «ENDDEFINE»
 
-
-«REM»
-	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
-«ENDREM»
 
 «REM»
 «ENDREM»

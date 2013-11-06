@@ -27,6 +27,9 @@
 «EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
 
 
+«REM» use GeneSEZ common access element scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+
 «REM» use GeneSEZ common navigate element scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::NavigateElement»
 
@@ -41,8 +44,20 @@
 «REM»
 	Processes the generation of "locallang_plugin_<plugin name>.xlf".
 «ENDREM»
-
 «DEFINE Root FOR MInterface -»
+«IF isPlugin() && hasAttributes() -»
+«EXPAND LocallangPlugin -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
+«ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE LocallangPlugin FOR MInterface -»
 «EXPAND SourceLanguage -»
 
 «FOREACH navModel().emGetTypo3LocalizationLanguageKeys() AS targetLanguageKey -»
@@ -50,10 +65,6 @@
 «ENDFOREACH -»
 «ENDDEFINE»
 
-
-«REM»
-	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
-«ENDREM»
 
 «REM»
 «ENDREM»

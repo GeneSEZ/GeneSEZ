@@ -42,8 +42,20 @@
 «REM»
 	Processes the generation of "locallang_module_<module name>.xlf".
 «ENDREM»
-
 «DEFINE Root FOR MInterface -»
+«IF isModule() -»
+«EXPAND LocallangModule -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
+«ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE LocallangModule FOR MInterface -»
 «EXPAND SourceLanguage -»
 
 «FOREACH navModel().emGetTypo3LocalizationLanguageKeys() AS targetLanguageKey -»
@@ -51,10 +63,6 @@
 «ENDFOREACH -»
 «ENDDEFINE»
 
-
-«REM»
-	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
-«ENDREM»
 
 «REM»
 «ENDREM»

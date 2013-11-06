@@ -14,13 +14,6 @@
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
 «ENDREM»
 
-«REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3::cms::mvc::util::AccessElement»
-
-
-«REM» use GeneSEZ common access element scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::AccessElement»
-
 
 «REM»
 	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
@@ -42,10 +35,8 @@
 	Processes the contents of a class. 
 «ENDREM»
 «DEFINE Root FOR MClass -»
-«IF isEntity() || isValueObject() -»
-	«REM» Generate Localization code «ENDREM»
-	«EXPAND LocallangCshXlf::Root -»
-«ENDIF -»
+«REM» Generate Localization code «ENDREM»
+«EXPAND LocallangCshXlf::Root -»
 «ENDDEFINE»
 
 
@@ -53,14 +44,11 @@
 	Processes the contents of an interface. 
 «ENDREM»
 «DEFINE Root FOR MInterface -»
-«IF isPlugin() && hasAttributes() -»
-	«REM» Generate Localization code «ENDREM»
-	«EXPAND LocallangPluginXlf::Root -»
-«ENDIF -»
-«IF isModule() -»
-	«REM» Generate Localization code «ENDREM»
-	«EXPAND LocallangModuleXlf::Root -»
-«ENDIF -»
+«REM» Generate Localization code «ENDREM»
+«EXPAND LocallangPluginXlf::Root -»
+
+«REM» Generate Localization code «ENDREM»
+«EXPAND LocallangModuleXlf::Root -»
 «ENDDEFINE»
 
 
