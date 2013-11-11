@@ -1,75 +1,82 @@
+«REM»
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
 «IMPORT gcore»
+
+
 «REM»
 	Entry point for generating "ext_tables.sql".
 	
-	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
-	@date	2011-07-14
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
 «ENDREM»
 
-«REM» use TYPO3 MVC Extbase profile access helper scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::profile::ExtbaseAccessElement»
+«REM» use TYPO3 CMS profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
 
-«REM» use TYPO3 naming context and common naming scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::NamingContext»
+«REM» use TYPO3 CMS profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::profile::Typo3CmsExtbaseAccessElement»
 
-«REM» use TYPO3 MVC conversion scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Conversion»
 
-«REM» use TYPO3 MVC naming scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Naming»
+«REM» use GeneSEZ common Persistence profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezPersistenceAccessElement»
 
-«REM» use TYPO3 MVC access helper scripts which overrides «ENDREM»
-«REM» common access helper scripts if script name is equal «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::util::AccessElement»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::AccessElement»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid file system convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::FileSystemConvention»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
+
+
+«REM» use GeneSEZ common access element scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::AccessElement»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
 «ENDREM»
 
 «REM»
-	Processes the generation of "ext_tables.sql".
+	Processes the generation of "<table name of domain object>.php".
 «ENDREM»
 «DEFINE Root FOR MModel -»
-«EXPAND ContextSettings -»
-
-«FILE extTablesSQLFileNamePath() -»
-«EXPAND CreateConcreteTableDefinition FOREACH allConreteTableInheritances().sortBy( e | e.name ) -»
+«FILE filePathExtTablesSql() -»
+«REM»
+«EXPAND ConcreteTableDefinition FOREACH allConreteTableInheritances().sortBy( e | e.asPersistenceName() ) -»
 «EXPAND CreateSingleTableDefinition FOREACH allSingleTableInheritances().sortBy( e | e.name ) -»
-«EXPAND CreateMappingTableDefinition FOREACH allMappingTables().sortBy( e | e.name ) -»
+«EXPAND CreateTableMappingDefinition FOREACH allTableMappings().sortBy( e | e.name ) -»
 «EXPAND ConcreteIntermediateTables FOREACH allConreteTableInheritances().sortBy ( e | e.name ) -»
 «EXPAND SingleIntermediateTables FOREACH allSingleTableInheritances().sortBy ( e | e.name ) -»
-«EXPAND MappingIntermediateTables FOREACH allMappingTables().sortBy ( e | e.name ) -»
-«EXPAND OwnSQLDeclaration("ext_tables.sql.own.sql.declaration." + xmiGuid) -»
+«EXPAND MappingIntermediateTables FOREACH allTableMappings().sortBy ( e | e.name ) -»
+«ENDREM»
+«EXPAND OwnCode("ext_tables.sql.own.code." + xmiGuid) -»
 «ENDFILE -»
 «ENDDEFINE»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
 «ENDREM»
+
 
 «REM»
 	Sets the naming and type mapping context for this part of generation. 
 «ENDREM»
-«DEFINE ContextSettings FOR MModel -»
-«setInternalNamingContext( namingContextPersistence() ) -»
-«setExternalNamingContext( typeMappingContextSQLColumnDefinition() ) -»
-«ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE CreateConcreteTableDefinition FOR MClass -»
-«EXPAND CreateTableComment -»
-CREATE TABLE «name() -» (
-	«EXPAND CreateConcreteTableColumns -»
+«DEFINE ConcreteTableDefinition FOR MClass -»
+«EXPAND TableComment -»
+CREATE TABLE «asPersistenceName() -» (
+	«EXPAND ConcreteTableColumns -»
 );
 
 «ENDDEFINE»
@@ -77,10 +84,10 @@ CREATE TABLE «name() -» (
 
 «REM»
 «ENDREM»
-«DEFINE CreateSingleTableDefinition FOR MClass -»
-«EXPAND CreateTableComment -»
-CREATE TABLE «name() -» (
-	«EXPAND CreateSingleTableColumns -»
+«DEFINE SingleTableDefinition FOR MClass -»
+«EXPAND TableComment -»
+CREATE TABLE «asPersistenceName() -» (
+	«EXPAND SingleTableColumns -»
 );
 
 «ENDDEFINE»
@@ -88,28 +95,28 @@ CREATE TABLE «name() -» (
 
 «REM»
 «ENDREM»
-«DEFINE CreateMappingTableDefinition FOR MClass -»
-«EXPAND CreateTableComment -»
-CREATE TABLE «name() -» (
-	«EXPAND CreateMappingTableColumns -»
+«DEFINE CreateTableMappingDefinition FOR MClass -»
+«EXPAND TableComment -»
+CREATE TABLE «asPersistenceName() -» (
+	«EXPAND TableMappingColumns -»
 );
 
 «ENDDEFINE»
 
 
-«DEFINE CreateTableComment FOR MClass -»
+«DEFINE TableComment FOR MClass -»
 #
-# Table structure for table '«name( namingContextConfiguration() ) -»'
+# Table structure for table '«asConfigurationName() -»'
 #
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE CreateConcreteTableColumns FOR MClass -»
+«DEFINE ConcreteTableColumns FOR MClass -»
 	«EXPAND InternalManagementColumns -»
-	«EXPAND AttributeColumn FOREACH allInstanceAttributes() -»
-	«EXPAND AssociationColumn FOREACH allInstanceAssociationRoles() -»
+	«EXPAND AttributeColumn FOREACH allAttributes().select( a | !a.derived && !a.static ) -»
+	«EXPAND AssociationColumn FOREACH allAssociationRoles().select( ar | !ar.derived ) -»
 	
 	«EXPAND SortingColumn -»
 	«EXPAND AccessControlColumns -»
@@ -121,10 +128,10 @@ CREATE TABLE «name() -» (
 
 «REM»
 «ENDREM»
-«DEFINE CreateSingleTableColumns FOR MClass -»
+«DEFINE SingleTableColumns FOR MClass -»
 	«EXPAND RecordTypeColumn -»
-	«EXPAND AttributeColumn FOREACH  owningInitializableAttributes() -»
-	«EXPAND AssociationColumn FOREACH owningInitializableAssociationRoles() -»
+	«EXPAND AttributeColumn FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static ) -»
+	«EXPAND AssociationColumn FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived ) -»
 	
 	«EXPAND SortingColumn -»
 «ENDDEFINE»
@@ -132,10 +139,10 @@ CREATE TABLE «name() -» (
 
 «REM»
 «ENDREM»
-«DEFINE CreateMappingTableColumns FOR MClass -»
+«DEFINE TableMappingColumns FOR MClass -»
 	«EXPAND RecordTypeColumn -»
-	«EXPAND AttributeColumn FOREACH  owningInitializableAttributes().select( e | !e.hasT3ExtbaseColumnMappingStereotype() ) -»
-	«EXPAND AssociationColumn FOREACH owningInitializableAssociationRoles().select( e | !e.hasT3ExtbaseColumnMappingStereotype() ) -»
+	«EXPAND AttributeColumn FOREACH property.typeSelect(MAttribute).select( a | !a.emHasColumnMappingStereotype() ) -»
+	«EXPAND AssociationColumn FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.emHasColumnMappingStereotype() ) -»
 	
 	«EXPAND SortingColumn -»
 «ENDDEFINE»
@@ -145,8 +152,8 @@ CREATE TABLE «name() -» (
 	Generates TYPO3 specific columns for internal management.
 «ENDREM»
 «DEFINE InternalManagementColumns FOR MClass -»
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
+	uid int(11) unsigned NOT NULL auto_increment,
+	pid int(11) unsigned DEFAULT '0' NOT NULL,
 	
 «ENDDEFINE»
 
@@ -161,44 +168,18 @@ CREATE TABLE «name() -» (
 
 
 «REM»
-	Generate a column for an attribute.
-	It depends on the attribute type.
+	Generate a column for an attribute. It depends on the attribute type.
 «ENDREM»
 «DEFINE AttributeColumn FOR MAttribute -»
-«IF !type.isClassifier() -»
+«IF isTypo3PrimitiveType( type.asGeneralName() ) && type.asGuiType() != "Association" -»
 	«EXPAND ColumnDefault -»
 «ELSE -»
-«IF isOneToOneUnidirectional() -»
-	«EXPAND ColumnOneToOneUnidirectional -»
+«IF multiplicity.isSingleValued() -»
+	«EXPAND ColumnToOneUnidirectional -»
 «ELSE -»
-	«EXPAND ColumnOneToManyUnidirectional -»
+	«EXPAND ColumnToManyUnidirectional -»
 «ENDIF -»
 «ENDIF -»
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE ColumnDefault FOR MAttribute -»
-	«name() -» «type.name() -»,
-«ENDDEFINE»
-
-
-«REM»
-	Generate the necessary columns if the attribute is 1:1 unidirectional.
-«ENDREM»
-«DEFINE ColumnOneToOneUnidirectional FOR MAttribute -»
-	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
-«ENDDEFINE»
-
-
-«REM»
-	Generate the necessary columns if the attribute is 1:n unidirectional.
-	
-	An intermediate table will be generated and inside this column a counter is set.
-«ENDREM»
-«DEFINE ColumnOneToManyUnidirectional FOR MAttribute -»
-	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 
@@ -207,31 +188,59 @@ CREATE TABLE «name() -» (
 	It depends on the association type.
 «ENDREM»
 «DEFINE AssociationColumn FOR MAssociationRole -»
-«IF isOneToOneUnidirectional() -»
+«IF isOneToOne() && !hasOpposite() -»
 	«EXPAND ColumnOneToOneUnidirectional -»
-«ELSEIF isOneToOneBidirectional() -»
+«ELSEIF isOneToOne() && hasOpposite() -»
 	«EXPAND ColumnOneToOneBidirectional -»
-«ELSEIF isOneToManyUnidirectional() -»
+«ELSEIF isOneToMany() && !hasOpposite() -»
 	«EXPAND ColumnOneToManyUnidirectional -»
-«ELSEIF isOneToManyBidirectional() -»
+«ELSEIF isOneToMany() && hasOpposite() -»
 	«EXPAND ColumnOneToManyBidirectional -»
-«ELSEIF isManyToOneUnidirectional() -»
+«ELSEIF isManyToOne() && !hasOpposite() -»
 	«EXPAND ColumnManyToOneUnidirectional -»
-«ELSEIF isManyToOneBidirectional() -»
+«ELSEIF isManyToOne() && hasOpposite() -»
 	«EXPAND ColumnManyToOneBidirectional -»
-«ELSEIF isManyToManyUnidirectional() -»
+«ELSEIF isManyToMany() && !hasOpposite() -»
 	«EXPAND ColumnManyToManyUnidirectional -»
-«ELSEIF isManyToManyBidirectional() -»
+«ELSEIF isManyToMany() && hasOpposite() -»
 	«EXPAND ColumnManyToManyBidirectional -»
 «ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
+«ENDREM»
+«DEFINE ColumnDefault FOR MAttribute -»
+	«asPersistenceName() -» «type.asSqlColumnType() -»,
+«ENDDEFINE»
+
+
+«REM»
+	Generate the necessary columns if the attribute is :1 unidirectional.
+«ENDREM»
+«DEFINE ColumnToOneUnidirectional FOR MAttribute -»
+	«asPersistenceName() -» int(11) unsigned DEFAULT '0' NOT NULL,
+«ENDDEFINE»
+
+
+«REM»
+	Generate the necessary columns if the attribute is :n unidirectional.
+	
+	An intermediate table will be generated and inside this column a counter is set.
+«ENDREM»
+«DEFINE ColumnToManyUnidirectional FOR MAttribute -»
+	«asPersistenceName() -» int(11) unsigned DEFAULT '0' NOT NULL,
+«ENDDEFINE»
+
+
+
+
+
+«REM»
 	Generate the necessary columns if the association is 1:1 unidirectional.
 «ENDREM»
 «DEFINE ColumnOneToOneUnidirectional FOR MAssociationRole -»
-	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
+	«asPersistenceName() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 
@@ -240,7 +249,7 @@ CREATE TABLE «name() -» (
 «ENDREM»
 «DEFINE ColumnOneToOneBidirectional FOR MAssociationRole -»
 «IF classifier.name.compareTo( type.name() ) < 0 || !type.isClassifier() -»
-	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
+	«asPersistenceName() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDIF -»
 «ENDDEFINE»
 
@@ -251,7 +260,7 @@ CREATE TABLE «name() -» (
 	An intermediate table will be generated and inside this column a counter is set.
 «ENDREM»
 «DEFINE ColumnOneToManyUnidirectional FOR MAssociationRole -»
-	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
+	«asPersistenceName() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 
@@ -261,7 +270,7 @@ CREATE TABLE «name() -» (
 	Inside this column a counter is set.
 «ENDREM»
 «DEFINE ColumnOneToManyBidirectional FOR MAssociationRole -»
-	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
+	«asPersistenceName() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 
@@ -269,7 +278,7 @@ CREATE TABLE «name() -» (
 	Generate the necessary columns if the association is n:1 unidirectional.
 «ENDREM»
 «DEFINE ColumnManyToOneUnidirectional FOR MAssociationRole -»
-	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
+	«asPersistenceName() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 
@@ -277,7 +286,7 @@ CREATE TABLE «name() -» (
 	Generate the necessary columns if the association is n:1 bidirectional.
 «ENDREM»
 «DEFINE ColumnManyToOneBidirectional FOR MAssociationRole -»
-	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
+	«asPersistenceName() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 
@@ -287,7 +296,7 @@ CREATE TABLE «name() -» (
 	An intermediate table will be generated and inside this column a counter is set.
 «ENDREM»
 «DEFINE ColumnManyToManyUnidirectional FOR MAssociationRole -»
-	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
+	«asPersistenceName() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 
@@ -297,7 +306,7 @@ CREATE TABLE «name() -» (
 	An intermediate table will be generated and inside this column a counter is set.
 «ENDREM»
 «DEFINE ColumnManyToManyBidirectional FOR MAssociationRole -»
-	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
+	«asPersistenceName() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 
@@ -305,7 +314,7 @@ CREATE TABLE «name() -» (
 	Generates TYPO3 specific columns for sorting control.
 «ENDREM»
 «DEFINE SortingColumn FOR MClass -»
-«IF createSortingField() -»
+«IF emHasExtbaseDomainObjectCreateSortingField("true") -»
 	sorting int(11) unsigned DEFAULT '0' NOT NULL,
 	
 «ENDIF -»
@@ -318,17 +327,50 @@ CREATE TABLE «name() -» (
 «DEFINE AccessControlColumns FOR MClass -»
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
+	cruser_id int(11) unsigned DEFAULT '0' NOT NULL,
 	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
-«IF createHiddenField() -»
-	hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
-«ENDIF -»
-«IF createStarttimeField() -»
+	
+«ENDDEFINE»
+
+
+
+«REM»
+	Generates TYPO3 specific columns for starttime.
+«ENDREM»
+«DEFINE StarttimeColumn FOR MClass -»
+«IF emHasExtbaseDomainObjectCreateStarttimeField("true") -»
 	starttime int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDIF -»
-«IF createEndtimeField() -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates TYPO3 specific columns for endtime.
+«ENDREM»
+«DEFINE EndtimeColumn FOR MClass -»
+«IF emHasExtbaseDomainObjectCreateEndtimeField("true") -»
 	endtime int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDIF -»
-	
+«ENDDEFINE»
+
+
+«REM»
+	Generates TYPO3 specific columns for disabled.
+«ENDREM»
+«DEFINE DisabledColumn FOR MClass -»
+«IF emHasExtbaseDomainObjectCreateHiddenField("true") -»
+	hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates TYPO3 specific columns for fe group.
+«ENDREM»
+«DEFINE FeGroupColumn FOR MClass -»
+«IF emHasExtbaseDomainObjectCreateFeGroupField("true") -»
+	fe_group varchar(100) DEFAULT '0' NOT NULL,
+«ENDIF -»
 «ENDDEFINE»
 
 
@@ -336,7 +378,7 @@ CREATE TABLE «name() -» (
 	Generates TYPO3 specific columns for localization.
 «ENDREM»
 «DEFINE LocalizationColumns FOR MClass -»
-«IF createLocalizationFields() -»
+«IF emHasExtbaseDomainObjectCreateLocalizationFields("true") -»
 	sys_language_uid int(11) DEFAULT '0' NOT NULL,
 	l10n_parent int(11) DEFAULT '0' NOT NULL,
 	l10n_diffsource mediumblob NOT NULL,
@@ -349,7 +391,7 @@ CREATE TABLE «name() -» (
 	Generates TYPO3 specific columns for versioning.
 «ENDREM»
 «DEFINE VersioningColumns FOR MClass -»
-«IF createVersioningFields() -»
+«IF emHasExtbaseDomainObjectCreateVersioningFields("true") -»
 	t3ver_oid int(11) DEFAULT '0' NOT NULL,
 	t3ver_id int(11) DEFAULT '0' NOT NULL,
 	t3ver_wsid int(11) DEFAULT '0' NOT NULL,
@@ -371,8 +413,8 @@ CREATE TABLE «name() -» (
 «DEFINE KeyManagement FOR MClass -»
 	PRIMARY KEY (uid),
 	KEY parent (pid),
-«IF createVersioningFields() -»
-	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
+«IF emHasExtbaseDomainObjectCreateVersioningFields("true") -»
+	KEY t3ver_oid (t3ver_oid, t3ver_wsid),
 «ENDIF -»
 «ENDDEFINE»
 
@@ -423,25 +465,7 @@ CREATE TABLE «name() -» (
 
 «REM»
 «ENDREM»
-«DEFINE CreateIntermediateTableDefinitionUnidirectional(MClass class) FOR MProperty -»
-#
-# Intermediate table structure for table '«asIntermediateTableName(class) -»'
-#
-CREATE TABLE «asIntermediateTableName(class) -» (
-	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
-	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
-	sorting int(11) unsigned DEFAULT '0' NOT NULL,
-	
-	KEY uid_local (uid_local),
-	KEY uid_foreign (uid_foreign)
-);
-
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE CreateIntermediateTableDefinitionBidirectional(MClass class) FOR MProperty -»
+«DEFINE CreateIntermediateTableDefinition(MClass class) FOR MProperty -»
 #
 # Intermediate table structure for table '«asIntermediateTableName(class) -»'
 #
@@ -459,10 +483,10 @@ CREATE TABLE «asIntermediateTableName(class) -» (
 
 
 «REM»
-	Generates a region for own SQL declarations.
+	Generates a protected region for own code.
 «ENDREM»
-«DEFINE OwnSQLDeclaration(String id) FOR MModel -»
+«DEFINE OwnCode(String id) FOR MModel -»
 «PROTECT CSTART '# ' CEND '' ID (id)»
-# TODO: put your further code implementations here
+# TODO: put your further code here
 «ENDPROTECT»
 «ENDDEFINE»
