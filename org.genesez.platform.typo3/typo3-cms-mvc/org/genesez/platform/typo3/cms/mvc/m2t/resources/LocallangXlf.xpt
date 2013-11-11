@@ -110,8 +110,8 @@
 «DEFINE Body(String languageKey) FOR MModel -»
 		<body>
 			«FOREACH allEntitiesAndValueObjects().sortBy( do | do.asLocalizationName() ) AS domainObject -»
-				«EXPAND ClassLocalization(languageKey) FOR domainObject -»
-				«EXPAND PropertyLocalization(languageKey) FOREACH domainObject.property.select( p | !p.isStatic() ).sortBy( p | p.asLocalizationName() ) -»
+			«EXPAND ClassLocalization(languageKey) FOR domainObject -»
+			«EXPAND PropertyLocalization(languageKey) FOREACH domainObject.property.select( p | !p.isStatic() ).sortBy( p | p.asLocalizationName() ) -»
 				
 			«ENDFOREACH -»
 			«EXPAND OwnLocalizations(languageKey) -»
