@@ -31,6 +31,9 @@
 «REM» use GeneSEZ common access element scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::AccessElement»
 
+«REM» use GeneSEZ common conversion scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+
 «REM» use GeneSEZ common navigate element scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::NavigateElement»
 
@@ -114,6 +117,8 @@
 
 «DEFINE Body(String languageKey) FOR MClass -»
 		<body>
+			«EXPAND DescriptionLocalization(languageKey) -»
+			«EXPAND DetailsLocalization(languageKey) -»
 			«EXPAND PropertyLocalization(languageKey) FOREACH property.select( p | !p.derived && !p.isStatic() ).sortBy( p | p.asLocalizationCshName() ) -»
 			
 			«EXPAND OwnLocalizations(languageKey) -»
@@ -121,9 +126,28 @@
 «ENDDEFINE»
 
 
+«DEFINE DescriptionLocalization(String languageKey) FOR MClass -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_csh.xlf." + languageKey + ".description") DISABLE»
+			<trans-unit id=".description" xml:space="preserve">
+				<source>«comment("; ", "") -»</source>
+			</trans-unit>
+			«ENDPROTECT»
+«ENDDEFINE»
+
+
+«DEFINE DetailsLocalization(String languageKey) FOR MClass -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_csh.xlf." + languageKey + ".details") DISABLE»
+			<trans-unit id=".details" xml:space="preserve">
+				<source>«comment("; ", "") -»</source>
+			</trans-unit>
+			«ENDPROTECT»
+«ENDDEFINE»
+
+
+
 «DEFINE PropertyLocalization(String languageKey) FOR MProperty -»
 			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_csh.xlf." + languageKey + "." + xmiGuid) DISABLE»
-			<trans-unit id="«asLocalizationName() -».description" xml:space="preserve">
+			<trans-unit id="«asLocalizationCshName() -».description" xml:space="preserve">
 				<source>«name.toFirstUpper() -»</source>
 			</trans-unit>
 			«ENDPROTECT»
