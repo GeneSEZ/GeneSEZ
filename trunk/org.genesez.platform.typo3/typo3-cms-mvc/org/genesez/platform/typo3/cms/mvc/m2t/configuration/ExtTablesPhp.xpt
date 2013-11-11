@@ -228,10 +228,21 @@ if (TYPO3_MODE === 'BE') {
 «ENDREM»
 «DEFINE DomainObjectConfiguration FOR MModel -»
 «FOREACH allConreteTableInheritances().sortBy( do | do.asConfigurationName() ) AS domainObject -»
-	«EXPAND ContextSensitiveHelpInclusion FOR domainObject -»
 	«EXPAND AllowTableOnStandardPages FOR domainObject -»
+	«EXPAND ContextSensitiveHelpInclusion FOR domainObject -»
 	
 «ENDFOREACH -»
+«ENDDEFINE»
+
+
+«REM»
+	By default records can be created only in "Folder"-type pages. 
+	To enable the creation of records on any kind of page, this additional call must be made.
+«ENDREM»
+«DEFINE AllowTableOnStandardPages FOR MClass -»
+«IF !emHasExtbaseDomainObjectAllowTableOnStandardPages("false") -»
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('«asConfigurationName() -»');
+«ENDIF -»
 «ENDDEFINE»
 
 
@@ -254,17 +265,6 @@ if (TYPO3_MODE === 'BE') {
 «ENDREM»
 «DEFINE ContextSensitiveHelpInclusion(MClass class) FOR MClass -»
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('«class.asLocalizationCshName() -»', 'EXT:' . $_EXTKEY . '/«filePathLocallangCshXlf() -»');
-«ENDDEFINE»
-
-
-«REM»
-	By default records can be created only in "Folder"-type pages. 
-	To enable the creation of records on any kind of page, this additional call must be made.
-«ENDREM»
-«DEFINE AllowTableOnStandardPages FOR MClass -»
-«IF !emHasExtbaseDomainObjectAllowTableOnStandardPages("false") -»
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('«asConfigurationName() -»');
-«ENDIF -»
 «ENDDEFINE»
 
 
