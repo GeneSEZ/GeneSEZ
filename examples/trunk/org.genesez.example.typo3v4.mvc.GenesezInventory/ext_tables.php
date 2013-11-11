@@ -26,8 +26,8 @@ if (TYPO3_MODE === 'BE') {
 // TODO: put your further TypoScript code here
 /* PROTECTED REGION END */
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_gszinventory_domain_model_product', 'EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_csh_tx_gszinventory_domain_model_product.xlf');
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_gszinventory_domain_model_product');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_gszinventory_domain_model_product', 'EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_csh_tx_gszinventory_domain_model_product.xlf');
 	
 /* PROTECTED REGION ID(ext_tables.php.own.code.eee_1045467100313_135436_1) ENABLED START */
 // TODO: put your further code here
