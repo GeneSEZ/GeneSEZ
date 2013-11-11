@@ -36,7 +36,7 @@
 «EXPAND ExtTablesPhp::Root»
 
 «REM» Generate "ext_tables.sql" «ENDREM»
-«REM»«EXPAND ExtTablesSql::Root»«ENDREM»
+«EXPAND ExtTablesSql::Root»
 
 «REM» Generate TypoScript setup and constants code «ENDREM»
 «EXPAND TypoScriptConstantsTS::Root»
@@ -48,10 +48,8 @@
 	Processes the contents of a class. 
 «ENDREM»
 «DEFINE Root FOR MClass»
-«IF ( isEntity() || isValueObject() ) && isConcreteTableInheritance() && !isTableMapping() -»
-	«REM» Generate tca.php «ENDREM»
-	«EXPAND TCAPhp::Root -»
-«ENDIF -»
+«REM» Generate tca.php «ENDREM»
+«EXPAND TCAPhp::Root -»
 «ENDDEFINE»
 
 
@@ -59,10 +57,8 @@
 	Processes the contents of an interface. 
 «ENDREM»
 «DEFINE Root FOR MInterface -»
-«REM»«IF isPlugin() && hasAttributes() -»«ENDREM»
-	«REM» Generate Flexform code «ENDREM»
-	«REM»«EXPAND FlexformXml::Root -»«ENDREM»
-«REM»«ENDIF -»«ENDREM»
+«REM» Generate Flexform code «ENDREM»
+«EXPAND FlexformXml::Root -»
 «ENDDEFINE»
 
 
@@ -71,7 +67,6 @@
 «ENDREM»
 «DEFINE Root FOR MClassifier -»
 «ENDDEFINE»
-
 
 
 «REM»
