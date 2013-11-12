@@ -24,29 +24,7 @@
 «EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
 
 
-
-
-
-«REM» use TYPO3 profile access helper scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::profile::AccessElement»
-
-«REM» use TYPO3 naming context and common naming scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::NamingContext»
-
-«REM» use TYPO3 MVC convention scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Convention»
-
-«REM» use TYPO3 MVC conversion scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::mvc::convention::Conversion»
-
-«REM» use TYPO3 naming scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::convention::Naming»
-
-«REM» use TYPO3 TCx access helper scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3cms::util::TCxAccessElement»
-
-«REM» use common access helper scripts «ENDREM»
+«REM» use GeneSEZ common access element scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::AccessElement»
 
 
@@ -55,14 +33,12 @@
 «ENDREM»
 
 «REM»
-	Processes the generation of "ext_localconf.php".
+	Processes the generation of "flexform_<plugin>.xml".
 «ENDREM»
 «DEFINE Root FOR MInterface -»
-«REM»
-«FILE filePathFlexFormXml() -»
-«EXPAND T3DataStructure -»
-«ENDFILE -»
-«ENDREM»
+«IF isPlugin() && hasAttributes() -»
+«EXPAND FlexForm -»
+«ENDIF -»
 «ENDDEFINE»
 
 
@@ -70,46 +46,37 @@
 	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
 «ENDREM»
 
-«REM»
-	Sets the naming and type mapping context for this part of generation. 
-«ENDREM»
-«DEFINE ContextSettings FOR MInterface -»
-«setInternalNamingContext( namingContextConfiguration() ) -»
-«setExternalNamingContext( typeMappingContextTYPO3TCx() ) -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE T3DataStructure FOR MInterface -»
+«DEFINE FlexForm FOR MInterface -»
+«FILE filePathFlexFormXml() -»
 <T3DataStructure>
 	<sheets>
 		«EXPAND Sheet("sDEF") -»
-		«FOREACH allTceSheetsWithoutDefault() AS sheet -»
-			«EXPAND Sheet(sheet) -»
+		«FOREACH allFlexFormSheetsWithoutSdef() AS sheetName -»
+		«EXPAND Sheet(sheetName) -»
 		«ENDFOREACH -»
-		«EXPAND OwnCodeImplementation("flexform.xml.own.code.implementation." + xmiGuid) -» 
+		«EXPAND OwnCode("flexform.xml.own.code." + xmiGuid) -» 
 	</sheets>
 </T3DataStructure>
+«ENDFILE -»
 «ENDDEFINE»
 
 
-«DEFINE Sheet(String sheet) FOR MInterface -»
-		<«sheet -»>
+«DEFINE Sheet(String sheetName) FOR MInterface -»
+		<«sheetName -»>
 			<ROOT>
-				«EXPAND TCEforms(sheet) -»
+				«EXPAND TceForms(sheetName) -»
 				«EXPAND Type -»
-				«EXPAND El(sheet) -»
+				«EXPAND El(sheetName) -»
 			</ROOT>
-		</«sheet -»>
+		</«sheetName -»>
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE TCEforms(String sheet) FOR MInterface -»
+«DEFINE TceForms(String sheetName) FOR MInterface -»
 				<TCEforms>
-					<sheetTitle>LLL:EXT:«extensionKey() -»/«locallangFFXMLFileNamePath() -»:«sheet -»</sheetTitle>
+					<sheetTitle>LLL:EXT:«extensionKey() -»/«filePathFlexFormXml() -»:«sheetName -»</sheetTitle>
 				</TCEforms>
 «ENDDEFINE»
 
@@ -123,17 +90,17 @@
 
 «REM» 
 «ENDREM»
-«DEFINE El(String sheet) FOR MInterface -»
+«DEFINE El(String sheetName) FOR MInterface -»
 				<el>
-					«EXPAND Option FOREACH allTCESheetProperties(sheet) -»
-					«EXPAND OwnOptionCodeImplementation("flexform.xml.own.option.code.implementation." + sheet + "." + xmiGuid) -»
+					«REM»«EXPAND Option FOREACH allFlexFormSheetProperties(sheetName) -»«ENDREM»
+					«EXPAND OwnSheetElementCode("flexform.xml.own.sheet.element.code." + sheetName + "." + xmiGuid) -»
 				</el>
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE Option FOR MAttribute -»
+«DEFINE SheetElement FOR MAttribute -»
 					<settings.«name() -»>
 						«EXPAND TCEforms -»
 					</settings.«name() -»>
@@ -141,11 +108,11 @@
 
 
 «REM»
-	generates a region for own TCE Option Config code implementations
+	Generates a protected region for own FlexForm Sheet Element code
 «ENDREM»
-«DEFINE OwnOptionCodeImplementation(String id) FOR MInterface -»
+«DEFINE OwnSheetElementCode(String id) FOR MInterface -»
 					«PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
-					<!-- TODO: put your further TCE Flexform Option code implementations here -->
+					<!-- TODO: put your further 'sheet element' code here -->
 					«ENDPROTECT»
 «ENDDEFINE»
 
@@ -626,10 +593,10 @@ hier evtl. versuch über sql type maximum herauszufinden
 
 
 «REM»
-	generates a region for own code implementations
+	Generates a protected region for own code.
 «ENDREM»
-«DEFINE OwnCodeImplementation(String id) FOR MInterface -»
+«DEFINE OwnCode(String id) FOR MInterface -»
 		«PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
-		<!-- TODO: put your further code implementations here -->
+		<!-- TODO: put your further code here -->
 		«ENDPROTECT»
 «ENDDEFINE»
