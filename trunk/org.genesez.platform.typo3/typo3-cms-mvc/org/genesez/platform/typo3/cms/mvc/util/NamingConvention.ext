@@ -22,15 +22,15 @@ extension org::genesez::platform::typo3::cms::util::NamingConvention reexport;
 extension org::genesez::platform::typo3::cms::mvc::profile::Typo3CmsExtbaseProfile;
 
 
-// use GeneSEZ common Persistence profile scripts
-extension org::genesez::metamodel::core::util::profile::GenesezPersistenceAccessElement;
-
-
 // use TYPO3 CMS specific Extbase + Fluid access element scripts
 extension org::genesez::platform::typo3::cms::mvc::util::AccessElement;
 
 // use TYPO3 CMS specific Extbase + Fluid file system convention scripts
 extension org::genesez::platform::typo3::cms::mvc::util::FileSystemConvention;
+
+
+// use GeneSEZ common Persistence profile scripts
+extension org::genesez::metamodel::core::util::profile::GenesezPersistenceAccessElement;
 
 
 // use GeneSEZ common access element scripts
@@ -287,6 +287,36 @@ cached String asConfigurationName(MClassifier this) :
 		: extensionPrefix() + "_" + asShortGeneralName().toLowerUnderscore();
 
 
+// -- "Localization" naming context --
+
+/**
+ * Formats the name of a classifier in "Localization" naming context.
+ * E.g.: If the extension key is "blog_example", the corresponding extension package name is "BlogExample"
+ *       and the domain object class "Blog" is modeled inside package path "Classes/Domain/Model" 
+ *       then this method returns "tx_blogexample_domain_model_blog".
+ * 
+ * @return	The formatted classifier name.
+ * @see		asConfigurationName(MClassifier this)
+ */
+cached String asLocalizationName(MClassifier this) :
+	asConfigurationName();
+
+
+// -- "LocalizationCsh" naming context --
+
+/**
+ * Formats the name of a classifier in "LocalizationCsh" naming context.
+ * E.g.: If the extension key is "blog_example", the corresponding extension package name is "BlogExample"
+ *       and the domain object class "Blog" is modeled inside package path "Classes/Domain/Model" 
+ *       then this method returns "tx_blogexample_domain_model_blog".
+ * 
+ * @return	The formatted classifier name.
+ * @see		asConfigurationName(MClassifier this)
+ */
+cached String asLocalizationCshName(MClassifier this) :
+	asConfigurationName();
+
+
 // -- "Persistence" naming context --
 
 /**
@@ -321,36 +351,6 @@ cached String asPersistenceName(MExternal this) :
  */
 cached String asPersistenceName(MType this) :
 	mapName();
-
-
-// -- "Localization" naming context --
-
-/**
- * Formats the name of a classifier in "Localization" naming context.
- * E.g.: If the extension key is "blog_example", the corresponding extension package name is "BlogExample"
- *       and the domain object class "Blog" is modeled inside package path "Classes/Domain/Model" 
- *       then this method returns "tx_blogexample_domain_model_blog".
- * 
- * @return	The formatted classifier name.
- * @see		asConfigurationName(MClassifier this)
- */
-cached String asLocalizationName(MClassifier this) :
-	asConfigurationName();
-
-
-// -- "LocalizationCsh" naming context --
-
-/**
- * Formats the name of a classifier in "LocalizationCsh" naming context.
- * E.g.: If the extension key is "blog_example", the corresponding extension package name is "BlogExample"
- *       and the domain object class "Blog" is modeled inside package path "Classes/Domain/Model" 
- *       then this method returns "tx_blogexample_domain_model_blog".
- * 
- * @return	The formatted classifier name.
- * @see		asConfigurationName(MClassifier this)
- */
-cached String asLocalizationCshName(MClassifier this) :
-	asConfigurationName();
 
 
 // -- TYPO3 CMS specific Extbase + Fluid property name conventions ------------------------------------------
@@ -402,20 +402,6 @@ cached String asConfigurationName(MProperty this) :
 	name.toLowerUnderscore();
 
 
-// -- "Persistence" naming context --
-
-/**
- * Formats the name of an attribute or association role in "Persistence" naming context.
- * E.g.: Attribute or accociation role "blogPosts" would become "blog_posts".
- * 
- * @return	The formatted attribute or association role name.
- */
-cached String asPersistenceName(MProperty this) :
-	emHasColumnMappingStereotype()
-		? emGetColumnMappingColumnName()
-		: asConfigurationName();
-
-
 // -- "Localization" naming context --
 
 /**
@@ -444,6 +430,100 @@ cached String asLocalizationName(MProperty this) :
  */
 cached String asLocalizationCshName(MProperty this) :
 	asConfigurationName();
+
+
+// -- "Persistence" naming context --
+
+/**
+ * Formats the name of an attribute or association role in "Persistence" naming context.
+ * E.g.: Attribute or accociation role "blogPosts" would become "blog_posts".
+ * 
+ * @return	The formatted attribute or association role name.
+ */
+cached String asPersistenceName(MProperty this) :
+	emHasColumnMappingStereotype()
+		? emGetColumnMappingColumnName()
+		: asConfigurationName();
+
+
+// -- "IntermediateTable" naming context --
+
+/**
+ * Formats the name of an attribute in "IntermediateTable" naming context.
+ * E.g.: If the extension key is "blog_example", the corresponding extension package name is "BlogExample"
+ *       and the domain object class "Post" has an attribute "tags" with a multiplicity of "0..*" 
+ *       and a reference type to the domain object class "Tag"
+ *       then this method returns "tx_blogexample_post_tag_tags_mm".
+ *
+ * @return	The formatted attribute name.
+ */
+String asIntermediateTableName(MAttribute this, MClass class) :
+	// tx_blogexample_
+	extensionPrefix() + "_"
+		// post_
+		+ class.asShortGeneralName().toLowerUnderscore() + "_"
+			// tag_
+			+ type.asShortGeneralName().toLowerUnderscore() + "_"
+				// tags
+	 			+ asPersistenceName()
+					// _mm  
+					+ "_mm";
+
+
+/**
+ * Formats the name of an association role in "IntermediateTable" naming context.
+ * E.g.: If the extension key is "blog_example", the corresponding extension package name is "BlogExample"
+ *       and the domain object class "Post" has an association role "tags" with a multiplicity of "0..*",
+ *       an unidirectional direction and a reference type to the domain object class "Tag"
+ *       then this method returns "tx_blogexample_post_tag_tags_mm".
+ *
+ * @return	The formatted association role name.
+ */
+String asIntermediateTableName(MAssociationRole this, MClass class) :
+	// tx_blogexample_
+	extensionPrefix() + "_"
+	+	( !hasOpposite()
+			?	(	// post_
+					class.asShortGeneralName().toLowerUnderscore() + "_"
+						// tag_
+						+ type.asShortGeneralName().toLowerUnderscore() + "_"
+							// tags 
+							+ asPersistenceName()
+				)
+			: 	(	// compare the class name and the type name
+					class.asShortGeneralName().compareTo( type.asShortGeneralName() ) < 0
+						?	(	// post
+								class.asShortGeneralName().toLowerUnderscore() + "_"
+									// posts
+									+ opposite.asPersistenceName() + "_"
+										// tag
+										+ type.asShortGeneralName().toLowerUnderscore() + "_"
+											// tags 
+											+ asPersistenceName()
+							)
+						: 	(	// comment
+								type.asShortGeneralName().toLowerUnderscore() + "_"
+									// comments
+									+ asPersistenceName() + "_"
+										// post
+										+ class.asShortGeneralName().toLowerUnderscore() + "_"
+											// post
+											+ opposite.asPersistenceName()
+							)
+				)
+		)
+		// _mm  
+		+ "_mm";
+
+
+/**
+ * Formats the name of an property in "IntermediateTable" naming context.
+ * 
+ * @return	The formatted association role name.
+ * @todo	Log error
+ */
+String asIntermediateTableName(MProperty this, MClass class) :
+	"";
 
 
 // -- TYPO3 CMS specific Extbase + Fluid accessor conventions for attributes --------------------------------
@@ -715,41 +795,7 @@ private create MExternal createExternalTypeOfValidatorStereotype(MStereotype val
 	this;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 MVC controller
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// -- TYPO3 CMS specific Extbase controller conventions -----------------------------------------------------
 
 /**
  * This method convert assigned controller actions of a TYPO3 CMS plugin or module.
@@ -761,14 +807,7 @@ List[String] asExtbaseControllerActionPairs(List[MOperation] operations) :
 	JAVA org.genesez.platform.typo3.cms.mvc.convention.Conversion.asControllerActionPairs(java.util.List);
 
 
-
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 MVC plugins and modules
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// -- TYPO3 CMS specific Extbase plugin conventions ---------------------------------------------------------
 
 String asPluginFlexformName(MInterface this) :
 	"flexform_" + name.toLowerCase();
@@ -789,13 +828,7 @@ String asExtbasePluginType(String pluginType) :
 	};
 
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 MVC persistence
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-
+// -- TYPO3 CMS specific Extbase persistance conventions ----------------------------------------------------
 
 /**
  * Formats an external in "SqlColumnType" context.
@@ -835,83 +868,3 @@ cached String asGuiType(MExternal this) :
  */
 cached String asGuiType(MType this) :
 	mapName();
-
-
-
-
-
-
-
-
-/**
- * Returns the intermediate table name for an attribute.
- * 
- * For instance: The extension key is "blog_example" and we have a
- * class "Post" which has a 1:n attribute called "tags" to the class "Tag".
- * Because this is like a 1:n unidirectional association we need a
- * intermediate table. This method returns "tx_blogexample_post_tag_tags_mm".
- */
-String asIntermediateTableName(MAttribute this, MClass class) :
-	// tx_blogexample_
-	fullQualifiedExtensionNameToLowerCase() + "_"
-		// post_
-		+ class.asIntermediateTableName() + "_"
-			// tag_
-			+ type.asIntermediateTableName() + "_"
-				// tags
-	 			+ name()
-					// _mm  
-					+ "_mm";
-
-
-/**
- * Returns the intermediate table name for a association role.
- * This method needs to be called in SQL context.
- * 
- * For instance: The extension key is "blog_example" and we have a
- * class "Post" which has a 1:n association role called "tags" to the class "Tag".
- * Because this is a 1:n association we need a intermediate table. 
- * This method returns "tx_blogexample_post_tag_tags_mm".
- */
-String asIntermediateTableName(MAssociationRole this, MClass class) :
-	// tx_blogexample_
-	fullQualifiedExtensionNameToLowerCase() + "_"
-	+	( !hasOpposite()
-			?	(	// post_
-					class.asIntermediateTableName() + "_"
-						// tag_
-						+ type.asIntermediateTableName() + "_"
-							// tags 
-							+ name()
-				)
-			: 	(	// compare the class name and the type name
-					class.name().compareTo( type.name() ) < 0
-						?	(	// post
-								class.asIntermediateTableName() + "_"
-									// posts
-									+ opposite.name() + "_"
-										// tag
-										+ type.asIntermediateTableName() + "_"
-											// tags 
-											+ name()
-							)
-						: 	(	// comment
-								type.asIntermediateTableName() + "_"
-									// comments
-									+ name() + "_"
-										// post
-										+ class.asIntermediateTableName() + "_"
-											// post
-											+ opposite.name()
-							)
-				)
-		)
-	// _mm  
-	+ "_mm";
-
-
-String asIntermediateTableName(MProperty this, MClass class) :
-	"";
-
-
-
