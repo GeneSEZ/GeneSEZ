@@ -19,7 +19,6 @@ CREATE TABLE tx_gszinventory_domain_model_product (
 	KEY parent (pid),
 );
 
-
 # PROTECTED REGION ID(ext_tables.sql.own.code.eee_1045467100313_135436_1) ENABLED START
 # TODO: put your further code here
 # PROTECTED REGION END
