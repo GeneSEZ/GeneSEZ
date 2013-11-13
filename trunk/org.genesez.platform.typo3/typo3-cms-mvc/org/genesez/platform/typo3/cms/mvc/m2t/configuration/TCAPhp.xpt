@@ -90,19 +90,15 @@ return array(
 		«EXPAND CtrlLabelAltForce -»
 		«EXPAND CtrlType -»
 		«EXPAND CtrlHideTable -»
-		«EXPAND CtrlIconFile -»
-		«EXPAND CtrlSortBy -»
-		«EXPAND CtrlTstamp -»
-		«EXPAND CtrlCrdate -»
-		«EXPAND CtrlCruserId -»
 		«EXPAND CtrlReadOnly -»
 		«EXPAND CtrlAdminOnly -»
-		«EXPAND CtrlOrigUid -»
-		«EXPAND CtrlDelete -»
-		«EXPAND CtrlEnablecolumns -»
+		«EXPAND CtrlIconFile -»
+		«EXPAND CtrlSortingSupport -»
+		«EXPAND CtrlEditingSupport -»
+		«EXPAND CtrlPublishingSupport -»
+		«EXPAND CtrlLocalizationSupport -»
+		«EXPAND CtrlVersioningSupport -»
 		«EXPAND CtrlSearchFields -»
-		«EXPAND CtrlLocalization -»
-		«EXPAND CtrlVersioning -»
 		«EXPAND CtrlDividers2tabs -»
 		«EXPAND OwnCtrlSectionCode("tca.php.own.ctrl.section.code." + xmiGuid) -»
 	),
@@ -164,6 +160,24 @@ return array(
 «ENDDEFINE»
 
 
+«REM» 
+«ENDREM»
+«DEFINE CtrlReadOnly FOR MClass -»
+«IF emHasTypo3TcaCtrlReadOnly("true") -»
+		'readOnly' => «emGetTypo3TcaCtrlReadOnly().asTypo3Boolean() -»,
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE CtrlAdminOnly FOR MClass -»
+«IF emHasTypo3TcaCtrlAdminOnly("true") -»
+		'adminOnly' => «emGetTypo3TcaCtrlAdminOnly().asTypo3Boolean() -»,
+«ENDIF-»
+«ENDDEFINE»
+
+
 «REM»
 	Pointing to the icon file to use for the table.
 «ENDREM»
@@ -172,13 +186,27 @@ return array(
 «ENDDEFINE»
 
 
+«DEFINE CtrlSortingSupport FOR MClass -»
+«IF emHasExtbaseDomainObjectCreateSortingField("true") -»
+		«EXPAND CtrlSortBy -»
+«ENDIF -»
+«ENDDEFINE»
+
+
 «REM»
 	Field name, which is used to manage the order of the records.
 «ENDREM»
 «DEFINE CtrlSortBy FOR MClass -»
-«IF emHasExtbaseDomainObjectCreateSortingField("true") -»
 		'sortby' => 'sorting',
-«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE CtrlEditingSupport FOR MClass -»
+		«EXPAND CtrlTstamp -»
+		«EXPAND CtrlCrdate -»
+		«EXPAND CtrlCruserId -»
+		«EXPAND CtrlDelete -»
+		«EXPAND CtrlOrigUid -»
 «ENDDEFINE»
 
 
@@ -206,21 +234,11 @@ return array(
 «ENDDEFINE»
 
 
-«REM» 
+«REM»
+	Field name, which indicates if a record is considered deleted or not.
 «ENDREM»
-«DEFINE CtrlReadOnly FOR MClass -»
-«IF emHasTypo3TcaCtrlReadOnly("true") -»
-		'readOnly' => «emGetTypo3TcaCtrlReadOnly().asTypo3Boolean() -»,
-«ENDIF-»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE CtrlAdminOnly FOR MClass -»
-«IF emHasTypo3TcaCtrlAdminOnly("true") -»
-		'adminOnly' => «emGetTypo3TcaCtrlAdminOnly().asTypo3Boolean() -»,
-«ENDIF-»
+«DEFINE CtrlDelete FOR MClass -»
+		'delete' => 'deleted',
 «ENDDEFINE»
 
 
@@ -233,10 +251,11 @@ return array(
 
 
 «REM»
-	Field name, which indicates if a record is considered deleted or not.
 «ENDREM»
-«DEFINE CtrlDelete FOR MClass -»
-		'delete' => 'deleted',
+«DEFINE CtrlPublishingSupport FOR MClass -»
+«IF emHasExtbaseDomainObjectCreateHiddenField("true") || emHasExtbaseDomainObjectCreateStarttimeField("true") || emHasExtbaseDomainObjectCreateEndtimeField("true") || emHasExtbaseDomainObjectCreateFeGroupField("true") -»
+		«EXPAND CtrlEnablecolumns -»
+«ENDIF -»
 «ENDDEFINE»
 
 
@@ -244,14 +263,12 @@ return array(
 	Specifies which publishing control features are automatically implemented for the table.
 «ENDREM»
 «DEFINE CtrlEnablecolumns FOR MClass -»
-«IF emHasExtbaseDomainObjectCreateHiddenField("true") || emHasExtbaseDomainObjectCreateStarttimeField("true") || emHasExtbaseDomainObjectCreateEndtimeField("true") || emHasExtbaseDomainObjectCreateFeGroupField("true") -»
 		'enablecolumns' => array(
 			«EXPAND CtrlEnablecolumnsDisabled -»
 			«EXPAND CtrlEnablecolumnsStarttime -»
 			«EXPAND CtrlEnablecolumnsEndtime -»
 			«EXPAND CtrlEnablecolumnsFeGroup -»
 		),
-«ENDIF -»
 «ENDDEFINE»
 
 
@@ -291,14 +308,7 @@ return array(
 «ENDDEFINE»
 
 
-«REM»
-«ENDREM»
-«DEFINE CtrlSearchFields FOR MClass -»
-		'searchFields' => '«IF emHasTypo3TcaUtilizableCtrlSearchFields() -»«FOREACH emGetTypo3TcaCtrlSearchFields() AS searchField SEPARATOR ", " -»«searchField.asConfigurationName() -»«ENDFOREACH -»«ELSE -»«FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static ) AS searchField SEPARATOR ", " -»«searchField.asConfigurationName() -»«ENDFOREACH -»«ENDIF -»',
-«ENDDEFINE»
-
-
-«DEFINE CtrlLocalization FOR MClass -»
+«DEFINE CtrlLocalizationSupport FOR MClass -»
 «IF emHasExtbaseDomainObjectCreateLocalizationFields("true") -»
 		«EXPAND CtrlLanguageField -»
 		«EXPAND CtrlTransOrigPointerField -»
@@ -331,7 +341,7 @@ return array(
 «ENDDEFINE»
 
 
-«DEFINE CtrlVersioning FOR MClass -»
+«DEFINE CtrlVersioningSupport FOR MClass -»
 «IF emHasExtbaseDomainObjectCreateVersioningFields("true") -»
 		«EXPAND CtrlVersioningWs -»
 		«EXPAND CtrlVersioningFollowPages -»
@@ -352,6 +362,13 @@ return array(
 «ENDREM»
 «DEFINE CtrlVersioningFollowPages FOR MClass -»
 		'versioning_followPages' => TRUE,
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE CtrlSearchFields FOR MClass -»
+		'searchFields' => '«IF emHasTypo3TcaUtilizableCtrlSearchFields() -»«FOREACH emGetTypo3TcaCtrlSearchFields() AS searchField SEPARATOR ", " -»«searchField.asConfigurationName() -»«ENDFOREACH -»«ELSE -»«FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static ) AS searchField SEPARATOR ", " -»«searchField.asConfigurationName() -»«ENDFOREACH -»«ENDIF -»',
 «ENDDEFINE»
 
 
@@ -409,21 +426,18 @@ return array(
 «ENDREM»
 «DEFINE ColumnsSection FOR MClass -»
 	'columns' => array(
-		«EXPAND ColumnsRecordType -»
-		«EXPAND ColumnsHidden -»
-		«EXPAND ColumnsStarttime -»
-		«EXPAND ColumnsEndtime -»
-		«EXPAND ColumnsFeGroup -»
-		«EXPAND ColumnsLocalization -»
-		«EXPAND ColumnsVersioning -»
+		«EXPAND ColumnsType -»
+		«EXPAND ColumnsPublishingSupport -»
+		«EXPAND ColumnsLocalizationSupport -»
+		«EXPAND ColumnsVersioningSupport -»
 		«EXPAND ColumnsAttribute(this) FOREACH allAttributes().select( a | !a.derived && !a.static ) -»
 		«FOREACH allSingleTableInheritanceSpecializations() AS s -»
 		«EXPAND ColumnsAttribute(s) FOREACH s.property.typeSelect(MAttribute).select( a | !a.derived && !a.static ) -»
 		«ENDFOREACH -»
-		«REM»«EXPAND ColumnsAssociation(this) FOREACH allAssociationRoles().select( ar | !ar.derived ) -»
+		«EXPAND ColumnsAssociation(this) FOREACH allAssociationRoles().select( ar | !ar.derived ) -»
 		«FOREACH allSingleTableInheritanceSpecializations() AS s -»
 		«EXPAND ColumnsAssociation(s) FOREACH s.property.typeSelect(MAssociationRole).select( ar | !ar.derived ) -»
-		«ENDFOREACH -»«ENDREM»
+		«ENDFOREACH -»
 		«EXPAND OwnColumnsSectionCode("tca.php.own.columns.section.code." + xmiGuid) -»
 	),
 «ENDDEFINE»
@@ -431,7 +445,7 @@ return array(
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnsRecordType FOR MClass -»
+«DEFINE ColumnsType FOR MClass -»
 «IF !allSingleTableInheritanceSpecializations().isEmpty && getPersistenceRecordTypeColumnName().length != 0 -»
 		'«getPersistenceRecordTypeColumnName() -»' => array(
 			'label' => 'Type',
@@ -450,9 +464,19 @@ return array(
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
+«DEFINE ColumnsPublishingSupport FOR MClass -»
+		«EXPAND ColumnsDisabled -»
+		«EXPAND ColumnsStarttime -»
+		«EXPAND ColumnsEndtime -»
+		«EXPAND ColumnsFeGroup -»
+«ENDDEFINE»
+
+
 «REM» 
 «ENDREM»
-«DEFINE ColumnsHidden FOR MClass -»
+«DEFINE ColumnsDisabled FOR MClass -»
 «IF emHasExtbaseDomainObjectCreateHiddenField("true") -»
 		'hidden' => array(
 			'exclude' => TRUE,
@@ -531,18 +555,18 @@ return array(
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnsLocalization FOR MClass -»
+«DEFINE ColumnsLocalizationSupport FOR MClass -»
 «IF emHasExtbaseDomainObjectCreateLocalizationFields("true") -»
-	«EXPAND ColumnsSysLanguageUid -»
-	«EXPAND ColumnsL10nParent -»
-	«EXPAND ColumnsL10nDiffsource -»
+		«EXPAND ColumnsLanguageField -»
+		«EXPAND ColumnsTransOrigPointerField -»
+		«EXPAND ColumnsTransOrigDiffSourceField -»
 «ENDIF -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnsSysLanguageUid FOR MClass -»
+«DEFINE ColumnsLanguageField FOR MClass -»
 		'sys_language_uid' => array(
 			'exclude' => TRUE,
 			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
@@ -561,7 +585,7 @@ return array(
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnsL10nParent FOR MClass -»
+«DEFINE ColumnsTransOrigPointerField FOR MClass -»
 		'l10n_parent' => array(
 			'exclude' => TRUE,
 			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.l18n_parent',
@@ -580,7 +604,7 @@ return array(
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnsL10nDiffsource FOR MClass -»
+«DEFINE ColumnsTransOrigDiffSourceField FOR MClass -»
 		'l10n_diffsource' => array(
 			'config' =>array(
 				'type' =>'passthrough',
@@ -591,7 +615,7 @@ return array(
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnsVersioning FOR MClass -»
+«DEFINE ColumnsVersioningSupport FOR MClass -»
 «IF emHasExtbaseDomainObjectCreateVersioningFields("true") -»
 	«EXPAND ColumnsT3verLabel -»
 «ENDIF -»
@@ -685,7 +709,7 @@ return array(
 «ENDREM»
 «DEFINE ColumnConfig(MClass class) FOR MAttribute -»
 			'config' => array(
-«IF isTypo3PrimitiveType( type.asGeneralName() ) && type.asGuiType() != "Association" -»
+			«IF isTypo3PrimitiveType( type.asGeneralName() ) && type.asGuiType() != "Association" -»
 			«IF type.asGuiType() == "Input" -»
 				«EXPAND ColumnConfigTypeInput -»
 			«ELSEIF type.asGuiType() == "Integer" -»
@@ -735,13 +759,13 @@ return array(
 			«ELSE -»
 				«EXPAND ColumnConfigTypeOther( type.asGuiType() ) -»
 			«ENDIF -»
-«ELSE -»
+			«ELSE -»
 			«IF multiplicity.isSingleValued() -»
 				«EXPAND ColumnConfigTypeToOneUnidirectional(class) -»
 			«ELSE -»
 				«EXPAND ColumnConfigTypeToManyUnidirectional(class) -»
 			«ENDIF -»
-«ENDIF -»
+			«ENDIF -»
 			«EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
 			),
 «ENDDEFINE»
@@ -776,260 +800,259 @@ return array(
 «REM»
 «ENDREM»
 «DEFINE ColumnConfigTypeInput FOR MAttribute -»
-«EXPAND ColumnConfigType("input") -»
-«EXPAND ColumnConfigSize(30) -»
-«EXPAND ColumnConfigMax(null) -»
-«EXPAND ColumnConfigDefault(null) -»
-«EXPAND ColumnConfigEval(null) -»
+				«EXPAND ColumnConfigType("input") -»
+				«EXPAND ColumnConfigSize(30) -»
+				«EXPAND ColumnConfigMax(null) -»
+				«EXPAND ColumnConfigDefault(null) -»
+				«EXPAND ColumnConfigEval(null) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeInteger FOR MAttribute -»
-«EXPAND ColumnConfigType("input") -»
-«EXPAND ColumnConfigSize(30) -»
-«EXPAND ColumnConfigDefault(null) -»
-«EXPAND ColumnConfigEval({"int"}) -»
+				«EXPAND ColumnConfigType("input") -»
+				«EXPAND ColumnConfigSize(30) -»
+				«EXPAND ColumnConfigDefault(null) -»
+				«EXPAND ColumnConfigEval({"int"}) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeFloat FOR MAttribute -»
-«EXPAND ColumnConfigType("input") -»
-«EXPAND ColumnConfigSize(30) -»
-«EXPAND ColumnConfigDefault(null) -»
-«EXPAND ColumnConfigEval({"double2"}) -»
+				«EXPAND ColumnConfigType("input") -»
+				«EXPAND ColumnConfigSize(30) -»
+				«EXPAND ColumnConfigDefault(null) -»
+				«EXPAND ColumnConfigEval({"double2"}) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeDateTime FOR MAttribute -»
-«EXPAND ColumnConfigType("input") -»
-«EXPAND ColumnConfigSize(16) -»
-«EXPAND ColumnConfigDefault("time()") -»
-«EXPAND ColumnConfigEval({"datetime"}) -»
+				«EXPAND ColumnConfigType("input") -»
+				«EXPAND ColumnConfigSize(16) -»
+				«EXPAND ColumnConfigDefault("time()") -»
+				«EXPAND ColumnConfigEval({"datetime"}) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeDate FOR MAttribute -»
-«EXPAND ColumnConfigType("input") -»
-«EXPAND ColumnConfigSize(20) -»
-«EXPAND ColumnConfigDefault("time()") -»
-«EXPAND ColumnConfigEval({"date"}) -»
+				«EXPAND ColumnConfigType("input") -»
+				«EXPAND ColumnConfigSize(20) -»
+				«EXPAND ColumnConfigDefault("time()") -»
+				«EXPAND ColumnConfigEval({"date"}) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeTime FOR MAttribute -»
-«EXPAND ColumnConfigType("input") -»
-«EXPAND ColumnConfigSize(5) -»
-«EXPAND ColumnConfigDefault("time()") -»
-«EXPAND ColumnConfigEval({"time"}) -»
+				«EXPAND ColumnConfigType("input") -»
+				«EXPAND ColumnConfigSize(5) -»
+				«EXPAND ColumnConfigDefault("time()") -»
+				«EXPAND ColumnConfigEval({"time"}) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeTimeSec FOR MAttribute -»
-«EXPAND ColumnConfigType("input") -»
-«EXPAND ColumnConfigSize(8) -»
-«EXPAND ColumnConfigDefault("time()") -»
-«EXPAND ColumnConfigEval({"timesec"}) -»
+				«EXPAND ColumnConfigType("input") -»
+				«EXPAND ColumnConfigSize(8) -»
+				«EXPAND ColumnConfigDefault("time()") -»
+				«EXPAND ColumnConfigEval({"timesec"}) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeString FOR MAttribute -»
-«EXPAND ColumnConfigType("input") -»
-«EXPAND ColumnConfigSize(30) -»
-«EXPAND ColumnConfigMax(null) -»
-«EXPAND ColumnConfigDefault(null) -»
-«EXPAND ColumnConfigEval({"trim"}) -»
+				«EXPAND ColumnConfigType("input") -»
+				«EXPAND ColumnConfigSize(30) -»
+				«EXPAND ColumnConfigMax(null) -»
+				«EXPAND ColumnConfigDefault(null) -»
+				«EXPAND ColumnConfigEval({"trim"}) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypePassword FOR MAttribute -»
-«EXPAND ColumnConfigType("input") -»
-«EXPAND ColumnConfigSize(30) -»
-«EXPAND ColumnConfigMax(null) -»
-«EXPAND ColumnConfigDefault(null) -»
-«EXPAND ColumnConfigEval({"password"}) -»
+				«EXPAND ColumnConfigType("input") -»
+				«EXPAND ColumnConfigSize(30) -»
+				«EXPAND ColumnConfigMax(null) -»
+				«EXPAND ColumnConfigDefault(null) -»
+				«EXPAND ColumnConfigEval({"password"}) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeText FOR MAttribute -»
-«EXPAND ColumnConfigType("text") -»
-«EXPAND ColumnConfigCols(40) -»
-«EXPAND ColumnConfigRows(15) -»
-«EXPAND ColumnConfigDefault(null) -»
-«EXPAND ColumnConfigEval({"trim"}) -»
-
+				«EXPAND ColumnConfigType("text") -»
+				«EXPAND ColumnConfigCols(40) -»
+				«EXPAND ColumnConfigRows(15) -»
+				«EXPAND ColumnConfigDefault(null) -»
+				«EXPAND ColumnConfigEval({"trim"}) -»
 «ENDDEFINE»
 
 
-«REM» 
+«REM»
+	@todo	Wizards RTE
 «ENDREM»
 «DEFINE ColumnConfigTypeRichText FOR MAttribute -»
-«EXPAND ColumnConfigType("text") -»
-«EXPAND ColumnConfigCols(40) -»
-«EXPAND ColumnConfigRows(15) -»
-«EXPAND ColumnConfigDefault(null) -»
-«EXPAND ColumnConfigEval({"trim"}) -»
-«EXPAND ColumnConfigDefaultExtras("'richtext:rte_transform[flag=rte_enabled|mode=ts]'") -»
+				«EXPAND ColumnConfigType("text") -»
+				«EXPAND ColumnConfigCols(40) -»
+				«EXPAND ColumnConfigRows(15) -»
+				«EXPAND ColumnConfigDefault(null) -»
+				«EXPAND ColumnConfigEval({"trim"}) -»
+				«EXPAND ColumnConfigDefaultExtras("'richtext:rte_transform[flag=rte_enabled|mode=ts]'") -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeCheck FOR MAttribute -»
-«EXPAND ColumnConfigType("check") -»
-«EXPAND ColumnConfigItems -»
-«EXPAND ColumnConfigCols(5) -»
-«EXPAND ColumnConfigDefault(null) -»
+				«EXPAND ColumnConfigType("check") -»
+				«EXPAND ColumnConfigItems(null) -»
+				«EXPAND ColumnConfigCols(5) -»
+				«EXPAND ColumnConfigDefault(null) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeBoolean FOR MAttribute -»
-«EXPAND ColumnConfigType("check") -»
-«EXPAND ColumnConfigDefault(null) -»
+				«EXPAND ColumnConfigType("check") -»
+				«EXPAND ColumnConfigDefault(null) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeRadio FOR MAttribute -»
-«EXPAND ColumnConfigType("radio") -»
-«EXPAND ColumnConfigItems -»
-«EXPAND ColumnConfigDefault(null) -»
+				«EXPAND ColumnConfigType("radio") -»
+				«EXPAND ColumnConfigItems(null) -»
+				«EXPAND ColumnConfigDefault(null) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeSelect FOR MAttribute -»
-«EXPAND ColumnConfigType("select") -»
-«EXPAND ColumnConfigSize(1) -»
-«EXPAND ColumnConfigEval({}) -»
-«EXPAND ColumnConfigMinitems(0) -»
-«EXPAND ColumnConfigMaxitems(1) -»
-«EXPAND ColumnConfigItems -»
-«EXPAND ColumnConfigDefault(null) -»
+				«EXPAND ColumnConfigType("select") -»
+				«EXPAND ColumnConfigItems(null) -»
+				«EXPAND ColumnConfigDefault(null) -»
+				«EXPAND ColumnConfigSize(1) -»
+				«EXPAND ColumnConfigMinitems(0) -»
+				«EXPAND ColumnConfigMaxitems(1) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeFile FOR MAttribute -»
-«EXPAND ColumnConfigType("group") -»
-«EXPAND ColumnConfigInternalType("file") -»
-«EXPAND ColumnConfigSize(1) -»
-«EXPAND ColumnConfigMinitems(0) -»
-«EXPAND ColumnConfigMaxitems(1) -»
-«EXPAND ColumnConfigAllowed("*") -»
-«EXPAND ColumnConfigDisallowed("php") -»
-«EXPAND ColumnConfigMaxSize(null) -»
-«EXPAND ColumnConfigShowThumbs(true) -»
-«EXPAND ColumnConfigUploadfolder( "uploads/" + extensionPrefixWithoutUnderscores() ) -»
+				«EXPAND ColumnConfigType("group") -»
+				«EXPAND ColumnConfigInternalType("file") -»
+				«EXPAND ColumnConfigAllowed("*") -»
+				«EXPAND ColumnConfigDisallowed("php") -»
+				«EXPAND ColumnConfigMaxSize("$GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize']") -»
+				«EXPAND ColumnConfigUploadfolder( "uploads/" + extensionPrefixWithoutUnderscores() ) -»
+				«EXPAND ColumnConfigShowThumbs(true) -»
+				«EXPAND ColumnConfigSize(1) -»
+				«EXPAND ColumnConfigMinitems(0) -»
+				«EXPAND ColumnConfigMaxitems(1) -»
 «ENDDEFINE»
+
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeFileReference FOR MAttribute -»
-«EXPAND ColumnConfigType("group") -»
-«EXPAND ColumnConfigInternalType("file_reference") -»
-«EXPAND ColumnConfigSize(1) -»
-«EXPAND ColumnConfigMinitems(0) -»
-«EXPAND ColumnConfigMaxitems(1) -»
-«EXPAND ColumnConfigAllowed("*") -»
-«EXPAND ColumnConfigDisallowed("php") -»
-«EXPAND ColumnConfigMaxSize(null) -»
-«EXPAND ColumnConfigShowThumbs(true) -»
-«EXPAND ColumnConfigUploadfolder( "uploads/" + extensionPrefixWithoutUnderscores() ) -»
+				«EXPAND ColumnConfigType("group") -»
+				«EXPAND ColumnConfigInternalType("file_reference") -»
+				«EXPAND ColumnConfigAllowed("*") -»
+				«EXPAND ColumnConfigDisallowed("php") -»
+				«EXPAND ColumnConfigMaxSize("$GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize']") -»
+				«EXPAND ColumnConfigUploadfolder( "uploads/" + extensionPrefixWithoutUnderscores() ) -»
+				«EXPAND ColumnConfigShowThumbs(true) -»
+				«EXPAND ColumnConfigSize(1) -»
+				«EXPAND ColumnConfigMinitems(0) -»
+				«EXPAND ColumnConfigMaxitems(1) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeImage FOR MAttribute -»
-«EXPAND ColumnConfigType("group") -»
-«EXPAND ColumnConfigInternalType("file") -»
-«EXPAND ColumnConfigSize(1) -»
-«EXPAND ColumnConfigMinitems(0) -»
-«EXPAND ColumnConfigMaxitems(1) -»
-«EXPAND ColumnConfigAllowed("gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai") -»
-«EXPAND ColumnConfigDisallowed("") -»
-«EXPAND ColumnConfigMaxSize(null) -»
-«EXPAND ColumnConfigShowThumbs(true) -»
-«EXPAND ColumnConfigUploadfolder( "uploads/" + extensionPrefixWithoutUnderscores() ) -»
+				«EXPAND ColumnConfigType("group") -»
+				«EXPAND ColumnConfigInternalType("file") -»
+				«EXPAND ColumnConfigAllowed("gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai") -»
+				«EXPAND ColumnConfigDisallowed("") -»
+				«EXPAND ColumnConfigMaxSize("$GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize']") -»
+				«EXPAND ColumnConfigUploadfolder( "uploads/" + extensionPrefixWithoutUnderscores() ) -»
+				«EXPAND ColumnConfigShowThumbs(true) -»
+				«EXPAND ColumnConfigSize(1) -»
+				«EXPAND ColumnConfigMinitems(0) -»
+				«EXPAND ColumnConfigMaxitems(1) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeImageReference FOR MAttribute -»
-«EXPAND ColumnConfigType("group") -»
-«EXPAND ColumnConfigInternalType("file_reference") -»
-«EXPAND ColumnConfigSize(1) -»
-«EXPAND ColumnConfigMinitems(0) -»
-«EXPAND ColumnConfigMaxitems(1) -»
-«EXPAND ColumnConfigAllowed("gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai") -»
-«EXPAND ColumnConfigDisallowed("") -»
-«EXPAND ColumnConfigMaxSize(null) -»
-«EXPAND ColumnConfigShowThumbs(true) -»
-«EXPAND ColumnConfigUploadfolder( "uploads/" + extensionPrefixWithoutUnderscores() ) -»
+				«EXPAND ColumnConfigType("group") -»
+				«EXPAND ColumnConfigInternalType("file_reference") -»
+				«EXPAND ColumnConfigAllowed("gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai") -»
+				«EXPAND ColumnConfigDisallowed("") -»
+				«EXPAND ColumnConfigMaxSize("$GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize']") -»
+				«EXPAND ColumnConfigUploadfolder( "uploads/" + extensionPrefixWithoutUnderscores() ) -»
+				«EXPAND ColumnConfigShowThumbs(true) -»
+				«EXPAND ColumnConfigSize(1) -»
+				«EXPAND ColumnConfigMinitems(0) -»
+				«EXPAND ColumnConfigMaxitems(1) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeFolder FOR MAttribute -»
-«EXPAND ColumnConfigType("group") -»
-«EXPAND ColumnConfigInternalType("folder") -»
-«EXPAND ColumnConfigSize(1) -»
-«EXPAND ColumnConfigMinitems(0) -»
-«EXPAND ColumnConfigMaxitems(1) -»
-«EXPAND ColumnConfigShowThumbs(true) -»
+				«EXPAND ColumnConfigType("group") -»
+				«EXPAND ColumnConfigInternalType("folder") -»
+				«EXPAND ColumnConfigSize(1) -»
+				«EXPAND ColumnConfigMinitems(0) -»
+				«EXPAND ColumnConfigMaxitems(1) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeDatabase FOR MAttribute -»
-«EXPAND ColumnConfigType("group") -»
-«EXPAND ColumnConfigInternalType("db") -»
-«EXPAND ColumnConfigSize(1) -»
-«EXPAND ColumnConfigMinitems(0) -»
-«EXPAND ColumnConfigMaxitems(1) -»
-«EXPAND ColumnConfigAllowed("*") -»
-«EXPAND ColumnConfigShowThumbs(true) -»
+				«EXPAND ColumnConfigType("group") -»
+				«EXPAND ColumnConfigInternalType("db") -»
+				«EXPAND ColumnConfigAllowed("*") -»
+				«EXPAND ColumnConfigDisallowed("") -»
+				«EXPAND ColumnConfigSize(1) -»
+				«EXPAND ColumnConfigMinitems(0) -»
+				«EXPAND ColumnConfigMaxitems(1) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeNone FOR MAttribute -»
-«EXPAND ColumnConfigType("none") -»
+				«EXPAND ColumnConfigType("none") -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypePassthrough FOR MAttribute -»
-«EXPAND ColumnConfigType("passthrough") -»
+				«EXPAND ColumnConfigType("passthrough") -»
 «ENDDEFINE»
 
 
@@ -1042,151 +1065,173 @@ return array(
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeToOneUnidirectional(MClass class) FOR MAttribute -»
-«EXPAND ColumnConfigType -»
-«EXPAND ColumnConfigForeignTable -»
-«EXPAND ColumnConfigMinitems -»
-«EXPAND ColumnConfigMaxitems -»
-«REM»«EXPAND ColumnConfigWizards -»«ENDREM»
+				«EXPAND ColumnConfigType("select") -»
+				«EXPAND ColumnConfigItems -»
+				«EXPAND ColumnConfigForeignTable -»
+				«EXPAND ColumnConfigMinitems -»
+				«EXPAND ColumnConfigMaxitems -»
+				«EXPAND ColumnConfigSize(1) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeToManyUnidirectional(MClass class) FOR MAttribute -»
-«EXPAND ColumnConfigType("select") -»
-«EXPAND ColumnConfigForeignTable -»
-«EXPAND ColumnConfigForeignSortBy -»
-«REM»«EXPAND ColumnConfigForeignTableWhere -»«ENDREM»
-«EXPAND ColumnConfigMM(class) -»
-«EXPAND ColumnConfigMinitems -»
-«EXPAND ColumnConfigMaxitems -»
-«EXPAND ColumnConfigMultiple -»
-«REM»«EXPAND ColumnConfigWizards -»«ENDREM»
+				«EXPAND ColumnConfigType("select") -»
+				«EXPAND ColumnConfigForeignTable -»
+				«EXPAND ColumnConfigMM(class) -»
+				«EXPAND ColumnConfigSize(10) -»
+				«EXPAND ColumnConfigMinitems -»
+				«EXPAND ColumnConfigMaxitems -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeOneToOneUnidirectional(MClass class) FOR MAssociationRole -»
-«EXPAND ColumnConfigType -»
-«EXPAND ColumnConfigForeignTable -»
-«EXPAND ColumnConfigForeignTableWhere -»
-«EXPAND ColumnConfigMinitems -»
-«EXPAND ColumnConfigMaxitems -»
-«EXPAND ColumnConfigAppearance -»
-«EXPAND ColumnConfigWizards -»
+«IF composition -»
+				«EXPAND ColumnConfigType("inline") -»
+				«EXPAND ColumnConfigForeignTable -»
+				«EXPAND ColumnConfigSize(1) -»
+				«EXPAND ColumnConfigMinitems -»
+				«EXPAND ColumnConfigMaxitems -»
+«ELSE -»
+				«EXPAND ColumnConfigType("select") -»
+				«EXPAND ColumnConfigItems -»
+				«EXPAND ColumnConfigForeignTable -»
+				«EXPAND ColumnConfigSize(1) -»
+				«EXPAND ColumnConfigMinitems -»
+				«EXPAND ColumnConfigMaxitems -»
+«ENDIF -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeOneToOneBidirectional(MClass class) FOR MAssociationRole -»
-«EXPAND ColumnConfigType -»
-«EXPAND ColumnConfigForeignTable -»
-«EXPAND ColumnConfigForeignTableWhere -»
-«EXPAND ColumnConfigMinitems -»
-«EXPAND ColumnConfigMaxitems -»
-«EXPAND ColumnConfigAppearance -»
-«EXPAND ColumnConfigWizards -»
+«IF composition -»
+				«EXPAND ColumnConfigType("inline") -»
+				«EXPAND ColumnConfigForeignTable -»
+				«EXPAND ColumnConfigForeignField -»
+				«EXPAND ColumnConfigSize(1) -»
+				«EXPAND ColumnConfigMinitems -»
+				«EXPAND ColumnConfigMaxitems -»
+«ELSEIF !opposite.composition && classifier.asShortGeneralName().compareTo( type.asShortGeneralName() ) < 0 -»
+				«EXPAND ColumnConfigType("passthrough") -»
+				«EXPAND ColumnConfigForeignTable -»
+				«EXPAND ColumnConfigForeignField -»
+				«EXPAND ColumnConfigSize(1) -»
+				«EXPAND ColumnConfigMinitems -»
+				«EXPAND ColumnConfigMaxitems -»
+«ELSE -»
+				«EXPAND ColumnConfigType("select") -»
+				«EXPAND ColumnConfigItems -»
+				«EXPAND ColumnConfigForeignTable -»
+				«EXPAND ColumnConfigSize(1) -»
+				«EXPAND ColumnConfigMinitems -»
+				«EXPAND ColumnConfigMaxitems -»
+«ENDIF -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeOneToManyUnidirectional(MClass class) FOR MAssociationRole -»
-«EXPAND ColumnConfigType -»
-«EXPAND ColumnConfigForeignTable -»
-«EXPAND ColumnConfigForeignSortBy -»
-«EXPAND ColumnConfigForeignTableWhere -»
-«EXPAND ColumnConfigMM(class) -»
-«EXPAND ColumnConfigMinitems -»
-«EXPAND ColumnConfigMaxitems -»
-«EXPAND ColumnConfigMultiple -»
-«EXPAND ColumnConfigAppearance -»
-«EXPAND ColumnConfigWizards -»
+«IF composition -»
+				«EXPAND ColumnConfigType("inline") -»
+				«EXPAND ColumnConfigForeignTable -»
+				«EXPAND ColumnConfigMM(class) -»
+				«EXPAND ColumnConfigSize(10) -»
+				«EXPAND ColumnConfigMinitems -»
+				«EXPAND ColumnConfigMaxitems -»
+«ELSE -»
+				«EXPAND ColumnConfigType("select") -»
+				«EXPAND ColumnConfigForeignTable -»
+				«EXPAND ColumnConfigMM(class) -»
+				«EXPAND ColumnConfigSize(10) -»
+				«EXPAND ColumnConfigMinitems -»
+				«EXPAND ColumnConfigMaxitems -»
+«ENDIF -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeOneToManyBidirectional(MClass class) FOR MAssociationRole -»
-«EXPAND ColumnConfigType -»
-«EXPAND ColumnConfigForeignTable -»
-«EXPAND ColumnConfigForeignField -»
-«REM»«EXPAND ColumnConfigForeignSortBy -»«ENDREM»
-«EXPAND ColumnConfigForeignTableWhere -»
-«EXPAND ColumnConfigMinitems -»
-«EXPAND ColumnConfigMaxitems -»
-«EXPAND ColumnConfigMultiple -»
-«EXPAND ColumnConfigAppearance -»
-«EXPAND ColumnConfigWizards -»
+«IF composition -»
+				«EXPAND ColumnConfigType("inline") -»
+				«EXPAND ColumnConfigForeignTable -»
+				«EXPAND ColumnConfigForeignField -»
+				«EXPAND ColumnConfigSize(10) -»
+				«EXPAND ColumnConfigMinitems -»
+				«EXPAND ColumnConfigMaxitems -»
+«ELSE -»
+				«EXPAND ColumnConfigType("passthrough") -»
+				«EXPAND ColumnConfigForeignTable -»
+				«EXPAND ColumnConfigForeignField -»
+				«EXPAND ColumnConfigSize(10) -»
+				«EXPAND ColumnConfigMinitems -»
+				«EXPAND ColumnConfigMaxitems -»
+«ENDIF -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeManyToOneUnidirectional(MClass class) FOR MAssociationRole -»
-«EXPAND ColumnConfigType -»
-«EXPAND ColumnConfigForeignTable -»
-«EXPAND ColumnConfigForeignTableWhere -»
-«EXPAND ColumnConfigMinitems -»
-«EXPAND ColumnConfigMaxitems -»
-«EXPAND ColumnConfigAppearance -»
-«EXPAND ColumnConfigWizards -»
+				«EXPAND ColumnConfigType("select") -»
+				«EXPAND ColumnConfigItems -»
+				«EXPAND ColumnConfigForeignTable -»
+				«EXPAND ColumnConfigSize(1) -»
+				«EXPAND ColumnConfigMinitems -»
+				«EXPAND ColumnConfigMaxitems -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeManyToOneBidirectional(MClass class) FOR MAssociationRole -»
-«EXPAND ColumnConfigType -»
-«EXPAND ColumnConfigForeignTable -»
-«EXPAND ColumnConfigForeignTableWhere -»
-«EXPAND ColumnConfigMinitems -»
-«EXPAND ColumnConfigMaxitems -»
-«EXPAND ColumnConfigAppearance -»
-«EXPAND ColumnConfigWizards -»
+				«EXPAND ColumnConfigType("select") -»
+				«EXPAND ColumnConfigItems -»
+				«EXPAND ColumnConfigForeignTable -»
+				«EXPAND ColumnConfigSize(1) -»
+				«EXPAND ColumnConfigMinitems -»
+				«EXPAND ColumnConfigMaxitems -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeManyToManyUnidirectional(MClass class) FOR MAssociationRole -»
-«EXPAND ColumnConfigType -»
-«EXPAND ColumnConfigForeignTable -»
-«EXPAND ColumnConfigForeignSortBy -»
-«EXPAND ColumnConfigForeignTableWhere -»
-«EXPAND ColumnConfigMM(class) -»
-«EXPAND ColumnConfigMinitems -»
-«EXPAND ColumnConfigMaxitems -»
-«EXPAND ColumnConfigMultiple -»
-«EXPAND ColumnConfigAppearance -»
-«EXPAND ColumnConfigWizards -»
+				«EXPAND ColumnConfigType("select") -»
+				«EXPAND ColumnConfigForeignTable -»
+				«EXPAND ColumnConfigMM(class) -»
+				«EXPAND ColumnConfigSize(10) -»
+				«EXPAND ColumnConfigMinitems -»
+				«EXPAND ColumnConfigMaxitems -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeManyToManyBidirectional(MClass class) FOR MAssociationRole -»
-«EXPAND ColumnConfigType -»
-«EXPAND ColumnConfigForeignTable -»
-«EXPAND ColumnConfigForeignSortBy -»
-«EXPAND ColumnConfigForeignTableWhere -»
-«EXPAND ColumnConfigMM(class) -»
-«EXPAND ColumnConfigMinitems -»
-«EXPAND ColumnConfigMaxitems -»
-«EXPAND ColumnConfigMultiple -»
-«EXPAND ColumnConfigAppearance -»
-«EXPAND ColumnConfigWizards -»
+«IF classifier.asShortGeneralName().compareTo( type.asShortGeneralName() ) < 0 -»
+				«EXPAND ColumnConfigType("select") -»
+				«EXPAND ColumnConfigForeignTable -»
+				«EXPAND ColumnConfigMM(class) -»
+				«EXPAND ColumnConfigSize(10) -»
+				«EXPAND ColumnConfigMinitems -»
+				«EXPAND ColumnConfigMaxitems -»
+«ELSE -»
+				«EXPAND ColumnConfigType("select") -»
+				«EXPAND ColumnConfigForeignTable -»
+				«EXPAND ColumnConfigMM(class) -»
+				«EXPAND ColumnConfigMMOppositeField -»
+				«EXPAND ColumnConfigSize(10) -»
+				«EXPAND ColumnConfigMinitems -»
+				«EXPAND ColumnConfigMaxitems -»
+«ENDIF -»
 «ENDDEFINE»
-
-
-
-
-
-
-
-
 
 
 «REM» -- Type Settings -- «ENDREM»
@@ -1263,9 +1308,9 @@ hier evtl. versuch über sql type maximum herauszufinden
 
 «REM»
 «ENDREM»
-«DEFINE ColumnConfigDefault(String defaultDefaultValue) FOR MAttribute -»
-«IF defaultDefaultValue != null || hasDefaultValue() -»
-				'default' => «IF hasDefaultValue() -»«defaultvalue -»«ELSE -»«defaultDefaultValue -»«ENDIF -»,
+«DEFINE ColumnConfigDefault(String defaultDefault) FOR MAttribute -»
+«IF defaultDefault != null || hasDefaultValue() -»
+				'default' => «IF hasDefaultValue() -»«defaultvalue -»«ELSE -»«defaultDefault -»«ENDIF -»,
 «ENDIF -»
 «ENDDEFINE»
 
@@ -1301,7 +1346,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 
 «REM»
 «ENDREM»
-«DEFINE ColumnConfigMaxSize(Integer defaultMaxSize) FOR MProperty -»
+«DEFINE ColumnConfigMaxSize(String defaultMaxSize) FOR MProperty -»
 «IF defaultMaxSize != null || emHasGuiPropertyMaxFileSizeUtilizableMaxFileSize() -»
 				'max_size' => «IF emHasGuiPropertyMaxFileSizeUtilizableMaxFileSize() -»«emGetGuiPropertyMaxFileSizeMaxFileSize() -»«ELSE -»«defaultMaxSize -»«ENDIF -»,
 «ENDIF -»
@@ -1362,6 +1407,13 @@ hier evtl. versuch über sql type maximum herauszufinden
 
 «REM»
 «ENDREM»
+«DEFINE ColumnConfigMMOppositeField FOR MAssociationRole -»
+				'MM_opposite_field' => '«opposite.asConfigurationName() -»',
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
 «REM»
 «DEFINE ColumnConfigForeignSortBy FOR MAttribute -»
 				'foreign_sortby' => 'sorting',
@@ -1403,13 +1455,26 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDREM»
 «DEFINE ColumnConfigItems(List[String] defaultItems) FOR MProperty -»
 «IF emHasGuiPropertyItemsUtilizableItems() -»
-				'items' => array(«FOREACH emGetGuiPropertyItemsItems() AS item SEPARATOR "," -»
-					array(«asAssociativeArrayItem(item)»)
-				«ENDFOREACH -»),
+				'items' => array(
+					«FOREACH emGetGuiPropertyItemsItems() AS item -»
+					array(«item -»),
+					«ENDFOREACH -»
+				),
 «ELSEIF defaultItems != null && !defaultItems.isEmpty -»
-				'items' => array(«FOREACH defaultItems AS item SEPARATOR "," -»
-					array(«asAssociativeArrayItem(item)»)
-				«ENDFOREACH -»),
+				'items' => array(
+					«FOREACH defaultItems AS item -»
+					array(«item -»),
+					«ENDFOREACH -»
+				),
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE ColumnConfigItems FOR MProperty -»
+«IF multiplicity.lowerBound < 1 -»
+				'items' => array(
+					array('', 0),
+				),
 «ENDIF -»
 «ENDDEFINE»
 
@@ -1452,33 +1517,19 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDDEFINE»
 
 
-«DEFINE ColumnConfigMultiple FOR MProperty -»
-				'multiple' => «(!multiplicity.unique).asTypo3Boolean() -»,
+
+«REM»
+«ENDREM»
+«DEFINE ColumnConfigMultiple(String defaultMultiple) FOR MProperty -»
+«IF defaultMultiple != null -»
+				'multiple' => «defaultMultiple.asTypo3Boolean() -»,
+«ENDIF -»
 «ENDDEFINE»
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+«DEFINE ColumnConfigMultiple FOR MProperty -»
+				«EXPAND ColumnConfigMultiple( (!multiplicity.unique).asTypo3Boolean() ) -»
+«ENDDEFINE»
 
 
 «REM»
@@ -1563,31 +1614,6 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDREM»
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 «REM»
 	Generates a protected region for own TCA Columns Section column config code.
 «ENDREM»
@@ -1613,9 +1639,9 @@ hier evtl. versuch über sql type maximum herauszufinden
 «REM» 
 «ENDREM»
 «DEFINE TypesNumbers FOR MClass -»
-		'0' => array('showitem' => '«EXPAND TypesNumbersRecordType -»«EXPAND TypesNumbersLocalization -»«EXPAND TypesNumbersHidden -»«EXPAND TypesNumbersStartime -»«EXPAND TypesNumbersEndtime -»«EXPAND TypesNumbersFeGroup -»«EXPAND TypesNumbers FOREACH allProperties().select( p | !p.derived && !p.isStatic() ) SEPARATOR ", " -»'),
+		'0' => array('showitem' => '«EXPAND TypesNumbersType -»«EXPAND TypesNumbersLocalization -»«EXPAND TypesNumbersHidden -»«EXPAND TypesNumbersStartime -»«EXPAND TypesNumbersEndtime -»«EXPAND TypesNumbersFeGroup -»«EXPAND TypesNumbers FOREACH allProperties().select( p | !p.derived && !p.isStatic() ) SEPARATOR ", " -»'),
 		«FOREACH allSingleTableInheritanceSpecializations() AS s -»
-		'«s.asGeneralName() -»' => array('showitem' => '«EXPAND TypesNumbersRecordType -»«EXPAND TypesNumbersLocalization FOR s -»«EXPAND TypesNumbersHidden FOR s -»«EXPAND TypesNumbersStartime FOR s -»«EXPAND TypesNumbersEndtime FOR s -»«EXPAND TypesNumbersFeGroup FOR s -»«EXPAND TypesNumbers FOREACH s.allProperties().select( p | !p.derived && !p.isStatic() ) SEPARATOR ", " -»'),
+		'«s.asGeneralName() -»' => array('showitem' => '«EXPAND TypesNumbersType -»«EXPAND TypesNumbersLocalization FOR s -»«EXPAND TypesNumbersHidden FOR s -»«EXPAND TypesNumbersStartime FOR s -»«EXPAND TypesNumbersEndtime FOR s -»«EXPAND TypesNumbersFeGroup FOR s -»«EXPAND TypesNumbers FOREACH s.allProperties().select( p | !p.derived && !p.isStatic() ) SEPARATOR ", " -»'),
 		«ENDFOREACH -»
 «ENDDEFINE»
 
@@ -1625,7 +1651,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDDEFINE»
 
 
-«DEFINE TypesNumbersRecordType FOR MClass -»
+«DEFINE TypesNumbersType FOR MClass -»
 «IF !allSingleTableInheritanceSpecializations().isEmpty && getPersistenceRecordTypeColumnName().length != 0 -»«getPersistenceRecordTypeColumnName() -», «ENDIF -»
 «ENDDEFINE»
 
