@@ -1121,6 +1121,8 @@ private MDataType transformDataType(MDataType this, DataType d) :
 	// ignore abstract + final
 	// transform classifier
 	transformClassifier(d) ->
+	// for data types: realization of interfaces because UML does not allow an interface realization for data types
+	realization.addAll( d.clientDependency.typeSelect(Realization).supplier.typeSelect(Interface).makeType() ) ->
 	this;
 
 /**
