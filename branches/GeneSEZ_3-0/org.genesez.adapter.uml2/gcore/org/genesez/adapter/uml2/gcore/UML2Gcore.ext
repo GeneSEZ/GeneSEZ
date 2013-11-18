@@ -1149,7 +1149,9 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
 	stereotype.addAll( c.getAppliedStereotypes().make() ) ->
 	// add generalizations and realizations
 	generalization.addAll( c.generalization.general.makeType() ) ->
-	realization.addAll( c.clientDependency.typeSelect(InterfaceRealization).contract.makeType() ) ->
+	BehavioredClassifier.isInstance( c )
+		? realization.addAll( ((BehavioredClassifier)c).interfaceRealization.contract.makeType() )
+		: this ->
 	// containments
 	// add comment to classifier
 	ownedComment.addAll( c.ownedComment.typeSelect(Comment).transform() ) ->
