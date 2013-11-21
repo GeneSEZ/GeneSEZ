@@ -153,7 +153,7 @@ config.tx_extbase {
 «REM»
 «ENDREM»
 «DEFINE PersistenceClassMapping FOR MClass -»
-			«asGeneralName() -» {
+			«asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" ) -» {
 				mapping {
 					«EXPAND PersistenceClassMappingTableName -»
 					«EXPAND PersistenceClassMappingRecordType -»
@@ -167,7 +167,7 @@ config.tx_extbase {
 «REM»
 «ENDREM»
 «DEFINE PersistenceClassMapping FOR MType -»
-			«asGeneralName() -» {
+			«asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" ) -» {
 				«EXPAND PersistenceSubclasses -»
 			}
 «ENDDEFINE»
@@ -183,7 +183,9 @@ config.tx_extbase {
 «REM»
 «ENDREM»
 «DEFINE PersistenceClassMappingRecordType FOR MClass -»
-					recordType = «asGeneralName()»
+«IF getPersistenceRecordTypeColumnName().length != 0 -»
+					recordType = «asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" )»
+«ENDIF -»
 «ENDDEFINE»
 
 
@@ -219,7 +221,7 @@ config.tx_extbase {
 «REM»
 «ENDREM»
 «DEFINE PersistenceSubclass FOR MClass -»
-					«asGeneralName() -» = «asGeneralName()»
+					«asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" ) -» = «asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" )»
 «ENDDEFINE»
 
 
