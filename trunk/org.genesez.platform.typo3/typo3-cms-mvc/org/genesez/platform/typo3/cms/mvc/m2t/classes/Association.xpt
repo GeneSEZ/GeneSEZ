@@ -248,7 +248,10 @@
 	Generates the default value for set accessor methods.
 «ENDREM»
 «DEFINE DefaultValueSetAccessor FOR MAssociationRole -»
-«IF multiplicity.lowerBound < 1 -» = NULL«ENDIF -»
+«IF multiplicity.lowerBound < 1 -»
+«IF multiplicity.isSingleValued() -» = NULL«ENDIF -»
+«IF multiplicity.isMultiValued() -»«IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() -» = NULL«ELSE -» array()«ENDIF -»«ENDIF -»
+«ENDIF -»
 «ENDDEFINE»
 
 
