@@ -136,7 +136,7 @@
 «DEFINE SetAccessorDeclaration FOR MAssociationRole -»
 «IF !emHasAccessorSetter("false") -»
 	«EXPAND Comment::SetAccessor -»
-	«EXPAND ModifierAccessor -» function «asSetAccessorName() -»(«EXPAND TypeHintSetAccessor -»$«asGeneralName() -»);
+	«EXPAND ModifierAccessor -» function «asSetAccessorName() -»(«EXPAND TypeHintSetAccessor -»$«asGeneralName() -»«EXPAND DefaultValueSetAccessor -»);
 	
 «ENDIF -»
 «ENDDEFINE»
@@ -148,7 +148,7 @@
 «DEFINE SetAccessorImplemementation FOR MAssociationRole -»
 «IF !emHasAccessorSetter("false") -»
 	«EXPAND Comment::SetAccessor -»
-	«EXPAND ModifierAccessor -» function «asSetAccessorName() -»(«EXPAND TypeHintSetAccessor -»$«asGeneralName() -») {
+	«EXPAND ModifierAccessor -» function «asSetAccessorName() -»(«EXPAND TypeHintSetAccessor -»$«asGeneralName() -»«EXPAND DefaultValueSetAccessor -») {
 		$this->«asGeneralName() -» = $«asGeneralName() -»;
 	}
 	
@@ -241,6 +241,14 @@
 «ENDREM»
 «DEFINE TypeHintAddRemoveAccessor FOR MAssociationRole -»
 «IF !isPhpPrimitiveType( type.asGeneralName() ) -»«type.asGeneralName() -» «ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the default value for set accessor methods.
+«ENDREM»
+«DEFINE DefaultValueSetAccessor FOR MAssociationRole -»
+«IF multiplicity.lowerBound < 1 -» = NULL«ENDIF -»
 «ENDDEFINE»
 
 
