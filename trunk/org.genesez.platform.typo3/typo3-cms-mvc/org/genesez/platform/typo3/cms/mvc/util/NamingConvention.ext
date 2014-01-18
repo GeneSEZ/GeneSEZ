@@ -291,15 +291,15 @@ cached String asConfigurationName(MClassifier this) :
 
 /**
  * Formats the name of a classifier in "Localization" naming context.
- * E.g.: If the extension key is "blog_example", the corresponding extension package name is "BlogExample"
- *       and the domain object class "Blog" is modeled inside package path "Classes/Domain/Model" 
- *       then this method returns "tx_blogexample_domain_model_blog".
+ * E.g.: If the domain object class "Blog" is modeled inside package path "Classes/Domain/Model" 
+ *       then this method returns "domain_model_blog".
  * 
  * @return	The formatted classifier name.
- * @see		asConfigurationName(MClassifier this)
  */
 cached String asLocalizationName(MClassifier this) :
-	asConfigurationName();
+	namespaceCategoryName().length != 0
+		? namespaceCategoryName().replaceAll("\\\\", "").toLowerUnderscore() + "_" + asShortGeneralName().toLowerCase()
+		: asShortGeneralName().toLowerCase();
 
 
 // -- "LocalizationCsh" naming context --
@@ -313,8 +313,8 @@ cached String asLocalizationName(MClassifier this) :
  * @return	The formatted classifier name.
  * @see		asConfigurationName(MClassifier this)
  */
-cached String asLocalizationCshName(MClassifier this) :
-	asConfigurationName();
+//cached String asLocalizationCshName(MClassifier this) :
+//	"";
 
 
 // -- "Persistence" naming context --
