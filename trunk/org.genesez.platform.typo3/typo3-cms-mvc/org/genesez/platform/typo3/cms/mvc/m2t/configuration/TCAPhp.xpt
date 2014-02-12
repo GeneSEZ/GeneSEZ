@@ -1114,7 +1114,7 @@ return array(
 				«EXPAND ColumnConfigSize(1) -»
 				«EXPAND ColumnConfigMinitems -»
 				«EXPAND ColumnConfigMaxitems -»
-«ELSEIF !opposite.composition && classifier.asShortGeneralName().compareTo( type.asShortGeneralName() ) < 0 -»
+«ELSEIF !opposite.composition && ( classifier.asShortGeneralName().compareTo( type.asShortGeneralName() ) < 0 || ( class.asShortGeneralName().compareTo( type.asShortGeneralName() ) == 0 && opposite.asGeneralName().compareTo( asGeneralName() ) < 0 ) ) -»
 				«EXPAND ColumnConfigType("passthrough") -»
 				«EXPAND ColumnConfigForeignTable -»
 				«EXPAND ColumnConfigForeignField -»
@@ -1213,7 +1213,7 @@ return array(
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeManyToManyBidirectional(MClass class) FOR MAssociationRole -»
-«IF classifier.asShortGeneralName().compareTo( type.asShortGeneralName() ) < 0 -»
+«IF classifier.asShortGeneralName().compareTo( type.asShortGeneralName() ) < 0 || ( class.asShortGeneralName().compareTo( type.asShortGeneralName() ) == 0 && opposite.asGeneralName().compareTo( asGeneralName() ) < 0 ) -»
 				«EXPAND ColumnConfigType("select") -»
 				«EXPAND ColumnConfigForeignTable -»
 				«EXPAND ColumnConfigMM(class) -»

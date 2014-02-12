@@ -584,7 +584,7 @@ CREATE TABLE «asPersistenceName() -» (
 	«EXPAND IntermediateTableDefinition(class) -»
 «ELSEIF isManyToMany() && !hasOpposite() -»
 	«EXPAND IntermediateTableDefinition(class) -»
-«ELSEIF isManyToMany() && hasOpposite() && ( classifier.asShortGeneralName().compareTo( type.asShortGeneralName() ) < 0 ) -»
+«ELSEIF isManyToMany() && hasOpposite() && ( classifier.asShortGeneralName().compareTo( type.asShortGeneralName() ) < 0 || ( class.asShortGeneralName().compareTo( type.asShortGeneralName() ) == 0 && opposite.asGeneralName().compareTo( asGeneralName() ) < 0 ) ) -»
 	«EXPAND IntermediateTableDefinition(class) -»
 «ENDIF -»
 «ENDDEFINE»
