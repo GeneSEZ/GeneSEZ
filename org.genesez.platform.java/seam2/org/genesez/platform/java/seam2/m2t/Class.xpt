@@ -82,12 +82,7 @@
 				«values-»
 			«ENDFOREACH-»})
 		«ENDIF»	
-		«IF emHasStereotypeAssignment("seam2ApplicationException")-»
-			@ApplicationException(rollback=«emGetTaggedValue("seam2ApplicationException", "rollback")-»
-			«IF emHasTaggedValue("seam2ApplicationException", "end", "true")-»
-				, end=true
-			«ENDIF-»)
-		«ENDIF-»
+		«EXPAND _EJB3ApplicationException-»
 	«ENDIF-»	
 «ENDDEFINE»
 
@@ -96,7 +91,10 @@
 «ENDREM»
 «DEFINE _EJB3ApplicationException FOR MClass-»
 	«IF emHasStereotypeAssignment("seam2ApplicationException")-»
-		@ApplicationException(rollback=«emGetTaggedValue("seam2ApplicationException", "rollback")-»)
+		@ApplicationException(rollback=«emGetTaggedValue("seam2ApplicationException", "rollback")-»
+		«IF emHasTaggedValue("seam2ApplicationException", "end", "true")-»
+			, end=true
+		«ENDIF-»)
 	«ENDIF-»
 «ENDDEFINE»
 «REM»
