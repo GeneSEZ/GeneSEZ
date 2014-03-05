@@ -55,7 +55,9 @@
 
 «DEFINE _MultiValuedInitialization FOR MAttribute -»
 	«FOREACH defaultvalue.convertToList() AS v -»
-		«asAttribute()».add(«v»);
+		«IF v != "null"-»
+			«asAttribute()».add(«v»);
+		«ENDIF-»
 	«ENDFOREACH -»
 «ENDDEFINE»
 
@@ -203,7 +205,11 @@
 	 = null
  		«ENDIF -»
 	«ELSE -»
-	 = new «mapCollection("Implementation") -»<«type.mapName("Wrapper").asTypeName() -»«EXPAND Type::GenericUse»>()
+		«IF hasDefaultValueNull() -»
+			= null
+		«ELSE -»
+	 		= new «mapCollection("Implementation") -»<«type.mapName("Wrapper").asTypeName() -»«EXPAND Type::GenericUse»>()
+		«ENDIF -»
 	«ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
