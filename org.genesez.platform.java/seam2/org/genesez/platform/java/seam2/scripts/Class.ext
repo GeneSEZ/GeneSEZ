@@ -1,0 +1,201 @@
+import gcore;
+
+extension org::genesez::util::logging::Logging;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
+extension org::genesez::platform::java::m2m::Constructor;
+extension org::genesez::platform::java::seam2::scripts::Stereotypes;
+extension org::genesez::platform::java::jbv::scripts::Stereotypes;
+extension org::genesez::platform::java::seam2::scripts::Operation;
+extension org::genesez::metamodel::core::util::CreateElement;
+
+/**
+  *	if there is at least on property with stereotype seam2JasyptEncryption
+  *	add stereotype jhvTypeDef to class instance
+  */
+Void checkJasyptEncryptionStereotype(MClass this) :
+	this.property.exists(e|e.emHasStereotypeAssignment("seam2JasyptEncryption")) &&
+	!this.emHasStereotypeAssignment("jhvTypeDef")
+		? (
+			let property=this.property.selectFirst(e|e.emHasStereotypeAssignment("seam2JasyptEncryption")) :
+			(
+				let value=property.emGetTaggedValue("seam2JasyptEncryption", "encryptorName"):
+					this.addTypeDefStereotype("encryptedString", "EncryptedStringType.class", {"encryptorRegisteredName"}, {value})
+			)
+		)
+		: "";
+
+/**
+  * add standard constructor to seam components 
+  *	if there is not already one
+  */	
+MClassifier addStandardConstructor(MClass this) :
+	this.emHasStereotypeAssignment("seam2Component") &&
+	!(operation.exists(e|e.isConstructor() && e.parameter.isEmpty))
+		? ensureDefaultConstructor("public")
+		: "";
+
+/**
+  *	creates a logger attribute if there is no attribute with datatype "Log"
+  */
+Void addLoggerAttribute(MClass this) :
+	!this.emHasStereotypeAssignment("jpaPersistentEntity") && this.emHasTaggedValue("seam2Component", "logger", "true") && !this.existLoggerAttribute() 
+		? ensureAttributeExistence( xmiGuid + "_logger", "logger" )
+			.processAttribute( "", false, false )
+			.processProperty( "private", false, createMultiplicity(0, 1) )
+			.wireType(
+				navModel().ensureExternalTypeExistence("org.jboss.seam.log.Log", "org.jboss.seam.log.Log")
+			)
+//	old impl:
+//		makeAttribute("logger", "org.jboss.seam.log.Log", "private")
+		: "";
+
+/**
+ *	
+ */
+Void checkAbstractClassesForComponentStereotype(MClass this) :
+	this.abstract && this.emHasStereotypeAssignment("seam2Component")
+		? this.stereotype.remove(this.stereotype.selectFirst(e|e.name == "seam2Component"))
+		: "";
+
+/**
+  *
+  */
+Void addFactoryMethod(MClassifier this, String autoCreate, String scope, String value) :
+	addInitiateOperation(value) ->
+//	old impl:
+//	makeOperation("initiate"+value.toFirstUpper(), "public") ->
+	this.realization.typeSelect(MClassifier).addInitiateOperation( value ) ->
+//	old impl:
+//	this.realization.typeSelect(MClassifier).makeOperation("initiate"+value.toFirstUpper(), "public") ->
+	this.operation.selectFirst(e|e.name == "initiate"+value.toFirstUpper()).addFactoryStereotype(autoCreate, scope, value);
+
+MOperation addInitiateOperation(MClassifier this, String value) :
+	ensureOperationExistence( xmiGuid + ".initiate"+value.toFirstUpper(), "initiate"+value.toFirstUpper() )
+		.processOperation( "public", false, false, false );
+
+/**
+  *	checks if there is an attribute with the datatype "Log"
+  */
+Boolean existLoggerAttribute(MClass this) :
+	this.property.exists(e|e.type.name().matches("org.jboss.seam.log.Log")) 
+	|| this.property.exists(e|e.type.name().matches("Log") && e.name.matches("logger"))
+		? true
+		: false;
+
+/**
+  *	adds method named "init" with annotation "@Create" for
+  * seam components with stateful session bean annotation 
+  * if there is no such annotation or method 
+  */
+Void checkCreateMethod(MClass this) :
+	this.emHasTaggedValue("ejb3SessionBean", "stateful", "true") &&
+	this.emHasStereotypeAssignment("seam2Component")
+		? (
+			!operation.exists(e|e.emHasTaggedValue("seam2Lifecycle", "create", "true")) 
+				? (
+					(!operation.exists(e|e.name == "init" && e.parameter.size == 0)
+						? (
+							addInitOperation()
+								.ensureStereotypeAssignment(
+									navModel().ensureStereotypeExistence( "http://www.genesez.org/java/seam2/CreateOperation", "http://www.genesez.org/java/seam2/CreateOperation" )
+								)
+//	old impl:
+//							let o = makeOperation("init", "public") :
+//								o.addInternalStereotype("http://www.genesez.org/java/seam2/CreateOperation")
+						)
+						: ""
+					) ->
+					operation.selectFirst(e|e.name == "init" && e.parameter.size == 0).addLifecycleStereotype("true", "false") ->
+					(!this.realization.typeSelect(MClassifier).selectFirst(e|e.emHasStereotypeAssignment("ejb3Local") || e.emHasStereotypeAssignment("ejb3Remote")).operation.exists(e|e.name == "init" && e.parameter.size == 0)
+						? this.realization.typeSelect(MClassifier).selectFirst(e|e.emHasStereotypeAssignment("ejb3Local") || e.emHasStereotypeAssignment("ejb3Remote")).addInitOperation()
+						: "")
+				)
+				: ""
+		)
+		: "";
+
+MOperation addInitOperation(MClassifier this) :
+	ensureOperationExistence( xmiGuid + ".init", "init")
+		.processOperation( "public", false, false, false );
+
+/**
+  *	adds method named "destroy" with annotation "@Destroy" and @Remove 
+  * for seam components with stateful session bean annotation 
+  * if there is no such annotation or method 
+  */
+Void checkDestroyMethod(MClass this) :
+	emHasStereotypeAssignment("seam2Component") && emHasTaggedValue("ejb3SessionBean", "stateful", "true")
+		? (
+			!operation.exists(e|e.emHasTaggedValue("seam2Lifecycle", "destroy", "true")) 
+				? (
+					(!operation.exists(e|e.name == "destroy" && e.parameter.size == 0)
+						? (
+							addDestroyOperation()
+								.ensureStereotypeAssignment(
+									navModel().ensureStereotypeExistence( "http://www.genesez.org/java/seam2/DestroyOperation", "http://www.genesez.org/java/seam2/DestroyOperation" )
+								)
+//	old impl:
+//							let o = makeOperation("destroy", "public") :
+//								o.addInternalStereotype("http://www.genesez.org/java/seam2/DestroyOperation")
+						)
+						: ""
+					) ->
+					operation.selectFirst(e|e.name == "destroy" && e.parameter.size == 0).addLifecycleStereotype("false", "true") ->
+					(!this.realization.typeSelect(MClassifier).selectFirst(e|e.emHasStereotypeAssignment("ejb3Local") || e.emHasStereotypeAssignment("ejb3Remote")).operation.exists(e|e.name == "destroy" && e.parameter.size == 0)
+						? this.realization.typeSelect(MClassifier).selectFirst(e|e.emHasStereotypeAssignment("ejb3Local") || e.emHasStereotypeAssignment("ejb3Remote")).addDestroyOperation()
+						: "")
+				)
+				: ""
+		)
+		: "";
+
+MOperation addDestroyOperation(MClassifier this) :
+	ensureOperationExistence( xmiGuid + ".destroy", "destroy")
+		.processOperation( "public", false, false, false );
+
+/**
+  *	adds an entity home class for a persistent entity which is also a Seam component
+  *
+  *	further work: add constraint that this can only be used if seam-managed persistence-context is used
+  */
+Void addEntityHome(MClass this) :
+	this.emHasStereotypeAssignment("jpaPersistentEntity") && this.emHasStereotypeAssignment("seam2Component")
+		? (
+			!this.navPackage().nestedPackage.exists(e|e.name == "entityHome") 
+				? createPackage(this.navPackage(), "entityHome", "entityHome")
+				: "" ->
+			createClass(this.navPackage().nestedPackage.selectFirst(e|e.name == "entityHome"), this.name+"Home", this.name+"Home") ->
+			(let c = this.navPackage().nestedPackage.selectFirst(e|e.name == "entityHome").classifier.typeSelect(MClass).selectFirst(e|e.name == this.name+"Home") :
+				c.addComponentStereotype(this.name.toFirstLower()+"Home", "false", "false") ->
+				(let e = this.navModel().ensureExternalTypeExistence("org.jboss.seam.framework.EntityHome<"+this.name+">", "EntityHome<"+this.name+">") :
+					c.generalization.add(e) ->
+					//e.createGeneric(this.name) ) ->					
+				//add seam2Component stereotype
+				"")
+			)
+		)
+		: "";
+
+/**
+  *	adds an query home class for a persistent entity which is also a Seam component
+  *
+  *	further work: add constraint that this can only be used if seam-managed persistence-context is used
+  */
+Void addQueryHome(MClass this) :
+	this.emHasStereotypeAssignment("jpaPersistentEntity") && this.emHasStereotypeAssignment("seam2Component")
+		? (
+			!this.navPackage().nestedPackage.exists(e|e.name == "entityQuery") 
+				? createPackage(this.navPackage(), "entityQuery", "entityQuery")
+				: "" ->
+			createClass(this.navPackage().nestedPackage.selectFirst(e|e.name == "entityQuery"), this.name+"Query", this.name+"Query") ->
+			(let c = this.navPackage().nestedPackage.selectFirst(e|e.name == "entityQuery").classifier.typeSelect(MClass).selectFirst(e|e.name == this.name+"Query") :
+				c.addComponentStereotype(this.name.toFirstLower()+"Query", "false", "false") ->
+				(let e = this.navModel().ensureExternalTypeExistence("org.jboss.seam.framework.EntityQuery<"+this.name+">", "EntityQuery<"+this.name+">") :
+					c.generalization.add(e) ->
+					//e.createGeneric(this.name) ) ->					
+				//add seam2Component stereotype
+				"")
+			)
+		)
+		: "";

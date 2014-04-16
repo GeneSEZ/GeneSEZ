@@ -19,7 +19,6 @@ import gcore;
 extension org::genesez::util::Conversion reexport;
 
 extension org::genesez::metamodel::core::util::NavigateElement;
-extension org::genesez::util::logging::Logging;
 
 
 // -- Comment Conversions -----------------------------------------------------------------------------------
@@ -157,7 +156,7 @@ String dirPath(MClassifier this) :
  * @api
  */
 String dirPath(MClassifier this, String basePath) :
-	basePath.trim().length > 0
+	basePath != ""
 		? basePath + dirPathSeparator() + dirPath()
 		: dirPath();
 
@@ -229,7 +228,7 @@ String filePath(MPackage this) :
  * @api 
  */
 String filePath(MPackage this, String basePath) :
-	basePath.trim().length > 0
+	basePath != ""
 		? basePath + dirPathSeparator() + filePath()
 		: filePath();
 
@@ -384,7 +383,7 @@ String qn(MPackage this, String separator, String packageName) :
  * @api
  */
 String qn(MPackage this, String separator, String packageName, String baseQN) :
-	baseQN.trim().length > 0
+	baseQN != ""
 		? baseQN + separator + qn( separator, packageName )
 		: qn( separator, packageName );
 
@@ -437,7 +436,7 @@ String qn(MClassifier this, String separator, String classifierName) :
  * @api
  */
 String qn(MClassifier this, String separator, String classifierName, String baseQN) :
-	baseQN.trim().length > 0
+	baseQN != ""
 		? baseQN + separator + qn( separator, classifierName )
 		: qn( separator, classifierName );
 
@@ -488,7 +487,7 @@ String qn(MProperty this, String separator, String propertyName) :
  * @api
  */
 String qn(MProperty this, String separator, String propertyName, String baseQN) :
-	baseQN.trim().length > 0
+	baseQN != ""
 		? baseQN + separator + qn( separator, propertyName )
 		: qn( separator, propertyName );
 
@@ -539,7 +538,7 @@ String qn(MOperation this, String separator, String operationName) :
  * @api
  */
 String qn(MOperation this, String separator, String operationName, String baseQN) :
-	baseQN.trim().length > 0
+	baseQN != ""
 		? baseQN + separator + qn( separator, operationName )
 		: qn( separator, operationName );
 

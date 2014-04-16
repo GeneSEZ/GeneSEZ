@@ -238,17 +238,16 @@ List[MClassifier] allNestedClassifiers(MPackage this) :
  * @api
  */
 List[MClassifier] allSpecializations(MType this):
-	{}.addAll(
-		specialization.allSpecializations()
-	).addAll( specialization );
+	owningSpecializations().addAll(
+		owningSpecializations().allSpecializations()
+	);
 
 
 /**
  * Returns the list of owning specializations of a type.
  * 
  * @return	The list of specializations of the classifier, otherwise an empty list.
- * @deprecated	This script is deprecated since GeneSEZ release 3.1 and will be removed in 2 versions - use metamodel property "specialization"
- * @todo		Log this deprecation.
+ * @todo:	make unidirectional association between generalization and spezialization bidirectional to avoid this script.
  * @api
  */
 List[MClassifier] owningSpecializations(MType this) :
@@ -303,16 +302,7 @@ List[MProperty] owningInitializableProperties(MClassifier this) :
 	owningInitializableAttributes().addAll(
 		owningInitializableAssociationRoles() 
 	);
-	
-boolean isFinal(MProperty this) : 
-	metaType == MAttribute
-		? ((MAttribute) this).final
-		: false;
 
-boolean isStatic(MProperty this) :
-	metaType == MAttribute
-		? ((MAttribute) this).static
-		: false;
 
 // -- Attributes --------------------------------------------------------------------------------------------
 
@@ -423,15 +413,7 @@ List[MAttribute] owningInitializableAttributes(MClassifier this) :
  */
 boolean hasDefaultValue(MAttribute this) :
 	defaultvalue.length > 0;
-	
-/**
- * Checks if an attribute has the default value 'null'
- * 
- * @return	True if the attribute has the default value 'null', otherwise false.
- * @api
- */
-boolean hasDefaultValueNull(MAttribute this) :
-	defaultvalue == "null";
+
 
 // -- Association Roles -------------------------------------------------------------------------------------
 
@@ -576,46 +558,6 @@ boolean hasAssociationClass(MAssociationRole this) :
  */
 MClass getAssociationClass(MAssociationRole this) :
 	association.associationClass;
-
-
-/**
- * Checks if an association role is one to one (1:1).
- * 
- * @return	True if the association role is one to one, otherwise false.
- * @api
- */
-boolean isOneToOne(MAssociationRole this) :
-	oppositeMultiplicity.isSingleValued() && multiplicity.isSingleValued();
-
-
-/**
- * Checks if an association role is one to many (1:n).
- * 
- * @return	True if the association role is one to many, otherwise false.
- * @api
- */
-boolean isOneToMany(MAssociationRole this) :
-	oppositeMultiplicity.isSingleValued() && multiplicity.isMultiValued();
-	
-
-/**
- * Checks if an association role is one to one (1:1).
- * 
- * @return	True if the association role is one to one, otherwise false.
- * @api
- */
-boolean isManyToOne(MAssociationRole this) :
-	oppositeMultiplicity.isMultiValued() && multiplicity.isSingleValued();
-
-
-/**
- * Checks if an association role is one to one (1:1).
- * 
- * @return	True if the association role is one to one, otherwise false.
- * @api
- */
-boolean isManyToMany(MAssociationRole this) :
-	oppositeMultiplicity.isMultiValued() && multiplicity.isMultiValued();
 
 
 /**

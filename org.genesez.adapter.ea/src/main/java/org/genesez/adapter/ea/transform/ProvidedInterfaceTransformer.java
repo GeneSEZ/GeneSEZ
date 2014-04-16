@@ -4,6 +4,7 @@ package org.genesez.adapter.ea.transform;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_5_12d203c6_1363943816181_363402_2407) 
  */
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.uml2.uml.Interface;
@@ -12,8 +13,9 @@ import org.genesez.adapter.ea.ElementRegistry;
 
 /**
  * transforms provided interface
- * @author Christian
+ * @author christian
  */
+
 public class ProvidedInterfaceTransformer extends AbstractElementTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -23,7 +25,11 @@ public class ProvidedInterfaceTransformer extends AbstractElementTransformer {
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
+	 * @param	element	
+	 * @param	parent	
+	 * @return	
 	 */
+	
 	public Interface transform(org.sparx.Element element, Port parent) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363944044823_397384_2442) ENABLED START */
 		LOG.debug("Creating ProvidedInterface " + element.GetName() + ", parent " + parent.getName());
@@ -45,10 +51,11 @@ public class ProvidedInterfaceTransformer extends AbstractElementTransformer {
 	
 	// -- generated association + attribute accessors -----------------------
 	
-	// -- generated code  ---------------------------------------------------
+	// -- generated code of other cartridges --------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363943816181_363402_2407) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
+	
 }
