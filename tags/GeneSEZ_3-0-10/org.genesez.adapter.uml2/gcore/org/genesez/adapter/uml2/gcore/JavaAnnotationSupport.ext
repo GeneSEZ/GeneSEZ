@@ -1,0 +1,54 @@
+
+import uml;
+import gcore;
+
+extension org::genesez::adapter::uml2::gcore::Utility;
+extension org::genesez::adapter::uml2::Helper;
+extension org::genesez::util::logging::Logging;
+
+
+/**
+ * Transforms the given stereotype into an interface.
+ * It transforms the profile containing the stereotype into a package and places it within the root of the given model.
+ * 
+ * Note: Properties of the stereotype are not transformed!
+ * 
+ * @param   this   an uml stereotype
+ * @param   model  the containment for the profile that is transformed to a package
+ * @return  the GeneSEZ interface
+ */
+MInterface transformAnnotationInterface(Stereotype this, MPackage profileContainment) :
+	logTrace( "make a java annotation from [ " + metaType + " ] - " + fqmn() ) ->
+	make( profileContainment ).transform( this );
+
+/**
+ * Transforms the given profile into a package with the specified containment.
+ * 
+ * Note: Properties are not transformed!
+ */
+MPackage makeProfile(Profile this, MPackage containment) :
+	logTrace( "make package [ " + metaType + " ] - " + fqmn() ) ->
+	make( this, containment );
+
+private create MInterface make(Stereotype s, MPackage profileContainment) :
+	logTrace( "make [" + metaType + " ] - " + s.fqmn() ) ->
+	transformBasics(s) ->
+	// basic element properties
+	setXmiGuid(xmiGuid + ".JavaAnnotationInterface") ->
+	// ensure containment
+	s.getProfile().make( profileContainment ).classifier.add( this ) ->
+	this;
+
+private create MPackage make(Profile p, MPackage containment) :
+	logTrace( "make [" + metaType + " ] - " + p.fqmn() ) ->
+	transformBasics(p) ->
+	// no containment
+	containment.nestedPackage.add( this ) ->
+	this;
+
+private MInterface transform(MInterface this, Stereotype s) :
+	// properties
+	setVisibility( s.visibility.toString() ) ->
+	setAbstract( s.isAbstract ) ->
+	setFinal( s.isLeaf ) ->
+	this;
