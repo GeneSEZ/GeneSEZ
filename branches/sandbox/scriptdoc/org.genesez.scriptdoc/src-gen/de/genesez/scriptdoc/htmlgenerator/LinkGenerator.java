@@ -85,25 +85,7 @@ public class LinkGenerator extends Generator {
 		for (ScriptPackage pack : table.getPackages()) {
 			// generate script paths
 			for (Script script : pack.getScripts()) {
-				String scfn = script.getFile().getAbsolutePath()
-						.replace('\\', '/');
-				String bap = "?";
-				File bas = this.base;
-				boolean found = false;
-				for (File b : getBases()) {
-					bap = b.getAbsolutePath().replace('\\', '/');
-					if (scfn.startsWith(bap)) {
-						bas = b;
-						found = true;
-						break;
-					}
-				}
-				if (! found )
-					System.err.println("LinkGen error");
-				path = RelativePath.getRelativePath(bas, script.getFile())
-						.replace("\\", "/") + DOCFILETYPE;
-				if (path.contains(".."))
-					System.err.println("LinkGen" + path);
+				path = getLinkPath(script);
 				script.setLink(path);
 			}
 		}
@@ -127,9 +109,13 @@ public class LinkGenerator extends Generator {
 		File exOwner = ex.getScript().getFile();
 
 		// generate link of executable ex
-		link = RelativePath.getRelativePath(this.base, exOwner) + DOCFILETYPE;
-		ex.setLink(link);
+		String path = getLinkPath(ex.getScript());
+		ex.setLink(path);
+//		link = RelativePath.getRelativePath(this.base, exOwner) + DOCFILETYPE;
+//		ex.setLink(link);
 
+		String exName = ex.getScript().getFile().getName();
+		
 		// generate called paths
 		for (Executable called : ex.getCalled()) {
 			type = null; // reset the type to distinguish the executables
@@ -158,7 +144,11 @@ public class LinkGenerator extends Generator {
 						// functions with "ordinary" owners and reexported
 						// functions
 				home = ex.getScript().getFile().getPath()
-						.replace(ex.getScript().getFile().getName(), "");
+				 .replace(ex.getScript().getFile().getName(), "");
+//				home = ex.getScript().getLink()
+//						.replace(exName + DOCFILETYPE, "");
+				link = called.getScript().getLink();
+//				String calledFile = called.getScript().getFile().getName();
 				link = RelativePath.getRelativePath(new File(home), called
 						.getScript().getFile())
 						+ DOCFILETYPE;
@@ -170,22 +160,9 @@ public class LinkGenerator extends Generator {
 		String suffix; // the filetype
 		// generate caller links
 		for (Executable caller : ex.getCaller()) {
-			File tmp = caller.getScript().getFile();
-			if (caller.getScript() != null) {
-				home = ex.getScript().getFile().getPath()
-						.replace(ex.getScript().getFile().getName(), "");
-				linkTo = tmp;
-				suffix = DOCFILETYPE;
-			} else if (BuiltInLoader.getInstance().isBuiltInFunction(
-					caller.getName())) {
-				home = ownerLink.replace(tmp.getName(), "");
-				linkTo = new File(ISINTEGRATEDFUNCTION);
-				suffix = "";
-			} else {
-				home = ownerLink.replace(tmp.getName(), "");
-				linkTo = new File(NOTREFERENCED);
-				suffix = "";
-			}
+			linkTo = new File(caller.getScript().getLink());
+			home = ex.getScript().getLink().replace(exName, "");
+			suffix = DOCFILETYPE;
 			link = RelativePath.getRelativePath(new File(home), linkTo)
 					+ suffix;
 
@@ -290,6 +267,30 @@ public class LinkGenerator extends Generator {
 
 		return RelativePath.getRelativePath(new File(scriptHome), new File(
 				summaryFile));
+	}
+
+	private String getLinkPath(Script script) {
+		String path;
+		String scfn = script.getFile().getAbsolutePath()
+				.replace('\\', '/');
+		String bap = "?";
+		File bas = this.base;
+		boolean found = false;
+		for (File b : getBases()) {
+			bap = b.getAbsolutePath().replace('\\', '/');
+			if (scfn.startsWith(bap)) {
+				bas = b;
+				found = true;
+				break;
+			}
+		}
+		if (! found )
+			System.err.println("LinkGen error");
+		path = RelativePath.getRelativePath(bas, script.getFile())
+				.replace("\\", "/") + DOCFILETYPE;
+		if (path.contains(".."))
+			System.err.println("LinkGen" + path);
+		return path;
 	}
 
 	@SuppressWarnings("unused")

@@ -20,22 +20,6 @@ public class DocParser {
 		System.out.println("starting scriptdoc process...");
 		long now = System.currentTimeMillis();
 
-//		/* loading built-in functions */
-//		BuiltInLoader.getInstance().setRoot(".");
-//		// BuiltInLoader.getInstance().setRoot("T:/IDEs/eclipse-java-kepler-64/eclipseGeneSEZ/plugins/org.genesez.metamodel.core_3.0.0.v20140325-1531.jar");
-//		BuiltInLoader.getInstance().generate();
-//
-//		/* generating the provided function that are provided automatically by EMF */
-//		ProvidedFunctionGenerator
-//				.getInstance()
-//				.setBase(
-//						new File(
-//								"T:/IDEs/eclipse-java-kepler-64/eclipseGeneSEZ/plugins/"
-//										+ "org.genesez.metamodel.core_3.0.0.v20140325-1531.jar"));
-//		ProvidedFunctionGenerator.getInstance().generate();
-//		ExecutableHelper.getInstance().setGeneratedFunctionHolder(
-//				ProvidedFunctionGenerator.getInstance().getFunctionHolder());
-
 		String metamodelCore = "T:/IDEs/eclipse-java-kepler-64/eclipseGeneSEZ/plugins/"
 				+ "org.genesez.metamodel.core_3.0.0.v20140325-1531.jar";
 		String scriptDocFolder = /*"T:/workspaces/swt.master.2014/org.genesez.scriptdoc/*/"/scriptdoc2";
@@ -72,10 +56,10 @@ public class DocParser {
 				"T:/IDEs/eclipse-java-kepler-64/eclipseGeneSEZ/plugins/"
 						+ "org.genesez.statistic_1.0.0.v20140325-1531",
 				"statistic");
-//		parseHelper.parseBaseWithPaths(
-//				"T:/IDEs/eclipse-java-kepler-64/eclipseGeneSEZ/plugins/"
-//						+ "org.genesez.adapter.uml2_3.0.8.v20140325-1531",
-//				"gcore", "gpresentation", "uml2");
+		parseHelper.parseBaseWithPaths(
+				"T:/IDEs/eclipse-java-kepler-64/eclipseGeneSEZ/plugins/"
+						+ "org.genesez.adapter.uml2_3.0.8.v20140325-1531",
+				"gcore", "gpresentation", "uml2");
 
 		parseHelper.generateHtml(false, scriptDocFolder);
 

@@ -101,8 +101,10 @@ public abstract class HtmlTemplate {
 		boolean failed = true;
 			String fullpath = (scriptPath + "/" + this.getPath()).replaceAll("//", "/");
 			String fullname = (fullpath + "/" + this.getName() + type).replaceAll("//", "/");
-			if(fullpath.contains(".."))
+			if(fullpath.contains("..") || getName().length() == 0) {
 				System.err.println(fullpath);
+				return false;
+			}
 		try {
 			File dir = new File(fullpath);
 			if(!dir.exists()) {
