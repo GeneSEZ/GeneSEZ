@@ -1,5 +1,6 @@
 package de.genesez.scriptdoc.htmlgenerator;
 
+import java.io.File;
 import java.util.*;
 
 /* PROTECTED REGION ID(java.type.import._17_0_1_ce902ca_1337440419977_249207_1641) ENABLED START */
@@ -44,7 +45,17 @@ public abstract class Generator {
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_1_ce902ca_1337440419977_249207_1641) ENABLED START */
-	// TODO: put your own implementation code here
+
+	private ArrayList<File> bases;
+
+	public void setBases(ArrayList<File> bases) {
+		this.bases = bases;
+	}
+
+	public ArrayList<File> getBases() {
+		return bases;
+	}
+	
 	/* PROTECTED REGION END */
 
 }

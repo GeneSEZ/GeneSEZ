@@ -20,26 +20,28 @@ import de.genesez.scriptdoc.parsing.Script;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
+ * 
  * @author EmpeROOR
  */
 public class LinkGenerator extends Generator {
-	
+
 	// -- generated attribute, constant + association declarations ----------
-	
+
 	private File base;
-	
+
 	private SymbolTable table;
-	
+
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * generates the links.
-	 * @return true if generation failed, false if succeed	
+	 * 
+	 * @return true if generation failed, false if succeed
 	 */
 	public boolean generate() {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_ce902ca_1337518775439_578051_2920) ENABLED START */
 		String link, to;
 		boolean failed = true;
-		
+
 		// generate script links
 		generateScriptLinks();
 
@@ -55,8 +57,9 @@ public class LinkGenerator extends Generator {
 						// set the link to the not-referenced.html..
 						to = NOTREFERENCED;
 						File tmp = new File(script.getLink());
-						link = RelativePath.getRelativePath(new File(script.getLink().replace(tmp.getName(), ""))
-							, new File(NOTREFERENCED));
+						link = RelativePath.getRelativePath(new File(script
+								.getLink().replace(tmp.getName(), "")),
+								new File(NOTREFERENCED));
 					}
 					script.getHeadExtensionLinks().add(link);
 				}
@@ -69,10 +72,11 @@ public class LinkGenerator extends Generator {
 		return failed;
 		/* PROTECTED REGION END */
 	}
-	
+
 	/**
-	 * generates relative paths for all scripts. We have to generate 'em before generating executables paths,
-	 * because we use the script link to create the executable paths. 
+	 * generates relative paths for all scripts. We have to generate 'em before
+	 * generating executables paths, because we use the script link to create
+	 * the executable paths.
 	 */
 	public void generateScriptLinks() {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_ce902ca_1337518856207_264423_2923) ENABLED START */
@@ -81,62 +85,85 @@ public class LinkGenerator extends Generator {
 		for (ScriptPackage pack : table.getPackages()) {
 			// generate script paths
 			for (Script script : pack.getScripts()) {
-				path = RelativePath.getRelativePath(this.base, script.getFile())
-					.replace("\\", "/") + DOCFILETYPE;
+				String scfn = script.getFile().getAbsolutePath()
+						.replace('\\', '/');
+				String bap = "?";
+				File bas = this.base;
+				boolean found = false;
+				for (File b : getBases()) {
+					bap = b.getAbsolutePath().replace('\\', '/');
+					if (scfn.startsWith(bap)) {
+						bas = b;
+						found = true;
+						break;
+					}
+				}
+				if (! found )
+					System.err.println("LinkGen error");
+				path = RelativePath.getRelativePath(bas, script.getFile())
+						.replace("\\", "/") + DOCFILETYPE;
+				if (path.contains(".."))
+					System.err.println("LinkGen" + path);
 				script.setLink(path);
 			}
 		}
 		/* PROTECTED REGION END */
 	}
-	
+
 	/**
-	 * generates relative paths for all executables, callers and called executables too.
-	 * @param	ex - the current executable 	
-	 * @param	ownerLink - the link of the script that declares the executable ex	
+	 * generates relative paths for all executables, callers and called
+	 * executables too.
+	 * 
+	 * @param ex
+	 *            - the current executable
+	 * @param ownerLink
+	 *            - the link of the script that declares the executable ex
 	 */
 	public void generateExecutableLinks(Executable ex, String ownerLink) {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_ce902ca_1337518856207_264423_2923) ENABLED START */
 		String home, link;
 		Function.OwnerType type = null;
 		File scriptLink = null;
-		File exOwner =  ex.getScript().getFile();
-		
+		File exOwner = ex.getScript().getFile();
+
 		// generate link of executable ex
 		link = RelativePath.getRelativePath(this.base, exOwner) + DOCFILETYPE;
 		ex.setLink(link);
-		
-		//generate called paths
+
+		// generate called paths
 		for (Executable called : ex.getCalled()) {
 			type = null; // reset the type to distinguish the executables
 			if (called instanceof Function) {
 				Function calledFunction = (Function) called;
-				scriptLink = new File(ownerLink);				
+				scriptLink = new File(ownerLink);
 				type = calledFunction.getOwnerType();
 			}
-			
-			if(type != null && 
-					!type.equals(Function.OwnerType.ReExported) && 
-					!type.equals(Function.OwnerType.OrdinaryOwner)) {
-				
-				if(type.equals(Function.OwnerType.BuiltIn)) {
-					home = ISINTEGRATEDFUNCTION; 
-				}else if (type.equals(Function.OwnerType.GeneratededByEMF)) {
-					home = ISGENERATEDFUNCTION; 
-				}else {// the scan doesnt contains this script
-					   // so we refer to the not-referenced.html	
-					home = NOTREFERENCED; 
+
+			if (type != null && !type.equals(Function.OwnerType.ReExported)
+					&& !type.equals(Function.OwnerType.OrdinaryOwner)) {
+
+				if (type.equals(Function.OwnerType.BuiltIn)) {
+					home = ISINTEGRATEDFUNCTION;
+				} else if (type.equals(Function.OwnerType.GeneratededByEMF)) {
+					home = ISGENERATEDFUNCTION;
+				} else {// the scan doesnt contains this script
+						// so we refer to the not-referenced.html
+					home = NOTREFERENCED;
 				}
-				
+
 				link = RelativePath.getRelativePath(
-						new File(ownerLink.replace(scriptLink.getName(), "")), new File(home));	
-			}else { // links for templates, validations, and 
-					// functions with "ordinary" owners and reexported functions
+						new File(ownerLink.replace(scriptLink.getName(), "")),
+						new File(home));
+			} else { // links for templates, validations, and
+						// functions with "ordinary" owners and reexported
+						// functions
 				home = ex.getScript().getFile().getPath()
-					.replace(ex.getScript().getFile().getName(), "");
-				link = RelativePath.getRelativePath(new File(home), 
-					called.getScript().getFile()) + DOCFILETYPE;		
+						.replace(ex.getScript().getFile().getName(), "");
+				link = RelativePath.getRelativePath(new File(home), called
+						.getScript().getFile())
+						+ DOCFILETYPE;
 			}
-			
+
 			called.setLink(link);
 		}
 		File linkTo;
@@ -145,10 +172,12 @@ public class LinkGenerator extends Generator {
 		for (Executable caller : ex.getCaller()) {
 			File tmp = caller.getScript().getFile();
 			if (caller.getScript() != null) {
-				home = ex.getScript().getFile().getPath().replace(ex.getScript().getFile().getName(), "");
+				home = ex.getScript().getFile().getPath()
+						.replace(ex.getScript().getFile().getName(), "");
 				linkTo = tmp;
 				suffix = DOCFILETYPE;
-			} else if (BuiltInLoader.getInstance().isBuiltInFunction(caller.getName())) {
+			} else if (BuiltInLoader.getInstance().isBuiltInFunction(
+					caller.getName())) {
 				home = ownerLink.replace(tmp.getName(), "");
 				linkTo = new File(ISINTEGRATEDFUNCTION);
 				suffix = "";
@@ -157,34 +186,40 @@ public class LinkGenerator extends Generator {
 				linkTo = new File(NOTREFERENCED);
 				suffix = "";
 			}
-			link = RelativePath.getRelativePath(new File(home), linkTo) + suffix;
-			
+			link = RelativePath.getRelativePath(new File(home), linkTo)
+					+ suffix;
+
 			caller.setLink(link);
 		}
 		/* PROTECTED REGION END */
 	}
-	
+
 	/**
 	 * Method stub for further implementation.
-	 * @param	ext	
-	 * @param	extCaller	
-	 * @return	
+	 * 
+	 * @param ext
+	 * @param extCaller
+	 * @return
 	 */
 	public String searchExtensionPath(String ext, Script extCaller) {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_ce902ca_1337519013246_232564_2929) ENABLED START */
 		String link;
-		
+
 		// look for each scanned extension.. maybe we could reference it
 		// otherwise we link to the notReferenced.html
 		for (ScriptPackage pack : table.getPackages()) {
 			for (Script script : pack.getScripts()) {
 				// just look for extend scripts..
 				if (script instanceof ExtendScript) {
-					String formExtendPath = StringHelper.replaceSlashWithColon(script.getLink(), root);
-					if (formExtendPath.contains(StringHelper.removeReExportStatment(ext))) {
+					String formExtendPath = StringHelper.replaceSlashWithColon(
+							script.getLink(), root);
+					if (formExtendPath.contains(StringHelper
+							.removeReExportStatment(ext))) {
 						File tmp = new File(extCaller.getLink());
-						String extCallerPath = extCaller.getLink().replace(tmp.getName(), "");
-						link = RelativePath.getRelativePath(new File(extCallerPath), new File(script.getLink()));
+						String extCallerPath = extCaller.getLink().replace(
+								tmp.getName(), "");
+						link = RelativePath.getRelativePath(new File(
+								extCallerPath), new File(script.getLink()));
 						return link;
 					}
 				}
@@ -193,7 +228,7 @@ public class LinkGenerator extends Generator {
 		return null;
 		/* PROTECTED REGION END */
 	}
-	
+
 	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Gets the value of the attribute '<em><b>base</b></em>'
@@ -201,30 +236,30 @@ public class LinkGenerator extends Generator {
 	public File getBase() {
 		return base;
 	}
-	
+
 	/**
 	 * Sets the value of the attribute '<em><b>base</b></em>'
 	 */
 	public void setBase(File base) {
 		this.base = base;
 	}
-	
+
 	/**
 	 * Gets the value of the attribute '<em><b>table</b></em>'
 	 */
 	public SymbolTable getTable() {
 		return table;
 	}
-	
+
 	/**
 	 * Sets the value of the attribute '<em><b>table</b></em>'
 	 */
 	public void setTable(SymbolTable table) {
 		this.table = table;
 	}
-	
+
 	// -- generated code of other cartridges --------------------------------
-	
+
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_1_ce902ca_1337440728163_389260_1787) ENABLED START */
 	public static final String NOTREFERENCED = "external-function.html";
@@ -234,23 +269,29 @@ public class LinkGenerator extends Generator {
 	public static final String FILESEPARATOR = "/";
 	public static final String NOTFOUND = "NOT_FOUND(!)";
 	public static final String NOTSETTED = "FOR LATER USAGE :)";
-	
+
 	/*
 	 * produces a relative path, used by wildcard impleme
 	 */
 	public static String getRelativePath(IContent c, String toFile) {
 		Script s = (Script) c;
-		String summaryFile = s.getRoot() + "/" + toFile;	
-		
-		String scriptHome = s.getFile().getPath()
-			.replace(s.getRoot().getBase().getPath(), "")
-			.replace("\\", "/");
-		
-		scriptHome = s.getRoot() + scriptHome.replace((new File(scriptHome)).getName(), "");	
-		
-		return RelativePath.getRelativePath(new File(scriptHome), new File(summaryFile));	
+		// String summaryFile = s.getRoot() + "/" + toFile;
+		String summaryFile = s.getRootPath() + "/" + toFile;
+
+		String scriptHome = s.getFile().getPath();
+		// String scriptRoot = s.getRoot().getBase().getPath();
+		String scriptRoot = s.getRootPath();
+		scriptHome = scriptHome.replace(scriptRoot, "").replace("\\", "/");
+
+		// scriptHome = s.getRoot() + scriptHome.replace((new
+		// File(scriptHome)).getName(), "");
+		scriptHome = s.getRootPath()
+				+ scriptHome.replace((new File(scriptHome)).getName(), "");
+
+		return RelativePath.getRelativePath(new File(scriptHome), new File(
+				summaryFile));
 	}
-	
+
 	@SuppressWarnings("unused")
 	private String printOnConsolePlease(TreeSet<ScriptPackage> symbols) {
 		StringBuilder b = new StringBuilder();
@@ -268,7 +309,8 @@ public class LinkGenerator extends Generator {
 				for (Executable ex : s.getSymbols()) {
 					b.append(ex.getName() + " link: " + ex.getLink() + "\n");
 					for (Executable called : ex.getCaller()) {
-						b.append("called by " + called.getName() + " link: " + called.getLink() + "\n");
+						b.append("called by " + called.getName() + " link: "
+								+ called.getLink() + "\n");
 					}
 				}
 			}

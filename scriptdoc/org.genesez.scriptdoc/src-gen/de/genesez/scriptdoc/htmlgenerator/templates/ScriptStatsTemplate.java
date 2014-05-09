@@ -39,7 +39,13 @@ public class ScriptStatsTemplate extends WildCardTemplate {
 			for (Script script : pack.getScripts()) {
 				// just calculate stats for xpand and xtend scripts
 				if (script instanceof ExpandScript || script instanceof ExtendScript) {
-					String path = script.getFile().getPath().replace(script.getRoot().getBase().getPath() + "\\", "").replace(script.getFile().getName(), "");
+					String path = script
+							.getFile()
+							.getPath()
+							.replace(
+//									script.getRoot().getBase().getPath() + "\\",
+									script.getRootPath() + "\\",
+									"").replace(script.getFile().getName(), "");
 					
 					create(script.getFile().getName(), STATSFOLDER + "/" + path, new ScriptStatsTemplate(this.templateName, contentType), createWildCards(script, contentType));
 				}

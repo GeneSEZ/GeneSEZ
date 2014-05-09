@@ -58,9 +58,15 @@ public class Function extends Executable implements IContent {
 			for (String typeAndParameter : tmpParams) {
 				String[] arParam = typeAndParameter.trim().split("\\s+");
 				Parameter param = new Parameter();
+				if(arParam.length > 1) {
 				param.setMetaType(arParam[0]);
 				param.setName(arParam[1]);
 				insertInParams(param);
+				} else {
+					param.setMetaType("Unknown");
+					param.setName("param");
+					System.err.println("parameter parse error in " + name + ": " + paramDef); 
+				}
 			}
 
 			// replace the metatype of the first parameter,
@@ -120,6 +126,13 @@ public class Function extends Executable implements IContent {
 			
 			cleanedBody = cleanedBody.replaceAll(STATICANNOTATION + "|" + STATICJAVAFUNCTION, "");
 			
+//			p = Pattern.compile(ANYSTRING);
+//			m = p.matcher(cleanedBody);
+//			while(m.find()) {
+//				System.out.println("any text: " + m.group());
+//			}
+//			cleanedBody.replaceAll(ANYSTRING, "\"\"");
+			
 			p = Pattern.compile(EXTENDFUNCTION);
 			m = p.matcher(cleanedBody);	
 			pJavaFunction = Pattern.compile(JAVAFUNCTION);	
@@ -140,6 +153,7 @@ public class Function extends Executable implements IContent {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_6_2_6340215_1304167512306_299263_406) ENABLED START */
 	// TODO: put your own implementation code here	
 	// matches xtend function calls in method body
+	// TODO avoid function lookalikes inside Strings
 	public static final String EXTENDFUNCTION = "(?s)((\\w+)(\\(.*\\))\\s*)";
 	// matches java method calls e.g. JAVA org.genesez.platform.common.Conversion.format(java.lang.String);
 	public static final String JAVAFUNCTION = "(JAVA)\\s*(\\w+\\.)*(\\w+)\\(.*?\\)\\s*";

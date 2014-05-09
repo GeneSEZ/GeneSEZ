@@ -99,20 +99,24 @@ public abstract class HtmlTemplate {
 	public boolean createFile(String type) {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_ce902ca_1337457361482_165389_3281) ENABLED START */
 		boolean failed = true;
+			String fullpath = (scriptPath + "/" + this.getPath()).replaceAll("//", "/");
+			String fullname = (fullpath + "/" + this.getName() + type).replaceAll("//", "/");
+			if(fullpath.contains(".."))
+				System.err.println(fullpath);
 		try {
-			//			file = new File(this.getRoot() + "/" + this.getPath() + "/" + this.getName() + type);	
-			// WHY THE HELL RETURNS getRoot() null ?!? ffs
-			// TODO -.-
-			file = new File("scriptdoc" + "/" + this.getPath() + "/" + this.getName() + type);
+			File dir = new File(fullpath);
+			if(!dir.exists()) {
+				dir.mkdirs();
+			}
+			file = new File(fullname);
 			failed = file.createNewFile();
 			FileWriter writer = new FileWriter(file);
 			
 			writer.write(content);
 			writer.flush();
 			writer.close();
-			//			System.out.println("File: " + file.getName() + " generated...");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.err.println(file.getAbsolutePath() + " error: " + e);
 			e.printStackTrace();
 		}
 		return failed;
@@ -310,6 +314,13 @@ public abstract class HtmlTemplate {
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_1_ce902ca_1337441098867_13776_1886) ENABLED START */
+	
+	private static String scriptPath = "scriptdoc";
+	
+	public static void setScriptPat(String path) {
+		scriptPath = path;
+	}
+	
 	public enum ContentType {
 		NAVI,
 		OAWSCRIPTHEAD,
