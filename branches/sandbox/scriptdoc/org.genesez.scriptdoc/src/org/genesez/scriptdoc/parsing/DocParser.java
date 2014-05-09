@@ -7,104 +7,153 @@ import java.util.Set;
 
 import de.genesez.scriptdoc.helper.ExecutableHelper;
 import de.genesez.scriptdoc.htmlgenerator.*;
+import de.genesez.scriptdoc.htmlgenerator.templates.HtmlTemplate;
 import de.genesez.scriptdoc.parsing.Roots;
 
 public class DocParser {
 
 	/**
-	 * @param args - Index 0: 1 - stats will be generated, 0 no stats
-	 * 			   - Index 1+ - the paths
+	 * @param args
+	 *            - Index 0: 1 - stats will be generated, 0 no stats 
 	 */
 	public static void main(String[] args) {
 		System.out.println("starting scriptdoc process...");
 		long now = System.currentTimeMillis();
+
+//		/* loading built-in functions */
+//		BuiltInLoader.getInstance().setRoot(".");
+//		// BuiltInLoader.getInstance().setRoot("T:/IDEs/eclipse-java-kepler-64/eclipseGeneSEZ/plugins/org.genesez.metamodel.core_3.0.0.v20140325-1531.jar");
+//		BuiltInLoader.getInstance().generate();
+//
+//		/* generating the provided function that are provided automatically by EMF */
+//		ProvidedFunctionGenerator
+//				.getInstance()
+//				.setBase(
+//						new File(
+//								"T:/IDEs/eclipse-java-kepler-64/eclipseGeneSEZ/plugins/"
+//										+ "org.genesez.metamodel.core_3.0.0.v20140325-1531.jar"));
+//		ProvidedFunctionGenerator.getInstance().generate();
+//		ExecutableHelper.getInstance().setGeneratedFunctionHolder(
+//				ProvidedFunctionGenerator.getInstance().getFunctionHolder());
+
+		String metamodelCore = "T:/IDEs/eclipse-java-kepler-64/eclipseGeneSEZ/plugins/"
+				+ "org.genesez.metamodel.core_3.0.0.v20140325-1531.jar";
+		String scriptDocFolder = /*"T:/workspaces/swt.master.2014/org.genesez.scriptdoc/*/"/scriptdoc2";
+
+		ParseHelper parseHelper = new ParseHelper();
+
+		parseHelper.initialize(metamodelCore);
+
+		parseHelper.parseBaseWithPaths(
+				"T:/IDEs/eclipse-java-kepler-64/eclipseGeneSEZ/plugins/"
+						+ "org.genesez.platform.java_3.0.2.v20140325-1531",
+				"jpa", "cdi", "di4java", "ejb3", "ejb3_1", "java", "jbv",
+				"jpa", "jws", "seam2");
+		parseHelper.parseBaseWithPaths(
+				"T:/IDEs/eclipse-java-kepler-64/eclipseGeneSEZ/plugins/"
+						+ "org.genesez.util_1.0.1.v20140325-1531",
+				"filesystem", "logging", "sysenv", "util");
+		parseHelper
+				.parseBaseWithPaths(
+						"T:/IDEs/eclipse-java-kepler-64/eclipseGeneSEZ/plugins/"
+								+ "org.genesez.mapping_1.0.0.v20140325-1531",
+						"mapping");
+		parseHelper
+				.parseBaseWithPaths(
+						"T:/IDEs/eclipse-java-kepler-64/eclipseGeneSEZ/plugins/"
+								+ "org.genesez.metamodel.core.util_1.0.3.v20140325-1531",
+						"m2m", "mapping", "profile", "util", "validation");
+		parseHelper
+				.parseBaseWithPaths(
+						"T:/IDEs/eclipse-java-kepler-64/eclipseGeneSEZ/plugins/"
+								+ "org.genesez.metamodel.traceability.util_1.0.0.v20140325-1531",
+						"dashboard", "java", "navigation");
+		parseHelper.parseBaseWithPaths(
+				"T:/IDEs/eclipse-java-kepler-64/eclipseGeneSEZ/plugins/"
+						+ "org.genesez.statistic_1.0.0.v20140325-1531",
+				"statistic");
+//		parseHelper.parseBaseWithPaths(
+//				"T:/IDEs/eclipse-java-kepler-64/eclipseGeneSEZ/plugins/"
+//						+ "org.genesez.adapter.uml2_3.0.8.v20140325-1531",
+//				"gcore", "gpresentation", "uml2");
+
+		parseHelper.generateHtml(false, scriptDocFolder);
+
+		long elapsed = System.currentTimeMillis();
+		System.out.println("scriptdoc process finished in: " + (elapsed - now)
+				+ "ms");
+	}
+
+	private static class ParseHelper {
+		HtmlGenerator gen = new HtmlGenerator();
+		Roots roots = new Roots();
+		ArrayList<File> bases = new ArrayList<>();
 		// home of script files
 		String base;
 		// scriptdoc home
 		String scriptDocFolder;
-		// the calculation of the statistics takes some time..
-		// ..especially for bigger projects!
-		boolean withStats  = false;	
 
-		ArrayList<String> paths = new ArrayList<String>();
-		Set<File> directories = new LinkedHashSet<File>();
+		/**
+		 * initialize doc generator with built-in functions and EMF provided
+		 * functions
+		 * 
+		 * @param pathToMetamodelCore
+		 *            path to the GeneSEZ Metamodel Core jar file
+		 */
+		public void initialize(String pathToMetamodelCore) {
+			/* loading built-in functions */
+			BuiltInLoader.getInstance().setRoot(".");
+			BuiltInLoader.getInstance().generate();
+			/* generating the functions that are provided automatically by EMF */
+			ProvidedFunctionGenerator.getInstance().setBase(
+					new File(pathToMetamodelCore));
+			ProvidedFunctionGenerator.getInstance().generate();
+			ExecutableHelper.getInstance()
+					.setGeneratedFunctionHolder(
+							ProvidedFunctionGenerator.getInstance()
+									.getFunctionHolder());
+		}
 
-		if(args.length == 0) {
-			base = "D:/GeneSEZ/eclipse/eclipse/workspace/org.genesez.scriptdoc";
-			scriptDocFolder  = "scriptdoc";
-		} else {
-			if(args[0] == "1") {
-				withStats = true;
+		/**
+		 * parse genesez scripts; must be called for every base folder before
+		 * generating html documentation
+		 * 
+		 * @param base
+		 *            common base folder of scripts, typically an eclipse plugin
+		 *            folder or a user supplied customisation folder
+		 * @param paths
+		 *            folders directly under base that contain scripts
+		 */
+		public void parseBaseWithPaths(String base, String... paths) {
+			Set<File> directories = new LinkedHashSet<File>();
+			bases.add(new File(base));
+			for (String path : paths) {
+				directories.add(new File(base + "/" + path));
 			}
-			base = args[1];
-			scriptDocFolder  = args[2];
+			roots.setBase(new File(base));
+			roots.setPaths(directories);
+			roots.parse();
 		}
-		if(args.length > 2) {
-			for( int i = 1; i < args.length; i++) {
-				paths.add(args[i]);
-			}
-		} else {
-			// some test scripts
-			paths.add("org.genesez.util");
-			//paths.add("org.genesez.metamodel.core.util");
-			//paths.add("org.genesez.platform.java/java5");
-			//paths.add("org.genesez.platform.java/java");
 
-			// complete genesez
-			/*
-			paths.add("org.eclipse.emf.ecore.adapter.uml");
-			paths.add("org.genesez.adapter.ea");
-			paths.add("org.genesez.adapter.magicdraw");
-			paths.add("org.genesez.adapter.uml2");
-			paths.add("org.genesez.build");
-			paths.add("org.genesez.feature");
-			paths.add("org.genesez.featuregroup");
-			paths.add("org.genesez.headless");
-			paths.add("org.genesez.metamodel.core");
-			paths.add("org.genesez.metamodel.requirements");
-			paths.add("org.genesez.metamodel.testing");
-			paths.add("org.genesez.metamodel.traceability");
-			paths.add("org.genesez.platform.common");
-			paths.add("org.genesez.platform.cpp");
-			paths.add("org.genesez.platform.dashboard");
-			paths.add("org.genesez.platform.documentation");
-			paths.add("org.genesez.platform.dotnet");
-			paths.add("org.genesez.platform.java");
-			paths.add("org.genesez.platform.php");
-			paths.add("org.genesez.platform.qftest");
-			paths.add("org.genesez.platform.typo3");
-			paths.add("org.genesez.platforms.generator");
-			paths.add("org.genesez.platforms.generator");
-			paths.add("org.genesez.tools");
-			*/
+		/**
+		 * generate html docomentation. must be called after parsing
+		 * <em>all</em> script folders
+		 * 
+		 * @param withStats
+		 *            generate statistics - might take quite a while
+		 * @param scriptPath
+		 *            output folder for generated documentation
+		 */
+		public void generateHtml(boolean withStats, String scriptPath) {
+			gen = new HtmlGenerator();
+			HtmlTemplate.setScriptPat(scriptPath);
+			gen.setTable(roots.getTable());
+			gen.setBases(bases);
+			gen.setBase(roots.getBase());
+			gen.setRoot(scriptDocFolder);
+			gen.setWithStats(withStats);
+			gen.generate();
 		}
-		for (String pathName : paths) {
-			directories.add(new File(base + "/" + pathName));
-		}
-		
-		/* loading built-in functions */
-		BuiltInLoader.getInstance().setRoot(".");
-		BuiltInLoader.getInstance().generate();
-		
-		/* generating the provided function that are provided automatically by EMF */
-		ProvidedFunctionGenerator.getInstance().setBase(new File(base));
-		ProvidedFunctionGenerator.getInstance().generate();
-		ExecutableHelper.getInstance().setGeneratedFunctionHolder(
-				ProvidedFunctionGenerator.getInstance().getFunctionHolder());
-		
-		Roots roots = new Roots();
-		roots.setBase(new File(base));
-		roots.setPaths(directories);
-		roots.parse();
-		
-		HtmlGenerator gen = new HtmlGenerator();
-		gen.setTable(roots.getTable());
-		gen.setBase(roots.getBase());
-		gen.setRoot(scriptDocFolder);
-		gen.setWithStats(withStats);
-		gen.generate();
 
-		long elapsed = System.currentTimeMillis();
-		System.out.println("scriptdoc process finished in: " + (elapsed - now) + "ms"); 
 	}
 }

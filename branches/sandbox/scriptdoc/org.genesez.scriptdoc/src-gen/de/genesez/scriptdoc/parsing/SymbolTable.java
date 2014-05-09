@@ -29,7 +29,8 @@ public class SymbolTable implements IContent {
 	 */
 	public void insertInSymbols(Script s) {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_ce902ca_1337446762631_928707_2452) ENABLED START */
-		String packageName = StringHelper.separateNamespaceOutOfFile(s.getFile(), s.getRoot().getBase().getPath(), true);
+//		String packageName = StringHelper.separateNamespaceOutOfFile(s.getFile(), s.getRoot().getBase().getPath(), true);
+		String packageName = StringHelper.separateNamespaceOutOfFile(s.getFile(), s.getRootPath(), true);
 		
 		for (ScriptPackage pack : packages) {
 			if(pack.getName().equals(packageName)) {

@@ -352,9 +352,9 @@ public abstract class Script implements IContent, Comparable<Script> {
 	/**
 	 * accessor for association to root
 	 */
-	public Roots getRoot() {
-		return root;
-	}
+//	public Roots getRoot() {
+//		return root;
+//	}
 	
 	/**
 	 * accessor for association to root
@@ -375,13 +375,26 @@ public abstract class Script implements IContent, Comparable<Script> {
 	public java.util.ArrayList<String> getHeadExtensionLinks() {
 		return headExtensionLinks;
 	}
-	
 	/**
 	 * Sets the value of the attribute '<em><b>headExtensions</b></em>'
 	 */
 	public void setHeadExtensionLinks(java.util.ArrayList<String> headExtensions) {
 		this.headExtensions = headExtensionLinks;
 	}
+	
+	/**
+	 * path to base directory of scripts
+	 */
+	private String rootPath;
+	
+	public String getRootPath() {
+		return rootPath;
+	}
+
+	public void setRootPath(String rootPath) {
+		this.rootPath = rootPath;
+	}
+
 	
 	/**
 	 * accessor for association to symbols

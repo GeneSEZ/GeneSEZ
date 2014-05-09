@@ -86,6 +86,7 @@ public class Roots {
 			return;
 		s.setFile(script);
 		s.setRoot(this);
+		s.setRootPath(base.getPath());
 		s.parse();
 		/* PROTECTED REGION END */
 	}

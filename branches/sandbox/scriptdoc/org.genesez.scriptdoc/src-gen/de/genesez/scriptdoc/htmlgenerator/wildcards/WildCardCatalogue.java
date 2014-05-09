@@ -120,7 +120,8 @@ public class WildCardCatalogue {
 		@Override
 		public void setupReplacement(IContent c) {
 			Script s = (Script) c;
-			String root = s.getRoot().getBase().getPath();
+//			String root = s.getRoot().getBase().getPath();
+			String root = s.getRootPath();
 			this.replacement = StringHelper.separateEclipsProjectPathOutOfFile(
 					s.getFile(), root);		
 		}
@@ -139,7 +140,8 @@ public class WildCardCatalogue {
 		public void setupReplacement(IContent c) {
 			Script s = (Script) c;
 			this.replacement = StringHelper.separateDirPathOutOfFile(
-					s.getFile(), s.getRoot().getBase().getPath());
+					s.getFile(), s.getRootPath());
+//			s.getFile(), s.getRoot().getBase().getPath());
 		}
 	}
 

@@ -75,19 +75,26 @@ public class ExecutableIndexTemplate extends WildCardTemplate {
 	
 	public void insertInPackList(Executable e) {
 		String pack = "";
+		String firstLetter = "";
 		// determine first letter of this executable
-		String firstLetter = (e.getName().charAt(0) + "").toUpperCase();
-		// watch if a scipt wit the current letter is available
+		try {
+		firstLetter = (e.getName().charAt(0) + "").toUpperCase();
+		} catch(RuntimeException r) {
+			System.err.println("parse error in " + e.getLink().replace(".html", "") + " for " + e.getCode());
+			return;
+		}
+		// watch if a script with the current letter is available
 		Script s = indices.getScript(firstLetter);
 		// if not, create a new once
 		if (s == null) {
 			
 			s = new ExpandScript();
 			s.setFile(new File(firstLetter));
-			s.setRoot(e.getScript().getRoot());
+//			s.setRoot(e.getScript().getRoot());
+			s.setRootPath(e.getScript().getRootPath());
 			s.insert(e);
 			
-			// sometimes the packages isnt setted up.. dunno why
+			// sometimes the packages are not set up.. 
 			// TODO
 			if (e.getScript().getPack() != null) {
 				pack = e.getScript().getPack().getName();

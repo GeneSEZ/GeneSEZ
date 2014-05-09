@@ -39,12 +39,12 @@ public class BuiltInLoader extends Loader {
 	public boolean generate() {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_ce902ca_1337520305417_545881_3064) ENABLED START */
 		boolean failed = true;
-		String trennzeichen = ";";
+		String separator = ";";
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(new File(root + "/" + dir + "/" + "functions.csv")));
 			String readString;
 			while ((readString = in.readLine()) != null) {
-				String s = readString.split(trennzeichen)[0];
+				String s = readString.split(separator)[0];
 				integratedFunctions.add(s);
 			}
 			in.close();

@@ -6,6 +6,7 @@ import de.genesez.scriptdoc.htmlgenerator.templates.HtmlTemplate;
 import de.genesez.scriptdoc.parsing.Script;
 import de.genesez.scriptdoc.parsing.ScriptPackage;
 import de.genesez.scriptdoc.parsing.SymbolTable;
+
 import java.io.File;
 
 /* PROTECTED REGION ID(java.type.import._17_0_1_ce902ca_1337440710824_281138_1767) ENABLED START */
@@ -31,7 +32,7 @@ public class HtmlGenerator extends Generator {
 	private File base;
 	
 	private boolean withStats;
-	
+
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
@@ -44,12 +45,14 @@ public class HtmlGenerator extends Generator {
 		
 		/* generating links */
 		linkGen.setBase(base);
+		linkGen.setBases(getBases());
 		linkGen.setRoot(root);
 		linkGen.setTable(table);
 		linkGen.generate();
 		
 		/* generating directory structure */
 		dirGen.setBase(base);
+		dirGen.setBases(getBases());
 		dirGen.setRoot(root);
 		dirGen.generate();
 		
