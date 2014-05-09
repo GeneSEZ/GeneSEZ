@@ -83,7 +83,10 @@ public class RelativePath {
 			homelist = getPathList(home);
 			if (homelist != null) {
 				filelist = getPathList(f);
-				return matchPathLists(homelist, filelist).replace("\\", "/");
+				String r = matchPathLists(homelist, filelist).replace("\\", "/");
+				if(r.contains("org.genesez.platform"))
+					System.err.println("whoops: " + r);
+				return r;
 			} else
 				return "";
 		}
