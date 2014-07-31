@@ -1,0 +1,87 @@
+/*
+
+ @author christian possoegel
+*/
+
+// uses uml metamodel
+import uml;
+
+
+/*
+Integer getComponentTaggedValue(Model this, String fullQualifiedName, String stereotype, String taggedValue) :
+	null;
+
+
+Object getValueFromStereotype(Component this, String stereotypeName, String taggedValue) :
+	getValue( getStereoypeFromComponent(stereotypeName),taggedValue);
+*/
+
+private Stereotype getStereoypeFromComponent(Component this, String fullQualifiedName) :
+	getAppliedStereotypes().select(e|e.getQualifiedName().matches(fullQualifiedName));
+
+
+/**
+ * getter for components by it's full qualified name which is separed by dot's
+ * @param	fullQualifiedName	full qualified name of the stereotype from the component
+ * @return	list of components found or null
+ */
+
+cached List[Component] getComponentByStereotype(Model this, String stereotype) :
+	allComponents().select(e| e.getAppliedStereotypes().exists(
+		stereo| stereo.getQualifiedName().matches(stereotype) )); 
+
+
+/**
+ * getter for a classifier by it's full qualified name which is separed by dot's
+ * @param	fullQualifiedName	full qualified name of the classifier
+ * @return	the classifier found or null
+ */
+
+Component getComponent(Model this, String fullQualifiedName) :
+	allComponents().select(e| e.getQualifiedName().matches(fullQualifiedName)).first();
+
+/**
+ * getter for a package by it's full qualified name, which is separated by dot's
+ * @param	fullQualifiedPackageName	full qualified name of a package
+ * @return	the package found or null
+ */
+
+Package getPackage(Model this, String fullQualifiedPackageName) :	
+	allPackages().select(e| e.getLabel().matches(fullQualifiedPackageName)).first();
+	
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	components
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+cached List[Component] allComponents(Package this) :
+	let list = addAllComponent({}) : 
+		list.addAll( list.typeSelect(Component).addComponentComponents() );
+	 
+
+create List[Component] addComponentComponents(Component component) :
+	this.addAll( component.ownedMember.typeSelect(Component) );	
+
+
+cached List[Component] addAllComponent(Package this, List[Component] components) :	
+	components.addAll( ownedMember.typeSelect(Component) ) ->
+	nestedPackage.addAllComponent(components) ->		
+	components;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	packages
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+cached List[Package] allPackages(Package this) :
+	addAllPackages({});
+	
+	
+cached List[Package] addAllPackages(Package this, List[Package] packages) :
+	packages.addAll(nestedPackage) ->
+	nestedPackage.addAllPackages(packages) ->
+	packages;
+	
+		
