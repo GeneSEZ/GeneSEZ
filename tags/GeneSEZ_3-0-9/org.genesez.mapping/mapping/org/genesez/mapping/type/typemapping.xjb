@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jaxb:bindings schemaLocation="typemapping.xsd" jaxb:version="2.0"
+	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:tm="http://www.genesez.org/typemapping"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb bindingschema_2_0.xsd">
+	<jaxb:bindings node="/xs:schema">
+		<jaxb:globalBindings collectionType="java.util.ArrayList" />
+		<jaxb:schemaBindings>
+			<jaxb:package name="org.genesez.mapping.type.types" />
+		</jaxb:schemaBindings>
+				
+		<jaxb:bindings node="//xs:complexType[@name='typeMappingType']">
+			<jaxb:class name="MappingBody" />
+			<jaxb:bindings node=".//xs:element[@ref='tm:include']">
+				<jaxb:property name="includedFiles" ></jaxb:property>
+			</jaxb:bindings>
+			<jaxb:bindings node=".//xs:element[@ref='tm:multiValuedTypes']">
+				<jaxb:property name="MultiValuedTypes" generateIsSetMethod="true"></jaxb:property>
+			</jaxb:bindings>
+			<jaxb:bindings node=".//xs:element[@ref='tm:externalTypes']">
+				<jaxb:property name="externalTypes" generateIsSetMethod="true"></jaxb:property>
+			</jaxb:bindings>
+		</jaxb:bindings>
+		
+		<jaxb:bindings node="//xs:complexType[@name='includeType']">
+			<jaxb:class name="FileContainer" />
+			<jaxb:bindings node=".//xs:element[@ref='tm:file']">
+				<jaxb:property name="FileList"></jaxb:property>
+			</jaxb:bindings>
+		</jaxb:bindings>
+		
+		<jaxb:bindings node="//xs:complexType[@name='multiValuedTypesType']">
+			<jaxb:class name="MultiValuedTypeContainer" />
+			<jaxb:bindings node=".//xs:element[@ref='tm:multiValuedType']">
+				<jaxb:property name="mappingList"></jaxb:property>
+			</jaxb:bindings>
+		</jaxb:bindings>
+		
+		<jaxb:bindings node="//xs:complexType[@name='typesType']">
+			<jaxb:class name="SingleValuedTypeContainer" />
+			<jaxb:bindings node="..//xs:element[@ref='tm:type']">
+				<jaxb:property name="MappingList" />
+			</jaxb:bindings>
+		</jaxb:bindings>
+		
+		<jaxb:bindings node="//xs:complexType[@name='multiValuedTypeType']">
+			<jaxb:class name="MultiValuedType" />
+			<jaxb:bindings node=".//xs:element[@ref='tm:default']">
+				<jaxb:property name="destinationMapping" generateIsSetMethod="true" />
+			</jaxb:bindings>
+			<jaxb:bindings node=".//xs:element[@ref='tm:context']">
+				<jaxb:property name="contextMap" />
+			</jaxb:bindings>
+		</jaxb:bindings>
+		
+		<jaxb:bindings node="//xs:complexType[@name='contextType']">
+			<jaxb:class name="Context" />
+			<jaxb:bindings node=".//xs:attribute[@name='name']">
+				<jaxb:property name="key" />
+			</jaxb:bindings>
+		</jaxb:bindings>
+		
+		<jaxb:bindings node="//xs:complexType[@name='typeType']">
+			<jaxb:class name="SingleValuedType" />
+			<jaxb:bindings node=".//xs:element[@ref='tm:to']">
+				<jaxb:property name="destinationMapping" generateIsSetMethod="true" />
+			</jaxb:bindings>
+			<jaxb:bindings node=".//xs:element[@ref='tm:context']">
+				<jaxb:property name="contextMap" />
+			</jaxb:bindings>
+			<jaxb:bindings node=".//xs:attribute[@name='from']">
+				<jaxb:property name="sourceMapping" />
+			</jaxb:bindings>
+		</jaxb:bindings>
+		<jaxb:bindings node="//xs:attributeGroup[@name='multiValuedAttributes']">
+			<jaxb:bindings node=".//xs:attribute[@name='unique']">
+				<jaxb:property name="unique" />
+			</jaxb:bindings>
+			<jaxb:bindings node=".//xs:attribute[@name='ordered']">
+				<jaxb:property name="ordered" />
+			</jaxb:bindings>
+		</jaxb:bindings>
+	</jaxb:bindings>
+</jaxb:bindings>

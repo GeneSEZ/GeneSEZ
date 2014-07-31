@@ -1,0 +1,840 @@
+/**
+ * UML 2 GeneSEZ transformation script.
+ * Transforms UML state machine models into GeneSEZ models.
+ * 
+ * @author	georg beier (state machines)
+ */
+import uml;
+import gcore;
+
+extension org::genesez::adapter::uml2::gcore::UML2Gcore;
+extension org::genesez::adapter::uml2::gcore::Utility;
+extension org::genesez::util::logging::Logging;
+
+/**
+ * create a GeneSEZ StateMachine from UML Behavior
+ * @param sm UML Behavior subclass StateMachine
+ * @context the Classifier that owns the behavior
+ * @return newly generated MStateMachine
+ */
+MStateMachine transformBehavior(StateMachine sm, MClassifier this):
+//	trace("transforming UML StateMachine for class " + name + " in package " + owningContext) ->
+	let msm = makeStateMachine(sm, this) :
+		ownedBehavior.add(msm) ->
+		msm.atomize() ->
+		msm.smstate.typeSelect(MHistoryState).buildHistoryContext() ->
+		msm.linkTimeTrigger() ->
+		msm.linkHistoryContext() ->
+		msm.display()
+		;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	state machine behavior
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * create StateMachine
+ * @param sm uml::StateMachine
+ * @context none
+ * @return new MStateMachine
+ */
+private create MStateMachine makeStateMachine(StateMachine sm, MDefinitionContext ctx) :
+	transformBasics(sm)->
+	ctx.ownedBehavior.add(this) ->
+	sm.region.transition.makeTransition(this) ->
+	this;
+
+ 
+/**
+ * create the right kind of State
+ * @param  uml::State
+ * @context none
+ * @return right kind of new MState 
+ */
+private MState makeState(State s, MStateMachine sm) :
+	switch {
+		case s.isComposite:
+			makeCompositeState(s, sm)
+		case s.isSimple:
+			makeLeafState(s, sm)
+		default:
+			logError("unsupported State " + s)
+	};
+
+/**
+ * create the right kind of Pseudostate
+ * @param  uml::Pseudostate
+ * @context none
+ * @return right kind of new MState 
+ */
+private MState makeState(Pseudostate ps, MStateMachine sm) :
+	switch {
+		case ps.kind.toString() == "initial":
+			makeInitialState(ps, sm)
+		case ps.kind.toString().endsWith("History"):
+			makeHistoryState(ps, sm)
+		default:
+			logError("unsupported Pseudostate " + ps)
+	};
+	
+/**
+ * propagate to the referenced state
+ * @param  uml::ConnectionPointReference
+ * @context none
+ * @return right kind of new MState 
+ */
+private MState makeState(Vertex v, MStateMachine sm) :
+	logError("should never be called: " + v);
+
+/**
+ * propagate to the referenced state
+ * @param  uml::ConnectionPointReference
+ * @context none
+ * @return right kind of new MState 
+ */
+private MState makeState(ConnectionPointReference ref, MStateMachine sm) :
+	ref.state.makeState(sm);
+
+/**
+ * create Final State
+ * @param  uml::FinalState
+ * @context none
+ * @return new MLeafState 
+ */
+private create MFinalState makeState(FinalState s, MStateMachine sm) :
+ 	transformBasics(s) ->
+ 	sm.smstate.add(this) ->
+ 	setName(stateName(s, "_f")) ->
+ 	this;
+ 
+
+/**
+ * create Composite State 
+ * @param  uml::State
+ * @context none
+ * @return new MCompositeState
+ */
+private create MCompositeState makeCompositeState(State s, MStateMachine sm) :
+ 	transformBasics(s) ->
+ 	sm.smstate.add(this) ->
+ 	s.region.transition.makeTransition(sm) ->
+	linkActions(s, sm) ->
+	(s.container.state != null ?
+		setSuperstate((MCompositeState) makeState(s.container.state, sm)) :
+		null) ->
+ 	this;
+
+/**
+ * create Leaf State
+ * @param s uml::State
+ * @context none
+ * @return new MLeafState 
+ */
+private create MLeafState makeLeafState(State s, MStateMachine sm) :
+// 	debug("\t\t Leaf State " + s.name) ->
+ 	transformBasics(s) ->
+ 	sm.smstate.add(this) ->
+	linkActions(s, sm) ->
+	(s.container.state != null ?
+		setSuperstate((MCompositeState) makeState(s.container.state, sm)) :
+		null) ->
+ 	this;
+
+/**
+ * create Initial State 
+ * @param  uml::Pseudostate
+ * @context none
+ * @return new Metaobject
+ */
+ private create MInitialState makeInitialState(Pseudostate ps, MStateMachine sm) :
+// 	debug("\t\t Initial state " + ps.name) ->
+ 	transformBasics(ps) ->
+ 	sm.smstate.add(this) ->
+	setName(psName(ps, "_i")) ->
+	(ps.container.state != null ?
+		setSuperstate((MCompositeState) makeState(ps.container.state, sm)) :
+		null) ->
+ 	this;
+
+/**
+ * create History State 
+ * @param  uml::Pseudostate
+ * @context none
+ * @return new Metaobject 
+ */
+ private create MHistoryState makeHistoryState(Pseudostate ps, MStateMachine sm) :
+ 	transformBasics(ps) ->
+ 	sm.smstate.add(this) ->
+ 	setDeep(ps.kind.toString() == "deepHistory") ->
+	setName(psName(ps, "_h")) ->
+	(ps.container.state != null ?
+		setSuperstate((MCompositeState) makeState(ps.container.state, sm)) :
+		null) ->
+ 	this;
+ 
+/**
+ * link actions into MState, creating them if not present 
+ * @param  gcore::MState
+ * @param  uml::State
+ * @param  gcore::MStateMachine	the owning state machine
+ * @context none
+ * @return new Metaobject
+ */
+private linkActions(MState ms, State s, MStateMachine sm) :
+ 	s.entry != null ? ms.setEntry(s.entry.makeActivity(sm)) : null ->
+ 	s.exit != null ? ms.setExit(s.exit.makeActivity(sm)) : null ->
+ 	s.doActivity != null ? ms.setDo(s.doActivity.makeActivity(sm)) : null ;
+
+/**
+ * build a meaningful default name for an unnamed Pseudostate 
+ * @param  uml::Pseudostate
+ * @context none
+ * @return name
+ */
+private String psName(Pseudostate ps, String prefix) :
+ 	ps.name == "" ?
+ 		prefix + 
+ 			(switch {
+ 				case ps.container.stateMachine != null:
+ 					ps.container.stateMachine.name
+ 				case ps.container.state != null:
+ 					ps.container.state.name
+ 				default:
+ 					logError("free floating state " + ps)
+ 			}).toFirstUpper()
+ 		: ps.name; 
+
+/**
+ * build a meaningful default name for an unnamed Pseudostate 
+ * @param  uml::Pseudostate
+ * @context none
+ * @return name
+ */
+private String stateName(State s, String prefix) :
+ 	s.name == "" ?
+ 		prefix + 
+ 			(switch {
+ 				case s.container.stateMachine != null:
+ 					s.container.stateMachine.name
+ 				case s.container.state != null:
+ 					s.container.state.name
+ 				default:
+ 					logError("free floating state " + s)
+ 			}).toFirstUpper()
+ 		: s.name; 
+
+/**
+ * create transition
+ * @param t uml::transition
+ * @param  gcore::MStateMachine	the owning state machine
+ * @context
+ * @return new Metaobject
+ */
+ private create MTransition makeTransition(Transition t, MStateMachine sm) :
+ 	transformBasics(t) ->
+ 	setKind(t.kind.toString().subString(0,3)) ->
+	setSource(makeState(t.source, sm)) ->
+	setTarget(makeState(t.target, sm)) ->
+	setName(kind + ": " + source.name + " -> " + target.name) ->
+	sm.smtransition.add(this) ->
+ 	t.effect != null ? setAction(t.effect.makeActivity(sm)): null ->
+ 	t.guard != null ? setGuard(t.guard.makeGuard(sm)) : null ->
+	t.trigger.event.isEmpty ? 
+		trigger.add(makeAnonymousEvent(sm)) : trigger.addAll(t.trigger.event.makeEvent(sm)) ->
+ 	this;
+ 
+/**
+ * create a new MActivity  
+ * @param bh uml::Behavior, usually the Activity or Action linked to transition or state
+ * @param sm gcore::MStateMachine	the owning state machine
+ * @context
+ * @return new or cached metaobject
+ */
+private MActivity makeActivity(Behavior bh, MStateMachine sm) :
+	makeActivity(bh.name, sm); 
+ 
+/**
+ * create a new MActivity. activities are distinguished by an unique name within 
+ * the state machine. That can result in loss of user defined code if name is changed in diagram.
+ * @param actionname uniquely identifying name of Activity or Action 
+ * @param sm gcore::MStateMachine the owning state machine
+ * @context
+ * @return new Metaobject
+ */
+private create MActivity makeActivity(String actionname, MStateMachine sm) :
+	setXmiGuid( actionname + sm.xmiGuid ) ->
+	setName(actionname == null ? "" : actionname) ->
+	sm.ownedBehavior.add(this) ->
+	this; 
+ 
+/**
+ * create a new MGuard  
+ * @param g uml::Constraint guard attached to transition
+ * @param sm gcore::MStateMachine	the owning state machine
+ * @context
+ * @return new Metaobject
+ */
+private create MGuard makeGuard(Constraint guard, MStateMachine sm) :
+	transformBasics(guard) ->
+	sm.guard.add(this) ->
+	setName(xtractValue(guard.specification)) ->
+	this; 
+	
+/**
+ * extract some meaningful specification string from a uml guard.specification
+ * @param ox uml::OpaqueExpression (a ValueSpecification subtype)
+ * @return specification string
+ */
+ private String xtractValue(OpaqueExpression ox) :
+ 	ox.body.toString()
+ 	;
+
+/**
+ * extract some meaningful specification string from a uml guard.specification
+ * @param vs uml::ValueSpecification subtype
+ * @return specification string
+ */
+ private String xtractValue(ValueSpecification vs) :
+ 	"cannot process ValueSpec of type " + vs.metaType.toString()
+ 	;
+
+/**
+ * delegate create event, because different triggers can map to
+ * the same signal (in which we are only interested)
+ * @param s a uml::SignalEvent
+ * @param sm gcore::MStateMachine	the owning state machine
+ * @context the owning state machine
+ * @return new MEvent
+ */
+private MEvent makeEvent(SignalEvent s, MStateMachine sm) :
+	makeEvent(s.signal, sm);
+	
+/**
+ * create event from a signal
+ * @param s a uml::Signal
+ * @param sm gcore::MStateMachine	the owning state machine
+ * @context the owning state machine
+ * @return new MEvent
+ */
+private create MEvent makeEvent(Signal s, MStateMachine sm) :
+	transformBasics(s) ->
+	sm.event.add(this) ->
+	setIsCall(false) ->
+	setIsChange(false) ->
+	parameter.addAll(s.ownedAttribute.makeEventParameter()) ->
+	this;
+	
+/**
+ * delegate event creation of call event because
+ * different uml call events refer to the same operation and
+ * we consider only the operation as relevant.
+ * @param s a uml::CallEvent
+ * @param sm gcore::MStateMachine	the owning state machine
+ * @context the owning state machine
+ * @return new MEvent
+ */
+private MEvent makeEvent(CallEvent s, MStateMachine sm) :
+	makeCallEventFromOp(s.operation, sm)
+	; 
+
+/**
+ * create event
+ * @param s a uml::CallEvent
+ * @param sm gcore::MStateMachine	the owning state machine
+ * @context the owning state machine
+ * @return new MEvent
+ */
+private create MEvent makeCallEventFromOp(Operation op, MStateMachine sm) :
+	// set the unique xmiId and name
+//	setXmiGuid( op.xmiId(n) ) ->
+//	setName(op.name == null ? "callevent" : op.name) ->
+	transformBasics(op) ->
+	sm.event.add(this) ->
+	setIsCall(true) ->
+	setIsChange(false) ->
+	parameter.addAll(op.ownedParameter.makeEventParameter()) ->
+	this;
+	
+/**
+ * create event
+ * @param s a uml::TimeEvent
+ * @param sm gcore::MStateMachine	the owning state machine
+ * @context the owning state machine
+ * @return new MEvent
+ */
+private create MTimeEvent makeEvent(TimeEvent s, MStateMachine sm) :
+	transformBasics(s) ->
+	sm.event.add(this) ->
+	setIsCall(false) ->
+	setIsChange(false) ->
+	setIsRelative(s.isRelative) ->
+	setWhen(s.when.stringValue()) ->
+	this;
+	
+/**
+ * create event
+ * @param s a uml::ChangeEvent
+ * @param sm gcore::MStateMachine	the owning state machine
+ * @context the owning state machine
+ * @return new MEvent
+ */
+private create MEvent makeEvent(ChangeEvent s, MStateMachine sm) :
+	transformBasics(s) ->
+	sm.event.add(this) ->
+	setIsCall(false) ->
+	setIsChange(true) ->
+	setName(s.changeExpression.stringValue()) ->
+	this;
+	
+/**
+ * create anonymous event. in contrast to the uml metamodel, any 
+ * transition in a genesez model is triggered by an event. thus we
+ * create a special anononymous event if there is no event in the uml model.
+ * @param sm gcore::MStateMachine	the owning state machine
+ * @context the owning state machine
+ * @return new MEvent
+ */
+private create MEvent makeAnonymousEvent(MStateMachine sm) :
+	setXmiGuid( "_anonymousEvent@" + sm.xmiGuid ) ->
+	setName("_ANON_") ->
+	sm.event.add(this) ->
+	setIsCall(false) ->
+	setIsChange(false) ->
+	this;
+
+/**
+ * create event
+ * @param s a uml::Event
+ * @param sm gcore::MStateMachine	the owning state machine
+ * @context the owning state machine
+ * @return new MEvent
+ */
+private MEvent makeEvent(Event s, MStateMachine sm) :
+	logError("not supported kind of event: " + s.metaType + " for event " + s.name) ->
+	null;
+
+/**
+ * create Event Parameter
+ * @param p uml::Parameter
+ * @return new MEventParameter
+ */
+private create MParameter makeEventParameter(Parameter p) :
+	transformBasics(p) ->
+	setDefaultvalue( "" ) ->
+	setDirection( "" ) ->
+	setMultiplicity( p.makeMultiplicity() ) ->
+	setType( p.type.makeType() ) ->
+	stereotype.addAll( p.getAppliedStereotypes().make() ) ->
+	// containments
+	// add comment to parameter
+	ownedComment.addAll( p.ownedComment.typeSelect(Comment).transform() ) ->
+	// set tagged values
+	taggedValue.addAll( makeTaggedValues(this, p) ) ->
+	this;
+
+/**
+ * create Event Parameter
+ * @param p uml::Property
+ * @return new MEventParameter
+ */
+private create MParameter makeEventParameter(Property p) :
+	transformBasics(p) ->
+	setDefaultvalue( "" ) ->
+	setDirection( "" ) ->
+	setMultiplicity( p.makeMultiplicity() ) ->
+	setType( p.type.makeType() ) ->
+	stereotype.addAll( p.getAppliedStereotypes().make() ) ->
+	// containments
+	// add comment to parameter
+	ownedComment.addAll( p.ownedComment.typeSelect(Comment).transform() ) ->
+	// set tagged values
+	taggedValue.addAll( makeTaggedValues(this, p) ) ->
+	this;
+
+/*
+ ********** Transition atomisation section **********
+ */
+ 
+/**
+ * decompose  a (top level) state machine into atomic transitions by
+ * decomposing all of its transitions
+ * @param msm top level state machine
+ */
+private atomize(MStateMachine this) :
+	atomicTransition.addAll(smtransition.
+		reject(t|{MInitialState, MHistoryState}.contains(t.source.metaType) && t.source.superstate != null).
+		decompose()
+	) ->
+	this;
+	
+/**
+ * decompose a transition into atomic transitions by processing all of its leaf 
+ * source and target states
+ */
+private decompose(MTransition this) :
+	switch {
+		case kind == "int" :
+			source.sourceStates().makeInternalAtomicTransition(this)
+		default:
+			source.sourceStates().makeAtomicTransition(target.targetState(), this)
+	};
+
+/**
+ * create an internal atomic transition in a MLeafState instance
+ * @param src the source and target leaf state
+ * @param def the defining transition, must be of kind="int"
+ * @return newly created object 
+ */
+private create MAtomicTransition makeInternalAtomicTransition(MLeafState src, MTransition def) :
+	setXmiGuid("ATI"+src.xmiGuid+def.xmiGuid) ->
+	setName("ATI_" + src.name) ->
+	setDefiningTransition(def) ->
+	(def.action != null ? action.add(def.action) : null) ->
+	setSource(src) ->
+	setTarget(src)
+	;
+
+/**
+ * create an atomic transition between two MLeafState instances
+ * @param src the source leaf state
+ * @param trg the target leaf state
+ * @param def the defining transition, must not be of kind="int"
+ * @return newly created object 
+ */
+private create MAtomicTransition makeAtomicTransition(MLeafState src, MLeafState trg, MTransition def) :
+	setXmiGuid("AT"+src.xmiGuid+def.xmiGuid+trg.xmiGuid) ->
+	setName("AT_" + src.name + "_" + trg.name) ->
+	setDefiningTransition(def) ->
+	action.addAll(def.chainActions()) ->
+	switch {
+		case def.kind == "int" : logError("only external transitions should be processed here")
+		case src == trg :
+		(
+			(src.exit != null ? exit.add(src.exit) : null) ->
+			(src.do != null ? endDo.add(src.do) : null) ->
+			(trg.entry != null ? entry.add(trg.entry) : null) ->
+			(trg.do != null ? startDo.add(trg.do) : null) ->
+			setSource(src) ->
+			setTarget(trg)
+		)
+		default:	
+		(let from = src.leftStates(trg) :
+			(let to = src.enteredStates(trg) :
+				setSource((MLeafState)from.first()) ->
+				setTarget((MLeafState)to.last()) ->
+				from.collect(state|(state.exit != null ? exit.add(state.exit) : null) -> 
+								   (state.do != null ? endDo.add(state.do) : null)) ->
+				to.collect(state|(state.entry != null ? entry.add(state.entry) : null) -> 
+										   (state.do != null ? startDo.add(state.do) : null))
+			)
+		)
+	} ->
+	this;
+
+/**
+ * link default of a History State as defined by its outgoing default transition<br>
+ * @return probably a Leaf State
+ */
+private MLeafState buildHistoryContext(MHistoryState this) :
+	setReachableHistory(
+		deep ?
+			superstate.sourceStates().select(st|st.metaType == MLeafState) :
+			shallowContext()
+	) ->
+	setDefaultHistory(
+		switch {
+			case outgoing.isEmpty : 
+				null
+			case outgoing.first().target.metaType == MHistoryState :
+				((MHistoryState) outgoing.first().target).buildHistoryContext()
+			default :
+				outgoing.first().target.targetState()
+		}
+	)
+	;
+
+/**
+ * find all actions that are bound to a possibly chained transition
+ */
+ private List[MActivity] chainActions(MTransition trans) :
+ 	let actions = (trans.action != null ? {trans.action} : {}) :
+ 		switch {
+ 			case trans.target.metaType == MCompositeState :
+ 				actions.addAll(((MCompositeState)trans.target).entryState().outgoing.chainActions()) 
+ 			default: actions
+ 		}
+ 	;
+ 
+/**
+ * build a list of all states that have a leaving transition with a MTimeEvent
+ * @param msm top level state machine
+ * @return list of time triggered states
+ */
+private cached List[MState] timeTriggeredStates(MStateMachine sm) :
+	sm.smtransition.select(tr|
+		(!tr.trigger.isEmpty) && 
+		(! tr.trigger.typeSelect(MTimeEvent).isEmpty)
+	).source
+	;
+ 
+/**
+ * link all MAtomicTransitions that are connected with a MTimeEvent to
+ * this event, either on start or stop meta association
+ * can only be called after atomic transitions are resolved
+ * @param msm top level state machine
+ */
+private linkTimeTrigger(MStateMachine this) :
+	timeTriggeredStates().collect(ttsource|
+		let src = ttsource.sourceStates() :
+			atomicTransition.select(a|
+				src.contains(a.source) && ! src.contains(a.target)
+			).collect(a|
+				a.stopTimer.addAll(ttsource.outgoing.trigger.typeSelect(MTimeEvent))
+			) ->
+			atomicTransition.select(a|
+				! src.contains(a.source) && src.contains(a.target)
+			).collect(a|
+				a.startTimer.addAll(ttsource.outgoing.trigger.typeSelect(MTimeEvent)) 
+			)
+	) ->
+	null
+	;
+ 
+/**
+ * link all MAtomicTransitions that leave a compound state with a history state
+ * to that MHistoryState(s)
+ * can only be called after atomic transitions are resolved
+ * @param msm top level state machine
+ */
+private linkHistoryContext(MStateMachine this) :
+	smstate.typeSelect(MHistoryState).collect(history|
+		let src = history.superstate.sourceStates() :
+			atomicTransition.select(a|
+				src.contains(a.source) && ! src.contains(a.target)
+			).collect(a|
+				a.historyContext.add(history)
+			)
+	) ->
+	null
+	;
+	
+/**
+ * build a list of all states selectable for a shallow history state
+ * i.e all final states on same level plus
+ * all entry states of composite states on same level
+ * @param tstate target state, where the transition ends
+ * @return list of states
+ */
+private List[MState] shallowContext(MHistoryState history) :
+	let ctx = history.superstate.substate.select(st|st.metaType == MLeafState): 
+		ctx.addAll(history.superstate.substate.typeSelect(MCompositeState).targetState()) ->
+		ctx
+	;
+ 
+/**
+ * build a list of all states that are left on a transition to an other state
+ * @param fstate from state, where the transition starts
+ * @param tstate target state, where the transition ends
+ * @return list of left states
+ */
+private List[MState] leftStates(MLeafState fstate, MLeafState tstate) :
+	let from = fstate.superStates() :
+	tstate.superStates().collect(st|from.remove(st)) ->
+	from
+	;
+
+
+/**
+ * build a list of all states that are entered on a transition to an other state
+ * @param fstate from state, where the transition starts
+ * @param tstate target state, where the transition ends
+ * @return list of entered states
+ */
+private List[MState] enteredStates(MLeafState fstate, MLeafState tstate) :
+	let into = tstate.superStates() :
+	fstate.superStates().collect(st|into.remove(st)) ->
+	into.reverse()
+	;
+
+/**
+ * recursively build a list of all leaf substates of a state
+ */
+private cached List[MLeafState] sourceStates(MCompositeState this) :
+	substate.sourceStates()
+		.reject(state|state.metaType == MInitialState || 
+		              state.metaType == MHistoryState || 
+		              state.metaType == MFinalState)
+		.flatten()
+	;
+
+/**
+ * list of all leaf substates of a state is itself
+ */
+private cached List[MLeafState] sourceStates(MLeafState this) :
+	{this};
+
+/**
+ * should never been called
+ */
+private cached List[MLeafState] sourceStates(MState this) :
+	logError("sourceStates should never been called on abstract class MState") ->
+	{};
+
+/**
+ * recursively build a list of all superstates of a state including itself
+ * @param starting point
+ * @return list of states
+ */
+private List[MState] superStates(MState state) :
+	state.superstate == null ? {state} : {state}.addAll(state.superstate.superStates())
+	;
+
+/**
+ * find entry substate of a composite state, which must be
+ * either an initial state or  history state
+ * @param state
+ * @return entry state
+ */
+private cached MState entryState(MCompositeState this) :
+	substate.typeSelect(MInitialState).isEmpty ? 
+		(substate.typeSelect(MHistoryState).isEmpty ?
+			logError("Encountered Compound state without Initial or History State") :
+			substate.typeSelect(MHistoryState).first()
+		) :
+		substate.typeSelect(MInitialState).first()
+	;
+
+/**
+ * recursively find target substate of a composite state which must be
+ * either an initial state or  history state
+ * @param starting point
+ * @return finally found leaf state
+ */
+private cached MLeafState targetState(MCompositeState this) :
+	entryState().targetState()
+	;
+
+/**
+ * target state of an Initial State is found on its outgoing transition
+ */
+private cached MLeafState targetState(MInitialState this) :
+	outgoing.isEmpty ? (logError("Initial State has no outgoing transition: " + name) -> null) :
+	outgoing.first().target.targetState()
+	;
+
+/**
+ * target state of a History State is found on its outgoing default transition<br>
+ * but has to be evaluated by generated code
+ */
+private cached MLeafState targetState(MHistoryState this) :
+	switch {
+		case outgoing.isEmpty : 
+			logError("Initializing History State has no outgoing transition: " + name)
+		default : (
+			null
+		) 
+	} ->
+	this
+	;
+
+/**
+ * target state of a LeafState is itself
+ */
+private MLeafState targetState(MLeafState this) :
+	this;
+
+/**
+ * should never been called
+ */
+private cached MLeafState targetState(MState this) :
+	logError("targetlist should never been called on abstract class MState") ->
+	{};
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	state machine tracing section
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * for debugging: trace this state machine element
+ */
+private display(MStateMachine msm) :
+	logTrace("StateMachine of " + msm.owningContext.name + " (" + msm.owningContext.metaType.toString() + ")") ->
+	logTrace("	Actions ") ->
+	msm.ownedBehavior.typeSelect(MActivity).sortBy(e|e.name).display("		") ->
+	logTrace("	Atomic Transitions") ->
+	msm.atomicTransition.
+	sortBy(t|t.source.name).
+	sortBy(t|t.definingTransition.kind).
+	display("		")
+	;
+
+/**
+ * for debugging: trace this state machine element
+ */
+private displayState(MState mst) :
+	logTrace("	" + mst.name + " [" + 
+		(switch (mst.metaType) {
+			case gcore::MLeafState: 'L'
+			case MCompositeState: 'C'
+			case MInitialState: 'I'
+			case MFinalState: 'F'
+			case MHistoryState: 'H' + (((MHistoryState) mst).deep ? '*':'')
+			default: mst.metaType.toString()
+		}) + "]"
+	) ->
+	mst.entry != null ? logTrace("		entry/" + mst.entry.name) : null -> 
+	mst.exit != null ? logTrace("		exit/" + mst.exit.name) : null -> 
+	mst.do != null ? logTrace("		do/" + mst.do.name) : null -> 
+	mst.outgoing.select(tr|tr.kind != 'ext').displayTransition("		")
+	;
+
+/**
+ * for debugging: trace this state machine element
+ */
+private displayTransition(MTransition mtr, String ind) :
+	logTrace(ind + "[" + mtr.source.name + "]-- " +
+		(mtr.trigger.first() != null ? mtr.trigger.first().displayEvent() : '***') +
+		(mtr.guard != null ? mtr.guard.name : '') + (mtr.action != null ? "/" + mtr.action.name : '') +
+		" -->[" + mtr.target.name + "]")
+	;	
+
+/**
+ * for debugging: trace this state machine element
+ */
+private displayEvent(MEvent mev) :
+	mev.name + "(" + 
+	(mev.parameter.size > 0 ? mev.parameter.collect(e|' ' + e.name + ":" + e.type.name()) + ' ' : '')
+		.toString().replaceAll('[\\[\\]]', '') + ")";
+ 
+/**
+ * for debugging: trace this state machine element
+ */
+private displayEvent(MTimeEvent mev) :
+	(mev.isRelative? "after" : "at") + "(" + mev.when + "): " + mev.name;
+
+/**
+ * for debugging: trace this state machine element
+ */
+private display(MActivity act, String ind) :
+	logTrace(ind + "Action " + act.name);
+
+/**
+ * for debugging: trace this state machine element
+ */
+private display(MAtomicTransition mtr, String ind) :
+	logTrace(ind + (mtr.definingTransition.kind == "int" ? "I " : "E ") + "(" + mtr.source.name + ")--- " +
+		(mtr.definingTransition.trigger.first() != null ? mtr.definingTransition.trigger.first().displayEvent() : '_anonymous_') +
+		(mtr.definingTransition.guard != null ? mtr.definingTransition.guard.name : '') +
+		" exit: " + mtr.exit.name + " endDo: " + mtr.endDo.name + " " +
+		(mtr.action.isEmpty ? "" : "/" + mtr.action.name) +
+		" entry: " + mtr.entry.name + " startDo: " + mtr.startDo.name + " " +
+		" start Timer: " + mtr.startTimer.name + " stop Timer: " + mtr.stopTimer.name + " " +
+		(mtr.historyContext.isEmpty ? "" : " left history context " + mtr.historyContext.name) + 
+		" -->(" + mtr.target.name + ")")
+	;	
+
+	
