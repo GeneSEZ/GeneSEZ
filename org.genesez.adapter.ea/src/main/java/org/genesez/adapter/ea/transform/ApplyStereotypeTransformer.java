@@ -4,6 +4,7 @@ package org.genesez.adapter.ea.transform;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_5_12d203c6_1363362878863_904654_3091) 
  */
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.ecore.EObject;
@@ -16,11 +17,13 @@ import org.eclipse.uml2.uml.Type;
 import org.genesez.adapter.ea.ContentRegistry;
 import org.genesez.adapter.ea.ProfileRegistry;
 import org.sparx.ConnectorTag;
+import org.sparx.TaggedValue;
 
 /**
  * Class for applying stereotypes
- * @author Christian
+ * @author christian
  */
+
 public class ApplyStereotypeTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -33,6 +36,7 @@ public class ApplyStereotypeTransformer {
 	/**
 	 * private constructor for singleton
 	 */
+	
 	private ApplyStereotypeTransformer() {
 		/* PROTECTED REGION ID(java.constructor._17_0_5_12d203c6_1363363248225_847078_3134) ENABLED START */
 		// :)
@@ -43,14 +47,18 @@ public class ApplyStereotypeTransformer {
 	/**
 	 * overwrites the default method to apply the stereotypes, because SPARX
 	 * allows only one stereotype for connectors
+	 * @param	eaConnector	
+	 * @param	umlElement	
+	 * @return	
 	 */
+	
 	public Element applyStereotypes(org.sparx.Connector eaConnector, Element umlElement) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363362966451_255649_3119) ENABLED START */
 		LOG.debug("Applying stereotypes for connectors");
-		final String stereotypeName = eaConnector.GetStereotype();
-		Stereotype st = ProfileRegistry.INSTANCE.getStereotype(stereotypeName);
+		String s = eaConnector.GetStereotype();
+		Stereotype st = ProfileRegistry.INSTANCE.getStereotype(s);
 		
-		if (stereotypeName.length() == 0) {
+		if (s.length() == 0) {
 			LOG.debug("No stereotype to apply, going on...");
 			return umlElement;
 		}
@@ -74,7 +82,9 @@ public class ApplyStereotypeTransformer {
 	 * @param	eaConnector	EA connector
 	 * @param	umlElement	the UML element
 	 * @param	st	The stereotype
+	 * @return	
 	 */
+	
 	private Element applyTaggedValuesConnector(org.sparx.Connector eaConnector, Element umlElement, Stereotype st) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363363036802_861473_3124) ENABLED START */
 		LOG.debug("Applying tagged values");
@@ -82,8 +92,8 @@ public class ApplyStereotypeTransformer {
 			LOG.debug("Tagged value " + p.getName());
 			for (ConnectorTag t : eaConnector.GetTaggedValues()) {
 				if (p.getName().equals(t.GetName())) {
-					LOG.debug("Found use of tagged value " + p.getName() + " to " + t.GetValue());
-					umlElement = applyTaggedValue(umlElement, st, p, t.GetValue());
+					LOG.debug("Found use of tagged value " + p.getName());
+					umlElement = applyTaggedValueConnector(umlElement, st, p, t);
 				}
 			}
 		}
@@ -92,8 +102,35 @@ public class ApplyStereotypeTransformer {
 	}
 	
 	/**
-	 * Method stub for further implementation.
+	 * Applies one tagged value of a stereotype to the element
+	 * @param	umlElement	
+	 * @param	st	
+	 * @param	p	
+	 * @param	t	The tagged value from the model
+	 * @return	
 	 */
+	
+	private Element applyTaggedValueConnector(Element umlElement, Stereotype st, Property p, org.sparx.ConnectorTag t) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363363073292_705579_3129) ENABLED START */
+		LOG.debug("Set tagged value " + p.getName() + " to " + t.GetValue());
+		
+		// get the right object from property type
+		Object obj = getObjectFromTypeName(p, t.GetValue());
+		umlElement.setValue(st, p.getName(), obj);
+		
+		LOG.debug("The tagged value of connector is " + obj != null ? obj.getClass() : "NULL");
+		
+		return umlElement;
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 * @param	eaElement	
+	 * @param	umlElement	
+	 * @return	
+	 */
+	
 	public Element applyStereotypes(org.sparx.Element eaElement, Element umlElement) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363363500708_64081_3152) ENABLED START */
 		LOG.debug("Applying stereotypes for elements");
@@ -118,7 +155,11 @@ public class ApplyStereotypeTransformer {
 	
 	/**
 	 * Method stub for further implementation.
+	 * @param	eaElement	
+	 * @param	umlElement	
+	 * @param	st	
 	 */
+	
 	private void applyTaggedValuesElement(org.sparx.Element eaElement, Element umlElement, Stereotype st) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363363532753_365707_3157) ENABLED START */
 		LOG.debug("Applying tagged values");
@@ -126,11 +167,31 @@ public class ApplyStereotypeTransformer {
 			LOG.debug("Tagged value " + p.getName());
 			for (org.sparx.TaggedValue t : eaElement.GetTaggedValues()) {
 				if (p.getName().equals(t.GetName())) {
-					LOG.debug("Found use of tagged value " + p.getName() + " to " + t.GetValue());
-					applyTaggedValue(umlElement, st, p, t.GetValue());
+					LOG.debug("Found use of tagged value " + p.getName());
+					applyTaggedValueElement(umlElement, st, p, t);
 				}
 			}
 		}
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Applies one tagged value of a stereotype to the element
+	 * @param	umlElement	the UML element
+	 * @param	st	the UML stereotype
+	 * @param	p	UML property
+	 * @param	t	the EA tagged value
+	 */
+	
+	private void applyTaggedValueElement(Element umlElement, Stereotype st, Property p, TaggedValue t) {
+		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363363756025_154382_3164) ENABLED START */
+		LOG.debug("Set tagged value " + p.getName() + " to " + t.GetValue());
+		
+		// get the right object from property type
+		Object obj = getObjectFromTypeName(p, t.GetValue());
+		umlElement.setValue(st, p.getName(), obj);
+		
+		LOG.debug("The tagged value of element is " + obj != null ? obj.getClass() : "NULL");
 		/* PROTECTED REGION END */
 	}
 	
@@ -140,6 +201,7 @@ public class ApplyStereotypeTransformer {
 	 * @param	typeName	The name of the Tag.
 	 * @return	The identified object. If not recognized, NULL is returned.
 	 */
+	
 	private Object getObjectFromTypeName(Property property, String typeName) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1365775148844_86200_1966) ENABLED START */
 		Type type = property.getType();
@@ -162,68 +224,13 @@ public class ApplyStereotypeTransformer {
 		/* PROTECTED REGION END */
 	}
 	
-	/**
-	 * Method stub for further implementation.
-	 */
-	private Element applyTaggedValue(Element umlElement, Stereotype stereotype, Property property, String eaTaggedValue) {
-		/* PROTECTED REGION ID(java.implementation._17_0_4_1_df50335_1382082170566_514929_3797) ENABLED START */
-		// get the right object from property type
-		Object obj = getObjectFromTypeName(property, eaTaggedValue);
-		umlElement.setValue(stereotype, property.getName(), obj);
-		
-		LOG.debug("The tagged value is " + obj != null ? obj.getClass() : "NULL");
-		
-		return umlElement;
-		/* PROTECTED REGION END */
-	}
-	
 	// -- generated association + attribute accessors -----------------------
 	
-	// -- generated code  ---------------------------------------------------
+	// -- generated code of other cartridges --------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363362878863_904654_3091) ENABLED START */
-	// TODO here is some space to do optimization
-	public Element applyStereotypes(org.sparx.Attribute eaAttribute, Element umlElement) {
-		LOG.debug("Applying stereotypes for attribute ");
-		final String stereotype = eaAttribute.GetStereotype();
-		
-		if (stereotype.length() == 0) {
-			LOG.debug("No stereotype to apply.");
-			return umlElement;
-		}
-		
-		Stereotype st = ProfileRegistry.INSTANCE.getStereotype(stereotype);
-		for (Stereotype s : st.getApplicableStereotypes()) {
-			LOG.error("\t\t" + s.getName());
-		}
-		
-		// does the UML element fit the stereotype
-		if (umlElement.isStereotypeApplicable(st)) {
-			LOG.debug("Apply stereotype " + st.getName());
-			EObject o = umlElement.applyStereotype(st);
-			if (null != o) {
-				ContentRegistry.INSTANCE.addContent(o);
-				applyTaggedValuesProperty(eaAttribute, umlElement, st);
-			}
-		} else {
-			LOG.error("Stereotype eaAttribute(" + eaAttribute.GetName() + "), umlElement(" + umlElement.toString() + "), stereotype(" + st.getName() + ") is not applicable!");
-		}
-		return umlElement;
-	}
-	
-	private void applyTaggedValuesProperty(org.sparx.Attribute eaAttribute, Element umlElement, Stereotype st) {
-		LOG.debug("Applying tagged values");
-		for (Property p : st.getAttributes()) {
-			LOG.debug("Tagged value " + p.getName());
-			for (org.sparx.AttributeTag t : eaAttribute.GetTaggedValues()) {
-				if (p.getName().equals(t.GetName())) {
-					LOG.debug("Found use of tagged value " + p.getName());
-					applyTaggedValue(umlElement, st, p, t.GetValue());
-				}
-			}
-		}
-	}
 	
 	/* PROTECTED REGION END */
+	
 }

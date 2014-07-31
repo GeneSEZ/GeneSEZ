@@ -21,5 +21,6 @@ public class JavaImportPreserverConfig extends ImportPreserverConfig {
 	}
 	
 	/* PROTECTED REGION ID(java.datatype.own.code.implementation._xsgQ0IvoEeKyp9GO00JvUQ) ENABLED START */
+	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
 }

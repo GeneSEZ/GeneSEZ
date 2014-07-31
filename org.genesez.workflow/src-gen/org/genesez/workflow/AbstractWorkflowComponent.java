@@ -51,11 +51,6 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 	 */
 	protected Mwe2Bridge getBridge() {
 		/* PROTECTED REGION ID(java.implementation._135mEPVBEeGsV8fV-DCYeA) ENABLED START */
-		
-		// Note: MWE execution (WorkflowRunner and WorkflowEngine) uses 1 issues object for checkConfiguration()
-		//       and another one for invoke()
-		// this mwe2 bridge uses the same behavior
-		
 		// @see WorkflowEngine.prepare()
 		// @see WorkflowEngine.logIssues()
 		// @see Mwe2Bridge.handleIssues()
@@ -130,7 +125,7 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 	 * Specifies the execution in case of errors.
 	 */
 	public boolean getAbortOnError() {
-		return this.abortOnError;
+		return abortOnError;
 	}
 	
 	/**

@@ -13,62 +13,38 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.eclipse.core.commands.Category;
-import org.eclipse.core.commands.Command;
-import org.eclipse.core.commands.IParameter;
-import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.e4.core.commands.ECommandService;
-import org.eclipse.e4.core.commands.EHandlerService;
-import org.eclipse.e4.core.contexts.ContextInjectionFactory;
-import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.pde.internal.ui.wizards.plugin.NewPluginProjectWizard;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.IWorkbench;
 import org.genesez.eclipse.wizard.util.AfterProjectCreationHelper;
 import org.genesez.eclipse.wizard.util.TemplateConfigXml;
 import org.genesez.eclipse.wizard.util.TemplateHelper;
 import org.genesez.eclipse.wizard.util.WizardConstants;
+import org.eclipse.pde.internal.ui.wizards.plugin.NewPluginProjectWizard;
 
 /**
  * Handles the creation of a project. Gets all parameters from the Context.
  * 
  * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
  */
+@SuppressWarnings("restriction")
 public class CreateProjectHandler {
 
 	@Inject
 	private IWorkspaceRoot workspace;
-	
+
 	/**
 	 * Standard constructor
 	 */
 	public CreateProjectHandler() {
-	}
-	
-	/**
-	 * Returns the parameterized command to create GeneSEZ projects.
-	 * 
-	 * @param commandService	The command service to define new categories + commands.
-	 * @param handlerService	The handler service to execute commands.
-	 * @param context			The current eclipse context.
-	 * @return					The paramerized command to create GeneSEZ projects.
-	 */
-	public ParameterizedCommand createProjectCommand(ECommandService commandService, EHandlerService handlerService, IEclipseContext context) {
-		Category genesez = commandService.defineCategory(WizardConstants.GENESEZ_CATEGORY_NAME, "GeneSEZ Commands", "A category to collect all genesez commands.");
-		Command createProjectCommand = commandService.defineCommand(WizardConstants.CREATE_PROJECT_COMMAND_NAME, "Create GeneSEZ Project", "Creates an application and a genesez generator project.", genesez, new IParameter[0]);
-		ContextInjectionFactory.inject(this, context);
-		handlerService.activateHandler(WizardConstants.CREATE_PROJECT_COMMAND_NAME, this);
-		ParameterizedCommand pc = ParameterizedCommand.generateCommand(createProjectCommand, null);
-		return pc;
 	}
 
 	/**

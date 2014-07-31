@@ -4,6 +4,7 @@ package org.genesez.adapter.ea.transform;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_5_12d203c6_1363939814445_709702_2016) 
  */
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.uml2.uml.Activity;
@@ -13,8 +14,9 @@ import org.genesez.adapter.ea.ElementRegistry;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author Christian
+ * @author christian
  */
+
 public class ForkNodeTransformer extends AbstractActivityNodeTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -24,7 +26,11 @@ public class ForkNodeTransformer extends AbstractActivityNodeTransformer {
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
+	 * @param	element	
+	 * @param	parent	
+	 * @return	
 	 */
+	
 	public ForkNode transform(org.sparx.Element element, Activity parent) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363939899659_549179_2067) ENABLED START */
 		LOG.debug("Creating ForkNode " + element.GetName() + ", parent " + parent.getName());
@@ -45,10 +51,11 @@ public class ForkNodeTransformer extends AbstractActivityNodeTransformer {
 	
 	// -- generated association + attribute accessors -----------------------
 	
-	// -- generated code  ---------------------------------------------------
+	// -- generated code of other cartridges --------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363939814445_709702_2016) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
+	
 }

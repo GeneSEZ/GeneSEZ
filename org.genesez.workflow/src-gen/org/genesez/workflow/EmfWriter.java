@@ -113,7 +113,7 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	 * Returns the value of attribute '<em><b>schemaLocation</b></em>'.
 	 */
 	public boolean getSchemaLocation() {
-		return this.schemaLocation;
+		return schemaLocation;
 	}
 	
 	/**
@@ -128,7 +128,7 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	 * Returns the value of attribute '<em><b>schemaLocationImplementation</b></em>'.
 	 */
 	public boolean getSchemaLocationImplementation() {
-		return this.schemaLocationImplementation;
+		return schemaLocationImplementation;
 	}
 	
 	/**
@@ -143,7 +143,7 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	 * Returns the value of attribute '<em><b>ignoreEmptySlot</b></em>'.
 	 */
 	public boolean getIgnoreEmptySlot() {
-		return this.ignoreEmptySlot;
+		return ignoreEmptySlot;
 	}
 	
 	/**
@@ -158,7 +158,7 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	 * Returns the value of attribute '<em><b>cloneSlotContents</b></em>'.
 	 */
 	public boolean getCloneSlotContents() {
-		return this.cloneSlotContents;
+		return cloneSlotContents;
 	}
 	
 	/**
@@ -173,7 +173,7 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	 * Returns the value of attribute '<em><b>multipleResourcesInCaseOfList</b></em>'.
 	 */
 	public boolean getMultipleResourcesInCaseOfList() {
-		return this.multipleResourcesInCaseOfList;
+		return multipleResourcesInCaseOfList;
 	}
 	
 	/**

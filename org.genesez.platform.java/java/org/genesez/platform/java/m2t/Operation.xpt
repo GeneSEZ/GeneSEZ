@@ -7,7 +7,7 @@
 	
 	@author	nico herbig
 	@author	tobias haubold
-	@author	andre pflueger <andre.pflueger@fh-zwickau.de>
+	@author andre pflueger (last)
 «ENDREM»
 
 «REM» useful support functions «ENDREM»
@@ -198,7 +198,7 @@
 «DEFINE _Params FOR MAttribute-»
 	«EXPAND Annotation-»
 	«IF multiplicity.isSingleValued()-»
-		«type.mapName().asTypeName()-»«EXPAND Type::GenericUse» «IF isImmutableType()-»«asVariable()-»«ELSE-»«asAttribute()-»«ENDIF-»
+		«type.mapName().asTypeName()-»«EXPAND Type::GenericUse» «asAttribute()-»
 	«ELSE-»
 		«EXPAND Type::MultiValuedType(multiplicity, type) -» «asAttribute()-»
 	«ENDIF-»
@@ -297,21 +297,13 @@
 «ENDREM»
 «DEFINE _Params FOR MOperation -»
 	«FOREACH parameter AS p SEPARATOR ", "-»
-		«EXPAND Annotation FOR p-» «EXPAND _Final FOR p-» «IF p.multiplicity.isSingleValued()-»
+		«EXPAND Annotation FOR p-» «IF p.multiplicity.isSingleValued()-»
 			«p.type.mapName().asTypeName() -» «p.asParameter()» «IF p.hasDefaultValue()-» = «p.defaultvalue-»«ENDIF-»
 		«ELSE-»
 			«EXPAND Type::MultiValuedType(p.multiplicity, p.type) FOR p-» «p.asParameter()-» «IF p.hasDefaultValue()-» = «p.defaultvalue-»«ENDIF-»
 		«ENDIF-»
 	«ENDFOREACH-»
 «ENDDEFINE»
-
-«REM»
-	generates the keyword final for a parameter
-«ENDREM»
-«DEFINE _Final FOR MParameter-»
-	«IF emHasStereotypeAssignment("java5FinalParameter")-»final«ENDIF-»
-«ENDDEFINE»
-
 
 «REM»
 	generates the exceptions an operation can throw

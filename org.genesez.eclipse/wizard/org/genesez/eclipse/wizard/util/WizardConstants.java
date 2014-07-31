@@ -29,17 +29,7 @@ public class WizardConstants {
 	public static final int RADIO_3 = 2;
 
 	// Constants for usage in an IEclipseContext
-	
-	/**
-	 * Category for GeneSEZ commands.
-	 */
-	public static final String GENESEZ_CATEGORY_NAME = "org.genesez.eclipse";
-	
-	/**
-	 * Command to create GeneSEZ projects.
-	 */
-	public static final String CREATE_PROJECT_COMMAND_NAME = "org.genesez.eclipse.create";
-	
+
 	/**
 	 * To determine the workflow template file String (key == workflow.template, valueType: {@link java.lang.String})
 	 */

@@ -31,12 +31,12 @@ import org.genesez.eclipse.wizard.util.WizardConstants;
  * The GeneSEZ Example wizard, to create GeneSEZ examples from templates.
  * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
  */
+@SuppressWarnings("restriction")
 public class GeneSEZExampleWizard extends Wizard implements INewWizard {
 
 	private MWindow hostWin;
 	private ParameterizedCommand executeCommand;
 	private IEclipseContext context;
-	private CreateProjectHandler createProjectHandler;
 	
 	@Inject
 	private ECommandService commandService;
@@ -63,8 +63,10 @@ public class GeneSEZExampleWizard extends Wizard implements INewWizard {
 		ContextInjectionFactory.inject(this, context);
 		setContextInitial();
 		
-		createProjectHandler = new CreateProjectHandler();
-		executeCommand = createProjectHandler.createProjectCommand(commandService, handlerService, context);
+		executeCommand = commandService.createCommand("create.projects", null);
+		CreateProjectHandler handler = new CreateProjectHandler();
+		ContextInjectionFactory.inject(handler, context);
+		handlerService.activateHandler("create.projects", handler);
 	}
 
 	/**
@@ -82,7 +84,7 @@ public class GeneSEZExampleWizard extends Wizard implements INewWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		Object result = handlerService.executeHandler(executeCommand);
+		handlerService.executeHandler(executeCommand);
 		return true;
 	}
 	

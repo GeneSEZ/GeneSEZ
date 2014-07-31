@@ -69,7 +69,7 @@ public class TemplateHelper {
 	public static final String FOLDER_ENDING = "(/$|[.]generator/$)";
 	public static final String GENERATOR_ENDING = ".generator";
 	public static Set<SimpleTextReplacer> replacer = ReplacerHelper.getAvailableReplacer();
-	public static final String DEFAULT_GEN_TEMPLATE = TEMPLATE_FOLDER + "default.zip";
+	public static final String DEFAULT_GEN_TEMPLATE = TEMPLATE_FOLDER + "default/default.zip";
 	public static final IPath LOCATION = new Path(TemplateHelper.class.getProtectionDomain().getCodeSource().getLocation()
 			.getFile());
 
@@ -206,7 +206,7 @@ public class TemplateHelper {
 	 *             if something went wrong with unzipping.
 	 */
 	public static List<String> decompress(TemplateConfigXml template, String appProjectName, String genProjectName,
-			String destination, boolean appFromZip, boolean genFromZip, IProgressMonitor monitor) throws FileNotFoundException, IOException {
+			String destination, boolean appFromZip, boolean genFromZip, IProgressMonitor monitor) throws IOException {
 		// ZipInputstream der TemplateDatei erzeugen
 		monitor.subTask("Prepare template file for reading.");
 		// toh: just use file input stream with the file available, the old way results always in a null input stream
@@ -240,11 +240,6 @@ public class TemplateHelper {
 			} else {
 				entryName = entry.getName().replaceFirst(oldName, appProjectName);
 				isGenProject = false;
-			}
-			
-			// toh: check projects to decompress
-			if (isGenProject && !genFromZip || !isGenProject && !appFromZip) {
-				continue;
 			}
 			
 			String path = destination + File.separator + entryName;
@@ -309,32 +304,25 @@ public class TemplateHelper {
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("Create " + appProjectName + " GeneSEZ projects.", 100);
 				List<String> projects = null;
-				
-				// obtain projects
 				try {
-					projects = decompress(
-							template, appProjectName, genProjectName, workspace.getLocationURI().getPath(), appFromZip, genFromZip, monitor
-					);
-				} catch (FileNotFoundException fnfe) {
-					fnfe.printStackTrace();
-					MessageDialog.openError(
-							null, "Can't create projects.", 
-							"The template file was not found!." + System.lineSeparator() + fnfe.toString()
-					);
+					projects = decompress(template, appProjectName, genProjectName, workspace.getLocationURI().getPath(),
+							appFromZip, genFromZip, monitor);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 					MessageDialog.openError(
-							null, "Can't create projects.", 
+							null, 
+							"Can't create projects.", 
 							"Decompression of the template failed." + System.lineSeparator() +
 							e1.toString()
 					);
+//					JOptionPane.showMessageDialog(null, "Decompression of the template failed.", "Can't create projects.",
+//							JOptionPane.ERROR_MESSAGE);
 					return Status.CANCEL_STATUS;
 				}
 				if (projects == null) {
 					return Status.CANCEL_STATUS;
 				}
 				monitor.worked(60);
-				
 				// import the created project folders to eclipse workspace
 				for (String folder : projects) {
 					IProject project = workspace.getProject(folder);
