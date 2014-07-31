@@ -1,0 +1,40 @@
+
+/**
+ * Provides useful helper functions to transform uml stereotypes and tagged values.
+ * 
+ * @author	tobias haubold
+ * @date	2012-07-30
+ */
+
+import uml;
+
+/**
+ * Rejects the 'base_' type properties from a list of properties of stereotypes.
+ */
+List[Property] tags(List[Property] this) : 
+	reject( t| t.name.startsWith("base_") );
+
+/**
+ * Returns a list of all attributes of a stereotype including the inherited one.
+ */
+List[Property] allAttributes(Stereotype this) :
+	addAllAttributes( {} );
+
+/**
+ * Recursive function call to find all attributes of a given stereotype.
+ */
+private List[Property] addAllAttributes(Stereotype this, List[Property] attributes) :
+	attributes.addAll(ownedAttribute) ->
+	general.typeSelect(Stereotype).addAllAttributes(attributes) ->
+	attributes;
+
+/**
+ * returns the tagged value of the uml model element
+ * note: don't do it in Xtend! (using getValue(...)) - due to some error in oAW Xtend cannot find
+ *       the method getValue(...)   :´-(
+ * @param	s	the applied uml stereotype
+ * @param	tag	the name of the tag
+ * @return	the value of the tag
+ */
+Object taggedValue(Element this, Stereotype s, String tag) :
+	JAVA org.genesez.adapter.uml2.TransformationHelper.getTaggedValue(org.eclipse.uml2.uml.Element, org.eclipse.uml2.uml.Stereotype, java.lang.String);

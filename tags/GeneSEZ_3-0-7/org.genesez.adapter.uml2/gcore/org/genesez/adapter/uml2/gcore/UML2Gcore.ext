@@ -1,0 +1,1335 @@
+/**
+ * UML 2 GeneSEZ transformation script.
+ * Transforms UML class models into GeneSEZ models.
+ * 
+ * To transform the model there are some distinctions:
+ * - transformation of model (non containment) references should call make() functions or makeType()
+ *   (they ensure identification by name and xmi id as well as serialization by a containment)
+ * - transformation of model containment references should call transform() or make().transform() functions
+ *   (transform properties of model elements, call transform functions for containment + make() for non containment references)
+ * - furthermore there are functions to distict transformation
+ * - functions to transform the properties of model elements
+ * 
+ * - profiles are transformed in 2 cases which differs slightly: 
+ *   - a uml profile should be transformed
+ *   - a profile is included in uml model transformation (java annotation support)
+ * 
+ * @author	georg beier
+ * @author	nancy doerfel
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+ * @author	tobias haubold <toh@fh-zwickau.de>
+ * 
+ * @todo	line 548 - should be fixed in uml2genesez constraints
+ * @todo	currently only the uml type 'Class' is used to transform into GeneSEZ external types
+ * 			- should be discussed, if other types should be also possible
+ * @todo	a call stack problem may occur, see 'List[MTaggedValue] makeTaggedValues(MElement me, Element e)'
+ * @todo	revise magic draw 12.5 specific exception handling, see 'MPrimitiveType makePrimitiveType(DataType d)'
+ * @todo	revise the externally processing functions which maps to java functions - seams that they are never called and not needed
+ * @todo	support qualified association ends with more than one qualifier attributes (e.g. create a class with these attributes)
+ */
+import uml;
+import gcore;
+
+extension org::genesez::adapter::uml2::gcore::Utility;
+extension org::genesez::adapter::uml2::gcore::JavaAnnotationSupport;
+extension org::genesez::adapter::uml2::Helper;
+extension org::genesez::util::logging::Logging;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::Conversion;
+
+// behavior models
+extension org::genesez::adapter::uml2::gcore::UML2GcoreActivities;
+extension org::genesez::adapter::uml2::gcore::UML2GcoreStatemachines;
+
+
+// - - parameters passed to the transformation - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+/**
+ * externally configure packages to ignore, e.g. UML standard profile ;-)
+ * @return	comma or semicolon separated list of packages to exclude from transformation or an empty string
+ */
+private String ignoredPackages(): 
+	GLOBALVAR excludePackages == null 
+		? "" 
+		: GLOBALVAR excludePackages;
+
+/**
+ * stereotypes used to exclude packages within the UML model from the transformation
+ * @return	comma or semicolon separated list of stereotypes
+ */
+private String excludeStereotypes() :
+	GLOBALVAR excludeStereotypes == null
+		? ""
+		: GLOBALVAR excludeStereotypes;
+
+/**
+ * indicates if all classes contained in the model should be mapped to 
+ * external classes
+ * @return	true if all classes contained directly in the model are mapped to external classes, otherwise false
+ */
+private boolean mapClassesInModelToExternal() : 
+	GLOBALVAR mapClassesInModelToExternal == null
+		? false
+		: GLOBALVAR mapClassesInModelToExternal;
+
+/**
+ * getter for all stereotypes, which are used to mark external classes or 
+ * packages containing classes to map to external classes
+ * @return	comma or semicolon separated list of names of stereotypes or an empty string
+ */
+private String externalStereotypes() : 
+	GLOBALVAR externalStereotypes == null 
+		? "" 
+		: GLOBALVAR externalStereotypes;
+
+/**
+ * getter for all names of packages, which contain classes that should
+ * be mapped to external classes (packages must containted in the model)
+ * @return	comma or semicolon separated list of names of packages
+ */
+private String externalPackages() : 
+	GLOBALVAR externalPackages == null 
+		? "" 
+		: GLOBALVAR externalPackages;
+
+/**
+ * getter for all names of packages, which contain classes that should
+ * be mapped to external classes (packages must containted in the model)
+ * @return  comma or semicolon separated list of names of packages
+ */
+private String includeProfiles() : 
+    GLOBALVAR includeProfiles == null 
+        ? "" 
+        : GLOBALVAR includeProfiles;
+
+
+// - - public extend function to transform a uml2 model - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+/**
+ * transforms an uml model to a GeneSEZ model
+ * @param	m	an uml model to transform
+ * @return	the newly created GeneSEZ model
+ */
+create MModel transform(Model m) :
+	useLogger("org.genesez.adapter.uml2") ->
+	uml2model(m) ->
+	coremodel(this) ->
+	m.getAllAppliedProfiles().logUnresolvedUmlProfile() ->
+	logTrace( "transform model [ " + metaType + " ] - " + m ) ->
+	transformBasics(m) ->
+	transformPackage(m) ->
+	// ensure types in included profiles are transformed completely, not just as stubs
+	m.getAllProfileApplications().appliedProfile.select( ap|ap.isContainedInIncludedProfile() ).forAll(
+		p | p.makeProfile( this ).transformProfile( p ) -> true
+	) ->
+	this;
+
+/**
+ * transforms an uml profile to a GeneSEZ model
+ * @param	p	an uml profile to transform
+ * @return	the newly created GeneSEZ model
+ */
+MModel transform(Profile this) :
+	useLogger( "org.genesez.adapter.uml2" ) ->
+	getAllAppliedProfiles().logUnresolvedUmlProfile() ->
+	logTrace( "transform profile [ " + metaType + " ] - " + this ) ->
+	// make profile without containment (it's the root)
+	(let p = make() :
+		coremodel( p ) ->
+		p.transformProfile( this ) ->
+		// stereotypes into classes
+		p.classifier.addAll( ownedStereotype.transformClass() ) ->
+		// TODO stereotype in packages are not transformed!
+	p);
+
+
+// - - » filter + distinction functions - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+/**
+ * transforms a package, that has a containement reference with another package
+ * checks if the specified package is a container for external types
+ * @param	p	an uml package to transform
+ * @context	the package which is the container for the specified package
+ * @return	the container of the transformed package
+ */
+private MPackage transform(Package p, MPackage this) :
+	switch {
+		// reject ignored package
+		case p.nestingPackage != null && p.nestingPackage.metaType == Model && p.isIgnoredPackage() : Void
+		case p.isIgnoredElement() : Void
+		// reject package by name when used as container for external classes (isContainerForExternalClasses)
+		// reject package by stereotype when used as container for external classes
+		case p.isContainerForExternalClasses() : p.ownedElement.typeSelect( Classifier ).makeExternal()
+		// else transform the package + set containment
+		default : nestedPackage.add( p.make().transformPackage(p) )
+	} ->
+	this;
+
+/**
+ * transforms a classifier, that has a containment reference to a package
+ * checks if the classifier is an external type
+ * @param	c	an uml classifier to transform
+ * @context	the package which is the container for the specified classifer
+ * @return	the transformed classifier
+ */
+private MClassifier transform(Classifier c, MDefinitionContext this) :
+	logTrace( "transform [ " + c.metaType + " ] - " + c ) ->
+	switch {
+		// check if classifier should be excluded
+		case c.isIgnoredElement() : Void
+		// check if classifier is an external type
+		case c.isExternalType() : c.makeExternal()
+		// check if classifier is an primitive type
+		case c.metaType == PrimitiveType : c.makeExternal()
+		// ignore stereotype when transforming uml models; when transforming uml profiles transform into classifier
+        case c.metaType == Stereotype && Model.isInstance(uml2model()) : Void
+        // else make + transform classifier
+		default : ( let mc = c.make().transform(c) :
+				classifier.add( mc ) ->
+				c.metaType.isAssignableFrom(Class) ? ((Class)c).ownedBehavior.transformBehavior(mc) : null
+			)
+	} ->
+	this;
+
+
+/**
+ * transforms the uml type into an GeneSEZ type
+ * distincts uml types and determines the correct GeneSEZ type for an uml type 
+ * @context	an uml type to transform
+ * @return	the transformed GeneSEZ type
+ */
+MType makeType(Type this) :
+	logDebug("transform [ " + metaType + " ] " + this) ->
+	logTrace("    isTemplateParameter: " + isTemplateParameter()) ->
+	logTrace("    isExternalType:      " + isExternalType()) ->
+	switch {
+		//  check if type is null (e.g. constructors usually don't have a return type)
+		case metaType == Void : ((PrimitiveType)this).makeExternal()
+		// generic
+		case isTemplateParameter() : ((ClassifierTemplateParameter)((Classifier)this).templateParameter).makeGeneric()
+		// external class
+		case isExternalType() : ((Classifier)this).makeExternal()
+		// primitive type
+		case metaType == PrimitiveType : ((PrimitiveType)this).makeExternal()
+//		case metaType == DataType && name == "void" : ((DataType)this).makePrimitiveType()
+		// classifier contained in profiles but not included profiles are transformed to external types when transforming uml models
+		// else as classifier
+		case isContainedInProfile() && Classifier.isInstance(this) && Model.isInstance(uml2model()) && !isContainedInIncludedProfile() : ((Classifier)this).makeExternal()
+		// classifier, just make it, no transformation yet
+		default : ((Classifier)this).make()
+	};
+
+
+// - - » creation of stubs (serializable, i.e. with name, xmiGuid + containment) - - - - - - - - - - - - - - -
+
+/**
+ * Creates a GeneSEZ model from an uml model
+ */
+private create MModel make(Model m) :
+	logTrace( "make [" + metaType + " ] - " + m.fqmn() ) ->
+	transformBasics(m) ->
+	// no containment!
+	this;
+
+/**
+ * Creates a GeneSEZ model from an uml model
+ */
+private create MModel make(Profile p) :
+	logTrace( "make [" + metaType + " ] - " + p.fqmn() ) ->
+	transformBasics(p) ->
+	// no containment!
+	this;
+
+/**
+ * creates a GeneSEZ package from an uml package
+ * @param	p	an uml package
+ * @return	the GeneSEZ package
+ */
+private create MPackage make(Package p) :
+	logTrace( "make [" + metaType + " ] - " + p.fqmn() ) ->
+	transformBasics(p) ->
+	// containment
+	p.nestingPackage != null
+		? p.nestingPackage.make().nestedPackage.add( this )
+		// toh: this could allow dangling packages not contained in resources!
+		: this ->
+	this;
+
+/**
+ * creates a GeneSEZ class from an uml class
+ * @param	c	an uml class
+ * @return	the GeneSEZ class
+ */
+private create MClass make(Class c) :
+	logTrace( "make [ " + metaType + " ] - " + c.fqmn() ) ->
+	transformBasics(c) ->
+	// containment
+	c.namespace.make().classifier.add( this ) ->
+	this;
+
+/**
+ * creates a GeneSEZ interface from an uml interface
+ * @param	i	an uml interface
+ * @return	the GeneSEZ interface
+ */
+private create MInterface make(Interface i) :
+	logTrace( "make [ " + metaType + " ] - " + i.fqmn() ) ->
+	transformBasics(i) ->
+	// containment
+	i.namespace.make().classifier.add( this ) ->
+	this;
+
+/**
+ * creates a GeneSEZ enumeration from an uml enumeration
+ * @param	e	an uml enumeration
+ * @return	the GeneSEZ enumeration
+ */
+private create MEnumeration make(Enumeration e) :
+	logTrace( "make [ " + metaType + " ] - " + e.fqmn() ) ->
+	transformBasics(e) ->
+	// containment
+	e.namespace.make().classifier.add( this ) ->
+	this;
+
+/**
+ * creates a GeneSEZ datatype from an uml datatype
+ * @param	d	an uml datatype
+ * @return	the GeneSEZ datatype
+ */
+private create MDataType make(DataType d) :
+	logTrace( "make [ " + metaType + " ] - " + d.fqmn() ) ->
+	transformBasics(d) ->
+	// containment
+	d.namespace.make().classifier.add( this ) ->
+	this;
+
+/**
+ * Creates a GeneSEZ operation from an uml operation
+ */
+private create MOperation make(Operation o) :
+	logTrace( "make [ " + metaType + " ] - " + o.fqmn() ) ->
+	transformBasics(o) ->
+	// containment
+	o.featuringClassifier.first().make().operation.add( this ) ->
+	this;
+
+/**
+ * Creates a GeneSEZ attribute from an uml property.
+ */
+private create MAttribute makeAttribute(Property p) :
+	logTrace( "make [ " + metaType + " ] - " + p.fqmn() ) ->
+	transformBasics(p) ->
+	// containment
+	p.featuringClassifier.first().make().property.add( this ) ->
+	this;
+
+/**
+ * Creates a GeneSEZ attribute from an uml property with the specified containment.
+ */
+private create MAttribute makeAttribute(Property p, MClassifier containment) :
+	logTrace( "make [ " + metaType + " ] - " + p.fqmn() ) ->
+	transformBasics(p) ->
+	// containment
+	containment.property.add( this ) ->
+	this;
+
+/**
+ * Creates a GeneSEZ attribute from an uml property
+ */
+private create MAssociationRole makeAssociationRole(Property p) :
+	logTrace( "make [ " + metaType + " ] - " + p.fqmn() ) ->
+	transformBasics(p) ->
+	// containment
+	p.featuringClassifier.first().make().property.add( this ) ->
+	this;
+
+/**
+ * Creates a GeneSEZ attribute from an uml property
+ */
+private create MAssociationRole makeAssociationRole(Property p, MClassifier containment) :
+	logTrace( "make [ " + metaType + " ] - " + p.fqmn() ) ->
+	transformBasics(p) ->
+	// containment
+	containment.property.add( this ) ->
+	this;
+
+/**
+ * just a marker for error free templates
+ * no GeneSEZ classifier is created, because the GeneSEZ classifier is an abstract class
+ * prints a 'severe' log message to report such an transformation
+ * @return	null
+ */
+private MClassifier make(Classifier c) :
+	logFatal("try to construct an MClassifier object from: " + c.fqmn()) ->
+	null;
+
+/**
+ * just a marker for error free templates
+ * no GeneSEZ definition context is created, because the GeneSEZ definition context is an abstract class
+ * prints a 'severe' log message to report such an transformation
+ * @return	null
+ */
+private MDefinitionContext make(Namespace n) :
+	logFatal("try to construct an MDefinitionContext object from: " + n.fqmn()) ->
+	null;
+
+
+// - - » creation of model elements with properties + references - - - - - - - - - - - - - - - - - - - - - - -
+
+/**
+ * creates a GeneSEZ usecase from an uml usecase
+ * @param	u	an uml usecase
+ * @return	the GeneSEZ usecase
+ */
+private create MUseCase make(UseCase u) :
+	logTrace( "make [ " + metaType + " ] - " + u.fqmn() ) ->
+	// basic element properties
+	transformBasics(u) ->
+	// transform owned use cases
+	classifier.addAll( u.ownedElement.typeSelect(UseCase).make() ) ->
+	// transform owned behavior
+	ownedBehavior.addAll( u.ownedBehavior.transformBehavior(this) ) ->
+	this;
+
+/**
+ * creates a GeneSEZ enumeration literal from an uml enumeration literal
+ * @param	l	an uml enumeration literal
+ * @return	the GeneSEZ enumeration literal
+ */
+private create MLiteral transform(EnumerationLiteral l) :
+	// basic element properties
+	transformBasics(l) ->
+	// containment
+	l.enumeration.make().literal.add( this ) ->
+	// add comment to classifier
+	ownedComment.addAll( l.ownedComment.typeSelect(Comment).transform() ) ->
+	this;
+
+/**
+ * creates a GeneSEZ operation from an uml operation
+ * @param	o	an uml operation
+ * @return	the GeneSEZ operation
+ */
+MOperation transform(MOperation this, Operation o) :
+	logTrace( "transform [ " + metaType + " ] - " + o.fqmn() ) ->
+	// set the unique xmiId and name
+	transformBasics(o) ->
+	// properties
+	setVisibility( o.visibility.toString() ) ->
+	setStatic( o.isStatic ) ->
+	setAbstract( o.isAbstract ) ->
+	setFinal( o.isLeaf ) ->
+	// associations
+	// add stereotypes of return type parameter [TODO: @deprecated, use return parameter instead - toh]
+	o.ownedParameter.exists(e|e.direction.toString() == "return")
+		? ( stereotype.addAll( o.ownedParameter.selectFirst(e|e.direction.toString() == "return").getAppliedStereotypes().make() ) ->
+			taggedValue.addAll( makeTaggedValues(this, o.ownedParameter.selectFirst(e|e.direction.toString() == "return")) )
+		)
+		: this ->
+	// set stereotype
+	stereotype.addAll( o.getAppliedStereotypes().make() ) ->
+	// set return parameter
+	o.ownedParameter.exists( e|e.direction.toString() == "return" )
+		? setReturn(
+			o.ownedParameter.select(e|e.direction.toString() == "return").first()
+			.transform().setOperation(this) )
+		: this ->
+	// add parameter to operation
+	parameter.addAll(
+		o.ownedParameter.reject(e|e.direction.toString() == "return").transform().setOperation(this)
+	) ->
+	// set raised exceptions
+	raisedException.addAll( o.raisedException.makeType() ) ->
+	// containments
+	// add comment to operation
+	ownedComment.addAll( o.ownedComment.typeSelect(Comment).transform() ) ->
+	// set tagged values
+	taggedValue.addAll( makeTaggedValues(this, o) ) ->
+	// set generics
+	o.ownedTemplateSignature != null
+		? genericParameter.addAll(
+			o.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).makeGeneric()
+		)
+		: this ->
+	this;
+
+/**
+ * creates a GeneSEZ parameter from an uml parameter
+ * @param	p	an uml parameter
+ * @return	the GeneSEZ parameter
+ */
+private create MParameter transform(Parameter p) :
+	logTrace("make [" + metaType + "] - " + p.fqmn()) ->
+	// set the unique xmiId and name
+	transformBasics(p) ->
+	// properties
+	setDefaultvalue( p.getDefault() ) ->
+	setDirection( p.direction.toString() ) ->
+	setMultiplicity( p.makeMultiplicity() ) ->
+	// associations
+	setType( p.type.makeType() ) ->
+	// set stereotype
+	stereotype.addAll( p.getAppliedStereotypes().make() ) ->
+	// containments
+	// add comment to parameter
+	ownedComment.addAll( p.ownedComment.typeSelect(Comment).transform() ) ->
+	// set tagged values
+	taggedValue.addAll( makeTaggedValues(this, p) ) ->
+	this;
+
+/**
+ * creates a GeneSEZ association role from an uml property
+ * @param	aend	an uml property
+ * @return	the GeneSEZ association role 
+ */
+private create MDependency transform(Dependency dep) : 
+	logTrace("make [" + metaType + "] - " + dep.fqmn()) ->
+	// set the unique xmiId and name
+	setXmiGuid( xmiId(dep) ) ->
+	client.addAll(dep.client.typeSelect(Class).collect(c|(let mc = c.make() : mc.dependency.add(this) -> mc))) ->
+	client.addAll(dep.client.typeSelect(Interface).collect(c|(let mc = c.make() : mc.dependency.add(this) -> mc))) ->
+	client.addAll(dep.client.typeSelect(Association).collect(a|(let ma = a.make() : ma.dependency.add(this) -> ma))) ->
+	supplier.addAll(dep.supplier.typeSelect(Class).collect(c|c.make())) ->
+	supplier.addAll(dep.supplier.typeSelect(Interface).collect(c|c.make())) ->
+	// set stereotype
+	stereotype.addAll( dep.getAppliedStereotypes().make() ) ->
+	this;
+
+/**
+ * Transforms the comments from the UML element to the gcore element.
+ */
+private MElement transformComment(MElement this, Element e) :
+	// add comment to package
+	ownedComment.addAll( e.ownedComment.typeSelect(Comment).transform() ) ->
+	this;
+
+/**
+ * creates a GeneSEZ comment from an uml comment
+ * @param	c	an uml comment
+ * @return	the GeneSEZ comment
+ */
+create MComment transform(Comment c) :
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(c)) ->
+	setAnnotation( c.body ) ->
+	// containment
+	nestedComment.addAll( (c.ownedComment.typeSelect(Comment).transform()) ) ->
+	this;
+
+/**
+ * creates a GeneSEZ interface from an uml stereotype
+ * @param   i   an uml stereotype
+ * @return  the GeneSEZ interface
+private create MInterface transformAnnotationInterface(Stereotype s) :
+    logTrace( "make a java annotation from [ " + metaType + " ] - " + s.fqmn() ) ->
+    // basic element properties
+    transformBasics(s) ->
+    setXmiGuid(xmiGuid + ".JavaAnnotationInterface") ->
+    // properties
+    setVisibility( s.visibility.toString() ) ->
+    setAbstract( s.isAbstract ) ->
+    setFinal( s.isLeaf ) ->
+    // transform classifier
+    transformClassifier( s ) ->
+    this;
+ */
+
+/*
+// do we need this? [toh]
+private create MParameter make(Void v) :
+	logTrace("make [" + metaType + "] - " + v) ->
+	setXmiGuid( "void" ) ->
+	setName( "" ) ->
+	setDirection( "return" ) ->
+	setLowerBoundMultiplicity( 1 ) ->
+	setUpperBoundMultiplicity( 1 ) ->
+	setUnique( true ) ->
+	setOrdered( false ) ->
+	setType( makeType( null )) ->
+	this;
+*/
+
+/**
+ * creates a GeneSEZ attribtue from an uml property
+ * @param	p	an uml property
+ * @return	the GeneSEZ attribute
+ */
+private MAttribute transform(MAttribute this, Property p) :
+	// set the unique xmiId and name
+	transformBasics(p) ->
+	// properties
+	setVisibility( p.visibility.toString() ) ->
+	setDerived( p.isDerived ) ->
+	setStatic( p.isStatic ) ->
+	setFinal( p.isReadOnly ) ->
+	setMultiplicity( p.makeMultiplicity() ) ->
+	setDefaultvalue( p.defaultValue() ) ->
+	// associations
+	// set stereotype
+	stereotype.addAll( p.getAppliedStereotypes().make() ) ->
+	// add type of attribute (can be a generic or classifier)
+	setType( p.type.makeType() ) ->
+	// containments
+	// add comment to attribute
+	ownedComment.addAll( p.ownedComment.typeSelect(Comment).transform() ) ->
+	// set tagged values
+	taggedValue.addAll( makeTaggedValues(this, p) ) ->
+	this;
+
+/**
+ * creates a GeneSEZ association role from an uml property
+ * @param	aend	an uml property
+ * @return	the GeneSEZ association role
+ */
+private MAssociationRole transform(MAssociationRole this, Property aend) :
+	logTrace("transform [" + metaType + "] - " + aend.fqmn()) ->
+	// set the unique xmiId and name
+	setXmiGuid( xmiId(aend) ) ->
+	setName( assocEndName(aend) ) ->
+	stereotype.addAll( aend.getAppliedStereotypes().make() ) ->
+	// properties
+	setVisibility( aend.visibility.toString() ) ->
+	setDerived( aend.isDerived ) ->
+	// multiplicities
+	setMultiplicity( aend.makeMultiplicity() ) ->
+	aend.association.memberEnd.exists( a|a != aend )
+		? setOppositeMultiplicity( aend.association.memberEnd.selectFirst( a|a != aend ).makeMultiplicity() )
+		: this ->
+	setAggregation( aend.aggregation.toString() == "shared" ? true : false ) ->
+	setComposition( aend.aggregation.toString() == "composite" ? true : false ) ->
+	// check for a qualified association end
+	checkQualifier( aend ) ->
+	// an asscociation couldn't have a generic as type i guess
+	setType( aend.getType() ) ->
+	// containments
+	// add comment to associationrole
+	ownedComment.addAll( aend.ownedComment.typeSelect(Comment).transform() ) ->
+	// set tagged values
+	taggedValue.addAll( makeTaggedValues(this, aend) ) ->
+	this;
+
+
+// - - » associations - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+/**
+ * creates a GeneSEZ association from an uml association
+ * GeneSEZ associations are contained in packages
+ * @param	a			an uml association
+ * @param	container	the container for GeneSEZ association
+ * @return	the GeneSEZ association
+ */
+private create MAssociation transformAssociation(Association a) :
+	logTrace("transform [" + metaType + "] - " + a) ->
+	// set the unique xmiId and name
+	setXmiGuid( xmiId(a) ) ->
+	setName( assocName(a) ) ->
+	// properties
+	setDerived( a.isDerived ) ->
+	// containments
+	// add comment to association
+	ownedComment.addAll( a.ownedComment.typeSelect(Comment).transform() ) ->
+	// associations ends: filter non navigable association ends 
+	// non navigable association ends do not have the class refernce set, except the association object is an association class, then the association class is itself set as class
+	logTrace("   featuring classifiers: " + a.memberEnd.featuringClassifier.fqmn() ) ->
+	end.addAll(
+		a.memberEnd.select( e| !e.featuringClassifier.isEmpty && !e.featuringClassifier.contains(a) ).makeAssociationRole()
+	) ->
+	logTrace("   link ends: " + end) ->
+	linkEnds() ->
+	// transform association class
+	transformAssociationClass(a) ->
+	// stereotypes + tagged values
+	stereotype.addAll( a.getAppliedStereotypes().make() ) ->
+	taggedValue.addAll( makeTaggedValues(this, a) ) ->
+	this;
+
+/**
+ * Simply does nothing
+ * @see		associationClass(MAssociation, AssociationClass)
+ */
+private MAssociation transformAssociationClass(MAssociation ma, Association a):
+	ma;
+
+/**
+ * transforms the specified uml association class to a GeneSEZ association class
+ * @param	ma	a GeneSEZ association as the container for the GeneSEZ association class
+ * @param	a	an uml association class
+ * @return	the GeneSEZ association
+ */
+private MAssociation transformAssociationClass(MAssociation ma, AssociationClass a):
+//	logInfo("association class: " + ma.name + ", " + a.name) -> 
+	ma.setAssociationClass( a.make().setOwnedAssociation(ma) );
+
+/**
+ * Checks if a type is from a base metaclass, if yes the type is generated as external class,
+ * if no, the type is generated as a new class/classifier.
+ * @param Property
+ * @return type as Class
+ */	
+private MType getType(Property aend) : 
+      ( aend.name.startsWith("base_") 
+           ? ((Class)aend.type).makeExternal()
+           : aend.type.makeType()
+     );
+
+/**
+ * checks if the assocation end is qualified with attributes
+ * @param	aend	uml association end property
+ */
+private Void checkQualifier(MAssociationRole this, Property aend) :
+	aend.qualifier.size > 0
+		? (aend.qualifier.size == 1
+			? transformSimpleQualifier( aend )
+			: transformQualifier( aend )
+		) : Void;
+
+/**
+ * transforms the only qualifier attribute of an association end
+ * @param	aend	uml association end property
+ */
+private MAssociationRole transformSimpleQualifier(MAssociationRole this, Property aend) :
+	logTrace("    qualifier multiplicity: " + aend.lower + ".." + aend.upper) ->
+	setQualifierMultiplicity( aend.qualifier.first().makeMultiplicity() ) ->
+	setQualifier( aend.qualifier.first().type.makeType() ) ->
+	this;
+
+/**
+ * transforms the qualifier attributes of an association end
+ * TODO: create a class (maybe named role name + qualifier) with all qualifier attributes
+ */
+private MAssociationRole transformQualifier(MAssociationRole this, Property aend) :
+	logFatal("qualified associations with more than one qualifier attribute are currently not supported") ->
+	this;
+
+/**
+ * links the ends of an GeneSEZ association (the association roles) to each other
+ * @param	ma	a GeneSEZ association
+ */
+private MAssociation linkEnds(MAssociation ma) :
+	logTrace("link association roles: " + ma) -> (
+	let mend = ma.end :
+		mend.size == 2
+			? (mend.get(0).setOpposite( mend.get(1) ) ->
+				mend.get(1).setOpposite( mend.get(0) ) ->
+				ma
+			)
+			: ma);
+
+/**
+ * determines the name of an uml association
+ * @param	a	an uml association
+ * @return	the name of the uml association
+ */
+private String assocName(Association a):
+	(a.name == null || a.name == "")
+		? ""
+		: a.name ;
+
+/**
+ * determines the name of an uml property (from an uml association)
+ * if the property has no name, the name is derived from the name of the type
+ * @param	a	an uml property
+ * @return	the name of the uml property
+ */
+private String assocEndName(Property a):
+	(a.name == null || a.name == "")
+		? a.type.name.toFirstLower()
+		: a.name;
+
+/**
+ * find the multiplicity of the other end of an association from the uml model
+ * @param	aend	uml association end property
+ * @deprecated
+private Integer oppositeMultiplicity(Property aend) :
+	aend.opposite != null
+		? aend.opposite.getUpper()
+		: aend.association.memberEnd.reject(e|e == aend).first().getUpper();
+ */
+
+/**
+ * find the lower bound multiplicity of the other end of an association from the uml model
+ * @param	aend	uml association end property
+private Integer oppositeLowerBoundMultiplicity(Property aend) :
+	aend.opposite != null
+		? aend.opposite.getLower()
+		: aend.association.memberEnd.reject(e|e == aend).first().getLower();
+ */
+
+/**
+ * find the upper bound multiplicity of the other end of an association from the uml model
+ * @param	aend	uml association end property
+private Integer oppositeUpperBoundMultiplicity(Property aend) :
+	aend.opposite != null
+		? aend.opposite.getUpper()
+		: aend.association.memberEnd.reject(e|e == aend).first().getUpper();
+ */
+
+// - - » extension mechanism (stereotypes + tagged values) - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+/**
+ * Transforms the meta data, i.e. stereotypes and tagged values.
+ */
+MElement transformMetaData(MElement this, Element e) :
+	// set stereotype
+	stereotype.addAll( e.getAppliedStereotypes().make() ) ->
+	// set tagged values
+	taggedValue.addAll( makeTaggedValues(e) ) ->
+	this;
+
+
+/**
+ * creates a GeneSEZ stereotype from an uml stereotype
+ * @param	s	an uml stereotype
+ * @return	the GeneSEZ stereotype
+ */
+create MStereotype make(Stereotype s) :
+	logTrace( "make [ " + metaType + " ] - " + s.fqmn() ) ->
+	// basic element properties
+	transformBasics(s) ->
+	// container
+	coremodel().anyStereotype.add( this ) ->
+	// associations
+	// add generalizations
+	generalization.addAll( s.general.typeSelect(Stereotype).make() ) ->
+	// containments
+	// add tagged values FAIL
+	// owned attributes returns a list of properties, reject the 'base_' property which indicates the base meta type
+	property.addAll( s.ownedAttribute.reject( t| t.name.startsWith("base_") ).makeTag() )->
+	// add stereotypes
+	stereotype.addAll( s.getAppliedStereotypes().make() ) ->
+	// set tagged values
+	taggedValue.addAll( makeTaggedValues(s) ) ->
+	// check if stereotyp needs to be generated to source code
+	s.isIncludedProfile() 
+		? s.transformAnnotationInterface( coremodel() ).transformClassifier( s )
+		: this ->
+	this;
+
+/**
+ * creates a GeneSEZ tag from an uml property
+ * @param	p	an uml property
+ * @return	the GeneSEZ tag
+ */
+private create MTag makeTag(Property p) :
+	logTrace("makeTag: " + p) ->
+	// set the unique xmiId and name
+	//setXmiGuid(xmiId(p))->
+	setName( p.name ) ->
+	// TODO: is it really need to transform the type of a tag ?
+	setType( p.type.name ) ->
+	this;
+
+/**
+ * creates a GeneSEZ tagged value from an uml object
+ * distincts the type of the uml object for a nice GeneSEZ representation
+ * @param	t		the GeneSEZ tag this value belongs to
+ * @param	owner	the GeneSEZ element which contains this tagged value
+ * @param	o		the value of the tag in the uml model
+ * @return	the GeneSEZ tagged value
+ */
+private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
+	logTrace("make tagged value: " + o + " for tag: " + t.name) ->
+	setTag(t) ->
+	switch (true) {
+		// check types
+		case Classifier.isInstance(o) : setValueReference( ((Class)o).make() )
+		
+		case Operation.isInstance(o) : setValueReference( ((Operation)o).make() )
+		case Property.isInstance(o) : setValueReference( ((MElement)((Property)o).association == null ? ((Property)o).makeAttribute() : ((Property)o).makeAssociationRole()) )
+		
+		// check instances
+		case EnumerationLiteral.isInstance(o) : setValue( ((EnumerationLiteral)o).name )
+		case NamedElement.isInstance(o) : setValue( ((NamedElement)o).name )
+		default : setValue( o.toString() )
+	} ->
+//	setOwningElement(owner)
+	owner.taggedValue.add(this) ->
+	this;
+
+/**
+ * transforms the tagged values of the specified uml element to the specified GeneSEZ element
+ * note: assums that all GeneSEZ tags are transformed correctly, because this function calls the 
+ * function 'makeTag' which creates an MTag, but don't adds them to a container (a stereotype)!
+ * @param	me	the GeneSEZ element
+ * @param	e	the uml element
+ * @return	a list of GeneSEZ tagged values
+ */
+List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
+	logTrace("check for tagged values on: " + me.name + ", elem: " + e.toString()) ->
+	e.getAppliedStereotypes().collect(
+		s | s.allAttributes(). 
+				reject( p | p.name.startsWith("base_") || null == e.getTaggedValue(s, p.name ) ).
+				collect(
+					property | e.getTaggedValue(s, property.name).metaType == List 
+						? ((List) e.getTaggedValue(s, property.name)).collect( o | makeTaggedValue( makeTag(property), me, o ) )
+						: makeTaggedValue( makeTag(property), me, e.getTaggedValue(s, property.name) )
+				)
+	).flatten().reject(e|e == null);
+
+List[Property] allAttributes(Stereotype this) :
+	addAllAttributes({});
+
+List[Property] addAllAttributes(Stereotype this, List[Property] attributes) :
+	attributes.addAll(ownedAttribute) ->
+	general.typeSelect(Stereotype).addAllAttributes(attributes) ->
+	attributes;
+
+
+/**
+ * returns the tagged value of the uml model element
+ * note: don't do it in Xtend! (using getValue(...)) - due to some error in oAW Xtend cannot find
+ *       the method getValue(...)   :´-(
+ * @param	s	the applied uml stereotype
+ * @param	tag	the name of the tag
+ * @return	the value of the tag
+ */
+private Object getTaggedValue(Element this, Stereotype s, String tag) :
+	JAVA org.genesez.adapter.uml2.TransformationHelper.getTaggedValue(org.eclipse.uml2.uml.Element, org.eclipse.uml2.uml.Stereotype, java.lang.String);
+
+
+// - - » genesez types - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+/**
+ * Creates a GeneSEZ generic from an uml template parameter.
+ * @param	c	the uml template parameter to transform
+ * @return	the GeneSEZ generic
+ */
+private create MGeneric makeGeneric(ClassifierTemplateParameter c) :
+	setSpecification( ((Class)c.ownedParameteredElement).name ) ->
+	constraint.addAll( c.constrainingClassifier.makeType() ) ->
+	c.ownedDefault != null
+		? c.ownedDefault.transformDefault( this )
+		: this ->
+	c.^default != null
+		? c.^default.transformDefault( this )
+		: this ->
+	this;
+
+/**
+ * Returns the specified generic and logs that the specified instance cannot be transformed to the default of the specified generic.
+ */
+private MGeneric transformDefault(ParameterableElement pe, MGeneric this) :
+	logFatal("Unable to set the 'default' of an _MGeneric_ from a _ParameterableElement_!" + pe.fqmn()) ->
+	this;
+
+/**
+ * Returns the specified generic with its default set to an external with the string representation of the specified value specification.
+ */
+private MGeneric transformDefault(ValueSpecification vs, MGeneric this) :
+	setDefault( vs.makeExternal() ) ->
+	this;
+
+/**
+ * Returns the specified generic with its default set to the transformed classifier.
+ */
+private MGeneric transformDefault(Classifier c, MGeneric this) :
+	setDefault( c.make() ) ->
+	this;
+
+
+private MExternal makeExternal(String name) :
+	makeExternal(name, name);
+
+private create MExternal makeExternal(String name, String xmiGuid) :
+	logTrace("make [" + metaType + "] - " + name + ", " + xmiGuid) ->
+	setName( name ) ->
+	// container
+	coremodel().externalTypes.add( this ) ->
+	this;
+
+/**
+ * Returns an external with its specification set to the string representation of the specified instance.
+ */
+private MExternal makeExternal(ValueSpecification v) :
+	logTrace("make [MExternal] - " + v.fqmn()) ->
+	makeExternal( v.stringValue() );
+
+/**
+ * creates a GeneSEZ external type from an uml classifier
+ * @param	c	an uml classifier
+ * @return	the GeneSEZ external type
+ */
+private MExternal makeExternal(Classifier c) :
+	logTrace("make [MExternal] - " + c.fqmn()) ->
+	(let e = makeExternal( c.name ) :
+		// set generics
+		c.ownedTemplateSignature != null
+			? e.genericParameter.addAll( 
+				c.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).makeGeneric() )
+			: e ->
+		e);
+
+/**
+ * creates a GeneSEZ primitive type from an uml primitive type
+ * @param	p	an uml primitive type
+ * @return	the GeneSEZ primitive type
+ */
+private MExternal makeExternal(PrimitiveType p) :
+	logTrace("make [MExternal] - " + p.fqmn()) ->
+	makeExternal( p.name );
+
+/**
+ * Returns the multilicity properties of the specified multiplicity element.
+ * @return	a multiplicity object without containment
+ */
+MMultiplicity makeMultiplicity(MultiplicityElement me) :
+	logTrace(me, "make multiplicity: " ) ->
+	createMultiplicity( me.lowerBound(), me.upperBound(), me.isUnique, me.isOrdered );
+
+/**
+ * polymorphic exception handling for the a little bug in magic draw 12.5
+ * the primitive type 'void' is transformed into an uml datatype instead uml primitive type
+ * @see		makePrimitiveType(Void v)
+private MPrimitiveType makePrimitiveType(DataType d) :
+	// delegate
+	makePrimitiveType(null);
+ */
+	
+/**
+ * polymorphic exception handling for the oaw type Void / null
+ * simply creaets a GeneSEZ primitive type 'void'
+ * @return	the GeneSEZ primitive type 'void'
+private create MPrimitiveType makePrimitiveType(Void v) :
+//	logInfo("fixme: make primitive type from void") ->
+	setXmiGuid("void") ->
+	setName("void") ->
+	coremodel().primitiveTypes.add( this ) ->
+	this;
+ */
+
+
+// - - » instance values, default values, instance specifications - - - - - - - - - - - - - - - - - - - - - - -
+
+/**
+ * Returns the default value of the specified property.
+ */
+String defaultValue(Property this) :
+	switch {
+		case LiteralString.isInstance( defaultValue ) : defaultValue.value()
+		case StringExpression.isInstance( defaultValue ) : defaultValue.value()
+		default : getDefault()
+	};
+
+/**
+ * Returns the value of the specified string expression.
+ */
+String value(StringExpression this) : 
+	operand.value().toString( symbol ).logTrace("default value string expression: ");
+
+String value(ValueSpecification this) :
+	stringValue();
+
+String value(LiteralString this) :
+	value.startsWith('"')
+		? value
+		: '"' + value + '"';
+
+// - - » property copy helpers - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+/**
+ * process the transformation of an uml package to a GeneSEZ package
+ * @param	p	an uml package
+ * @return	the GeneSEZ package
+ */
+private MPackage transformPackage(MPackage this, Package p) :
+	logTrace( "transform [ " + metaType + " ] - " + p.fqmn() ) ->
+	// basic package properties
+	transformComment( p ) ->
+	transformMetaData( p ) ->
+	// containments: package, classifier, behaviour
+	p.ownedElement.typeSelect(Package).transform( this ) ->
+	p.ownedElement.typeSelect(Classifier).reject(
+		e|{Activity, Actor, Association, Extension}.contains(e.metaType) 
+	).transform( this ) ->
+	p.ownedElement.typeSelect(Behavior).transform( this ) ->
+	// map associations in package
+	association.addAll( p.ownedElement.typeSelect(Association).transformAssociation() ) ->
+	// map dependencies
+	dependency.addAll( p.packagedElement.typeSelect(Dependency).transform()) ->
+	this;
+
+/**
+ * Transforms an UML profile into a GeneSEZ package.
+ */
+private MPackage transformProfile(MPackage this, Profile p) :
+	logTrace( "transform [ " + metaType + " ] - " + p.fqmn() ) ->
+	// basic package properties
+	transformComment( p ) ->
+	transformMetaData( p ) ->
+	// containments: package, classifier
+	p.ownedElement.typeSelect(Package).transform( this ) ->
+	p.ownedElement.typeSelect(Classifier).reject(
+		e|{Activity, Actor, Association, Extension, Stereotype}.contains(e.metaType) 
+	).transform( this ) ->
+	this;
+
+/**
+ * Transforms UML stereotypes into GeneSEZ classes.
+ */
+private create MClass transformClass(Stereotype s) :
+	logTrace( "transform [ " + metaType + " ] - " + s.fqmn() ) ->
+	transformBasics( s ) ->
+	transformClassifier( s ) ->
+	this;
+
+/**
+ * processes the transformation of an uml classifier to a GeneSEZ classifier
+ * @param	c	an uml classifier
+ * @return	the GeneSEZ classifier
+ */
+private MClassifier transform(MClassifier this, Classifier c) :
+	switch (metaType) {
+		case MClass : transformClass((MClass)this, (Class)c)
+		case MInterface : transformInterface((MInterface)this, (Interface)c)
+		case MDataType : transformDataType((MDataType)this, (DataType)c)
+		case MEnumeration : transformEnumeration((MEnumeration)this, (Enumeration)c)
+		default : ( logFatal("try to construct an MClassifier object from: " + c) -> Void )
+	};
+
+/**
+ * processes the transformation of an uml class to a GeneSEZ class
+ * @param	c	an uml class
+ * @return	the GeneSEZ class
+ */
+private MClass transformClass(MClass this, Class c) :
+	// properties
+	setVisibility( c.visibility.toString() ) ->
+	setAbstract( c.isAbstract ) ->
+	setFinal( c.isLeaf ) ->
+	// transform classifier
+	transformClassifier(c) ->
+	this;
+
+/**
+ * processes the transformation of an uml interface to a GeneSEZ interface
+ * @param	i	an uml interface
+ * @return	the GeneSEZ interface
+ */
+private MInterface transformInterface(MInterface this, Interface i) :
+	// properties
+	setVisibility( i.visibility.toString() ) ->
+	setAbstract( i.isAbstract ) ->
+	setFinal( i.isLeaf ) ->
+	// transform classifier
+	transformClassifier(i) ->
+	this;
+
+/**
+ * processes the transformation of an uml datatype to a GeneSEZ datatype
+ * @param	d	an uml datatype
+ * @return	the GeneSEZ datatype
+ */
+private MDataType transformDataType(MDataType this, DataType d) : 
+	// properties
+	// TODO: should be done by uml2genesez constraints
+	setVisibility( d.visibility == null ? "public" : d.visibility.toString() ) ->
+	// ignore abstract + final
+	// transform classifier
+	transformClassifier(d) ->
+	this;
+
+/**
+ * processes the transformation of an uml enumeration to a GeneSEZ enumeration
+ * @param	e	an uml enumeration
+ * @return	the GeneSEZ enumeration
+ */
+private MEnumeration transformEnumeration(MEnumeration this, Enumeration e) : 
+	// properties
+	setVisibility( e.visibility.toString() ) ->
+	// ignoring: abstract, final
+	// containments
+	literal.addAll( e.ownedLiteral.typeSelect(EnumerationLiteral).transform() ) ->
+	// transform classifier
+	transformClassifier(e) ->
+	// for enums: realization of interfaces because UML does not allow an interface realization for enums
+	realization.addAll( e.clientDependency.typeSelect(Realization).supplier.typeSelect(Interface).makeType() ) ->
+	this;
+
+/**
+ * processes the transformation of an uml classifier to a GeneSEZ classifier
+ * @param	c	an uml classifier
+ * @return	the GeneSEZ classifier
+ */
+private MClassifier transformClassifier(MClassifier this, Classifier c) :
+	// associations
+	// set stereotype
+	stereotype.addAll( c.getAppliedStereotypes().make() ) ->
+	// add generalizations and realizations
+	generalization.addAll( c.generalization.general.makeType() ) ->
+	realization.addAll( c.clientDependency.typeSelect(InterfaceRealization).contract.makeType() ) ->
+	// containments
+	// add comment to classifier
+	ownedComment.addAll( c.ownedComment.typeSelect(Comment).transform() ) ->
+	// add attributes and association ends
+	c.attribute.reject( p|p.association != null ).forAll( a|a.makeAttribute( this ).transform( a ) -> true ) ->
+	c.attribute.reject( p|p.association == null ).forAll( ar|ar.makeAssociationRole( this ).transform(ar) -> true ) ->
+	// add operations
+	c.getOperations().forAll( o|o.make().transform(o) -> true ) ->
+	// add nested classifiers
+	c.ownedElement.typeSelect(Classifier).select(
+		e | {Class, Interface, Enumeration, DataType}.contains(e.metaType)
+	).transform( this ) ->
+	// set generics
+	c.ownedTemplateSignature != null
+		? genericParameter.addAll( 
+			c.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).makeGeneric() )
+		: this ->
+	// set tagged values
+	taggedValue.addAll( makeTaggedValues(c) ) ->
+	this;
+
+
+// - - » filter + identification helpers - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+/**
+ * checks if a package should be excluded from transformation by transformation settings
+ * @return	true if the package should be excluded from transformation, otherwise false
+ */
+private boolean isIgnoredPackage(Package this) :
+	let result = ignoredPackages().toList().contains( fqn() ) :
+	logDebug("exclude packge: [" + result + "] " + fqn()) -> result;
+
+/**
+ * checks if an element should be excluded from transformation
+ * @return	true if the element should be excluded, otherwise false
+ */
+private boolean isIgnoredElement(Element this) :
+	getAppliedStereotypes().exists( s|excludeStereotypes().toList().contains( s.name) );
+
+/**
+ * checks if an element should be excluded from transformation
+ * @return  true if the element should be excluded, otherwise false
+ */
+private boolean isIncludedProfile(Stereotype this) :
+    includeProfiles().toList().contains( this.getProfile().name );
+
+/**
+ * checks if a package is used as container for external types either by name or 
+ * by an assigned stereotype
+ * @return	true if the package is used as container for external types, otherwise false
+ */
+private boolean isContainerForExternalClasses(Package this) :
+	externalPackages().toList().contains( name )
+		|| getAppliedStereotypes().exists( s|externalStereotypes().toList().contains( s.name ) );
+
+/**
+ * Returns true if the specified type is contained within an included profile, otherwise false.
+ */
+private boolean isContainedInIncludedProfile(Type this) :
+	package == null
+		? true // unable to determine, should not get here!
+		: package.isContainedInIncludedProfile();
+
+/**
+ * Returns true if the specified package is contained within an included profile, otherwise false.
+ */
+private boolean isContainedInIncludedProfile(Package this) :
+	nestingPackage == null
+		? true // unable to determine, should not get here!
+		: nestingPackage.isContainedInIncludedProfile();
+
+/**
+ * Returns true, if the specified profile is included, otherwise false.
+ */
+private boolean isContainedInIncludedProfile(Profile this) : includeProfiles().toList().contains( name );
+
+/**
+ * Returns false, we assume model + profile elements as the root of the model tree.
+ */
+private boolean isContainedInIncludedProfile(Model this) : false;
+
+/**
+ * checks if a type is contained within a profile (deep recursive check)
+ * - if the type is not contained within a package, true is returned!
+ *   (to ensure its containment by transforming it into a GeneSEZ external type after this check)
+ * @return	true if the type is within a subtree of a profile
+ */
+private boolean isContainedInProfile(Type this) :
+	package == null
+		? true
+		: ( package.metaType == Profile
+			? true
+			: package.isContainedInProfile()
+		);
+
+/**
+ * checks if a package is contained within a profile (deep recursive check)
+ * - if nesting package is null, it returns false (because we reached the root of the model tree)
+ * @return	true if the package is in a subtree of a profile, otherwise false
+ */
+private boolean isContainedInProfile(Package this) :
+	nestingPackage == null
+		? false
+		: (	nestingPackage.metaType == Profile
+			? true
+			: nestingPackage.isContainedInProfile()
+		);
+
+/**
+ * checks if a classifier has a containment association to the model
+ * @return	true if the classifier is contained in the model, otherwise false
+ */
+private boolean isRootClassifier(Classifier this) :
+	owner.metaType == Model;
+
+/**
+ * checks if a classifier should be transformed into an external type
+ * @return	true if the uml classifier should be transformed to a GeneSEZ external type
+ */
+private boolean isExternalType(Type this) :
+	// is annotated with stereotype to mark as external
+	getAppliedStereotypes().exists( s|externalStereotypes().toList().contains( s.name ) )
+	// or is root classifier + all classes in model are treated as externals
+	|| ( mapClassesInModelToExternal() && ((Classifier)this).isRootClassifier() )
+	// or is contained in a package which is a container for external classes
+	|| ( package.isContainerForExternalClasses() );
+
+/**
+ * splits a comma separated list of values into a list of strings and 
+ * removing all unnessesary whitespace
+ * @param	s	comma separated list of values
+ * @return	the list of strings
+ */
+private List[String] toList(String s) :
+	s.split(",").trim();
+
+/**
+ * returns the name of a GeneSEZ type
+ * because the fact, GeneSEZ types has no common base with a 'name' attribute,
+ * the name is derived from special type attributes
+ * @return	the name of the GeneSEZ type
+ */
+String name(MType this) :
+	switch (true) {
+		case MGeneric.isAssignableFrom(metaType) : ((MGeneric)this).specification
+		case MExternal.isAssignableFrom(metaType): ((MExternal)this).name
+		case MClassifier.isAssignableFrom(metaType) : ((MClassifier)this).name
+		default : logFatal("cannot determine name of type from object: " + metaType)
+	};
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	mapping to the java functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * process EJavaObject externally. this function is never called but keeps the syntax checker calm ;-)
+private List[String] eToString(ecore::EJavaObject obj):
+	JAVA org.genesez.adapter.uml2.TransformationHelper.eToString(java.lang.Object);
+ */
+
+/**
+ * process List structured EJavaObject externally
+ */
+private List[String] eToString(List obj):
+	JAVA org.genesez.adapter.uml2.TransformationHelper.lToString(org.eclipse.emf.ecore.util.EDataTypeUniqueEList);
+
+/**
+ * process flat EJavaObject externally
+ */
+private List[String] eToString(Object obj):
+	JAVA org.genesez.adapter.uml2.TransformationHelper.eToString(java.lang.Object);
+

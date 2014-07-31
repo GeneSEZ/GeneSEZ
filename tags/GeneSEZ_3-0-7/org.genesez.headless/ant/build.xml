@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Runs a GeneSEZ transformation using mwe or mwe2. Distinction is based on transformation file extension.
+	Needs ant contrib library and an ant 1.8.
+	
+	@author	tobias haubold
+-->
+<project name="org.genesez.headless.ant" basedir="." default="run">
+	
+	<!-- classpath definitions -->
+	<property file="config.properties" />
+	<import file="customization.xml" />
+	<import file="classpath.xml" />
+	
+	<target name="run" description="Runs the specified transformation for the specified project">
+		<!-- set path and load the ant contrib library tasks -->
+		<path id="antcontrib.classpath">
+			<pathelement location="${basedir}/lib/ant-contrib-0.6.jar" />
+		</path>
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="antcontrib.classpath" />
+		
+		<fail message="Need the following parameters: ${project.dir} + ${workflow.file}">
+			<condition>
+				<not>
+					<or>
+						<available file="${project.dir}" />
+						<available file="${workflow.file}" />
+					</or>
+				</not>
+			</condition>
+		</fail>
+		<antcall target="eclipse.project.classpath">
+			<param name="project.dir" value="${project.dir}" />
+		</antcall>
+	</target>
+	
+	<target name="execute.transformation" description="Executes all transformations of an example project">
+		<path id="classpath">
+			<path path="${project.classpath}" />
+			<path refid="additional.classpath" />
+			<path refid="genesez.bundle.classpath" />
+		</path>
+		<pathconvert property="classpath" refid="classpath" />
+		<echo level="verbose" message="Project classpath: ${classpath}"></echo>
+		
+		<condition property="execute.target" value="execute.mwe2.workflow" else="execute.mwe.workflow">
+			<matches string="${workflow.file}" pattern=".*mwe2$" casesensitive="false" />
+		</condition>
+		<antcall target="${execute.target}">
+			<param name="project.dir" value="${project.dir}" />
+			<param name="workflow.file" value="${workflow.file}" />
+			<param name="classpath" value="${classpath}" />
+		</antcall>
+	</target>
+	
+	<target name="execute.mwe.workflow" description="Executes an mwe workflow file">
+		<fail message="Workflow file not available: ${workflow.file}">
+			<condition>
+				<not>
+					<available file="${workflow.file}" />
+				</not>
+			</condition>
+		</fail>
+		<property name="workflow.relative" value="${workflow.file}" basedir="${project.dir}" relative="true" />
+		<echo level="verbose" message="Running: ${workflow.relative}" />
+		<java classname="org.eclipse.emf.mwe.core.WorkflowRunner"
+				classpath="${classpath}"
+				fork = "true"
+				failonerror="true"
+				resultproperty="returncode"
+				dir="${project.dir}">
+			<syspropertyset refid="jvm.sys.args" />
+			<sysproperty key="java.library.path" value="${custom.java.library.path}" />
+			<arg value="${workflow.relative}" />
+			<arg value="-pbaseDir=${project.dir}" />
+			<arg value="--ant" />
+		</java>
+		<echo level="verbose" message="Done: ${workflow.relative}" />
+		<echo level="verbose" message="Return Code: ${returncode}" />
+	</target>
+	
+	<target name="execute.mwe2.workflow" description="Executes an mwe2 workflow file">
+		<fail message="Workflow file not available: ${workflow.file}">
+			<condition>
+				<not>
+					<available file="${workflow.file}" />
+				</not>
+			</condition>
+		</fail>
+		
+		<!-- the mwe2 execution engines does not like backslashs as path seperator so converting to slashs... -->
+		<property name="workflow.relative" value="${workflow.file}" basedir="${project.dir}" relative="true" />
+		<propertyregex property="workflow.executable" input="${workflow.relative}" regexp="\\" replace="/" global="true" />
+		
+		<echo level="verbose" message="Running: ${workflow.relative}" />
+		<java classname = "org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher"
+				classpath="${classpath}"
+				fork="true"
+				failonerror="true"
+				resultproperty="returncode"
+				dir="${project.dir}">
+			<syspropertyset refid="jvm.sys.args" />
+			<sysproperty key="java.library.path" value="${custom.java.library.path}" />
+			<arg value="${workflow.executable}" />
+			<!--arg value="config/transformation.mwe2" /-->
+			<arg value="-pbaseDir=${project.dir}" />
+		</java>
+		<echo level="verbose" message="Done: ${workflow.relative}" />
+		<echo level="verbose" message="Return Code: ${returncode}" />
+	</target>
+	
+	
+	<!-- targets to obtain the classpath entries of an eclipse project (from the .classpath file) an use them within ant -->
+	
+	<target name="eclipse.project.classpath" description="Obtains the classpath entries of the eclipse project">
+		<fail message="Project dir missing: ${project.dir}">
+			<condition>
+				<not>
+					<available file="${project.dir}" />
+				</not>
+			</condition>
+		</fail>
+		<echo level="verbose" message="Obtain eclipse classpath of: ${project.dir}" />
+		<ant antfile="${ant.file}" dir="${project.dir}">
+			<target name="eclipse.project.classpath.internal" />
+			<target name="execute.transformation" />
+		</ant>
+	</target>
+	
+	<target name="eclipse.project.classpath.internal">
+		<antclipse produce="classpath" idcontainer="project.classpath" verbose="false" includesource="true" includelibs="true" includeoutput="true" />
+		<pathconvert property="project.classpath" refid="project.classpath">
+			<map from="${user.dir}" to="${basedir}" />
+		</pathconvert>
+		<echo level="verbose" message="Eclipse project classpath: ${project.classpath}"></echo>
+	</target>
+	
+</project>

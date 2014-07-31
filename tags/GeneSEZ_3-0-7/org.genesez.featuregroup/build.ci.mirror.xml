@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Mirror Eclipse Plugins for GeneSEZ Aggregated Repository
+	
+	@author nihe
+-->
+<project name="org.genesez.p2mirror" default="publish.mirrored.repository">
+
+	<!-- import ant contrib for usage -->
+	<import file="lib/antcontrib.xml"/>
+	
+	<!-- import general ci ant targets for usage -->
+	<import file="build.ci.xml"/>
+	
+	<!-- environment qualifier replacements -->
+	<property environment="env"/>
+	<property name="source.repository.url" value="${env.UPDATESITE}"/>
+	<property name="plugin.name" value="${env.PLUGIN_NAME}"/>
+	<property name="plugin.versions" value="${env.PLUGIN_VERSIONS}"/>
+	<property name="temp.dir" value="${env.WORKSPACE}/tmp"/>
+	
+	<property name="destination.repository.name" value="GeneSEZ Aggregated Mirror Repository"/>
+	<property name="destination.repository.artifact.url" value="${destination.repository.url}/artifact"/>
+	<property name="destination.repository.metadata.url" value="${destination.repository.url}/metadata"/>
+	<property name="destination.repository.artifact.dir" value="${destination.repository.dir}/artifact"/>
+	<property name="destination.repository.metadata.dir" value="${destination.repository.dir}/metadata"/>
+	
+	
+	<target name="mirror.repository" description="Mirror Repository for GeneSEZ Aggregated Repository">
+		<echo message="Mirror p2 repository from ${source.repository.url}:"/>
+		
+		<for list="${plugin.versions}" param="plugin.version">
+			<sequential>
+				<echo message="... add ${plugin.name} (@{plugin.version})."/>
+				<p2.mirror validate="true">
+					<repository location="file:${destination.repository.artifact.dir}" name="${destination.repository.name}" kind="A"/>
+					<repository location="file:${destination.repository.metadata.dir}/${plugin.name}/@{plugin.version}" name="${destination.repository.name}" kind="M"/>
+					<source>
+						<repository location="${source.repository.url}"/>
+					</source>
+					<iu id="${plugin.name}" version="@{plugin.version}"/>
+				</p2.mirror>
+			</sequential>
+		</for>
+	</target>
+	
+	<target name="perform.mirroring">
+		<exec executable="${eclipse.home.dir}/eclipse" failonerror="true">
+			<arg value="-noSplash"/>
+			<arg value="-data"/>
+			<arg value="${env.WORKSPACE}"/>
+			<arg value="-application"/>
+			<arg value="org.eclipse.ant.core.antRunner"/>
+			<arg value="-buildfile"/>
+			<arg value="${ant.file}"/>
+			<arg value="mirror.repository"/>
+			<arg value="-Ddestination.repository.dir=${destination.repository.dir}" />
+			<arg value="-Ddestination.repository.url=${destination.repository.url}" />
+		</exec>
+	</target>
+	
+	
+	
+	<target name="aggregate.composite.repository">
+		<echo message="Aggregate p2 composite repository:"/>
+		
+		<echo message="... delete old configuration."/>
+		<delete>
+		    <fileset dir="${destination.repository.dir}" includes="*.jar,*.xml"/>
+		</delete>
+		
+		<echo message="... add p2 artifact repository."/>
+		<p2.composite.repository>
+			<repository location="file:${destination.repository.dir}" name="${destination.repository.name}"/>
+			<add>
+				<repository location="${destination.repository.artifact.url}" kind="A"/>
+			</add>
+		</p2.composite.repository>
+	
+		<for param="directory">
+			<path>
+				<dirset dir="${destination.repository.metadata.dir}">
+					<include name="*/*"/>
+				</dirset>
+			</path>
+			<sequential>
+				<var name="tmp.plugin.name" unset="true"/>
+				<var name="tmp.plugin.version" unset="true"/>
+				<propertyregex property="tmp.plugin.name" input="@{directory}" regexp="${destination.repository.metadata.dir}/([^/]*)/(.*)" select="\1"/>
+				<propertyregex property="tmp.plugin.version" input="@{directory}" regexp="${destination.repository.metadata.dir}/([^/]*)/(.*)" select="\2"/>
+				
+				<echo message="... add p2 metadata repository ${tmp.plugin.name} (${tmp.plugin.version})."/>
+				<p2.composite.repository>
+					<repository location="file:${destination.repository.dir}" name="${destination.repository.name}"/>
+					<add>
+						<repository location="${destination.repository.metadata.url}/${tmp.plugin.name}/${tmp.plugin.version}" kind="M"/>
+					</add>
+				</p2.composite.repository>
+			</sequential>
+		</for>
+	</target>
+	
+	<target name="perform.aggregation">
+		<exec executable="${eclipse.home.dir}/eclipse" failonerror="true">
+			<arg value="-noSplash"/>
+			<arg value="-data"/>
+			<arg value="${env.WORKSPACE}"/>
+			<arg value="-application"/>
+			<arg value="org.eclipse.ant.core.antRunner"/>
+			<arg value="-buildfile"/>
+			<arg value="${ant.file}"/>
+			<arg value="aggregate.composite.repository"/>
+			<arg value="-Ddestination.repository.dir=${destination.repository.dir}" />
+			<arg value="-Ddestination.repository.url=${destination.repository.url}" />
+		</exec>
+	</target>
+
+	
+	
+	<target name="rebuild.artifact.repository">
+		<echo message="Rebuild p2 artifact repository:"/>
+		<for param="directory">
+			<path>
+				<dirset dir="${destination.repository.metadata.dir}">
+					<include name="*/*"/>
+				</dirset>
+			</path>
+			<sequential>
+				<!-- extract plugin name and plugin version from directory path -->
+				<var name="tmp.plugin.name" unset="true"/>
+				<var name="tmp.plugin.version" unset="true"/>
+				<propertyregex property="tmp.plugin.name" input="@{directory}" regexp="${destination.repository.metadata.dir}/([^/]*)/(.*)" select="\1"/>
+				<propertyregex property="tmp.plugin.version" input="@{directory}" regexp="${destination.repository.metadata.dir}/([^/]*)/(.*)" select="\2"/>
+				
+				<echo message="... add ${tmp.plugin.name} (${tmp.plugin.version})."/>
+				<p2.mirror validate="true">
+					<repository location="file:${temp.dir}" name="${destination.repository.name}" kind="A"/>
+					<source>
+						<repository location="file:${destination.repository.artifact.dir}" kind="A"/>
+						<repository location="file:${destination.repository.metadata.dir}/${tmp.plugin.name}/${tmp.plugin.version}" kind="M"/>
+					</source>
+					<iu id="${tmp.plugin.name}" version="${tmp.plugin.version}"/>
+				</p2.mirror> 
+			</sequential>
+		</for>
+		
+		<mkdir dir="${temp.dir}"/>
+		<delete dir="${destination.repository.artifact.dir}"/>
+		<move file="${temp.dir}" tofile="${destination.repository.artifact.dir}"/>
+	</target>
+	
+	<target name="perform.rebuilding">
+		<exec executable="${eclipse.home.dir}/eclipse" failonerror="true">
+			<arg value="-noSplash"/>
+			<arg value="-data"/>
+			<arg value="${env.WORKSPACE}"/>
+			<arg value="-application"/>
+			<arg value="org.eclipse.ant.core.antRunner"/>
+			<arg value="-buildfile"/>
+			<arg value="${ant.file}"/>
+			<arg value="rebuild.artifact.repository"/>
+			<arg value="-Ddestination.repository.dir=${destination.repository.dir}" />
+			<arg value="-Ddestination.repository.url=${destination.repository.url}" />
+		</exec>
+	</target>
+
+	
+
+	<target name="publish.mirrored.repository" depends="perform.mirroring, perform.aggregation">
+		<antcall target="change.permissions">
+			<param name="dir" value="${destination.repository.dir}" />
+		</antcall>
+	</target>
+	
+	<target name="publish.rebuilt.repository" depends="perform.rebuilding, perform.aggregation">
+		<antcall target="change.permissions">
+			<param name="dir" value="${destination.repository.dir}" />
+		</antcall>
+	</target>
+
+</project>

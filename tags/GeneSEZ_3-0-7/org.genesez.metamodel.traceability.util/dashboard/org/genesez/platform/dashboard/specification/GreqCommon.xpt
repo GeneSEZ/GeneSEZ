@@ -1,0 +1,59 @@
+«IMPORT greq»
+«IMPORT gtrace»
+
+«REM»
+	Common templates to represent specification model elements.
+	@author tobias haubold
+«ENDREM»
+
+«EXTENSION org::genesez::platform::dashboard::Naming»
+«EXTENSION org::genesez::platform::dashboard::Conversion»
+«EXTENSION org::genesez::platform::dashboard::traceability::TraceCalculation»
+
+
+«DEFINE Definition FOR List[RSpecObject] -»
+«IF size > 0 -»
+	<dt>«first().asMetaTypeNamePlural()»</dt>
+	<dd>
+		<div class="list">
+		«EXPAND ListItem(true, true) FOREACH this -»
+		</div>
+	</dd>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«DEFINE ListItem FOR RSpecObject -»
+«EXPAND ListItem(true, false) -»
+«ENDDEFINE»
+
+«DEFINE ListItem(boolean withVersion) FOR RSpecObject -»
+«EXPAND ListItem(withVersion, false) FOR this»
+«ENDDEFINE»
+
+«DEFINE ListItem(boolean withVersion, boolean scenarioAsTooltip) FOR RSpecObject -»
+	<div class="entry">
+		«EXPAND Id -»
+		«IF withVersion -»<div class="hint"><span class="version">«version»</span></div>«ENDIF -»
+		«EXPAND Content(scenarioAsTooltip) -»
+	</div>
+«ENDDEFINE»
+
+«DEFINE Id FOR RScenarioStep -»
+		<div class="id">«scenario.id».«scenario.step.indexOf(this) +1»)</div>
+«ENDDEFINE»
+
+«DEFINE Id FOR RSpecObject -»
+		<div class="id">«id»</div>
+«ENDDEFINE»
+
+«DEFINE Content(Boolean scenarioAsTooltip) FOR RSpecObject -»
+		<div class="content">
+			<a href="#" onclick="«IF metaType == RScenario»showScenario(«id»)«ELSEIF metaType == RScenarioStep»showScenario(«((RScenarioStep)this).scenario.id»)«ELSE»showRequirement(«id»)«ENDIF»"
+					title="«IF metaType == RScenarioStep && scenarioAsTooltip -»«((RScenarioStep)this).scenario.asMetaTypeNameSingular()»: «((RScenarioStep)this).scenario.definition»«ELSE -»«definition»«ENDIF -»">
+				<div class="truncating">«definition»</div>
+			</a>
+		</div>
+«ENDDEFINE»

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="org.genesez.eclipse" basedir=".." default="build">
+
+	<condition property="build.basedir"
+		value="${basedir}/..">
+		<not>
+			<isset property="build.basedir" />
+		</not>
+	</condition>
+
+	<available file="${build.basedir}/org.genesez.build" type="dir" property="org.genesez.build.available" />
+	<fail unless="org.genesez.build.available" message="Please make sure that ${build.basedir}/org.genesez.build is available" />
+
+	<import file="${build.basedir}/org.genesez.build/build/imports.xml" />
+	
+	<!-- Import project related properties -->
+	<property file="build.properties" />
+	<property name="bin.dir" value="bin" />
+	<property name="dist.dir" value="dist" />
+	
+	<!-- Set the classpath -->
+	<path id="org.genesez.eclipse.classpath">
+		<path refid="Plug-in Dependencies.libraryclasspath" />
+	</path>
+	
+	<!-- Public target section -->
+	
+	<target name="build" description="Build org.genesez.eclipse">
+		<mkdir dir="${bin.dir}" />
+		<javac srcdir="src" 
+			destdir="${bin.dir}"
+			classpathref="org.genesez.eclipse.classpath"
+			target="${target}"
+			source="${source}"
+			debug="on" />
+	</target>
+	
+	<target name="createjar" depends="build" description="Create the plugin jar for org.genesez.eclipse">
+		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/${project.name}.jar" compress="true">
+			<fileset dir="${bin.dir}" includes="**/*" />
+		</jar>
+		<jar destfile="${dist.dir}/${plugin.jar}"
+			compress="true"
+			manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${dist.dir}" includes="${project.name}.jar" />
+			<fileset dir="${basedir}">
+				<include name="about.ini" />
+				<include name="plugin.xml" />
+				<include name="icons/**" />
+				<include name="images/**" />
+				<include name="templates/**" />
+			</fileset>
+		</jar>
+		<delete file="${dist.dir}/${project.name}.jar" />
+	</target>
+	
+	<target name="clean" description="Clean org.genesez.eclipse">
+		<delete includeemptydirs="true" failonerror="false" dir="${dist.dir}" />
+	</target>
+</project>
