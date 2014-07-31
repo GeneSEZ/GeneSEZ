@@ -27,7 +27,7 @@
 	<xmltask source="${genesez.feature.file}">
 		<copy property="genesez.feature.version" path="/feature/@version" />
 	</xmltask>
-	<propertyregex property="genesez.release.number" regexp="(\d+\.\d+\.\d+)" select="\1" input="${genesez.feature.version}" />
+	<propertyregex property="genesez.release.number" regexp="(\d.\d.\d)" select="\1" input="${genesez.feature.version}" />
 	<echo message="Building GeneSEZ release ${genesez.release.number} with version number ${genesez.feature.version}..." />
 	
 	<condition property="latest.build.count" value="${LATEST_BUILD_COUNT}" else="10">
@@ -156,7 +156,7 @@
 				
 				<!-- obtain genesez version from repo path -->
 				<var name="version" unset="true" />
-				<propertyregex property="version" regexp="(\d+\.\d+\.\d+)" select="\1" input="${uri}" />
+				<propertyregex property="version" regexp="(\d.\d.\d)" select="\1" input="${uri}" />
 				
 				<!-- check if validation set for genesez version exists -->
 				<var name="validation.set" unset="true" />
@@ -201,8 +201,8 @@
 				<!-- obtain genesez version from repo path -->
 				<var name="version.complete" unset="true" />
 				<var name="version" unset="true" />
-				<propertyregex property="version.complete" regexp="(\d+\.\d+\.\d+)" select="\1" input="${uri}" />
-				<propertyregex property="version" regexp="(\d+\.\d+)\.\d+" select="\1" input="${uri}" />
+				<propertyregex property="version.complete" regexp="(\d.\d.\d)" select="\1" input="${uri}" />
+				<propertyregex property="version" regexp="(\d.\d).\d" select="\1" input="${uri}" />
 				
 				<!-- find all validation sets for that version -->
 				<xmltask source="${b3aggr.file}">

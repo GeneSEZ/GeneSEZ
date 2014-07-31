@@ -23,7 +23,7 @@ public class ProfileGenerator extends SimpleModel2Text {
 	private String profileFileName = "Profile.ext";
 	
 	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
-	private String accessElementFileName = "AccessElement.ext";
+	private String accessHelperFileName = "AccessHelper.ext";
 	
 	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String stereotypeNamePrefix = "";
@@ -46,8 +46,8 @@ public class ProfileGenerator extends SimpleModel2Text {
 		if (profileFileName == null) {
 			profileFileName = getDefaultProfileFileName();
 		}
-		if (accessElementFileName == null) {
-			accessElementFileName = getDefaultAccessElementFileName();
+		if (accessHelperFileName == null) {
+			accessHelperFileName = getDefaultAccessHelperFileName();
 		}
 		if (stereotypeNamePrefix == null) {
 			stereotypeNamePrefix = getDefaultStereotypeNamePrefix();
@@ -66,7 +66,7 @@ public class ProfileGenerator extends SimpleModel2Text {
 		java.util.Set<Parameter> result = super.getParameter();
 		result.add(new Parameter("xtendFilePath", xtendFilePath));
 		result.add(new Parameter("profileFileName", profileFileName));
-		result.add(new Parameter("accessElementFileName", accessElementFileName));
+		result.add(new Parameter("accessHelperFileName", accessHelperFileName));
 		result.add(new Parameter("stereotypeNamePrefix", stereotypeNamePrefix));
 		result.add(new Parameter("enumerationNamePrefix", enumerationNamePrefix));
 		return result;
@@ -83,9 +83,9 @@ public class ProfileGenerator extends SimpleModel2Text {
 	/**
 	 * Method stub for further implementation.
 	 */
-	@WfDefault(parameter = "accessElementFileName")
-	public String getDefaultAccessElementFileName() {
-		return "AccessElement.ext";
+	@WfDefault(parameter = "accessHelperFileName")
+	public String getDefaultAccessHelperFileName() {
+		return "AccessHelper.ext";
 	}
 	
 	/**
@@ -109,14 +109,14 @@ public class ProfileGenerator extends SimpleModel2Text {
 	 */
 	@WfDefault(parameter = "template")
 	public String getDefaultTemplate() {
-		return "org::genesez::metamodel::core::util::profile::m2t::Root::Root";
+		return "org::genesez::platform::common::profile::templates::Root::Root";
 	}
 	
 	/**
 	 * Returns the value of attribute '<em><b>xtendFilePath</b></em>'.
 	 */
 	public String getXtendFilePath() {
-		return this.xtendFilePath;
+		return xtendFilePath;
 	}
 	
 	/**
@@ -131,7 +131,7 @@ public class ProfileGenerator extends SimpleModel2Text {
 	 * Returns the value of attribute '<em><b>profileFileName</b></em>'.
 	 */
 	public String getProfileFileName() {
-		return this.profileFileName;
+		return profileFileName;
 	}
 	
 	/**
@@ -143,25 +143,25 @@ public class ProfileGenerator extends SimpleModel2Text {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>accessElementFileName</b></em>'.
+	 * Returns the value of attribute '<em><b>accessHelperFileName</b></em>'.
 	 */
-	public String getAccessElementFileName() {
-		return this.accessElementFileName;
+	public String getAccessHelperFileName() {
+		return accessHelperFileName;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>accessElementFileName</b></em>'.
-	 * @param	accessElementFileName	the value to set.
+	 * Sets the value of attribute '<em><b>accessHelperFileName</b></em>'.
+	 * @param	accessHelperFileName	the value to set.
 	 */
-	public void setAccessElementFileName(String accessElementFileName) {
-		this.accessElementFileName = accessElementFileName;
+	public void setAccessHelperFileName(String accessHelperFileName) {
+		this.accessHelperFileName = accessHelperFileName;
 	}
 	
 	/**
 	 * Returns the value of attribute '<em><b>stereotypeNamePrefix</b></em>'.
 	 */
 	public String getStereotypeNamePrefix() {
-		return this.stereotypeNamePrefix;
+		return stereotypeNamePrefix;
 	}
 	
 	/**
@@ -176,7 +176,7 @@ public class ProfileGenerator extends SimpleModel2Text {
 	 * Returns the value of attribute '<em><b>enumerationNamePrefix</b></em>'.
 	 */
 	public String getEnumerationNamePrefix() {
-		return this.enumerationNamePrefix;
+		return enumerationNamePrefix;
 	}
 	
 	/**

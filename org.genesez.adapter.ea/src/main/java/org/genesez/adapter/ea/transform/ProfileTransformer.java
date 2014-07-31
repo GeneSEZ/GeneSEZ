@@ -4,7 +4,9 @@ package org.genesez.adapter.ea.transform;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_5_12d203c6_1363353485096_359383_2408) 
  */
+
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -18,20 +20,24 @@ import org.genesez.adapter.ea.ElementRegistry;
 /**
  * transforms the profile
  * TODO doesn't work yet
- * @author Christian
+ * @author christian
  */
+
 public class ProfileTransformer extends AbstractPackageTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
 	
 	private static final Log LOG = LogFactory.getLog(ProfileTransformer.class);
 	
-	private java.util.Set<Integer> connectors = new java.util.HashSet<Integer>();
+	private java.util.Set<Integer> connectors = new HashSet<Integer>();
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
+	 * @param	p	
+	 * @return	
 	 */
+	
 	public Profile transform(org.sparx.Package p) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363948546213_20212_2673) ENABLED START */
 		LOG.debug("Creating Profile " + p.GetName());
@@ -45,14 +51,16 @@ public class ProfileTransformer extends AbstractPackageTransformer {
 		this.transformElements();
 		this.transformConnectors();
 		
-		ElementRegistry.INSTANCE.addPackage(p, profile);
+		ElementRegistry.INSTANCE.addElement(p, profile);
 		return profile;
 		/* PROTECTED REGION END */
 	}
 	
 	/**
 	 * Method stub for further implementation.
+	 * @param	element	
 	 */
+	
 	protected void transformElement(org.sparx.Element element) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363948570387_252184_2677) ENABLED START */
 		LOG.debug("Transforming element " + element.GetName());
@@ -68,7 +76,7 @@ public class ProfileTransformer extends AbstractPackageTransformer {
 		} else if (element.GetType().equals("Interface")) {
 			LOG.debug("Element is an Interface");
 			InterfaceTransformer t = new InterfaceTransformer();
-			t.transform(element, this.umlPackage);
+			t.transform(element, (Profile) this.umlPackage);
 			//			this.metaclasses.put(_e.GetElementID(), t.transform(_e, (Profile)this.umlPackage));
 		} else if (element.GetType().equals("Class") && element.GetStereotypeList().equals("enumeration")) {
 			LOG.debug("Element is an Enumeration");
@@ -85,6 +93,7 @@ public class ProfileTransformer extends AbstractPackageTransformer {
 	/**
 	 * Method stub for further implementation.
 	 */
+	
 	private void transformConnectors() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363948505700_467158_2668) ENABLED START */
 		for (org.sparx.Element e : this.eaPackage.GetElements()) {
@@ -99,7 +108,9 @@ public class ProfileTransformer extends AbstractPackageTransformer {
 	
 	/**
 	 * Method stub for further implementation.
+	 * @param	connector	
 	 */
+	
 	private void transformConnector(org.sparx.Connector connector) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363948619756_505498_2681) ENABLED START */
 		LOG.debug("Transforming connector " + connector.GetName());
@@ -115,11 +126,12 @@ public class ProfileTransformer extends AbstractPackageTransformer {
 	
 	// -- generated association + attribute accessors -----------------------
 	
-	// -- generated code  ---------------------------------------------------
+	// -- generated code of other cartridges --------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363353485096_359383_2408) ENABLED START */
 	private Map<Integer, Stereotype> stereotypes = new HashMap<Integer, Stereotype>();
 	private Map<Integer, Class> metaclasses = new HashMap<Integer, Class>();
 	/* PROTECTED REGION END */
+	
 }
