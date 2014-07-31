@@ -4,6 +4,7 @@ package org.genesez.adapter.ea;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_12d203c6_1328866926613_182323_2017) 
  */
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.mwe.core.WorkflowContext;
@@ -19,22 +20,25 @@ import org.genesez.adapter.ea.transform.ProfileTransformer;
  * The Profile2UML workflow component transforms an Enterprise Architect package
  * from the input slot into an UML profile and put transformed profile to the
  * output slot.
- * @author Christian
+ * @author christian
  */
+
 public class Profile2UML extends AbstractWorkflowComponent {
 	
 	// -- generated attribute, constant + association declarations ----------
 	
 	private static final Log LOG = LogFactory.getLog(Profile2UML.class);
 	
-	private String inputSlot = "null";
+	private String inputSlot = null;
 	
-	private String outputSlot = "null";
+	private String outputSlot = null;
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
+	 * @param	i	
 	 */
+	
 	public void checkConfiguration(Issues i) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363096557648_725848_2092) ENABLED START */
 		
@@ -45,7 +49,11 @@ public class Profile2UML extends AbstractWorkflowComponent {
 	
 	/**
 	 * Method stub for further implementation.
+	 * @param	ctx	
+	 * @param	pm	
+	 * @param	issues	
 	 */
+	
 	protected void invokeInternal(WorkflowContext ctx, ProgressMonitor pm, Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363096582750_554232_2112) ENABLED START */
 		PostProcessor.INSTANCE.initialize();
@@ -69,25 +77,22 @@ public class Profile2UML extends AbstractWorkflowComponent {
 		/* PROTECTED REGION END */
 	}
 	
+	// -- generated association + attribute accessors -----------------------
 	/**
-	 * Sets the value of attribute '<em><b>inputSlot</b></em>'.
-	 * @param	inputSlot	the value to set.
+	 * Sets the value of attribute '<em><b>inputSlot</b></em>'
 	 */
 	public void setInputSlot(String inputSlot) {
 		this.inputSlot = inputSlot;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>outputSlot</b></em>'.
-	 * @param	outputSlot	the value to set.
+	 * Sets the value of attribute '<em><b>outputSlot</b></em>'
 	 */
 	public void setOutputSlot(String outputSlot) {
 		this.outputSlot = outputSlot;
 	}
 	
-	// -- generated association + attribute accessors -----------------------
-	
-	// -- generated code  ---------------------------------------------------
+	// -- generated code of other cartridges --------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_12d203c6_1328866926613_182323_2017) ENABLED START */
@@ -95,4 +100,5 @@ public class Profile2UML extends AbstractWorkflowComponent {
 	// :)
 	
 	/* PROTECTED REGION END */
+	
 }

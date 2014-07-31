@@ -935,7 +935,7 @@ private create MExternal makeExternal(String name, String xmiGuid) :
  */
 private MExternal makeExternal(ValueSpecification v) :
 	logTrace("make [MExternal] - " + v.fqmn()) ->
-	makeExternal( v.stringValue() ).transformMetaData(v);
+	makeExternal( v.stringValue() );
 
 /**
  * creates a GeneSEZ external type from an uml classifier
@@ -950,8 +950,6 @@ private MExternal makeExternal(Classifier c) :
 			? e.genericParameter.addAll( 
 				c.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).makeGeneric() )
 			: e ->
-		// meta data
-		e.transformMetaData(c) ->
 		e);
 
 /**
@@ -961,7 +959,7 @@ private MExternal makeExternal(Classifier c) :
  */
 private MExternal makeExternal(PrimitiveType p) :
 	logTrace("make [MExternal] - " + p.fqmn()) ->
-	makeExternal( p.name ).transformMetaData(p);
+	makeExternal( p.name );
 
 /**
  * Returns the multilicity properties of the specified multiplicity element.
@@ -979,7 +977,7 @@ private MPrimitiveType makePrimitiveType(DataType d) :
 	// delegate
 	makePrimitiveType(null);
  */
-
+	
 /**
  * polymorphic exception handling for the oaw type Void / null
  * simply creaets a GeneSEZ primitive type 'void'
@@ -1121,8 +1119,6 @@ private MDataType transformDataType(MDataType this, DataType d) :
 	// ignore abstract + final
 	// transform classifier
 	transformClassifier(d) ->
-	// for data types: realization of interfaces because UML does not allow an interface realization for data types
-	realization.addAll( d.clientDependency.typeSelect(Realization).supplier.typeSelect(Interface).makeType() ) ->
 	this;
 
 /**
@@ -1153,9 +1149,7 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
 	stereotype.addAll( c.getAppliedStereotypes().make() ) ->
 	// add generalizations and realizations
 	generalization.addAll( c.generalization.general.makeType() ) ->
-	BehavioredClassifier.isInstance( c )
-		? realization.addAll( ((BehavioredClassifier)c).interfaceRealization.contract.makeType() )
-		: this ->
+	realization.addAll( c.clientDependency.typeSelect(InterfaceRealization).contract.makeType() ) ->
 	// containments
 	// add comment to classifier
 	ownedComment.addAll( c.ownedComment.typeSelect(Comment).transform() ) ->

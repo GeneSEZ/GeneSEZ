@@ -4,6 +4,7 @@ package org.genesez.adapter.ea.transform;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_5_12d203c6_1363949546037_909056_2775) 
  */
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.URI;
@@ -17,8 +18,9 @@ import org.genesez.adapter.ea.ResourceRegistry;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author Christian
+ * @author christian
  */
+
 public class PropertySimpleTransformer extends PropertyTransformer {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -30,7 +32,9 @@ public class PropertySimpleTransformer extends PropertyTransformer {
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
+	 * @return	
 	 */
+	
 	protected Type findType() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363950042883_914097_2805) ENABLED START */
 		Type type = null;
@@ -54,7 +58,7 @@ public class PropertySimpleTransformer extends PropertyTransformer {
 	
 	// -- generated association + attribute accessors -----------------------
 	
-	// -- generated code  ---------------------------------------------------
+	// -- generated code of other cartridges --------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_5_12d203c6_1363949546037_909056_2775) ENABLED START */
@@ -63,4 +67,5 @@ public class PropertySimpleTransformer extends PropertyTransformer {
 		PropertySimpleTransformer.metaModel = (Model) EcoreUtil.getObjectByType(resource.getContents(), UMLPackage.Literals.MODEL);
 	}
 	/* PROTECTED REGION END */
+	
 }

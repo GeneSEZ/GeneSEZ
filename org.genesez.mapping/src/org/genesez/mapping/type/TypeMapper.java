@@ -134,20 +134,6 @@ public class TypeMapper {
 	}
 	
 	/**
-	 * Returns true if a mapping for the specified multi typed type with the specified context exists, otherwise false.
-	 * 
-	 * @param unique	True if duplicate items in the multi valued type are not allowed, otherwise false.
-	 * @param ordered	True if the items in the multi valued type are ordered, otherwise false.
-	 * @param context	The context in which the type should be mapped.
-	 * @return	True if a type mapping exists, otherwise false.
-	 * 
-	 * @see org.genesez.mapping.type.ITypeMappingManager#hasTypeMapping(java.lang.String, java.lang.String)
-	 */
-	public boolean hasMultiValuedTypeMapping(boolean unique, boolean ordered, String context) {
-		return multivaluedTypeManager.hasTypeMapping(String.valueOf(unique) + String.valueOf(ordered), context);
-	}
-	
-	/**
 	 * Returns the name of the multi-valued type if a mapping entry exists, 
 	 * otherwise an empty string will be returned.
 	 * 

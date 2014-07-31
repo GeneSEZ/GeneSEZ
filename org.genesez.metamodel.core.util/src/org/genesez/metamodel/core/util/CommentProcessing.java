@@ -40,7 +40,7 @@ public class CommentProcessing {
 			// obtain annotation and only append if it's not null to avoid a NullPointerException
 			String annotation = c.getAnnotation();
 			if (annotation != null) {
-				result.append(org.genesez.util.conversion.CommentProcessing.commentText(annotation));
+				result.append(org.genesez.util.comment.CommentProcessing.commentText(annotation));
 			}
 			// check for nested comments and append them
 			if (!c.getNestedComment().isEmpty()) {

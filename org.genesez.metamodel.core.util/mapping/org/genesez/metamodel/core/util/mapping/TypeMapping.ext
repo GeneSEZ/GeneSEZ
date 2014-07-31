@@ -134,47 +134,6 @@ MType mapName(MType this, String contextName) :
 
 
 /**
- * Returns true if a multi valued type mapping for the specified multiplicity exists with the specified context, otherwise false.
- * 
- * @param this			The multiplicity settings to check for.
- * @param contextName	The name of the context in which the type should be mapped.
- * @return	True if a context type mapping exists, otherwise false.
- * 
- * @api
-*/
-boolean hasMultiValuedTypeMapping(MMultiplicity this, String contextName) :
-	upperBound == -1 || upperBound > 1
-		? hasMultiValuedTypeMapping( unique, ordered, contextName )
-		: false;
-
-
-/**
- * Returns true if a multi typed mapping with the specified context exists for the given parameter, otherwise false.
- * 
- * @param this			The parameter with a multi valued type to check for.
- * @param contextName	The name of the context in which the type should be mapped.
- * @return	True if a context type mapping exists, otherwise false.
- * 
- * @api
-*/
-boolean hasMultiValuedTypeMapping(MParameter this, String contextName) :
-	hasMultiValuedTypeMapping( multiplicity, contextName );
-
-
-/**
- * Returns true if a multi typed mapping with the specified context exists for the given property, otherwise false.
- * 
- * @param this			The property with a multi valued type to check for.
- * @param contextName	The name of the context in which the type should be mapped.
- * @return	True if a context type mapping exists, otherwise false.
- * 
- * @api
-*/
-boolean hasMultiValuedTypeMapping(MProperty this, String contextName) :
-	hasMultiValuedTypeMapping( multiplicity, contextName );
-
-
-/**
  * Maps the multiplicity settings to a collection type using the type mapping.
  *
  * @param	this		The parameter.

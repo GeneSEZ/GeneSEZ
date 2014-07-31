@@ -1,0 +1,240 @@
+«IMPORT gcore»
+
+«REM»
+	template for jpa class annotations
+	
+	@author		andre pflueger
+	@date		2009-04-20
+	@version	1.0
+«ENDREM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION org::genesez::util::logging::Logging»
+
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
+
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
+«EXTENSION org::genesez::platform::java::jpa::scripts::Naming»
+
+«REM»
+	public functions
+«ENDREM»
+
+«REM» 
+	evaluates the stereotype "jpaDiscriminatorValue" for classes, 
+	operations and properties
+«ENDREM»
+«DEFINE DiscriminatorValue FOR MElement-»	
+	«IF emHasStereotypeAssignment("jpaDiscriminatorValue")-»
+		«IF !emHasTaggedValue("jpaDiscriminatorValue", "value", "null")-»
+			@DiscriminatorValue("«taggedValue.selectFirst(e|e.tag.name == "value").value-»")
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	private functions
+«ENDREM»
+
+«REM»  «ENDREM»
+«DEFINE Annotation FOR MClass-»
+	«EXPAND _PersistentEntity-»
+	«EXPAND _PrimaryKey-»
+«ENDDEFINE»
+
+«REM» method searches the super classes recursively for class with annoted inheritance strategy«ENDREM»
+«DEFINE _superClassSearch(MClass super) FOR MClass-»
+	«FOREACH super.generalization.typeSelect(MClass) AS classes-»
+		«EXPAND _checkInheritanceStrategy(classes)-»
+		«EXPAND _superClassSearch(classes)-»
+	«ENDFOREACH-»	
+«ENDDEFINE»
+
+«DEFINE _checkInheritanceStrategy(MClass super) FOR MClass-»
+	«IF super.emHasStereotypeAssignment("jpaInheritance") && !super.emHasTaggedValue("jpaInheritance", "strategy", "SINGLE_TABLE")-»
+		«EXPAND _Table-»
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	evaluates the stereotype "jpaPersistentEntity"
+«ENDREM»
+«DEFINE _PersistentEntity FOR MClass-»
+	«IF emHasStereotypeAssignment("jpaPersistentEntity")-»
+		@Entity
+		«IF	emHasUtilizableTaggedValue("jpaPersistentEntity", "name")-»
+			(name="«emGetTaggedValue("jpaPersistentEntity", "name")-»")
+		«ENDIF-»
+		«REM»@Table is not allowed with SINGLE_TABLE inheritance strategy«ENDREM»
+		«IF generalization.isEmpty-»
+			«EXPAND _Table-»
+		«ELSE-»
+			«REM»@Table is needed with JOINED or TABLE_PER_CLASS inheritance strategy«ENDREM»
+			«EXPAND _superClassSearch(this)-»
+		«ENDIF-»
+		«EXPAND _Inheritance-»
+	«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	evaluates tagged values of @Table in "jpaPersistentEntity"
+«ENDREM»
+«DEFINE _Table FOR MClass-»	
+	«IF emHasUtilizableTaggedValue("jpaPersistentEntity", "tableName")-»		
+		@Table( name = "«emGetTaggedValue("jpaPersistentEntity", "tableName")-»"
+		«IF emHasUtilizableTaggedValue("jpaPersistentEntity", "tableCatalog")-»
+			, catalog = "«emGetTaggedValue("jpaPersistentEntity", "tableCatalog")-»"
+		«ENDIF-»
+		«IF emHasUtilizableTaggedValue("jpaPersistentEntity", "tableSchema")-»
+			, schema = "«emGetTaggedValue("jpaPersistentEntity", "tableSchema")-»"
+		«ENDIF-»)
+	«ENDIF-»	
+«ENDDEFINE»	
+
+«REM» 
+	evaluates the stereotype "jpaInheritance", "jpaPrimaryKeyJoinColumn",
+	"jpaDiscriminatorColumn" and "jpaDiscriminatorValue" 
+«ENDREM»
+«DEFINE _Inheritance FOR MClass-»
+	«IF emHasStereotypeAssignment("jpaInheritance")-»
+		«REM» Klasse ist selbst die vererbende Klasse «ENDREM»
+		@Inheritance(strategy=InheritanceType.«taggedValue.selectFirst(e|e.tag.name == "strategy").value-»)
+		«IF emHasStereotypeAssignment("jpaDiscriminatorColumn") && emHasTaggedValue("jpaInheritance", "strategy", "SINGLE_TABLE")-»
+			@DiscriminatorColumn(discriminatorType=DiscriminatorType.«emGetTaggedValue("jpaDiscriminatorColumn", "discriminatorType")-»
+			«IF emHasUtilizableTaggedValue("jpaDiscriminatorColumn", "name") && !emHasTaggedValue("jpaDiscriminatorColumn", "name", "DTYPE")-»
+				, name="«emGetTaggedValue("jpaDiscriminatorColumn", "name")-»", 
+			«ENDIF-»
+			«IF emHasUtilizableTaggedValue("jpaDiscriminatorColumn", "columnDefinition")-»
+				, columnDefinition="«emGetTaggedValue("jpaDiscriminatorColumn", "columnDefinition")-»"
+			«ENDIF-»
+			«IF !emHasTaggedValue("jpaDiscriminatorColumn", "length", "31") && emHasTaggedValue("jpaDiscriminatorColumn", "discriminatorType", "STRING")-»
+				, length=«emGetTaggedValue("jpaDiscriminatorColumn", "length")-»
+			«ENDIF-»)
+		«ENDIF-»
+		«EXPAND DiscriminatorValue-»		
+	«ELSEIF emHasStereotypeAssignment("jpaDiscriminatorValue") || emHasStereotypeAssignment("jpaPrimaryKeyJoinColumn")-»
+		«REM» class is a derived class «ENDREM»
+		«EXPAND DiscriminatorValue-»
+		«IF emHasStereotypeAssignment("jpaPrimaryKeyJoinColumn")-»
+			@PrimaryKeyJoinColumns(
+			«FOREACH emAllTaggedValues("jpaPrimaryKeyJoinColumn", "name") AS value-»
+				@PrimaryKeyJoinColumn(
+					name="«value-»"
+					«LET emAllTaggedValues("jpaPrimaryKeyJoinColumn", "name").indexOf(value) AS index-»		
+						«IF emHasUtilizableTaggedValue("jpaPrimaryKeyJoinColumn", "referencedName")-»
+ 							, referencedColumnName="«emAllTaggedValues("jpaPrimaryKeyJoinColumn", "referencedName").get(index)-»"
+	 					«ENDIF-»
+						«IF emHasUtilizableTaggedValue("jpaPrimaryKeyJoinColumn", "columnDefinition")-»
+ 							, columnDefinition="«emAllTaggedValues("jpaPrimaryKeyJoinColumn", "columnDefinition").get(index)-»"
+ 						«ENDIF-»
+ 					«ENDLET-») 					
+			«ENDFOREACH»)
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM» evaluates the stereotype "jpaPrimaryKey"«ENDREM»
+«DEFINE _PrimaryKey FOR MClass-»
+	«IF emHasStereotypeAssignment("jpaPrimaryKeyClass") && emHasTaggedValue("jpaPrimaryKeyClass", "embeddable", "false")-»
+		«REM» primary key with extern primary key class «ENDREM»
+		«IF emHasUtilizableTaggedValue("jpaPrimaryKeyClass", "name")-»
+			@IdClass(«emGetTaggedValue("jpaPrimaryKeyClass", "name")-».class)
+			«EXPAND _PrimaryKeyClass(emGetTaggedValue("jpaPrimaryKeyClass", "name"))-»
+		«ELSE-»
+			@IdClass(«asTypeName()-»PK.class)
+			«EXPAND _PrimaryKeyClass(asTypeName()+"PK")-»
+		«ENDIF-»
+	«ELSEIF emHasStereotypeAssignment("jpaPrimaryKeyClass") && emHasTaggedValue("jpaPrimaryKeyClass", "embeddable", "true")-»
+		«REM» primary key with embedded primary key class «ENDREM»
+		@Embeddable
+	«ENDIF-»	
+«ENDDEFINE»
+
+«REM» creates a primary key class for stereotype "idClass" «ENDREM»
+«DEFINE _PrimaryKeyClass(String filename) FOR MClass-»
+	«FILE filePath( filename + ".java", basePath() )-»
+		/**
+		  *	generated primary key class of the jpa platform
+		  *
+		  * @author		andre pflueger
+		  *	@date		2008 May 18
+		  * @version	1.0
+		  *
+		  */	
+		package «packageDeclaration( basePackage() ) -»;
+		
+		/**
+		  * generated primary key class for "«asTypeName()-»"
+		  *
+		  */
+		public class «filename-» implements java.io.Serializable {
+			«FOREACH property.select(e|e.emHasStereotypeAssignment("jpaPrimaryKey")) AS ids»
+				private «ids.type.mapName()» «ids.name»;
+			«ENDFOREACH»
+			public «filename-»() {}
+			public «filename-»(
+			«FOREACH property.select(e|e.emHasStereotypeAssignment("jpaPrimaryKey")) AS ids SEPARATOR ", "-»
+				«ids.type.asTypeName()» «ids.name»
+			«ENDFOREACH-») {
+				«FOREACH property.select(e|e.emHasStereotypeAssignment("jpaPrimaryKey")) AS ids SEPARATOR ";"-»
+					this.«ids.name» = «ids.name»
+				«ENDFOREACH-»;
+			}
+			
+			«FOREACH property.typeSelect(MAttribute).select(e|e.emHasStereotypeAssignment("jpaPrimaryKey")) AS ids»
+				public «ids.type.asTypeName()» «ids.asGetter()»() {
+					return «ids.name»;
+				}
+			«ENDFOREACH»
+			«FOREACH property.typeSelect(MAttribute).select(e|e.emHasStereotypeAssignment("jpaPrimaryKey")) AS ids»
+				public  void «ids.asSetter()»(«ids.type.asTypeName()» «ids.name») {
+					this.«ids.name» = «ids.name»;
+				}	
+			«ENDFOREACH»
+			public boolean equals(Object obj){
+				if (obj == this) return true;
+				if (!(obj instanceof «filename-»)) return false;
+				«filename-» pk = («filename-») obj;
+				return ( 
+				«FOREACH property.select(e|e.emHasStereotypeAssignment("jpaPrimaryKey")) AS ids SEPARATOR "&&"-»
+					this.«ids.name»
+					«IF ids.type.isPrimitiveType()-»
+						 == pk.«ids.name»
+					«ELSE-»
+						.equals(pk.«ids.name-»)
+					«ENDIF-»
+				«ENDFOREACH-»
+				);
+			}
+			
+			public int hashCode() {
+				return (int) 
+				«FOREACH property.select(e|e.emHasStereotypeAssignment("jpaPrimaryKey")) AS ids SEPARATOR " + "-»
+					this.«ids.name-»
+					«IF !isPrimitiveType(ids.type)-»
+						.hashCode()
+					«ELSEIF ids.type.mapName() == "String"-»
+						.hashCode()
+					«ENDIF-»	
+				«ENDFOREACH-»
+				;				
+			}
+		}
+	«ENDFILE»
+«ENDDEFINE»
+
+«REM» 
+	generates a protected region for own implementations
+«ENDREM»
+«DEFINE _OwnCodeImpl(String proRegId) FOR MClass-»
+	/* «PROTECT CSTART "" CEND "" ID (proRegId)» */
+	/* TODO: put your own source code here */
+	
+	/* «ENDPROTECT» */
+«ENDDEFINE»

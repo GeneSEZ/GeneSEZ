@@ -60,15 +60,6 @@ public class GlobalObjectStorage {
 	}
 	
 	/**
-	 * Count all saved model elements and objects from the backend storage.
-	 */
-	public static int count() {
-		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1324549067124_959868_2557) ENABLED START */
-		return storageBackend.size();
-		/* PROTECTED REGION END */
-	}
-	
-	/**
 	 * Remove all saved model elements and objects from the backend storage.
 	 */
 	public static void clear() {
