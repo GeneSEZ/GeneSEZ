@@ -30,7 +30,7 @@ public class Owner implements AssociationClass {
 	 * Returns the value of attribute '<em><b>associationClassLink</b></em>'.
 	 */
 	public ACLink getAssociationClassLink() {
-		return associationClassLink;
+		return this.associationClassLink;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._12_5_6340215_1182161516984_21570_380) ENABLED START */

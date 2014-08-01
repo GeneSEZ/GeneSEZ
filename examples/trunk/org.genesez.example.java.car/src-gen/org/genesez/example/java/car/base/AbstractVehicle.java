@@ -9,7 +9,7 @@ import java.awt.Color;
 /**
  * This abstract class Vehicle is the superclass for all things that can drive (for example: car, boat, air plane, ...).
  */
-public abstract class AbstractVehicle implements IDriveable, IPaintable {
+public abstract class AbstractVehicle implements IPaintable, IDriveable {
 	
 	private String make;
 	

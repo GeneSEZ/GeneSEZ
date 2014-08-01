@@ -94,7 +94,7 @@ public class Ship extends Figure implements AssociationRole {
 	 * Returns the value of attribute '<em><b>lifePoints</b></em>'.
 	 */
 	public long getLifePoints() {
-		return lifePoints;
+		return this.lifePoints;
 	}
 	
 	/**
@@ -109,14 +109,14 @@ public class Ship extends Figure implements AssociationRole {
 	 * Returns the value of attribute '<em><b>color</b></em>'.
 	 */
 	public Color getColor() {
-		return color;
+		return this.color;
 	}
 	
 	/**
 	 * Returns the value of attribute '<em><b>speed</b></em>'.
 	 */
 	public double getSpeed() {
-		return speed;
+		return this.speed;
 	}
 	
 	/**
@@ -131,7 +131,7 @@ public class Ship extends Figure implements AssociationRole {
 	 * Returns the value of attribute '<em><b>angle</b></em>'.
 	 */
 	public double getAngle() {
-		return angle;
+		return this.angle;
 	}
 	
 	/**

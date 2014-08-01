@@ -33,21 +33,21 @@ public class Screw {
 	 * describes the length of a screw
 	 */
 	public double getLength() {
-		return length;
+		return this.length;
 	}
 	
 	/**
 	 * Returns the value of attribute '<em><b>diameter</b></em>'.
 	 */
 	public double getDiameter() {
-		return diameter;
+		return this.diameter;
 	}
 	
 	/**
 	 * Returns the value of attribute '<em><b>metric</b></em>'.
 	 */
 	public boolean getMetric() {
-		return metric;
+		return this.metric;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1178034133828_951385_16) ENABLED START */

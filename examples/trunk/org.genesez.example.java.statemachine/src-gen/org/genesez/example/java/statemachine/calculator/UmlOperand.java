@@ -44,7 +44,7 @@ public class UmlOperand implements EventReceiver<UmlOperand.EventId> {
 	 * Returns the value of attribute '<em><b>val</b></em>'.
 	 */
 	public BigDecimal getVal() {
-		return val;
+		return this.val;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._14_0_6340215_1225038888453_246116_139) ENABLED START */

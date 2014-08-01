@@ -37,14 +37,14 @@ public class Engine implements AssociationRole {
 	 * Returns the value of attribute '<em><b>ps</b></em>'.
 	 */
 	public byte getPs() {
-		return ps;
+		return this.ps;
 	}
 	
 	/**
 	 * Returns the value of attribute '<em><b>name</b></em>'.
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	
 	// initialization block for association management objects

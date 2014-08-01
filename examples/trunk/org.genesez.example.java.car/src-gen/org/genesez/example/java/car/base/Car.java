@@ -85,7 +85,7 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	 * internal bla bla bla
 	 */
 	public int getMaxSpeed() {
-		return maxSpeed;
+		return this.maxSpeed;
 	}
 	
 	/**

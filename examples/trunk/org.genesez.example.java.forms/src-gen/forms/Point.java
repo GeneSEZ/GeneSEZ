@@ -50,14 +50,14 @@ public class Point extends AbstractForm implements Form {
 	 * the x coordinate value
 	 */
 	public double getX() {
-		return x;
+		return this.x;
 	}
 	
 	/**
 	 * the y coordinate value
 	 */
 	public double getY() {
-		return y;
+		return this.y;
 	}
 	
 	/**
