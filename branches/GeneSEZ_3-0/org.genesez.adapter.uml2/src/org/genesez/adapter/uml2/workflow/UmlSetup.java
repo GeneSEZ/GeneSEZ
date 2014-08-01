@@ -1,5 +1,6 @@
 package org.genesez.adapter.uml2.workflow;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.LinkedHashMap;
@@ -16,7 +17,7 @@ import org.eclipse.emf.mwe.utils.Mapping;
 import org.eclipse.emf.mwe.utils.SingleGlobalResourceSet;
 import org.eclipse.uml2.uml.UMLPlugin;
 import org.eclipse.xtend.typesystem.emf.EcoreUtil2;
-import org.eclipse.xtend.typesystem.uml2.Setup;
+import org.eclipse.xtend.typesystem.emf.Setup;
 
 /**
  * Provides standalone use of UML based on the xtend uml setup.
@@ -31,18 +32,33 @@ public class UmlSetup extends Setup {
 	static final Map<String, String> PLUGIN_URI_MAP = new LinkedHashMap<String, String>();
 	
 	private Log logger = LogFactory.getLog(getClass());
+	private org.eclipse.xtend.typesystem.uml2.Setup xpandUmlSetup;
 	
 	public UmlSetup() {
-//		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("uml", UMLResource.Factory.INSTANCE);
-//		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("uml2", UMLResource.Factory.INSTANCE);
+		initUmlPlugin();
 	}
 	
-	@Override
+	@SuppressWarnings("deprecation")
 	public void setStandardUML2Setup(boolean b) {
-		initUmlPlugin();
-		super.setStandardUML2Setup(b);
+		setDoSetup(b);
 		if (b) {
-			// fill maps if not already manuall done
+			xpandUmlSetup = new org.eclipse.xtend.typesystem.uml2.Setup();
+			try {
+				// xpand 1.x compatibility
+				Method m = org.eclipse.xtend.typesystem.uml2.Setup.class.getMethod("setStandardUML2Setup", boolean.class);
+				Annotation depcreated = m.getAnnotation(Deprecated.class);
+				if (depcreated == null) {
+					xpandUmlSetup.setStandardUML2Setup(b);
+				}
+			} catch (Exception e) {
+				logger.debug("XPand 1.x compatibility couldn't be guaranted!", e);
+			}
+		}
+	}
+	
+	public void setDoSetup(boolean perform) {
+		if (perform) {
+			// fill maps if not already manually done
 			if (NS_URI_FQN_MAP.isEmpty()) {
 				setRegisterNsUri(true);
 			}
@@ -75,7 +91,6 @@ public class UmlSetup extends Setup {
 		}
 	}
 	
-	
 	/**
 	 * Registers standard UML packages and profile packages depending on specified value.
 	 * @param shallRegister	true if registration should be performed
@@ -84,9 +99,16 @@ public class UmlSetup extends Setup {
 		if (shallRegister) {
 			NS_URI_FQN_MAP.put("http://www.eclipse.org/uml2/4.0.0/Types", "org.eclipse.uml2.types.TypesPackage");
 			
+			// uml 4.x.x packages
 			NS_URI_FQN_MAP.put("http://www.eclipse.org/uml2/schemas/Standard/1", "org.eclipse.uml2.uml.profile.l2.L2Package");
 			NS_URI_FQN_MAP.put("http://www.eclipse.org/uml2/4.0.0/UML/Profile/L2", "org.eclipse.uml2.uml.profile.l2.L2Package");
 			NS_URI_FQN_MAP.put("http://www.eclipse.org/uml2/4.0.0/UML/Profile/L3", "org.eclipse.uml2.uml.profile.l3.L3Package");
+			
+			// uml 5.x.x packages
+			NS_URI_FQN_MAP.put("http://www.eclipse.org/uml2/schemas/Standard/1", "org.eclipse.uml2.uml.profile.standard.StandardPackage");
+			NS_URI_FQN_MAP.put("http://www.eclipse.org/uml2/4.0.0/UML/Profile/L2", "org.eclipse.uml2.uml.profile.standard.StandardPackage");
+			NS_URI_FQN_MAP.put("http://www.eclipse.org/uml2/4.0.0/UML/Profile/L3", "org.eclipse.uml2.uml.profile.standard.StandardPackage");
+			NS_URI_FQN_MAP.put("http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard", "org.eclipse.uml2.uml.profile.standard.StandardPackage");
 		}
 	}
 	
@@ -104,9 +126,14 @@ public class UmlSetup extends Setup {
 	 */
 	public void setRegisterProfileLocation(boolean shallRegister) {
 		if (shallRegister) {
+			// uml 4.x.x locations
 			NS_URI_URI_MAP.put("http://www.eclipse.org/uml2/4.0.0/UML/Profile/L2", "pathmap://UML_PROFILES/StandardL2.profile.uml#_0");
 			NS_URI_URI_MAP.put("http://www.eclipse.org/uml2/4.0.0/UML/Profile/L3", "pathmap://UML_PROFILES/StandardL3.profile.uml#_0");
 			NS_URI_URI_MAP.put("http://www.eclipse.org/uml2/schemas/Ecore/5", "pathmap://UML_PROFILES/Ecore.profile.uml#_0");
+			
+			// uml 5.x.x locations
+			NS_URI_URI_MAP.put("http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard", "pathmap://UML_PROFILES/Standard.profile.uml#_0");
+			NS_URI_URI_MAP.put("http://www.eclipse.org/uml2/schemas/UML2/2", "pathmap://UML_PROFILES/UML2.profile.uml#_0");
 		}
 	}
 	
@@ -193,7 +220,7 @@ public class UmlSetup extends Setup {
 				EPackage.Registry.INSTANCE.put(nsUri, ePackage);
 			}
 		} catch (ConfigurationException ce) {
-			logger.info("Unable to register EPackage with namespace URI: " + nsUri);
+			logger.debug("Unable to register EPackage with namespace URI: " + nsUri);
 		}
 	}
 	
@@ -219,11 +246,11 @@ public class UmlSetup extends Setup {
 			}
 			m.invoke(null, rs);
 			if (logger.isInfoEnabled()) {
-				logger.info("UML support was initialized by calling 'UMLResourceUtil.init()'.");
+				logger.debug("UML support was initialized.");
 			}
 		} catch (Exception e) {
 			if (logger.isErrorEnabled()) {
-				logger.error("UML support could not be initialized by calling 'UMLResourceUtil.init()'!", e);
+				logger.error("UML support could not be initialized by with 'UMLResourceUtil'!", e);
 			}
 		}
 	}
