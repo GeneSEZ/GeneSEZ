@@ -1,0 +1,78 @@
+«REM»
+	(c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+«IMPORT gcore»
+
+
+«REM»
+	Generates a simple model documentation.
+	
+	@author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+«ENDREM»
+
+
+«EXTENSION org::genesez::platform::documentation::latex::util::Convention»
+«EXTENSION org::genesez::platform::documentation::latex::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+
+
+«DEFINE Root FOR MModel -»
+«FILE name + ".tex"»
+	«EXPAND Root FOREACH classifier -»
+	«EXPAND Root FOREACH nestedPackage -»
+«ENDFILE»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MPackage -»
+\section{Package {\tt «name.formatText()»}}
+
+	«EXPAND Root FOREACH classifier -»
+	«EXPAND Root FOREACH nestedPackage -»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MClassifier -»
+\subsection{«metaTypeName()» {\tt «name.formatText()»}}
+
+«comment().formatText()»
+
+«EXPAND Attributes -»
+«EXPAND References -»
+
+«ENDDEFINE»
+
+
+«DEFINE Attributes FOR MClassifier -»
+«IF !property.typeSelect(MAttribute).isEmpty -»
+\subsubsection{Attributes}
+
+The «metaTypeName()» \verb|«name.formatText()»| defines the following attributes:
+
+\begin{description}
+	«EXPAND Item FOREACH property.typeSelect(MAttribute) -»
+\end{description}
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE References FOR MClassifier -»
+«IF !property.typeSelect(MAssociationRole).isEmpty -»
+\subsubsection{References}
+
+The «metaTypeName()» \verb|«name.formatText()»| defines the following references:
+
+\begin{description}
+	«EXPAND Item FOREACH property.typeSelect(MAssociationRole) -»
+\end{description}
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE Item FOR MProperty -»
+	\item[«name.formatText()» : «type.name().formatText()»] «comment().formatText()»
+«ENDDEFINE»

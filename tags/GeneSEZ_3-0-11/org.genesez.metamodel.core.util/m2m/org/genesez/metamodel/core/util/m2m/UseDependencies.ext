@@ -1,0 +1,85 @@
+/**
+ * Helper for dealing with use dependencies of model elements
+ * 
+ * there are two different ways to handle use dependencies:
+ * <ul>
+ *   <li>
+ *     you can add them to the model during a model modification or a model-to-model transformation, 
+ *     that means the 'supplier' reference from MClassifier to MType
+ *   </li>
+ *   <li>
+ *     you can just get them as a collection of MType without touching the model
+ *   </li>
+ * </ul>
+ * 
+ * @author	tobias haubold <toh@fh-zwickau.de>
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension org::genesez::metamodel::core::util::AccessElement;
+
+/**
+ * collects the use dependencies of a classifier
+ * @return	the use dependencies
+ */
+Collection[MType] useDependencies(MClassifier this) : 
+	collectUseDependencies();
+
+/**
+ * adds all use dependencies of types to the 'supplier' reference of classifiers
+ * iterates over the model and contained packages and processes all classifiers
+ * @return	the same model as given
+ */
+MModel addUseDependencies(MModel this) :
+	process() ->
+	this;
+
+/**
+ * processes all subpackages + classifiers within a package
+ * @return	the same package as given
+ */
+private MPackage process(MPackage this) :
+	nestedPackage.process() ->
+	classifier.process() ->
+	this;
+
+/**
+ * adds all used types to the supplier (use dependency) collection
+ * used types are: class, interface, enumeration, data type, external types
+ * not included: primitive types, generics
+ */
+private MClassifier process(MClassifier this) :
+	supplier.addAll( collectUseDependencies() ) ->
+	this;
+
+/**
+ * collects the use dependencies of a classifier
+ * @return	the use dependencies
+ */
+private Collection[MType] collectUseDependencies(MClassifier this) :
+	let deps = {} :
+		// add types of properties
+		deps.addAll( property.type.filter() ) ->
+		// add return parameter types of operations
+		deps.addAll( operation.reject(e|!e.hasReturn()).return.type.filter()) ->
+		// add raised exceptions
+		deps.addAll( operation.raisedException.filter() ) ->
+		// add parameter types of operation parameters
+		deps.addAll( operation.parameter.type.filter() ) ->
+		// add supertypes
+		deps.addAll( generalization ) ->
+		deps.addAll( realization ) ->
+		
+		// remove duplicates !?! - but don't appear, maybe ecore removes them for us :)
+	deps;
+
+/**
+ * removes all primitive types and all generics from the list
+ * don't change parameter l to context - currently doesn't work with oAW 4.2
+ * @param	l	list with types
+ * @return		list with filtered types
+ */
+private List[MType] filter(List[MType] l) :
+	l.reject( e| e.metaType == MGeneric );

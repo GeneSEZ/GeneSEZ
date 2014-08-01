@@ -1,0 +1,124 @@
+«IMPORT gcore»
+
+«REM»
+	Template for classifier annotations of the jws platform
+	
+	@author		andre pflueger
+	@date		2010-11-10
+«ENDREM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION org::genesez::util::logging::Logging»
+
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Conversion»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
+
+«DEFINE _WebServiceClient FOR MClassifier-»
+	«IF emHasStereotypeAssignment("jwsWebServiceClient")-»
+		@WebServiceClient«IF emHasUtilizableTaggedValue("jwsWebServiceClient", "name")
+			|| emHasUtilizableTaggedValue("jwsWebServiceClient", "targetNamespace") 
+			|| emHasUtilizableTaggedValue("jwsWebServiceClient", "wsdlLocation")-»(
+			«IF emHasUtilizableTaggedValue("jwsWebServiceClient", "name")-»
+				name="«emGetTaggedValue("jwsWebServiceClient", "name")-»"
+			«ENDIF-»
+			«IF emHasUtilizableTaggedValue("jwsWebServiceClient", "targetNamespace")-»
+				«IF emHasUtilizableTaggedValue("jwsWebServiceClient", "name")-», «ENDIF-»targetNamespace="«emGetTaggedValue("jwsWebServiceClient", "targetNamespace")-»"
+			«ENDIF-»
+			«IF emHasUtilizableTaggedValue("jwsWebServiceClient", "wsdlLocation")-»
+				«IF emHasUtilizableTaggedValue("jwsWebServiceClient", "name") 
+				|| emHasUtilizableTaggedValue("jwsWebServiceClient", "targetNamespace")-», «ENDIF-»wsdlLocation="«emGetTaggedValue("jwsWebServiceClient", "wsdlLocation")-»"
+			«ENDIF-»)	
+		«ENDIF»
+	«ENDIF»
+«ENDDEFINE»
+
+«DEFINE _SOAPBinding FOR MClassifier-»
+	«IF emHasStereotypeAssignment("jwsSOAPBinding")-»
+		@SOAPBinding(use=SOAPBinding.Use.LITERAL
+		«IF emHasTaggedValue("jwsSOAPBinding", "style", "RPC")-»
+			, style=SOAPBinding.Style.RPC
+		«ENDIF-»
+		«IF emHasTaggedValue("jwsSOAPBinding", "parameterStyle", "BARE") && !emHasTaggedValue("jwsSOAPBinding", "style", "RPC")-»
+			, parameterStyle=SOAPBinding.ParameterStyle.BARE
+		«ENDIF-»)			
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE _HandlerChain FOR MClassifier-»
+	«IF emHasStereotypeAssignment("jwsHandlerChain") && emAllTaggedValues("jwsHandlerChain", "handlers").size > 0-»
+		@HandlerChain(file=«IF emHasUtilizableTaggedValue("jwsHandlerChain", "file")-»
+			"«emGetTaggedValue("jwsHandlerChain", "file")-».xml"
+			«EXPAND _HandlerChainXMLFile(emGetTaggedValue("jwsHandlerChain", "file"))-»
+		«ELSE-»
+			"«this.asTypeName()-».xml"
+			«EXPAND _HandlerChainXMLFile(asTypeName())-»
+		«ENDIF-»)
+	«ELSE-»
+		«IF emHasUtilizableTaggedValue("jwsHandlerChain", "file")-»
+			@HandlerChain(file="«emGetTaggedValue("jwsHandlerChain", "file")-».xml")
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE _WebService FOR MClassifier-»
+	«IF emHasStereotypeAssignment("jwsWebService")-»
+		@WebService«IF emHasUtilizableTaggedValue("jwsWebService", "name")
+			|| emHasUtilizableTaggedValue("jwsWebService", "targetNamespace") 
+			|| emHasUtilizableTaggedValue("jwsWebService", "serviceName")
+			|| emHasUtilizableTaggedValue("jwsWebService", "portName")
+			|| emHasUtilizableTaggedValue("jwsWebService", "endpointInterface")
+			|| emHasUtilizableTaggedValue("jwsWebService", "wsdlLocation")-»(
+			«IF emHasUtilizableTaggedValue("jwsWebService", "name")-»
+				name="«emGetTaggedValue("jwsWebService", "name")-»"
+			«ENDIF-»
+			«IF emHasUtilizableTaggedValue("jwsWebService", "targetNamespace")-»
+				«IF emHasUtilizableTaggedValue("jwsWebServiceClient", "name")-», «ENDIF-»targetNamespace="«emGetTaggedValue("jwsWebService", "targetNamespace")-»"
+			«ENDIF-»
+			«IF emHasUtilizableTaggedValue("jwsWebService", "serviceName")-»
+				«IF emHasUtilizableTaggedValue("jwsWebServiceClient", "name")
+				|| emHasUtilizableTaggedValue("jwsWebServiceClient", "targetNamespace")-», «ENDIF-»serviceName="«emGetTaggedValue("jwsWebService", "serviceName")-»"
+			«ENDIF-»
+			«IF emHasUtilizableTaggedValue("jwsWebService", "portName")-»
+				«IF emHasUtilizableTaggedValue("jwsWebServiceClient", "name")
+				|| emHasUtilizableTaggedValue("jwsWebServiceClient", "targetNamespace")
+				|| emHasUtilizableTaggedValue("jwsWebServiceClient", "serviceName")-», «ENDIF-»portName="«emGetTaggedValue("jwsWebService", "portName")-»"
+			«ENDIF-»
+			«IF emHasUtilizableTaggedValue("jwsWebService", "endpointInterface")-»
+				«IF emHasUtilizableTaggedValue("jwsWebServiceClient", "name")
+				|| emHasUtilizableTaggedValue("jwsWebServiceClient", "targetNamespace")
+				|| emHasUtilizableTaggedValue("jwsWebServiceClient", "serviceName")
+				|| emHasUtilizableTaggedValue("jwsWebServiceClient", "portName")-», «ENDIF-»endpointInterface="«emGetTaggedValue("jwsWebService", "endpointInterface")-»"
+			«ENDIF-»
+			«IF emHasUtilizableTaggedValue("jwsWebService", "wsdlLocation")-»
+				«IF emHasUtilizableTaggedValue("jwsWebServiceClient", "name")
+				|| emHasUtilizableTaggedValue("jwsWebServiceClient", "targetNamespace")
+				|| emHasUtilizableTaggedValue("jwsWebServiceClient", "serviceName")
+				|| emHasUtilizableTaggedValue("jwsWebServiceClient", "portName")
+				|| emHasUtilizableTaggedValue("jwsWebServiceClient", "endpointInterface")-», «ENDIF-»wsdlLocation="«emGetTaggedValue("jwsWebService", "wsdlLocation")-»"
+			«ENDIF-»)
+		«ENDIF»
+	«ENDIF»
+«ENDDEFINE»
+
+«DEFINE _HandlerChainXMLFile(String filename) FOR MClassifier-»
+	«FILE filePath( filename + ".xml", basePath() )-»
+<handler-chains xmlns="http://java.sun.com/xml/ns/javaee">
+		«FOREACH emAllTaggedValueReferences("jwsHandlerChain", "handlers").typeSelect(MClassifier) AS handler-»
+	<handler-chain>
+		<handler>
+			<handler-class>
+				«handler.packageDeclaration( handler.basePackage() ) -».«handler.asTypeName()»
+			</handler-class>
+		</handler>
+	</handler-chain>
+		«ENDFOREACH-»
+</handler-chains>
+    «ENDFILE-»
+«ENDDEFINE»
