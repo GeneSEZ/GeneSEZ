@@ -1,8 +1,6 @@
 module org.genesez.example.java.car
 
-var uml2setup = org.genesez.adapter.uml2.workflow.UmlSetup {
-	standardUML2Setup = true
-}
+var uml2setup = org.genesez.adapter.uml2.workflow.UmlSetup {}
 var gcore = org.eclipse.xtend.typesystem.emf.EmfMetaModel {
 	metaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
 }
@@ -48,6 +46,10 @@ Workflow {
 		// cares about property access operations
 		model2model = org.genesez.workflow.SimpleScript {
 			script = "org::genesez::platform::java::m2m::AccessOperation::prepare"
+			parameter = {
+				name = "usePropertyVisibilityForAccessors"
+				value = false
+			}
 		}
 		// automatically implement abstract and interface operations in classes
 		model2model = org.genesez.workflow.SimpleScript {
