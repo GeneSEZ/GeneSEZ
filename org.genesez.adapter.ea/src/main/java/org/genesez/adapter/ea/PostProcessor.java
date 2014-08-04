@@ -4,6 +4,7 @@ package org.genesez.adapter.ea;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_12d203c6_1328866918745_268442_1992) 
  */
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,13 +16,9 @@ import org.eclipse.uml2.uml.Behavior;
 import org.eclipse.uml2.uml.CallBehaviorAction;
 import org.eclipse.uml2.uml.Dependency;
 import org.eclipse.uml2.uml.NamedElement;
-import org.eclipse.uml2.uml.Operation;
-import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.StructuredClassifier;
-import org.eclipse.uml2.uml.Type;
 import org.genesez.adapter.ea.transform.ConnectorFactory;
 import org.genesez.adapter.ea.transform.InterfaceFactory;
-import org.genesez.adapter.ea.transform.OperationTransformer;
 import org.genesez.adapter.ea.transform.PropertyClassifierTransformer;
 
 /**
@@ -33,8 +30,9 @@ import org.genesez.adapter.ea.transform.PropertyClassifierTransformer;
  * elements are already processed.
  * So, these actions are performed after the main transformation.
  * The PostProcessor collect these actions for a later execution.
- * @author Christian
+ * @author christian
  */
+
 public class PostProcessor {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -47,6 +45,7 @@ public class PostProcessor {
 	/**
 	 * Just to make constructor private
 	 */
+	
 	private PostProcessor() {
 		/* PROTECTED REGION ID(java.constructor._17_0_5_12d203c6_1363342594283_164328_2184) ENABLED START */
 		// nothing to do here
@@ -57,6 +56,7 @@ public class PostProcessor {
 	/**
 	 * Initializes (or reset) the PostProcessor
 	 */
+	
 	public void initialize() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363342582819_76343_2181) ENABLED START */
 		this.calledBehaviors = new HashMap<CallBehaviorAction, Integer>();
@@ -68,6 +68,7 @@ public class PostProcessor {
 	/**
 	 * Runs the post processing for all elements
 	 */
+	
 	public void startPostProcessing() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363342826962_47138_2205) ENABLED START */
 		LOG.debug("Starting post processing");
@@ -79,12 +80,6 @@ public class PostProcessor {
 		// Connections
 		this.processConnections();
 		
-		// Attribute properties
-		this.processProperty2Classiefier();
-		
-		// process parameters
-		this.processInternalParameter();
-		
 		// DEBUG
 		ElementRegistry.INSTANCE.printElementRegistry();
 		/* PROTECTED REGION END */
@@ -93,6 +88,7 @@ public class PostProcessor {
 	/**
 	 * Process dependencies which could not be resolved
 	 */
+	
 	private void processDependencies() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363342783520_562684_2196) ENABLED START */
 		LOG.debug("Starting post processing for dependencies");
@@ -118,6 +114,7 @@ public class PostProcessor {
 	/**
 	 * Process interfaces
 	 */
+	
 	private void processInterfaces() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363342746814_626934_2190) ENABLED START */
 		LOG.debug("Starting post processing interface realization");
@@ -128,8 +125,10 @@ public class PostProcessor {
 	/**
 	 * Process all connections
 	 */
+	
 	private void processConnections() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363342771093_486808_2193) ENABLED START */
+		//		ConnectorFactory.instance.printDependencies();
 		LOG.debug("Starting post processing all Connections");
 		ConnectorFactory.INSTANCE.startProcessingConnectors();
 		/* PROTECTED REGION END */
@@ -138,6 +137,7 @@ public class PostProcessor {
 	/**
 	 * Process properties of classifiers
 	 */
+	
 	private void processProperties() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363342802536_987354_2199) ENABLED START */
 		LOG.debug("Starting post processing for properties");
@@ -154,6 +154,7 @@ public class PostProcessor {
 	/**
 	 * Runs the post processing for setting behaviors
 	 */
+	
 	private void processBehaviors() {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363342810147_943022_2202) ENABLED START */
 		LOG.debug("Starting post processing for called behaviors");
@@ -169,7 +170,10 @@ public class PostProcessor {
 	
 	/**
 	 * Method stub for further implementation.
+	 * @param	caller	
+	 * @param	id	
 	 */
+	
 	public void addCalledBehaviorAction(CallBehaviorAction caller, int id) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363342920411_716130_2208) ENABLED START */
 		this.calledBehaviors.put(caller, id);
@@ -178,7 +182,10 @@ public class PostProcessor {
 	
 	/**
 	 * Method stub for further implementation.
+	 * @param	c	
+	 * @param	a	
 	 */
+	
 	public void addProperty2Classifier(StructuredClassifier c, org.sparx.Attribute a) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363342948960_607032_2216) ENABLED START */
 		if (!this.properties.containsKey(c)) {
@@ -193,6 +200,7 @@ public class PostProcessor {
 	 * @param	d	The Enterprise Architect Connector to create the Dependency from
 	 * @param	c	The dependency to add the dependencies
 	 */
+	
 	public void addDependency(Dependency d, org.sparx.Connector c) {
 		/* PROTECTED REGION ID(java.implementation._17_0_5_12d203c6_1363342986388_650310_2224) ENABLED START */
 		if (!this.dependencies.containsKey(d)) {
@@ -203,48 +211,13 @@ public class PostProcessor {
 	
 	// -- generated association + attribute accessors -----------------------
 	
-	// -- generated code  ---------------------------------------------------
+	// -- generated code of other cartridges --------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_12d203c6_1328866918745_268442_1992) ENABLED START */
 	private Map<CallBehaviorAction, Integer> calledBehaviors = new HashMap<CallBehaviorAction, Integer>();
 	private Map<StructuredClassifier, Set<org.sparx.Attribute>> properties = new HashMap<StructuredClassifier, Set<org.sparx.Attribute>>();
 	private Map<Dependency, org.sparx.Connector> dependencies = new HashMap<Dependency, org.sparx.Connector>();
-	
-	// attribute which type is a class in the model
-	private Map<Property, Integer> attributeClassifierIdMap = new HashMap<Property, Integer>();
-	
-	public void addAttributeProperty(Property property, int classifierID) {
-		attributeClassifierIdMap.put(property, classifierID);
-	}
-	
-	private void processProperty2Classiefier() {
-		LOG.info("start post processing properties");
-		
-		Type element = null;
-		int classifierId = 0;
-		
-		for (Property property : attributeClassifierIdMap.keySet()) {
-			classifierId = attributeClassifierIdMap.get(property);
-			element = (Type) ElementRegistry.INSTANCE.getElementById(classifierId);
-			property.setType(element);
-			// TODO stereotype transformer to properties
-		}
-	}
-	
-	// parameter which are in the model
-	private Map<org.sparx.Parameter, Operation> parameterOperationMap = new HashMap<org.sparx.Parameter, Operation>();
-	
-	public void addParameter(Operation umlOperation, org.sparx.Parameter parameter) {
-		this.parameterOperationMap.put(parameter, umlOperation);
-	}
-	
-	private void processInternalParameter() {
-		LOG.info("start post processing internal parameters SIZE(" + parameterOperationMap.size() + ")");
-		for (org.sparx.Parameter eaParameter : parameterOperationMap.keySet()) {
-			OperationTransformer.INSTANCE.transform(parameterOperationMap.get(eaParameter), eaParameter);
-		}
-	}
-	
 	/* PROTECTED REGION END */
+	
 }

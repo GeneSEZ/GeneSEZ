@@ -108,7 +108,7 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	 * Returns the value of attribute '<em><b>makeEPackagesGlobal</b></em>'.
 	 */
 	public boolean getMakeEPackagesGlobal() {
-		return this.makeEPackagesGlobal;
+		return makeEPackagesGlobal;
 	}
 	
 	/**
@@ -123,7 +123,7 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	 * Returns the value of attribute '<em><b>firstElementOnly</b></em>'.
 	 */
 	public boolean getFirstElementOnly() {
-		return this.firstElementOnly;
+		return firstElementOnly;
 	}
 	
 	/**
@@ -138,7 +138,7 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	 * Returns the value of attribute '<em><b>ignoreMissingModel</b></em>'.
 	 */
 	public boolean getIgnoreMissingModel() {
-		return this.ignoreMissingModel;
+		return ignoreMissingModel;
 	}
 	
 	/**

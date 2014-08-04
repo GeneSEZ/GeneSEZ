@@ -94,7 +94,7 @@ public class Model2ModelComponent extends AbstractXpandWorkflowComponent {
 	 * Returns the value of attribute '<em><b>outputSlot</b></em>'.
 	 */
 	public String getOutputSlot() {
-		return this.outputSlot;
+		return outputSlot;
 	}
 	
 	/**
@@ -109,7 +109,7 @@ public class Model2ModelComponent extends AbstractXpandWorkflowComponent {
 	 * Returns the value of attribute '<em><b>model2model</b></em>'.
 	 */
 	public Model2Model getModel2model() {
-		return this.model2model;
+		return model2model;
 	}
 	
 	/**

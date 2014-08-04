@@ -39,18 +39,7 @@ public class CollectionMappingManager<T extends MultiValuedType> implements ITyp
 	 * @see org.genesez.mapping.type.ITypeMappingManager#hasTypeMapping(java.lang.String, java.lang.String)
 	 */
 	public boolean hasTypeMapping(String mappingType, String context) {
-		if (context == null) {
-			return typeMappings.containsKey(mappingType);
-		}
-		if (typeMappings.containsKey(mappingType)) {
-			T specificType = typeMappings.get(mappingType);
-			for (Context c : specificType.getContextMap()) {
-				if (c.getKey().equalsIgnoreCase(context)) {
-					return true;
-				}
-			}
-		}
-		return false;
+		return typeMappings.containsKey(mappingType);
 	}
 	
 	/**

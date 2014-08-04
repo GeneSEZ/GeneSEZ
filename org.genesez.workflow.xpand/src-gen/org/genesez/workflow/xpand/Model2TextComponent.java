@@ -200,7 +200,7 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	 * Returns the value of attribute '<em><b>fileEncoding</b></em>'.
 	 */
 	public String getFileEncoding() {
-		return this.fileEncoding;
+		return fileEncoding;
 	}
 	
 	/**
@@ -215,7 +215,7 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	 * Returns the value of attribute '<em><b>isMultiValueSlot</b></em>'.
 	 */
 	public boolean getIsMultiValueSlot() {
-		return this.isMultiValueSlot;
+		return isMultiValueSlot;
 	}
 	
 	/**
@@ -230,7 +230,7 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	 * Returns the value of attribute '<em><b>prDefaultExcludes</b></em>'.
 	 */
 	public boolean getPrDefaultExcludes() {
-		return this.prDefaultExcludes;
+		return prDefaultExcludes;
 	}
 	
 	/**
@@ -245,7 +245,7 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	 * Returns the value of attribute '<em><b>prExcludes</b></em>'.
 	 */
 	public String getPrExcludes() {
-		return this.prExcludes;
+		return prExcludes;
 	}
 	
 	/**
@@ -352,7 +352,7 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	 * Returns the value of attribute '<em><b>outputDir</b></em>'.
 	 */
 	public String getOutputDir() {
-		return this.outputDir;
+		return outputDir;
 	}
 	
 	/**
@@ -390,7 +390,7 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	 * Returns the value of attribute '<em><b>importPreserverConfig</b></em>'.
 	 */
 	public ImportPreserverConfig getImportPreserverConfig() {
-		return this.importPreserverConfig;
+		return importPreserverConfig;
 	}
 	
 	/**
@@ -471,7 +471,7 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	private void prepareDelegate() {
 		compositeGenerator = new CompositeComponent(getClass().getName());
 		for (Model2Text m2t : model2text) {
-			Generator gen = new XpandGenerator();
+			Generator gen = new Generator();
 			gen.setSkipOnErrors(getAbortOnError());
 			for (MetaModel mm : getMetaModel()) {
 				gen.addMetaModel(mm);

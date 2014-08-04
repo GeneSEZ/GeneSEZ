@@ -203,7 +203,7 @@ public class Gcore2Java extends SimpleModel2Text {
 	 * Returns the value of attribute '<em><b>fieldAccess</b></em>'.
 	 */
 	public boolean getFieldAccess() {
-		return this.fieldAccess;
+		return fieldAccess;
 	}
 	
 	/**
@@ -218,7 +218,7 @@ public class Gcore2Java extends SimpleModel2Text {
 	 * Returns the value of attribute '<em><b>useModelNameAsBasePackage</b></em>'.
 	 */
 	public boolean getUseModelNameAsBasePackage() {
-		return this.useModelNameAsBasePackage;
+		return useModelNameAsBasePackage;
 	}
 	
 	/**
@@ -233,7 +233,7 @@ public class Gcore2Java extends SimpleModel2Text {
 	 * Returns the value of attribute '<em><b>basePackage</b></em>'.
 	 */
 	public String getBasePackage() {
-		return this.basePackage;
+		return basePackage;
 	}
 	
 	/**
@@ -271,7 +271,7 @@ public class Gcore2Java extends SimpleModel2Text {
 	 * Returns the value of attribute '<em><b>accessorStereotype</b></em>'.
 	 */
 	public String getAccessorStereotype() {
-		return this.accessorStereotype;
+		return accessorStereotype;
 	}
 	
 	/**
@@ -286,7 +286,7 @@ public class Gcore2Java extends SimpleModel2Text {
 	 * Returns the value of attribute '<em><b>usePropertyVisibilityForAccessors</b></em>'.
 	 */
 	public boolean getUsePropertyVisibilityForAccessors() {
-		return this.usePropertyVisibilityForAccessors;
+		return usePropertyVisibilityForAccessors;
 	}
 	
 	/**
