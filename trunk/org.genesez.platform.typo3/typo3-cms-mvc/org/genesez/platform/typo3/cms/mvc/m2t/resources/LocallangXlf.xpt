@@ -109,10 +109,10 @@
 
 «DEFINE Body(String languageKey) FOR MModel -»
 		<body>
-			«FOREACH allEntitiesAndValueObjects().sortBy( do | do.asLocalizationName() ) AS domainObject -»
+			«FOREACH allEntitiesAndValueObjects().sortBy( do | do.asLocalizationFeName() ) AS domainObject -»
 			«EXPAND ClassLocalization(languageKey) FOR domainObject -»
-			«EXPAND PropertyLocalization(languageKey) FOREACH domainObject.property.select( p | !p.isStatic() ).sortBy( p | p.asLocalizationName() ) -»
-			
+			«EXPAND PropertyLocalization(languageKey) FOREACH domainObject.property.select( p | !p.isStatic() ).sortBy( p | p.asLocalizationFeName() ) -»
+
 			«ENDFOREACH -»
 			«EXPAND OwnLocalizations(languageKey) -»
 		</body>
@@ -121,7 +121,7 @@
 
 «DEFINE ClassLocalization(String languageKey) FOR MClass -»
 			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang.xlf." + languageKey + "." + xmiGuid) DISABLE»
-			<trans-unit id="«asLocalizationName() -»" xml:space="preserve">
+			<trans-unit id="«asLocalizationFeName() -»" xml:space="preserve">
 				<source>«name.toFirstUpper() -»</source>
 			</trans-unit>
 			«ENDPROTECT»
@@ -130,7 +130,7 @@
 
 «DEFINE PropertyLocalization(String languageKey) FOR MProperty -»
 			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang.xlf." + languageKey + "." + xmiGuid) DISABLE»
-			<trans-unit id="«asLocalizationName() -»" xml:space="preserve">
+			<trans-unit id="«asLocalizationFeName() -»" xml:space="preserve">
 				<source>«name.toFirstUpper() -»</source>
 			</trans-unit>
 			«ENDPROTECT»
