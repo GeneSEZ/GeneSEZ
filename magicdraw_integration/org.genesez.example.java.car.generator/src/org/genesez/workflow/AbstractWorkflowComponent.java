@@ -198,31 +198,35 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 		StringWriter writer = new StringWriter();
 		Client client = null;
 		
-		try {client = new Client("localhost", 12345, null, null);} 
-		catch (LoginException e) {e.printStackTrace();} 
-			catch (IOException e) {e.printStackTrace();}
-		
-		
-		for (MWEDiagnostic error : issues.getErrors()) 
-		{
-			Object object = error.getElement();
-			
-			if(object instanceof EObject && ((EObject) object).eResource() != null)
+		try {
+			client = new Client("localhost", 12345, null, null);
+			for (MWEDiagnostic error : issues.getErrors()) 
 			{
-				EObject eObject = (EObject) object;
-				String xmlGUIID = ((XMLResource) eObject.eResource()).getID(eObject);
+				Object object = error.getElement();
 				
-				properties.put("id", xmlGUIID);
-				properties.put("severity", String.valueOf(error.getSeverity()));
-				properties.put("message", error.getMessage());
-				
+				if(object instanceof EObject && ((EObject) object).eResource() != null)
+				{
+					EObject eObject = (EObject) object;
+					String xmlGUIID = ((XMLResource) eObject.eResource()).getID(eObject);
+					
+					properties.put("id", xmlGUIID);
+					properties.put("severity", String.valueOf(error.getSeverity()));
+					properties.put("message", error.getMessage());
+					
 
-				try {properties.store(new PrintWriter(writer), "storeID");} 
-					catch (IOException e1) {e1.printStackTrace();}
-				
-				client.send("/validation", writer.getBuffer().toString());
+					try {properties.store(new PrintWriter(writer), "storeID");} 
+						catch (IOException e1) {e1.printStackTrace();}
+					
+					client.send("/validation", writer.getBuffer().toString());
+				}
 			}
+			client.disconnect();
+		} catch (LoginException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		client.disconnect();
 	}
 }
