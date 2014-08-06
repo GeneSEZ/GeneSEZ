@@ -13,9 +13,9 @@ public abstract class AbstractVehicle implements IPaintable, IDriveable {
 	
 	private String make;
 	
-	private Color color;
-	
 	private VehicleStatus state = VehicleStatus.STOP;
+	
+	private Color color;
 	
 	/**
 	 * Method stub for further implementation.
