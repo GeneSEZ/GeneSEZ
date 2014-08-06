@@ -89,7 +89,7 @@ CREATE TABLE «asPersistenceName() -» (
 	«EXPAND ColumnsInternalManagement -»
 	«EXPAND Column FOREACH allAttributes().select( a | !a.derived && !a.static ) -»
 	«EXPAND Column FOREACH allAssociationRoles().select( ar | !ar.derived ) -»
-	
+
 	«EXPAND ColumnSortingSupport -»
 	«EXPAND ColumnsEditingSupport -»
 	«EXPAND ColumnsPublishingSupport -»
@@ -129,7 +129,7 @@ CREATE TABLE «asPersistenceName() -» (
 «DEFINE SingleTableColumns FOR MClass -»
 	«EXPAND Column FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static ) -»
 	«EXPAND Column FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived ) -»
-	
+
 	«EXPAND ColumnType -»
 	«EXPAND ColumnSortingSupport -»
 «ENDDEFINE»
@@ -166,7 +166,7 @@ CREATE TABLE «asPersistenceName() -» (
 «DEFINE TableMappingColumns FOR MClass -»
 	«EXPAND Column FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static && !a.emHasColumnMappingStereotype() ) -»
 	«EXPAND Column FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived && !ar.emHasColumnMappingStereotype() ) -»
-	
+
 	«EXPAND ColumnType -»
 	«EXPAND ColumnSortingSupport -»
 «ENDDEFINE»
@@ -193,7 +193,7 @@ CREATE TABLE «asPersistenceName() -» (
 «DEFINE ColumnsInternalManagement FOR MClass -»
 	uid int(11) unsigned NOT NULL auto_increment,
 	pid int(11) unsigned DEFAULT '0' NOT NULL,
-	
+
 «ENDDEFINE»
 
 
@@ -341,7 +341,7 @@ CREATE TABLE «asPersistenceName() -» (
 «DEFINE ColumnType FOR MClass -»
 «IF getPersistenceRecordTypeColumnName().length != 0 -»
 	«getPersistenceRecordTypeColumnName() -» varchar(255) DEFAULT '' NOT NULL,
-	
+
 «ENDIF -»
 «ENDDEFINE»
 
@@ -352,7 +352,7 @@ CREATE TABLE «asPersistenceName() -» (
 «DEFINE ColumnSortingSupport FOR MClass -»
 «IF emHasExtbaseDomainObjectCreateSortingField("true") -»
 	«EXPAND ColumnSortBy -»
-	
+
 «ENDIF -»
 «ENDDEFINE»
 
@@ -370,7 +370,7 @@ CREATE TABLE «asPersistenceName() -» (
 	«EXPAND ColumnCruserId -»
 	«EXPAND ColumnDelete -»
 	«EXPAND ColumnOrigUid -»
-	
+
 «ENDDEFINE»
 
 
@@ -405,7 +405,7 @@ CREATE TABLE «asPersistenceName() -» (
 	«EXPAND ColumnStarttime -»
 	«EXPAND ColumnEndtime -»
 	«EXPAND ColumnFeGroup -»
-	
+
 «ENDIF -»
 «ENDDEFINE»
 
@@ -457,7 +457,7 @@ CREATE TABLE «asPersistenceName() -» (
 	«EXPAND ColumnLanguageField -»
 	«EXPAND ColumnTransOrigPointerField -»
 	«EXPAND ColumnTransOrigDiffSourceField -»
-	
+
 «ENDIF -»
 «ENDDEFINE»
 
@@ -491,7 +491,7 @@ CREATE TABLE «asPersistenceName() -» (
 	«EXPAND ColumnT3verCount -»
 	«EXPAND ColumnT3verTstamp -»
 	«EXPAND ColumnT3verMoveId -»
-	
+
 «ENDIF -»
 «ENDDEFINE»
 
@@ -601,7 +601,7 @@ CREATE TABLE «asIntermediateTableName(class) -» (
 	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
 	sorting int(11) unsigned DEFAULT '0' NOT NULL,
 	sorting_foreign int(11) unsigned DEFAULT '0' NOT NULL,
-	
+
 	KEY uid_local (uid_local),
 	KEY uid_foreign (uid_foreign)
 );
