@@ -17,6 +17,9 @@
 «REM» use TYPO3 CMS specific Extbase profile scripts «ENDREM»
 «EXTENSION org::genesez::platform::typo3::cms::mvc::profile::Typo3CmsExtbaseAccessElement»
 
+«REM» use TYPO3 CMS profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
+
 
 «REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
 «EXTENSION org::genesez::platform::typo3::cms::mvc::util::AccessElement»
@@ -74,9 +77,7 @@ if (!defined ('TYPO3_MODE')) {
 «REM»
 «ENDREM»
 «DEFINE PluginConfiguration FOR MModel -»
-«IF !allPlugins().isEmpty -»
 «EXPAND RegisterPlugin FOREACH allPlugins().sortBy( p | p.asTypo3PluginName() ) -»
-«ENDIF -»
 «EXPAND OwnPluginCode("ext_tables.php.own.plugin.code." + xmiGuid) -»
 
 «ENDDEFINE»
@@ -92,7 +93,7 @@ if (!defined ('TYPO3_MODE')) {
 	$_EXTKEY,
 	'«asTypo3PluginName() -»',
 	'«emGetExtbasePluginTitle() -»'«IF emHasExtbasePluginUtilizableIconFileNamePath() -»,
-	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility ::extRelPath($_EXTKEY) . '«emGetExtbasePluginIconFileNamePath() -»'«ENDIF»
+	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . '«emGetExtbasePluginIconFileNamePath() -»'«ENDIF»
 );
 
 «EXPAND PluginFlexform -»
@@ -115,9 +116,9 @@ if (!defined ('TYPO3_MODE')) {
 	Generates a plugin flexform is needed.
 «ENDREM»
 «DEFINE PluginFlexform FOR MInterface -»
-«IF hasAttributes() -»
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['«asPluginFlexformName() -»'] = 'pi_flexform';
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue('«asPluginFlexformName() -»', 'FILE:EXT:' . $_EXTKEY . '/«filePathFlexFormXml() -»');
+«IF emHasTypo3FlexFormStereotype() -»
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['«asTypo3FlexFormPluginName() -»'] = 'pi_flexform';
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue('«asTypo3FlexFormPluginName() -»', 'FILE:EXT:' . $_EXTKEY . '/«filePathFlexFormXml() -»');
 
 «ENDIF -»
 «ENDDEFINE»
@@ -137,9 +138,7 @@ $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['«asPluginFl
 «ENDREM»
 «DEFINE ModuleConfiguration FOR MModel -»
 if (TYPO3_MODE === 'BE') {
-«IF !allModules().isEmpty -»
 	«EXPAND RegisterModule FOREACH allModules().sortBy( m | m.asTypo3ModuleName() ) -»
-«ENDIF -»
 	«EXPAND OwnModuleCode("ext_tables.php.own.module.code." + xmiGuid) -»
 }
 
