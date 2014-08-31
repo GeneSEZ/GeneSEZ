@@ -65,9 +65,7 @@ if (!defined ('TYPO3_MODE')) {
 «REM»
 «ENDREM»
 «DEFINE PluginConfiguration FOR MModel -»
-«IF !allPlugins().isEmpty -»
 «EXPAND ConfigurePlugin FOREACH allPlugins().sortBy( p | p.asTypo3PluginName() ) -»
-«ENDIF -»
 «EXPAND OwnPluginCode("ext_localconf.php.own.plugin.code." + xmiGuid) -»
 
 «ENDDEFINE»
@@ -107,9 +105,7 @@ if (!defined ('TYPO3_MODE')) {
 «ENDREM»
 «DEFINE CommandControllerConfiguration FOR MModel -»
 if (TYPO3_MODE === 'BE') {
-«IF !allCommandControllers().isEmpty -»
 	«EXPAND RegisterCommandController FOREACH allCommandControllers().sortBy( cc | cc.asGeneralName() ) -»
-«ENDIF -»
 	«EXPAND OwnCommandControllerCode("ext_localconf.php.own.command.controller.code." + xmiGuid) -»
 }
 
