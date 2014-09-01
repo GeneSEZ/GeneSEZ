@@ -26,11 +26,10 @@ extension org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement;
  * 
  * @return	The list of FlexForm sheets or an empty list.
  */
-List[String] allFlexFormSheetsWithoutGeneral(MInterface this) :
-	let sheets = {} :
-		property.typeSelect(MAttribute).select( a | a.emHasTypo3FlexFormElementUtilizableFlexFormSheet() )
-			.collect( a | sheets.add( a.emGetTypo3FlexFormElementFlexFormSheet() ) ) ->
-		sheets.toSet().remove( prTypo3FlexFormSheetGeneral() ).sortBy( s | s );
+List[String] allFlexFormSheetsWithoutGeneralSheet(MInterface this) :
+	property.typeSelect(MAttribute)
+		.reject( e | e.emGetTypo3FlexFormElementFlexFormSheet() == prTypo3FlexFormSheetGeneral() || !e.emHasTypo3FlexFormElementUtilizableFlexFormSheet() )
+		.collect( e | e.emGetTypo3FlexFormElementFlexFormSheet() ).toSet().sortBy( e | e);
 
 
 /**
@@ -41,5 +40,22 @@ List[String] allFlexFormSheetsWithoutGeneral(MInterface this) :
  */
 List[MAttribute] allFlexFormSheetElements(MInterface this, String sheetName) :
 	sheetName == "sDEF"
-		? property.typeSelect(MAttribute).select( a | !a.emHasTypo3FlexFormElementUtilizableFlexFormSheet() || a.emGetTypo3FlexFormElementFlexFormSheet() == prTypo3FlexFormSheetGeneral() )
-		: property.typeSelect(MAttribute).select( a | a.emGetTypo3FlexFormElementFlexFormSheet() == sheetName );
+		? property.typeSelect(MAttribute).select( e | e.emGetTypo3FlexFormElementFlexFormSheet() == prTypo3FlexFormSheetGeneral() || !e.emHasTypo3FlexFormElementUtilizableFlexFormSheet() )
+		: property.typeSelect(MAttribute).select( e | e.emGetTypo3FlexFormElementFlexFormSheet() == sheetName );
+
+		
+/**
+ * 
+ */
+List[Integer] allSwichableControllerActionIndexes(MInterface this) :
+	let indexes = {} :
+		emHasTypo3FlexFormUtilizableSwitchableControllerAction1() ? indexes.add(1) : this ->
+		emHasTypo3FlexFormUtilizableSwitchableControllerAction2() ? indexes.add(2) : this ->
+		emHasTypo3FlexFormUtilizableSwitchableControllerAction3() ? indexes.add(3) : this ->
+		emHasTypo3FlexFormUtilizableSwitchableControllerAction4() ? indexes.add(4) : this ->
+		emHasTypo3FlexFormUtilizableSwitchableControllerAction5() ? indexes.add(5) : this ->
+		emHasTypo3FlexFormUtilizableSwitchableControllerAction6() ? indexes.add(6) : this ->
+		emHasTypo3FlexFormUtilizableSwitchableControllerAction7() ? indexes.add(7) : this ->
+		emHasTypo3FlexFormUtilizableSwitchableControllerAction8() ? indexes.add(8) : this ->
+		emHasTypo3FlexFormUtilizableSwitchableControllerAction9() ? indexes.add(9) : this ->
+		indexes;
