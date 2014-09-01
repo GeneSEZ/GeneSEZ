@@ -116,9 +116,9 @@ if (!defined ('TYPO3_MODE')) {
 	Generates a plugin flexform is needed.
 «ENDREM»
 «DEFINE PluginFlexform FOR MInterface -»
-«IF emHasTypo3FlexFormStereotype() -»
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['«asTypo3FlexFormPluginName() -»'] = 'pi_flexform';
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue('«asTypo3FlexFormPluginName() -»', 'FILE:EXT:' . $_EXTKEY . '/«filePathFlexFormXml() -»');
+«IF hasAttributes() || emHasTypo3FlexFormStereotype() -»
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['«asTypo3PluginSignatureName() -»'] = 'pi_flexform';
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue('«asTypo3PluginSignatureName() -»', 'FILE:EXT:' . $_EXTKEY . '/«filePathFlexFormXml() -»');
 
 «ENDIF -»
 «ENDDEFINE»
