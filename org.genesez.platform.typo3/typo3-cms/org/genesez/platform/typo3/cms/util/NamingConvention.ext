@@ -27,6 +27,7 @@ extension org::genesez::platform::typo3::cms::util::GlobalVar;
  * Getter of the extension key. 
  * This script is only a wrapper for "globalVarExtensionKey()" defined in "GlobalVar.ext".
  * E.g.: If the extension key is "blog_example" then this method returns the same extension key "blog_example".
+ * See http://docs.typo3.org/typo3cms/CoreApiReference/ExtensionArchitecture/ExtensionKey/Index.html
  *
  * @return	The extension key.
  */
@@ -35,7 +36,7 @@ String extensionKey() :
 
 
 /**
- * Getter of the extension key without underscores. 
+ * Getter of the extension key without underscores.
  * E.g.: Extension key "blog_example" would become "blogexample".
  *
  * @return	The extension key without underscores.
@@ -64,17 +65,8 @@ String extensionVendorName() :
  * @return	The extension package name.
  */
 String extensionPackageName() :
-	extensionPackageName( extensionKey() );
-
-
-/**
- * Getter of the extension package name.
- *
- * @param	extensionKey	The extension key.
- * @return	The extension package name.
- */
-private cached String extensionPackageName(String extensionKey) :
-	JAVA org.genesez.platform.typo3.cms.convention.NamingConvention.extensionPackageName(java.lang.String);
+	// using toString() method without parameter does not work
+	extensionKey().split("_").toFirstUpper().toString("");
 
 
 // -- TYPO3 CMS extension prefix conventions ----------------------------------------------------------------
@@ -83,10 +75,13 @@ private cached String extensionPackageName(String extensionKey) :
  * Getter of the extension prefix.
  * Example for general extensions: If the extension key is "blog_example" then this method returns the prefix "tx_blogexample".
  * Example for user specific extensions: If the extension key is "user_blog_example" then the method returns the prefix "user_blog_example".
- *
+ * See http://docs.typo3.org/typo3cms/CoreApiReference/ExtensionArchitecture/NamingConventions/Index.html
+ * 
  * @return	The prefix to prepend to extensions.
  */
 String extensionPrefix() :
+	// checks if the extension is a general or a user specific extension, 
+	// by determination of the extension key if it does start with prefix "user_"
 	isGeneralExtension()
 		? "tx_" + extensionKeyWithoutUnderscores()
 		: extensionKey();
@@ -96,20 +91,18 @@ String extensionPrefix() :
  * Getter of the extension prefix without underscores.
  * Example for general extensions: If the extension key is "blog_example" then this method returns the prefix "txblogexample".
  * Example for user specific extensions: If the extension key is "user_blog_example" then the method returns the prefix "userblogexample".
- *
+ * See http://docs.typo3.org/typo3cms/CoreApiReference/ExtensionArchitecture/NamingConventions/Index.html
+ * 
  * @return	The prefix to prepend to extensions.
  */
 String extensionPrefixWithoutUnderscores() :
-	// checks if the extension is a general or a user specific extension, 
-	// by determination of the extension key if it does start with prefix "user_"
-	isGeneralExtension()
-		? "tx" + extensionKeyWithoutUnderscores()
-		: extensionKeyWithoutUnderscores();
+	extensionPrefix().replaceAll("_", "");
 
 
 /**
  * Checks if the extension is a general or a user specific extension, 
  * by determination if the extension key does not start with prefix "user_".
+ * See http://docs.typo3.org/typo3cms/CoreApiReference/ExtensionArchitecture/NamingConventions/Index.html
  */
 Boolean isGeneralExtension() :
 	!extensionKey().startsWith("user_");
@@ -230,6 +223,7 @@ String asTypo3AccessRole(String accessRole) :
 
 /**
  * Formats a string value into a TYPO3 CMS Boolean value.
+ * See http://docs.typo3.org/typo3cms/CodingGuidelinesReference/PhpFileFormatting/PhpSyntaxFormatting/Index.html
  *
  * @param	boolean	The Boolean to format.
  * @return	The TYPO3 CMS Boolean (TRUE or FALSE).
@@ -240,26 +234,28 @@ String asTypo3Boolean(Boolean boolean) :
 
 /**
  * Formats a integer value into a TYPO3 CMS Boolean.
+ * See http://docs.typo3.org/typo3cms/CodingGuidelinesReference/PhpFileFormatting/PhpSyntaxFormatting/Index.html
  *
  * @param	boolean	The Boolean to format.
  * @return	The TYPO3 CMS Boolean (TRUE or FALSE).
  */
 String asTypo3Boolean(Integer boolean) :
 	boolean == 1
-		? "TRUE"
-		: "FALSE";
+		? asTypo3Boolean(true)
+		: asTypo3Boolean(false);
 
 
 /**
  * Formats a string value into a TYPO3 CMS Boolean.
+ * See http://docs.typo3.org/typo3cms/CodingGuidelinesReference/PhpFileFormatting/PhpSyntaxFormatting/Index.html
  *
  * @param	boolean	The Boolean to format.
  * @return	The TYPO3 CMS Boolean (TRUE or FALSE).
  */
 String asTypo3Boolean(String boolean) :
 	boolean.toLowerCase() == "true" || boolean == "1"
-		? "TRUE"
-		: "FALSE";
+		? asTypo3Boolean(true)
+		: asTypo3Boolean(false);
 
 
 // -- PHP conventions ---------------------------------------------------------------------------------------
@@ -280,8 +276,5 @@ String asTypo3Boolean(String boolean) :
  */
 List[String] asAssociativeArrayItem(String item) :
 	item.contains("=")
-		? (	
-			let kv = item.replaceFirst("=", "=>").split("=>") :
-				"'" + kv.get(0).trim() + "' => " + kv.get(1).trim() + ","
-		) 
-		: "";
+		? "'" + item.split("=").trim().toString("' => ") + ","
+		: item;
