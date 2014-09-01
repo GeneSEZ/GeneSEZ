@@ -180,9 +180,15 @@ String filePathExtConfTemplateTxt() :
 // -- TYPO3 CMS directory path conventions ------------------------------------------------------------------
 
 /**
+ * Gets the directory path of the extension upload folder "uploads/tx_<extension key without underscores>".
+ * Example for general extensions: If the extension key is "blog_example" then this method returns the directory path "uploads/tx_blogexample".
+ * Example for user specific extensions: If the extension key is "user_blog_example" then the method returns the the directoy path "uploads/tx_userblogexample".
+ *
  * See http://docs.typo3.org/typo3cms/CodingGuidelinesReference/FileSystemConventions/Typo3DirectoryStructure/Index.html
  * See http://docs.typo3.org/typo3cms/CoreApiReference/ExtensionArchitecture/DeclarationFile/Index.html
- * TODO: It is unclear why user specific extensions are prefixed with tx_? Maybe a TYPO3 CMS bug? 
+ * TODO: It is unclear why user specific extensions are prefixed with tx_? Maybe a TYPO3 CMS bug?
+ *
+ * @return	The directory path of the extension upload folder "uploads/tx_<extension key without underscores>".
  */
 String dirPathExtensionUploadFolder() :
 	"uploads/" + "tx_" + extensionKeyWithoutUnderscores();
