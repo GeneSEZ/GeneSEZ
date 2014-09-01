@@ -12,6 +12,10 @@
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
  */
 
+// use TYPO3 CMS naming convention scripts
+extension org::genesez::platform::typo3::cms::util::NamingConvention;
+
+
 // use GeneSEZ common conversion scripts
 extension org::genesez::util::Conversion;
 
@@ -171,3 +175,14 @@ String fileNameExtConfTemplateTxt() :
  */
 String filePathExtConfTemplateTxt() :
 	fileNameExtConfTemplateTxt();
+
+
+// -- TYPO3 CMS directory path conventions ------------------------------------------------------------------
+
+/**
+ * See http://docs.typo3.org/typo3cms/CodingGuidelinesReference/FileSystemConventions/Typo3DirectoryStructure/Index.html
+ * See http://docs.typo3.org/typo3cms/CoreApiReference/ExtensionArchitecture/DeclarationFile/Index.html
+ * TODO: It is unclear why user specific extensions are prefixed with tx_? Maybe a TYPO3 CMS bug? 
+ */
+String dirPathExtensionUploadFolder() :
+	"uploads/" + "tx_" + extensionKeyWithoutUnderscores();
