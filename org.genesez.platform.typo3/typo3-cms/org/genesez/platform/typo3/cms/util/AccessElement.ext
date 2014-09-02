@@ -33,7 +33,7 @@ List[String] allFlexFormSheetsWithoutGeneralSheet(MInterface this) :
 
 
 /**
- * Returns the a list of elements for a FlexForm sheet for a plugin.
+ * Returns the a list of elements for a FlexForm sheet of a plugin.
  * 
  * @param	sheetName	The name of the FlexForm sheet.
  * @return	The list of elements for a FlexForm sheet or an empty list.
@@ -42,20 +42,3 @@ List[MAttribute] allFlexFormSheetElements(MInterface this, String sheetName) :
 	sheetName == "sDEF"
 		? property.typeSelect(MAttribute).select( e | e.emGetTypo3FlexFormElementFlexFormSheet() == prTypo3FlexFormSheetGeneral() || !e.emHasTypo3FlexFormElementUtilizableFlexFormSheet() )
 		: property.typeSelect(MAttribute).select( e | e.emGetTypo3FlexFormElementFlexFormSheet() == sheetName );
-
-		
-/**
- * 
- */
-List[Integer] allSwichableControllerActionIndexes(MInterface this) :
-	let indexes = {} :
-		emHasTypo3FlexFormUtilizableSwitchableControllerAction1() ? indexes.add(1) : this ->
-		emHasTypo3FlexFormUtilizableSwitchableControllerAction2() ? indexes.add(2) : this ->
-		emHasTypo3FlexFormUtilizableSwitchableControllerAction3() ? indexes.add(3) : this ->
-		emHasTypo3FlexFormUtilizableSwitchableControllerAction4() ? indexes.add(4) : this ->
-		emHasTypo3FlexFormUtilizableSwitchableControllerAction5() ? indexes.add(5) : this ->
-		emHasTypo3FlexFormUtilizableSwitchableControllerAction6() ? indexes.add(6) : this ->
-		emHasTypo3FlexFormUtilizableSwitchableControllerAction7() ? indexes.add(7) : this ->
-		emHasTypo3FlexFormUtilizableSwitchableControllerAction8() ? indexes.add(8) : this ->
-		emHasTypo3FlexFormUtilizableSwitchableControllerAction9() ? indexes.add(9) : this ->
-		indexes;
