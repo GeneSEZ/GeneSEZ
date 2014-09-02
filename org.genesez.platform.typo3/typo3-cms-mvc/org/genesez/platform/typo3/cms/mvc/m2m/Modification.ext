@@ -96,7 +96,7 @@ MClass classModifications(MClass this) :
 		case isViewHelper() :
 			viewHelperModifications()
 		default :
-			Void
+			this
 	} ->
 	this;
 	
@@ -111,7 +111,7 @@ MStereotype stereotypeModifications(MStereotype this) :
 		case name == prStringLengthValidator() :
 			stringLengthValidatorModifications()
 		default :
-			Void
+			this
 	} ->
 	this;
 
@@ -125,7 +125,7 @@ MPackage packageChangePackageNameToFirstUpper(MPackage this) :
 	name.matches("^[a-z].*")
 		? (	logTrace( "GeneSEZ: Change package name to first upper! Model element: " + fqmn() ) ->
 			setName( name.toFirstUpper() )
-		) : Void ->
+		) : this ->
 	this;
 
 
@@ -138,7 +138,7 @@ MClass classAddTypo3SingletonInterface(MClass this) :
 	emHasSingletonStereotype()
 		? (	logTrace( "GeneSEZ: Add TYPO3 CMS singleton interface! Model element: " + fqmn() ) ->
 			realization.add( navModel().ensureExternalTypeExistence("SingletonInterface", "SingletonInterface") )
-		) : Void ->
+		) : this ->
 	this;
 
 
@@ -153,7 +153,7 @@ MProperty classNoAccessorsIfDependencyInjectionIsSet(MProperty this) :
 						.ensureSingleTaggedValueExistence( genesezAccessorStereotype.ensureTagExistence( prAccessorGetter(), "Boolean" ), "false" ).owningElement
 						.ensureSingleTaggedValueExistence( genesezAccessorStereotype.ensureTagExistence( prAccessorSetter(), "Boolean" ), "false" )
 			)
-		) : Void ->
+		) : this ->
 	this;
 	
 
@@ -180,7 +180,7 @@ MClass controllerAddGeneralization(MClass this) :
 	!generalization.isEmpty
 		? (	logTrace( "GeneSEZ: Add default generalization to controller class! Model element: " + fqmn() ) ->
 			generalization.add( navModel().ensureExternalTypeExistence("ActionController", "ActionController") )
-		) : Void ->
+		) : this ->
 	this;
 
 
@@ -191,7 +191,7 @@ MClass controllerAddInitializeAction(MClass this) :
 			ensureOperationExistence(this.xmiGuid + ".initializeAction", "initalizeAction")
 				.processOperation("protected", false, false, false)
 				.ensureCommentExistence(this.xmiGuid + ".initializeAction.comment", "Override initalizeAction to solve tasks which all actions have in common.")
-		) : Void ->
+		) : this ->
 	this;
 
 
@@ -202,7 +202,7 @@ MClass controllerAddErrorAction(MClass this) :
 			ensureOperationExistence(this.xmiGuid + ".errorAction", "errorAction")
 				.processOperation("protected", false, false, false)
 				.ensureCommentExistence(this.xmiGuid + ".errorAction.comment", "Override errorAction to show that errors happend.")
-		) : Void ->
+		) : this ->
 	this;
 
 
@@ -214,7 +214,7 @@ MOperation controllerAddInitializeAction(MOperation this) :
 			classifier.ensureOperationExistence( this.xmiGuid + ".initializeAction", "initialize" + asGeneralName().toFirstUpper() )
 				.processOperation("protected", false, false, false)
 				.ensureCommentExistence(this.xmiGuid + ".initializeAction.comment", "Define initialize" + asGeneralName().toFirstUpper() + " to solve tasks before the action is called.")
-		) : Void ->
+		) : this ->
 	this;
 
 
@@ -241,7 +241,7 @@ MProperty domainObjectAddNotEmptyValidatorStereotype(MProperty this) :
 	multiplicity.lowerBound >= 1 && !stereotype.exists( s | s.name == prNotEmptyValidator() )
 		? ( logTrace( "GeneSEZ: Add 'NotEmptyValidator' stereotype to domain object property! Model element: " + fqmn() ) ->
 			ensureStereotypeAssignment( navModel().ensureStereotypeExistence( prNotEmptyValidator(), prNotEmptyValidator() ) )
-		) : Void ->
+		) : this ->
 	this;
 
 
@@ -249,7 +249,7 @@ MProperty domainObjectChangePropertyVisibilityToProtected(MProperty this) :
 	!derived && visibility != "protected"
 		? ( logTrace( "GeneSEZ: Change visibility to 'protected' of domain object property! Model element: " + fqmn() ) ->
 			setVisibility("protected")
-		) : Void ->
+		) : this ->
 	this;
 
 
@@ -273,7 +273,7 @@ MClass entityAddGeneralization(MClass this) :
 	!generalization.isEmpty
 		? (	logTrace( "GeneSEZ: Add default generalization to entity class! Model element: " + fqmn() ) ->
 			generalization.add( navModel().ensureExternalTypeExistence("AbstractEntity", "AbstractEntity") )
-		) : Void ->
+		) : this ->
 	this;
 
 
@@ -297,7 +297,7 @@ MClass valueObjectAddGeneralization(MClass this) :
 	!generalization.isEmpty
 		? (	logTrace( "GeneSEZ: Add default generalization to value object class! Model element: " + fqmn() ) ->
 			generalization.add( navModel().ensureExternalTypeExistence("AbstractValueObject", "AbstractValueObject") )
-		) : Void ->
+		) : this ->
 	this;
 
 
@@ -321,7 +321,7 @@ MClass repositoryAddGeneralization(MClass this) :
 	!generalization.isEmpty
 		? (	logTrace( "GeneSEZ: Add default generalization to repository class! Model element: " + fqmn() ) ->
 			generalization.add( navModel().ensureExternalTypeExistence("Repository", "Repository") )
-		) : Void ->
+		) : this ->
 	this;
 
 
@@ -346,7 +346,7 @@ MClass validatorAddGeneralization(MClass this) :
 	!generalization.isEmpty
 		? (	logTrace( "GeneSEZ: Add default generalization to validator class! Model element: " + fqmn() ) ->
 			generalization.add( navModel().ensureExternalTypeExistence("AbstractValidator", "AbstractValidator") )
-		) : Void ->
+		) : this ->
 	this;
 
 
@@ -365,7 +365,7 @@ MClass validatorAddIsValid(MClass this) :
 				.ensureReturnParameterExistence(this.xmiGuid + ".isValid.return", "")
 					.wireType( navModel().ensureExternalTypeExistence("boolean", "boolean") )
 					.ensureCommentExistence(this.xmiGuid + ".isValid.return.comment", "TRUE if the value is valid, FALSE if an error occured.")
-		) : Void ->
+		) : this ->
 	this;
 
 
@@ -389,7 +389,7 @@ MClass viewHelperAddGeneralization(MClass this) :
 	!generalization.isEmpty
 		? (	logTrace( "GeneSEZ: Add default generalization to view helper class! Model element: " + fqmn() ) ->
 			generalization.add( navModel().ensureExternalTypeExistence("AbstractViewHelper", "AbstractViewHelper") )
-		) : Void ->
+		) : this ->
 	this;
 
 
@@ -408,7 +408,7 @@ MStereotype numberRangeValidatorChangePropertyStartRangeToMinimum(MStereotype th
 	property.exists( p | p.name == prNumberRangeValidatorStartRange() ) 
 		? (	logTrace( "GeneSEZ: Change name of property 'startRange' to 'mimimum' of 'NumberRangeValidator' stereotype! Model element: " + fqmn() ) ->
 			property.select( p | p.name == prNumberRangeValidatorStartRange() ).setName("minimum")
-		) : Void ->
+		) : this ->
 	this;
 
 
@@ -416,7 +416,7 @@ MStereotype numberRangeValidatorChangePropertyEndRangeToMaximum(MStereotype this
 	property.exists( p | p.name == prNumberRangeValidatorEndRange() ) 
 		? (	logTrace( "GeneSEZ: Change name of property 'endRange' to 'maximum' of 'NumberRangeValidator' stereotype! Model element: " + fqmn() ) ->
 			property.select( p | p.name == prNumberRangeValidatorEndRange() ).setName("maximum")
-		) : Void ->
+		) : this ->
 	this;
 
 
@@ -433,7 +433,7 @@ MStereotype stringLengthValidatorChangePropertyMinLengthToMinimum(MStereotype th
 	property.exists( p | p.name == prStringLengthValidatorMinLength() ) 
 		? (	logTrace( "GeneSEZ: Change name of property 'minLength' to 'mimimum' of 'StringLengthValidator' stereotype! Model element: " + fqmn() ) ->
 			property.select( p | p.name == prStringLengthValidatorMinLength() ).setName("minimum")
-		) : Void ->
+		) : this ->
 	this;
 
 
@@ -441,5 +441,5 @@ MStereotype stringLengthValidatorChangePropertyMaxLengthToMaximum(MStereotype th
 	property.exists( p | p.name == prStringLengthValidatorMaxLength() ) 
 		? (	logTrace( "GeneSEZ: Change name of property 'maxLength' to 'maximum' of 'StringLengthValidator' stereotype! Model element: " + fqmn() ) ->
 			property.select( p | p.name == prStringLengthValidatorMaxLength() ).setName("maximum")
-		) : Void ->
+		) : this ->
 	this;
