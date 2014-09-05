@@ -1,0 +1,34 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+
+import gcore;
+
+
+/**
+ * Type mapping scripts for profile generation.
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ */
+
+extension org::genesez::metamodel::core::util::AccessElement;
+
+
+/**
+ * Maps the name of an external type using the type mapping.
+ *
+ * @param	this	The external type to map.
+ * @return	The name of the external type according type mapping.
+ * @api
+ */
+String mapName(MType this) : 
+	switch (name()) {
+		case "Class": "MClass"
+		case "Property" : "MProperty"
+		case "Operation" : "MOperation"
+		
+		default: "MElement"
+	};

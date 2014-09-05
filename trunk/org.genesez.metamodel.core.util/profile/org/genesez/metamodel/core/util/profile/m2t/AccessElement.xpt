@@ -19,6 +19,7 @@
 «EXTENSION org::genesez::metamodel::core::util::profile::m2t::util::AccessHelper»
 «EXTENSION org::genesez::metamodel::core::util::profile::m2t::util::GlobalVar»
 «EXTENSION org::genesez::metamodel::core::util::profile::m2t::util::Naming»
+«EXTENSION org::genesez::metamodel::core::util::profile::m2t::util::TypeMapping»
 
 
 «REM»
@@ -37,14 +38,14 @@ import gcore;
 «EXPAND Comment::AccessHelperFile -»
 
 // use profile scripts
-extension «globalVarXtendFilePath() -»::«globalVarProfileFileName().replaceFirst(".ext", "") -»;
+extension «globalVarXtendFilePath()»::«globalVarProfileFileName().replaceFirst(".ext", "")»;
 
 // use GeneSEZ common extension mechanism scripts
 extension org::genesez::metamodel::core::util::AccessElement;
 
 
-«EXPAND StereotypeElement FOREACH allNestedClassifiers().typeSelect(MClass).sortBy( c | c.name ) -»
-«EXPAND OwnCodeImplementation -»
+«EXPAND StereotypeElement FOREACH allNestedClassifiers().typeSelect( MClass ).sortBy( c | c.name ) -»
+«EXPAND OwnCode -»
 «ENDFILE -»
 «ENDDEFINE»
 
@@ -78,8 +79,8 @@ extension org::genesez::metamodel::core::util::AccessElement;
 «ENDREM»
 «DEFINE HasStereotype FOR MClass -»
 «EXPAND Comment::HasStereotype -»
-boolean «asAccessHelperHasStereotype() -»(MElement this) :
-	emHasStereotypeAssignment( «asProfileScriptName() -»() );
+boolean «asAccessHelperHasStereotype()»(MElement this) :
+	emHasStereotypeAssignment( «asProfileScriptName()»() );
 
 
 «ENDDEFINE»
@@ -90,8 +91,8 @@ boolean «asAccessHelperHasStereotype() -»(MElement this) :
 «DEFINE HasTaggedValue FOR MClass -»
 «IF hasAttributes() -»
 «EXPAND Comment::HasTaggedValue -»
-boolean «asAccessHelperHasTaggedValue() -»(MElement this, String tag, String value) :
-	emHasTaggedValue( «asProfileScriptName() -»(), tag, value );
+boolean «asAccessHelperHasTaggedValue()»(MElement this, String tag, String value) :
+	emHasTaggedValue( «asProfileScriptName()»(), tag, value );
 
 
 «ENDIF -»
@@ -103,8 +104,8 @@ boolean «asAccessHelperHasTaggedValue() -»(MElement this, String tag, String v
 «DEFINE HasTaggedValueReference FOR MClass -»
 «IF hasAttributes() -»
 «EXPAND Comment::HasTaggedValueReference -»
-boolean «asAccessHelperHasTaggedValue() -»(MElement this, String tag, MElement valueReference) :
-	emHasTaggedValue( «asProfileScriptName() -»(), tag, valueReference );
+boolean «asAccessHelperHasTaggedValue()»(MElement this, String tag, MElement valueReference) :
+	emHasTaggedValue( «asProfileScriptName()»(), tag, valueReference );
 
 
 «ENDIF -»
@@ -116,11 +117,11 @@ boolean «asAccessHelperHasTaggedValue() -»(MElement this, String tag, MElement
 «DEFINE HasTaggedValue FOR MAttribute -»
 «EXPAND Comment::HasTaggedValue -»
 «IF !isTaggedValueReference() -»
-boolean «asAccessHelperHasTaggedValue() -»(MElement this, String value) :
-	emHasTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»(), value );
+boolean «asAccessHelperHasTaggedValue()»(MElement this, String value) :
+	emHasTaggedValue( «classifier.asProfileScriptName()»(), «asProfileScriptName()»(), value );
 «ELSE -»
-boolean «asAccessHelperHasTaggedValue() -»(MElement this, MElement valueReference) :
-	emHasTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»(), valueReference );
+boolean «asAccessHelperHasTaggedValue()»(MElement this, MElement valueReference) :
+	emHasTaggedValue( «classifier.asProfileScriptName()»(), «asProfileScriptName()»(), valueReference );
 «ENDIF -»
 
 
@@ -132,11 +133,11 @@ boolean «asAccessHelperHasTaggedValue() -»(MElement this, MElement valueRefere
 «DEFINE HasUtilizableTaggedValue FOR MAttribute -»
 «EXPAND Comment::HasUtilizableTaggedValue -»
 «IF !isTaggedValueReference() -»
-boolean «asAccessHelperHasUtilizableTaggedValue() -»(MElement this) :
-	emHasUtilizableTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
+boolean «asAccessHelperHasUtilizableTaggedValue()»(MElement this) :
+	emHasUtilizableTaggedValue( «classifier.asProfileScriptName()»(), «asProfileScriptName()»() );
 «ELSE -»
-boolean «asAccessHelperHasUtilizableTaggedValue() -»(MElement this) :
-	emHasUtilizableTaggedValueReference( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
+boolean «asAccessHelperHasUtilizableTaggedValue()»(MElement this) :
+	emHasUtilizableTaggedValueReference( «classifier.asProfileScriptName()»(), «asProfileScriptName()»() );
 «ENDIF -»
 
 
@@ -147,8 +148,8 @@ boolean «asAccessHelperHasUtilizableTaggedValue() -»(MElement this) :
 «ENDREM»
 «DEFINE GetOwningTaggedValues FOR MAttribute -»
 «EXPAND Comment::GetOwningTaggedValues -»
-List[MTaggedValue] «asAccessHelperGetOwningTaggedValues() -»(MElement this) : 
-	emOwningTaggedValues( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
+List[MTaggedValue] «asAccessHelperGetOwningTaggedValues()»(MElement this) : 
+	emOwningTaggedValues( «classifier.asProfileScriptName()»(), «asProfileScriptName()»() );
 
 
 «ENDDEFINE»
@@ -163,7 +164,7 @@ List[MTaggedValue] «asAccessHelperGetOwningTaggedValues() -»(MElement this) :
 String «asAccessHelperGetTaggedValue() -»(MElement this) :
 	emGetTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
 «ELSE -»
-MElement «asAccessHelperGetTaggedValue() -»(MElement this) :
+«type.mapName()» «asAccessHelperGetTaggedValue() -»(MElement this) :
 	emGetTaggedValueReference( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
 «ENDIF -»
 «ELSE -»
@@ -171,7 +172,7 @@ MElement «asAccessHelperGetTaggedValue() -»(MElement this) :
 List[String] «asAccessHelperGetTaggedValue() -»(MElement this) : 
 	emAllTaggedValues( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
 «ELSE -»
-List[MElement] «asAccessHelperGetTaggedValue() -»(MElement this) : 
+List[«type.mapName()»] «asAccessHelperGetTaggedValue() -»(MElement this) : 
 	emAllTaggedValueReferences( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
 «ENDIF -»
 «ENDIF -»
@@ -199,10 +200,10 @@ Void «asAccessHelperSetTaggedValue() -»(MElement this, MElement valueReference
 
 
 «REM»
-	Generates a region for own code implementations.
+	Generates a protected region for own code.
 «ENDREM»
-«DEFINE OwnCodeImplementation FOR MModel -»
-«PROTECT CSTART '// ' CEND '' ID ( "accesselement.own.code.implementation." + xmiGuid )»
-// TODO: put your further code implementations here
+«DEFINE OwnCode FOR MModel -»
+«PROTECT CSTART '// ' CEND '' ID ( "accesselement.own.code." + xmiGuid )»
+// TODO: put your further code here
 «ENDPROTECT»
 «ENDDEFINE»
