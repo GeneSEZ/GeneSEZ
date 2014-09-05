@@ -65,7 +65,7 @@ if (!defined ('TYPO3_MODE')) {
 «REM»
 «ENDREM»
 «DEFINE PluginConfiguration FOR MModel -»
-«EXPAND ConfigurePlugin FOREACH allPlugins().sortBy( p | p.asTypo3PluginName() ) -»
+«EXPAND ConfigurePlugin FOREACH allPlugins().sortBy( p | p.asExtbasePluginName() ) -»
 «EXPAND OwnPluginCode("ext_localconf.php.own.plugin.code." + xmiGuid) -»
 
 «ENDDEFINE»
@@ -78,12 +78,12 @@ if (!defined ('TYPO3_MODE')) {
 «DEFINE ConfigurePlugin FOR MInterface -»
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
 	'«extensionVendorName() -».' . $_EXTKEY,
-	'«asTypo3PluginName() -»',
-	array(«FOREACH asExtbaseControllerActionPairs( emGetExtbasePluginControllerActions() ) AS controllerAction SEPARATOR ", "»
-		«controllerAction -»«ENDFOREACH»
+	'«asExtbasePluginName() -»',
+	array(«FOREACH emGetExtbasePluginControllerActions().classifier.toSet() AS controller SEPARATOR ", "»
+		'«controller.asControllerName()»' => '«FOREACH emGetExtbasePluginControllerActions().select( o | o.classifier == controller) AS controllerAction SEPARATOR ", "»«controllerAction.asControllerActionName() -»«ENDFOREACH»'«ENDFOREACH»
 	),
-	array(«FOREACH asExtbaseControllerActionPairs( emGetExtbasePluginUncachedControllerActions() ) AS uncachedControllerAction SEPARATOR ", "»
-		«uncachedControllerAction -»«ENDFOREACH»
+	array(«FOREACH emGetExtbasePluginUncachedControllerActions().classifier.toSet() AS controller SEPARATOR ", "»
+		'«controller.asControllerName()»' => '«FOREACH emGetExtbasePluginUncachedControllerActions().select( o | o.classifier == controller) AS uncachedControllerAction SEPARATOR ", "»«uncachedControllerAction.asControllerActionName() -»«ENDFOREACH»'«ENDFOREACH»
 	),
 	«emGetExtbasePluginPluginType().asExtbasePluginType()»
 );
