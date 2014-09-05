@@ -14,6 +14,14 @@
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
 «ENDREM»
 
+«REM» use TYPO3 CMS specific Extbase profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::profile::Typo3CmsExtbaseAccessElement»
+
+«REM» use TYPO3 CMS profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsProfile»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
+
+
 «REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
 «EXTENSION org::genesez::platform::typo3::cms::mvc::util::AccessElement»
 
@@ -22,6 +30,10 @@
 
 «REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
 «EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
+
+
+«REM» use GeneSEZ common GUI profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezGuiAccessElement»
 
 
 «REM» use GeneSEZ common access element scripts «ENDREM»
@@ -36,7 +48,7 @@
 	Processes the generation of "flexform_<plugin>.xml".
 «ENDREM»
 «DEFINE Root FOR MInterface -»
-«IF isPlugin() && hasAttributes() -»
+«IF isPlugin() && ( hasAttributes() || emHasTypo3FlexFormStereotype() || emHasExtbasePluginUtilizableSwitchableControllerActions() ) -»
 «EXPAND FlexForm -»
 «ENDIF -»
 «ENDDEFINE»
@@ -50,8 +62,8 @@
 «FILE filePathFlexFormXml() -»
 <T3DataStructure>
 	<sheets>
-		«EXPAND Sheet("sDEF") -»
-		«FOREACH allFlexFormSheetsWithoutSdef() AS sheetName -»
+		«EXPAND Sheet( prTypo3FlexFormSheetGeneral() ) -»
+		«FOREACH allFlexFormSheetsWithoutGeneralSheet().sortBy( s | s ) AS sheetName -»
 		«EXPAND Sheet(sheetName) -»
 		«ENDFOREACH -»
 		«EXPAND OwnCode("flexform.xml.own.code." + xmiGuid) -» 
@@ -62,13 +74,13 @@
 
 
 «DEFINE Sheet(String sheetName) FOR MInterface -»
-		<«sheetName -»>
+		<«IF sheetName == prTypo3FlexFormSheetGeneral() -»sDEF«ELSE -»«sheetName -»«ENDIF -»>
 			<ROOT>
 				«EXPAND TceForms(sheetName) -»
 				«EXPAND Type -»
 				«EXPAND El(sheetName) -»
 			</ROOT>
-		</«sheetName -»>
+		</«IF sheetName == prTypo3FlexFormSheetGeneral() -»sDEF«ELSE -»«sheetName -»«ENDIF -»>
 «ENDDEFINE»
 
 
@@ -76,7 +88,7 @@
 «ENDREM»
 «DEFINE TceForms(String sheetName) FOR MInterface -»
 				<TCEforms>
-					<sheetTitle>LLL:EXT:«extensionKey() -»/«filePathFlexFormXml() -»:«sheetName -»</sheetTitle>
+					<sheetTitle>LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:sheet.«sheetName -»</sheetTitle>
 				</TCEforms>
 «ENDDEFINE»
 
@@ -92,18 +104,43 @@
 «ENDREM»
 «DEFINE El(String sheetName) FOR MInterface -»
 				<el>
-					«REM»«EXPAND Option FOREACH allFlexFormSheetProperties(sheetName) -»«ENDREM»
+					«IF sheetName == prTypo3FlexFormSheetGeneral() -»«EXPAND SwitchableControllerActions -»«ENDIF -»
+					«REM»«EXPAND SheetElement FOREACH allFlexFormSheetElements(sheetName) -»«ENDREM»
 					«EXPAND OwnSheetElementCode("flexform.xml.own.sheet.element.code." + sheetName + "." + xmiGuid) -»
 				</el>
+«ENDDEFINE»
+
+
+
+«DEFINE SwitchableControllerActions FOR MInterface -»
+«IF emHasExtbasePluginUtilizableSwitchableControllerActions() -»
+					<switchableControllerActions>
+                        <TCEforms>
+                            <label>LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:switchablecontrolleraction</label>
+                            <onChange>reload</onChange>
+                            <config>
+                                <type>select</type>
+                                <items type="array">
+                                	«FOREACH emGetExtbasePluginSwitchableControllerActionIndexes() AS switchableControllerActionIndex -»
+                                	<numIndex index="«switchableControllerActionIndex.asInteger() -»" type="array">
+                                        <numIndex index="0">LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:switchablecontrolleraction.«switchableControllerActionIndex -»</numIndex>
+                                        <numIndex index="1">«FOREACH emGetExtbasePluginSwitchableControllerActions(switchableControllerActionIndex) AS controllerAction SEPARATOR "; "»«controllerAction.classifier.asControllerName() -»->«controllerAction.asControllerActionName() -»«ENDFOREACH -»</numIndex>
+                                    </numIndex>
+                                	«ENDFOREACH -»
+                                </items>
+                            </config>
+                        </TCEforms>
+                    </switchableControllerActions>
+«ENDIF -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE SheetElement FOR MAttribute -»
-					<settings.«name() -»>
+					<settings.«asGeneralName() -»>
 						«EXPAND TCEforms -»
-					</settings.«name() -»>
+					</settings.«asGeneralName() -»>
 «ENDDEFINE»
 
 
@@ -121,7 +158,7 @@
 «ENDREM»
 «DEFINE TCEforms FOR MAttribute -»
 						<TCEforms>
-							«EXPAND Label -»
+							«REM»«EXPAND Label -»«ENDREM»
 							«EXPAND Config -»
 						</TCEforms>
 «ENDDEFINE»
@@ -130,7 +167,7 @@
 «REM» 
 «ENDREM»
 «DEFINE Label FOR MAttribute -»
-							<label>LLL:EXT:«extensionKey() -»/«((MInterface)classifier).locallangFFXMLFileNamePath() -»:«name( namingContextLocalization() ) -»</label>
+							<label>LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:«asLocalizationName() -»</label>
 «ENDDEFINE»
 
 
@@ -138,42 +175,54 @@
 «ENDREM»
 «DEFINE Config FOR MAttribute -»
 							<config>
-							«IF type.name() == "Input" -»
+							«IF type.asGuiType() == "Input" -»
 								«EXPAND ConfigTypeInput -»
-							«ELSEIF type.name() == "String" -»
-								«EXPAND ConfigTypeString -»
-							«ELSEIF type.name() == "Integer" -»
+							«ELSEIF type.asGuiType() == "Integer" -»
 								«EXPAND ConfigTypeInteger -»
-							«ELSEIF type.name() == "Float" -»
+							«ELSEIF type.asGuiType() == "Float" -»
 								«EXPAND ConfigTypeFloat -»
-							«ELSEIF type.name() == "DateTime" -»
+							«ELSEIF type.asGuiType() == "DateTime" -»
 								«EXPAND ConfigTypeDateTime -»	
-							«ELSEIF type.name() == "Text" -»
+							«ELSEIF type.asGuiType() == "Date" -»
+								«EXPAND ConfigTypeDate -»	
+							«ELSEIF type.asGuiType() == "Time" -»
+								«EXPAND ConfigTypeTime -»	
+							«ELSEIF type.asGuiType() == "TimeSec" -»
+								«EXPAND ConfigTypeTimeSec -»	
+							«ELSEIF type.asGuiType() == "String" -»
+								«EXPAND ConfigTypeString -»
+							«ELSEIF type.asGuiType() == "Password" -»
+								«EXPAND ConfigTypePassword -»
+							«ELSEIF type.asGuiType() == "Text" -»
 								«EXPAND ConfigTypeText -»
-							«ELSEIF type.name() == "Check" -»
+							«ELSEIF type.asGuiType() == "RichText" -»
+								«EXPAND ConfigTypeRichText -»
+							«ELSEIF type.asGuiType() == "Check" -»
 								«EXPAND ConfigTypeCheck -»
-							«ELSEIF type.name() == "Boolean" -»
+							«ELSEIF type.asGuiType() == "Boolean" -»
 								«EXPAND ConfigTypeBoolean -»
-							«ELSEIF type.name() == "Radio" -»
+							«ELSEIF type.asGuiType() == "Radio" -»
 								«EXPAND ConfigTypeRadio -»
-							«ELSEIF type.name() == "Select" -»
+							«ELSEIF type.asGuiType() == "Select" -»
 								«EXPAND ConfigTypeSelect -»
-							«ELSEIF type.name() == "File" -»
+							«ELSEIF type.asGuiType() == "File" -»
 								«EXPAND ConfigTypeFile -»
-							«ELSEIF type.name() == "FileReference" -»
+							«ELSEIF type.asGuiType() == "FileReference" -»
 								«EXPAND ConfigTypeFileReference -»
-							«ELSEIF type.name() == "Image" -»
+							«ELSEIF type.asGuiType() == "Image" -»
 								«EXPAND ConfigTypeImage -»
-							«ELSEIF type.name() == "ImageReference" -»
+							«ELSEIF type.asGuiType() == "ImageReference" -»
 								«EXPAND ConfigTypeImageReference -»
-							«ELSEIF type.name() == "Database" -»
-								«EXPAND ConfigTypeDatabase -»
-							«ELSEIF type.name() == "Folder" -»
+							«ELSEIF type.asGuiType() == "Folder" -»
 								«EXPAND ConfigTypeFolder -»
-							«ELSEIF type.name() == "None" -»
+							«ELSEIF type.asGuiType() == "Database" -»
+								«EXPAND ConfigTypeDatabase -»
+							«ELSEIF type.asGuiType() == "None" -»
 								«EXPAND ConfigTypeNone -»
+							«ELSEIF type.asGuiType() == "Passthrough" -»
+								«EXPAND ConfigTypePassthrough -»
 							«ELSE -»
-								«EXPAND ConfigTypeOther( type.name() ) -»
+								«EXPAND ConfigTypeOther( type.asGuiType() ) -»
 							«ENDIF -»
 							«EXPAND OwnOptionConfigCodeImplementation("flexform.xml.own.option.config.code.implementation." + xmiGuid) -»
 							</config>
