@@ -155,8 +155,8 @@ if (TYPO3_MODE === 'BE') {
 		'«emGetExtbaseModuleMainModule().asTypo3MainModul() -»',
 		'«asTypo3ModuleName() -»',
 		'«emGetExtbaseModulePosition() -»',
-		array(«FOREACH emGetExtbaseModuleControllerActions().classifier.toSet() AS controller SEPARATOR ", "»
-			'«controller.asControllerName()»' => '«FOREACH emGetExtbaseModuleControllerActions().select( o | o.classifier == controller) AS controllerAction SEPARATOR ", "»«controllerAction.asControllerActionName() -»«ENDFOREACH»'«ENDFOREACH»
+		array(«FOREACH emGetExtbaseModuleController() AS controller SEPARATOR ", "»
+			'«controller.asControllerName()»' => '«FOREACH emGetExtbaseModuleControllerActions(this, controller) AS controllerAction SEPARATOR ", "»«controllerAction.asControllerActionName() -»«ENDFOREACH»'«ENDFOREACH»
 		),
 		array(
 			'access' => '«FOREACH emGetExtbaseModuleAccess() AS accessRole SEPARATOR ", " -»«accessRole.asTypo3AccessRole() -»«ENDFOREACH -»',
