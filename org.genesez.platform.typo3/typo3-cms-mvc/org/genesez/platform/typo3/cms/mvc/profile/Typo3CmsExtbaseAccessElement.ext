@@ -2201,5 +2201,33 @@ List[MOperation] emGetExtbasePluginUncachedControllerActions(MElement this) :
 
 
 // PROTECTED REGION ID(accesselement.own.code.438b08e4-1c85-11e3-8460-2388508c54e2) ENABLED START
-// TODO: put your further code here
+
+
+/**
+ * Checks if an element has a utilizable value reference
+ * of the tagged value "switchableControllerAction" of the stereotype "ExtbasePlugin" 
+ * which is not null.
+ *
+ * @return	True if the element has a utilizable tagged value, otherwise false.
+ */
+boolean emHasExtbasePluginUtilizableSwitchableControllerActions(MInterface this) :
+	!emGetExtbasePluginSwitchableControllerActionIndexes().isEmpty;
+
+	
+List[String] emGetExtbasePluginSwitchableControllerActionIndexes(MInterface this) :
+	{}.add({"00", "01", "02", "03", "04", "05", "06", "07", "08", "09"})
+		.add({"10", "11", "12", "13", "14", "15", "16", "17", "18", "19"})
+		.select( index | emHasUtilizableTaggedValue( prExtbasePlugin() , prExtbasePluginSwitchableControllerAction() + index ) );
+
+
+/**
+ * Returns the list of value references of the multi-valued tagged value "switchableControllerAction"
+ * of the stereotype "ExtbasePlugin".
+ * @return	The list of value references of a multi-valued tagged value, otherwise an empty list, if the tagged value is not assigned.
+ * 
+ */
+List[MOperation] emGetExtbasePluginSwitchableControllerActions(MElement this, String index) : 
+	emAllTaggedValueReferences( prExtbasePlugin(), prExtbasePluginSwitchableControllerAction() + index );
+
+
 // PROTECTED REGION END
