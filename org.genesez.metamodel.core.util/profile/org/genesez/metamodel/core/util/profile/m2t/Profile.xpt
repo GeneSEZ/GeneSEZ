@@ -36,6 +36,7 @@
 
 «EXPAND ProfileElement FOREACH allNestedClassifiers().typeSelect( MClass ).sortBy( c | c.name ) -»
 «EXPAND ProfileElement FOREACH allNestedClassifiers().typeSelect( MEnumeration ).sortBy( e | e.name ) -»
+«EXPAND OwnCode -»
 «ENDFILE -»
 «ENDDEFINE»
 
@@ -111,4 +112,14 @@ String «asProfileScriptName() -»() :
 	"«name -»";
 
 
+«ENDDEFINE»
+
+
+«REM»
+	Generates a protected region for own code.
+«ENDREM»
+«DEFINE OwnCode FOR MModel -»
+«PROTECT CSTART '// ' CEND '' ID ( "profile.own.code." + xmiGuid )»
+// TODO: put your further code here
+«ENDPROTECT»
 «ENDDEFINE»
