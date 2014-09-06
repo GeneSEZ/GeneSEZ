@@ -65,7 +65,7 @@ if (!defined ('TYPO3_MODE')) {
 «REM»
 «ENDREM»
 «DEFINE PluginConfiguration FOR MModel -»
-«EXPAND ConfigurePlugin FOREACH allPlugins().sortBy( p | p.asExtbasePluginName() ) -»
+«EXPAND PluginConfiguration FOREACH allPlugins().sortBy( p | p.asExtbasePluginName() ) -»
 «EXPAND OwnPluginCode("ext_localconf.php.own.plugin.code." + xmiGuid) -»
 
 «ENDDEFINE»
@@ -75,7 +75,7 @@ if (!defined ('TYPO3_MODE')) {
 	Configure all TYPO3 Extbase plugins by using "configurePlugin" from class 
 	"\TYPO3\CMS\Extbase\Utility\ExtensionUtility".
 «ENDREM»
-«DEFINE ConfigurePlugin FOR MInterface -»
+«DEFINE PluginConfiguration FOR MInterface -»
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
 	'«extensionVendorName() -».' . $_EXTKEY,
 	'«asExtbasePluginName() -»',
@@ -105,7 +105,7 @@ if (!defined ('TYPO3_MODE')) {
 «ENDREM»
 «DEFINE CommandControllerConfiguration FOR MModel -»
 if (TYPO3_MODE === 'BE') {
-	«EXPAND RegisterCommandController FOREACH allCommandControllers().sortBy( cc | cc.asGeneralName() ) -»
+	«EXPAND CommandControllerConfiguration FOREACH allCommandControllers().sortBy( cc | cc.asGeneralName() ) -»
 	«EXPAND OwnCommandControllerCode("ext_localconf.php.own.command.controller.code." + xmiGuid) -»
 }
 
@@ -115,7 +115,7 @@ if (TYPO3_MODE === 'BE') {
 «REM»
 	@TODO: refactoring code from replaceAll method
 «ENDREM»
-«DEFINE RegisterCommandController FOR MClass -»
+«DEFINE CommandControllerConfiguration FOR MClass -»
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = '«(namespace() + namespaceSeperator() + asShortGeneralName()).replaceAll("\\\\", "\\\\\\\\") -»';
 
 «ENDDEFINE»
