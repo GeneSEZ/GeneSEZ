@@ -26,7 +26,7 @@ extension org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement;
  * 
  * @return	The list of FlexForm sheets or an empty list.
  */
-cached List[String] allFlexFormSheetsWithoutGeneralSheet(MInterface this) :
+List[String] allFlexFormSheetsWithoutGeneralSheet(MInterface this) :
 	property.typeSelect(MAttribute)
 		.reject( e | e.emGetTypo3FlexFormElementFlexFormSheet() == prTypo3FlexFormSheetGeneral() || !e.emHasTypo3FlexFormElementUtilizableFlexFormSheet() )
 		.collect( e | e.emGetTypo3FlexFormElementFlexFormSheet() ).toSet();
@@ -38,7 +38,7 @@ cached List[String] allFlexFormSheetsWithoutGeneralSheet(MInterface this) :
  * @param	sheetName	The name of the FlexForm sheet.
  * @return	The list of elements for a FlexForm sheet or an empty list.
  */
-cached List[MAttribute] allFlexFormSheetElements(MInterface this, String sheetName) :
+List[MAttribute] allFlexFormSheetElements(MInterface this, String sheetName) :
 	sheetName == prTypo3FlexFormSheetGeneral()
 		? property.typeSelect(MAttribute).select( e | e.emGetTypo3FlexFormElementFlexFormSheet() == prTypo3FlexFormSheetGeneral() || !e.emHasTypo3FlexFormElementUtilizableFlexFormSheet() )
 		: property.typeSelect(MAttribute).select( e | e.emGetTypo3FlexFormElementFlexFormSheet() == sheetName );
