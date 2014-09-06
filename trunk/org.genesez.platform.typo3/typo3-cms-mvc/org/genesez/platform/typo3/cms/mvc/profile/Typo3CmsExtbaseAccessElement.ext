@@ -2270,7 +2270,9 @@ List[MOperation] emGetExtbaseModuleControllerActions(MInterface this, MClass con
  * @return	True if the element has a utilizable tagged value, otherwise false.
  */
 boolean emHasExtbasePluginUtilizableSwitchableControllerActions(MInterface this) :
-	!emGetExtbasePluginSwitchableControllerActionIndexes().isEmpty;
+	{}	.addAll({"00", "01", "02", "03", "04", "05", "06", "07", "08", "09"})
+		.addAll({"10", "11", "12", "13", "14", "15", "16", "17", "18", "19"})
+		.exists( index | emHasUtilizableTaggedValue( prExtbasePlugin() , prExtbasePluginSwitchableControllerAction() + index ) );
 
 	
 List[String] emGetExtbasePluginSwitchableControllerActionIndexes(MInterface this) :
@@ -2285,8 +2287,7 @@ List[String] emGetExtbasePluginSwitchableControllerActionIndexes(MInterface this
  * @return	The list of value references of a multi-valued tagged value, otherwise an empty list, if the tagged value is not assigned.
  * 
  */
-List[MOperation] emGetExtbasePluginSwitchableControllerActions(MElement this, String index) : 
+List[MOperation] emGetExtbasePluginSwitchableControllerActions(MInterface this, String index) : 
 	emAllTaggedValueReferences( prExtbasePlugin(), prExtbasePluginSwitchableControllerAction() + index );
-
 
 // PROTECTED REGION END
