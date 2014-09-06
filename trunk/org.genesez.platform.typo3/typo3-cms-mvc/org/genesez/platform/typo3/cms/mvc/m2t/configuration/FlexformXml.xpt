@@ -62,7 +62,7 @@
 «FILE filePathFlexFormXml() -»
 <T3DataStructure>
 	<sheets>
-		«EXPAND Sheet( prTypo3FlexFormSheetGeneral() ) -»
+		«EXPAND Sheet( "sDEF" ) -»
 		«FOREACH allFlexFormSheetsWithoutGeneralSheet().sortBy( s | s ) AS sheetName -»
 		«EXPAND Sheet(sheetName) -»
 		«ENDFOREACH -»
@@ -74,13 +74,13 @@
 
 
 «DEFINE Sheet(String sheetName) FOR MInterface -»
-		<«IF sheetName == prTypo3FlexFormSheetGeneral() -»sDEF«ELSE -»«sheetName -»«ENDIF -»>
+		<«sheetName -»>
 			<ROOT>
 				«EXPAND TceForms(sheetName) -»
 				«EXPAND Type -»
 				«EXPAND El(sheetName) -»
 			</ROOT>
-		</«IF sheetName == prTypo3FlexFormSheetGeneral() -»sDEF«ELSE -»«sheetName -»«ENDIF -»>
+		</«sheetName -»>
 «ENDDEFINE»
 
 
@@ -104,8 +104,8 @@
 «ENDREM»
 «DEFINE El(String sheetName) FOR MInterface -»
 				<el>
-					«IF sheetName == prTypo3FlexFormSheetGeneral() -»«EXPAND SwitchableControllerActions -»«ENDIF -»
-					«REM»«EXPAND SheetElement FOREACH allFlexFormSheetElements(sheetName) -»«ENDREM»
+					«IF sheetName == "sDEF" -»«EXPAND SwitchableControllerActions -»«ENDIF -»
+					«EXPAND SheetElement FOREACH allFlexFormSheetElements(sheetName) -»
 					«EXPAND OwnSheetElementCode("flexform.xml.own.sheet.element.code." + sheetName + "." + xmiGuid) -»
 				</el>
 «ENDDEFINE»
@@ -116,14 +116,14 @@
 «IF emHasExtbasePluginUtilizableSwitchableControllerActions() -»
 					<switchableControllerActions>
                         <TCEforms>
-                            <label>LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:switchablecontrolleraction</label>
+                            <label>LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:switchableControllerAction</label>
                             <onChange>reload</onChange>
                             <config>
                                 <type>select</type>
                                 <items type="array">
                                 	«FOREACH emGetExtbasePluginSwitchableControllerActionIndexes() AS switchableControllerActionIndex -»
                                 	<numIndex index="«switchableControllerActionIndex.asInteger() -»" type="array">
-                                        <numIndex index="0">LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:switchablecontrolleraction.«switchableControllerActionIndex -»</numIndex>
+                                        <numIndex index="0">LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:switchableControllerAction.«switchableControllerActionIndex.asInteger() -»</numIndex>
                                         <numIndex index="1">«FOREACH emGetExtbasePluginSwitchableControllerActions(switchableControllerActionIndex) AS controllerAction SEPARATOR "; "»«controllerAction.classifier.asControllerName() -»->«controllerAction.asControllerActionName() -»«ENDFOREACH -»</numIndex>
                                     </numIndex>
                                 	«ENDFOREACH -»
@@ -158,7 +158,7 @@
 «ENDREM»
 «DEFINE TCEforms FOR MAttribute -»
 						<TCEforms>
-							«REM»«EXPAND Label -»«ENDREM»
+							«EXPAND Label -»
 							«EXPAND Config -»
 						</TCEforms>
 «ENDDEFINE»
@@ -167,7 +167,7 @@
 «REM» 
 «ENDREM»
 «DEFINE Label FOR MAttribute -»
-							<label>LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:«asLocalizationName() -»</label>
+							<label>LLL:EXT:«extensionKey() -»/«((MInterface) classifier).filePathLocallangPluginXlf() -»:«asLocalizationName() -»</label>
 «ENDDEFINE»
 
 
@@ -175,6 +175,7 @@
 «ENDREM»
 «DEFINE Config FOR MAttribute -»
 							<config>
+							«IF isTypo3PrimitiveType( type.asGeneralName() ) && type.asGuiType() != "Association" -»
 							«IF type.asGuiType() == "Input" -»
 								«EXPAND ConfigTypeInput -»
 							«ELSEIF type.asGuiType() == "Integer" -»
@@ -224,216 +225,274 @@
 							«ELSE -»
 								«EXPAND ConfigTypeOther( type.asGuiType() ) -»
 							«ENDIF -»
+							«ELSE -»
+							«IF multiplicity.isSingleValued() -»
+								«EXPAND ConfigTypeToOneUnidirectional -»
+							«ELSE -»
+								«EXPAND ConfigTypeToManyUnidirectional -»
+							«ENDIF -»
+							«ENDIF -»
 							«EXPAND OwnOptionConfigCodeImplementation("flexform.xml.own.option.config.code.implementation." + xmiGuid) -»
 							</config>
 «ENDDEFINE»
 
 
-«REM» 
+«REM»
 «ENDREM»
 «DEFINE ConfigTypeInput FOR MAttribute -»
-«EXPAND ConfigType("input") -»
-«EXPAND ConfigSize(30) -»
-«EXPAND ConfigEval({}) -»
-«EXPAND ConfigDefault(null) -»
-«EXPAND ConfigMax(null) -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE ConfigTypeString FOR MAttribute -»
-«EXPAND ConfigType("input") -»
-«EXPAND ConfigSize(30) -»
-«EXPAND ConfigEval({"trim"}) -»
-«EXPAND ConfigDefault(null) -»
-«EXPAND ConfigMax(null) -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(30) -»
+								«EXPAND ConfigMax(null) -»
+								«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigEval(null) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ConfigTypeInteger FOR MAttribute -»
-«EXPAND ConfigType("input") -»
-«EXPAND ConfigSize(30) -»
-«EXPAND ConfigEval({"int"}) -»
-«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(30) -»
+								«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigEval({"int"}) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ConfigTypeFloat FOR MAttribute -»
-«EXPAND ConfigType("input") -»
-«EXPAND ConfigSize(30) -»
-«EXPAND ConfigEval({"double2"}) -»
-«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(30) -»
+								«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigEval({"double2"}) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ConfigTypeDateTime FOR MAttribute -»
-«EXPAND ConfigType("input") -»
-«EXPAND ConfigSize(12) -»
-«EXPAND ConfigEval({"datetime"}) -»
-«EXPAND ConfigDefault("time()") -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(16) -»
+								«EXPAND ConfigDefault("time()") -»
+								«EXPAND ConfigEval({"datetime"}) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeDate FOR MAttribute -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(20) -»
+								«EXPAND ConfigDefault("time()") -»
+								«EXPAND ConfigEval({"date"}) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeTime FOR MAttribute -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(5) -»
+								«EXPAND ConfigDefault("time()") -»
+								«EXPAND ConfigEval({"time"}) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeTimeSec FOR MAttribute -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(8) -»
+								«EXPAND ConfigDefault("time()") -»
+								«EXPAND ConfigEval({"timesec"}) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeString FOR MAttribute -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(30) -»
+								«EXPAND ConfigMax(null) -»
+								«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigEval({"trim"}) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypePassword FOR MAttribute -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(30) -»
+								«EXPAND ConfigMax(null) -»
+								«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigEval({"password"}) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ConfigTypeText FOR MAttribute -»
-«EXPAND ConfigType("text") -»
-«EXPAND ConfigCols(40) -»
-«EXPAND ConfigRows(15) -»
-«EXPAND ConfigEval({"trim"}) -»
-«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigType("text") -»
+								«EXPAND ConfigCols(40) -»
+								«EXPAND ConfigRows(15) -»
+								«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigEval({"trim"}) -»
+«ENDDEFINE»
+
+
+«REM»
+	@todo	Wizards RTE
+«ENDREM»
+«DEFINE ConfigTypeRichText FOR MAttribute -»
+								«EXPAND ConfigType("text") -»
+								«EXPAND ConfigCols(40) -»
+								«EXPAND ConfigRows(15) -»
+								«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigEval({"trim"}) -»
+								«EXPAND ConfigDefaultExtras("'richtext:rte_transform[flag=rte_enabled|mode=ts]'") -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ConfigTypeCheck FOR MAttribute -»
-«EXPAND ConfigType("check") -»
-«EXPAND ConfigCols(5) -»
-«EXPAND ConfigEval({"unique"}) -»
-«EXPAND ConfigItems -»
-«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigType("check") -»
+								«EXPAND ConfigItems(null) -»
+								«EXPAND ConfigCols(5) -»
+								«EXPAND ConfigDefault(null) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ConfigTypeBoolean FOR MAttribute -»
-«EXPAND ConfigType("check") -»
-«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigType("check") -»
+								«EXPAND ConfigDefault(null) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ConfigTypeRadio FOR MAttribute -»
-«EXPAND ConfigType("radio") -»
-«EXPAND ConfigDefault("") -»
-«EXPAND ConfigItems -»
+								«EXPAND ConfigType("radio") -»
+								«EXPAND ConfigItems(null) -»
+								«EXPAND ConfigDefault(null) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ConfigTypeSelect FOR MAttribute -»
-«EXPAND ConfigType("select") -»
-«EXPAND ConfigSize(1) -»
-«EXPAND ConfigAutoMaxSize(null) -»
-«EXPAND ConfigEval({}) -»
-«EXPAND ConfigMinitems(0) -»
-«EXPAND ConfigMaxitems(1) -»
-«EXPAND ConfigItems -»
-«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigType("select") -»
+								«EXPAND ConfigItems(null) -»
+								«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigSize(1) -»
+								«EXPAND ConfigMinitems(0) -»
+								«EXPAND ConfigMaxitems(1) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ConfigTypeFile FOR MAttribute -»
-«EXPAND ConfigType("group") -»
-«EXPAND ConfigInternalType("file") -»
-«EXPAND ConfigSize(1) -»
-«EXPAND ConfigAutoMaxSize(null) -»
-«EXPAND ConfigMinitems(0) -»
-«EXPAND ConfigMaxitems(1) -»
-«EXPAND ConfigAllowed("*") -»
-«EXPAND ConfigDisallowed("php") -»
-«EXPAND ConfigMaxSize(null) -»
-«EXPAND ConfigShowThumbs(true) -»
-«EXPAND ConfigUploadfolder("uploads/" + fullQualifiedExtensionNameToLowerCase()) -»
+								«EXPAND ConfigType("group") -»
+								«EXPAND ConfigInternalType("file") -»
+								«EXPAND ConfigAllowed("*") -»
+								«EXPAND ConfigDisallowed("php") -»
+								«EXPAND ConfigMaxSize("$GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize']") -»
+								«EXPAND ConfigUploadfolder( dirPathExtensionUploadFolder() ) -»
+								«EXPAND ConfigShowThumbs(true) -»
+								«EXPAND ConfigSize(1) -»
+								«EXPAND ConfigMinitems(0) -»
+								«EXPAND ConfigMaxitems(1) -»
 «ENDDEFINE»
+
 
 
 «REM» 
 «ENDREM»
 «DEFINE ConfigTypeFileReference FOR MAttribute -»
-«EXPAND ConfigType("group") -»
-«EXPAND ConfigInternalType("file_reference") -»
-«EXPAND ConfigSize(1) -»
-«EXPAND ConfigAutoMaxSize(null) -»
-«EXPAND ConfigMinitems(0) -»
-«EXPAND ConfigMaxitems(1) -»
-«EXPAND ConfigAllowed("*") -»
-«EXPAND ConfigDisallowed("php") -»
-«EXPAND ConfigMaxSize(null) -»
-«EXPAND ConfigShowThumbs(true) -»
-«EXPAND ConfigUploadfolder("uploads/" + fullQualifiedExtensionNameToLowerCase()) -»
+								«EXPAND ConfigType("group") -»
+								«EXPAND ConfigInternalType("file_reference") -»
+								«EXPAND ConfigAllowed("*") -»
+								«EXPAND ConfigDisallowed("php") -»
+								«EXPAND ConfigMaxSize("$GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize']") -»
+								«EXPAND ConfigUploadfolder( dirPathExtensionUploadFolder() ) -»
+								«EXPAND ConfigShowThumbs(true) -»
+								«EXPAND ConfigSize(1) -»
+								«EXPAND ConfigMinitems(0) -»
+								«EXPAND ConfigMaxitems(1) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ConfigTypeImage FOR MAttribute -»
-«EXPAND ConfigType("group") -»
-«EXPAND ConfigInternalType("file") -»
-«EXPAND ConfigSize(1) -»
-«EXPAND ConfigAutoMaxSize(null) -»
-«EXPAND ConfigMinitems(0) -»
-«EXPAND ConfigMaxitems(1) -»
-«EXPAND ConfigAllowed("gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai") -»
-«EXPAND ConfigDisallowed("") -»
-«EXPAND ConfigMaxSize(null) -»
-«EXPAND ConfigShowThumbs(true) -»
-«EXPAND ConfigUploadfolder("uploads/" + fullQualifiedExtensionNameToLowerCase()) -»
+								«EXPAND ConfigType("group") -»
+								«EXPAND ConfigInternalType("file") -»
+								«EXPAND ConfigAllowed("gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai") -»
+								«EXPAND ConfigDisallowed("") -»
+								«EXPAND ConfigMaxSize("$GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize']") -»
+								«EXPAND ConfigUploadfolder( dirPathExtensionUploadFolder() ) -»
+								«EXPAND ConfigShowThumbs(true) -»
+								«EXPAND ConfigSize(1) -»
+								«EXPAND ConfigMinitems(0) -»
+								«EXPAND ConfigMaxitems(1) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ConfigTypeImageReference FOR MAttribute -»
-«EXPAND ConfigType("group") -»
-«EXPAND ConfigInternalType("file_reference") -»
-«EXPAND ConfigSize(1) -»
-«EXPAND ConfigAutoMaxSize(null) -»
-«EXPAND ConfigMinitems(0) -»
-«EXPAND ConfigMaxitems(1) -»
-«EXPAND ConfigAllowed("gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai") -»
-«EXPAND ConfigDisallowed("") -»
-«EXPAND ConfigMaxSize(null) -»
-«EXPAND ConfigShowThumbs(true) -»
-«EXPAND ConfigUploadfolder("uploads/" + fullQualifiedExtensionNameToLowerCase()) -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE ConfigTypeDatabase FOR MAttribute -»
-«EXPAND ConfigType("group") -»
-«EXPAND ConfigInternalType("db") -»
-«EXPAND ConfigSize(1) -»
-«EXPAND ConfigAutoMaxSize(null) -»
-«EXPAND ConfigMinitems(0) -»
-«EXPAND ConfigMaxitems(1) -»
-«EXPAND ConfigAllowed("*") -»
-«EXPAND ConfigShowThumbs(true) -»
-«EXPAND ConfigPrependTname(null) -»
+								«EXPAND ConfigType("group") -»
+								«EXPAND ConfigInternalType("file_reference") -»
+								«EXPAND ConfigAllowed("gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai") -»
+								«EXPAND ConfigDisallowed("") -»
+								«EXPAND ConfigMaxSize("$GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize']") -»
+								«EXPAND ConfigUploadfolder( dirPathExtensionUploadFolder() ) -»
+								«EXPAND ConfigShowThumbs(true) -»
+								«EXPAND ConfigSize(1) -»
+								«EXPAND ConfigMinitems(0) -»
+								«EXPAND ConfigMaxitems(1) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ConfigTypeFolder FOR MAttribute -»
-«EXPAND ConfigType("group") -»
-«EXPAND ConfigInternalType("folder") -»
-«EXPAND ConfigSize(1) -»
-«EXPAND ConfigAutoMaxSize(null) -»
-«EXPAND ConfigMinitems(0) -»
-«EXPAND ConfigMaxitems(1) -»
-«EXPAND ConfigShowThumbs(true) -»
+								«EXPAND ConfigType("group") -»
+								«EXPAND ConfigInternalType("folder") -»
+								«EXPAND ConfigSize(1) -»
+								«EXPAND ConfigMinitems(0) -»
+								«EXPAND ConfigMaxitems(1) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeDatabase FOR MAttribute -»
+								«EXPAND ConfigType("group") -»
+								«EXPAND ConfigInternalType("db") -»
+								«EXPAND ConfigAllowed("*") -»
+								«EXPAND ConfigDisallowed("") -»
+								«EXPAND ConfigSize(1) -»
+								«EXPAND ConfigMinitems(0) -»
+								«EXPAND ConfigMaxitems(1) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ConfigTypeNone FOR MAttribute -»
-«EXPAND ConfigType("none") -»
+								«EXPAND ConfigType("none") -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypePassthrough FOR MAttribute -»
+								«EXPAND ConfigType("passthrough") -»
 «ENDDEFINE»
 
 
@@ -443,84 +502,89 @@
 «ENDDEFINE»
 
 
-«REM»
+«REM» 
 «ENDREM»
-«DEFINE ConfigAllowed(String defaultAllowed) FOR MAttribute -»
-«LET getT3TCxAllowedAllowed() AS allowed -» 
-«IF allowed != "" || defaultAllowed != null -»
-								<allowed>«IF allowed != "" -»«allowed -»«ELSE -»«defaultAllowed -»«ENDIF -»</allowed>
-«ENDIF -»
-«ENDLET -»
+«DEFINE ConfigTypeToOneUnidirectional FOR MAttribute -»
+								«EXPAND ConfigType("select") -»
+								«EXPAND ConfigItems -»
+								«EXPAND ConfigForeignTable -»
+								«EXPAND ConfigMinitems -»
+								«EXPAND ConfigMaxitems -»
+								«EXPAND ConfigSize(1) -»
 «ENDDEFINE»
 
 
-«REM»
+«REM» 
 «ENDREM»
-«DEFINE ConfigAutoMaxSize(Integer defaultAutoSizeMax) FOR MAttribute -»
-«LET getT3TCxAutoSizeMaxAutoSizeMax() AS autoSizeMax -» 
-«IF autoSizeMax != "" || defaultAutoSizeMax != null -»
-								<autoSizeMax>«IF autoSizeMax != "" -»«autoSizeMax -»«ELSE -»«defaultAutoSizeMax -»«ENDIF -»</autoMaxSize>
-«ENDIF -»
-«ENDLET -»
+«DEFINE ConfigTypeToManyUnidirectional FOR MAttribute -»
+								«EXPAND ConfigType("select") -»
+								«EXPAND ConfigForeignTable -»
+								«EXPAND ConfigMM -»
+								«EXPAND ConfigSize(10) -»
+								«EXPAND ConfigMinitems -»
+								«EXPAND ConfigMaxitems -»
 «ENDDEFINE»
 
 
-«REM»
-«ENDREM»
-«DEFINE ConfigCols(Integer defaultCols) FOR MAttribute -»
-«LET getT3TCxColsCols() AS cols -» 
-«IF cols != "" || defaultCols != null -»
-								<cols>«IF cols != "" -»«cols -»«ELSE -»«defaultCols -»«ENDIF -»</cols>
-«ENDIF -»
-«ENDLET -»
-«ENDDEFINE»
+
+
+
+
+«REM» -- Type Settings -- «ENDREM»
 
 
 «REM»
 «ENDREM»
-«DEFINE ConfigDefault(String defaultDefaultValue) FOR MAttribute -»
-«IF hasDefaultValue() || defaultDefaultValue != null -»
-								<default>«IF hasDefaultValue() -»«defaultvalue -»«ELSE -»«defaultDefaultValue -»«ENDIF -»</default>
+«DEFINE ConfigType(String defaultType) FOR MProperty -»
+«IF defaultType != null -»
+								<type>«defaultType -»</type>
 «ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE ConfigDisallowed(String defaultDisallowed) FOR MAttribute -»
-«LET getT3TCxDisallowedDisallowed() AS disallowed -» 
-«IF disallowed != "" || defaultDisallowed != null -»
-								<disallowed>«IF disallowed != "" -»«disallowed -»«ELSE -»«defaultDisallowed -»«ENDIF -»</disallowed>
-«ENDIF -»
-«ENDLET -»
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE ConfigEval(List[String] defaultEvals) FOR MAttribute -»
-«IF !getT3TCxEvalEvals().isEmpty || !defaultEvals.isEmpty -»
-								<eval>«FOREACH allTCxEvals(defaultEvals) AS eval SEPARATOR ", "»«eval.asT3TCxEvalType() -»«ENDFOREACH -»</eval>
+«DEFINE ConfigDbType(String defaultDbType) FOR MProperty -»
+«IF defaultDbType != null -»
+								<dbType>'«defaultDbType -»'</dbType>
 «ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE ConfigInternalType(String internalType) FOR MAttribute -»
-								<internal_type>«internalType -»</internal_type>
+«DEFINE ConfigInternalType(String defaultInternalType) FOR MProperty -»
+«IF defaultInternalType != null -»
+								<internal_type>'«defaultInternalType -»'</internal_type>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM» -- Graphical User Interface Settings -- «ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE ConfigCols(Integer defaultCols) FOR MProperty -»
+«IF defaultCols != null || emHasGuiPropertyWidthUtilizableWidth() -»
+								<cols>«IF emHasGuiPropertyWidthUtilizableWidth() -»«emGetGuiPropertyWidthWidth() -»«ELSE -»«defaultCols -»«ENDIF -»</cols>
+«ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE ConfigItems FOR MAttribute -»
-«IF !getT3TCxItemsItems().isEmpty -»
+«DEFINE ConfigRows(Integer defaultRows) FOR MProperty -»
+«IF defaultRows != null || emHasGuiPropertyHeightUtilizableHeight() -»
+								<rows>«IF emHasGuiPropertyHeightUtilizableHeight() -»«emGetGuiPropertyHeightHeight() -»«ELSE -»«defaultRows -»«ENDIF -»</rows>
+«ENDIF -»
+«ENDDEFINE»
+
+
 «REM»
-				'items' => array(«FOREACH getT3TCxItemsItems() AS item SEPARATOR "," -»
-					array(«FOREACH item.split("=") AS kv SEPARATOR " => "»«kv.trim() -»«ENDFOREACH -»)
-				«ENDFOREACH -»),
 «ENDREM»
+«DEFINE ConfigSize(Integer defaultSize) FOR MProperty -»
+«IF defaultSize != null || emHasGuiPropertyWidthUtilizableWidth() -»
+								<size>«IF emHasGuiPropertyWidthUtilizableWidth() -»«emGetGuiPropertyWidthWidth() -»«ELSE -»«defaultSize -»«ENDIF -»</size>
 «ENDIF -»
 «ENDDEFINE»
 
@@ -528,107 +592,215 @@
 «REM»
 hier evtl. versuch über sql type maximum herauszufinden
 «ENDREM»
-«DEFINE ConfigMax(Integer defaultMax) FOR MAttribute -»
-«LET getT3TCxMaxMax() AS max -» 
-«IF max != "" || defaultMax != null -»
-								<max>«IF max != "" -»«max -»«ELSE -»«defaultMax -»«ENDIF -»</max>
+«DEFINE ConfigMax(Integer defaultMax) FOR MProperty -»
+«IF defaultMax != null || emHasGuiPropertyMaxLengthUtilizableMaxLength() -»
+								<max>«IF emHasGuiPropertyMaxLengthUtilizableMaxLength() -»«emGetGuiPropertyMaxLengthMaxLength() -»«ELSE -»«defaultMax -»«ENDIF -»</max>
 «ENDIF -»
-«ENDLET -»
+«ENDDEFINE»
+
+
+«REM» -- Default Settings -- «ENDREM»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigDefault(String defaultDefault) FOR MAttribute -»
+«IF defaultDefault != null || hasDefaultValue() -»
+								<default>«IF hasDefaultValue() -»«defaultvalue -»«ELSE -»«defaultDefault -»«ENDIF -»</default>
+«ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE ConfigMaxitems(Integer defaultMaxitems) FOR MAttribute -»
-«LET getT3TCxMaxitemsMaxitems() AS maxitems -» 
-«IF maxitems != "" || defaultMaxitems != null -»
-								<maxitems>«IF maxitems != "" -»«maxitems -»«ELSE -»«defaultMaxitems -»«ENDIF -»</maxitems>
+«DEFINE ConfigDefaultExtras(String defaultDefaultExtras) FOR MProperty -»
+«IF defaultDefaultExtras != null -»
+								<defaultExtras>'«defaultDefaultExtras -»'</defaultExtras>
 «ENDIF -»
-«ENDLET -»
+«ENDDEFINE»
+
+
+«REM» -- File Handling Settings -- «ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE ConfigAllowed(String defaultAllowed) FOR MProperty -»
+«IF defaultAllowed != null || emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»
+								<allowed>'«IF emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»«emGetGuiPropertyAllowedFileExtensionsAllowedFileExtensions() -»«ELSE -»«defaultAllowed -»«ENDIF -»'</allowed>
+«ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE ConfigMaxSize(Integer defaultMaxSize) FOR MAttribute -»
-«LET getT3TCxMaxSizeMaxSize() AS maxSize -» 
-«IF maxSize != "" || defaultMaxSize != null -»
-								<max_size>«IF maxSize != "" -»«maxSize -»«ELSE -»«defaultMaxSize -»«ENDIF -»</max_size>
+«DEFINE ConfigDisallowed(String defaultDisallowed) FOR MProperty -»
+«IF defaultDisallowed != null || emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»
+								<disallowed>'«IF emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»«emGetGuiPropertyDisallowedFileExtensionsDisallowedFileExtensions() -»«ELSE -»«defaultDisallowed -»«ENDIF -»'</disallowed>
 «ENDIF -»
-«ENDLET -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE ConfigMinitems(Integer defaultMinitems) FOR MAttribute -»
-«LET getT3TCxMinitemsMinitems() AS minitems -» 
-«IF minitems != "" || defaultMinitems != null -»
-								<minitems>«IF minitems != "" -»«minitems -»«ELSE -»«defaultMinitems -»«ENDIF -»</minitems>
+«DEFINE ConfigMaxSize(String defaultMaxSize) FOR MProperty -»
+«IF defaultMaxSize != null || emHasGuiPropertyMaxFileSizeUtilizableMaxFileSize() -»
+								<max_size>«IF emHasGuiPropertyMaxFileSizeUtilizableMaxFileSize() -»«emGetGuiPropertyMaxFileSizeMaxFileSize() -»«ELSE -»«defaultMaxSize -»«ENDIF -»</max_size>
 «ENDIF -»
-«ENDLET -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE ConfigPrependTname(Boolean defaultPrependTname) FOR MAttribute -»
-«LET getT3TCxPrependTnamePrependTname() AS prependTname -» 
-«IF prependTname != "" || defaultPrependTname != null -»
-								<prepend_tname>«IF prependTname != "" -»«prependTname -»«ELSE -»«defaultPrependTname -»«ENDIF -»</prepend_tname>
+«DEFINE ConfigShowThumbs(Boolean defaultShowThumbs) FOR MProperty -»
+«IF defaultShowThumbs != null || emHasGuiPropertyShowThumbnailsUtilizableShowThumbnails() -»
+								<show_thumbs>«IF emHasGuiPropertyShowThumbnailsUtilizableShowThumbnails() -»«emGetGuiPropertyShowThumbnailsShowThumbnails().asTypo3Boolean() -»«ELSE -»«defaultShowThumbs.asTypo3Boolean() -»«ENDIF -»</show_thumbs>
 «ENDIF -»
-«ENDLET -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE ConfigRows(Integer defaultRows) FOR MAttribute -»
-«LET getT3TCxRowsRows() AS rows -» 
-«IF rows != "" || defaultRows != null -»
-								<rows>«IF rows != "" -»«rows -»«ELSE -»«defaultRows -»«ENDIF -»</rows>
+«DEFINE ConfigUploadfolder(String defaultUploadfolder) FOR MProperty -»
+«IF defaultUploadfolder != null || emHasGuiPropertyUploadFolderUtilizableUploadFolder() -»
+								<uploadfolder>'«IF emHasGuiPropertyUploadFolderUtilizableUploadFolder() -»«emGetGuiPropertyUploadFolderUploadFolder() -»«ELSE -»«defaultUploadfolder -»«ENDIF -»'</uploadfolder>
 «ENDIF -»
-«ENDLET -»
-«ENDDEFINE»
-
-«REM»
-«ENDREM»
-«DEFINE ConfigShowThumbs(Boolean defaultShowThumbs) FOR MAttribute -»
-«LET getT3TCxShowThumbsShowThumbs() AS showThumbs -» 
-«IF showThumbs != "" || defaultShowThumbs != null -»
-								<show_thumbs>«IF showThumbs != "" -»«showThumbs -»«ELSE -»«defaultShowThumbs -»«ENDIF -»</show_thumbs>
-«ENDIF -»
-«ENDLET -»
 «ENDDEFINE»
 
 
+«REM» -- Validation Settings -- «ENDREM»
+
 «REM»
 «ENDREM»
-«DEFINE ConfigSize(Integer defaultSize) FOR MAttribute -»
-«LET getT3TCxSizeSize() AS size -» 
-«IF size != "" || defaultSize != null -»
-								<size>«IF size != "" -»«size -»«ELSE -»«defaultSize -»«ENDIF -»</size>
+«DEFINE ConfigEval(List[String] defaultEvals) FOR MProperty -»
+«IF defaultEvals != null && !defaultEvals.isEmpty -»
+								<eval>'«FOREACH defaultEvals AS eval SEPARATOR ", "»«eval -»«ENDFOREACH -»'</eval>
 «ENDIF -»
-«ENDLET -»
+«ENDDEFINE»
+
+
+«REM» -- Foreign Table + Intermediate Table Settings -- «ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE ConfigForeignTable FOR MProperty -»
+								<foreign_table>'«type.asPersistenceName() -»'</foreign_table>
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE ConfigType(String type) FOR MAttribute -»
-								<type>«type -»</type>
+«DEFINE ConfigForeignField FOR MAssociationRole -»
+								<foreign_field>'«opposite.asConfigurationName() -»'</foreign_field>
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE ConfigUploadfolder(String defaultUploadfolder) FOR MAttribute -»
-«LET getT3TCxUploadfolderUploadfolder() AS uploadfolder -» 
-«IF uploadfolder != "" || defaultUploadfolder != null -»
-								<uploadfolder>«IF uploadfolder != "" -»«uploadfolder.replaceFirst("EXT", fullQualifiedExtensionNameToLowerCase()) -»«ELSE -»«defaultUploadfolder -»«ENDIF -»</uploadfolder>
-«ENDIF -»
-«ENDLET -»
+«DEFINE ConfigMM FOR MProperty -»
+«REM»
+								<MM>'«asIntermediateTableName(class) -»'</MM>
+«ENDREM»
 «ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigMMOppositeField FOR MAssociationRole -»
+								<MM_opposite_field>'«opposite.asConfigurationName() -»'</MM_opposite_field>
+«ENDDEFINE»
+
+
+
+«REM» -- Items Settings -- «ENDREM»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigItems(List[String] defaultItems) FOR MProperty -»
+«IF emHasGuiPropertyItemsUtilizableItems() -»
+				'items>array(
+					«FOREACH emGetGuiPropertyItemsItems() AS item -»
+					array(«item -»),
+					«ENDFOREACH -»
+				),
+«ELSEIF defaultItems != null && !defaultItems.isEmpty -»
+				'items>array(
+					«FOREACH defaultItems AS item -»
+					array(«item -»),
+					«ENDFOREACH -»
+				),
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE ConfigItems FOR MProperty -»
+«IF multiplicity.lowerBound < 1 -»
+				'items>array(
+					array('', 0),
+				),
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigMinitems(Integer defaultMinitems) FOR MProperty -»
+«IF defaultMinitems != null || emHasGuiPropertyMinItemsUtilizableMinItems() -»
+								<minitems>«IF emHasGuiPropertyMaxItemsUtilizableMaxItems() -»«emGetGuiPropertyMinItemsMinItems() -»«ELSE -»«defaultMinitems -»«ENDIF -»</minitems>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE ConfigMinitems FOR MAttribute -»
+								<minitems>«IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»</minitems>
+«ENDDEFINE»
+
+
+«DEFINE ConfigMinitems FOR MAssociationRole -»
+								<minitems>«IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»</minitems>
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigMaxitems(Integer defaultMaxitems) FOR MProperty -»
+«IF defaultMaxitems != null || emHasGuiPropertyMaxItemsUtilizableMaxItems() -»
+								<maxitems>«IF emHasGuiPropertyMaxItemsUtilizableMaxItems() -»«emGetGuiPropertyMaxItemsMaxItems() -»«ELSE -»«defaultMaxitems -»«ENDIF -»</maxitems>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE ConfigMaxitems FOR MAttribute -»
+								<maxitems>«IF multiplicity.hasFixedUpperBoundMultiplicity() -»«multiplicity.upperBound -»«ELSE -»999999«ENDIF -»</maxitems>
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigMultiple(String defaultMultiple) FOR MProperty -»
+«IF defaultMultiple != null -»
+								<multiple>«defaultMultiple.asTypo3Boolean() -»</multiple>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE ConfigMultiple FOR MProperty -»
+								«EXPAND ConfigMultiple( (!multiplicity.unique).asTypo3Boolean() ) -»
+«ENDDEFINE»
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 «REM»
