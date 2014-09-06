@@ -10,7 +10,7 @@ import org.genesez.workflow.profile.WfDefault;
 /**
  * Please describe the responsibility of your class in your modeling tool.
  */
-public class Typo3ModelModification extends SimpleScript {
+public class Typo3ModelModificationScript extends SimpleScript {
 	
 	/**
 	 * Method stub for further implementation.
