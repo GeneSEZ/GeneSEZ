@@ -62,9 +62,9 @@
 «FILE filePathFlexFormXml() -»
 <T3DataStructure>
 	<sheets>
-		«EXPAND Sheet( "sDEF" ) -»
+		«EXPAND SheetConfiguration("sDEF") -»
 		«FOREACH allFlexFormSheetsWithoutGeneralSheet().sortBy( s | s ) AS sheetName -»
-		«EXPAND Sheet(sheetName) -»
+		«EXPAND SheetConfiguration(sheetName) -»
 		«ENDFOREACH -»
 		«EXPAND OwnCode("flexform.xml.own.code." + xmiGuid) -» 
 	</sheets>
@@ -73,12 +73,12 @@
 «ENDDEFINE»
 
 
-«DEFINE Sheet(String sheetName) FOR MInterface -»
+«DEFINE SheetConfiguration(String sheetName) FOR MInterface -»
 		<«sheetName -»>
 			<ROOT>
-				«EXPAND TceForms(sheetName) -»
-				«EXPAND Type -»
-				«EXPAND El(sheetName) -»
+				«EXPAND SheetTceForms(sheetName) -»
+				«EXPAND SheetType -»
+				«EXPAND SheetElements(sheetName) -»
 			</ROOT>
 		</«sheetName -»>
 «ENDDEFINE»
@@ -86,7 +86,7 @@
 
 «REM» 
 «ENDREM»
-«DEFINE TceForms(String sheetName) FOR MInterface -»
+«DEFINE SheetTceForms(String sheetName) FOR MInterface -»
 				<TCEforms>
 					<sheetTitle>LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:sheet.«sheetName -»</sheetTitle>
 				</TCEforms>
@@ -95,16 +95,16 @@
 
 «REM» 
 «ENDREM»
-«DEFINE Type FOR MInterface -»
+«DEFINE SheetType FOR MInterface -»
 				<type>array</type>
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE El(String sheetName) FOR MInterface -»
+«DEFINE SheetElements(String sheetName) FOR MInterface -»
 				<el>
-					«IF sheetName == "sDEF" -»«EXPAND SwitchableControllerActions -»«ENDIF -»
+					«IF sheetName == "sDEF" -»«EXPAND SheetElementSwitchableControllerActions -»«ENDIF -»
 					«EXPAND SheetElement FOREACH allFlexFormSheetElements(sheetName) -»
 					«EXPAND OwnSheetElementCode("flexform.xml.own.sheet.element.code." + sheetName + "." + xmiGuid) -»
 				</el>
@@ -112,7 +112,7 @@
 
 
 
-«DEFINE SwitchableControllerActions FOR MInterface -»
+«DEFINE SheetElementSwitchableControllerActions FOR MInterface -»
 «IF emHasExtbasePluginUtilizableSwitchableControllerActions() -»
 					<switchableControllerActions>
                         <TCEforms>
@@ -139,7 +139,7 @@
 «ENDREM»
 «DEFINE SheetElement FOR MAttribute -»
 					<settings.«asGeneralName() -»>
-						«EXPAND TCEforms -»
+						«EXPAND SheetElementTceForms -»
 					</settings.«asGeneralName() -»>
 «ENDDEFINE»
 
@@ -156,25 +156,37 @@
 
 «REM» 
 «ENDREM»
-«DEFINE TCEforms FOR MAttribute -»
+«DEFINE SheetElementTceForms FOR MAttribute -»
 						<TCEforms>
-							«EXPAND Label -»
-							«EXPAND Config -»
+							«EXPAND SheetElementTceFormsLabel -»
+							«EXPAND OwnSheetElementTceFormsCode("flexform.xml.own.option.code.implementation." + xmiGuid) -»
+							«EXPAND SheetElementTceFormsConfig -»
 						</TCEforms>
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE Label FOR MAttribute -»
+«DEFINE SheetElementTceFormsLabel FOR MAttribute -»
 							<label>LLL:EXT:«extensionKey() -»/«((MInterface) classifier).filePathLocallangPluginXlf() -»:«asLocalizationName() -»</label>
+«ENDDEFINE»
+
+
+«REM»
+	Generates a protected region for own TCA Columns Section column code.
+«ENDREM»
+«DEFINE OwnSheetElementTceFormsCode(String id) FOR MProperty -»
+							«PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
+							<!-- TODO: put your further column code here -->
+							«ENDPROTECT»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE Config FOR MAttribute -»
+«DEFINE SheetElementTceFormsConfig FOR MAttribute -»
 							<config>
+								«PROTECT CSTART '<!-- ' CEND ' -->' ID ("flexform.xml.own.option.config.code.implementation." + xmiGuid) DISABLE»
 							«IF isTypo3PrimitiveType( type.asGeneralName() ) && type.asGuiType() != "Association" -»
 							«IF type.asGuiType() == "Input" -»
 								«EXPAND ConfigTypeInput -»
@@ -232,7 +244,7 @@
 								«EXPAND ConfigTypeToManyUnidirectional -»
 							«ENDIF -»
 							«ENDIF -»
-							«EXPAND OwnOptionConfigCodeImplementation("flexform.xml.own.option.config.code.implementation." + xmiGuid) -»
+								«ENDPROTECT»
 							</config>
 «ENDDEFINE»
 
@@ -350,7 +362,7 @@
 								«EXPAND ConfigRows(15) -»
 								«EXPAND ConfigDefault(null) -»
 								«EXPAND ConfigEval({"trim"}) -»
-								«EXPAND ConfigDefaultExtras("'richtext:rte_transform[flag=rte_enabled|mode=ts]'") -»
+								«EXPAND ConfigDefaultExtras("richtext:rte_transform[flag=rte_enabled|mode=ts]") -»
 «ENDDEFINE»
 
 
@@ -546,7 +558,7 @@
 «ENDREM»
 «DEFINE ConfigDbType(String defaultDbType) FOR MProperty -»
 «IF defaultDbType != null -»
-								<dbType>'«defaultDbType -»'</dbType>
+								<dbType>«defaultDbType -»</dbType>
 «ENDIF -»
 «ENDDEFINE»
 
@@ -555,7 +567,7 @@
 «ENDREM»
 «DEFINE ConfigInternalType(String defaultInternalType) FOR MProperty -»
 «IF defaultInternalType != null -»
-								<internal_type>'«defaultInternalType -»'</internal_type>
+								<internal_type>«defaultInternalType -»</internal_type>
 «ENDIF -»
 «ENDDEFINE»
 
@@ -615,7 +627,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDREM»
 «DEFINE ConfigDefaultExtras(String defaultDefaultExtras) FOR MProperty -»
 «IF defaultDefaultExtras != null -»
-								<defaultExtras>'«defaultDefaultExtras -»'</defaultExtras>
+								<defaultExtras>«defaultDefaultExtras -»</defaultExtras>
 «ENDIF -»
 «ENDDEFINE»
 
@@ -626,7 +638,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDREM»
 «DEFINE ConfigAllowed(String defaultAllowed) FOR MProperty -»
 «IF defaultAllowed != null || emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»
-								<allowed>'«IF emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»«emGetGuiPropertyAllowedFileExtensionsAllowedFileExtensions() -»«ELSE -»«defaultAllowed -»«ENDIF -»'</allowed>
+								<allowed>«IF emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»«emGetGuiPropertyAllowedFileExtensionsAllowedFileExtensions() -»«ELSE -»«defaultAllowed -»«ENDIF -»</allowed>
 «ENDIF -»
 «ENDDEFINE»
 
@@ -635,7 +647,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDREM»
 «DEFINE ConfigDisallowed(String defaultDisallowed) FOR MProperty -»
 «IF defaultDisallowed != null || emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»
-								<disallowed>'«IF emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»«emGetGuiPropertyDisallowedFileExtensionsDisallowedFileExtensions() -»«ELSE -»«defaultDisallowed -»«ENDIF -»'</disallowed>
+								<disallowed>«IF emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»«emGetGuiPropertyDisallowedFileExtensionsDisallowedFileExtensions() -»«ELSE -»«defaultDisallowed -»«ENDIF -»</disallowed>
 «ENDIF -»
 «ENDDEFINE»
 
@@ -662,7 +674,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDREM»
 «DEFINE ConfigUploadfolder(String defaultUploadfolder) FOR MProperty -»
 «IF defaultUploadfolder != null || emHasGuiPropertyUploadFolderUtilizableUploadFolder() -»
-								<uploadfolder>'«IF emHasGuiPropertyUploadFolderUtilizableUploadFolder() -»«emGetGuiPropertyUploadFolderUploadFolder() -»«ELSE -»«defaultUploadfolder -»«ENDIF -»'</uploadfolder>
+								<uploadfolder>«IF emHasGuiPropertyUploadFolderUtilizableUploadFolder() -»«emGetGuiPropertyUploadFolderUploadFolder() -»«ELSE -»«defaultUploadfolder -»«ENDIF -»</uploadfolder>
 «ENDIF -»
 «ENDDEFINE»
 
@@ -673,7 +685,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDREM»
 «DEFINE ConfigEval(List[String] defaultEvals) FOR MProperty -»
 «IF defaultEvals != null && !defaultEvals.isEmpty -»
-								<eval>'«FOREACH defaultEvals AS eval SEPARATOR ", "»«eval -»«ENDFOREACH -»'</eval>
+								<eval>«FOREACH defaultEvals AS eval SEPARATOR ", "»«eval -»«ENDFOREACH -»</eval>
 «ENDIF -»
 «ENDDEFINE»
 
@@ -683,14 +695,14 @@ hier evtl. versuch über sql type maximum herauszufinden
 «REM»
 «ENDREM»
 «DEFINE ConfigForeignTable FOR MProperty -»
-								<foreign_table>'«type.asPersistenceName() -»'</foreign_table>
+								<foreign_table>«type.asPersistenceName() -»</foreign_table>
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
 «DEFINE ConfigForeignField FOR MAssociationRole -»
-								<foreign_field>'«opposite.asConfigurationName() -»'</foreign_field>
+								<foreign_field>«opposite.asConfigurationName() -»</foreign_field>
 «ENDDEFINE»
 
 
@@ -706,7 +718,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 «REM»
 «ENDREM»
 «DEFINE ConfigMMOppositeField FOR MAssociationRole -»
-								<MM_opposite_field>'«opposite.asConfigurationName() -»'</MM_opposite_field>
+								<MM_opposite_field>«opposite.asConfigurationName() -»</MM_opposite_field>
 «ENDDEFINE»
 
 
@@ -718,17 +730,23 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDREM»
 «DEFINE ConfigItems(List[String] defaultItems) FOR MProperty -»
 «IF emHasGuiPropertyItemsUtilizableItems() -»
-				'items>array(
-					«FOREACH emGetGuiPropertyItemsItems() AS item -»
-					array(«item -»),
+				<items type="array">
+					«FOREACH emGetGuiPropertyItemsItems() AS item ITERATOR iterator -»
+					<numIndex index="«iterator.counter0 -»" type="array">
+						<numIndex index="0">«item.split("=").get(0) -»</numIndex>
+						<numIndex index="1">«item.split("=").get(1) -»</numIndex>
+					</numIndex>
 					«ENDFOREACH -»
-				),
+				</items>
 «ELSEIF defaultItems != null && !defaultItems.isEmpty -»
-				'items>array(
-					«FOREACH defaultItems AS item -»
-					array(«item -»),
+				<items type="array">
+					«FOREACH defaultItems AS item ITERATOR iterator -»
+					<numIndex index="«iterator.counter0 -»" type="array">
+						<numIndex index="0">«item.split("=").get(0) -»</numIndex>
+						<numIndex index="1">«item.split("=").get(1) -»</numIndex>
+					</numIndex>
 					«ENDFOREACH -»
-				),
+				</items>
 «ENDIF -»
 «ENDDEFINE»
 
@@ -790,27 +808,6 @@ hier evtl. versuch über sql type maximum herauszufinden
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-«REM»
-	generates a region for own TCA Column Config code implementations
-«ENDREM»
-«DEFINE OwnOptionConfigCodeImplementation(String id) FOR MAttribute -»
-								«PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
-								<!-- TODO: put your further TCE Flexform Option Config code implementations here -->
-								«ENDPROTECT»
-«ENDDEFINE»
 
 
 «REM»
