@@ -187,7 +187,7 @@
 «DEFINE SheetElementTceFormsConfig FOR MAttribute -»
 							<config>
 								«PROTECT CSTART '<!-- ' CEND ' -->' ID ("flexform.xml.own.sheet.element.config.code." + xmiGuid) DISABLE»
-							«IF isTypo3PrimitiveType( type.asGeneralName() ) && type.asGuiType() != "Association" -»
+						«IF isTypo3PrimitiveType( type.asGeneralName() ) && type.asGuiType() != "Association" -»
 							«IF type.asGuiType() == "Input" -»
 								«EXPAND ConfigTypeInput -»
 							«ELSEIF type.asGuiType() == "Integer" -»
@@ -237,13 +237,13 @@
 							«ELSE -»
 								«EXPAND ConfigTypeOther( type.asGuiType() ) -»
 							«ENDIF -»
-							«ELSE -»
+						«ELSE -»
 							«IF multiplicity.isSingleValued() -»
 								«EXPAND ConfigTypeToOneUnidirectional -»
 							«ELSE -»
 								«EXPAND ConfigTypeToManyUnidirectional -»
 							«ENDIF -»
-							«ENDIF -»
+						«ENDIF -»
 								«ENDPROTECT»
 							</config>
 «ENDDEFINE»
@@ -730,32 +730,29 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDREM»
 «DEFINE ConfigItems(List[String] defaultItems) FOR MProperty -»
 «IF emHasGuiPropertyItemsUtilizableItems() -»
-				<items type="array">
-					«FOREACH emGetGuiPropertyItemsItems() AS item ITERATOR iterator -»
-					<numIndex index="«iterator.counter0 -»" type="array">
-						<numIndex index="0">«item.split("=").get(0) -»</numIndex>
-						<numIndex index="1">«item.split("=").get(1) -»</numIndex>
-					</numIndex>
-					«ENDFOREACH -»
-				</items>
+								<items type="array">
+									«FOREACH emGetGuiPropertyItemsItems() AS item -»
+									«item»
+									«ENDFOREACH -»
+								</items>
 «ELSEIF defaultItems != null && !defaultItems.isEmpty -»
-				<items type="array">
-					«FOREACH defaultItems AS item ITERATOR iterator -»
-					<numIndex index="«iterator.counter0 -»" type="array">
-						<numIndex index="0">«item.split("=").get(0) -»</numIndex>
-						<numIndex index="1">«item.split("=").get(1) -»</numIndex>
-					</numIndex>
-					«ENDFOREACH -»
-				</items>
+								<items type="array">
+									«FOREACH defaultItems AS item -»
+									«item»
+									«ENDFOREACH -»
+								</items>
 «ENDIF -»
 «ENDDEFINE»
 
 
 «DEFINE ConfigItems FOR MProperty -»
 «IF multiplicity.lowerBound < 1 -»
-				'items>array(
-					array('', 0),
-				),
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0"></numIndex>
+										<numIndex index="1">0</numIndex>
+									</numIndex>
+								</items>
 «ENDIF -»
 «ENDDEFINE»
 
