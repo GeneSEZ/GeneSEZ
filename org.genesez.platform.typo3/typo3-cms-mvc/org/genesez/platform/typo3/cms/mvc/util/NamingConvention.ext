@@ -80,7 +80,7 @@ String namespaceVendorNameAndPackageName() :
  *
  * @return	The category name in namespace notation.
  */
-cached String namespaceCategoryName(MClassifier this) :
+String namespaceCategoryName(MClassifier this) :
 	// get the namespace of the classifier inside the model and remove the namespace part 'Classes'
 	dirPath() != dirPathClasses() // e.g. Classes == Classes/Domain/Model
 		? navPackage().qn( dirPathSeparator() )	// e.g. Classes/Domain/Model 
@@ -96,7 +96,7 @@ cached String namespaceCategoryName(MClassifier this) :
  *       then this method returns "GeneSEZ\BlogExample\Domain\Model".
  * @return	The namespace of a classifier.
  */
-cached String namespace(MClassifier this) :
+String namespace(MClassifier this) :
 	namespaceCategoryName().length != 0 
 		? namespaceVendorNameAndPackageName() + namespaceSeperator() + namespaceCategoryName() // e.g. GeneSEZ\BlogExample\Domain\Model 
 		: namespaceVendorNameAndPackageName(); // e.g. GeneSEZ\BlogExample
@@ -302,19 +302,17 @@ cached String asLocalizationName(MClassifier this) :
 		: asShortGeneralName().toLowerCase();
 
 
-// -- "LocalizationCsh" naming context --
-
 /**
- * Formats the name of a classifier in "LocalizationCsh" naming context.
- * E.g.: If the extension key is "blog_example", the corresponding extension package name is "BlogExample"
- *       and the domain object class "Blog" is modeled inside package path "Classes/Domain/Model" 
- *       then this method returns "tx_blogexample_domain_model_blog".
+ * Formats the name of a classifier in "LocalizationFe" naming context.
+ * E.g.: If the domain object class "Blog" is modeled inside package path "Classes/Domain/Model" 
+ *       then this method returns "domain_model_blog".
  * 
  * @return	The formatted classifier name.
- * @see		asConfigurationName(MClassifier this)
  */
-//cached String asLocalizationCshName(MClassifier this) :
-//	"";
+cached String asLocalizationFeName(MClassifier this) :
+	namespaceCategoryName().length != 0
+		? namespaceCategoryName().split("\\\\").toFirstLower().toString("_") + "_" + asShortGeneralName().toFirstLower()
+		: asShortGeneralName().toFirstLower();
 
 
 // -- "Persistence" naming context --
@@ -417,6 +415,21 @@ cached String asConfigurationName(MProperty this) :
  */
 cached String asLocalizationName(MProperty this) :
 	classifier.asLocalizationName() + "." + asConfigurationName();
+
+
+/**
+ * Formats the name of an attribute or association role in "Persistence" naming context.
+ * E.g.: If the extension key is "blog_example", the corresponding extension package name is "BlogExample",
+ *       the domain object class "Blog" is modeled inside package path "Classes/Domain/Model" 
+ *       and the name of the attribute or association role is "blogPosts" 
+ *       then this method returns "tx_blogexample_domain_model_blog.blog_posts".
+ * 
+ * @return	The formatted attribute or association role name.
+ * @see		asLocalizationName(MClassifier this)
+ * @see		asConfigurationName(MProperty this)
+ */
+cached String asLocalizationFeName(MProperty this) :
+	classifier.asLocalizationFeName() + "." + asGeneralName();
 	
 
 // -- "LocalizationCsh" naming context --
@@ -544,7 +557,7 @@ String getAccessorPrefix(MAttribute this) :
  *
  * @return	The formatted name of the getter method.
  */
-cached String asGetAccessorName(MAttribute this) : 
+String asGetAccessorName(MAttribute this) : 
 	getAccessorPrefix() + name.toFirstUpper();
 
 
@@ -564,7 +577,7 @@ String setAccessorPrefix(MAttribute this) :
  * 
  * @return	the formatted name of the setter method
  */
-cached String asSetAccessorName(MAttribute this) : 
+String asSetAccessorName(MAttribute this) : 
 	setAccessorPrefix() + name.toFirstUpper();
 
 
@@ -584,7 +597,7 @@ String addAccessorPrefix(MAttribute this) :
  * 
  * @return	The formatted name of the 'insert in' method.
  */
-cached String asAddAccessorName(MAttribute this) : 
+String asAddAccessorName(MAttribute this) : 
 	addAccessorPrefix() + name.toFirstUpper();
 
 
@@ -604,7 +617,7 @@ String removeAccessorPrefix(MAttribute this) :
  * 
  * @return	The formatted name of the 'remove from' method.
  */
-cached String asRemoveAccessorName(MAttribute this) : 
+String asRemoveAccessorName(MAttribute this) : 
 	removeAccessorPrefix() + name.toFirstUpper();
 
 
@@ -627,7 +640,7 @@ String getAccessorPrefix(MAssociationRole this) :
  *
  * @return	The formatted name of the getter method.
  */
-cached String asGetAccessorName(MAssociationRole this) : 
+String asGetAccessorName(MAssociationRole this) : 
 	getAccessorPrefix() + name.toFirstUpper();
 
 
@@ -647,7 +660,7 @@ String setAccessorPrefix(MAssociationRole this) :
  * 
  * @return	The formatted name of the setter method.
  */
-cached String asSetAccessorName(MAssociationRole this) : 
+String asSetAccessorName(MAssociationRole this) : 
 	setAccessorPrefix() + name.toFirstUpper();
 
 
@@ -667,7 +680,7 @@ String addAccessorPrefix(MAssociationRole this) :
  * 
  * @return	The formatted name of the 'insert in' method.
  */
-cached String asAddAccessorName(MAssociationRole this) : 
+String asAddAccessorName(MAssociationRole this) : 
 	addAccessorPrefix() + name.toFirstUpper();
 
 
@@ -687,7 +700,7 @@ String removeAccessorPrefix(MAssociationRole this) :
  * 
  * @return	The formatted name of the 'remove from' method.
  */
-cached String asRemoveAccessorName(MAssociationRole this) : 
+String asRemoveAccessorName(MAssociationRole this) : 
 	removeAccessorPrefix() + name.toFirstUpper();
 
 
@@ -803,15 +816,73 @@ private create MExternal createExternalTypeOfValidatorStereotype(MStereotype val
  * @param 	operations	The list of operations (controller actions).
  * @return	The list of valid controller actions.
  */
-List[String] asExtbaseControllerActionPairs(List[MOperation] operations) :
-	JAVA org.genesez.platform.typo3.cms.mvc.convention.Conversion.asControllerActionPairs(java.util.List);
+//List[String] asExtbaseControllerActionPairs(List[MOperation] operations) :
+//	JAVA org.genesez.platform.typo3.cms.mvc.convention.Conversion.asControllerActionPairs(java.util.List);
+
+
+//List[String] asExtbaseSwitchableControllerActionPairs(List[MOperation] operations) :
+//	JAVA org.genesez.platform.typo3.cms.mvc.convention.Conversion.asSwitchableControllerActionPairs(java.util.List);
 
 
 // -- TYPO3 CMS specific Extbase plugin conventions ---------------------------------------------------------
 
-String asPluginFlexformName(MInterface this) :
-	"flexform_" + name.toLowerCase();
+/**
+ * Formats an interface name into a TYPO3 CMS plugin name.
+ * E.g.: If the plugin name is "ListPlugin" then this method returns the same plugin name "ListPlugin".
+ *
+ * @return	The TYPO3 CMS plugin name.
+ */
+String asExtbasePluginName(MInterface this):
+	name.toFirstUpper();
+
+
+/**
+ * Formats an interface name into a TYPO3 CMS plugin signature name.
+ * E.g.: If the extension key is "blog_example" and the plugin name is "ListPlugin"
+ *       then this method returns "blogexample_listplugin".
+ *
+ * @return	The TYPO3 CMS FlexForm plugin name.
+ */
+String asExtbasePluginSignatureName(MInterface this) :
+	extensionKeyWithoutUnderscores() + "_" + name.toLowerCase();
+
+
+String asControllerName(MClassifier this) :
+	asShortGeneralName().replaceFirst("(?s)(.*)Controller", "$1");
+
+
+String asControllerActionName(MOperation this) :
+	asGeneralName().replaceFirst("(?s)(.*)Action", "$1");
+
+
+/**
+ * Formats an interface name into a TYPO3 CMS module name.
+ *
+ * @return	The TYPO3 CMS module name.
+ */
+String asTypo3ModuleName(MInterface this) :
+	extensionPrefixWithoutUnderscores() + "_"  + name.toLowerCase();
+
+
+/**
+ * Formats a string value into a TYPO3 CMS main module value.
+ *
+ * @param	mainModule	The main module to format.
+ * @return	The TYPO3 CMS main module.
+ */
+String asTypo3MainModul(String mainModule) :
+	mainModule.toLowerCase();
 	
+	
+/**
+ * Formats a string value into a TYPO3 CMS access role value.
+ *
+ * @param	accessRole	The access role to format.
+ * @return	The TYPO3 CMS access role.
+ */
+String asTypo3AccessRole(String accessRole) :
+	accessRole.toLowerCase();
+
 
 /**
  * Formats a string value into a TYPO3 CMS specific Extbase plugin type value.
