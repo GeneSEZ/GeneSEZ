@@ -96,7 +96,7 @@ if (!defined ('TYPO3_MODE')) {
 	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . '«emGetExtbasePluginIconFileNamePath() -»'«ENDIF»
 );
 
-«EXPAND PluginFlexform -»
+«EXPAND PluginFlexForm -»
 «ENDDEFINE»
 
 
@@ -114,9 +114,8 @@ if (!defined ('TYPO3_MODE')) {
 
 «REM»
 	Generates a plugin flexform is needed.
-	TODO: add has switchableControllerActions
 «ENDREM»
-«DEFINE PluginFlexform FOR MInterface -»
+«DEFINE PluginFlexForm FOR MInterface -»
 «IF hasAttributes() || emHasTypo3FlexFormStereotype() || emHasExtbasePluginUtilizableSwitchableControllerActions() -»
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['«asExtbasePluginSignatureName() -»'] = 'pi_flexform';
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue('«asExtbasePluginSignatureName() -»', 'FILE:EXT:' . $_EXTKEY . '/«filePathFlexFormXml() -»');
