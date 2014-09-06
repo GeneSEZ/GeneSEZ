@@ -14,6 +14,9 @@
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
 «ENDREM»
 
+«REM» use TYPO3 CMS specific Extbase profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::profile::Typo3CmsExtbaseAccessElement»
+
 «REM» use TYPO3 CMS profile scripts «ENDREM»
 «EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
 
@@ -44,9 +47,10 @@
 
 «REM»
 	Processes the generation of "locallang_plugin_<plugin name>.xlf".
+	TODO add switchableControllerActions
 «ENDREM»
 «DEFINE Root FOR MInterface -»
-«IF isPlugin() && hasAttributes() -»
+«IF isPlugin() && ( hasAttributes() || emHasTypo3FlexFormStereotype() || emHasExtbasePluginUtilizableSwitchableControllerActions() ) -»
 «EXPAND LocallangPlugin -»
 «ENDIF -»
 «ENDDEFINE»
@@ -115,10 +119,14 @@
 «DEFINE Body(String languageKey) FOR MInterface -»
 		<body>
 			«EXPAND SheetLocalization(languageKey, "sDEF") -»
-			«FOREACH allFlexFormSheetsWithoutSdef().sortBy( s| s ) AS sheet -»
-			«EXPAND SheetLocalization(languageKey, sheet) -»
+			«FOREACH allFlexFormSheetsWithoutGeneralSheet().sortBy( s | s ) AS sheetName -»
+			«EXPAND SheetLocalization(languageKey, sheetName) -»
 			«ENDFOREACH -»
-			«EXPAND PropertyLocalization(languageKey) FOREACH property.sortBy( p | p.name ) -»
+			«EXPAND SwitchableControllerActionLocalization(languageKey) -»
+			«FOREACH emGetExtbasePluginSwitchableControllerActionIndexes() AS switchableControllerActionIndex -»
+			«EXPAND SwitchableControllerActionIndexLocalization(languageKey, switchableControllerActionIndex) -»
+			«ENDFOREACH -»
+			«EXPAND ElementLocalization(languageKey) FOREACH property.sortBy( e | e.name ) -»
 
 			«EXPAND OwnLocalizations(languageKey) -»
 		</body>
@@ -127,14 +135,34 @@
 
 «DEFINE SheetLocalization(String languageKey, String sheetName) FOR MInterface -»
 			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + languageKey + "." + sheetName + "." + xmiGuid) DISABLE»
-			<trans-unit id="«sheetName -»" xml:space="preserve">
+			<trans-unit id="sheet.«sheetName -»" xml:space="preserve">
 				<source>«sheetName.toFirstUpper() -»</source>
 			</trans-unit>
 			«ENDPROTECT»
 «ENDDEFINE»
 
 
-«DEFINE PropertyLocalization(String languageKey) FOR MProperty -»
+«DEFINE SwitchableControllerActionLocalization(String languageKey) FOR MInterface -»
+«IF emHasExtbasePluginUtilizableSwitchableControllerActions() -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + languageKey + ".switchableControllerAction." + xmiGuid) DISABLE»
+			<trans-unit id="switchableControllerAction" xml:space="preserve">
+				<source>Switchable Controller Action</source>
+			</trans-unit>
+			«ENDPROTECT»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE SwitchableControllerActionIndexLocalization(String languageKey, String index) FOR MInterface -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + languageKey + ".switchableControllerAction." + index.asInteger() + "." + xmiGuid) DISABLE»
+			<trans-unit id="switchableControllerAction.«index.asInteger() -»" xml:space="preserve">
+				<source>Switchable Controller Action «index.asInteger() -»</source>
+			</trans-unit>
+			«ENDPROTECT»
+«ENDDEFINE»
+
+
+«DEFINE ElementLocalization(String languageKey) FOR MProperty -»
 			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + languageKey + "." + xmiGuid) DISABLE»
 			<trans-unit id="«name -»" xml:space="preserve">
 				<source>«name.toFirstUpper() -»</source>
