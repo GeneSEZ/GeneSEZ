@@ -107,7 +107,7 @@
 «DEFINE Derived FOR MAttribute -»
 	«EXPAND Comment::GetAccessor -»
 	«EXPAND Modifier -» function «asGetAccessorName() -»() {
-		«EXPAND OwnCode("php.derived.attribute.own.code." + xmiGuid) -»
+		«EXPAND OwnCode("php.attribute.derived.own.code." + xmiGuid) -»
 	}
 
 «ENDDEFINE»
@@ -120,7 +120,7 @@
 «IF !emHasAccessorGetter("false") -»
 	«EXPAND Comment::GetAccessor -»
 	«EXPAND ModifierAccessor -» function «asGetAccessorName() -»() {
-		«PROTECT CSTART '/* ' CEND ' */' ID ("php.get.attribute.own.code." + xmiGuid) DISABLE»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("php.attribute.get.own.code." + xmiGuid) DISABLE»
 		return $this->«asGeneralName() -»;
 		«ENDPROTECT»
 	}
@@ -136,7 +136,7 @@
 «IF !emHasAccessorSetter("false") -»
 	«EXPAND Comment::SetAccessor -»
 	«EXPAND ModifierAccessor -» function «asSetAccessorName() -»(«EXPAND TypeHintSetAccessor -»$«asGeneralName() -»«EXPAND DefaultValueSetAccessor -») {
-		«PROTECT CSTART '/* ' CEND ' */' ID ("php.set.attribute.own.code." + xmiGuid) DISABLE»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("php.attribute.set.own.code." + xmiGuid) DISABLE»
 		$this->«asGeneralName() -» = $«asGeneralName() -»;
 		«ENDPROTECT»
 	}
@@ -152,7 +152,7 @@
 «IF multiplicity.isMultiValued() && !emHasAccessorAdd("false") -»
 	«EXPAND Comment::AddAccessor -»
 	«EXPAND ModifierAccessor -» function «asAddAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toAdd) {
-		«PROTECT CSTART '/* ' CEND ' */' ID ("php.add.attribute.own.code." + xmiGuid) DISABLE»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("php.attribute.add.own.code." + xmiGuid) DISABLE»
 		$this->«asGeneralName() -»->attach($toAdd);
 		«ENDPROTECT»
 	}
@@ -168,7 +168,7 @@
 «IF multiplicity.isMultiValued() && ! emHasAccessorRemove("false") -»
 	«EXPAND Comment::RemoveAccessor -»
 	«EXPAND ModifierAccessor -» function «asRemoveAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toRemove) {
-		«PROTECT CSTART '/* ' CEND ' */' ID ("php.remove.attribute.own.code." + xmiGuid) DISABLE»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("php.attribute.remove.own.code." + xmiGuid) DISABLE»
 		$this->«asGeneralName() -»->detach($toRemove);
 		«ENDPROTECT»
 	}

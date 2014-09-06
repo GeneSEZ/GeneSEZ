@@ -98,7 +98,7 @@
 «DEFINE Derived FOR MAssociationRole -»
 	«EXPAND Comment::GetAccessor -»
 	«EXPAND ModifierAccessor -» function «asGetAccessorName() -»() {
-		«EXPAND OwnCode("php.derived.association.own.code." + xmiGuid) -»
+		«EXPAND OwnCode("php.association.derived.own.code." + xmiGuid) -»
 	}
 
 «ENDDEFINE»
@@ -123,7 +123,7 @@
 «IF !emHasAccessorGetter("false") -»
 	«EXPAND Comment::GetAccessor -»
 	«EXPAND ModifierAccessor -» function «asGetAccessorName() -»() {
-		«PROTECT CSTART '/* ' CEND ' */' ID ("php.get.association.own.code." + xmiGuid) DISABLE»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("php.association.get.own.code." + xmiGuid) DISABLE»
 		return $this->«asGeneralName() -»;
 		«ENDPROTECT»
 	}
@@ -151,7 +151,7 @@
 «IF !emHasAccessorSetter("false") -»
 	«EXPAND Comment::SetAccessor -»
 	«EXPAND ModifierAccessor -» function «asSetAccessorName() -»(«EXPAND TypeHintSetAccessor -»$«asGeneralName() -»«EXPAND DefaultValueSetAccessor -») {
-		«PROTECT CSTART '/* ' CEND ' */' ID ("php.set.association.own.code." + xmiGuid) DISABLE»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("php.association.set.own.code." + xmiGuid) DISABLE»
 		$this->«asGeneralName() -» = $«asGeneralName() -»;
 		«ENDPROTECT»
 	}
@@ -179,7 +179,7 @@
 «IF multiplicity.isMultiValued() && !emHasAccessorAdd("false") -»
 	«EXPAND Comment::AddAccessor -»
 	«EXPAND ModifierAccessor -» function «asAddAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toAdd) {
-		«PROTECT CSTART '/* ' CEND ' */' ID ("php.add.association.own.code." + xmiGuid) DISABLE»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("php.association.add.own.code." + xmiGuid) DISABLE»
 		$this->«asGeneralName() -»->attach($toAdd);
 		«ENDPROTECT»
 	}
@@ -207,7 +207,7 @@
 «IF multiplicity.isMultiValued() && ! emHasAccessorRemove("false") -»
 	«EXPAND Comment::RemoveAccessor -»
 	«EXPAND ModifierAccessor -» function «asRemoveAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toRemove) {
-		«PROTECT CSTART '/* ' CEND ' */' ID ("php.remove.association.own.code." + xmiGuid) DISABLE»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("php.association.remove.own.code." + xmiGuid) DISABLE»
 		$this->«asGeneralName() -»->detach($toRemove);
 		«ENDPROTECT»
 	}
