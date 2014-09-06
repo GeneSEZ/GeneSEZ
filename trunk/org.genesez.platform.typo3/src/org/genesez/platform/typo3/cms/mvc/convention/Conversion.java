@@ -16,6 +16,7 @@ import org.genesez.metamodel.gcore.MOperation;
  * Utility class for TYPO3 CMS specific Extbase naming conventions.
  * 
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ * @deprecated All functionality is outsourced in Xtend
  */
 public class Conversion {
 
@@ -32,6 +33,7 @@ public class Conversion {
 	 * 
 	 * @param	operations	The list of operations (controller actions).
 	 * @return 	The list of valid controller actions.
+	 * @deprecated
 	 */
 	public static List<String> asControllerActionPairs(List<MOperation> operations) throws Exception {
 		List<String> controllerActions = new ArrayList<String>();
@@ -69,12 +71,34 @@ public class Conversion {
 		
 		return controllerActions;
 	}
+	
+	/**
+	 * @deprecated
+	 */
+	public static List<String> asSwitchableControllerActionPairs(List<MOperation> operations) throws Exception {
+		List<String> switchableControllerActions = new ArrayList<String>();
+		String controllerName;
+		String actionName;
+
+		for (MOperation operation : operations) {
+			// get controller name where the controller action is owned
+			controllerName = getControllerName(operation);
+
+			// get controller action name
+			actionName = getControllerActionName(operation);
+
+			switchableControllerActions.add(controllerName + "->" + actionName);
+		}
+		
+		return switchableControllerActions;
+	}
 
 	/**
 	 * Returns the name of the controller without the 'Controller' suffix for a given controller action.
 	 * 
 	 * @param 	controllerAction	The given controller action.
 	 * @return 	The name of the controller.
+	 * @deprecated
 	 */
 	private static String getControllerName(MOperation controllerAction) {
 		String controllerName;
@@ -94,6 +118,7 @@ public class Conversion {
 	 * 
 	 * @param	controllerAction	The given controller action.
 	 * @return	The name of the controller action.
+	 * @deprecated
 	 */
 	private static String getControllerActionName(MOperation controllerAction) {
 		String controllerActionName;
