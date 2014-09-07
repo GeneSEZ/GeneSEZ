@@ -170,6 +170,26 @@ String asTypo3State(String state) :
 	};
 
 
+/**
+ * Formats a string value into a TYPO3 CMS associative constraint array item.
+ * 
+ * Having a trailing comma after the last defined array entry, while unusual, is a valid syntax. 
+ * See http://php.net/manual/en/function.array.php
+ *
+ * When using this latter declaration, we encourage using a trailing comma for the last item in the array; 
+ * this minimizes the impact of adding new items on successive lines, and helps to ensure no parse errors 
+ * occur due to a missing comma. 
+ * See http://framework.zend.com/manual/en/coding-standard.coding-style.html
+ *
+ * @param	constraint	The constraint to format.
+ * @return	The associative constraint array item.
+ */
+String asTypo3Constraint(String constraint) :
+	constraint.contains(":")
+		? "'" + constraint.split(":").trim().toString("' => '") + "'" + ","
+		: constraint;
+
+
 // -- TYPO3 CMS conventions ---------------------------------------------------------------------------------
 
 /**
@@ -207,25 +227,3 @@ String asTypo3Boolean(String boolean) :
 	boolean.toLowerCase() == "true" || boolean == "1"
 		? asTypo3Boolean(true)
 		: asTypo3Boolean(false);
-
-
-// -- PHP conventions ---------------------------------------------------------------------------------------
-
-/**
- * Formats a string value into an associative array item.
- * 
- * Having a trailing comma after the last defined array entry, while unusual, is a valid syntax. 
- * See http://php.net/manual/en/function.array.php
- *
- * When using this latter declaration, we encourage using a trailing comma for the last item in the array; 
- * this minimizes the impact of adding new items on successive lines, and helps to ensure no parse errors 
- * occur due to a missing comma. 
- * See http://framework.zend.com/manual/en/coding-standard.coding-style.html
- *
- * @param	item	The item to format.
- * @return	The associative array item.
- */
-String asAssociativeArrayItem(String item) :
-	item.contains("=")
-		? "'" + item.split("=").trim().toString("' => ") + ","
-		: item;
