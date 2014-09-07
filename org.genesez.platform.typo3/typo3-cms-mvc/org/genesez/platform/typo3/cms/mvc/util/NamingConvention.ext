@@ -287,7 +287,7 @@ cached String asConfigurationName(MClassifier this) :
 		: extensionPrefix() + "_" + asShortGeneralName().toLowerCase();
 
 
-// -- "Localization" naming context --
+// -- "Backend Localization" naming context --
 
 /**
  * Formats the name of a classifier in "Localization" naming context.
@@ -296,11 +296,13 @@ cached String asConfigurationName(MClassifier this) :
  * 
  * @return	The formatted classifier name.
  */
-cached String asLocalizationName(MClassifier this) :
+cached String asBackendLocalizationName(MClassifier this) :
 	namespaceCategoryName().length != 0
 		? namespaceCategoryName().replaceAll("\\\\", "").toLowerUnderscore() + "_" + asShortGeneralName().toLowerCase()
 		: asShortGeneralName().toLowerCase();
 
+
+// -- "Frontend Localization" naming context --
 
 /**
  * Formats the name of a classifier in "LocalizationFe" naming context.
@@ -309,7 +311,7 @@ cached String asLocalizationName(MClassifier this) :
  * 
  * @return	The formatted classifier name.
  */
-cached String asLocalizationFeName(MClassifier this) :
+cached String asFrontendLocalizationName(MClassifier this) :
 	namespaceCategoryName().length != 0
 		? namespaceCategoryName().split("\\\\").toFirstLower().toString("_") + "_" + asShortGeneralName().toFirstLower()
 		: asShortGeneralName().toFirstLower();
@@ -400,7 +402,7 @@ cached String asConfigurationName(MProperty this) :
 	name.toLowerUnderscore();
 
 
-// -- "Localization" naming context --
+// -- "Backend Localization" naming context --
 
 /**
  * Formats the name of an attribute or association role in "Persistence" naming context.
@@ -413,9 +415,11 @@ cached String asConfigurationName(MProperty this) :
  * @see		asLocalizationName(MClassifier this)
  * @see		asConfigurationName(MProperty this)
  */
-cached String asLocalizationName(MProperty this) :
-	classifier.asLocalizationName() + "." + asConfigurationName();
+cached String asBackendLocalizationName(MProperty this) :
+	classifier.asBackendLocalizationName() + "." + asConfigurationName();
 
+
+// -- "Frontend Localization" naming context --
 
 /**
  * Formats the name of an attribute or association role in "Persistence" naming context.
@@ -428,8 +432,8 @@ cached String asLocalizationName(MProperty this) :
  * @see		asLocalizationName(MClassifier this)
  * @see		asConfigurationName(MProperty this)
  */
-cached String asLocalizationFeName(MProperty this) :
-	classifier.asLocalizationFeName() + "." + asGeneralName();
+cached String asFrontendLocalizationName(MProperty this) :
+	classifier.asFrontendLocalizationName() + "." + asGeneralName();
 	
 
 // -- "LocalizationCsh" naming context --
