@@ -290,7 +290,7 @@ cached String asConfigurationName(MClassifier this) :
 // -- "Backend Localization" naming context --
 
 /**
- * Formats the name of a classifier in "Localization" naming context.
+ * Formats the name of a classifier in "Backend Localization" naming context.
  * E.g.: If the domain object class "Blog" is modeled inside package path "Classes/Domain/Model" 
  *       then this method returns "domain_model_blog".
  * 
@@ -305,7 +305,7 @@ cached String asBackendLocalizationName(MClassifier this) :
 // -- "Frontend Localization" naming context --
 
 /**
- * Formats the name of a classifier in "LocalizationFe" naming context.
+ * Formats the name of a classifier in "Frontend Localization" naming context.
  * E.g.: If the domain object class "Blog" is modeled inside package path "Classes/Domain/Model" 
  *       then this method returns "domain_model_blog".
  * 
@@ -404,48 +404,26 @@ cached String asConfigurationName(MProperty this) :
 
 // -- "Backend Localization" naming context --
 
-/**
- * Formats the name of an attribute or association role in "Persistence" naming context.
- * E.g.: If the extension key is "blog_example", the corresponding extension package name is "BlogExample",
- *       the domain object class "Blog" is modeled inside package path "Classes/Domain/Model" 
- *       and the name of the attribute or association role is "blogPosts" 
- *       then this method returns "tx_blogexample_domain_model_blog.blog_posts".
- * 
- * @return	The formatted attribute or association role name.
- * @see		asLocalizationName(MClassifier this)
- * @see		asConfigurationName(MProperty this)
- */
 cached String asBackendLocalizationName(MProperty this) :
 	classifier.asBackendLocalizationName() + "." + asConfigurationName();
 
 
 // -- "Frontend Localization" naming context --
 
-/**
- * Formats the name of an attribute or association role in "Persistence" naming context.
- * E.g.: If the extension key is "blog_example", the corresponding extension package name is "BlogExample",
- *       the domain object class "Blog" is modeled inside package path "Classes/Domain/Model" 
- *       and the name of the attribute or association role is "blogPosts" 
- *       then this method returns "tx_blogexample_domain_model_blog.blog_posts".
- * 
- * @return	The formatted attribute or association role name.
- * @see		asLocalizationName(MClassifier this)
- * @see		asConfigurationName(MProperty this)
- */
 cached String asFrontendLocalizationName(MProperty this) :
 	classifier.asFrontendLocalizationName() + "." + asGeneralName();
-	
 
-// -- "LocalizationCsh" naming context --
+
+// -- "Context Sensitive Help Localization" naming context --
 
 /**
- * Formats the name of an attribute or association role in "LocalizationCsh" naming context.
+ * Formats the name of an attribute or association role in "Context Sensitive Help Localization" naming context.
  * E.g.: Attribute or accociation role "blogPosts" would become "blog_posts".
  * 
  * @return	The formatted attribute or association role name.
  * @see		asConfigurationName(MProperty this)
  */
-cached String asLocalizationCshName(MProperty this) :
+cached String asContextSensitiveHelpLocalizationName(MProperty this) :
 	asConfigurationName();
 
 
