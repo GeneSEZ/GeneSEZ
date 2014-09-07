@@ -111,7 +111,8 @@
 		<body>
 			«FOREACH allEntitiesAndValueObjects().sortBy( do | do.asLocalizationName() ) AS domainObject -»
 			«EXPAND ClassLocalization(languageKey) FOR domainObject -»
-			«EXPAND PropertyLocalization(languageKey) FOREACH domainObject.property.select( p | !p.derived && !p.isStatic() ).sortBy( p | p.asLocalizationName() ) -»
+			«EXPAND PropertyLocalization(languageKey) FOREACH domainObject.property.select( p | !p.derived && !p.isStatic() ) -»
+
 
 			«ENDFOREACH -»
 			«EXPAND OwnLocalizations(languageKey) -»
