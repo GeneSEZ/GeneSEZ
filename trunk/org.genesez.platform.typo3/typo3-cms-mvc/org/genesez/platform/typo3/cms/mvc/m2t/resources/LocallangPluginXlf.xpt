@@ -119,15 +119,18 @@
 «DEFINE Body(String languageKey) FOR MInterface -»
 		<body>
 			«EXPAND SheetLocalization(languageKey, "sDEF") -»
-			«FOREACH allFlexFormSheetsWithoutGeneralSheet().sortBy( s | s ) AS sheetName -»
-			«EXPAND SheetLocalization(languageKey, sheetName) -»
-			«ENDFOREACH -»
-			«EXPAND SwitchableControllerActionLocalization(languageKey) -»
 			«FOREACH emGetExtbasePluginSwitchableControllerActionIndexes() AS switchableControllerActionIndex -»
 			«EXPAND SwitchableControllerActionIndexLocalization(languageKey, switchableControllerActionIndex) -»
 			«ENDFOREACH -»
-			«EXPAND ElementLocalization(languageKey) FOREACH property.sortBy( e | e.name ) -»
-
+			«EXPAND ElementLocalization(languageKey) FOREACH allFlexFormSheetElements("sDEF") -»
+			«FOREACH allFlexFormSheetsWithoutGeneralSheet().sortBy( s | s ) AS sheetName -»
+			«EXPAND SheetLocalization(languageKey, sheetName) -»
+			«EXPAND ElementLocalization(languageKey) FOREACH allFlexFormSheetElements(sheetName) -»
+			
+			
+			«ENDFOREACH -»
+			
+			
 			«EXPAND OwnLocalizations(languageKey) -»
 		</body>
 «ENDDEFINE»
@@ -164,7 +167,7 @@
 
 «DEFINE ElementLocalization(String languageKey) FOR MProperty -»
 			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + languageKey + "." + xmiGuid) DISABLE»
-			<trans-unit id="«name -»" xml:space="preserve">
+			<trans-unit id="setting.«name -»" xml:space="preserve">
 				<source>«name.toFirstUpper() -»</source>
 			</trans-unit>
 			«ENDPROTECT»
