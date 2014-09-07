@@ -111,42 +111,32 @@ Boolean isGeneralExtension() :
 // -- TYPO3 CMS extension management conventions ------------------------------------------------------------
 
 /**
- * Formats a string value into a TYPO3 CMS category value.
+ * Formats a string value into a TYPO3 CMS extension category value.
  *
  * @param	category	The category to format.
- * @return	The TYPO3 CMS category.
+ * @return	The TYPO3 CMS extension category.
  */
-String asTypo3Category(String category) :
+String asExtensionCategory(String category) :
 	category.toLowerCase();
 
 
 /**
- * Formats a string value into a TYPO3 CMS language key value.
- *
- * @param	languageKey	The language key to format.
- * @return	The TYPO3 CMS language key.
- */
-String asTypo3LanguageKey(String languageKey) :
-	languageKey.toLowerCase();
-
-
-/**
- * Formats a string value into a TYPO3 CMS lock type value.
+ * Formats a string value into a TYPO3 CMS extension lock type value.
  *
  * @param	lockType	The lock type to format.
- * @return	The TYPO3 CMS lock type.
+ * @return	The TYPO3 CMS extension lock type.
  */
-String asTypo3LockType(String lockType) :
+String asExtensionLockType(String lockType) :
 	lockType.subString(0, 1);
 
 
 /**
- * Formats a string value into a TYPO3 CMS priority value.
+ * Formats a string value into a TYPO3 CMS extension priority value.
  *
  * @param	priority	The priority to format.
- * @return	The TYPO3 CMS priority.
+ * @return	The TYPO3 CMS extension priority.
  */
-String asTypo3Priority(String priority) :
+String asExtensionPriority(String priority) :
 	switch (priority) {
 		case prTypo3PriorityEmpty() :
 			""
@@ -156,12 +146,12 @@ String asTypo3Priority(String priority) :
 	
 
 /**
- * Formats a string value into a TYPO3 CMS state value.
+ * Formats a string value into a TYPO3 CMS extension state value.
  *
  * @param	state	The state to format.
- * @return	The TYPO3 CMS state.
+ * @return	The TYPO3 CMS extension state.
  */
-String asTypo3State(String state) :
+String asExtensionState(String state) :
 	switch (state) {
 		case prTypo3StateExcludeFromUpdates() :
 			"excludeFromUpdates"
@@ -171,7 +161,7 @@ String asTypo3State(String state) :
 
 
 /**
- * Formats a string value into a TYPO3 CMS associative constraint array item.
+ * Formats a string value into a TYPO3 CMS associative extension constraint array item.
  * 
  * Having a trailing comma after the last defined array entry, while unusual, is a valid syntax. 
  * See http://php.net/manual/en/function.array.php
@@ -184,13 +174,23 @@ String asTypo3State(String state) :
  * @param	constraint	The constraint to format.
  * @return	The associative constraint array item.
  */
-String asTypo3Constraint(String constraint) :
+String asExtensionConstraint(String constraint) :
 	constraint.contains(":")
 		? "'" + constraint.split(":").trim().toString("' => '") + "'" + ","
 		: constraint;
 
 
 // -- TYPO3 CMS conventions ---------------------------------------------------------------------------------
+
+/**
+ * Formats a string value into a TYPO3 CMS language key value.
+ *
+ * @param	languageKey	The language key to format.
+ * @return	The TYPO3 CMS language key.
+ */
+String asTypo3LanguageKey(String languageKey) :
+	languageKey.toLowerCase();
+
 
 /**
  * Formats a string value into a TYPO3 CMS Boolean value.
