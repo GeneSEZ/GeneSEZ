@@ -177,7 +177,7 @@
 «REM» 
 «ENDREM»
 «DEFINE SheetElementTceFormsLabel FOR MAttribute -»
-							<label>LLL:EXT:«extensionKey() -»/«((MInterface) classifier).filePathLocallangPluginXlf() -»:«asLocalizationName() -»</label>
+							<label>LLL:EXT:«extensionKey() -»/«((MInterface) classifier).filePathLocallangPluginXlf() -»:setting.«asLocalizationName() -»</label>
 «ENDDEFINE»
 
 
@@ -535,21 +535,23 @@
 «REM» 
 «ENDREM»
 «DEFINE ConfigTypeToOneUnidirectional FOR MAttribute -»
-								«EXPAND ConfigType("select") -»
-								«EXPAND ConfigItems -»
-								«EXPAND ConfigForeignTable -»
+								«EXPAND ConfigType("group") -»
+								«EXPAND ConfigInternalType("db") -»
+								«EXPAND ConfigAllowed( classifier.asPersistenceName() ) -»
+								«EXPAND ConfigDisallowed("") -»
+								«EXPAND ConfigSize(1) -»
 								«EXPAND ConfigMinitems -»
 								«EXPAND ConfigMaxitems -»
-								«EXPAND ConfigSize(1) -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ConfigTypeToManyUnidirectional FOR MAttribute -»
-								«EXPAND ConfigType("select") -»
-								«EXPAND ConfigForeignTable -»
-								«EXPAND ConfigMM -»
+								«EXPAND ConfigType("group") -»
+								«EXPAND ConfigInternalType("db") -»
+								«EXPAND ConfigAllowed( classifier.asPersistenceName() ) -»
+								«EXPAND ConfigDisallowed("") -»
 								«EXPAND ConfigSize(10) -»
 								«EXPAND ConfigMinitems -»
 								«EXPAND ConfigMaxitems -»
@@ -708,41 +710,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDDEFINE»
 
 
-«REM» -- Foreign Table + Intermediate Table Settings -- «ENDREM»
-
-«REM»
-«ENDREM»
-«DEFINE ConfigForeignTable FOR MProperty -»
-								<foreign_table>«type.asPersistenceName() -»</foreign_table>
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE ConfigForeignField FOR MAssociationRole -»
-								<foreign_field>«opposite.asConfigurationName() -»</foreign_field>
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE ConfigMM FOR MProperty -»
-«REM»
-								<MM>'«asIntermediateTableName(class) -»'</MM>
-«ENDREM»
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE ConfigMMOppositeField FOR MAssociationRole -»
-								<MM_opposite_field>«opposite.asConfigurationName() -»</MM_opposite_field>
-«ENDDEFINE»
-
-
-
 «REM» -- Items Settings -- «ENDREM»
-
 
 «REM»
 «ENDREM»
