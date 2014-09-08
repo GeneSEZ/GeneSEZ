@@ -18,7 +18,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Please describe the responsibility of your class in your modeling tool.
  */
-public class ImportPreserver extends FileIdProvider implements ContentIncluder, LineContentExtractor, LineContentPreservable {
+public class ImportPreserver extends FileIdProvider implements LineContentExtractor, ContentIncluder, LineContentPreservable {
 	
 	public final Log logger = LogFactory.getLog(getClass());
 	

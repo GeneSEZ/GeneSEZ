@@ -110,7 +110,7 @@ public class Gcore2Php extends SimpleModel2Text {
 	 */
 	@WfDefault(parameter = "template")
 	public String getDefaultTemplate() {
-		return "org::genesez::platform::php5::templates::Root::Root";
+		return "org::genesez::platform::php::m2t::Root::Root";
 	}
 	
 	/**
