@@ -113,10 +113,12 @@ cached Boolean isController(MType this) :
  * @return	True if the operation is a TYPO3 CMS specific Extbase controller action, otherwise false.
  */
 cached Boolean isControllerAction(MOperation this) :
-	// first check if the operation has the required stereotype
+	// first check if the operation ends with the suffix "Action"
+	name.endsWith("Action") ||
+	// second check if the operation has the required stereotype
 	emHasExtbaseControllerActionStereotype() ||
-	// second check if the classifier (class) is a controller AND the operation is neither a controller command action nor a non controller action
-	( classifier.isController() && !isControllerCommand() && !isControllerNoAction() );
+	// third check if the classifier (class) is a controller AND the operation is neither a controller command action nor a non controller action
+	( classifier.isController() && !isControllerCommand() && !isNoControllerAction() );
 
 
 /**
@@ -134,9 +136,9 @@ cached Boolean isControllerCommand(MOperation this) :
  *
  * @return	True if the operation is not a TYPO3 CMS specific Extbase controller action, otherwise false.
  */
-cached Boolean isControllerNoAction(MOperation this) :
+cached Boolean isNoControllerAction(MOperation this) :
 	// checks if the operation has the required stereotype
-	emHasExtbaseControllerNoActionStereotype();
+	emHasExtbaseNoControllerActionStereotype();
 
 
 // -- TYPO3 CMS specific Extbase entity + value object scripts ----------------------------------------------
