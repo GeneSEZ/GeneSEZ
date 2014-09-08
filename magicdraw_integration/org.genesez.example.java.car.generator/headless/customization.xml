@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Provides customizations of the java task executing the transformation.
+	
+	@author	tobias haubold
+-->
+<project name="org.genesez.headless.customization" basedir=".">
+	
+	<!-- list additional java classpath entries here -->
+	<path id="additional.classpath">
+		<!-- pathelement location="." / -->
+		<pathelement location="bin" />
+		<fileset dir="headless">
+			<include name="org.genesez*.jar" />
+			<include name="org.genesez*/*.jar" />
+			<include name="org.genesez*/lib/*.jar" />
+		</fileset>
+	</path>
+	
+	<!-- list entries for the java.library.path here -->
+	<path id="java.library.path">
+		<!-- include current java.library.path -->
+		<pathelement path="${java.library.path}" />
+		<!-- additional entries -->
+		<pathelement location="." />
+	</path>
+	<pathconvert property="custom.java.library.path" refid="java.library.path" />
+	
+	<!-- list jvm system properties here except java.library.path -->
+	<propertyset id="jvm.sys.args">
+		<!-- propertyref name="" / -->
+	</propertyset>
+	
+</project>

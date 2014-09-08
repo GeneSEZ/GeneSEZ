@@ -1,0 +1,1 @@
+start C:\noinstall\eclipse.genesez.test-SDK-4.4_x64\eclipse\plugins\org.apache.ant_1.9.2.v201404171502\bin\ant -f E:\devel\genesez.git\magicdraw_integration\org.genesez.example.java.car.generator\headless\build.xml -v
