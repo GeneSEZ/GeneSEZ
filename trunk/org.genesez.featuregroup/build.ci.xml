@@ -34,6 +34,10 @@
 		<isset property="LATEST_BUILD_COUNT" />
 	</condition>
 	
+	<condition property="eclipse.preferences.file" value="${ECLIPSE_PREFERENCES}" else="java.classpath.variables.epf">
+		<isset property="ECLIPSE_PREFERENCES" />
+	</condition>
+	
 	<!-- determine kind of build -->
 	<condition property="is.development.build">
 		<not>
@@ -101,7 +105,7 @@
 			<arg value="${env.WORKSPACE}" />
 			<arg value="importpreferences" />
 			<arg value="-F" />
-			<arg value="${env.ECLIPSE_PREFERENCES}" />
+			<arg value="${eclipse.preferences.file}" />
 		</exec>
 	</target>
 	
