@@ -50,7 +50,7 @@
 	TODO add switchableControllerActions
 «ENDREM»
 «DEFINE Root FOR MInterface -»
-«IF isPlugin() && ( hasAttributes() || emHasTypo3FlexFormStereotype() || emHasExtbasePluginUtilizableSwitchableControllerActions() ) -»
+«IF isPlugin() && ( hasAttributes() || emHasExtbasePluginUtilizablePluginConfigurations() || emHasTypo3FlexFormStereotype() ) -»
 «EXPAND LocallangPlugin -»
 «ENDIF -»
 «ENDDEFINE»
@@ -120,9 +120,7 @@
 		<body>
 			«EXPAND SheetLocalization(languageKey, "sDEF") -»
 			«EXPAND SwitchableControllerActionLocalization(languageKey) -»
-			«FOREACH emGetExtbasePluginSwitchableControllerActionIndexes() AS switchableControllerActionIndex -»
-			«EXPAND SwitchableControllerActionIndexLocalization(languageKey, switchableControllerActionIndex) -»
-			«ENDFOREACH -»
+			«EXPAND SwitchableControllerActionConfigurationLocalization(languageKey) FOREACH emGetExtbasePluginPluginConfigurations() -»
 			«EXPAND ElementLocalization(languageKey) FOREACH allFlexFormSheetElements("sDEF") -»
 			«FOREACH allFlexFormSheetsWithoutGeneralSheet().sortBy( s | s ) AS sheetName -»
 			«EXPAND SheetLocalization(languageKey, sheetName) -»
@@ -147,7 +145,7 @@
 
 
 «DEFINE SwitchableControllerActionLocalization(String languageKey) FOR MInterface -»
-«IF emHasExtbasePluginUtilizableSwitchableControllerActions() -»
+«IF emHasExtbasePluginUtilizablePluginConfigurations() -»
 			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + languageKey + ".switchableControllerAction." + xmiGuid) DISABLE»
 			<trans-unit id="switchableControllerAction" xml:space="preserve">
 				<source>Switchable Controller Action</source>
@@ -157,10 +155,10 @@
 «ENDDEFINE»
 
 
-«DEFINE SwitchableControllerActionIndexLocalization(String languageKey, String index) FOR MInterface -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + languageKey + ".switchableControllerAction." + index.asInteger() + "." + xmiGuid) DISABLE»
-			<trans-unit id="switchableControllerAction.«index.asInteger() -»" xml:space="preserve">
-				<source>Switchable Controller Action «index.asInteger() -»</source>
+«DEFINE SwitchableControllerActionConfigurationLocalization(String languageKey) FOR MInterface -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + languageKey + ".switchableControllerAction." + xmiGuid) DISABLE»
+			<trans-unit id="switchableControllerAction.«name -»" xml:space="preserve">
+				<source>Switchable Controller Action «name -»</source>
 			</trans-unit>
 			«ENDPROTECT»
 «ENDDEFINE»
