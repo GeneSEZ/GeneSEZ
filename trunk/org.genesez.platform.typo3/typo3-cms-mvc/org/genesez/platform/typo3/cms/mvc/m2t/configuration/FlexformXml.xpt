@@ -48,7 +48,7 @@
 	Processes the generation of "flexform_<plugin>.xml".
 «ENDREM»
 «DEFINE Root FOR MInterface -»
-«IF isPlugin() && ( hasAttributes() || emHasTypo3FlexFormStereotype() || emHasExtbasePluginUtilizableSwitchableControllerActions() ) -»
+«IF isPlugin() && ( hasAttributes() || emHasExtbasePluginUtilizablePluginConfigurations() || emHasTypo3FlexFormStereotype() ) -»
 «EXPAND FlexForm -»
 «ENDIF -»
 «ENDDEFINE»
@@ -113,7 +113,7 @@
 
 
 «DEFINE SheetElementSwitchableControllerActions FOR MInterface -»
-«IF emHasExtbasePluginUtilizableSwitchableControllerActions() -»
+«IF emHasExtbasePluginUtilizablePluginConfigurations() -»
 					<switchableControllerActions>
                         <TCEforms>
                             <label>LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:switchableControllerAction</label>
@@ -121,10 +121,10 @@
                             <config>
                                 <type>select</type>
                                 <items type="array">
-                                	«FOREACH emGetExtbasePluginSwitchableControllerActionIndexes() AS switchableControllerActionIndex -»
-                                	<numIndex index="«switchableControllerActionIndex.asInteger() -»" type="array">
-                                        <numIndex index="0">LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:switchableControllerAction.«switchableControllerActionIndex.asInteger() -»</numIndex>
-                                        <numIndex index="1">«FOREACH emGetExtbasePluginSwitchableControllerActions(switchableControllerActionIndex) AS controllerAction SEPARATOR "; "»«controllerAction.classifier.asControllerName() -»->«controllerAction.asControllerActionName() -»«ENDFOREACH -»</numIndex>
+                                	«FOREACH emGetExtbasePluginPluginConfigurations() AS pluginConfiguration -»
+                                	<numIndex index="«pluginConfiguration.emGetExtbasePluginConfigurationSwitchableControllerActionIndex() -»" type="array">
+                                        <numIndex index="0">LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:switchableControllerAction.«pluginConfiguration.name -»</numIndex>
+                                        <numIndex index="1">«FOREACH pluginConfiguration.emGetExtbasePluginConfigurationSwitchableControllerActions() AS controllerAction SEPARATOR "; "»«controllerAction.classifier.asControllerName() -»->«controllerAction.asControllerActionName() -»«ENDFOREACH -»</numIndex>
                                     </numIndex>
                                 	«ENDFOREACH -»
                                 </items>
