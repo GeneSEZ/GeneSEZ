@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Appends all classpath variables an eclipse properties file.
+	
+	All ant properties with the name starting with 'CPV_' are treated as classpath variables.
+	The eclipse properties file is imported into buckminster.
+	
+	@author	tobias haubold <toh@fh-zwickau.de>
+-->
+<project name="org.genesez.featuregroup.classpathvariables" default="modify">
+	
+	<import file="lib/antcontrib.xml" />
+	<import file="lib/xmltask.xml" />
+	
+	<propertyselector property="classpath.variables" match="CPV_(.*)" select="\1" distinct="true" />
+	<echo level="verbose" message="all classpath variables: ${classpath.variables}" />
+	
+	<target name="modify" description="Modifies the value of all classpath variables." if="classpath.variables">
+		<for list="${classpath.variables}" param="var">
+			<sequential>
+				<echo level="verbose" message="add classpath variable: @{var}" />
+				<echo file="java.classpath.variables.epf" append="true">
+<![CDATA[/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.classpathVariable.@{var}=${CPV_@{var}}]]></echo>
+			</sequential>
+		</for>
+	</target>
+</project>
