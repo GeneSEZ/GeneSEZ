@@ -71,6 +71,7 @@
 	</condition>
 	
 	
+	<!-- note: currently not used in build -->
 	<target name="buckminster.materialize" description="Puts genesez into the workspace">
 		<exec executable="/bin/sh" dir="${buckminster.home.dir}" failonerror="true">
 			<arg value="buckminster" />
@@ -93,7 +94,18 @@
 	</target>
 	
 	
-	<target name="buckminster.build" description="Builds genesez (java source compiling).">
+	<target name="buckminster.prepare" description="Imports preferences needed for compiling.">
+		<exec executable="/bin/sh" dir="${buckminster.home.dir}" failonerror="true">
+			<arg value="buckminster" />
+			<arg value="-data" />
+			<arg value="${env.WORKSPACE}" />
+			<arg value="importpreferences" />
+			<arg value="-F" />
+			<arg value="${env.ECLIPSE_PREFERENCES}" />
+		</exec>
+	</target>
+	
+	<target name="buckminster.build" depends="buckminser.prepare" description="Builds genesez (java source compiling).">
 		<exec executable="/bin/sh" dir="${buckminster.home.dir}" failonerror="true">
 			<arg value="buckminster" />
 			<arg value="-data" />
