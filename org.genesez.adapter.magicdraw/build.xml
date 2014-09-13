@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<!--
+	Builds the magic draw plugin.
+	In development environments where the file ant/environment.properties is configured, it is possible to install the plugin into magic draw.
+	
+	@author	tobias haubold <toh@fh-zwickau.de>
+-->
+<project name="org.genesez.adapter.magicdraw" basedir="." default="build">
+	
+	<condition property="installable">
+		<available file="ant/environment.properties" />
+	</condition>
+	<condition property="distribution.dir" value="${DISTRIBUTION_DIR}" else="dist">
+		<isset property="DISTRIBUTION_DIR" />
+	</condition>
+	
+	<property name="name" value="${ant.project.name}" />
+	<property name="dist.dir" value="dist" />
+	<property name="jar.file" value="${dist.dir}/${name}.jar" />
+	<property name="zip.file" value="${dist.dir}/${name}.zip" />
+	<property name="mdplugin.dir" value="plugins/${name}" />
+	
+	
+	<target name="build" description="Compiles and packages the magic draw plugin.">
+		<jar destfile="${jar.file}">
+			<fileset dir="bin">
+				<include name="**/*.class"/>
+			</fileset>
+		</jar>
+		<zip destfile="${zip.file}">
+			<zipfileset file="${jar.file}" />
+			<zipfileset file="mdconfig/plugin.xml" />
+		</zip>
+	</target>
+	
+	<target name="install" depends="build" description="Installs the plugin into magic draw.">
+		<property file="ant/environment.properties" />
+		<fail message="Magic Draw directory not contained in environment.properties file, does not exists or properties file not found!">
+			<condition>
+				<or>
+					<not>
+						<isset property="installable" />
+					</not>
+					<not>
+						<isset property="MAGICDRAW_DIR" />
+					</not>
+					<not>
+						<available file="${MAGICDRAW_DIR}" />
+					</not>
+				</or>
+			</condition>
+		</fail>
+		<mkdir dir="${MAGICDRAW_DIR}/${mdplugin.dir}"/>
+		<unzip dest="${MAGICDRAW_DIR}/${mdplugin.dir}">
+			<fileset file="${zip.file}" />
+		</unzip>
+	</target>
+</project>
