@@ -10,15 +10,57 @@
 	magicdraw classpath:
 	- libraries for mdzip -> emf uml2 export
 	
-	@author tobias haubold 
+	@author	tobias haubold <tobias.haubold@fh-zwickau.de> (maintainer)
  -->
 <project name="org.genesez.build.classpath" basedir="..">
 	
 	<path id="genesez.bundle.classpath">
 		<path refid="genesez.classpath" />
 		<path refid="eclipse.classpath" />
-		<path refid="magicdraw.classpath" />
+		<!--path refid="magicdraw.classpath" /-->
 	</path>
+	
+	<fail message="Property ${ECLIPSE_HOME} not set!">
+		<condition>
+			<not>
+				<isset property="ECLIPSE_HOME" />
+			</not>
+		</condition>
+	</fail>
+	
+	<!-- default plugin directories if not specified -->
+	<condition property="GENESEZ_DIR" value="${ECLIPSE_HOME}/plugins">
+		<not>
+			<isset property="GENESEZ_DIR" />
+		</not>
+	</condition>
+	<condition property="EMF_PLUGIN_DIR" value="${ECLIPSE_HOME}/plugins">
+		<not>
+			<isset property="EMF_PLUGIN_DIR" />
+		</not>
+	</condition>
+	<condition property="UML2_PLUGIN_DIR" value="${ECLIPSE_HOME}/plugins">
+		<not>
+			<isset property="UML2_PLUGIN_DIR" />
+		</not>
+	</condition>
+	<condition property="MWE_PLUGIN_DIR" value="${ECLIPSE_HOME}/plugins">
+		<not>
+			<isset property="MWE_PLUGIN_DIR" />
+		</not>
+	</condition>
+	<condition property="MWE2_PLUGIN_DIR" value="${ECLIPSE_HOME}/plugins">
+		<not>
+			<isset property="MWE2_PLUGIN_DIR" />
+		</not>
+	</condition>
+	<condition property="M2T_PLUGIN_DIR" value="${ECLIPSE_HOME}/plugins">
+		<not>
+			<isset property="M2T_PLUGIN_DIR" />
+		</not>
+	</condition>
+	<echo level="verbose" message="ECLIPSE_HOME = ${ECLIPSE_HOME}" />
+	<echo level="verbose" message="GENESEZ_DIR = ${GENESEZ_DIR}" />
 	
 	<path id="genesez.classpath">
 		<fileset dir="${GENESEZ_DIR}">
