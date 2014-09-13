@@ -24,8 +24,6 @@ import com.nomagic.uml2.ext.magicdraw.classes.mdkernel.Element;
  */
 public class PresentationElementChanger 
 {
-	//Class to display messages
-	MessageServiceClass messageServiceClass = new MessageServiceClass();
 	PresentationElementReseter presentationElementReseter;
 	
 	/**
@@ -67,8 +65,6 @@ public class PresentationElementChanger
 				}
 			} 
 		}
-		
-		messageServiceClass.showSimpleMessage(errorProperties.getProperty("message"));
 	}
 
 	/**
