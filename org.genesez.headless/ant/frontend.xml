@@ -11,38 +11,11 @@
 	When using the GeneSEZ magic draw integration, these properties are passed to ant using '-D' command line parameters.
 	If you use this script otherwise you have to provide or define these properties.
 	
-	Furthermore you can customize the java classpath, java library path and java system properties.
-	
 	@author	tobias haubold <tobias.haubold@fh-zwickau.de> (maintainer)
 -->
 <project name="org.genesez.headless.ant.frontend" basedir="." default="start">
 	
-	<!-- list additional java classpath entries here -->
-	<path id="additional.classpath">
-		<!-- pathelement location="." / -->
-		<!--fileset dir=".">
-			<include name="org.genesez*.jar" />
-			<include name="org.genesez*/*.jar" />
-			<include name="org.genesez*/lib/*.jar" />
-		</fileset-->
-	</path>
-	
-	<!-- list entries for the java.library.path here -->
-	<path id="java.library.path">
-		<!-- include current java.library.path -->
-		<pathelement path="${java.library.path}" />
-		<!-- additional entries -->
-		<pathelement location="." />
-	</path>
-	<pathconvert property="custom.java.library.path" refid="java.library.path" />
-	
-	<!-- list jvm system properties here except java.library.path -->
-	<propertyset id="jvm.sys.args">
-		<!-- propertyref name="" / -->
-	</propertyset>
-	
-	
-	<!-- include ant targets and run transformation -->
+	<import file="customization.xml" />
 	<import file="targets.xml" />
 	
 	<target name="start" description="Runs the specified transformation for the specified project">
