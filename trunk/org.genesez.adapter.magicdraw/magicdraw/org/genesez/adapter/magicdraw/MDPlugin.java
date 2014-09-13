@@ -19,6 +19,9 @@ public class MDPlugin extends com.nomagic.magicdraw.plugins.Plugin
 {
 	MDServer mdServer;
 	MDClient mdClient;
+	GeneSezProjectOptions options;
+	IssueHandler issueHandler;
+	MessageServiceClass messageServiceClass;
 	
 	/**
 	 * If MagicDraw is closed
@@ -38,17 +41,20 @@ public class MDPlugin extends com.nomagic.magicdraw.plugins.Plugin
 	public void init() 
 	{
 		createMenuePoints();
+		options = new GeneSezProjectOptions();
+		messageServiceClass = new MessageServiceClass();
+		issueHandler = new IssueHandler(messageServiceClass);
 		
 		try 
 		{
 			mdServer = new MDServer();
-			mdClient = new MDClient();
-		} 
+			mdClient = new MDClient(issueHandler);
+		}
 		catch (IOException e){e.printStackTrace();} 
 		catch (LoginException e) {e.printStackTrace();}
 		
 		//add listener
-		SaveProjectListener saveProjectListener = new SaveProjectListener(mdClient.getPresentationElementReseter());
+		SaveProjectListener saveProjectListener = new SaveProjectListener(mdClient.getPresentationElementReseter(), options, messageServiceClass);
 		Application.getInstance().getProjectsManager().addProjectListener(saveProjectListener);
 	}
 

@@ -17,12 +17,19 @@ import com.nomagic.uml2.ext.magicdraw.classes.mdkernel.Property;
  */
 public class IssueHandler 
 {
+	//Class to display messages
+	MessageServiceClass messageServiceClass = null;
 	//class to change the elements on the diagram
 	PresentationElementChanger presentationElementChanger = new PresentationElementChanger();
 	//For searching needed. items will not be searched several times or infinite loops are created
 	List<String> listOfVisitedElements = new ArrayList<String>();
 	Properties issueProperties;
 	String xmiGUID;
+	
+	
+	public IssueHandler(MessageServiceClass messageServiceClass) {
+		this.messageServiceClass = messageServiceClass;
+	}
 	
 	/**
 	 * Entry point to handle issues
@@ -94,6 +101,8 @@ public class IssueHandler
 					if((attribute.getID().equals(issueProperties.get("id").toString())))
 					{
 						presentationElementChanger.changeClassPresentation(attribute.getOwner(), issueProperties);
+						
+						messageServiceClass.showError(issueProperties.getProperty("message"));
 					}
 				}
 			}

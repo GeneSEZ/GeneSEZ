@@ -16,12 +16,13 @@ import net.ser1.stomp.Listener;
 public class MDClient extends Client
 {
 	PresentationElementReseter presentationElementReseter = new PresentationElementReseter();
-	IssueHandler issueHandler = new IssueHandler();
+	IssueHandler issueHandler = null;
 	
-	public MDClient() throws IOException, LoginException 
+	public MDClient(final IssueHandler issueHandler) throws IOException, LoginException 
 	{
 		super("localhost", 12345, null, null);
 		
+		this.issueHandler = issueHandler;
 		
 		//instructions to respond to an issue
 		this.subscribe("/validation", new Listener() 
