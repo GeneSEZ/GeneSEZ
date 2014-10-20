@@ -198,9 +198,9 @@
 
 
 «DEFINE Validate FOR MProperty -»
-«IF !allAssignedValidators().isEmpty -»
-	 * @validate «FOREACH allAssignedValidators() AS v SEPARATOR ", " -»«v.asAssignedValidatorName() -»«IF v.property.exists( p | emGetTaggedValue( v.name, p.name ) != "" ) -»(«FOREACH v.property.select( p | emGetTaggedValue( v.name, p.name ) != "" ) AS p SEPARATOR ", "-»«p.name -» = «emGetTaggedValue(v.name, p.name) -»«ENDFOREACH -»)«ENDIF -»«ENDFOREACH»
-«ENDIF -»
+«FOREACH allAssignedValidators() AS v -»
+	 * @validate «v.asAssignedValidatorName() -»«IF v.property.exists( p | emGetTaggedValue( v.name, p.name ) != "" ) -»(«FOREACH v.property.select( p | emGetTaggedValue( v.name, p.name ) != "" ) AS p SEPARATOR ", "-»«p.name -» = «emGetTaggedValue(v.name, p.name) -»«ENDFOREACH -»)«ENDIF»
+«ENDFOREACH -»
 «ENDDEFINE»
 
 
