@@ -715,9 +715,13 @@ return array(
 			«ELSEIF type.asGuiType() == "Float" -»
 				«EXPAND ColumnConfigTypeFloat -»
 			«ELSEIF type.asGuiType() == "DateTime" -»
-				«EXPAND ColumnConfigTypeDateTime -»	
+				«EXPAND ColumnConfigTypeDateTime -»
+			«ELSEIF type.asGuiType() == "NativeDateTime" -»
+				«EXPAND ColumnConfigTypeNativeDateTime -»	
 			«ELSEIF type.asGuiType() == "Date" -»
-				«EXPAND ColumnConfigTypeDate -»	
+				«EXPAND ColumnConfigTypeDate -»
+			«ELSEIF type.asGuiType() == "NativeDate" -»
+				«EXPAND ColumnConfigTypeNativeDate -»
 			«ELSEIF type.asGuiType() == "Time" -»
 				«EXPAND ColumnConfigTypeTime -»	
 			«ELSEIF type.asGuiType() == "TimeSec" -»
@@ -838,8 +842,30 @@ return array(
 
 «REM» 
 «ENDREM»
+«DEFINE ColumnConfigTypeNativeDateTime FOR MAttribute -»
+				«EXPAND ColumnConfigType("input") -»
+				«EXPAND ColumnConfigDbType("datetime") -»
+				«EXPAND ColumnConfigSize(16) -»
+				«EXPAND ColumnConfigDefault("time()") -»
+				«EXPAND ColumnConfigEval({"date"}) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
 «DEFINE ColumnConfigTypeDate FOR MAttribute -»
 				«EXPAND ColumnConfigType("input") -»
+				«EXPAND ColumnConfigSize(20) -»
+				«EXPAND ColumnConfigDefault("time()") -»
+				«EXPAND ColumnConfigEval({"date"}) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeNativeDate FOR MAttribute -»
+				«EXPAND ColumnConfigType("input") -»
+				«EXPAND ColumnConfigDbType("date") -»
 				«EXPAND ColumnConfigSize(20) -»
 				«EXPAND ColumnConfigDefault("time()") -»
 				«EXPAND ColumnConfigEval({"date"}) -»
