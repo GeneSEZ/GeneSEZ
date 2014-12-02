@@ -353,6 +353,40 @@ cached String asPersistenceName(MType this) :
 	mapName();
 
 
+// -- "Assigned Validator" naming context --
+
+/**
+ * Formats the name of a classifier (validator) in "AssignedValidatorName" naming context.
+ * E.g.: If the extension vendor name is "GeneSEZ", the extension package name is "BlogExample" 
+ *       and the validator class "BlogValidator" is modeled inside package path "Classes/Domain/Validator" 
+ *       then this method returns "\GeneSEZ\BlogExample\Domain\Validator\Blog".
+ * 
+ * @return	The formatted classifier name.
+ */
+cached String asAssignedValidatorName(MClassifier this) :
+	namespaceSeperator() + namespace() + namespaceSeperator() + asShortGeneralName();	
+
+
+/**
+ * Formats the name of an external (validator) in "AssignedValidatorName" naming context.
+ * E.g.: Mapped external "NotEmptyValidator" would become "NotEmpty".
+ * 
+ * @return	The formatted external name.
+ */
+cached String asAssignedValidatorName(MExternal this) :
+	mapName("AssignedValidatorName");
+
+
+/**
+ * Formats the name of a type in "AssignedValidatorName" naming context.
+ *
+ * @return	The formatted type name.
+ * @todo	Log error
+ */
+cached String asAssignedValidatorName(MType this) :
+	mapName();
+
+
 // -- TYPO3 CMS specific Extbase + Fluid property name conventions ------------------------------------------
 
 // -- "General" naming context --
@@ -787,8 +821,8 @@ cached String asConfigurationName(MElement this) :
 String asAssignedValidatorName(MStereotype this) :
 	// first check if the name of the stereotype is equals to a validator class
 	model.allValidators().exists( v | v.name == name )
-		? model.allValidators().selectFirst( v | v.name == name ).asGeneralName()
-		: createExternalTypeOfValidatorStereotype().asGeneralName();
+		? model.allValidators().selectFirst( v | v.name == name ).asAssignedValidatorName()
+		: createExternalTypeOfValidatorStereotype().asAssignedValidatorName();
 
 
 private create MExternal createExternalTypeOfValidatorStereotype(MStereotype validator) :
