@@ -1,0 +1,31 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+
+import gcore;
+extension org::genesez::platform::typo3::cms::mvc::m2m::Modification;
+
+
+/**
+ * Aspect registration to generate TYPO3 CMS 6.x compliant extensions.
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ */
+
+// use GeneSEZ common conversion scripts
+extension org::genesez::util::Conversion;
+
+// use GeneSEZ common logging scripts
+extension org::genesez::util::logging::Logging;
+
+
+// -- Around statements -------------------------------------------------------------------------------------
+
+ 
+around org::genesez::platform::typo3::cms::util::FileSystemConvention::fileExtensionTs() :
+	useLogger("org.genesez.platform.typo3") -> 
+	logTrace( "GeneSEZ: TYPO3 CMS 6.x Compatibility! Use '.txt' instead of newer '.ts' file extension for static TypoScript files." ) ->
+	fileExtensionSeparator() + "txt";
