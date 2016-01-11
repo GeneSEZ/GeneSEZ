@@ -226,7 +226,6 @@ if (TYPO3_MODE === 'BE') {
 «FOREACH allConreteTableInheritances().sortBy( do | do.asConfigurationName() ) AS domainObject -»
 	«EXPAND DomainObjectAllowTableOnStandardPages FOR domainObject -»
 	«EXPAND DomainObjectContextSensitiveHelpInclusion FOR domainObject -»
-
 «ENDFOREACH -»
 «ENDDEFINE»
 
@@ -236,7 +235,7 @@ if (TYPO3_MODE === 'BE') {
 	To enable the creation of records on any kind of page, this additional call must be made.
 «ENDREM»
 «DEFINE DomainObjectAllowTableOnStandardPages FOR MClass -»
-«IF !emHasExtbaseDomainObjectAllowTableOnStandardPages("false") -»
+«IF emHasExtbaseDomainObjectAllowTableOnStandardPages("true") -»
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('«asConfigurationName() -»');
 «ENDIF -»
 «ENDDEFINE»
