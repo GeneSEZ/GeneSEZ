@@ -75,15 +75,15 @@ defined('TYPO3_MODE') or die();
 «ENDREM»
 «DEFINE PluginConfiguration FOR MInterface -»
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-	'«extensionVendorName() -».' . $_EXTKEY,
-	'«asExtbasePluginName() -»',
-	array(«FOREACH emGetExtbasePluginControllers() AS controller SEPARATOR ", "»
-		'«controller.asControllerName() -»' => '«FOREACH emGetExtbasePluginControllerActions(this, controller) AS controllerAction SEPARATOR ", " -»«controllerAction.asControllerActionName() -»«ENDFOREACH -»'«ENDFOREACH»
-	),
-	array(«FOREACH emGetExtbasePluginUncachedControllers() AS controller SEPARATOR ", "»
-		'«controller.asControllerName() -»' => '«FOREACH emGetExtbasePluginUncachedControllerActions(this, controller) AS uncachedControllerAction SEPARATOR ", " -»«uncachedControllerAction.asControllerActionName() -»«ENDFOREACH -»'«ENDFOREACH»
-	),
-	«emGetExtbasePluginPluginType().asExtbasePluginType()»
+    '«extensionVendorName() -».' . $_EXTKEY,
+    '«asExtbasePluginName() -»',
+    array(«FOREACH emGetExtbasePluginControllers() AS controller SEPARATOR ","»
+        '«controller.asControllerName() -»' => '«FOREACH emGetExtbasePluginControllerActions(this, controller) AS controllerAction SEPARATOR ", " -»«controllerAction.asControllerActionName() -»«ENDFOREACH -»'«ENDFOREACH»
+    ),
+    array(«FOREACH emGetExtbasePluginUncachedControllers() AS controller SEPARATOR ","»
+        '«controller.asControllerName() -»' => '«FOREACH emGetExtbasePluginUncachedControllerActions(this, controller) AS uncachedControllerAction SEPARATOR ", " -»«uncachedControllerAction.asControllerActionName() -»«ENDFOREACH -»'«ENDFOREACH»
+    ),
+    «emGetExtbasePluginPluginType().asExtbasePluginType()»
 );
 
 «ENDDEFINE»
@@ -103,8 +103,8 @@ defined('TYPO3_MODE') or die();
 «ENDREM»
 «DEFINE CommandControllerConfiguration FOR MModel -»
 if (TYPO3_MODE === 'BE') {
-	«EXPAND CommandControllerRegistration FOREACH allCommandControllers().sortBy( cc | cc.asGeneralName() ) -»
-	«EXPAND OwnCommandControllerCode("ext_localconf.php.own.command.controller.code." + xmiGuid) -»
+    «EXPAND CommandControllerRegistration FOREACH allCommandControllers().sortBy( cc | cc.asGeneralName() ) -»
+    «EXPAND OwnCommandControllerCode("ext_localconf.php.own.command.controller.code." + xmiGuid) -»
 }
 
 «ENDDEFINE»
@@ -114,7 +114,7 @@ if (TYPO3_MODE === 'BE') {
 	@TODO: refactoring code from replaceAll method
 «ENDREM»
 «DEFINE CommandControllerRegistration FOR MClass -»
-	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = '«(namespace() + namespaceSeperator() + asShortGeneralName()).replaceAll("\\\\", "\\\\\\\\") -»';
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = '«(namespace() + namespaceSeperator() + asShortGeneralName()).replaceAll("\\\\", "\\\\\\\\") -»';
 
 «ENDDEFINE»
 
@@ -123,9 +123,9 @@ if (TYPO3_MODE === 'BE') {
 	Generates a protected region for own command controller code.
 «ENDREM»
 «DEFINE OwnCommandControllerCode(String id) FOR MModel -»
-	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-	// TODO: put your further command controller code here
-	«ENDPROTECT»
+    «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+    // TODO: put your further command controller code here
+    «ENDPROTECT»
 «ENDDEFINE»
 
 
