@@ -85,12 +85,12 @@
 «ENDREM»
 «DEFINE GetAccessor FOR MProperty -»
 «IF multiplicity.isSingleValued() -»
-     * @return «type.asGeneralName() -» «comment("; ", "")»
+     * @return «type.asGeneralName() -»«IF hasComment() -» «comment("; ", "") -»«ENDIF»
 «ELSE -»
 «IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() -»
-     * @return «mapCollection("DomainModel") -»<«type.asGeneralName() -»> «comment("; ", "")»
+     * @return «mapCollection("DomainModel") -»<«type.asGeneralName() -»>«IF hasComment() -» «comment("; ", "") -»«ENDIF»
 «ELSE -»
-     * @return «mapCollection() -» «comment("; ", "")»
+     * @return «mapCollection() -»«IF hasComment() -» «comment("; ", "") -»«ENDIF»
 «ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
@@ -101,10 +101,10 @@
 «ENDREM»
 «DEFINE SetAccessor FOR MProperty -»
 «IF multiplicity.isSingleValued() -»
-     * @param «type.asGeneralName() -» $«asGeneralName() -» «comment("; ", "")»
+     * @param «type.asGeneralName() -» $«asGeneralName() -»«IF hasComment() -» «comment("; ", "") -»«ENDIF»
 «ELSE -»
 «IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() -»
-     * @param «mapCollection("DomainModel") -»<«type.asGeneralName() -»> $«asGeneralName() -» «comment("; ", "")»
+     * @param «mapCollection("DomainModel") -»<«type.asGeneralName() -»> $«asGeneralName() -»«IF hasComment() -» «comment("; ", "") -»«ENDIF»
 «ELSE -»
      * @param «mapCollection() -» $«asGeneralName() -» «comment("; ", "")»
 «ENDIF -» 
@@ -117,7 +117,7 @@
 	Generates the annotations for an add accessor method of a property.
 «ENDREM»
 «DEFINE AddAccessor FOR MProperty -»
-     * @param «type.asGeneralName() -» $toAdd «comment("; ", "")»
+     * @param «type.asGeneralName() -» $toAdd«IF hasComment() -» «comment("; ", "") -»«ENDIF»
      * @return void
 «ENDDEFINE»
 
@@ -126,7 +126,7 @@
 	Generates the annotations for a remove accessor method of a property.
 «ENDREM»
 «DEFINE RemoveAccessor FOR MProperty -»
-     * @param «type.asGeneralName() -» $toRemove «comment("; ", "")»
+     * @param «type.asGeneralName() -» $toRemove«IF hasComment() -» «comment("; ", "") -»«ENDIF»
      * @return void
 «ENDDEFINE»
 
@@ -206,9 +206,9 @@
 
 «DEFINE Param FOR MParameter -»
 «IF multiplicity.isSingleValued() -»
-     * @param «type.asGeneralName() -» $«asGeneralName() -» «comment("; ", "")»
+     * @param «type.asGeneralName() -» $«asGeneralName() -»«IF hasComment() -» «comment("; ", "") -»«ENDIF»
 «ELSE -»
-     * @param «mapCollection() -» $«asGeneralName() -» «comment("; ", "")»
+     * @param «mapCollection() -» $«asGeneralName() -»«IF hasComment() -» «comment("; ", "") -»«ENDIF»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -216,12 +216,12 @@
 «DEFINE Return FOR MOperation -»
 «IF hasReturn() -»
 «IF return.multiplicity.isSingleValued() -»
-     * @return «return.type.asGeneralName() -» «return.comment("; ", "")»
+     * @return «return.type.asGeneralName() -»«IF return.hasComment() -» «return.comment("; ", "") -»«ENDIF»
 «ELSE -»
 «IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() -»
-     * @return «return.mapCollection("DomainModel") -»<«return.type.asGeneralName() -»> «return.comment("; ", "")»
+     * @return «return.mapCollection("DomainModel") -»<«return.type.asGeneralName() -»>«IF return.hasComment() -» «return.comment("; ", "") -»«ENDIF»
 «ELSE -»
-     * @return «return.mapCollection() -» «return.comment("; ", "")»
+     * @return «return.mapCollection() -»«IF return.hasComment() -» «return.comment("; ", "") -»«ENDIF»
 «ENDIF -»
 «ENDIF -»
 «ELSE -»
