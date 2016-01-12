@@ -50,9 +50,9 @@
 «DEFINE PluginConfiguration FOR MModel -»
 «IF !allPlugins().isEmpty -»
 plugin.«extensionPrefix() -» {
-	«EXPAND PluginPersistence -»
-	«EXPAND PluginView -»
-	«EXPAND OwnPluginCode("setup.txt.own.plugin.code." + xmiGuid) -»
+    «EXPAND PluginPersistence -»
+    «EXPAND PluginView -»
+    «EXPAND OwnPluginCode("setup.txt.own.plugin.code." + xmiGuid) -»
 }
 
 «ENDIF -»
@@ -62,9 +62,9 @@ plugin.«extensionPrefix() -» {
 «REM»
 «ENDREM»
 «DEFINE PluginPersistence FOR MModel -»
-	persistence {
-		storagePid = {$plugin.«extensionPrefix() -».persistence.storagePid}
-	}
+    persistence {
+        storagePid = {$plugin.«extensionPrefix() -».persistence.storagePid}
+    }
 «ENDDEFINE»
 
 
@@ -72,20 +72,20 @@ plugin.«extensionPrefix() -» {
 	@todo	Support of templateRootPaths
 «ENDREM»
 «DEFINE PluginView FOR MModel -»
-	view {
-		templateRootPaths {
-			10 = EXT:«extensionKey() -»/«dirPathResourcesPrivateTemplates() -»/
-			20 = {$plugin.«extensionPrefix() -».view.templateRootPath}
-		}
-		partialRootPaths {
-			10 = EXT:«extensionKey() -»/«dirPathResourcesPrivatePartials() -»/
-			20 = {$plugin.«extensionPrefix() -».view.partialRootPath}
-		}
-		layoutRootPaths {
-			10 = EXT:«extensionKey() -»/«dirPathResourcesPrivateLayouts() -»/
-			20 = {$plugin.«extensionPrefix() -».view.layoutRootPath}
-		}
-	}
+    view {
+        templateRootPaths {
+            10 = EXT:«extensionKey() -»/«dirPathResourcesPrivateTemplates() -»/
+            20 = {$plugin.«extensionPrefix() -».view.templateRootPath}
+        }
+        partialRootPaths {
+            10 = EXT:«extensionKey() -»/«dirPathResourcesPrivatePartials() -»/
+            20 = {$plugin.«extensionPrefix() -».view.partialRootPath}
+        }
+        layoutRootPaths {
+            10 = EXT:«extensionKey() -»/«dirPathResourcesPrivateLayouts() -»/
+            20 = {$plugin.«extensionPrefix() -».view.layoutRootPath}
+        }
+    }
 «ENDDEFINE»
 
 
@@ -93,9 +93,9 @@ plugin.«extensionPrefix() -» {
 	Generates a protected region for own plugin code.
 «ENDREM»
 «DEFINE OwnPluginCode(String id) FOR MModel -»
-	«PROTECT CSTART '// ' CEND '' ID (id)»
-	// TODO: put your further plugin code here
-	«ENDPROTECT»
+    «PROTECT CSTART '// ' CEND '' ID (id)»
+    // TODO: put your further plugin code here
+    «ENDPROTECT»
 «ENDDEFINE»
 
 
@@ -104,9 +104,9 @@ plugin.«extensionPrefix() -» {
 «DEFINE ModuleConfiguration FOR MModel -»
 «IF !allModules().isEmpty -»
 module.«extensionPrefix() -» {
-	«EXPAND ModulePersistence -»
-	«EXPAND ModuleView -»
-	«EXPAND OwnModuleCode("setup.txt.own.module.code." + xmiGuid) -»
+    «EXPAND ModulePersistence -»
+    «EXPAND ModuleView -»
+    «EXPAND OwnModuleCode("setup.txt.own.module.code." + xmiGuid) -»
 }
 
 «ENDIF -»
@@ -116,29 +116,29 @@ module.«extensionPrefix() -» {
 «REM»
 «ENDREM»
 «DEFINE ModulePersistence FOR MModel -»
-	persistence {
-		storagePid = {$module.«extensionPrefix() -».persistence.storagePid}
-	}
+    persistence {
+        storagePid = {$module.«extensionPrefix() -».persistence.storagePid}
+    }
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
 «DEFINE ModuleView FOR MModel -»
-	view {
-		templateRootPaths {
-			10 = EXT:«extensionKey() -»/«dirPathResourcesPrivateTemplates() -»/
-			20 = {$module.«extensionPrefix() -».view.templateRootPath}
-		}
-		partialRootPaths {
-			10 = EXT:«extensionKey() -»/«dirPathResourcesPrivatePartials() -»/
-			20 = {$module.«extensionPrefix() -».view.partialRootPath}
-		}
-		layoutRootPaths {
-			10 = EXT:«extensionKey() -»/«dirPathResourcesPrivateLayouts() -»/
-			20 = {$module.«extensionPrefix() -».view.layoutRootPath}
-		}
-	}
+    view {
+        templateRootPaths {
+            10 = EXT:«extensionKey() -»/«dirPathResourcesPrivateTemplates() -»/
+            20 = {$module.«extensionPrefix() -».view.templateRootPath}
+        }
+        partialRootPaths {
+            10 = EXT:«extensionKey() -»/«dirPathResourcesPrivatePartials() -»/
+            20 = {$module.«extensionPrefix() -».view.partialRootPath}
+        }
+        layoutRootPaths {
+            10 = EXT:«extensionKey() -»/«dirPathResourcesPrivateLayouts() -»/
+            20 = {$module.«extensionPrefix() -».view.layoutRootPath}
+        }
+    }
 «ENDDEFINE»
 
 
@@ -146,9 +146,9 @@ module.«extensionPrefix() -» {
 	Generates a protected region for own module code.
 «ENDREM»
 «DEFINE OwnModuleCode(String id) FOR MModel -»
-	«PROTECT CSTART '// ' CEND '' ID (id) »
-	// TODO: put your further module code here
-	«ENDPROTECT»
+    «PROTECT CSTART '// ' CEND '' ID (id) »
+    // TODO: put your further module code here
+    «ENDPROTECT»
 «ENDDEFINE»
 
 
@@ -157,11 +157,11 @@ module.«extensionPrefix() -» {
 «DEFINE PersistenceClassesMappingConfiguration FOR MModel -»
 «IF !allPersistenceClassMappings().isEmpty -»
 config.tx_extbase {
-	persistence {
-		classes {
-			«EXPAND PersistenceClassMapping FOREACH allPersistenceClassMappings().sortBy( e | e.asGeneralName() ) -»
-		}
-	}
+    persistence {
+        classes {
+            «EXPAND PersistenceClassMapping FOREACH allPersistenceClassMappings().sortBy( e | e.asGeneralName() ) -»
+        }
+    }
 }
 
 «ENDIF -»
@@ -171,30 +171,30 @@ config.tx_extbase {
 «REM»
 «ENDREM»
 «DEFINE PersistenceClassMapping FOR MClass -»
-			«asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" ) -» {
-				mapping {
-					«EXPAND PersistenceClassMappingTableName -»
-					«EXPAND PersistenceClassMappingRecordType -»
-					«EXPAND PersistenceColumnsMapping -»
-				}
-				«EXPAND PersistenceSubclasses -»
-			}
+            «asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" ) -» {
+                mapping {
+                    «EXPAND PersistenceClassMappingTableName -»
+                    «EXPAND PersistenceClassMappingRecordType -»
+                    «EXPAND PersistenceColumnsMapping -»
+                }
+                «EXPAND PersistenceSubclasses -»
+            }
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
 «DEFINE PersistenceClassMapping FOR MType -»
-			«asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" ) -» {
-				«EXPAND PersistenceSubclasses -»
-			}
+            «asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" ) -» {
+                «EXPAND PersistenceSubclasses -»
+            }
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
 «DEFINE PersistenceClassMappingTableName FOR MClass -»
-					tableName = «asPersistenceName()»
+                    tableName = «asPersistenceName()»
 «ENDDEFINE»
 
 
@@ -202,7 +202,7 @@ config.tx_extbase {
 «ENDREM»
 «DEFINE PersistenceClassMappingRecordType FOR MClass -»
 «IF getPersistenceRecordTypeColumnName().length != 0 -»
-					recordType = «asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" )»
+                    recordType = «asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" )»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -211,9 +211,9 @@ config.tx_extbase {
 «ENDREM»
 «DEFINE PersistenceColumnsMapping FOR MClass -»
 «IF !owningPersistencePropertyMappings().isEmpty -»
-					columns {
-						«EXPAND PersistenceColumnMapping FOREACH owningPersistencePropertyMappings().sortBy( p | p.asGeneralName() ) -»
-					}
+                    columns {
+                        «EXPAND PersistenceColumnMapping FOREACH owningPersistencePropertyMappings().sortBy( p | p.asGeneralName() ) -»
+                    }
 «ENDIF -»
 «ENDDEFINE»
 
@@ -221,7 +221,7 @@ config.tx_extbase {
 «REM»
 «ENDREM»
 «DEFINE PersistenceColumnMapping FOR MProperty -»
-						«asPersistenceName() -».mapOnProperty = «asGeneralName()»
+                        «asPersistenceName() -».mapOnProperty = «asGeneralName()»
 «ENDDEFINE»
 
 
@@ -229,9 +229,9 @@ config.tx_extbase {
 «ENDREM»
 «DEFINE PersistenceSubclasses FOR MType -»
 «IF !owningSingleTableInheritanceSpecializations().isEmpty -»
-				subclasses {
-					«EXPAND PersistenceSubclass FOREACH owningSingleTableInheritanceSpecializations().sortBy( c | c.asGeneralName() ) -»						
-				}
+                subclasses {
+                    «EXPAND PersistenceSubclass FOREACH owningSingleTableInheritanceSpecializations().sortBy( c | c.asGeneralName() ) -»						
+                }
 «ENDIF -»
 «ENDDEFINE»
 
@@ -239,7 +239,7 @@ config.tx_extbase {
 «REM»
 «ENDREM»
 «DEFINE PersistenceSubclass FOR MClass -»
-					«asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" ) -» = «asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" )»
+                    «asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" ) -» = «asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" )»
 «ENDDEFINE»
 
 
