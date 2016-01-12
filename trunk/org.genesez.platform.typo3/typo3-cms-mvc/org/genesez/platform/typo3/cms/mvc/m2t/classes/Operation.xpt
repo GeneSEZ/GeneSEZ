@@ -40,7 +40,7 @@
 	Processes all constructors.
 «ENDREM»
 «DEFINE Constructor FOR MClass -»
-	«EXPAND Constructor FOREACH uniqueOperations().select( o | o.isConstructor() ) -»
+    «EXPAND Constructor FOREACH uniqueOperations().select( o | o.isConstructor() ) -»
 «ENDDEFINE»
 
 
@@ -48,7 +48,7 @@
 	Processes all destructors.
 «ENDREM»
 «DEFINE Destructor FOR MClass -»
-	«EXPAND Destructor FOREACH uniqueOperations().select( o | o.isDestructor() ) -»
+    «EXPAND Destructor FOREACH uniqueOperations().select( o | o.isDestructor() ) -»
 «ENDDEFINE»
 
 
@@ -57,8 +57,8 @@
 	Order: realized operations from interfaces first
 «ENDREM»
 «DEFINE Declaration FOR MClass -»
-	«EXPAND Declaration FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && o.abstract && realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
-	«EXPAND Declaration FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && o.abstract && !realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
+    «EXPAND Declaration FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && o.abstract && realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
+    «EXPAND Declaration FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && o.abstract && !realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
 «ENDDEFINE»
 
 
@@ -66,7 +66,7 @@
 	Processes operation declarations for an interface.
 «ENDREM»
 «DEFINE Declaration FOR MInterface -»
-	«EXPAND Declaration FOREACH uniqueOperations() -»
+    «EXPAND Declaration FOREACH uniqueOperations() -»
 «ENDDEFINE»
 
 
@@ -75,8 +75,8 @@
 	Order: realized operations from interfaces first
 «ENDREM»
 «DEFINE Implementation FOR MClass -»
-	«EXPAND Implementation FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && !o.abstract && realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
-	«EXPAND Implementation FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && !o.abstract && !realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
+    «EXPAND Implementation FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && !o.abstract && realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
+    «EXPAND Implementation FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && !o.abstract && !realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
 «ENDDEFINE»
 
 
@@ -84,7 +84,7 @@
 	Processes all static operations to implement.
 «ENDREM»
 «DEFINE Implementation FOR MEnumeration -»
-	«EXPAND Implementation FOREACH uniqueOperations().select( o | o.static ) -»
+    «EXPAND Implementation FOREACH uniqueOperations().select( o | o.static ) -»
 «ENDDEFINE»
 
 
@@ -96,10 +96,11 @@
 	Generates a constructor which cannot has a return value.
 «ENDREM»
 «DEFINE Constructor FOR MOperation -»
-	«EXPAND Comment::Constructor -»
-	«visibility -» function __construct(«EXPAND Params -») {
-		«EXPAND OwnCode("php.constructor.own.code." + xmiGuid) -»
-	}
+    «EXPAND Comment::Constructor -»
+    «visibility -» function __construct(«EXPAND Params -»)
+    {
+        «EXPAND OwnCode("php.constructor.own.code." + xmiGuid) -»
+    }
 
 «ENDDEFINE»
 
@@ -108,10 +109,11 @@
 	Generates a destructor which cannot have parameters or a return value.
 «ENDREM»
 «DEFINE Destructor FOR MOperation -»
-	«EXPAND Comment::Destructor -»
-	«visibility -» function __destruct() {
-		«EXPAND OwnCode("php.destructor.own.code." + xmiGuid) -»
-	}
+    «EXPAND Comment::Destructor -»
+    «visibility -» function __destruct()
+    {
+        «EXPAND OwnCode("php.destructor.own.code." + xmiGuid) -»
+    }
 
 «ENDDEFINE»
 
@@ -120,8 +122,8 @@
 	Generates an operation declaration.
 «ENDREM»
 «DEFINE Declaration FOR MOperation -»
-	«EXPAND Comment::Operation -»
-	«EXPAND Modifier -» function «asGeneralName() -»(«EXPAND Params -»);
+    «EXPAND Comment::Operation -»
+    «EXPAND Modifier -» function «asGeneralName() -»(«EXPAND Params -»);
 
 «ENDDEFINE»
 
@@ -130,10 +132,11 @@
 	Generates an operation implementation.
 «ENDREM»
 «DEFINE Implementation FOR MOperation -»
-	«EXPAND Comment::Operation -»
-	«EXPAND Modifier -» function «asGeneralName() -»(«EXPAND Params -») {
-		«EXPAND OwnCode("php.operation.own.code." + xmiGuid) -»
-	}
+    «EXPAND Comment::Operation -»
+    «EXPAND Modifier -» function «asGeneralName() -»(«EXPAND Params -»)
+    {
+        «EXPAND OwnCode("php.operation.own.code." + xmiGuid) -»
+    }
 
 «ENDDEFINE»
 
@@ -144,9 +147,9 @@
 «ENDREM»
 «DEFINE Modifier FOR MOperation -»
 «IF classifier.metaType == MInterface -»
-	public«"" -»
+    public«"" -»
 «ELSE -»
-	«IF static»static «ENDIF»«IF final»final «ENDIF»«IF abstract && classifier.abstract»abstract «ENDIF»«visibility -»
+    «IF abstract && classifier.abstract»abstract «ENDIF»«IF final»final «ENDIF»«visibility»«IF static» static«ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -192,34 +195,34 @@ $«asGeneralName() -»«EXPAND DefaultValue -»
 «ENDREM»
 «DEFINE OwnCode(String id) FOR MOperation -»
 «IF isConstructor() -»
-		«EXPAND OwnCodeConstructor(id) -»
+        «EXPAND OwnCodeConstructor(id) -»
 «ELSEIF isDestructor() -»
-		«EXPAND OwnCodeDestructor(id) -»
+        «EXPAND OwnCodeDestructor(id) -»
 «ELSE -»
-		«EXPAND OwnCodeOperation(id) -»
+        «EXPAND OwnCodeOperation(id) -»
 «ENDIF -»
 «ENDDEFINE»
 
 
 «DEFINE OwnCodeConstructor(String id) FOR MOperation -»
-		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: implementation of destructor for class «classifier.asShortGeneralName()»
-		throw new Exception('The implementation of the destructor for class «classifier.asShortGeneralName() -» is missing!');
-		«ENDPROTECT»
+        «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+        // TODO: implementation of destructor for class «classifier.asShortGeneralName()»
+        throw new Exception('The implementation of the destructor for class «classifier.asShortGeneralName() -» is missing!');
+        «ENDPROTECT»
 «ENDDEFINE»
 
 
 «DEFINE OwnCodeDestructor(String id) FOR MOperation -»
-		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: implementation of destructor for class «classifier.asShortGeneralName()»
-		throw new Exception('The implementation of the destructor for class «classifier.asShortGeneralName() -» is missing!');
-		«ENDPROTECT»
+        «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+        // TODO: implementation of destructor for class «classifier.asShortGeneralName()»
+        throw new Exception('The implementation of the destructor for class «classifier.asShortGeneralName() -» is missing!');
+        «ENDPROTECT»
 «ENDDEFINE»
 
 
 «DEFINE OwnCodeOperation(String id) FOR MOperation -»
-		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: implementation of method «asGeneralName() -» for class «classifier.asShortGeneralName()»
-		throw new Exception('The implementation of the method «asGeneralName() -» for class «classifier.asShortGeneralName() -» is missing!');
-		«ENDPROTECT»
+        «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+        // TODO: implementation of method «asGeneralName() -» for class «classifier.asShortGeneralName()»
+        throw new Exception('The implementation of the method «asGeneralName() -» for class «classifier.asShortGeneralName() -» is missing!');
+        «ENDPROTECT»
 «ENDDEFINE»

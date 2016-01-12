@@ -40,7 +40,7 @@
 	Processes the association roles of classifier.
 «ENDREM»
 «DEFINE Declaration FOR MClassifier -»
-	«EXPAND Declaration FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived ) -»
+    «EXPAND Declaration FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived ) -»
 «ENDDEFINE»
 
 
@@ -48,7 +48,7 @@
 	Processes the derived association roles of a class.
 «ENDREM»
 «DEFINE Derived FOR MClass -»
-	«EXPAND Derived FOREACH property.typeSelect(MAssociationRole).select( ar | ar.derived ) -»
+    «EXPAND Derived FOREACH property.typeSelect(MAssociationRole).select( ar | ar.derived ) -»
 «ENDDEFINE»
 
 
@@ -56,12 +56,12 @@
 	Processes the implementation of the accessor methods for an association role.
 «ENDREM»
 «DEFINE Accessors FOR MClass -»
-	«FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived ) AS assocationRole -»
-		«EXPAND GetAccessorImplemementation FOR assocationRole -»
-		«EXPAND SetAccessorImplemementation FOR assocationRole -»
-		«EXPAND AddAccessorImplemementation FOR assocationRole -»
-		«EXPAND RemoveAccessorImplemementation FOR assocationRole -»
-	«ENDFOREACH -»
+    «FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived ) AS assocationRole -»
+        «EXPAND GetAccessorImplemementation FOR assocationRole -»
+        «EXPAND SetAccessorImplemementation FOR assocationRole -»
+        «EXPAND AddAccessorImplemementation FOR assocationRole -»
+        «EXPAND RemoveAccessorImplemementation FOR assocationRole -»
+    «ENDFOREACH -»
 «ENDDEFINE»
 
 
@@ -69,12 +69,12 @@
 	Processes the declaration of the accessor methods for an association role.
 «ENDREM»
 «DEFINE Accessors FOR MInterface -»
-	«FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived ) AS assocationRole -»
-		«EXPAND GetAccessorDeclaration FOR assocationRole -»
-		«EXPAND SetAccessorDeclaration FOR assocationRole -»
-		«EXPAND AddAccessorDeclaration FOR assocationRole -»
-		«EXPAND RemoveAccessorDeclaration FOR assocationRole -»
-	«ENDFOREACH -»
+    «FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived ) AS assocationRole -»
+        «EXPAND GetAccessorDeclaration FOR assocationRole -»
+        «EXPAND SetAccessorDeclaration FOR assocationRole -»
+        «EXPAND AddAccessorDeclaration FOR assocationRole -»
+        «EXPAND RemoveAccessorDeclaration FOR assocationRole -»
+    «ENDFOREACH -»
 «ENDDEFINE»
 
 
@@ -86,8 +86,8 @@
 	Generates the declaration of an association role.
 «ENDREM»
 «DEFINE Declaration FOR MAssociationRole -»
-	«EXPAND Comment::Association -»
-	«EXPAND Modifier -» $«asGeneralName() -»;
+    «EXPAND Comment::Association -»
+    «EXPAND Modifier -» $«asGeneralName() -»;
 
 «ENDDEFINE»
 
@@ -96,10 +96,11 @@
 	Generates the get accessor method for an derived association role.
 «ENDREM»
 «DEFINE Derived FOR MAssociationRole -»
-	«EXPAND Comment::GetAccessor -»
-	«EXPAND ModifierAccessor -» function «asGetAccessorName() -»() {
-		«EXPAND OwnCode("php.association.derived.own.code." + xmiGuid) -»
-	}
+    «EXPAND Comment::GetAccessor -»
+    «EXPAND ModifierAccessor -» function «asGetAccessorName() -»()
+    {
+        «EXPAND OwnCode("php.association.derived.own.code." + xmiGuid) -»
+    }
 
 «ENDDEFINE»
 
@@ -109,8 +110,8 @@
 «ENDREM»
 «DEFINE GetAccessorDeclaration FOR MAssociationRole -»
 «IF !emHasAccessorGetter("false") -»
-	«EXPAND Comment::GetAccessor -»
-	«EXPAND ModifierAccessor -» function «asGetAccessorName() -»();
+    «EXPAND Comment::GetAccessor -»
+    «EXPAND ModifierAccessor -» function «asGetAccessorName() -»();
 
 «ENDIF -»
 «ENDDEFINE»
@@ -121,12 +122,13 @@
 «ENDREM»
 «DEFINE GetAccessorImplemementation FOR MAssociationRole -»
 «IF !emHasAccessorGetter("false") -»
-	«EXPAND Comment::GetAccessor -»
-	«EXPAND ModifierAccessor -» function «asGetAccessorName() -»() {
-		«PROTECT CSTART '/* ' CEND ' */' ID ("php.association.get.own.code." + xmiGuid) DISABLE»
-		return $this->«asGeneralName() -»;
-		«ENDPROTECT»
-	}
+    «EXPAND Comment::GetAccessor -»
+    «EXPAND ModifierAccessor -» function «asGetAccessorName() -»()
+    {
+        «PROTECT CSTART '/* ' CEND ' */' ID ("php.association.get.own.code." + xmiGuid) DISABLE»
+        return $this->«asGeneralName() -»;
+        «ENDPROTECT»
+    }
 
 «ENDIF -»
 «ENDDEFINE»
@@ -137,8 +139,8 @@
 «ENDREM»
 «DEFINE SetAccessorDeclaration FOR MAssociationRole -»
 «IF !emHasAccessorSetter("false") -»
-	«EXPAND Comment::SetAccessor -»
-	«EXPAND ModifierAccessor -» function «asSetAccessorName() -»(«EXPAND TypeHintSetAccessor -»$«asGeneralName() -»«EXPAND DefaultValueSetAccessor -»);
+    «EXPAND Comment::SetAccessor -»
+    «EXPAND ModifierAccessor -» function «asSetAccessorName() -»(«EXPAND TypeHintSetAccessor -»$«asGeneralName() -»«EXPAND DefaultValueSetAccessor -»);
 
 «ENDIF -»
 «ENDDEFINE»
@@ -149,12 +151,13 @@
 «ENDREM»
 «DEFINE SetAccessorImplemementation FOR MAssociationRole -»
 «IF !emHasAccessorSetter("false") -»
-	«EXPAND Comment::SetAccessor -»
-	«EXPAND ModifierAccessor -» function «asSetAccessorName() -»(«EXPAND TypeHintSetAccessor -»$«asGeneralName() -»«EXPAND DefaultValueSetAccessor -») {
-		«PROTECT CSTART '/* ' CEND ' */' ID ("php.association.set.own.code." + xmiGuid) DISABLE»
-		$this->«asGeneralName() -» = $«asGeneralName() -»;
-		«ENDPROTECT»
-	}
+    «EXPAND Comment::SetAccessor -»
+    «EXPAND ModifierAccessor -» function «asSetAccessorName() -»(«EXPAND TypeHintSetAccessor -»$«asGeneralName() -»«EXPAND DefaultValueSetAccessor -»)
+    {
+        «PROTECT CSTART '/* ' CEND ' */' ID ("php.association.set.own.code." + xmiGuid) DISABLE»
+        $this->«asGeneralName() -» = $«asGeneralName() -»;
+        «ENDPROTECT»
+    }
 
 «ENDIF -»
 «ENDDEFINE»
@@ -165,8 +168,8 @@
 «ENDREM»
 «DEFINE AddAccessorDeclaration FOR MAssociationRole -»
 «IF multiplicity.isMultiValued() && !emHasAccessorAdd("false") -»
-	«EXPAND Comment::AddAccessor -»
-	«EXPAND ModifierAccessor -» function «asAddAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toAdd);
+    «EXPAND Comment::AddAccessor -»
+    «EXPAND ModifierAccessor -» function «asAddAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toAdd);
 
 «ENDIF -»
 «ENDDEFINE»
@@ -177,12 +180,13 @@
 «ENDREM»
 «DEFINE AddAccessorImplemementation FOR MAssociationRole -»
 «IF multiplicity.isMultiValued() && !emHasAccessorAdd("false") -»
-	«EXPAND Comment::AddAccessor -»
-	«EXPAND ModifierAccessor -» function «asAddAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toAdd) {
-		«PROTECT CSTART '/* ' CEND ' */' ID ("php.association.add.own.code." + xmiGuid) DISABLE»
-		$this->«asGeneralName() -»->attach($toAdd);
-		«ENDPROTECT»
-	}
+    «EXPAND Comment::AddAccessor -»
+    «EXPAND ModifierAccessor -» function «asAddAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toAdd)
+    {
+        «PROTECT CSTART '/* ' CEND ' */' ID ("php.association.add.own.code." + xmiGuid) DISABLE»
+        $this->«asGeneralName() -»->attach($toAdd);
+        «ENDPROTECT»
+    }
 
 «ENDIF -»
 «ENDDEFINE»
@@ -193,8 +197,8 @@
 «ENDREM»
 «DEFINE RemoveAccessorDeclaration FOR MAssociationRole -»
 «IF multiplicity.isMultiValued() && ! emHasAccessorRemove("false") -»
-	«EXPAND Comment::RemoveAccessor -»
-	«EXPAND ModifierAccessor -» function «asRemoveAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toRemove);
+    «EXPAND Comment::RemoveAccessor -»
+    «EXPAND ModifierAccessor -» function «asRemoveAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toRemove);
 
 «ENDIF -»
 «ENDDEFINE»
@@ -205,12 +209,13 @@
 «ENDREM»
 «DEFINE RemoveAccessorImplemementation FOR MAssociationRole -»
 «IF multiplicity.isMultiValued() && ! emHasAccessorRemove("false") -»
-	«EXPAND Comment::RemoveAccessor -»
-	«EXPAND ModifierAccessor -» function «asRemoveAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toRemove) {
-		«PROTECT CSTART '/* ' CEND ' */' ID ("php.association.remove.own.code." + xmiGuid) DISABLE»
-		$this->«asGeneralName() -»->detach($toRemove);
-		«ENDPROTECT»
-	}
+    «EXPAND Comment::RemoveAccessor -»
+    «EXPAND ModifierAccessor -» function «asRemoveAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toRemove)
+    {
+        «PROTECT CSTART '/* ' CEND ' */' ID ("php.association.remove.own.code." + xmiGuid) DISABLE»
+        $this->«asGeneralName() -»->detach($toRemove);
+        «ENDPROTECT»
+    }
 
 «ENDIF -»
 «ENDDEFINE»
@@ -220,7 +225,7 @@
 	Generates the modifiers of an association role.
 «ENDREM»
 «DEFINE Modifier FOR MAssociationRole -»
-	«visibility -»
+    «visibility -»
 «ENDDEFINE»
 
 
@@ -228,7 +233,7 @@
 	Generates the modifiers of an association role accessor method.
 «ENDREM»
 «DEFINE ModifierAccessor FOR MAssociationRole -»
-	public«"" -»
+    public«"" -»
 «ENDDEFINE»
 
 
@@ -257,8 +262,8 @@
 «ENDREM»
 «DEFINE DefaultValueSetAccessor FOR MAssociationRole -»
 «IF multiplicity.lowerBound < 1 -»
-«IF multiplicity.isSingleValued() -» = NULL«ENDIF -»
-«IF multiplicity.isMultiValued() -»«IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() -» = NULL«ELSE -» = array()«ENDIF -»«ENDIF -»
+«IF multiplicity.isSingleValued() -» = null«ENDIF -»
+«IF multiplicity.isMultiValued() -»«IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() -» = null«ELSE -» = array()«ENDIF -»«ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -267,8 +272,8 @@
 	Generates the protected region of an operation.
 «ENDREM»
 «DEFINE OwnCode(String id) FOR MAssociationRole -»
-		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: implementation of method «asGetAccessorName() -» for class «classifier.asShortGeneralName()»
-		throw new Exception('The implementation of the method «asGetAccessorName() -» for class «classifier.asShortGeneralName() -» is missing!');
-		«ENDPROTECT»
+        «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+        // TODO: implementation of method «asGetAccessorName() -» for class «classifier.asShortGeneralName()»
+        throw new Exception('The implementation of the method «asGetAccessorName() -» for class «classifier.asShortGeneralName() -» is missing!');
+        «ENDPROTECT»
 «ENDDEFINE»
