@@ -65,18 +65,18 @@
 «ENDREM»
 «DEFINE Property FOR MProperty -»
 «IF multiplicity.isSingleValued() -»
-	 * @var «type.asGeneralName()»
+     * @var «type.asGeneralName()»
 «ELSE -»
 «IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() -»
-	 * @var «mapCollection("DomainModel") -»<«type.asGeneralName() -»>
+     * @var «mapCollection("DomainModel") -»<«type.asGeneralName() -»>
 «ELSE -»
-	 * @var «mapCollection()»
+     * @var «mapCollection()»
 «ENDIF -» 
 «ENDIF -»
-	«EXPAND Cascade -»
-	«EXPAND Fetch -»
-	«EXPAND Inject -»
-	«EXPAND Validate -»
+    «EXPAND Cascade -»
+    «EXPAND Fetch -»
+    «EXPAND Inject -»
+    «EXPAND Validate -»
 «ENDDEFINE»
 
 
@@ -85,12 +85,12 @@
 «ENDREM»
 «DEFINE GetAccessor FOR MProperty -»
 «IF multiplicity.isSingleValued() -»
-	 * @return «type.asGeneralName() -» «comment("; ", "")»
+     * @return «type.asGeneralName() -» «comment("; ", "")»
 «ELSE -»
 «IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() -»
-	 * @return «mapCollection("DomainModel") -»<«type.asGeneralName() -»> «comment("; ", "")»
+     * @return «mapCollection("DomainModel") -»<«type.asGeneralName() -»> «comment("; ", "")»
 «ELSE -»
-	 * @return «mapCollection() -» «comment("; ", "")»
+     * @return «mapCollection() -» «comment("; ", "")»
 «ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
@@ -101,15 +101,15 @@
 «ENDREM»
 «DEFINE SetAccessor FOR MProperty -»
 «IF multiplicity.isSingleValued() -»
-	 * @param «type.asGeneralName() -» $«asGeneralName() -» «comment("; ", "")»
+     * @param «type.asGeneralName() -» $«asGeneralName() -» «comment("; ", "")»
 «ELSE -»
 «IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() -»
-	 * @param «mapCollection("DomainModel") -»<«type.asGeneralName() -»> $«asGeneralName() -» «comment("; ", "")»
+     * @param «mapCollection("DomainModel") -»<«type.asGeneralName() -»> $«asGeneralName() -» «comment("; ", "")»
 «ELSE -»
-	 * @param «mapCollection() -» $«asGeneralName() -» «comment("; ", "")»
+     * @param «mapCollection() -» $«asGeneralName() -» «comment("; ", "")»
 «ENDIF -» 
 «ENDIF -»
-	 * @return void
+     * @return void
 «ENDDEFINE»
 
 
@@ -117,8 +117,8 @@
 	Generates the annotations for an add accessor method of a property.
 «ENDREM»
 «DEFINE AddAccessor FOR MProperty -»
-	 * @param «type.asGeneralName() -» $toAdd «comment("; ", "")»
-	 * @return void
+     * @param «type.asGeneralName() -» $toAdd «comment("; ", "")»
+     * @return void
 «ENDDEFINE»
 
 
@@ -126,8 +126,8 @@
 	Generates the annotations for a remove accessor method of a property.
 «ENDREM»
 «DEFINE RemoveAccessor FOR MProperty -»
-	 * @param «type.asGeneralName() -» $toRemove «comment("; ", "")»
-	 * @return void
+     * @param «type.asGeneralName() -» $toRemove «comment("; ", "")»
+     * @return void
 «ENDDEFINE»
 
 
@@ -135,7 +135,7 @@
 	Generates the annotations for a constructor operation.
 «ENDREM»
 «DEFINE Constructor FOR MOperation -»
-	«EXPAND Param FOREACH parameter -»
+    «EXPAND Param FOREACH parameter -»
 «ENDDEFINE»
 
 
@@ -150,10 +150,10 @@
 	Generates the annotations for an operation.
 «ENDREM»
 «DEFINE Operation FOR MOperation -»
-	«EXPAND Param FOREACH parameter -»
-	«EXPAND Return -»
-	«EXPAND IgnoreValidation FOREACH parameter -»
-	«EXPAND DontVerifyRequestHash -»
+    «EXPAND Param FOREACH parameter -»
+    «EXPAND Return -»
+    «EXPAND IgnoreValidation FOREACH parameter -»
+    «EXPAND DontVerifyRequestHash -»
 «ENDDEFINE»
 
 
@@ -178,37 +178,37 @@
 
 «DEFINE Cascade FOR MProperty -»
 «IF emHasAssociationCascadeType( prCascadeTypeRemove() ) -»
-	 * @cascade remove
+     * @cascade remove
 «ENDIF -»
 «ENDDEFINE»
 
 
 «DEFINE Fetch FOR MProperty -»
 «IF emHasAssociationFetchType( prFetchTypeLazy() ) -»
-	 * @lazy
+     * @lazy
 «ENDIF -»
 «ENDDEFINE»
 
 
 «DEFINE Inject FOR MProperty -»
 «IF emHasDiSetter("true") -»
-	 * @inject
+     * @inject
 «ENDIF -»
 «ENDDEFINE»
 
 
 «DEFINE Validate FOR MProperty -»
 «FOREACH allAssignedValidators() AS v -»
-	 * @validate «v.asAssignedValidatorName() -»«IF v.property.exists( p | emGetTaggedValue( v.name, p.name ) != "" ) -»(«FOREACH v.property.select( p | emGetTaggedValue( v.name, p.name ) != "" ) AS p SEPARATOR ", "-»«p.name -» = «emGetTaggedValue(v.name, p.name) -»«ENDFOREACH -»)«ENDIF»
+     * @validate «v.asAssignedValidatorName() -»«IF v.property.exists( p | emGetTaggedValue( v.name, p.name ) != "" ) -»(«FOREACH v.property.select( p | emGetTaggedValue( v.name, p.name ) != "" ) AS p SEPARATOR ", "-»«p.name -» = «emGetTaggedValue(v.name, p.name) -»«ENDFOREACH -»)«ENDIF»
 «ENDFOREACH -»
 «ENDDEFINE»
 
 
 «DEFINE Param FOR MParameter -»
 «IF multiplicity.isSingleValued() -»
-	 * @param «type.asGeneralName() -» $«asGeneralName() -» «comment("; ", "")»
+     * @param «type.asGeneralName() -» $«asGeneralName() -» «comment("; ", "")»
 «ELSE -»
-	 * @param «mapCollection() -» $«asGeneralName() -» «comment("; ", "")»
+     * @param «mapCollection() -» $«asGeneralName() -» «comment("; ", "")»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -216,29 +216,29 @@
 «DEFINE Return FOR MOperation -»
 «IF hasReturn() -»
 «IF return.multiplicity.isSingleValued() -»
-	 * @return «return.type.asGeneralName() -» «return.comment("; ", "")»
+     * @return «return.type.asGeneralName() -» «return.comment("; ", "")»
 «ELSE -»
 «IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() -»
-	 * @return «return.mapCollection("DomainModel") -»<«return.type.asGeneralName() -»> «return.comment("; ", "")»
+     * @return «return.mapCollection("DomainModel") -»<«return.type.asGeneralName() -»> «return.comment("; ", "")»
 «ELSE -»
-	 * @return «return.mapCollection() -» «return.comment("; ", "")»
+     * @return «return.mapCollection() -» «return.comment("; ", "")»
 «ENDIF -»
-«ENDIF -»	
+«ENDIF -»
 «ELSE -»
-	 * @return void
+     * @return void
 «ENDIF -»
 «ENDDEFINE»
 
 
 «DEFINE IgnoreValidation FOR MParameter -»
 «IF emHasIgnoreValidationStereotype() -»
-	 * @ignorevalidation $«asGeneralName()»
+     * @ignorevalidation $«asGeneralName()»
 «ENDIF -»
 «ENDDEFINE»
 
 
 «DEFINE DontVerifyRequestHash FOR MOperation -»
 «IF emHasIgnoreValidationStereotype() -»
-	 * @dontverifyrequesthash
+     * @dontverifyrequesthash
 «ENDIF -»
 «ENDDEFINE»

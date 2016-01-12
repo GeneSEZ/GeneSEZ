@@ -41,9 +41,9 @@
 	Order: constants (static + final), static, non static
 «ENDREM»
 «DEFINE Declaration FOR MClassifier -»
-	«EXPAND Const FOREACH property.typeSelect(MAttribute).select( a | !a.derived && a.static && a.final && a.hasDefaultValue() ) -»
-	«EXPAND Declaration FOREACH property.typeSelect(MAttribute).select( a | !a.derived && a.static && !a.final ) -»
-	«EXPAND Declaration FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static ) -»
+    «EXPAND Const FOREACH property.typeSelect(MAttribute).select( a | !a.derived && a.static && a.final && a.hasDefaultValue() ) -»
+    «EXPAND Declaration FOREACH property.typeSelect(MAttribute).select( a | !a.derived && a.static && !a.final ) -»
+    «EXPAND Declaration FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static ) -»
 «ENDDEFINE»
 
 
@@ -52,8 +52,8 @@
 	Order: static, non static
 «ENDREM»
 «DEFINE Derived FOR MClass -»
-	«EXPAND Derived FOREACH property.typeSelect(MAttribute).select( a | a.derived && a.static ) -»
-	«EXPAND Derived FOREACH property.typeSelect(MAttribute).select( a | a.derived && !a.static ) -»
+    «EXPAND Derived FOREACH property.typeSelect(MAttribute).select( a | a.derived && a.static ) -»
+    «EXPAND Derived FOREACH property.typeSelect(MAttribute).select( a | a.derived && !a.static ) -»
 «ENDDEFINE»
 
 
@@ -63,16 +63,16 @@
 «ENDREM»
 «DEFINE Accessors FOR MClass -»
 «FOREACH property.typeSelect(MAttribute).select( a | !a.derived && a.static && !a.final ) AS attribute -»
-	«EXPAND GetAccessor FOR attribute -»
-	«EXPAND SetAccessor FOR attribute -»
-	«EXPAND AddAccessor FOR attribute -»
-	«EXPAND RemoveAccessor FOR attribute -»
+    «EXPAND GetAccessor FOR attribute -»
+    «EXPAND SetAccessor FOR attribute -»
+    «EXPAND AddAccessor FOR attribute -»
+    «EXPAND RemoveAccessor FOR attribute -»
 «ENDFOREACH -»
 «FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static ) AS attribute -»
-	«EXPAND GetAccessor FOR attribute -»
-	«EXPAND SetAccessor FOR attribute -»
-	«EXPAND AddAccessor FOR attribute -»
-	«EXPAND RemoveAccessor FOR attribute -»
+    «EXPAND GetAccessor FOR attribute -»
+    «EXPAND SetAccessor FOR attribute -»
+    «EXPAND AddAccessor FOR attribute -»
+    «EXPAND RemoveAccessor FOR attribute -»
 «ENDFOREACH -»
 «ENDDEFINE»
 
@@ -85,8 +85,8 @@
 	Generates the constant declaration of an attribute.
 «ENDREM»
 «DEFINE Const FOR MAttribute -»
-	«EXPAND Comment::Attribute -»
-	const «asGeneralName() -»«EXPAND DefaultValue -»;
+    «EXPAND Comment::Attribute -»
+    const «asGeneralName() -»«EXPAND DefaultValue -»;
 
 «ENDDEFINE»
 
@@ -95,8 +95,8 @@
 	Generates the declaration of an attribute.
 «ENDREM»
 «DEFINE Declaration FOR MAttribute -»
-	«EXPAND Comment::Attribute -»
-	«EXPAND Modifier -» $«asGeneralName() -»«EXPAND DefaultValue -»;
+    «EXPAND Comment::Attribute -»
+    «EXPAND Modifier -» $«asGeneralName() -»«EXPAND DefaultValue -»;
 
 «ENDDEFINE»
 
@@ -105,10 +105,11 @@
 	Generates the get accessor method for an derived attribute.
 «ENDREM»
 «DEFINE Derived FOR MAttribute -»
-	«EXPAND Comment::GetAccessor -»
-	«EXPAND Modifier -» function «asGetAccessorName() -»() {
-		«EXPAND OwnCode("php.attribute.derived.own.code." + xmiGuid) -»
-	}
+    «EXPAND Comment::GetAccessor -»
+    «EXPAND Modifier -» function «asGetAccessorName() -»()
+    {
+        «EXPAND OwnCode("php.attribute.derived.own.code." + xmiGuid) -»
+    }
 
 «ENDDEFINE»
 
@@ -118,12 +119,13 @@
 «ENDREM»
 «DEFINE GetAccessor FOR MAttribute -»
 «IF !emHasAccessorGetter("false") -»
-	«EXPAND Comment::GetAccessor -»
-	«EXPAND ModifierAccessor -» function «asGetAccessorName() -»() {
-		«PROTECT CSTART '/* ' CEND ' */' ID ("php.attribute.get.own.code." + xmiGuid) DISABLE»
-		return $this->«asGeneralName() -»;
-		«ENDPROTECT»
-	}
+    «EXPAND Comment::GetAccessor -»
+    «EXPAND ModifierAccessor -» function «asGetAccessorName() -»()
+    {
+        «PROTECT CSTART '/* ' CEND ' */' ID ("php.attribute.get.own.code." + xmiGuid) DISABLE»
+        return $this->«asGeneralName() -»;
+        «ENDPROTECT»
+    }
 
 «ENDIF -»
 «ENDDEFINE»
@@ -134,12 +136,13 @@
 «ENDREM»
 «DEFINE SetAccessor FOR MAttribute -»
 «IF !emHasAccessorSetter("false") -»
-	«EXPAND Comment::SetAccessor -»
-	«EXPAND ModifierAccessor -» function «asSetAccessorName() -»(«EXPAND TypeHintSetAccessor -»$«asGeneralName() -»«EXPAND DefaultValueSetAccessor -») {
-		«PROTECT CSTART '/* ' CEND ' */' ID ("php.attribute.set.own.code." + xmiGuid) DISABLE»
-		$this->«asGeneralName() -» = $«asGeneralName() -»;
-		«ENDPROTECT»
-	}
+    «EXPAND Comment::SetAccessor -»
+    «EXPAND ModifierAccessor -» function «asSetAccessorName() -»(«EXPAND TypeHintSetAccessor -»$«asGeneralName() -»«EXPAND DefaultValueSetAccessor -»)
+    {
+        «PROTECT CSTART '/* ' CEND ' */' ID ("php.attribute.set.own.code." + xmiGuid) DISABLE»
+        $this->«asGeneralName() -» = $«asGeneralName() -»;
+        «ENDPROTECT»
+    }
 
 «ENDIF -»
 «ENDDEFINE»
@@ -150,12 +153,13 @@
 «ENDREM»
 «DEFINE AddAccessor FOR MAttribute -»
 «IF multiplicity.isMultiValued() && !emHasAccessorAdd("false") -»
-	«EXPAND Comment::AddAccessor -»
-	«EXPAND ModifierAccessor -» function «asAddAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toAdd) {
-		«PROTECT CSTART '/* ' CEND ' */' ID ("php.attribute.add.own.code." + xmiGuid) DISABLE»
-		$this->«asGeneralName() -»->attach($toAdd);
-		«ENDPROTECT»
-	}
+    «EXPAND Comment::AddAccessor -»
+    «EXPAND ModifierAccessor -» function «asAddAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toAdd)
+    {
+        «PROTECT CSTART '/* ' CEND ' */' ID ("php.attribute.add.own.code." + xmiGuid) DISABLE»
+        $this->«asGeneralName() -»->attach($toAdd);
+        «ENDPROTECT»
+    }
 
 «ENDIF -»
 «ENDDEFINE»
@@ -166,12 +170,13 @@
 «ENDREM»
 «DEFINE RemoveAccessor FOR MAttribute -»
 «IF multiplicity.isMultiValued() && ! emHasAccessorRemove("false") -»
-	«EXPAND Comment::RemoveAccessor -»
-	«EXPAND ModifierAccessor -» function «asRemoveAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toRemove) {
-		«PROTECT CSTART '/* ' CEND ' */' ID ("php.attribute.remove.own.code." + xmiGuid) DISABLE»
-		$this->«asGeneralName() -»->detach($toRemove);
-		«ENDPROTECT»
-	}
+    «EXPAND Comment::RemoveAccessor -»
+    «EXPAND ModifierAccessor -» function «asRemoveAccessorName() -»(«EXPAND TypeHintAddRemoveAccessor -»$toRemove)
+    {
+        «PROTECT CSTART '/* ' CEND ' */' ID ("php.attribute.remove.own.code." + xmiGuid) DISABLE»
+        $this->«asGeneralName() -»->detach($toRemove);
+        «ENDPROTECT»
+    }
 
 «ENDIF -»
 «ENDDEFINE»
@@ -181,7 +186,7 @@
 	Generates the modifiers of an attribute.
 «ENDREM»
 «DEFINE Modifier FOR MAttribute -»
-	«IF static»static «ENDIF»«visibility -»
+    «visibility -»«IF static» static«ENDIF -»
 «ENDDEFINE»
 
 
@@ -189,7 +194,7 @@
 	Generates the modifiers of an attribute accessor method.
 «ENDREM»
 «DEFINE ModifierAccessor FOR MAttribute -»
-	«IF static»static «ENDIF»public«"" -»
+    public«IF static» static«ENDIF -»
 «ENDDEFINE»
 
 
@@ -226,8 +231,8 @@
 «ENDREM»
 «DEFINE DefaultValueSetAccessor FOR MAttribute -»
 «IF multiplicity.lowerBound < 1 -»
-«IF multiplicity.isSingleValued() -» = NULL«ENDIF -»
-«IF multiplicity.isMultiValued() -»«IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() -» = NULL«ELSE -» = array()«ENDIF -»«ENDIF -»
+«IF multiplicity.isSingleValued() -» = null«ENDIF -»
+«IF multiplicity.isMultiValued() -»«IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() -» = null«ELSE -» = array()«ENDIF -»«ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -236,8 +241,8 @@
 	Generates the protected region of an operation.
 «ENDREM»
 «DEFINE OwnCode(String id) FOR MAttribute -»
-		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: implementation of method «asGetAccessorName() -» for class «classifier.asShortGeneralName()»
-		throw new Exception('The implementation of the method «asGetAccessorName() -» for class «classifier.asShortGeneralName() -» is missing!');
-		«ENDPROTECT»
+        «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+        // TODO: implementation of method «asGetAccessorName() -» for class «classifier.asShortGeneralName()»
+        throw new Exception('The implementation of the method «asGetAccessorName() -» for class «classifier.asShortGeneralName() -» is missing!');
+        «ENDPROTECT»
 «ENDDEFINE»
