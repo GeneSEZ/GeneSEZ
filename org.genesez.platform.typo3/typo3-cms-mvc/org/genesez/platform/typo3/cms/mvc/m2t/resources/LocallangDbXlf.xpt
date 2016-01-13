@@ -95,10 +95,15 @@
 
 
 «DEFINE File(String languageKey) FOR MModel -»
-	<file source-language="en" datatype="plaintext" original="messages" date="«getIso8601TimeStamp() -»" product-name="«extensionKey() -»"«IF languageKey != "en"» target-language="«languageKey -»"«ENDIF -»>
+	<file source-language="en" datatype="plaintext" original="messages" date="«EXPAND CurrentTimeStamp -»" product-name="«extensionKey() -»"«IF languageKey != "en"» target-language="«languageKey -»"«ENDIF -»>
 		«EXPAND Header(languageKey) -»
 		«EXPAND Body(languageKey) -»
 	</file>
+«ENDDEFINE»
+
+
+«DEFINE CurrentTimeStamp FOR MModel -»
+«getIso8601TimeStamp() -»
 «ENDDEFINE»
 
 
