@@ -25,11 +25,21 @@ extension org::genesez::metamodel::core::util::Conversion;
 // -- Property Checks ---------------------------------------------------------------------------------------
 
 /**
- * Checks if the visibility of properties from domain objects is 'protected'.
+ * Checks if the visibility of attributes from domain objects is 'protected'.
  * 
  * @return	False, if the visibility is not 'protected', otherwise true.
  */
-context MProperty 
-	if !derived && ( classifier.isEntity() || classifier.isValueObject() ) 
-	WARNING "GeneSEZ: The visibility of the property from the domain object is not protected! See model element: " + fqmn() :
+context MAttribute 
+	if ( classifier.isEntity() || classifier.isValueObject() ) && !( derived || ( static && final ) ) 
+	WARNING "GeneSEZ: The visibility of the attribute from the domain object is not protected! See model element: " + fqmn() :
+	visibility == "protected";
+
+/**
+ * Checks if the visibility of association roles from domain objects is 'protected'.
+ * 
+ * @return	False, if the visibility is not 'protected', otherwise true.
+ */
+context MAssociationRole 
+	if ( classifier.isEntity() || classifier.isValueObject() ) && !derived
+	WARNING "GeneSEZ: The visibility of the association role from the domain object is not protected! See model element: " + fqmn() :
 	visibility == "protected";
