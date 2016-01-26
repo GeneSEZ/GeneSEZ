@@ -147,6 +147,28 @@ String asExtensionConstraint(String constraint) :
 		: constraint;
 
 
+// -- PHP Composer extension management conventions ---------------------------------------------------------
+
+/**
+ * Getter of the extension key in PHP Composer notation.
+ * E.g.: Extension key "blog_example" would become "blog-example".
+ *
+ * @return	The extension key in PHP Composer notation.
+ */
+String composerExtensionKey() :
+	extensionKey().replaceAll("_", "-");
+
+
+/**
+ * Getter of the extension vendor name in PHP Composer notation. 
+ * E.g.: Extension vendor name "GeneSEZ" would become "genesez".
+ *
+ * @return	The extension vendor name in PHP composer notation.
+ */
+String composerExtensionVendorName() :
+	extensionVendorName().toLowerCase();
+
+
 // -- TYPO3 CMS conventions ---------------------------------------------------------------------------------
 
 /**
@@ -159,35 +181,59 @@ String asTypo3LanguageKey(String languageKey) :
 	languageKey.toLowerCase();
 
 
+// -- TYPO3 CMS Table Configuration Array conventions -------------------------------------------------------
+
 /**
- * Formats a string value into a TYPO3 CMS Boolean value.
+ * Formats a string value into a TYPO3 CMS TCA rootLevel value.
+ *
+ * @param	rootLevel	The rootLevel to format.
+ * @return	The TYPO3 CMS TCA rootLevel.
+ */
+Integer asTcaRootLevel(String rootLevel) :
+	switch (rootLevel) {
+		case prTypo3TcaRootLevelExistsInBoth() :
+			-1
+		case prTypo3TcaRootLevelExistsOnlyInRoot() :
+			1
+		default :
+			0
+	};
+
+
+// -- PHP Standards Recommendations conventions -------------------------------------------------------------
+
+/**
+ * Formats a boolean value into a PHP PSR-2 Boolean value.
+ * See http://www.php-fig.org/psr/psr-2/
  *
  * @param	boolean	The Boolean to format.
- * @return	The TYPO3 CMS Boolean (true or false).
+ * @return	The PHP PSR-2 Boolean (true or false).
  */
-String asTypo3Boolean(Boolean boolean) :
+String asPhpBoolean(Boolean boolean) :
 	boolean.toString().toLowerCase();
 
 
 /**
- * Formats a integer value into a TYPO3 CMS Boolean.
+ * Formats a integer value into a PHP PSR-2 Boolean.
+ * See http://www.php-fig.org/psr/psr-2/
  *
  * @param	boolean	The Boolean to format.
- * @return	The TYPO3 CMS Boolean (true or false).
+ * @return	The PHP PSR-2 Boolean (true or false).
  */
-String asTypo3Boolean(Integer boolean) :
+String asPhpBoolean(Integer boolean) :
 	boolean == 1
-		? asTypo3Boolean(true)
-		: asTypo3Boolean(false);
+		? asPhpBoolean(true)
+		: asPhpBoolean(false);
 
 
 /**
- * Formats a string value into a TYPO3 CMS Boolean.
+ * Formats a string value into a PHP PSR-2 Boolean.
+ * See http://www.php-fig.org/psr/psr-2/
  *
  * @param	boolean	The Boolean to format.
- * @return	The TYPO3 CMS Boolean (true or false).
+ * @return	The PHP PSR-2 Boolean (true or false).
  */
-String asTypo3Boolean(String boolean) :
+String asPhpBoolean(String boolean) :
 	boolean.toLowerCase() == "true" || boolean == "1"
-		? asTypo3Boolean(true)
-		: asTypo3Boolean(false);
+		? asPhpBoolean(true)
+		: asPhpBoolean(false);
