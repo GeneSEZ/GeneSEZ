@@ -69,6 +69,28 @@ String extensionPackageName() :
 	extensionKey().split("_").toFirstUpper().toString("");
 
 
+// -- PHP Composer extension key + vendor name conventions --------------------------------------------------
+
+/**
+ * Getter of the extension key in PHP Composer notation.
+ * E.g.: Extension key "blog_example" would become "blog-example".
+ *
+ * @return	The extension key in PHP Composer notation.
+ */
+String composerExtensionKey() :
+	extensionKey().replaceAll("_", "-");
+
+
+/**
+ * Getter of the extension vendor name in PHP Composer notation. 
+ * E.g.: Extension vendor name "GeneSEZ" would become "genesez".
+ *
+ * @return	The extension vendor name in PHP composer notation.
+ */
+String composerExtensionVendorName() :
+	extensionVendorName().toLowerCase();
+
+
 // -- TYPO3 CMS extension prefix conventions ----------------------------------------------------------------
 
 /**
@@ -147,40 +169,6 @@ String asExtensionConstraint(String constraint) :
 		: constraint;
 
 
-// -- PHP Composer extension management conventions ---------------------------------------------------------
-
-/**
- * Getter of the extension key in PHP Composer notation.
- * E.g.: Extension key "blog_example" would become "blog-example".
- *
- * @return	The extension key in PHP Composer notation.
- */
-String composerExtensionKey() :
-	extensionKey().replaceAll("_", "-");
-
-
-/**
- * Getter of the extension vendor name in PHP Composer notation. 
- * E.g.: Extension vendor name "GeneSEZ" would become "genesez".
- *
- * @return	The extension vendor name in PHP composer notation.
- */
-String composerExtensionVendorName() :
-	extensionVendorName().toLowerCase();
-
-
-// -- TYPO3 CMS conventions ---------------------------------------------------------------------------------
-
-/**
- * Formats a string value into a TYPO3 CMS language key value.
- *
- * @param	languageKey	The language key to format.
- * @return	The TYPO3 CMS language key.
- */
-String asTypo3LanguageKey(String languageKey) :
-	languageKey.toLowerCase();
-
-
 // -- TYPO3 CMS Table Configuration Array conventions -------------------------------------------------------
 
 /**
@@ -198,6 +186,18 @@ Integer asTcaRootLevel(String rootLevel) :
 		default :
 			0
 	};
+
+
+// -- ISO 639-1 Language Code conventions -------------------------------------------------------------------
+
+/**
+ * Formats a string value into a ISO 639-1 language code.
+ *
+ * @param	languageCode	The language code to format.
+ * @return	The ISO 639-1 language code.
+ */
+String asIsoLanguageCode(String languageCode) :
+	languageCode.toLowerCase();
 
 
 // -- PHP Standards Recommendations conventions -------------------------------------------------------------

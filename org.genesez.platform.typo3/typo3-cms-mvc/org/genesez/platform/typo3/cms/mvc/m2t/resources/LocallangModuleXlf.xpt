@@ -59,7 +59,7 @@
 «EXPAND SourceLanguage -»
 
 «FOREACH navModel().emGetTypo3LocalizationLanguageKeys() AS targetLanguageKey -»
-	«EXPAND TargetLanguage( targetLanguageKey.asTypo3LanguageKey() ) -»
+	«EXPAND TargetLanguage( targetLanguageKey.asIsoLanguageCode() ) -»
 «ENDFOREACH -»
 «ENDDEFINE»
 
@@ -76,10 +76,10 @@
 
 «REM»
 «ENDREM»
-«DEFINE TargetLanguage(String languageKey) FOR MInterface -»
-«FILE filePathLocallangModuleXlf(languageKey) -»
+«DEFINE TargetLanguage(String isoLanguageCode) FOR MInterface -»
+«FILE filePathLocallangModuleXlf(isoLanguageCode) -»
 «EXPAND XmlDefinition -»
-«EXPAND Xliff(languageKey) -»
+«EXPAND Xliff(isoLanguageCode) -»
 «ENDFILE -»
 «ENDDEFINE»
 
@@ -89,17 +89,17 @@
 «ENDDEFINE»
 
 
-«DEFINE Xliff(String languageKey) FOR MInterface -»
+«DEFINE Xliff(String isoLanguageCode) FOR MInterface -»
 <xliff version="1.0">
-	«EXPAND File(languageKey) -»
+	«EXPAND File(isoLanguageCode) -»
 </xliff>
 «ENDDEFINE»
 
 
-«DEFINE File(String languageKey) FOR MInterface -»
-	<file source-language="en" datatype="plaintext" original="messages" date="«EXPAND CurrentTimeStamp -»" product-name="«extensionPrefixWithoutUnderscores() -»"«IF languageKey != "en"» target-language="«languageKey -»"«ENDIF -»>
-		«EXPAND Header(languageKey) -»
-		«EXPAND Body(languageKey) -»
+«DEFINE File(String isoLanguageCode) FOR MInterface -»
+	<file source-language="en" datatype="plaintext" original="messages" date="«EXPAND CurrentTimeStamp -»" product-name="«extensionPrefixWithoutUnderscores() -»"«IF isoLanguageCode != "en"» target-language="«isoLanguageCode -»"«ENDIF -»>
+		«EXPAND Header(isoLanguageCode) -»
+		«EXPAND Body(isoLanguageCode) -»
 	</file>
 «ENDDEFINE»
 
@@ -109,25 +109,25 @@
 «ENDDEFINE»
 
 
-«DEFINE Header(String languageKey) FOR MInterface -»
+«DEFINE Header(String isoLanguageCode) FOR MInterface -»
 		<header/>
 «ENDDEFINE»
 
 
-«DEFINE Body(String languageKey) FOR MInterface -»
+«DEFINE Body(String isoLanguageCode) FOR MInterface -»
 		<body>
-			«EXPAND MlangTabsTabLocalization(languageKey) -»
-			«EXPAND MlangLabelsTabdescrLocalization(languageKey) -»
-			«EXPAND MlangLabelsTablabelLocalization(languageKey) -»
+			«EXPAND MlangTabsTabLocalization(isoLanguageCode) -»
+			«EXPAND MlangLabelsTabdescrLocalization(isoLanguageCode) -»
+			«EXPAND MlangLabelsTablabelLocalization(isoLanguageCode) -»
 
 
-			«EXPAND OwnLocalizations(languageKey) -»
+			«EXPAND OwnLocalizations(isoLanguageCode) -»
 		</body>
 «ENDDEFINE»
 
 
-«DEFINE MlangTabsTabLocalization(String languageKey) FOR MInterface -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_module.xlf." + languageKey + ".mlang_tabs_tab." + xmiGuid) DISABLE»
+«DEFINE MlangTabsTabLocalization(String isoLanguageCode) FOR MInterface -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_module.xlf." + isoLanguageCode + ".mlang_tabs_tab." + xmiGuid) DISABLE»
 			<trans-unit id="mlang_tabs_tab" xml:space="preserve">
 				<source>«name.toFirstUpper() -»</source>
 			</trans-unit>
@@ -135,8 +135,8 @@
 «ENDDEFINE»
 
 
-«DEFINE MlangLabelsTabdescrLocalization(String languageKey) FOR MInterface -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_module.xlf." + languageKey + ".mlang_labels_tabdescr." + xmiGuid) DISABLE»
+«DEFINE MlangLabelsTabdescrLocalization(String isoLanguageCode) FOR MInterface -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_module.xlf." + isoLanguageCode + ".mlang_labels_tabdescr." + xmiGuid) DISABLE»
 			<trans-unit id="mlang_labels_tabdescr" xml:space="preserve">
 				<source>Module Description</source>
 			</trans-unit>
@@ -144,8 +144,8 @@
 «ENDDEFINE»
 
 
-«DEFINE MlangLabelsTablabelLocalization(String languageKey) FOR MInterface -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_module.xlf." + languageKey + ".mlang_labels_tablabel." + xmiGuid) DISABLE»
+«DEFINE MlangLabelsTablabelLocalization(String isoLanguageCode) FOR MInterface -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_module.xlf." + isoLanguageCode + ".mlang_labels_tablabel." + xmiGuid) DISABLE»
 			<trans-unit id="mlang_labels_tablabel" xml:space="preserve">
 				<source>Module Tab Name</source>
 			</trans-unit>
@@ -156,8 +156,8 @@
 «REM»
 	Generates a protected region for own localizations.
 «ENDREM»
-«DEFINE OwnLocalizations(String languageKey) FOR MInterface -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_module.xlf." + languageKey + ".own.localizations." + xmiGuid)»
-			<!-- TODO: put your further '«languageKey -»' localizations here -->
+«DEFINE OwnLocalizations(String isoLanguageCode) FOR MInterface -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_module.xlf." + isoLanguageCode + ".own.localizations." + xmiGuid)»
+			<!-- TODO: put your further '«isoLanguageCode -»' localizations here -->
 			«ENDPROTECT»
 «ENDDEFINE»
