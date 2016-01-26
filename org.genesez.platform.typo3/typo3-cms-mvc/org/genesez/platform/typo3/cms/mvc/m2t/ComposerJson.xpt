@@ -1,0 +1,150 @@
+«REM»
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+
+«REM»
+	Entry point for generating "composer.json".
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+«ENDREM»
+
+«REM» use TYPO3 CMS profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
+
+
+«REM» use TYPO3 CMS file system convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::mvc::util::FileSystemConvention»
+
+«REM» use TYPO3 CMS naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::NamingConvention»
+
+
+«REM»
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
+«ENDREM»
+
+«REM»
+	Processes the generation of "composer.json".
+«ENDREM»
+«DEFINE Root FOR MModel -»
+«FILE filePathComposerJson() -»
+«EXPAND ExtensionConfiguration -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«REM»
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
+«ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE ExtensionConfiguration FOR MModel -»
+{
+    «EXPAND Name -»
+    «EXPAND Description -»
+    «EXPAND Version -»
+
+    «EXPAND Type -»
+
+    «EXPAND Keywords -»
+    «EXPAND Homepage -»
+	«EXPAND License -»
+
+    «EXPAND Replace -»
+
+	«EXPAND Autoload -»
+
+	«EXPAND OwnCode -»
+}
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'name' field.
+«ENDREM»
+«DEFINE Name FOR MModel -»
+    "name": "«composerExtensionVendorName() -»/«composerExtensionKey() -»",
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'description' field.
+«ENDREM»
+«DEFINE Description FOR MModel -»
+    "description": "«emGetTypo3ExtensionConfigurationDescription() -»",
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'version' field.
+«ENDREM»
+«DEFINE Version FOR MModel -»
+    "version": "«emGetTypo3ExtensionConfigurationVersion() -»",
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'type' field.
+«ENDREM»
+«DEFINE Type FOR MModel -»
+    "type": "typo3-cms-extension",
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'keywords' field.
+«ENDREM»
+«DEFINE Keywords FOR MModel -»
+    "keywords": [""],
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'homepage' field.
+«ENDREM»
+«DEFINE Homepage FOR MModel -»
+    "homepage": "",
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'license' field.
+«ENDREM»
+«DEFINE License FOR MModel -»
+    "license": ["GPL-2.0+"],
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'replace' field.
+«ENDREM»
+«DEFINE Replace FOR MModel -»
+    "replace": {
+        "«extensionKey() -»": "self.version"
+    }
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'autoload' field.
+«ENDREM»
+«DEFINE Autoload FOR MModel -»
+    "autoload": {
+        "psr-4": {
+            "«extensionVendorName() -»\\«extensionPackageName() -»\\": "«dirPathClasses() -»/"
+        }
+    }
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE OwnCode FOR MModel -»
+«ENDDEFINE»
