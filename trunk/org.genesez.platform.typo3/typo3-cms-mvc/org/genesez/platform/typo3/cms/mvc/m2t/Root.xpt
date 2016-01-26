@@ -31,6 +31,24 @@
 «REM» init GeneSEZ common logger «ENDREM»
 «useLogger("org.genesez.platform.typo3") -»
 
+«REM» Generate "composer.json" «ENDREM»
+«EXPAND ComposerJson::Root -»
+
+«REM» Generate "ext_conf_template.txt" if hook is registered by AOP «ENDREM»
+«EXPAND ExtConfTemplateTxt::Hook -»
+
+«REM» Generate "ext_emconf.php" «ENDREM»
+«EXPAND ExtEmconfPhp::Root -»
+
+«REM» Generate "ext_localconf.php" «ENDREM»
+«EXPAND ExtLocalconfPhp::Root»
+
+«REM» Generate "ext_tables.php" «ENDREM»
+«EXPAND ExtTablesPhp::Root»
+
+«REM» Generate "ext_tables.sql" «ENDREM»
+«EXPAND ExtTablesSql::Root»
+
 «REM» Generate TYPO3 CMS Extension Configuration code «ENDREM»
 «EXPAND configuration::Root::Root -»
 
