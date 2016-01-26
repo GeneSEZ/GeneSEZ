@@ -66,7 +66,7 @@
 «EXPAND SourceLanguage -»
 
 «FOREACH navModel().emGetTypo3LocalizationLanguageKeys() AS targetLanguageKey -»
-	«EXPAND TargetLanguage( targetLanguageKey.asTypo3LanguageKey() ) -»
+	«EXPAND TargetLanguage( targetLanguageKey.asIsoLanguageCode() ) -»
 «ENDFOREACH -»
 «ENDDEFINE»
 
@@ -83,10 +83,10 @@
 
 «REM»
 «ENDREM»
-«DEFINE TargetLanguage(String languageKey) FOR MInterface -»
-«FILE filePathLocallangPluginXlf(languageKey) -»
+«DEFINE TargetLanguage(String isoLanguageCode) FOR MInterface -»
+«FILE filePathLocallangPluginXlf(isoLanguageCode) -»
 «EXPAND XmlDefinition -»
-«EXPAND Xliff(languageKey) -»
+«EXPAND Xliff(isoLanguageCode) -»
 «ENDFILE -»
 «ENDDEFINE»
 
@@ -96,17 +96,17 @@
 «ENDDEFINE»
 
 
-«DEFINE Xliff(String languageKey) FOR MInterface -»
+«DEFINE Xliff(String isoLanguageCode) FOR MInterface -»
 <xliff version="1.0">
-	«EXPAND File(languageKey) -»
+	«EXPAND File(isoLanguageCode) -»
 </xliff>
 «ENDDEFINE»
 
 
-«DEFINE File(String languageKey) FOR MInterface -»
-	<file source-language="en" datatype="plaintext" original="messages" date="«EXPAND CurrentTimeStamp -»" product-name="«extensionPrefixWithoutUnderscores() -»"«IF languageKey != "en"» target-language="«languageKey -»"«ENDIF -»>
-		«EXPAND Header(languageKey) -»
-		«EXPAND Body(languageKey) -»
+«DEFINE File(String isoLanguageCode) FOR MInterface -»
+	<file source-language="en" datatype="plaintext" original="messages" date="«EXPAND CurrentTimeStamp -»" product-name="«extensionPrefixWithoutUnderscores() -»"«IF isoLanguageCode != "en"» target-language="«isoLanguageCode -»"«ENDIF -»>
+		«EXPAND Header(isoLanguageCode) -»
+		«EXPAND Body(isoLanguageCode) -»
 	</file>
 «ENDDEFINE»
 
@@ -116,32 +116,32 @@
 «ENDDEFINE»
 
 
-«DEFINE Header(String languageKey) FOR MInterface -»
+«DEFINE Header(String isoLanguageCode) FOR MInterface -»
 		<header/>
 «ENDDEFINE»
 
 
-«DEFINE Body(String languageKey) FOR MInterface -»
+«DEFINE Body(String isoLanguageCode) FOR MInterface -»
 		<body>
-			«EXPAND SheetLocalization(languageKey, "sDEF") -»
-			«EXPAND SwitchableControllerActionLocalization(languageKey) -»
-			«EXPAND SwitchableControllerActionConfigurationLocalization(languageKey) FOREACH emGetExtbasePluginPluginConfigurations() -»
-			«EXPAND ElementLocalization(languageKey) FOREACH allFlexFormSheetElements("sDEF") -»
+			«EXPAND SheetLocalization(isoLanguageCode, "sDEF") -»
+			«EXPAND SwitchableControllerActionLocalization(isoLanguageCode) -»
+			«EXPAND SwitchableControllerActionConfigurationLocalization(isoLanguageCode) FOREACH emGetExtbasePluginPluginConfigurations() -»
+			«EXPAND ElementLocalization(isoLanguageCode) FOREACH allFlexFormSheetElements("sDEF") -»
 			«FOREACH allFlexFormSheetsWithoutGeneralSheet().sortBy( s | s ) AS sheetName -»
-			«EXPAND SheetLocalization(languageKey, sheetName) -»
-			«EXPAND ElementLocalization(languageKey) FOREACH allFlexFormSheetElements(sheetName) -»
+			«EXPAND SheetLocalization(isoLanguageCode, sheetName) -»
+			«EXPAND ElementLocalization(isoLanguageCode) FOREACH allFlexFormSheetElements(sheetName) -»
 			
 			
 			«ENDFOREACH -»
 			
 			
-			«EXPAND OwnLocalizations(languageKey) -»
+			«EXPAND OwnLocalizations(isoLanguageCode) -»
 		</body>
 «ENDDEFINE»
 
 
-«DEFINE SheetLocalization(String languageKey, String sheetName) FOR MInterface -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + languageKey + "." + sheetName + "." + xmiGuid) DISABLE»
+«DEFINE SheetLocalization(String isoLanguageCode, String sheetName) FOR MInterface -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + "." + sheetName + "." + xmiGuid) DISABLE»
 			<trans-unit id="sheet.«sheetName -»" xml:space="preserve">
 				<source>«sheetName.toFirstUpper() -»</source>
 			</trans-unit>
@@ -149,9 +149,9 @@
 «ENDDEFINE»
 
 
-«DEFINE SwitchableControllerActionLocalization(String languageKey) FOR MInterface -»
+«DEFINE SwitchableControllerActionLocalization(String isoLanguageCode) FOR MInterface -»
 «IF emHasExtbasePluginUtilizablePluginConfigurations() -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + languageKey + ".switchableControllerAction." + xmiGuid) DISABLE»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + ".switchableControllerAction." + xmiGuid) DISABLE»
 			<trans-unit id="switchableControllerAction" xml:space="preserve">
 				<source>Switchable Controller Action</source>
 			</trans-unit>
@@ -160,8 +160,8 @@
 «ENDDEFINE»
 
 
-«DEFINE SwitchableControllerActionConfigurationLocalization(String languageKey) FOR MInterface -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + languageKey + ".switchableControllerAction." + xmiGuid) DISABLE»
+«DEFINE SwitchableControllerActionConfigurationLocalization(String isoLanguageCode) FOR MInterface -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + ".switchableControllerAction." + xmiGuid) DISABLE»
 			<trans-unit id="switchableControllerAction.«name -»" xml:space="preserve">
 				<source>Switchable Controller Action «name -»</source>
 			</trans-unit>
@@ -169,8 +169,8 @@
 «ENDDEFINE»
 
 
-«DEFINE ElementLocalization(String languageKey) FOR MProperty -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + languageKey + "." + xmiGuid) DISABLE»
+«DEFINE ElementLocalization(String isoLanguageCode) FOR MProperty -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + "." + xmiGuid) DISABLE»
 			<trans-unit id="«asPluginLocalizationName() -»" xml:space="preserve">
 				<source>«name.toFirstUpper() -»</source>
 			</trans-unit>
@@ -181,8 +181,8 @@
 «REM»
 	Generates a protected region for own localizations.
 «ENDREM»
-«DEFINE OwnLocalizations(String languageKey) FOR MInterface -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + languageKey + ".own.localizations." + xmiGuid)»
-			<!-- TODO: put your further '«languageKey -»' localizations here -->
+«DEFINE OwnLocalizations(String isoLanguageCode) FOR MInterface -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + ".own.localizations." + xmiGuid)»
+			<!-- TODO: put your further '«isoLanguageCode -»' localizations here -->
 			«ENDPROTECT»
 «ENDDEFINE»

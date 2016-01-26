@@ -9,7 +9,7 @@
 
 
 «REM»
-	Entry point for generating "locallang_db.xlf".
+	Entry point for generating "locallang_tca.xlf".
 	
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
 «ENDREM»
@@ -40,10 +40,10 @@
 «ENDREM»
 
 «REM»
-	Processes the generation of "locallang_db.xlf".
+	Processes the generation of "locallang_tca.xlf".
 «ENDREM»
 «DEFINE Root FOR MModel -»
-«EXPAND LocallangDb -»
+«EXPAND LocallangTca -»
 «ENDDEFINE»
 
 
@@ -53,11 +53,11 @@
 
 «REM»
 «ENDREM»
-«DEFINE LocallangDb FOR MModel -»
+«DEFINE LocallangTca FOR MModel -»
 «EXPAND SourceLanguage -»
 
 «FOREACH emGetTypo3LocalizationLanguageKeys() AS targetLanguageKey -»
-	«EXPAND TargetLanguage( targetLanguageKey.asTypo3LanguageKey() ) -»
+	«EXPAND TargetLanguage( targetLanguageKey.asIsoLanguageCode() ) -»
 «ENDFOREACH -»
 «ENDDEFINE»
 
@@ -65,7 +65,7 @@
 «REM»
 «ENDREM»
 «DEFINE SourceLanguage FOR MModel -»
-«FILE filePathLocallangDbXlf() -»
+«FILE filePathLocallangTcaXlf() -»
 «EXPAND XmlDefinition -»
 «EXPAND Xliff("en") -»
 «ENDFILE -»
@@ -74,10 +74,10 @@
 
 «REM»
 «ENDREM»
-«DEFINE TargetLanguage(String languageKey) FOR MModel -»
-«FILE filePathLocallangDbXlf(languageKey) -»
+«DEFINE TargetLanguage(String isoLanguageCode) FOR MModel -»
+«FILE filePathLocallangTcaXlf(isoLanguageCode) -»
 «EXPAND XmlDefinition -»
-«EXPAND Xliff(languageKey) -»
+«EXPAND Xliff(isoLanguageCode) -»
 «ENDFILE -»
 «ENDDEFINE»
 
@@ -87,17 +87,17 @@
 «ENDDEFINE»
 
 
-«DEFINE Xliff(String languageKey) FOR MModel -»
+«DEFINE Xliff(String isoLanguageCode) FOR MModel -»
 <xliff version="1.0">
-	«EXPAND File(languageKey) -»
+	«EXPAND File(isoLanguageCode) -»
 </xliff>
 «ENDDEFINE»
 
 
-«DEFINE File(String languageKey) FOR MModel -»
-	<file source-language="en" datatype="plaintext" original="messages" date="«EXPAND CurrentTimeStamp -»" product-name="«extensionKey() -»"«IF languageKey != "en"» target-language="«languageKey -»"«ENDIF -»>
-		«EXPAND Header(languageKey) -»
-		«EXPAND Body(languageKey) -»
+«DEFINE File(String isoLanguageCode) FOR MModel -»
+	<file source-language="en" datatype="plaintext" original="messages" date="«EXPAND CurrentTimeStamp -»" product-name="«extensionKey() -»"«IF isoLanguageCode != "en"» target-language="«isoLanguageCode -»"«ENDIF -»>
+		«EXPAND Header(isoLanguageCode) -»
+		«EXPAND Body(isoLanguageCode) -»
 	</file>
 «ENDDEFINE»
 
@@ -107,26 +107,26 @@
 «ENDDEFINE»
 
 
-«DEFINE Header(String languageKey) FOR MModel -»
+«DEFINE Header(String isoLanguageCode) FOR MModel -»
 		<header/>
 «ENDDEFINE»
 
 
-«DEFINE Body(String languageKey) FOR MModel -»
+«DEFINE Body(String isoLanguageCode) FOR MModel -»
 		<body>
 			«FOREACH allEntitiesAndValueObjects().sortBy( do | do.asBackendLocalizationName() ) AS domainObject -»
-			«EXPAND ClassLocalization(languageKey) FOR domainObject -»
-			«EXPAND PropertyLocalization(languageKey) FOREACH domainObject.property.select( p | !p.derived && !p.isStatic() ) -»
+			«EXPAND ClassLocalization(isoLanguageCode) FOR domainObject -»
+			«EXPAND PropertyLocalization(isoLanguageCode) FOREACH domainObject.property.select( p | !p.derived && !p.isStatic() ) -»
 
 
 			«ENDFOREACH -»
-			«EXPAND OwnLocalizations(languageKey) -»
+			«EXPAND OwnLocalizations(isoLanguageCode) -»
 		</body>
 «ENDDEFINE»
 
 
-«DEFINE ClassLocalization(String languageKey) FOR MClass -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_tca.xlf." + languageKey + "." + xmiGuid) DISABLE»
+«DEFINE ClassLocalization(String isoLanguageCode) FOR MClass -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_tca.xlf." + isoLanguageCode + "." + xmiGuid) DISABLE»
 			<trans-unit id="«asBackendLocalizationName() -»" xml:space="preserve">
 				<source>«name.toFirstUpper() -»</source>
 			</trans-unit>
@@ -134,8 +134,8 @@
 «ENDDEFINE»
 
 
-«DEFINE PropertyLocalization(String languageKey) FOR MProperty -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_tca.xlf." + languageKey + "." + xmiGuid) DISABLE»
+«DEFINE PropertyLocalization(String isoLanguageCode) FOR MProperty -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_tca.xlf." + isoLanguageCode + "." + xmiGuid) DISABLE»
 			<trans-unit id="«asBackendLocalizationName() -»" xml:space="preserve">
 				<source>«name.toFirstUpper() -»</source>
 			</trans-unit>
@@ -146,8 +146,8 @@
 «REM»
 	Generates a protected region for own localizations.
 «ENDREM»
-«DEFINE OwnLocalizations(String languageKey) FOR MModel -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_tca.xlf." + languageKey + ".own.localizations." + xmiGuid)»
-			<!-- TODO: put your further '«languageKey -»' localizations here -->
+«DEFINE OwnLocalizations(String isoLanguageCode) FOR MModel -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_tca.xlf." + isoLanguageCode + ".own.localizations." + xmiGuid)»
+			<!-- TODO: put your further '«isoLanguageCode -»' localizations here -->
 			«ENDPROTECT»
 «ENDDEFINE»

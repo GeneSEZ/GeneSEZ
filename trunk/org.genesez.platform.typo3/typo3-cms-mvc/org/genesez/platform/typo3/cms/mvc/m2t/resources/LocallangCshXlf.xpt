@@ -65,7 +65,7 @@
 «EXPAND SourceLanguage -»
 
 «FOREACH navModel().emGetTypo3LocalizationLanguageKeys() AS targetLanguageKey -»
-	«EXPAND TargetLanguage( targetLanguageKey.asTypo3LanguageKey() ) -»
+	«EXPAND TargetLanguage( targetLanguageKey.asIsoLanguageCode() ) -»
 «ENDFOREACH -»
 «ENDDEFINE»
 
@@ -82,10 +82,10 @@
 
 «REM»
 «ENDREM»
-«DEFINE TargetLanguage(String languageKey) FOR MClass -»
-«FILE filePathLocallangCshXlf(languageKey) -»
+«DEFINE TargetLanguage(String isoLanguageCode) FOR MClass -»
+«FILE filePathLocallangCshXlf(isoLanguageCode) -»
 «EXPAND XmlDefinition -»
-«EXPAND Xliff(languageKey) -»
+«EXPAND Xliff(isoLanguageCode) -»
 «ENDFILE -»
 «ENDDEFINE»
 
@@ -95,17 +95,17 @@
 «ENDDEFINE»
 
 
-«DEFINE Xliff(String languageKey) FOR MClass -»
+«DEFINE Xliff(String isoLanguageCode) FOR MClass -»
 <xliff version="1.0">
-	«EXPAND File(languageKey) -»
+	«EXPAND File(isoLanguageCode) -»
 </xliff>
 «ENDDEFINE»
 
 
-«DEFINE File(String languageKey) FOR MClass -»
-	<file source-language="en" datatype="plaintext" original="messages" date="«EXPAND CurrentTimeStamp -»" product-name="«extensionKey() -»"«IF languageKey != "en"» target-language="«languageKey -»"«ENDIF -»>
-		«EXPAND Header(languageKey) -»
-		«EXPAND Body(languageKey) -»
+«DEFINE File(String isoLanguageCode) FOR MClass -»
+	<file source-language="en" datatype="plaintext" original="messages" date="«EXPAND CurrentTimeStamp -»" product-name="«extensionKey() -»"«IF isoLanguageCode != "en"» target-language="«isoLanguageCode -»"«ENDIF -»>
+		«EXPAND Header(isoLanguageCode) -»
+		«EXPAND Body(isoLanguageCode) -»
 	</file>
 «ENDDEFINE»
 
@@ -115,25 +115,25 @@
 «ENDDEFINE»
 
 
-«DEFINE Header(String languageKey) FOR MClass -»
+«DEFINE Header(String isoLanguageCode) FOR MClass -»
 		<header/>
 «ENDDEFINE»
 
 
-«DEFINE Body(String languageKey) FOR MClass -»
+«DEFINE Body(String isoLanguageCode) FOR MClass -»
 		<body>
-			«EXPAND DescriptionLocalization(languageKey) -»
-			«EXPAND DetailsLocalization(languageKey) -»
-			«EXPAND PropertyLocalization(languageKey) FOREACH property.select( p | !p.derived && !p.isStatic() ) -»
+			«EXPAND DescriptionLocalization(isoLanguageCode) -»
+			«EXPAND DetailsLocalization(isoLanguageCode) -»
+			«EXPAND PropertyLocalization(isoLanguageCode) FOREACH property.select( p | !p.derived && !p.isStatic() ) -»
 
 
-			«EXPAND OwnLocalizations(languageKey) -»
+			«EXPAND OwnLocalizations(isoLanguageCode) -»
 		</body>
 «ENDDEFINE»
 
 
-«DEFINE DescriptionLocalization(String languageKey) FOR MClass -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_csh.xlf." + languageKey + ".description." + xmiGuid) DISABLE»
+«DEFINE DescriptionLocalization(String isoLanguageCode) FOR MClass -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_csh.xlf." + isoLanguageCode + ".description." + xmiGuid) DISABLE»
 			<trans-unit id=".description" xml:space="preserve">
 				<source>«comment("; ", "") -»</source>
 			</trans-unit>
@@ -141,8 +141,8 @@
 «ENDDEFINE»
 
 
-«DEFINE DetailsLocalization(String languageKey) FOR MClass -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_csh.xlf." + languageKey + ".details." + xmiGuid) DISABLE»
+«DEFINE DetailsLocalization(String isoLanguageCode) FOR MClass -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_csh.xlf." + isoLanguageCode + ".details." + xmiGuid) DISABLE»
 			<trans-unit id=".details" xml:space="preserve">
 				<source>«comment("; ", "") -»</source>
 			</trans-unit>
@@ -151,8 +151,8 @@
 
 
 
-«DEFINE PropertyLocalization(String languageKey) FOR MProperty -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_csh.xlf." + languageKey + "." + xmiGuid) DISABLE»
+«DEFINE PropertyLocalization(String isoLanguageCode) FOR MProperty -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_csh.xlf." + isoLanguageCode + "." + xmiGuid) DISABLE»
 			<trans-unit id="«asContextSensitiveHelpLocalizationName() -».description" xml:space="preserve">
 				<source>«name.toFirstUpper() -»</source>
 			</trans-unit>
@@ -163,8 +163,8 @@
 «REM»
 	Generates a protected region for own localizations.
 «ENDREM»
-«DEFINE OwnLocalizations(String languageKey) FOR MClass -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_csh.xlf." + languageKey + ".own.localizations." + xmiGuid)»
-			<!-- TODO: put your further '«languageKey -»' localizations here -->
+«DEFINE OwnLocalizations(String isoLanguageCode) FOR MClass -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_csh.xlf." + isoLanguageCode + ".own.localizations." + xmiGuid)»
+			<!-- TODO: put your further '«isoLanguageCode -»' localizations here -->
 			«ENDPROTECT»
 «ENDDEFINE»
