@@ -1,6 +1,8 @@
 module org.genesez.example.typo3.cms.inventory
 
-var uml2setup = org.genesez.adapter.uml2.workflow.UmlSetup {}
+var uml2setup = org.genesez.adapter.uml2.workflow.UmlSetup {
+	standardUML2Setup = true
+}
 var gcore = org.eclipse.xtend.typesystem.emf.EmfMetaModel {
 	metaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
 }
@@ -73,10 +75,10 @@ Workflow {
 	}
 	
 	// modifiy the GeneSEZ model for TYPO3 Extbase + Fluid compliance
-	component = org.genesez.workflow.xpand.Model2ModelComponent {
+	component = org.genesez.workflow.xpand.ModelModificationComponent {
 		metaModel = gcore
 		
-		model2model = org.genesez.platform.typo3.workflow.Typo3ModelModification { }
+		model2model = org.genesez.platform.typo3.workflow.Typo3ModelModificationScript {}
 	}
 	
 	// serialize the GeneSEZ model - just for info if you want to have a look at it
@@ -94,7 +96,9 @@ Workflow {
 						
 			outputDir = outputDir
 			typeMappingFile = "typemapping.xml"
-			model2text = org.genesez.platform.typo3.workflow.Gcore2Typo3 { }
+			model2text = org.genesez.platform.typo3.workflow.Gcore2Typo3 {}
+			
+			aopTemplate = "Customization"
 			
 		}
 		fileDeletion = org.genesez.m2t.deletion.FileDeletion {
