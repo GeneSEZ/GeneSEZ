@@ -130,51 +130,76 @@
 			«FOREACH allFlexFormSheetsWithoutGeneralSheet().sortBy( s | s ) AS sheetName -»
 			«EXPAND SheetLocalization(isoLanguageCode, sheetName) -»
 			«EXPAND ElementLocalization(isoLanguageCode) FOREACH allFlexFormSheetElements(sheetName) -»
-			
-			
 			«ENDFOREACH -»
-			
-			
+
 			«EXPAND OwnLocalizations(isoLanguageCode) -»
 		</body>
 «ENDDEFINE»
 
 
 «DEFINE SheetLocalization(String isoLanguageCode, String sheetName) FOR MInterface -»
+			«EXPAND SheetLocalizationHint(sheetName) -»
 			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + "." + sheetName + "." + xmiGuid) DISABLE»
 			<trans-unit id="sheet.«sheetName -»" xml:space="preserve">
 				<source>«sheetName.toFirstUpper() -»</source>
 			</trans-unit>
 			«ENDPROTECT»
+
+«ENDDEFINE»
+
+
+«DEFINE SheetLocalizationHint(String sheetName) FOR MInterface -»
+			<!-- GeneSEZ Generator Hint: id="sheet.«sheetName -»" -->
 «ENDDEFINE»
 
 
 «DEFINE SwitchableControllerActionLocalization(String isoLanguageCode) FOR MInterface -»
 «IF emHasExtbasePluginUtilizablePluginConfigurations() -»
+			«EXPAND SwitchableControllerActionLocalizationHint -»
 			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + ".switchableControllerAction." + xmiGuid) DISABLE»
 			<trans-unit id="switchableControllerAction" xml:space="preserve">
 				<source>Switchable Controller Action</source>
 			</trans-unit>
 			«ENDPROTECT»
+
 «ENDIF -»
 «ENDDEFINE»
 
 
+«DEFINE SwitchableControllerActionLocalizationHint FOR MInterface -»
+			<!-- GeneSEZ Generator Hint: id="switchableControllerAction" -->
+«ENDDEFINE»
+
+
 «DEFINE SwitchableControllerActionConfigurationLocalization(String isoLanguageCode) FOR MInterface -»
+			«EXPAND SwitchableControllerActionConfigurationLocalizationHint -»
 			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + ".switchableControllerAction." + xmiGuid) DISABLE»
 			<trans-unit id="switchableControllerAction.«name -»" xml:space="preserve">
 				<source>Switchable Controller Action «name -»</source>
 			</trans-unit>
 			«ENDPROTECT»
+
+«ENDDEFINE»
+
+
+«DEFINE SwitchableControllerActionConfigurationLocalizationHint FOR MInterface -»
+			<!-- GeneSEZ Generator Hint: id="switchableControllerAction.«name -»" -->
 «ENDDEFINE»
 
 
 «DEFINE ElementLocalization(String isoLanguageCode) FOR MProperty -»
+			«EXPAND ElementLocalizationHint -»
 			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + "." + xmiGuid) DISABLE»
 			<trans-unit id="«asPluginLocalizationName() -»" xml:space="preserve">
 				<source>«name.toFirstUpper() -»</source>
 			</trans-unit>
 			«ENDPROTECT»
+
+«ENDDEFINE»
+
+
+«DEFINE ElementLocalizationHint FOR MProperty -»
+			<!-- GeneSEZ Generator Hint: id="«asPluginLocalizationName() -»" -->
 «ENDDEFINE»
 
 
