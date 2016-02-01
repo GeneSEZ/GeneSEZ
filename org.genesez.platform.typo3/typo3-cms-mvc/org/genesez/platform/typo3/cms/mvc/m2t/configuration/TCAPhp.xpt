@@ -88,8 +88,9 @@ return array(
         «EXPAND CtrlLabelAltForce -»
         «EXPAND CtrlType -»
         «EXPAND CtrlHideTable -»
-        «EXPAND CtrlReadOnly -»
         «EXPAND CtrlAdminOnly -»
+        «EXPAND CtrlReadOnly -»
+        «EXPAND CtrlIsStatic -»
         «EXPAND CtrlIconFile -»
         «EXPAND CtrlSortingSupport -»
         «EXPAND CtrlEditingSupport -»
@@ -107,7 +108,7 @@ return array(
 	Contains the system name of the table. Is used for display in the backend.
 «ENDREM»
 «DEFINE CtrlTitle FOR MClass-»
-        'title' => 'LLL:EXT:«extensionKey() -»/«filePathLocallangDbXlf() -»:«asBackendLocalizationName() -»',
+        'title' => 'LLL:EXT:«extensionKey() -»/«filePathLocallangTcaXlf() -»:«asBackendLocalizationName() -»',
 «ENDDEFINE»
 
 
@@ -134,7 +135,7 @@ return array(
 «ENDREM»
 «DEFINE CtrlLabelAltForce FOR MClass -»
 «IF emHasTypo3TcaUtilizableCtrlLabelAlt() -»
-        'label_alt_force' => «emGetTypo3TcaCtrlLabelAltForce().asTypo3Boolean() -»,
+        'label_alt_force' => «emGetTypo3TcaCtrlLabelAltForce().asPhpBoolean() -»,
 «ENDIF -»
 «ENDDEFINE»
 
@@ -153,16 +154,7 @@ return array(
 «ENDREM»
 «DEFINE CtrlHideTable FOR MClass -»
 «IF emHasTypo3TcaCtrlHideTable("true") -»
-        'hideTable' => «emGetTypo3TcaCtrlHideTable().asTypo3Boolean() -»,
-«ENDIF-»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE CtrlReadOnly FOR MClass -»
-«IF emHasTypo3TcaCtrlReadOnly("true") -»
-        'readOnly' => «emGetTypo3TcaCtrlReadOnly().asTypo3Boolean() -»,
+        'hideTable' => «emGetTypo3TcaCtrlHideTable().asPhpBoolean() -»,
 «ENDIF-»
 «ENDDEFINE»
 
@@ -171,7 +163,34 @@ return array(
 «ENDREM»
 «DEFINE CtrlAdminOnly FOR MClass -»
 «IF emHasTypo3TcaCtrlAdminOnly("true") -»
-        'adminOnly' => «emGetTypo3TcaCtrlAdminOnly().asTypo3Boolean() -»,
+        'adminOnly' => «emGetTypo3TcaCtrlAdminOnly().asPhpBoolean() -»,
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE CtrlReadOnly FOR MClass -»
+«IF emHasTypo3TcaCtrlReadOnly("true") -»
+        'readOnly' => «emGetTypo3TcaCtrlReadOnly().asPhpBoolean() -»,
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE CtrlIsStatic FOR MClass -»
+«IF emHasTypo3TcaCtrlIsStatic("true") -»
+        'is_static' => «emGetTypo3TcaCtrlIsStatic().asPhpBoolean() -»,
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE CtrlRootLevel FOR MClass -»
+«IF emHasTypo3TcaCtrlRootLevel("true") -»
+        'rootLevel' => «emGetTypo3TcaCtrlRootLevel().asTcaRootLevel() -»,
 «ENDIF-»
 «ENDDEFINE»
 
@@ -180,7 +199,7 @@ return array(
 	Pointing to the icon file to use for the table.
 «ENDREM»
 «DEFINE CtrlIconFile FOR MClass -»
-        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('«extensionKey() -»') . '«dirPathResourcesPublicIcons() -»/«asConfigurationName() -».png',
+        'iconfile' => 'EXT:«extensionKey() -»/«dirPathResourcesPublicBackendIcons() -»/«asConfigurationName() -».svg',
 «ENDDEFINE»
 
 
@@ -481,9 +500,7 @@ return array(
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
             'config' => array(
                 'type' => 'check',
-                'items' => array(
-                    array('LLL:EXT:cms/locallang_ttc.xlf:hidden.I.0', ''),
-                ),
+                'default' => '0',
             ),
         ),
 «ENDIF -»
@@ -500,7 +517,6 @@ return array(
             'config' => array(
                 'type' => 'input',
                 'size' => 13,
-                'max' => 20,
                 'default' => 0,
                 'eval' => 'datetime',
             ),
@@ -519,7 +535,6 @@ return array(
             'config' => array(
                 'type' => 'input',
                 'size' => 13,
-                'max' => 20,
                 'default' => 0,
                 'eval' => 'datetime',
             ),
@@ -533,18 +548,20 @@ return array(
 «IF emHasExtbaseDomainObjectCreateFeGroupField("true") -»
         'fe_group' => array (
             'exclude' => true,
-            'label' => 'LLL:EXT:lang/locallang_general.php:LGL.fe_group',
+            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.fe_group',
             'config' => array (
                 'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
                 'items' => array(
-                    array('LLL:EXT:lang/locallang_general.php:LGL.hide_at_login', -1),
-                    array('LLL:EXT:lang/locallang_general.php:LGL.any_login', -2),
-                    array('LLL:EXT:lang/locallang_general.php:LGL.usergroups', '--div--'),
+                    array('LLL:EXT:lang/locallang_general.xlf:LGL.hide_at_login', -1),
+                    array('LLL:EXT:lang/locallang_general.xlf:LGL.any_login', -2),
+                    array('LLL:EXT:lang/locallang_general.xlf:LGL.usergroups', '--div--'),
                 ),
+                'exclusiveKeys' => '-1,-2',
                 'foreign_table' => 'fe_groups',
                 'foreign_table_where' => 'ORDER BY fe_groups.title',
                 'size' => 5,
-                'maxitems' => 100,
+                'maxitems' => 20,
             ),
         ),
 «ENDIF -»
@@ -570,12 +587,15 @@ return array(
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
             'config' => array(
                 'type' => 'select',
+                'renderType' => 'selectSingle',
+                'special' => 'languages',
                 'items' => array(
-                    array('LLL:EXT:lang/locallang_general.xlf:LGL.allLanguages', -1),
-                    array('LLL:EXT:lang/locallang_general.xlf:LGL.default_value', 0)
+                    array('LLL:EXT:lang/locallang_general.xlf:LGL.allLanguages', -1, 'flags-multiple'),
+                    array('LLL:EXT:lang/locallang_general.xlf:LGL.default_value', 0, 'flags-multiple'),
                 ),
                 'foreign_table' => 'sys_language',
                 'foreign_table_where' => 'ORDER BY sys_language.title',
+                'default' => 0,
             ),
         ),
 «ENDDEFINE»
@@ -590,11 +610,13 @@ return array(
             'displayCond' => 'FIELD:sys_language_uid:>:0',
             'config' => array(
                 'type' => 'select',
+                'renderType' => 'selectSingle',
                 'items' => array(
                     array('', 0),
                 ),
                 'foreign_table' => '«asConfigurationName() -»',
                 'foreign_table_where' => 'AND «asConfigurationName() -».pid=###CURRENT_PID### AND «asConfigurationName() -».sys_language_uid IN (-1, 0)',
+                'default' => 0,
             ),
         ),
 «ENDDEFINE»
@@ -606,6 +628,7 @@ return array(
         'l10n_diffsource' => array(
             'config' =>array(
                 'type' =>'passthrough',
+                'default' => '',
             ),
         ),
 «ENDDEFINE»
@@ -673,14 +696,14 @@ return array(
 «REM» 
 «ENDREM»
 «DEFINE ColumnExclude FOR MProperty -»
-            'exclude' => «emHasTypo3TcaPropertyColumnsExclude("true").asTypo3Boolean() -»,
+            'exclude' => «emHasTypo3TcaPropertyColumnsExclude("true").asPhpBoolean() -»,
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnLabel FOR MProperty -»
-            'label' => 'LLL:EXT:«extensionKey() -»/«filePathLocallangDbXlf() -»:«asBackendLocalizationName() -»',
+            'label' => 'LLL:EXT:«extensionKey() -»/«filePathLocallangTcaXlf() -»:«asBackendLocalizationName() -»',
 «ENDDEFINE»
 
 
@@ -690,6 +713,106 @@ return array(
 «IF emHasTypo3TcaPropertyUtilizableColumnsDefaultExtras() -»
             'defaultExtras' => '«emGetTypo3TcaPropertyColumnsDefaultExtras() -»',
 «ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ColumnConfig(MClass class) FOR MAttribute -»
+			«IF type.isExternalType() && type.asGeneralName().isTypo3PrimitiveType() && type.asGuiType() != "Association" -»
+	            «IF type.asGuiType() == "Input" -»
+	                «EXPAND ColumnConfigTypeInput(class) -»
+	            «ELSEIF type.asGuiType() == "Integer" -»
+	                «EXPAND ColumnConfigTypeInteger(class) -»
+	            «ELSEIF type.asGuiType() == "Float" -»
+	                «EXPAND ColumnConfigTypeFloat(class) -»
+	            «ELSEIF type.asGuiType() == "DateTime" -»
+	                «EXPAND ColumnConfigTypeDateTime(class) -»
+	            «ELSEIF type.asGuiType() == "NativeDateTime" -»
+	                «EXPAND ColumnConfigTypeNativeDateTime(class) -»
+	            «ELSEIF type.asGuiType() == "Date" -»
+	                «EXPAND ColumnConfigTypeDate(class) -»
+	            «ELSEIF type.asGuiType() == "NativeDate" -»
+	                «EXPAND ColumnConfigTypeNativeDate(class) -»
+	            «ELSEIF type.asGuiType() == "Time" -»
+	                «EXPAND ColumnConfigTypeTime(class) -»
+	            «ELSEIF type.asGuiType() == "TimeSec" -»
+	                «EXPAND ColumnConfigTypeTimeSec(class) -»
+	            «ELSEIF type.asGuiType() == "String" -»
+	                «EXPAND ColumnConfigTypeString(class) -»
+	            «ELSEIF type.asGuiType() == "Password" -»
+	                «EXPAND ColumnConfigTypePassword(class) -»
+	            «ELSEIF type.asGuiType() == "Text" -»
+	                «EXPAND ColumnConfigTypeText(class) -»
+	            «ELSEIF type.asGuiType() == "RichText" -»
+	                «EXPAND ColumnConfigTypeRichText(class) -»
+	            «ELSEIF type.asGuiType() == "Check" -»
+	                «EXPAND ColumnConfigTypeCheck(class) -»
+	            «ELSEIF type.asGuiType() == "Boolean" -»
+	                «EXPAND ColumnConfigTypeBoolean(class) -»
+	            «ELSEIF type.asGuiType() == "Radio" -»
+	                «EXPAND ColumnConfigTypeRadio(class) -»
+	            «ELSEIF type.asGuiType() == "Select" -»
+	                «EXPAND ColumnConfigTypeSelect(class) -»
+	            «ELSEIF type.asGuiType() == "File" -»
+	                «EXPAND ColumnConfigTypeFile(class) -»
+	            «ELSEIF type.asGuiType() == "FileReference" -»
+	                «EXPAND ColumnConfigTypeFileReference(class) -»
+	            «ELSEIF type.asGuiType() == "Image" -»
+	                «EXPAND ColumnConfigTypeImage(class) -»
+	            «ELSEIF type.asGuiType() == "ImageReference" -»
+	                «EXPAND ColumnConfigTypeImageReference(class) -»
+	            «ELSEIF type.asGuiType() == "Folder" -»
+	                «EXPAND ColumnConfigTypeFolder(class) -»
+	            «ELSEIF type.asGuiType() == "Database" -»
+	                «EXPAND ColumnConfigTypeDatabase(class) -»
+	            «ELSEIF type.asGuiType() == "None" -»
+	                «EXPAND ColumnConfigTypeNone(class) -»
+	            «ELSEIF type.asGuiType() == "Passthrough" -»
+	                «EXPAND ColumnConfigTypePassthrough(class) -»
+	            «ELSE -»
+	                «EXPAND ColumnConfigTypeOther( type.asGuiType(), class ) -»
+	            «ENDIF -»
+			«ELSEIF type.isExternalType() && type.asGuiType() == "FalFileReference" -»
+            	«EXPAND ColumnConfigTypeFalFileReference(class) -»
+			«ELSEIF type.isExternalType() && type.asGuiType() == "FalImageReference" -»
+                «EXPAND ColumnConfigTypeFalImageReference(class) -»
+			«ELSE -»
+	            «IF multiplicity.isSingleValued() -»
+	                «EXPAND ColumnConfigTypeToOneUnidirectional(class) -»
+	            «ELSE -»
+	                «EXPAND ColumnConfigTypeToManyUnidirectional(class) -»
+	            «ENDIF -»
+			«ENDIF -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfig(MClass class) FOR MAssociationRole -»
+            «IF type.isExternalType() && type.asGuiType() == "FalFileReference" -»
+            	«EXPAND ColumnConfigTypeFalFileReference(class) -»
+            «ELSEIF type.isExternalType() && type.asGuiType() == "FalImageReference" -»
+                «EXPAND ColumnConfigTypeFalImageReference(class) -»
+            «ELSE -»
+	            «IF isOneToOne() && !hasOpposite() -»
+	                «EXPAND ColumnConfigTypeOneToOneUnidirectional(class) -»
+	            «ELSEIF isOneToOne() && hasOpposite() -»
+	                «EXPAND ColumnConfigTypeOneToOneBidirectional(class) -»
+	            «ELSEIF isOneToMany() && !hasOpposite() -»
+	                «EXPAND ColumnConfigTypeOneToManyUnidirectional(class) -»
+	            «ELSEIF isOneToMany() && hasOpposite() -»
+	                «EXPAND ColumnConfigTypeOneToManyBidirectional(class) -»
+	            «ELSEIF isManyToOne() && !hasOpposite() -»
+	                «EXPAND ColumnConfigTypeManyToOneUnidirectional(class) -»
+	            «ELSEIF isManyToOne() && hasOpposite() -»
+	                «EXPAND ColumnConfigTypeManyToOneBidirectional(class) -»
+	            «ELSEIF isManyToMany() && !hasOpposite() -»
+	                «EXPAND ColumnConfigTypeManyToManyUnidirectional(class) -»
+	            «ELSEIF isManyToMany() && hasOpposite() -»
+	                «EXPAND ColumnConfigTypeManyToManyBidirectional(class) -»
+	            «ENDIF -»
+			«ENDIF -»
 «ENDDEFINE»
 
 
@@ -705,281 +828,237 @@ return array(
 
 «REM»
 «ENDREM»
-«DEFINE ColumnConfig(MClass class) FOR MAttribute -»
+«DEFINE ColumnConfigTypeInput(MClass class) FOR MAttribute -»
             'config' => array(
-            «IF isTypo3PrimitiveType( type.asGeneralName() ) && type.asGuiType() != "Association" -»
-            «IF type.asGuiType() == "Input" -»
-                «EXPAND ColumnConfigTypeInput -»
-            «ELSEIF type.asGuiType() == "Integer" -»
-                «EXPAND ColumnConfigTypeInteger -»
-            «ELSEIF type.asGuiType() == "Float" -»
-                «EXPAND ColumnConfigTypeFloat -»
-            «ELSEIF type.asGuiType() == "DateTime" -»
-                «EXPAND ColumnConfigTypeDateTime -»
-            «ELSEIF type.asGuiType() == "NativeDateTime" -»
-                «EXPAND ColumnConfigTypeNativeDateTime -»
-            «ELSEIF type.asGuiType() == "Date" -»
-                «EXPAND ColumnConfigTypeDate -»
-            «ELSEIF type.asGuiType() == "NativeDate" -»
-                «EXPAND ColumnConfigTypeNativeDate -»
-            «ELSEIF type.asGuiType() == "Time" -»
-                «EXPAND ColumnConfigTypeTime -»
-            «ELSEIF type.asGuiType() == "TimeSec" -»
-                «EXPAND ColumnConfigTypeTimeSec -»
-            «ELSEIF type.asGuiType() == "String" -»
-                «EXPAND ColumnConfigTypeString -»
-            «ELSEIF type.asGuiType() == "Password" -»
-                «EXPAND ColumnConfigTypePassword -»
-            «ELSEIF type.asGuiType() == "Text" -»
-                «EXPAND ColumnConfigTypeText -»
-            «ELSEIF type.asGuiType() == "RichText" -»
-                «EXPAND ColumnConfigTypeRichText -»
-            «ELSEIF type.asGuiType() == "Check" -»
-                «EXPAND ColumnConfigTypeCheck -»
-            «ELSEIF type.asGuiType() == "Boolean" -»
-                «EXPAND ColumnConfigTypeBoolean -»
-            «ELSEIF type.asGuiType() == "Radio" -»
-                «EXPAND ColumnConfigTypeRadio -»
-            «ELSEIF type.asGuiType() == "Select" -»
-                «EXPAND ColumnConfigTypeSelect -»
-            «ELSEIF type.asGuiType() == "File" -»
-                «EXPAND ColumnConfigTypeFile -»
-            «ELSEIF type.asGuiType() == "FileReference" -»
-                «EXPAND ColumnConfigTypeFileReference -»
-            «ELSEIF type.asGuiType() == "Image" -»
-                «EXPAND ColumnConfigTypeImage -»
-            «ELSEIF type.asGuiType() == "ImageReference" -»
-                «EXPAND ColumnConfigTypeImageReference -»
-            «ELSEIF type.asGuiType() == "Folder" -»
-                «EXPAND ColumnConfigTypeFolder -»
-            «ELSEIF type.asGuiType() == "Database" -»
-                «EXPAND ColumnConfigTypeDatabase -»
-            «ELSEIF type.asGuiType() == "None" -»
-                «EXPAND ColumnConfigTypeNone -»
-            «ELSEIF type.asGuiType() == "Passthrough" -»
-                «EXPAND ColumnConfigTypePassthrough -»
-            «ELSE -»
-                «EXPAND ColumnConfigTypeOther( type.asGuiType() ) -»
-            «ENDIF -»
-            «ELSE -»
-            «IF multiplicity.isSingleValued() -»
-                «EXPAND ColumnConfigTypeToOneUnidirectional(class) -»
-            «ELSE -»
-                «EXPAND ColumnConfigTypeToManyUnidirectional(class) -»
-            «ENDIF -»
-            «ENDIF -»
-            «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
-            ),
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE ColumnConfig(MClass class) FOR MAssociationRole -»
-            'config' => array(
-            «IF isOneToOne() && !hasOpposite() -»
-                «EXPAND ColumnConfigTypeOneToOneUnidirectional(class) -»
-            «ELSEIF isOneToOne() && hasOpposite() -»
-                «EXPAND ColumnConfigTypeOneToOneBidirectional(class) -»
-            «ELSEIF isOneToMany() && !hasOpposite() -»
-                «EXPAND ColumnConfigTypeOneToManyUnidirectional(class) -»
-            «ELSEIF isOneToMany() && hasOpposite() -»
-                «EXPAND ColumnConfigTypeOneToManyBidirectional(class) -»
-            «ELSEIF isManyToOne() && !hasOpposite() -»
-                «EXPAND ColumnConfigTypeManyToOneUnidirectional(class) -»
-            «ELSEIF isManyToOne() && hasOpposite() -»
-                «EXPAND ColumnConfigTypeManyToOneBidirectional(class) -»
-            «ELSEIF isManyToMany() && !hasOpposite() -»
-                «EXPAND ColumnConfigTypeManyToManyUnidirectional(class) -»
-            «ELSEIF isManyToMany() && hasOpposite() -»
-                «EXPAND ColumnConfigTypeManyToManyBidirectional(class) -»
-            «ENDIF -»
-            «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
-            ),
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE ColumnConfigTypeInput FOR MAttribute -»
                 «EXPAND ColumnConfigType("input") -»
                 «EXPAND ColumnConfigSize(30) -»
                 «EXPAND ColumnConfigMax(null) -»
                 «EXPAND ColumnConfigDefault(null) -»
                 «EXPAND ColumnConfigEval(null) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeInteger FOR MAttribute -»
+«DEFINE ColumnConfigTypeInteger(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("input") -»
                 «EXPAND ColumnConfigSize(30) -»
                 «EXPAND ColumnConfigDefault(null) -»
                 «EXPAND ColumnConfigEval({"int"}) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeFloat FOR MAttribute -»
+«DEFINE ColumnConfigTypeFloat(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("input") -»
                 «EXPAND ColumnConfigSize(30) -»
                 «EXPAND ColumnConfigDefault(null) -»
                 «EXPAND ColumnConfigEval({"double2"}) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeDateTime FOR MAttribute -»
+«DEFINE ColumnConfigTypeDateTime(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("input") -»
                 «EXPAND ColumnConfigSize(16) -»
                 «EXPAND ColumnConfigDefault("time()") -»
                 «EXPAND ColumnConfigEval({"datetime"}) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeNativeDateTime FOR MAttribute -»
+«DEFINE ColumnConfigTypeNativeDateTime(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("input") -»
                 «EXPAND ColumnConfigDbType("datetime") -»
                 «EXPAND ColumnConfigSize(16) -»
                 «EXPAND ColumnConfigDefault("time()") -»
                 «EXPAND ColumnConfigEval({"datetime"}) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeDate FOR MAttribute -»
+«DEFINE ColumnConfigTypeDate(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("input") -»
                 «EXPAND ColumnConfigSize(20) -»
                 «EXPAND ColumnConfigDefault("time()") -»
                 «EXPAND ColumnConfigEval({"date"}) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeNativeDate FOR MAttribute -»
+«DEFINE ColumnConfigTypeNativeDate(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("input") -»
                 «EXPAND ColumnConfigDbType("date") -»
                 «EXPAND ColumnConfigSize(20) -»
                 «EXPAND ColumnConfigDefault("time()") -»
                 «EXPAND ColumnConfigEval({"date"}) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeTime FOR MAttribute -»
+«DEFINE ColumnConfigTypeTime(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("input") -»
                 «EXPAND ColumnConfigSize(5) -»
                 «EXPAND ColumnConfigDefault("time()") -»
                 «EXPAND ColumnConfigEval({"time"}) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeTimeSec FOR MAttribute -»
+«DEFINE ColumnConfigTypeTimeSec(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("input") -»
                 «EXPAND ColumnConfigSize(8) -»
                 «EXPAND ColumnConfigDefault("time()") -»
                 «EXPAND ColumnConfigEval({"timesec"}) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeString FOR MAttribute -»
+«DEFINE ColumnConfigTypeString(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("input") -»
                 «EXPAND ColumnConfigSize(30) -»
                 «EXPAND ColumnConfigMax(null) -»
                 «EXPAND ColumnConfigDefault(null) -»
                 «EXPAND ColumnConfigEval({"trim"}) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypePassword FOR MAttribute -»
+«DEFINE ColumnConfigTypePassword(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("input") -»
                 «EXPAND ColumnConfigSize(30) -»
                 «EXPAND ColumnConfigMax(null) -»
                 «EXPAND ColumnConfigDefault(null) -»
                 «EXPAND ColumnConfigEval({"password"}) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeText FOR MAttribute -»
+«DEFINE ColumnConfigTypeText(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("text") -»
                 «EXPAND ColumnConfigCols(40) -»
                 «EXPAND ColumnConfigRows(15) -»
                 «EXPAND ColumnConfigDefault(null) -»
                 «EXPAND ColumnConfigEval({"trim"}) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM»
 	@todo	Wizards RTE
 «ENDREM»
-«DEFINE ColumnConfigTypeRichText FOR MAttribute -»
+«DEFINE ColumnConfigTypeRichText(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("text") -»
                 «EXPAND ColumnConfigCols(40) -»
                 «EXPAND ColumnConfigRows(15) -»
                 «EXPAND ColumnConfigDefault(null) -»
                 «EXPAND ColumnConfigEval({"trim"}) -»
                 «EXPAND ColumnConfigDefaultExtras("'richtext:rte_transform[flag=rte_enabled|mode=ts]'") -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeCheck FOR MAttribute -»
+«DEFINE ColumnConfigTypeCheck(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("check") -»
                 «EXPAND ColumnConfigItems(null) -»
                 «EXPAND ColumnConfigCols(5) -»
                 «EXPAND ColumnConfigDefault(null) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeBoolean FOR MAttribute -»
+«DEFINE ColumnConfigTypeBoolean(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("check") -»
                 «EXPAND ColumnConfigDefault(null) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeRadio FOR MAttribute -»
+«DEFINE ColumnConfigTypeRadio(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("radio") -»
                 «EXPAND ColumnConfigItems(null) -»
                 «EXPAND ColumnConfigDefault(null) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeSelect FOR MAttribute -»
+«DEFINE ColumnConfigTypeSelect(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("select") -»
                 «EXPAND ColumnConfigItems(null) -»
                 «EXPAND ColumnConfigDefault(null) -»
                 «EXPAND ColumnConfigSize(1) -»
                 «EXPAND ColumnConfigMinitems(0) -»
                 «EXPAND ColumnConfigMaxitems(1) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeFile FOR MAttribute -»
+«DEFINE ColumnConfigTypeFile(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("group") -»
                 «EXPAND ColumnConfigInternalType("file") -»
                 «EXPAND ColumnConfigAllowed("*") -»
@@ -990,13 +1069,16 @@ return array(
                 «EXPAND ColumnConfigSize(1) -»
                 «EXPAND ColumnConfigMinitems(0) -»
                 «EXPAND ColumnConfigMaxitems(1) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeFileReference FOR MAttribute -»
+«DEFINE ColumnConfigTypeFileReference(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("group") -»
                 «EXPAND ColumnConfigInternalType("file_reference") -»
                 «EXPAND ColumnConfigAllowed("*") -»
@@ -1007,12 +1089,15 @@ return array(
                 «EXPAND ColumnConfigSize(1) -»
                 «EXPAND ColumnConfigMinitems(0) -»
                 «EXPAND ColumnConfigMaxitems(1) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeImage FOR MAttribute -»
+«DEFINE ColumnConfigTypeImage(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("group") -»
                 «EXPAND ColumnConfigInternalType("file") -»
                 «EXPAND ColumnConfigAllowed("gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai") -»
@@ -1023,12 +1108,15 @@ return array(
                 «EXPAND ColumnConfigSize(1) -»
                 «EXPAND ColumnConfigMinitems(0) -»
                 «EXPAND ColumnConfigMaxitems(1) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeImageReference FOR MAttribute -»
+«DEFINE ColumnConfigTypeImageReference(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("group") -»
                 «EXPAND ColumnConfigInternalType("file_reference") -»
                 «EXPAND ColumnConfigAllowed("gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai") -»
@@ -1039,23 +1127,29 @@ return array(
                 «EXPAND ColumnConfigSize(1) -»
                 «EXPAND ColumnConfigMinitems(0) -»
                 «EXPAND ColumnConfigMaxitems(1) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeFolder FOR MAttribute -»
+«DEFINE ColumnConfigTypeFolder(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("group") -»
                 «EXPAND ColumnConfigInternalType("folder") -»
                 «EXPAND ColumnConfigSize(1) -»
                 «EXPAND ColumnConfigMinitems(0) -»
                 «EXPAND ColumnConfigMaxitems(1) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeDatabase FOR MAttribute -»
+«DEFINE ColumnConfigTypeDatabase(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("group") -»
                 «EXPAND ColumnConfigInternalType("db") -»
                 «EXPAND ColumnConfigAllowed("*") -»
@@ -1063,56 +1157,71 @@ return array(
                 «EXPAND ColumnConfigSize(1) -»
                 «EXPAND ColumnConfigMinitems(0) -»
                 «EXPAND ColumnConfigMaxitems(1) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeNone FOR MAttribute -»
+«DEFINE ColumnConfigTypeNone(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("none") -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypePassthrough FOR MAttribute -»
+«DEFINE ColumnConfigTypePassthrough(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("passthrough") -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE ColumnConfigTypeOther(String otherPropertyType) FOR MAttribute -»
+«DEFINE ColumnConfigTypeOther(String otherPropertyType, MClass class) FOR MAttribute -»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeToOneUnidirectional(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("select") -»
                 «EXPAND ColumnConfigItems -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
                 «EXPAND ColumnConfigSize(1) -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeToManyUnidirectional(MClass class) FOR MAttribute -»
+            'config' => array(
                 «EXPAND ColumnConfigType("select") -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigMM(class) -»
                 «EXPAND ColumnConfigSize(10) -»
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeOneToOneUnidirectional(MClass class) FOR MAssociationRole -»
+            'config' => array(
 «IF composition -»
                 «EXPAND ColumnConfigType("inline") -»
                 «EXPAND ColumnConfigForeignTable -»
@@ -1127,12 +1236,15 @@ return array(
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
 «ENDIF -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeOneToOneBidirectional(MClass class) FOR MAssociationRole -»
+            'config' => array(
 «IF composition -»
                 «EXPAND ColumnConfigType("inline") -»
                 «EXPAND ColumnConfigForeignTable -»
@@ -1155,12 +1267,15 @@ return array(
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
 «ENDIF -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeOneToManyUnidirectional(MClass class) FOR MAssociationRole -»
+            'config' => array(
 «IF composition -»
                 «EXPAND ColumnConfigType("inline") -»
                 «EXPAND ColumnConfigForeignTable -»
@@ -1176,12 +1291,15 @@ return array(
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
 «ENDIF -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeOneToManyBidirectional(MClass class) FOR MAssociationRole -»
+            'config' => array(
 «IF composition -»
                 «EXPAND ColumnConfigType("inline") -»
                 «EXPAND ColumnConfigForeignTable -»
@@ -1197,48 +1315,60 @@ return array(
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
 «ENDIF -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeManyToOneUnidirectional(MClass class) FOR MAssociationRole -»
+            'config' => array(
                 «EXPAND ColumnConfigType("select") -»
                 «EXPAND ColumnConfigItems -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigSize(1) -»
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeManyToOneBidirectional(MClass class) FOR MAssociationRole -»
+            'config' => array(
                 «EXPAND ColumnConfigType("select") -»
                 «EXPAND ColumnConfigItems -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigSize(1) -»
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeManyToManyUnidirectional(MClass class) FOR MAssociationRole -»
+            'config' => array(
                 «EXPAND ColumnConfigType("select") -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigMM(class) -»
                 «EXPAND ColumnConfigSize(10) -»
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE ColumnConfigTypeManyToManyBidirectional(MClass class) FOR MAssociationRole -»
+            'config' => array(
 «IF classifier.asShortGeneralName().compareTo( type.asShortGeneralName() ) < 0 || ( class.asShortGeneralName().compareTo( type.asShortGeneralName() ) == 0 && opposite.asGeneralName().compareTo( asGeneralName() ) < 0 ) -»
                 «EXPAND ColumnConfigType("select") -»
                 «EXPAND ColumnConfigForeignTable -»
@@ -1255,6 +1385,31 @@ return array(
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
 «ENDIF -»
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ),
+«ENDDEFINE»
+
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeFalFileReference(MClass class) FOR MProperty -»
+            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig('«asConfigurationName() -»', array(
+            	'minitems' => «IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»,
+            	'maxitems' => «IF multiplicity.hasFixedUpperBoundMultiplicity() -»«multiplicity.upperBound -»«ELSE -»999999«ENDIF -»,
+            	«EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ), «IF emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»'«emGetGuiPropertyAllowedFileExtensionsAllowedFileExtensions() -»'«ELSE -»''«ENDIF -», «IF emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»'«emGetGuiPropertyDisallowedFileExtensionsDisallowedFileExtensions() -»'«ELSE -»''«ENDIF -»),
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ColumnConfigTypeFalImageReference(MClass class) FOR MProperty -»
+            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig('«asConfigurationName() -»', array(
+            	'minitems' => «IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»,
+            	'maxitems' => «IF multiplicity.hasFixedUpperBoundMultiplicity() -»«multiplicity.upperBound -»«ELSE -»999999«ENDIF -»,
+            	«EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+            ), «IF emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»'«emGetGuiPropertyAllowedFileExtensionsAllowedFileExtensions() -»'«ELSE -»''«ENDIF -», «IF emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»'«emGetGuiPropertyDisallowedFileExtensionsDisallowedFileExtensions() -»'«ELSE -»''«ENDIF -»),
 «ENDDEFINE»
 
 
@@ -1381,7 +1536,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDREM»
 «DEFINE ColumnConfigShowThumbs(Boolean defaultShowThumbs) FOR MProperty -»
 «IF defaultShowThumbs != null || emHasGuiPropertyShowThumbnailsUtilizableShowThumbnails() -»
-                'show_thumbs' => «IF emHasGuiPropertyShowThumbnailsUtilizableShowThumbnails() -»«emGetGuiPropertyShowThumbnailsShowThumbnails().asTypo3Boolean() -»«ELSE -»«defaultShowThumbs.asTypo3Boolean() -»«ENDIF -»,
+                'show_thumbs' => «IF emHasGuiPropertyShowThumbnailsUtilizableShowThumbnails() -»«emGetGuiPropertyShowThumbnailsShowThumbnails().asPhpBoolean() -»«ELSE -»«defaultShowThumbs.asPhpBoolean() -»«ENDIF -»,
 «ENDIF -»
 «ENDDEFINE»
 
@@ -1546,13 +1701,13 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDREM»
 «DEFINE ColumnConfigMultiple(String defaultMultiple) FOR MProperty -»
 «IF defaultMultiple != null -»
-                'multiple' => «defaultMultiple.asTypo3Boolean() -»,
+                'multiple' => «defaultMultiple.asPhpBoolean() -»,
 «ENDIF -»
 «ENDDEFINE»
 
 
 «DEFINE ColumnConfigMultiple FOR MProperty -»
-                «EXPAND ColumnConfigMultiple( (!multiplicity.unique).asTypo3Boolean() ) -»
+                «EXPAND ColumnConfigMultiple( (!multiplicity.unique).asPhpBoolean() ) -»
 «ENDDEFINE»
 
 

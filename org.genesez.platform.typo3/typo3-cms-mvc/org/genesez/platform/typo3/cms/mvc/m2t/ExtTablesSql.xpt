@@ -201,7 +201,7 @@ CREATE TABLE «asPersistenceName() -» (
 	Generate a column for an attribute. It depends on the attribute type.
 «ENDREM»
 «DEFINE Column FOR MAttribute -»
-«IF isTypo3PrimitiveType( type.asGeneralName() ) && type.asGuiType() != "Association" -»
+«IF type.isExternalType() && type.asGeneralName().isTypo3PrimitiveType() && type.asGuiType() != "Association" -»
     «EXPAND ColumnDefault -»
 «ELSE -»
 «IF multiplicity.isSingleValued() -»
@@ -571,21 +571,23 @@ CREATE TABLE «asPersistenceName() -» (
 	If the attribute type is a classifier and the attribute is a multi valued type.   
 «ENDREM»
 «DEFINE IntermediateTable(MClass class) FOR MAttribute -»
-    «IF ( !isTypo3PrimitiveType( type.asGeneralName() ) || type.asGuiType() == "Association" ) && multiplicity.isMultiValued() -»
-        «EXPAND IntermediateTableDefinition(class) -»
-    «ENDIF -»
+«IF multiplicity.isMultiValued() && !( type.isExternalType() && ( type.asGeneralName().isTypo3PrimitiveType() || type.asGuiType() == "FalFileReference" || type.asGuiType() == "FalImageReference" ) ) -»
+    «EXPAND IntermediateTableDefinition(class) -»
+«ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
 «DEFINE IntermediateTable(MClass class) FOR MAssociationRole -»
-«IF isOneToMany() && !hasOpposite() -»
-    «EXPAND IntermediateTableDefinition(class) -»
-«ELSEIF isManyToMany() && !hasOpposite() -»
-    «EXPAND IntermediateTableDefinition(class) -»
-«ELSEIF isManyToMany() && hasOpposite() && ( classifier.asShortGeneralName().compareTo( type.asShortGeneralName() ) < 0 || ( class.asShortGeneralName().compareTo( type.asShortGeneralName() ) == 0 && opposite.asGeneralName().compareTo( asGeneralName() ) < 0 ) ) -»
-    «EXPAND IntermediateTableDefinition(class) -»
+«IF !( type.isExternalType() && ( type.asGuiType() == "FalFileReference" || type.asGuiType() == "FalImageReference" ) ) -»
+	«IF isOneToMany() && !hasOpposite() -»
+	    «EXPAND IntermediateTableDefinition(class) -»
+	«ELSEIF isManyToMany() && !hasOpposite() -»
+	    «EXPAND IntermediateTableDefinition(class) -»
+	«ELSEIF isManyToMany() && hasOpposite() && ( classifier.asShortGeneralName().compareTo( type.asShortGeneralName() ) < 0 || ( class.asShortGeneralName().compareTo( type.asShortGeneralName() ) == 0 && opposite.asGeneralName().compareTo( asGeneralName() ) < 0 ) ) -»
+	    «EXPAND IntermediateTableDefinition(class) -»
+	«ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 
