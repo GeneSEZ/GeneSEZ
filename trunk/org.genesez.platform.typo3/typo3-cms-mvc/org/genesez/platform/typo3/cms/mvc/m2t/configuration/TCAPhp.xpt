@@ -69,7 +69,7 @@ return [
     «EXPAND ColumnsSection -»
     «EXPAND TypesSection -»
     «EXPAND PalettesSection -»
-    «EXPAND OwnCode("tca.php.own.code." + xmiGuid) -»
+    «EXPAND OwnCode -»
 ];
 «ENDFILE -»
 «ENDDEFINE»
@@ -99,7 +99,7 @@ return [
         «EXPAND CtrlVersioningSupport -»
         «EXPAND CtrlSearchFields -»
         «EXPAND CtrlDividers2tabs -»
-        «EXPAND OwnCtrlSectionCode("tca.php.own.ctrl.section.code." + xmiGuid) -»
+        «EXPAND OwnCtrlSectionCode -»
     ],
 «ENDDEFINE»
 
@@ -199,7 +199,7 @@ return [
 	Pointing to the icon file to use for the table.
 «ENDREM»
 «DEFINE CtrlIconFile FOR MClass -»
-        'iconfile' => 'EXT:«extensionKey() -»/«dirPathResourcesPublicBackendIcons() -»/«asConfigurationName() -».svg',
+        'iconfile' => 'EXT:«extensionKey() -»/«dirPathResourcesPublicBackendIcons() -»/«asConfigurationName() -».«fileExtensionSvg() -»',
 «ENDDEFINE»
 
 
@@ -400,8 +400,8 @@ return [
 «REM»
 	Generates a protected region for own TCA Ctrl Section code.
 «ENDREM»
-«DEFINE OwnCtrlSectionCode(String id) FOR MClass -»
-        «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnCtrlSectionCode FOR MClass -»
+        «PROTECT CSTART '/* ' CEND ' */' ID ("tca.php.own.ctrl.section.code." + xmiGuid)»
         // TODO: put your further 'ctrl' section code here
         «ENDPROTECT»
 «ENDDEFINE»
@@ -455,7 +455,7 @@ return [
         «FOREACH allSingleTableInheritanceSpecializations() AS s -»
         «EXPAND ColumnsAssociation(s) FOREACH s.property.typeSelect(MAssociationRole).select( ar | !ar.derived ) -»
         «ENDFOREACH -»
-        «EXPAND OwnColumnsSectionCode("tca.php.own.columns.section.code." + xmiGuid) -»
+        «EXPAND OwnColumnsSectionCode -»
     ],
 «ENDDEFINE»
 
@@ -665,7 +665,7 @@ return [
             «EXPAND ColumnLabel -»
             «EXPAND ColumnDefaultExtras -»
             «EXPAND ColumnConfig(class) -»
-            «EXPAND OwnColumnCode("tca.php.own.columns.section.column.code." + class.xmiGuid + "." + xmiGuid) -»
+            «EXPAND OwnColumnCode(class) -»
         ],
 «ENDDEFINE»
 
@@ -678,7 +678,7 @@ return [
             «EXPAND ColumnLabel -»
             «EXPAND ColumnDefaultExtras -»
             «EXPAND ColumnConfig(class) -»
-            «EXPAND OwnColumnCode("tca.php.own.columns.section.column.code." + class.xmiGuid + "." + xmiGuid) -»
+            «EXPAND OwnColumnCode(class) -»
         ],
 «ENDDEFINE»
 
@@ -686,8 +686,8 @@ return [
 «REM»
 	Generates a region for own TCA Columns Section code.
 «ENDREM»
-«DEFINE OwnColumnsSectionCode(String id) FOR MClass -»
-        «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnColumnsSectionCode FOR MClass -»
+        «PROTECT CSTART '/* ' CEND ' */' ID ("tca.php.own.columns.section.code." + xmiGuid)»
         // TODO: put your further 'columns' section code here
         «ENDPROTECT»
 «ENDDEFINE»
@@ -819,8 +819,8 @@ return [
 «REM»
 	Generates a protected region for own TCA Columns Section column code.
 «ENDREM»
-«DEFINE OwnColumnCode(String id) FOR MProperty -»
-            «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnColumnCode(MClass class) FOR MProperty -»
+            «PROTECT CSTART '/* ' CEND ' */' ID ("tca.php.own.columns.section.column.code." + class.xmiGuid + "." + xmiGuid)»
             // TODO: put your further column code here
             «ENDPROTECT»
 «ENDDEFINE»
@@ -1877,7 +1877,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 «DEFINE PalettesSection FOR MClass -»
     'palettes' => [
         «EXPAND PalettesNumbers -»
-        «EXPAND OwnPalettesSectionCode("tca.php.own.palettes.section.code." + xmiGuid) -»
+        «EXPAND OwnPalettesSectionCode -»
     ],
 «ENDDEFINE»
 
@@ -1892,8 +1892,8 @@ hier evtl. versuch über sql type maximum herauszufinden
 «REM»
 	Generates a protected region for own TCA Palettes Section code.
 «ENDREM»
-«DEFINE OwnPalettesSectionCode(String id) FOR MClass -»
-        «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnPalettesSectionCode FOR MClass -»
+        «PROTECT CSTART '/* ' CEND ' */' ID ("tca.php.own.palettes.section.code." + xmiGuid)»
         // TODO: put your further 'palettes' section code here
         «ENDPROTECT»
 «ENDDEFINE»
@@ -1902,8 +1902,8 @@ hier evtl. versuch über sql type maximum herauszufinden
 «REM»
 	Generates a protected region for own code.
 «ENDREM»
-«DEFINE OwnCode(String id) FOR MClass -»
-    «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnCode FOR MClass -»
+    «PROTECT CSTART '/* ' CEND ' */' ID ("tca.php.own.code." + xmiGuid)»
     // TODO: put your further code here
     «ENDPROTECT»
 «ENDDEFINE»
