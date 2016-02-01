@@ -99,7 +99,7 @@
     «EXPAND Comment::Constructor -»
     «visibility -» function __construct(«EXPAND Params -»)
     {
-        «EXPAND OwnCode("php.constructor.own.code." + xmiGuid) -»
+        «EXPAND OwnCodeConstructor -»
     }
 
 «ENDDEFINE»
@@ -112,7 +112,7 @@
     «EXPAND Comment::Destructor -»
     «visibility -» function __destruct()
     {
-        «EXPAND OwnCode("php.destructor.own.code." + xmiGuid) -»
+        «EXPAND OwnCodeDestructor -»
     }
 
 «ENDDEFINE»
@@ -135,7 +135,7 @@
     «EXPAND Comment::Operation -»
     «EXPAND Modifier -» function «asGeneralName() -»(«EXPAND Params -»)
     {
-        «EXPAND OwnCode("php.operation.own.code." + xmiGuid) -»
+        «EXPAND OwnCodeOperation -»
     }
 
 «ENDDEFINE»
@@ -191,37 +191,32 @@ $«asGeneralName() -»«EXPAND DefaultValue -»
 
 
 «REM»
+	Generates the protected region of a constructor operation.
+«ENDREM»
+«DEFINE OwnCodeConstructor FOR MOperation -»
+        «PROTECT CSTART '/* ' CEND ' */' ID ("php.constructor.own.code." + xmiGuid)»
+        // TODO: implementation of constructor for class «classifier.asShortGeneralName()»
+        throw new Exception('The implementation of the constructor for class «classifier.asShortGeneralName() -» is missing!');
+        «ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the protected region of a destructor operation.
+«ENDREM»
+«DEFINE OwnCodeDestructor FOR MOperation -»
+        «PROTECT CSTART '/* ' CEND ' */' ID ("php.destructor.own.code." + xmiGuid)»
+        // TODO: implementation of destructor for class «classifier.asShortGeneralName()»
+        throw new Exception('The implementation of the destructor for class «classifier.asShortGeneralName() -» is missing!');
+        «ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
 	Generates the protected region of an operation.
 «ENDREM»
-«DEFINE OwnCode(String id) FOR MOperation -»
-«IF isConstructor() -»
-        «EXPAND OwnCodeConstructor(id) -»
-«ELSEIF isDestructor() -»
-        «EXPAND OwnCodeDestructor(id) -»
-«ELSE -»
-        «EXPAND OwnCodeOperation(id) -»
-«ENDIF -»
-«ENDDEFINE»
-
-
-«DEFINE OwnCodeConstructor(String id) FOR MOperation -»
-        «PROTECT CSTART '/* ' CEND ' */' ID (id)»
-        // TODO: implementation of destructor for class «classifier.asShortGeneralName()»
-        throw new Exception('The implementation of the destructor for class «classifier.asShortGeneralName() -» is missing!');
-        «ENDPROTECT»
-«ENDDEFINE»
-
-
-«DEFINE OwnCodeDestructor(String id) FOR MOperation -»
-        «PROTECT CSTART '/* ' CEND ' */' ID (id)»
-        // TODO: implementation of destructor for class «classifier.asShortGeneralName()»
-        throw new Exception('The implementation of the destructor for class «classifier.asShortGeneralName() -» is missing!');
-        «ENDPROTECT»
-«ENDDEFINE»
-
-
-«DEFINE OwnCodeOperation(String id) FOR MOperation -»
-        «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnCodeOperation FOR MOperation -»
+        «PROTECT CSTART '/* ' CEND ' */' ID ("php.operation.own.code." + xmiGuid)»
         // TODO: implementation of method «asGeneralName() -» for class «classifier.asShortGeneralName()»
         throw new Exception('The implementation of the method «asGeneralName() -» for class «classifier.asShortGeneralName() -» is missing!');
         «ENDPROTECT»

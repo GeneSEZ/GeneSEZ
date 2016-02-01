@@ -108,7 +108,7 @@
     «EXPAND Comment::GetAccessor -»
     «EXPAND Modifier -» function «asGetAccessorName() -»()
     {
-        «EXPAND OwnCode("php.attribute.derived.own.code." + xmiGuid) -»
+        «EXPAND OwnDerivedAttributeCode -»
     }
 
 «ENDDEFINE»
@@ -238,10 +238,10 @@
 
 
 «REM»
-	Generates the protected region of an operation.
+	Generates the protected region of an derived attribute operation.
 «ENDREM»
-«DEFINE OwnCode(String id) FOR MAttribute -»
-        «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnDerivedAttributeCode FOR MAttribute -»
+        «PROTECT CSTART '/* ' CEND ' */' ID ("php.attribute.derived.own.code." + xmiGuid)»
         // TODO: implementation of method «asGetAccessorName() -» for class «classifier.asShortGeneralName()»
         throw new Exception('The implementation of the method «asGetAccessorName() -» for class «classifier.asShortGeneralName() -» is missing!');
         «ENDPROTECT»
