@@ -42,7 +42,7 @@
 «EXPAND AccessDenied -»
 «EXPAND PluginConfiguration -»
 «EXPAND CommandControllerConfiguration -»
-«EXPAND OwnCode("ext_localconf.php.own.code." + xmiGuid) -»
+«EXPAND OwnCode -»
 «ENDFILE -»
 «ENDDEFINE»
 
@@ -64,7 +64,7 @@ defined('TYPO3_MODE') or die();
 «ENDREM»
 «DEFINE PluginConfiguration FOR MModel -»
 «EXPAND PluginConfiguration FOREACH allPlugins().sortBy( p | p.asExtbasePluginName() ) -»
-«EXPAND OwnPluginCode("ext_localconf.php.own.plugin.code." + xmiGuid) -»
+«EXPAND OwnPluginCode -»
 
 «ENDDEFINE»
 
@@ -92,8 +92,8 @@ defined('TYPO3_MODE') or die();
 «REM»
 	Generates a protected region for own plugin code.
 «ENDREM»
-«DEFINE OwnPluginCode(String id) FOR MModel -»
-«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnPluginCode FOR MModel -»
+«PROTECT CSTART '/* ' CEND ' */' ID ("ext_localconf.php.own.plugin.code." + xmiGuid)»
 // TODO: put your further plugin code here
 «ENDPROTECT»
 «ENDDEFINE»
@@ -104,7 +104,7 @@ defined('TYPO3_MODE') or die();
 «DEFINE CommandControllerConfiguration FOR MModel -»
 if (TYPO3_MODE === 'BE') {
     «EXPAND CommandControllerRegistration FOREACH allCommandControllers().sortBy( cc | cc.asGeneralName() ) -»
-    «EXPAND OwnCommandControllerCode("ext_localconf.php.own.command.controller.code." + xmiGuid) -»
+    «EXPAND OwnCommandControllerCode -»
 }
 
 «ENDDEFINE»
@@ -122,8 +122,8 @@ if (TYPO3_MODE === 'BE') {
 «REM»
 	Generates a protected region for own command controller code.
 «ENDREM»
-«DEFINE OwnCommandControllerCode(String id) FOR MModel -»
-    «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnCommandControllerCode FOR MModel -»
+    «PROTECT CSTART '/* ' CEND ' */' ID ("ext_localconf.php.own.command.controller.code." + xmiGuid)»
     // TODO: put your further command controller code here
     «ENDPROTECT»
 «ENDDEFINE»
@@ -132,8 +132,8 @@ if (TYPO3_MODE === 'BE') {
 «REM»
 	Generates a protected region for own code.
 «ENDREM»
-«DEFINE OwnCode(String id) FOR MModel -»
-«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnCode FOR MModel -»
+«PROTECT CSTART '/* ' CEND ' */' ID ("ext_localconf.php.own.code." + xmiGuid)»
 // TODO: put your further code here
 «ENDPROTECT»
 «ENDDEFINE»

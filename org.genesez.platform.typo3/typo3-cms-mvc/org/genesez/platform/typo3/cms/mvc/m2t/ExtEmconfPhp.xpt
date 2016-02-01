@@ -62,7 +62,7 @@ $EM_CONF[$_EXTKEY] = [
     «EXPAND AuthorEmail -»
     «EXPAND AuthorCompany -»
     «EXPAND Version -»
-    «EXPAND OwnCode("ext_emconf.php.own.code." + xmiGuid) -»
+    «EXPAND OwnCode -»
 ];
 «ENDDEFINE»
 
@@ -111,7 +111,7 @@ $EM_CONF[$_EXTKEY] = [
             «FOREACH emGetTypo3ExtensionConfigurationDependencies() AS dependsConstraint -»
             «dependsConstraint.asExtensionConstraint()»,
             «ENDFOREACH -»
-            «EXPAND OwnDependsConstraints("ext_emconf.php.own.depends.constraints." + xmiGuid) -»
+            «EXPAND OwnDependsConstraints -»
         ],
 «ENDDEFINE»
 
@@ -119,8 +119,8 @@ $EM_CONF[$_EXTKEY] = [
 «REM»
 	Generates a protected region for own depends constraints.
 «ENDREM»
-«DEFINE OwnDependsConstraints(String id) FOR MModel -»
-            «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnDependsConstraints FOR MModel -»
+            «PROTECT CSTART '/* ' CEND ' */' ID ("ext_emconf.php.own.depends.constraints." + xmiGuid)»
             // TODO: put your further 'depends' constraints here
             «ENDPROTECT»
 «ENDDEFINE»
@@ -134,7 +134,7 @@ $EM_CONF[$_EXTKEY] = [
             «FOREACH emGetTypo3ExtensionConfigurationConflicts() AS conflictConstraint -»
             «conflictConstraint.asExtensionConstraint()»,
             «ENDFOREACH -»
-            «EXPAND OwnConflictsConstraints("ext_emconf.php.own.conflicts.constraints." + xmiGuid) -»
+            «EXPAND OwnConflictsConstraints -»
         ],
 «ENDDEFINE»
 
@@ -142,8 +142,8 @@ $EM_CONF[$_EXTKEY] = [
 «REM»
 	Generates a protected region for own conflict constraints.
 «ENDREM»
-«DEFINE OwnConflictsConstraints(String id) FOR MModel -»
-            «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnConflictsConstraints FOR MModel -»
+            «PROTECT CSTART '/* ' CEND ' */' ID ("ext_emconf.php.own.conflicts.constraints." + xmiGuid)»
             // TODO: put your further 'conflicts' constraints here
             «ENDPROTECT»
 «ENDDEFINE»
@@ -157,7 +157,7 @@ $EM_CONF[$_EXTKEY] = [
             «FOREACH emGetTypo3ExtensionConfigurationSuggests() AS suggestConstraint -»
             «suggestConstraint.asExtensionConstraint()»,
             «ENDFOREACH -»
-            «EXPAND OwnSuggestsConstraints("ext_emconf.php.own.suggests.constraints." + xmiGuid) -»
+            «EXPAND OwnSuggestsConstraints -»
         ],
 «ENDDEFINE»
 
@@ -165,8 +165,8 @@ $EM_CONF[$_EXTKEY] = [
 «REM»
 	Generates a protected region for own suggests constraints.
 «ENDREM»
-«DEFINE OwnSuggestsConstraints(String id) FOR MModel -»
-            «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnSuggestsConstraints FOR MModel -»
+            «PROTECT CSTART '/* ' CEND ' */' ID ("ext_emconf.php.own.suggests.constraints." + xmiGuid)»
             // TODO: put your further 'suggests' constraints here
             «ENDPROTECT»
 «ENDDEFINE»
@@ -239,8 +239,8 @@ $EM_CONF[$_EXTKEY] = [
 «REM»
 	Generates a protected region for own code.
 «ENDREM»
-«DEFINE OwnCode(String id) FOR MModel -»
-    «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnCode FOR MModel -»
+    «PROTECT CSTART '/* ' CEND ' */' ID ("ext_emconf.php.own.code." + xmiGuid)»
     // TODO: put your further code here
     «ENDPROTECT»
 «ENDDEFINE»

@@ -54,7 +54,7 @@
 «EXPAND ModuleConfiguration -»
 «EXPAND TypoScriptConfiguration -»
 «EXPAND DomainObjectConfiguration -»
-«EXPAND OwnCode("ext_tables.php.own.code." + xmiGuid) -»
+«EXPAND OwnCode -»
 «ENDFILE -»
 «ENDDEFINE»
 
@@ -76,7 +76,7 @@ defined('TYPO3_MODE') or die();
 «ENDREM»
 «DEFINE PluginConfiguration FOR MModel -»
 «EXPAND PluginRegistration FOREACH allPlugins().sortBy( p | p.asExtbasePluginName() ) -»
-«EXPAND OwnPluginCode("ext_tables.php.own.plugin.code." + xmiGuid) -»
+«EXPAND OwnPluginCode -»
 
 «ENDDEFINE»
 
@@ -117,8 +117,8 @@ $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['«asExtbaseP
 «REM»
 	Generates a protected region for own plugin code.
 «ENDREM»
-«DEFINE OwnPluginCode(String id) FOR MModel -»
-«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnPluginCode FOR MModel -»
+«PROTECT CSTART '/* ' CEND ' */' ID ("ext_tables.php.own.plugin.code." + xmiGuid)»
 // TODO: put your further plugin code here
 «ENDPROTECT»
 «ENDDEFINE»
@@ -129,7 +129,7 @@ $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['«asExtbaseP
 «DEFINE ModuleConfiguration FOR MModel -»
 if (TYPO3_MODE === 'BE') {
     «EXPAND ModuleRegistration FOREACH allModules().sortBy( m | m.asTypo3ModuleName() ) -»
-    «EXPAND OwnModuleCode("ext_tables.php.own.module.code." + xmiGuid) -»
+    «EXPAND OwnModuleCode -»
 }
 
 «ENDDEFINE»
@@ -153,7 +153,7 @@ if (TYPO3_MODE === 'BE') {
             'access' => '«FOREACH emGetExtbaseModuleAccess() AS accessRole SEPARATOR ", " -»«accessRole.asTypo3AccessRole() -»«ENDFOREACH -»',
             'icon' => 'EXT:' . $_EXTKEY . '/ext_icon.png',
             'labels' => 'LLL:EXT:' . $_EXTKEY . '/«filePathLocallangModuleXlf("") -»',
-            «EXPAND OwnModuleConfigurationCode("ext_tables.php.own.module.configuration.code." + xmiGuid) -»
+            «EXPAND OwnModuleConfigurationCode -»
         ]
     );
 
@@ -175,8 +175,8 @@ if (TYPO3_MODE === 'BE') {
 «REM»
 	Generates a protected region for own module configuration code.
 «ENDREM»
-«DEFINE OwnModuleConfigurationCode(String id) FOR MInterface -»
-            «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnModuleConfigurationCode FOR MInterface -»
+            «PROTECT CSTART '/* ' CEND ' */' ID ("ext_tables.php.own.module.configuration.code." + xmiGuid)»
             // TODO: put your further module configuration code here
             «ENDPROTECT»
 «ENDDEFINE»
@@ -185,8 +185,8 @@ if (TYPO3_MODE === 'BE') {
 «REM»
 	Generates a protected region for own module code.
 «ENDREM»
-«DEFINE OwnModuleCode(String id) FOR MModel -»
-    «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnModuleCode FOR MModel -»
+    «PROTECT CSTART '/* ' CEND ' */' ID ("ext_tables.php.own.module.code." + xmiGuid)»
     // TODO: put your further module code here
     «ENDPROTECT»
 «ENDDEFINE»
@@ -196,7 +196,7 @@ if (TYPO3_MODE === 'BE') {
 «ENDREM»
 «DEFINE TypoScriptConfiguration FOR MModel -»
 «EXPAND TypoScriptStaticFileInclusion -»
-«EXPAND OwnTypoScriptCode("ext_tables.php.own.typoscript.code." + xmiGuid) -»
+«EXPAND OwnTypoScriptCode -»
 
 «ENDDEFINE»
 
@@ -213,8 +213,8 @@ if (TYPO3_MODE === 'BE') {
 «REM»
 	Generates a protected region for own TypoScript code.
 «ENDREM»
-«DEFINE OwnTypoScriptCode(String id) FOR MModel -»
-«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnTypoScriptCode FOR MModel -»
+«PROTECT CSTART '/* ' CEND ' */' ID ("ext_tables.php.own.typoscript.code." + xmiGuid)»
 // TODO: put your further TypoScript code here
 «ENDPROTECT»
 «ENDDEFINE»
@@ -267,8 +267,8 @@ if (TYPO3_MODE === 'BE') {
 «REM»
 	Generates a protected region for own code.
 «ENDREM»
-«DEFINE OwnCode(String id) FOR MModel -»
-«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnCode FOR MModel -»
+«PROTECT CSTART '/* ' CEND ' */' ID ("ext_tables.php.own.code." + xmiGuid)»
 // TODO: put your further code here
 «ENDPROTECT»
 «ENDDEFINE»
