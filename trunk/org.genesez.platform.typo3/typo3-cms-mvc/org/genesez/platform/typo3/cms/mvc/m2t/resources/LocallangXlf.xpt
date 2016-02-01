@@ -118,7 +118,6 @@
 			«EXPAND ClassLocalization(isoLanguageCode) FOR domainObject -»
 			«EXPAND PropertyLocalization(isoLanguageCode) FOREACH domainObject.property.select( p | !p.isStatic() ) -»
 
-
 			«ENDFOREACH -»
 			«EXPAND OwnLocalizations(isoLanguageCode) -»
 		</body>
@@ -126,20 +125,34 @@
 
 
 «DEFINE ClassLocalization(String isoLanguageCode) FOR MClass -»
+			«EXPAND ClassLocalizationHint -»
 			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang.xlf." + isoLanguageCode + "." + xmiGuid) DISABLE»
 			<trans-unit id="«asFrontendLocalizationName() -»" xml:space="preserve">
 				<source>«name.toFirstUpper() -»</source>
 			</trans-unit>
 			«ENDPROTECT»
+
+«ENDDEFINE»
+
+
+«DEFINE ClassLocalizationHint FOR MClass -»
+			<!-- GeneSEZ Generator Hint: id="«asFrontendLocalizationName() -»" -->
 «ENDDEFINE»
 
 
 «DEFINE PropertyLocalization(String isoLanguageCode) FOR MProperty -»
+			«EXPAND PropertyLocalizationHint -»
 			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang.xlf." + isoLanguageCode + "." + xmiGuid) DISABLE»
 			<trans-unit id="«asFrontendLocalizationName() -»" xml:space="preserve">
 				<source>«name.toFirstUpper() -»</source>
 			</trans-unit>
 			«ENDPROTECT»
+
+«ENDDEFINE»
+
+
+«DEFINE PropertyLocalizationHint FOR MProperty -»
+			<!-- GeneSEZ Generator Hint: id="«asFrontendLocalizationName() -»" -->
 «ENDDEFINE»
 
 

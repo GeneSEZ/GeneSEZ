@@ -126,37 +126,56 @@
 			«EXPAND DetailsLocalization(isoLanguageCode) -»
 			«EXPAND PropertyLocalization(isoLanguageCode) FOREACH property.select( p | !p.derived && !p.isStatic() ) -»
 
-
 			«EXPAND OwnLocalizations(isoLanguageCode) -»
 		</body>
 «ENDDEFINE»
 
 
 «DEFINE DescriptionLocalization(String isoLanguageCode) FOR MClass -»
+			«EXPAND DescriptionLocalizationHint -»
 			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_csh.xlf." + isoLanguageCode + ".description." + xmiGuid) DISABLE»
 			<trans-unit id=".description" xml:space="preserve">
 				<source>«comment("; ", "") -»</source>
 			</trans-unit>
 			«ENDPROTECT»
+
+«ENDDEFINE»
+
+
+«DEFINE DescriptionLocalizationHint FOR MClass -»
+			<!-- GeneSEZ Generator Hint: id=".description" -->
 «ENDDEFINE»
 
 
 «DEFINE DetailsLocalization(String isoLanguageCode) FOR MClass -»
+			«EXPAND DetailsLocalizationHint -»
 			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_csh.xlf." + isoLanguageCode + ".details." + xmiGuid) DISABLE»
 			<trans-unit id=".details" xml:space="preserve">
 				<source>«comment("; ", "") -»</source>
 			</trans-unit>
 			«ENDPROTECT»
+
 «ENDDEFINE»
 
 
+«DEFINE DetailsLocalizationHint FOR MClass -»
+			<!-- GeneSEZ Generator Hint: id=".details" -->
+«ENDDEFINE»
+
 
 «DEFINE PropertyLocalization(String isoLanguageCode) FOR MProperty -»
+			«EXPAND PropertyLocalizationHint -»
 			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_csh.xlf." + isoLanguageCode + "." + xmiGuid) DISABLE»
 			<trans-unit id="«asContextSensitiveHelpLocalizationName() -».description" xml:space="preserve">
 				<source>«name.toFirstUpper() -»</source>
 			</trans-unit>
 			«ENDPROTECT»
+
+«ENDDEFINE»
+
+
+«DEFINE PropertyLocalizationHint FOR MProperty -»
+			<!-- GeneSEZ Generator Hint: id="«asContextSensitiveHelpLocalizationName() -».description" -->
 «ENDDEFINE»
 
 
