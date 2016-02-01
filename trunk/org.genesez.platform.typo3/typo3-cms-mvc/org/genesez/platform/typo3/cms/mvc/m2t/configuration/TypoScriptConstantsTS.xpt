@@ -35,7 +35,7 @@
 «FILE filePathTypoScriptConstantsTs() -»
 «EXPAND PluginConfiguration -»
 «EXPAND ModuleConfiguration -»
-«EXPAND OwnCode("constants.txt.own.code." + xmiGuid) -»
+«EXPAND OwnCode -»
 «ENDFILE -»
 «ENDDEFINE»
 
@@ -51,7 +51,7 @@
 plugin.«extensionPrefix() -» {
     «EXPAND PluginPersistence -»
     «EXPAND PluginView -»
-    «EXPAND OwnPluginCode("constants.txt.own.plugin.code." + xmiGuid) -»
+    «EXPAND OwnPluginCode -»
 }
 
 «ENDIF -»
@@ -85,8 +85,8 @@ plugin.«extensionPrefix() -» {
 «REM»
 	Generates a protected region for own plugin code.
 «ENDREM»
-«DEFINE OwnPluginCode(String id) FOR MModel -»
-    «PROTECT CSTART '// ' CEND '' ID (id)»
+«DEFINE OwnPluginCode FOR MModel -»
+    «PROTECT CSTART '// ' CEND '' ID ("constants.txt.own.plugin.code." + xmiGuid)»
     // TODO: put your further plugin code here
     «ENDPROTECT»
 «ENDDEFINE»
@@ -99,7 +99,7 @@ plugin.«extensionPrefix() -» {
 module.«extensionPrefix() -» {
     «EXPAND ModulePersistence -»
     «EXPAND ModuleView -»
-    «EXPAND OwnModuleCode("constants.txt.own.module.code." + xmiGuid) -»
+    «EXPAND OwnModuleCode -»
 }
 
 «ENDIF -»
@@ -133,8 +133,8 @@ module.«extensionPrefix() -» {
 «REM»
 	Generates a protected region for own module code.
 «ENDREM»
-«DEFINE OwnModuleCode(String id) FOR MModel -»
-    «PROTECT CSTART '// ' CEND '' ID (id)»
+«DEFINE OwnModuleCode FOR MModel -»
+    «PROTECT CSTART '// ' CEND '' ID ("constants.txt.own.module.code." + xmiGuid)»
     // TODO: put your further module code here
     «ENDPROTECT»
 «ENDDEFINE»
@@ -143,8 +143,8 @@ module.«extensionPrefix() -» {
 «REM»
 	Generates a protected region for own code.
 «ENDREM»
-«DEFINE OwnCode(String id) FOR MModel -»
-«PROTECT CSTART '// ' CEND '' ID (id)»
+«DEFINE OwnCode FOR MModel -»
+«PROTECT CSTART '// ' CEND '' ID ("constants.txt.own.code." + xmiGuid)»
 // TODO: put your further code here
 «ENDPROTECT»
 «ENDDEFINE»

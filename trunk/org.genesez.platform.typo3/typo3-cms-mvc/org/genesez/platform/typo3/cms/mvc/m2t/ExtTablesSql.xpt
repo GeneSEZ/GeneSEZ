@@ -51,7 +51,7 @@
 «EXPAND ConcreteTable FOREACH allConreteTableInheritances().sortBy( do | do.asPersistenceName() ) -»
 «EXPAND SingleTable FOREACH allSingleTableInheritances().sortBy( do | do.asPersistenceName() ) -»
 «EXPAND TableMapping FOREACH allTableMappings().sortBy( do | do.asPersistenceName() ) -»
-«EXPAND OwnCode("ext_tables.sql.own.code." + xmiGuid) -»
+«EXPAND OwnCode -»
 «ENDFILE -»
 «ENDDEFINE»
 
@@ -614,8 +614,8 @@ CREATE TABLE «asIntermediateTableName(class) -» (
 «REM»
 	Generates a protected region for own code.
 «ENDREM»
-«DEFINE OwnCode(String id) FOR MModel -»
-«PROTECT CSTART '# ' CEND '' ID (id)»
+«DEFINE OwnCode FOR MModel -»
+«PROTECT CSTART '# ' CEND '' ID ("ext_tables.sql.own.code." + xmiGuid)»
 # TODO: put your further code here
 «ENDPROTECT»
 «ENDDEFINE»
