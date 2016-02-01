@@ -146,15 +146,15 @@ if (TYPO3_MODE === 'BE') {
         '«emGetExtbaseModuleMainModule().asTypo3MainModul() -»',
         '«asTypo3ModuleName() -»',
         '«emGetExtbaseModulePosition() -»',
-        array(«FOREACH emGetExtbaseModuleControllers() AS controller SEPARATOR ", "»
+        [«FOREACH emGetExtbaseModuleControllers() AS controller SEPARATOR ", "»
             '«controller.asControllerName()»' => '«FOREACH emGetExtbaseModuleControllerActions(this, controller) AS controllerAction SEPARATOR ", "»«controllerAction.asControllerActionName() -»«ENDFOREACH»'«ENDFOREACH»
-        ),
-        array(
+        ],
+        [
             'access' => '«FOREACH emGetExtbaseModuleAccess() AS accessRole SEPARATOR ", " -»«accessRole.asTypo3AccessRole() -»«ENDFOREACH -»',
             'icon' => 'EXT:' . $_EXTKEY . '/ext_icon.png',
             'labels' => 'LLL:EXT:' . $_EXTKEY . '/«filePathLocallangModuleXlf("") -»',
             «EXPAND OwnModuleConfigurationCode("ext_tables.php.own.module.configuration.code." + xmiGuid) -»
-        )
+        ]
     );
 
 «ENDDEFINE»

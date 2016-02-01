@@ -49,7 +49,7 @@
 	Generates the '$EM_CONF' array to connect a TYPO3 CMS extension to TYPO3 CMS.
 «ENDREM»
 «DEFINE ExtensionConfiguration FOR MModel -»
-$EM_CONF[$_EXTKEY] = array(
+$EM_CONF[$_EXTKEY] = [
     «EXPAND Title -»
     «EXPAND Description -»
     «EXPAND Category -»
@@ -63,7 +63,7 @@ $EM_CONF[$_EXTKEY] = array(
     «EXPAND AuthorCompany -»
     «EXPAND Version -»
     «EXPAND OwnCode("ext_emconf.php.own.code." + xmiGuid) -»
-);
+];
 «ENDDEFINE»
 
 
@@ -95,11 +95,11 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'constraints' field.
 «ENDREM»
 «DEFINE Constraints FOR MModel -»
-    'constraints' => array(
+    'constraints' => [
         «EXPAND DependsConstraints -»
         «EXPAND ConflictsConstraints -»
         «EXPAND SuggestsConstraints -»
-    ),
+    ],
 «ENDDEFINE»
 
 
@@ -107,12 +107,12 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'depends' field.
 «ENDREM»
 «DEFINE DependsConstraints FOR MModel -»
-        'depends' => array(
+        'depends' => [
             «FOREACH emGetTypo3ExtensionConfigurationDependencies() AS dependsConstraint -»
             «dependsConstraint.asExtensionConstraint()»,
             «ENDFOREACH -»
             «EXPAND OwnDependsConstraints("ext_emconf.php.own.depends.constraints." + xmiGuid) -»
-        ),
+        ],
 «ENDDEFINE»
 
 
@@ -130,12 +130,12 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'conflicts' field.
 «ENDREM»
 «DEFINE ConflictsConstraints FOR MModel -»
-        'conflicts' => array(
+        'conflicts' => [
             «FOREACH emGetTypo3ExtensionConfigurationConflicts() AS conflictConstraint -»
             «conflictConstraint.asExtensionConstraint()»,
             «ENDFOREACH -»
             «EXPAND OwnConflictsConstraints("ext_emconf.php.own.conflicts.constraints." + xmiGuid) -»
-        ),
+        ],
 «ENDDEFINE»
 
 
@@ -153,12 +153,12 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'suggests' field.
 «ENDREM»
 «DEFINE SuggestsConstraints FOR MModel -»
-        'suggests' => array(
+        'suggests' => [
             «FOREACH emGetTypo3ExtensionConfigurationSuggests() AS suggestConstraint -»
             «suggestConstraint.asExtensionConstraint()»,
             «ENDFOREACH -»
             «EXPAND OwnSuggestsConstraints("ext_emconf.php.own.suggests.constraints." + xmiGuid) -»
-        ),
+        ],
 «ENDDEFINE»
 
 
