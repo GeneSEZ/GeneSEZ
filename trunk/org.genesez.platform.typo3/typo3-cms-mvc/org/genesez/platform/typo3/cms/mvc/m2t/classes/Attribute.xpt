@@ -21,6 +21,9 @@
 «EXTENSION org::genesez::platform::typo3::cms::mvc::util::NamingConvention»
 
 
+«REM» use GeneSEZ common Persistence profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezPersistenceAccessElement»
+
 «REM» use GeneSEZ common Standard profile scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::profile::GenesezStandardAccessElement»
 
@@ -205,7 +208,7 @@
 «IF multiplicity.isSingleValued() -»
 «IF !isPhpPrimitiveType( type.asGeneralName() ) -»«type.asGeneralName() -» «ENDIF -»
 «ELSE -»
-«IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() -»«mapCollection("DomainModel") -» «ELSE -»«mapCollection() -» «ENDIF -»
+«IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() && !emHasTransientStereotype() -»«mapCollection("DomainModel") -» «ELSE -»«mapCollection() -» «ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -232,7 +235,7 @@
 «DEFINE DefaultValueSetAccessor FOR MAttribute -»
 «IF multiplicity.lowerBound < 1 -»
 «IF multiplicity.isSingleValued() -» = null«ENDIF -»
-«IF multiplicity.isMultiValued() -»«IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() -» = null«ELSE -» = []«ENDIF -»«ENDIF -»
+«IF multiplicity.isMultiValued() -»«IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() && !emHasTransientStereotype() -» = null«ELSE -» = []«ENDIF -»«ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 
