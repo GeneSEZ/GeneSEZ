@@ -418,7 +418,7 @@ return [
 «DEFINE InterfaceSection FOR MClass -»
     'interface' => [
         «EXPAND InterfaceShowRecordFieldList -»
-        «EXPAND OwnInterfaceSectionCode("tca.php.own.interface.section.code." + xmiGuid) -»
+        «EXPAND OwnInterfaceSectionCode -»
     ],
 «ENDDEFINE»
 
@@ -433,8 +433,8 @@ return [
 «REM»
 	Generates a protected region for own TCA Interface Section code.
 «ENDREM»
-«DEFINE OwnInterfaceSectionCode(String id) FOR MClass -»
-        «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnInterfaceSectionCode FOR MClass -»
+        «PROTECT CSTART '/* ' CEND ' */' ID ("tca.php.own.interface.section.code." + xmiGuid)»
         // TODO: put your further 'interface' section code here
         «ENDPROTECT»
 «ENDDEFINE»
@@ -1880,16 +1880,8 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDREM»
 «DEFINE PalettesSection FOR MClass -»
     'palettes' => [
-        «EXPAND PalettesNumbers -»
         «EXPAND OwnPalettesSectionCode -»
     ],
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE PalettesNumbers FOR MClass -»
-        '1' => ['showitem' => ''],
 «ENDDEFINE»
 
 
