@@ -18,6 +18,10 @@
 «EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
 
 
+«REM» use GeneSEZ common Persistence profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezPersistenceAccessElement»
+
+
 «REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
 «EXTENSION org::genesez::platform::typo3::cms::mvc::util::AccessElement»
 
@@ -124,7 +128,7 @@
 		<body>
 			«EXPAND DescriptionLocalization(isoLanguageCode) -»
 			«EXPAND DetailsLocalization(isoLanguageCode) -»
-			«EXPAND PropertyLocalization(isoLanguageCode) FOREACH property.select( p | !p.derived && !p.isStatic() ) -»
+			«EXPAND PropertyLocalization(isoLanguageCode) FOREACH property.select( p | !p.derived && !p.isStatic() && !p.emHasTransientStereotype() ) -»
 
 			«EXPAND OwnLocalizations(isoLanguageCode) -»
 		</body>
