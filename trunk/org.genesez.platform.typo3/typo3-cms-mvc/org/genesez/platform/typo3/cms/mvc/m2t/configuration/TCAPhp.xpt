@@ -1814,7 +1814,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 «DEFINE TypesSection FOR MClass -»
     'types' => [
         «EXPAND TypesNumbers -»
-        «EXPAND OwnTypesSectionCode("tca.php.own.types.section.code." + xmiGuid) -»
+        «EXPAND OwnTypesSectionCode -»
     ],
 «ENDDEFINE»
 
@@ -1822,9 +1822,15 @@ hier evtl. versuch über sql type maximum herauszufinden
 «REM» 
 «ENDREM»
 «DEFINE TypesNumbers FOR MClass -»
-        '0' => ['showitem' => '«EXPAND TypesNumbersType -»«EXPAND TypesNumbersLocalization -»«EXPAND TypesNumbersHidden -»«EXPAND TypesNumbersStartime -»«EXPAND TypesNumbersEndtime -»«EXPAND TypesNumbersFeGroup -»«EXPAND TypesNumbers FOREACH allProperties().select( p | !p.derived && !p.isStatic() && !p.emHasTransientStereotype() ) SEPARATOR ", " -»'],
+        '0' => [
+            'showitem' => '«EXPAND TypesNumbersType -»«EXPAND TypesNumbersLocalization -»«EXPAND TypesNumbersHidden -»«EXPAND TypesNumbersStartime -»«EXPAND TypesNumbersEndtime -»«EXPAND TypesNumbersFeGroup -»«FOREACH allProperties().select( p | !p.derived && !p.isStatic() && !p.emHasTransientStereotype() ) AS p SEPARATOR ", " -»«p.asConfigurationName() -»«ENDFOREACH -»',
+            «EXPAND OwnTypesSectionTypeCode -»
+        ],
         «FOREACH allSingleTableInheritanceSpecializations() AS s -»
-        '«s.asGeneralName() -»' => ['showitem' => '«EXPAND TypesNumbersType -»«EXPAND TypesNumbersLocalization FOR s -»«EXPAND TypesNumbersHidden FOR s -»«EXPAND TypesNumbersStartime FOR s -»«EXPAND TypesNumbersEndtime FOR s -»«EXPAND TypesNumbersFeGroup FOR s -»«EXPAND TypesNumbers FOREACH s.allProperties().select( p | !p.derived && !p.isStatic() && !p.emHasTransientStereotype() ) SEPARATOR ", " -»'],
+        '«s.asGeneralName() -»' => [
+            'showitem' => '«EXPAND TypesNumbersType -»«EXPAND TypesNumbersLocalization FOR s -»«EXPAND TypesNumbersHidden FOR s -»«EXPAND TypesNumbersStartime FOR s -»«EXPAND TypesNumbersEndtime FOR s -»«EXPAND TypesNumbersFeGroup FOR s -»«FOREACH s.allProperties().select( p | !p.derived && !p.isStatic() && !p.emHasTransientStereotype() ) AS p SEPARATOR ", " -»«p.asConfigurationName() -»«ENDFOREACH -»',
+            «EXPAND OwnTypesSectionTypeCode FOR s -»
+        ],
         «ENDFOREACH -»
 «ENDDEFINE»
 
@@ -1859,16 +1865,18 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDDEFINE»
 
 
-«DEFINE TypesNumbers FOR MProperty -»
-«asConfigurationName() -»
+«DEFINE OwnTypesSectionTypeCode FOR MClass -»
+            «PROTECT CSTART '/* ' CEND ' */' ID ("tca.php.own.types.section.type.code." + xmiGuid)»
+            // TODO: put your further type code here
+            «ENDPROTECT»
 «ENDDEFINE»
 
 
 «REM»
 	Generates a protected region for own TCA Types Section code.
 «ENDREM»
-«DEFINE OwnTypesSectionCode(String id) FOR MClass -»
-        «PROTECT CSTART '/* ' CEND ' */' ID (id)»
+«DEFINE OwnTypesSectionCode FOR MClass -»
+        «PROTECT CSTART '/* ' CEND ' */' ID ("tca.php.own.types.section.code." + xmiGuid)»
         // TODO: put your further 'types' section code here
         «ENDPROTECT»
 «ENDDEFINE»
