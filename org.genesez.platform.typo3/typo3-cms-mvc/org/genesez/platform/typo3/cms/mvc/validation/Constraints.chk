@@ -14,6 +14,10 @@ import gcore;
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
  */
 
+// use GeneSEZ common Persistence profile scripts
+extension org::genesez::metamodel::core::util::profile::GenesezPersistenceAccessElement;
+
+
 // use TYPO3 CMS specific Extbase + Fluid access element scripts
 extension org::genesez::platform::typo3::cms::mvc::util::AccessElement;
 
@@ -30,7 +34,7 @@ extension org::genesez::metamodel::core::util::Conversion;
  * @return	False, if the visibility is not 'protected', otherwise true.
  */
 context MAttribute 
-	if ( classifier.isEntity() || classifier.isValueObject() ) && !( derived || ( static && final ) ) 
+	if ( classifier.isEntity() || classifier.isValueObject() ) && !( derived || ( static && final ) || emHasTransientStereotype() ) 
 	WARNING "GeneSEZ: The visibility of the attribute from the domain object is not protected! See model element: " + fqmn() :
 	visibility == "protected";
 
@@ -40,6 +44,6 @@ context MAttribute
  * @return	False, if the visibility is not 'protected', otherwise true.
  */
 context MAssociationRole 
-	if ( classifier.isEntity() || classifier.isValueObject() ) && !derived
+	if ( classifier.isEntity() || classifier.isValueObject() ) && ! ( derived || emHasTransientStereotype() )
 	WARNING "GeneSEZ: The visibility of the association role from the domain object is not protected! See model element: " + fqmn() :
 	visibility == "protected";
