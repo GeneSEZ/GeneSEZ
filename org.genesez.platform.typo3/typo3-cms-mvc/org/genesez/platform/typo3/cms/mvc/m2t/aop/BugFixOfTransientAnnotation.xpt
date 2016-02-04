@@ -1,0 +1,49 @@
+«REM»
+	(c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+
+«REM»
+	This aspect registration supresses the generation of the '@transient' annotation for non-persistent properties of domain objects.
+	
+	In TYPO3 CMS 6.2 LTS and later exists an bug if a property of a domain object is annotated with '@transient' annotation.
+	In that case properties can not be uses in TYPO3 CMS Fluid forms because of an exeption of the Extbase PropertyMapper.
+	
+	See https://forum.typo3.org/index.php/t/188798/ for more details.
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+«ENDREM»
+
+«REM» use GeneSEZ common Persistence profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezPersistenceAccessElement»
+
+
+«REM» use GeneSEZ common conversion scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+
+«REM» use GeneSEZ common logging scripts «ENDREM»
+«EXTENSION org::genesez::util::logging::Logging»
+
+
+«REM»
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
+«ENDREM»
+
+«REM»
+	Registers aspect to disable the generation of context sensitive help files for all domain objects.
+«ENDREM»
+«AROUND org::genesez::platform::typo3::cms::mvc::m2t::classes::Annotation::Transient FOR MProperty -»
+«IF emHasTransientStereotype() -»
+    «useLogger("org.genesez.platform.typo3") -» 
+    «logInfo( "GeneSEZ: Aspect call to bug fix the '@transient' annotation for non-persistent properties of domain objects! Model element: " + fqmn() ) -»
+     *
+     * Note: This is a transient property. Currently it can not be annotated with the corresponding
+     *       annotation because of a property mapping bug of TYPO3 CMS Extbase + Fluid, see
+     *       https://forum.typo3.org/index.php/t/188798/ for more details.
+«ENDIF -»
+«ENDAROUND»
