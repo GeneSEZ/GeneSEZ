@@ -36,6 +36,9 @@ extension org::genesez::metamodel::core::util::profile::GenesezStandardProfile;
 extension org::genesez::metamodel::core::util::profile::GenesezValidationProfile;
 
 
+// use GeneSEZ common access element scripts
+extension org::genesez::metamodel::core::util::AccessElement;
+
 // use GeneSEZ common create element scripts
 extension org::genesez::metamodel::core::util::CreateElement;
 
@@ -55,28 +58,45 @@ MModel modelModifications(MModel this) :
 	useLogger("org.genesez.platform.typo3") ->
 	logTrace( "GeneSEZ: Modifications for Model! Model element: " + fqmn() ) ->
 	
-	// perform modifications for all stereotypes
-	anyStereotype.stereotypeModifications() ->
-	
+	// perform modifications for all nested packages
+	nestedPackage.packageModifications() ->	
 	// perform modifications for all classes
 	classifier.typeSelect(MClass).classModifications() ->
-	// perform modifications for all nested packages
-	nestedPackage.packageModifications() ->
+	// perform modifications for all enumerations
+	classifier.typeSelect(MEnumeration).enumerationModifications() ->
+	
+	// perform modifications for all stereotypes
+	anyStereotype.stereotypeModifications() ->
 	this;
 
+
+// -- Modification of Packages ------------------------------------------------------------------------------
 
 MPackage packageModifications(MPackage this) :
 	logTrace( "GeneSEZ: Modifications for Package! Model element: " + fqmn() ) ->
 	packageChangePackageNameToFirstUpper() ->
 	
-	// perform modifications for all classes
-	classifier.typeSelect(MClass).classModifications() ->
 	// perform modifications for all nested packages
 	nestedPackage.packageModifications() ->
+	// perform modifications for all classes
+	classifier.typeSelect(MClass).classModifications() ->
+	// perform modifications for all enumerations
+	classifier.typeSelect(MEnumeration).enumerationModifications() ->
 	this;
 
 
-// -- Selection of manipulating Classes ---------------------------------------------------------------------
+/**
+ * @todo: should performed by a check validation rule
+ */
+MPackage packageChangePackageNameToFirstUpper(MPackage this) :
+	name.matches("^[a-z].*")
+		? (	logTrace( "GeneSEZ: Change package name to first upper! Model element: " + fqmn() ) ->
+			setName( name.toFirstUpper() )
+		) : this ->
+	this;
+
+
+// -- Modification of Classes -------------------------------------------------------------------------------
 
 MClass classModifications(MClass this) :
 	logTrace( "GeneSEZ: Modifications for Class! Model element: " + fqmn() ) ->
@@ -99,37 +119,7 @@ MClass classModifications(MClass this) :
 			this
 	} ->
 	this;
-	
 
-// -- Selection of manipulating Stereotypes -----------------------------------------------------------------
-
-MStereotype stereotypeModifications(MStereotype this) :
-	logTrace( "GeneSEZ: Modifications for Stereotype! Model element: " + fqmn() ) ->
-	switch {
-		case name == prNumberRangeValidator() :
-			numberRangeValidatorModifications()
-		case name == prStringLengthValidator() :
-			stringLengthValidatorModifications()
-		default :
-			this
-	} ->
-	this;
-
-
-// -- Modification of Packages ------------------------------------------------------------------------------
-
-/**
- * @todo: should performed by a check validation rule
- */
-MPackage packageChangePackageNameToFirstUpper(MPackage this) :
-	name.matches("^[a-z].*")
-		? (	logTrace( "GeneSEZ: Change package name to first upper! Model element: " + fqmn() ) ->
-			setName( name.toFirstUpper() )
-		) : this ->
-	this;
-
-
-// -- Modification of Classes -------------------------------------------------------------------------------
 
 /**
  * @todo:	Check of realization already set.
@@ -153,6 +143,27 @@ MProperty classNoAccessorsIfDependencyInjectionIsSet(MProperty this) :
 						.ensureSingleTaggedValueExistence( genesezAccessorStereotype.ensureTagExistence( prAccessorGetter(), "Boolean" ), "false" ).owningElement
 						.ensureSingleTaggedValueExistence( genesezAccessorStereotype.ensureTagExistence( prAccessorSetter(), "Boolean" ), "false" )
 			)
+		) : this ->
+	this;
+
+
+// -- Modification of Enumerations --------------------------------------------------------------------------
+
+MEnumeration enumerationModifications(MEnumeration this) :
+	logTrace( "GeneSEZ: Modifications for Enumeration! Model element: " + fqmn() ) ->
+	// add default generalization if hook is registered by AOP
+	enumerationHookAddGeneralization() ->
+	this;
+
+
+MEnumeration enumerationHookAddGeneralization(MEnumeration this) :
+	this;
+
+
+MEnumeration enumerationAddGeneralization(MEnumeration this) :
+	!generalization.isEmpty
+		? (	logTrace( "GeneSEZ: Add default generalization to enumeration! Model element: " + fqmn() ) ->
+			generalization.add( navModel().ensureExternalTypeExistence("Enumeration", "Enumeration") )
 		) : this ->
 	this;
 	
@@ -227,6 +238,8 @@ MOperation controllerAddInitializeAction(MOperation this) :
 MClass domainObjectModifications(MClass this) :
 	// add 'NotEmptyValidator' stereotype if hook is registered by AOP
 	property.domainObjectHookAddNotEmptyValidatorStereotype() ->
+	// add 'StringLengthValidator' stereotype if hook is registered by AOP
+	property.domainObjectHookAddStringLengthValidatorStereotype() ->
 	
 	property.domainObjectChangePropertyVisibilityToProtected() ->
 	this;
@@ -240,6 +253,21 @@ MProperty domainObjectAddNotEmptyValidatorStereotype(MProperty this) :
 	multiplicity.lowerBound >= 1 && !stereotype.exists( s | s.name == prNotEmptyValidator() )
 		? ( logTrace( "GeneSEZ: Add 'NotEmptyValidator' stereotype to domain object property! Model element: " + fqmn() ) ->
 			ensureStereotypeAssignment( navModel().ensureStereotypeExistence( prNotEmptyValidator(), prNotEmptyValidator() ) )
+		) : this ->
+	this;
+
+
+MClass domainObjectHookAddStringLengthValidatorStereotype(MProperty this) :
+	this;
+
+
+MProperty domainObjectAddStringLengthValidatorStereotype(MProperty this) :
+	type.isExternalType() && type.asSqlColumnType().hasUtilizableCalculateTcaMaxValue() && !stereotype.exists( s | s.name == prStringLengthValidator() )
+		? ( logInfo( "GeneSEZ: Add 'StringLengthValidator' stereotype to domain object property! Model element: " + fqmn() ) ->
+			(	let validationStringLengthStereotype = navModel().ensureStereotypeExistence( prStringLengthValidator(), prStringLengthValidator() ) :
+					ensureStereotypeAssignment(validationStringLengthStereotype)
+						.ensureSingleTaggedValueExistence( validationStringLengthStereotype.ensureTagExistence( prStringLengthValidatorMaxLength(), "String" ), "\"" + type.asSqlColumnType().calculateTcaMaxValue() + "\"" )
+			)
 		) : this ->
 	this;
 
@@ -389,6 +417,22 @@ MClass viewHelperAddGeneralization(MClass this) :
 		? (	logTrace( "GeneSEZ: Add default generalization to view helper class! Model element: " + fqmn() ) ->
 			generalization.add( navModel().ensureExternalTypeExistence("AbstractViewHelper", "AbstractViewHelper") )
 		) : this ->
+	this;
+
+
+
+// -- Modification of Stereotypes ---------------------------------------------------------------------------
+
+MStereotype stereotypeModifications(MStereotype this) :
+	logTrace( "GeneSEZ: Modifications for Stereotype! Model element: " + fqmn() ) ->
+	switch {
+		case name == prNumberRangeValidator() :
+			numberRangeValidatorModifications()
+		case name == prStringLengthValidator() :
+			stringLengthValidatorModifications()
+		default :
+			this
+	} ->
 	this;
 
 

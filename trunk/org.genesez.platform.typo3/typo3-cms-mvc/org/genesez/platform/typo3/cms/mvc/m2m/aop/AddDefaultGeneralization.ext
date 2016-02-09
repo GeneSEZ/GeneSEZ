@@ -24,7 +24,12 @@ extension org::genesez::util::logging::Logging;
 
 // -- Around statements -------------------------------------------------------------------------------------
 
- 
+around org::genesez::platform::typo3::cms::mvc::m2m::Modification::enumerationHookAddGeneralization(MEnumeration this) :
+	useLogger("org.genesez.platform.typo3") -> 
+	logTrace( "GeneSEZ: Aspect call to add default generalization to enumeration! Model element: " + fqmn() ) ->
+	enumerationAddGeneralization() -> ctx.proceed();
+
+
 around org::genesez::platform::typo3::cms::mvc::m2m::Modification::controllerHookAddGeneralization(MClass this) :
 	useLogger("org.genesez.platform.typo3") -> 
 	logTrace( "GeneSEZ: Aspect call to add default generalization to controller class! Model element: " + fqmn() ) ->
