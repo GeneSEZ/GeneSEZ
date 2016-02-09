@@ -876,7 +876,7 @@ return [
             'config' => [
                 «EXPAND ColumnConfigType("input") -»
                 «EXPAND ColumnConfigSize(16) -»
-                «EXPAND ColumnConfigDefault("time()") -»
+                «EXPAND ColumnConfigDefault("0") -»
                 «EXPAND ColumnConfigEval({"datetime"}) -»
                 «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
             ],
@@ -890,7 +890,7 @@ return [
                 «EXPAND ColumnConfigType("input") -»
                 «EXPAND ColumnConfigDbType("datetime") -»
                 «EXPAND ColumnConfigSize(16) -»
-                «EXPAND ColumnConfigDefault("time()") -»
+                «EXPAND ColumnConfigDefault("0") -»
                 «EXPAND ColumnConfigEval({"datetime"}) -»
                 «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
             ],
@@ -903,7 +903,7 @@ return [
             'config' => [
                 «EXPAND ColumnConfigType("input") -»
                 «EXPAND ColumnConfigSize(20) -»
-                «EXPAND ColumnConfigDefault("time()") -»
+                «EXPAND ColumnConfigDefault("0") -»
                 «EXPAND ColumnConfigEval({"date"}) -»
                 «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
             ],
@@ -917,7 +917,7 @@ return [
                 «EXPAND ColumnConfigType("input") -»
                 «EXPAND ColumnConfigDbType("date") -»
                 «EXPAND ColumnConfigSize(20) -»
-                «EXPAND ColumnConfigDefault("time()") -»
+                «EXPAND ColumnConfigDefault("0") -»
                 «EXPAND ColumnConfigEval({"date"}) -»
                 «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
             ],
@@ -930,7 +930,7 @@ return [
             'config' => [
                 «EXPAND ColumnConfigType("input") -»
                 «EXPAND ColumnConfigSize(5) -»
-                «EXPAND ColumnConfigDefault("time()") -»
+                «EXPAND ColumnConfigDefault("0") -»
                 «EXPAND ColumnConfigEval({"time"}) -»
                 «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
             ],
@@ -943,7 +943,7 @@ return [
             'config' => [
                 «EXPAND ColumnConfigType("input") -»
                 «EXPAND ColumnConfigSize(8) -»
-                «EXPAND ColumnConfigDefault("time()") -»
+                «EXPAND ColumnConfigDefault("0") -»
                 «EXPAND ColumnConfigEval({"timesec"}) -»
                 «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
             ],
@@ -1002,7 +1002,6 @@ return [
                 «EXPAND ColumnConfigRows(15) -»
                 «EXPAND ColumnConfigDefault(null) -»
                 «EXPAND ColumnConfigEval({"trim"}) -»
-                «EXPAND ColumnConfigDefaultExtras("'richtext:rte_transform[flag=rte_enabled|mode=ts]'") -»
                 «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
             ],
 «ENDDEFINE»
@@ -1197,6 +1196,7 @@ return [
 «DEFINE ColumnConfigTypeToOneUnidirectional(MClass class) FOR MAttribute -»
             'config' => [
                 «EXPAND ColumnConfigType("select") -»
+                «EXPAND ColumnConfigRenderType("selectSingle") -»
                 «EXPAND ColumnConfigItems -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigMinitems -»
@@ -1212,9 +1212,10 @@ return [
 «DEFINE ColumnConfigTypeToManyUnidirectional(MClass class) FOR MAttribute -»
             'config' => [
                 «EXPAND ColumnConfigType("select") -»
+                «EXPAND ColumnConfigRenderType("selectMultipleSideBySide") -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigMM(class) -»
-                «EXPAND ColumnConfigSize(10) -»
+                «EXPAND ColumnConfigSize(6) -»
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
                 «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
@@ -1234,6 +1235,7 @@ return [
                 «EXPAND ColumnConfigMaxitems -»
 «ELSE -»
                 «EXPAND ColumnConfigType("select") -»
+                «EXPAND ColumnConfigRenderType("selectSingle") -»
                 «EXPAND ColumnConfigItems -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigSize(1) -»
@@ -1265,6 +1267,7 @@ return [
                 «EXPAND ColumnConfigMaxitems -»
 «ELSE -»
                 «EXPAND ColumnConfigType("select") -»
+                «EXPAND ColumnConfigRenderType("selectSingle") -»
                 «EXPAND ColumnConfigItems -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigSize(1) -»
@@ -1284,14 +1287,15 @@ return [
                 «EXPAND ColumnConfigType("inline") -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigMM(class) -»
-                «EXPAND ColumnConfigSize(10) -»
+                «EXPAND ColumnConfigSize(6) -»
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
 «ELSE -»
                 «EXPAND ColumnConfigType("select") -»
+                «EXPAND ColumnConfigRenderType("selectMultipleSideBySide") -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigMM(class) -»
-                «EXPAND ColumnConfigSize(10) -»
+                «EXPAND ColumnConfigSize(6) -»
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
 «ENDIF -»
@@ -1308,14 +1312,14 @@ return [
                 «EXPAND ColumnConfigType("inline") -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigForeignField -»
-                «EXPAND ColumnConfigSize(10) -»
+                «EXPAND ColumnConfigSize(6) -»
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
 «ELSE -»
                 «EXPAND ColumnConfigType("passthrough") -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigForeignField -»
-                «EXPAND ColumnConfigSize(10) -»
+                «EXPAND ColumnConfigSize(6) -»
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
 «ENDIF -»
@@ -1329,6 +1333,7 @@ return [
 «DEFINE ColumnConfigTypeManyToOneUnidirectional(MClass class) FOR MAssociationRole -»
             'config' => [
                 «EXPAND ColumnConfigType("select") -»
+                «EXPAND ColumnConfigRenderType("selectSingle") -»
                 «EXPAND ColumnConfigItems -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigSize(1) -»
@@ -1344,6 +1349,7 @@ return [
 «DEFINE ColumnConfigTypeManyToOneBidirectional(MClass class) FOR MAssociationRole -»
             'config' => [
                 «EXPAND ColumnConfigType("select") -»
+                «EXPAND ColumnConfigRenderType("selectSingle") -»
                 «EXPAND ColumnConfigItems -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigSize(1) -»
@@ -1359,9 +1365,10 @@ return [
 «DEFINE ColumnConfigTypeManyToManyUnidirectional(MClass class) FOR MAssociationRole -»
             'config' => [
                 «EXPAND ColumnConfigType("select") -»
+                «EXPAND ColumnConfigRenderType("selectMultipleSideBySide") -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigMM(class) -»
-                «EXPAND ColumnConfigSize(10) -»
+                «EXPAND ColumnConfigSize(6) -»
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
                 «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
@@ -1375,17 +1382,19 @@ return [
             'config' => [
 «IF classifier.asShortGeneralName().compareTo( type.asShortGeneralName() ) < 0 || ( class.asShortGeneralName().compareTo( type.asShortGeneralName() ) == 0 && opposite.asGeneralName().compareTo( asGeneralName() ) < 0 ) -»
                 «EXPAND ColumnConfigType("select") -»
+                «EXPAND ColumnConfigRenderType("selectMultipleSideBySide") -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigMM(class) -»
-                «EXPAND ColumnConfigSize(10) -»
+                «EXPAND ColumnConfigSize(6) -»
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
 «ELSE -»
                 «EXPAND ColumnConfigType("select") -»
+                «EXPAND ColumnConfigRenderType("selectMultipleSideBySide") -»
                 «EXPAND ColumnConfigForeignTable -»
                 «EXPAND ColumnConfigMM(class) -»
                 «EXPAND ColumnConfigMMOppositeField -»
-                «EXPAND ColumnConfigSize(10) -»
+                «EXPAND ColumnConfigSize(6) -»
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
 «ENDIF -»
@@ -1402,7 +1411,7 @@ return [
             	'minitems' => «IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»,
             	'maxitems' => «IF multiplicity.hasFixedUpperBoundMultiplicity() -»«multiplicity.upperBound -»«ELSE -»999999«ENDIF -»,
             	«EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
-            ], «IF emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»'«emGetGuiPropertyAllowedFileExtensionsAllowedFileExtensions() -»'«ELSE -»''«ENDIF -», «IF emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»'«emGetGuiPropertyDisallowedFileExtensionsDisallowedFileExtensions() -»'«ELSE -»''«ENDIF -»),
+            ], «IF emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»'«FOREACH emGetGuiPropertyAllowedFileExtensionsAllowedFileExtensions() AS allowedFileExtension SEPARATOR ","-»«allowedFileExtension -»«ENDFOREACH -»'«ELSE -»''«ENDIF -», «IF emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»'«emGetGuiPropertyDisallowedFileExtensionsDisallowedFileExtensions() -»'«ELSE -»''«ENDIF -»),
 «ENDDEFINE»
 
 
@@ -1413,12 +1422,11 @@ return [
             	'minitems' => «IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»,
             	'maxitems' => «IF multiplicity.hasFixedUpperBoundMultiplicity() -»«multiplicity.upperBound -»«ELSE -»999999«ENDIF -»,
             	«EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
-            ], «IF emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»'«emGetGuiPropertyAllowedFileExtensionsAllowedFileExtensions() -»'«ELSE -»''«ENDIF -», «IF emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»'«emGetGuiPropertyDisallowedFileExtensionsDisallowedFileExtensions() -»'«ELSE -»''«ENDIF -»),
+            ], «IF emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»'«emGetGuiPropertyAllowedFileExtensionsAllowedFileExtensions() -»'«ELSE -»$GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']«ENDIF -», «IF emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»'«emGetGuiPropertyDisallowedFileExtensionsDisallowedFileExtensions() -»'«ELSE -»''«ENDIF -»),
 «ENDDEFINE»
 
 
 «REM» -- Type Settings -- «ENDREM»
-
 
 «REM»
 «ENDREM»
@@ -1447,12 +1455,21 @@ return [
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
+«DEFINE ColumnConfigRenderType(String defaultRenderType) FOR MProperty -»
+«IF defaultRenderType != null -»
+                'renderType' => '«defaultRenderType -»',
+«ENDIF -»
+«ENDDEFINE»
+
+
 «REM» -- Graphical User Interface Settings -- «ENDREM»
 
 «REM»
 «ENDREM»
 «DEFINE ColumnConfigCols(Integer defaultCols) FOR MProperty -»
-«IF defaultCols != null || emHasGuiPropertyWidthUtilizableWidth() -»
+«IF emHasGuiPropertyWidthUtilizableWidth() || defaultCols != null -»
                 'cols' => «IF emHasGuiPropertyWidthUtilizableWidth() -»«emGetGuiPropertyWidthWidth() -»«ELSE -»«defaultCols -»«ENDIF -»,
 «ENDIF -»
 «ENDDEFINE»
@@ -1461,7 +1478,7 @@ return [
 «REM»
 «ENDREM»
 «DEFINE ColumnConfigRows(Integer defaultRows) FOR MProperty -»
-«IF defaultRows != null || emHasGuiPropertyHeightUtilizableHeight() -»
+«IF emHasGuiPropertyHeightUtilizableHeight() || defaultRows != null -»
                 'rows' => «IF emHasGuiPropertyHeightUtilizableHeight() -»«emGetGuiPropertyHeightHeight() -»«ELSE -»«defaultRows -»«ENDIF -»,
 «ENDIF -»
 «ENDDEFINE»
@@ -1470,39 +1487,28 @@ return [
 «REM»
 «ENDREM»
 «DEFINE ColumnConfigSize(Integer defaultSize) FOR MProperty -»
-«IF defaultSize != null || emHasGuiPropertyWidthUtilizableWidth() -»
+«IF emHasGuiPropertyWidthUtilizableWidth() || defaultSize != null -»
                 'size' => «IF emHasGuiPropertyWidthUtilizableWidth() -»«emGetGuiPropertyWidthWidth() -»«ELSE -»«defaultSize -»«ENDIF -»,
 «ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
-hier evtl. versuch über sql type maximum herauszufinden
 «ENDREM»
 «DEFINE ColumnConfigMax(Integer defaultMax) FOR MProperty -»
-«IF defaultMax != null || emHasGuiPropertyMaxLengthUtilizableMaxLength() -»
-                'max' => «IF emHasGuiPropertyMaxLengthUtilizableMaxLength() -»«emGetGuiPropertyMaxLengthMaxLength() -»«ELSE -»«defaultMax -»«ENDIF -»,
+«IF emHasGuiPropertyMaxLengthUtilizableMaxLength() || type.asSqlColumnType().hasUtilizableCalculateTcaMaxValue() || defaultMax != null -»
+                'max' => «IF emHasGuiPropertyMaxLengthUtilizableMaxLength() -»«emGetGuiPropertyMaxLengthMaxLength() -»«ELSEIF type.asSqlColumnType().hasUtilizableCalculateTcaMaxValue() -»«type.asSqlColumnType().calculateTcaMaxValue() -»«ELSE -»«defaultMax -»«ENDIF -»,
 «ENDIF -»
 «ENDDEFINE»
 
 
 «REM» -- Default Settings -- «ENDREM»
 
-
 «REM»
 «ENDREM»
 «DEFINE ColumnConfigDefault(String defaultDefault) FOR MAttribute -»
-«IF defaultDefault != null || hasDefaultValue() -»
+«IF hasDefaultValue() || defaultDefault != null -»
                 'default' => «IF hasDefaultValue() -»«defaultvalue -»«ELSE -»«defaultDefault -»«ENDIF -»,
-«ENDIF -»
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE ColumnConfigDefaultExtras(String defaultDefaultExtras) FOR MProperty -»
-«IF defaultDefaultExtras != null -»
-                'defaultExtras' => '«defaultDefaultExtras -»',
 «ENDIF -»
 «ENDDEFINE»
 
@@ -1512,7 +1518,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 «REM»
 «ENDREM»
 «DEFINE ColumnConfigAllowed(String defaultAllowed) FOR MProperty -»
-«IF defaultAllowed != null || emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»
+«IF emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() || defaultAllowed != null -»
                 'allowed' => '«IF emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»«emGetGuiPropertyAllowedFileExtensionsAllowedFileExtensions() -»«ELSE -»«defaultAllowed -»«ENDIF -»',
 «ENDIF -»
 «ENDDEFINE»
@@ -1521,7 +1527,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 «REM»
 «ENDREM»
 «DEFINE ColumnConfigDisallowed(String defaultDisallowed) FOR MProperty -»
-«IF defaultDisallowed != null || emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»
+«IF emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() || defaultDisallowed != null -»
                 'disallowed' => '«IF emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»«emGetGuiPropertyDisallowedFileExtensionsDisallowedFileExtensions() -»«ELSE -»«defaultDisallowed -»«ENDIF -»',
 «ENDIF -»
 «ENDDEFINE»
@@ -1530,7 +1536,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 «REM»
 «ENDREM»
 «DEFINE ColumnConfigMaxSize(String defaultMaxSize) FOR MProperty -»
-«IF defaultMaxSize != null || emHasGuiPropertyMaxFileSizeUtilizableMaxFileSize() -»
+«IF emHasGuiPropertyMaxFileSizeUtilizableMaxFileSize() || defaultMaxSize != null -»
                 'max_size' => «IF emHasGuiPropertyMaxFileSizeUtilizableMaxFileSize() -»«emGetGuiPropertyMaxFileSizeMaxFileSize() -»«ELSE -»«defaultMaxSize -»«ENDIF -»,
 «ENDIF -»
 «ENDDEFINE»
@@ -1539,7 +1545,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 «REM»
 «ENDREM»
 «DEFINE ColumnConfigShowThumbs(Boolean defaultShowThumbs) FOR MProperty -»
-«IF defaultShowThumbs != null || emHasGuiPropertyShowThumbnailsUtilizableShowThumbnails() -»
+«IF emHasGuiPropertyShowThumbnailsUtilizableShowThumbnails() || defaultShowThumbs != null -»
                 'show_thumbs' => «IF emHasGuiPropertyShowThumbnailsUtilizableShowThumbnails() -»«emGetGuiPropertyShowThumbnailsShowThumbnails().asPhpBoolean() -»«ELSE -»«defaultShowThumbs.asPhpBoolean() -»«ENDIF -»,
 «ENDIF -»
 «ENDDEFINE»
@@ -1548,7 +1554,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 «REM»
 «ENDREM»
 «DEFINE ColumnConfigUploadfolder(String defaultUploadfolder) FOR MProperty -»
-«IF defaultUploadfolder != null || emHasGuiPropertyUploadFolderUtilizableUploadFolder() -»
+«IF emHasGuiPropertyUploadFolderUtilizableUploadFolder() || defaultUploadfolder != null -»
                 'uploadfolder' => '«IF emHasGuiPropertyUploadFolderUtilizableUploadFolder() -»«emGetGuiPropertyUploadFolderUploadFolder() -»«ELSE -»«defaultUploadfolder -»«ENDIF -»',
 «ENDIF -»
 «ENDDEFINE»
@@ -1559,8 +1565,8 @@ hier evtl. versuch über sql type maximum herauszufinden
 «REM»
 «ENDREM»
 «DEFINE ColumnConfigEval(List[String] defaultEvals) FOR MProperty -»
-«IF defaultEvals != null && !defaultEvals.isEmpty -»
-                'eval' => '«FOREACH defaultEvals AS eval SEPARATOR ", "»«eval -»«ENDFOREACH -»',
+«IF defaultEvals != null -»
+                'eval' => '«FOREACH defaultEvals AS eval SEPARATOR ","»«eval -»«ENDFOREACH -»',
 «ENDIF -»
 «ENDDEFINE»
 
@@ -1636,6 +1642,13 @@ hier evtl. versuch über sql type maximum herauszufinden
 
 «REM»
 «ENDREM»
+«DEFINE ColumnConfigItems FOR MProperty -»
+«IF multiplicity.lowerBound < 1 -»
+                «EXPAND ColumnConfigItems( {"'', 0"} ) -»
+«ENDIF -»
+«ENDDEFINE»
+
+
 «DEFINE ColumnConfigItems(List[String] defaultItems) FOR MProperty -»
 «IF emHasGuiPropertyItemsUtilizableItems() -»
                 'items' => [
@@ -1643,7 +1656,7 @@ hier evtl. versuch über sql type maximum herauszufinden
                     [«item -»],
                     «ENDFOREACH -»
                 ],
-«ELSEIF defaultItems != null && !defaultItems.isEmpty -»
+«ELSEIF defaultItems != null -»
                 'items' => [
                     «FOREACH defaultItems AS item -»
                     [«item -»],
@@ -1653,56 +1666,42 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDDEFINE»
 
 
-«DEFINE ColumnConfigItems FOR MProperty -»
-«IF multiplicity.lowerBound < 1 -»
-                'items' => [
-                    ['', 0],
-                ],
-«ENDIF -»
+
+«DEFINE ColumnConfigMinitems FOR MProperty -»
+                «EXPAND ColumnConfigMinitems( multiplicity.hasFixedLowerBoundMultiplicity() ? multiplicity.lowerBound : 0 ) -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
 «DEFINE ColumnConfigMinitems(Integer defaultMinitems) FOR MProperty -»
-«IF defaultMinitems != null || emHasGuiPropertyMinItemsUtilizableMinItems() -»
+«IF emHasGuiPropertyMinItemsUtilizableMinItems() || defaultMinitems != null -»
                 'minitems' => «IF emHasGuiPropertyMaxItemsUtilizableMaxItems() -»«emGetGuiPropertyMinItemsMinItems() -»«ELSE -»«defaultMinitems -»«ENDIF -»,
 «ENDIF -»
 «ENDDEFINE»
 
 
-«DEFINE ColumnConfigMinitems FOR MAttribute -»
-                'minitems' => «IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»,
-«ENDDEFINE»
-
-
-«DEFINE ColumnConfigMinitems FOR MAssociationRole -»
-                'minitems' => «IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»,
-«ENDDEFINE»
-
-
 «REM»
 «ENDREM»
+«DEFINE ColumnConfigMaxitems FOR MProperty -»
+                «EXPAND ColumnConfigMaxitems( multiplicity.hasFixedUpperBoundMultiplicity() ? multiplicity.upperBound : 999999 ) -»
+«ENDDEFINE»
+
+
 «DEFINE ColumnConfigMaxitems(Integer defaultMaxitems) FOR MProperty -»
-«IF defaultMaxitems != null || emHasGuiPropertyMaxItemsUtilizableMaxItems() -»
+«IF emHasGuiPropertyMaxItemsUtilizableMaxItems() || defaultMaxitems != null -»
                 'maxitems' => «IF emHasGuiPropertyMaxItemsUtilizableMaxItems() -»«emGetGuiPropertyMaxItemsMaxItems() -»«ELSE -»«defaultMaxitems -»«ENDIF -»,
 «ENDIF -»
 «ENDDEFINE»
 
 
-«DEFINE ColumnConfigMaxitems FOR MAttribute -»
-                'maxitems' => «IF multiplicity.hasFixedUpperBoundMultiplicity() -»«multiplicity.upperBound -»«ELSE -»999999«ENDIF -»,
-«ENDDEFINE»
-
-
-«DEFINE ColumnConfigMaxitems FOR MAssociationRole -»
-                'maxitems' => «IF multiplicity.hasFixedUpperBoundMultiplicity() -»«multiplicity.upperBound -»«ELSE -»999999«ENDIF -»,
-«ENDDEFINE»
-
-
-
 «REM»
 «ENDREM»
+«DEFINE ColumnConfigMultiple FOR MProperty -»
+                «EXPAND ColumnConfigMultiple( (!multiplicity.unique).asPhpBoolean() ) -»
+«ENDDEFINE»
+
+
 «DEFINE ColumnConfigMultiple(String defaultMultiple) FOR MProperty -»
 «IF defaultMultiple != null -»
                 'multiple' => «defaultMultiple.asPhpBoolean() -»,
@@ -1710,23 +1709,22 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDDEFINE»
 
 
-«DEFINE ColumnConfigMultiple FOR MProperty -»
-                «EXPAND ColumnConfigMultiple( (!multiplicity.unique).asPhpBoolean() ) -»
-«ENDDEFINE»
+
 
 
 «REM»
 «DEFINE ColumnConfigWizards FOR MProperty -»
 «IF emHasTypo3TcaAssociationColumnsConfigWizardAdd("true") || emHasTypo3TcaAssociationColumnsConfigWizardEdit("true")  || emHasTypo3TcaAssociationColumnsConfigWizardSuggest("true") -»
-                'wizards' => array(
+                'wizards' => [
                     '_PADDING' => 1,
                     '_VERTICAL' => 1,
                     «EXPAND ColumnConfigWizardsAdd -»
                     «EXPAND ColumnConfigWizardsEdit -»
                     «EXPAND ColumnConfigWizardsSuggest -»
-                ),
+                ],
 «ENDIF -»
 «ENDDEFINE»
+
 
 
 «DEFINE ColumnConfigWizardsAdd FOR MProperty -»
@@ -1762,9 +1760,9 @@ hier evtl. versuch über sql type maximum herauszufinden
 
 «DEFINE ColumnConfigWizardsSuggest FOR MProperty -»
 «IF emHasTypo3TcaAssociationColumnsConfigWizardSuggest("true") -»
-                    'suggest' => array(
+                    'suggest' => [
                         'type' => 'suggest',
-                    ),
+                    ],
 «ENDIF -»
 «ENDDEFINE»
 «ENDREM»

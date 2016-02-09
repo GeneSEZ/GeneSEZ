@@ -21,8 +21,18 @@ extension org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement;
 
 // -- TYPO3 CMS Table Configuation Array --------------------------------------------------------------------
 
-Integer calculateTcaMaxValue(MAttribute this) :
-	type;
+Integer calculateTcaMaxValue(String sqlColumnType) :
+	switch {
+		case sqlColumnType.startsWith("varchar") : sqlColumnType.split("[\\(\\)]").get(1)
+		default : null
+	};
+
+
+Boolean hasUtilizableCalculateTcaMaxValue(String sqlColumnType) :
+	calculateTcaMaxValue(sqlColumnType) != null
+		? true
+		: false;
+
 
 // -- TYPO3 CMS FlexForm ------------------------------------------------------------------------------------
 
