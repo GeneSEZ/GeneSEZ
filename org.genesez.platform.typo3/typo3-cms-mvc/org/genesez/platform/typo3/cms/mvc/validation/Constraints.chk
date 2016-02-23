@@ -22,6 +22,9 @@ extension org::genesez::metamodel::core::util::profile::GenesezPersistenceAccess
 extension org::genesez::platform::typo3::cms::mvc::util::AccessElement;
 
 
+// use GeneSEZ common access element scripts
+extension org::genesez::metamodel::core::util::AccessElement;
+
 // use GeneSEZ common conversion scripts
 extension org::genesez::metamodel::core::util::Conversion;
 
@@ -47,3 +50,15 @@ context MAssociationRole
 	if ( classifier.isEntity() || classifier.isValueObject() ) && ! ( derived || emHasTransientStereotype() )
 	WARNING "GeneSEZ: The visibility of the association role from the domain object is not protected! See model element: " + fqmn() :
 	visibility == "protected";
+
+
+/**
+ * Checks if no default enumeration value is set for an attribute.
+ * Hint: PHP does not support an object initialization, see http://php.net/manual/en/language.oop5.properties.php. 
+ * 
+ * @return	False, if the default enumeration value is set, otherwise true.
+ */
+context MAttribute 
+	if type.isEnumeration()
+	WARNING "GeneSEZ: The default enumeration value of the attribute could not be generated, because PHP does not support object initializations. Please set the default value through the constructor of this classifier or otherwise! See model element: " + fqmn() :
+	!hasDefaultValue();
