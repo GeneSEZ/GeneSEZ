@@ -924,8 +924,28 @@ String asExtbasePluginType(String pluginType) :
 // -- TYPO3 CMS specific Extbase persistance conventions ----------------------------------------------------
 
 /**
+ * Formats a classifier in "SqlColumnType" context.
+ * Each classifier would become "int(11) unsigned DEFAULT '0' NOT NULL".
+ *
+ * @return	The formatted type name.
+ */
+cached String asSqlColumnType(MClassifier this) :
+	"int(11) unsigned DEFAULT '0' NOT NULL";
+
+
+/**
+ * Formats a enumeration in "SqlColumnType" context.
+ * Each enumeration would become "varchar(255) DEFAULT '' NOT NULL".
+ *
+ * @return	The formatted type name.
+ */
+cached String asSqlColumnType(MEnumeration this) :
+	"varchar(255) DEFAULT '' NOT NULL";
+
+
+/**
  * Formats an external in "SqlColumnType" context.
- * E.g.: Mapped external "int" would become "int(11) DEFAULT '0' NOT NULL".
+ * E.g.: Mapped external "int" would become "int(11) unsigned DEFAULT '0' NOT NULL".
  * 
  * @return	The formatted external name.
  */
@@ -942,6 +962,8 @@ cached String asSqlColumnType(MExternal this) :
 cached String asSqlColumnType(MType this) :
 	mapName();
 
+
+// -- TYPO3 CMS specific Extbase graphical user interface conventions ---------------------------------------
 
 /**
  * Formats an external in "GuiType" context.
