@@ -1195,6 +1195,14 @@ return [
 «ENDREM»
 «DEFINE ColumnConfigTypeToOneUnidirectional(MClass class) FOR MAttribute -»
             'config' => [
+«IF type.isEnumeration() -»
+                «EXPAND ColumnConfigType("select") -»
+                «EXPAND ColumnConfigRenderType("selectSingle") -»
+                «EXPAND ColumnConfigItems( ((MEnumeration) type).literal.collect( item | "'" + item.name + "', '" + item.name + "'" ) ) -»
+                «EXPAND ColumnConfigMinitems -»
+                «EXPAND ColumnConfigMaxitems -»
+                «EXPAND ColumnConfigSize(1) -»
+«ELSE -»
                 «EXPAND ColumnConfigType("select") -»
                 «EXPAND ColumnConfigRenderType("selectSingle") -»
                 «EXPAND ColumnConfigItems -»
@@ -1202,6 +1210,7 @@ return [
                 «EXPAND ColumnConfigMinitems -»
                 «EXPAND ColumnConfigMaxitems -»
                 «EXPAND ColumnConfigSize(1) -»
+«ENDIF -»
                 «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
             ],
 «ENDDEFINE»
