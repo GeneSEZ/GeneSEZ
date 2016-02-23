@@ -225,7 +225,7 @@
 	Generates the default value of an attribute.
 «ENDREM»
 «DEFINE DefaultValue FOR MAttribute -»
-«IF hasDefaultValue() -» = «defaultvalue -»«ENDIF -»
+«IF hasDefaultValue() && !type.isEnumeration() -» = «defaultvalue -»«ENDIF -»
 «ENDDEFINE»
 
 
@@ -234,7 +234,7 @@
 «ENDREM»
 «DEFINE DefaultValueSetAccessor FOR MAttribute -»
 «IF multiplicity.lowerBound < 1 -»
-«IF multiplicity.isSingleValued() -» = null«ENDIF -»
+«IF multiplicity.isSingleValued() -»«IF hasDefaultValue() -» = «defaultvalue -»«ELSE -» = null«ENDIF -»«ENDIF -»
 «IF multiplicity.isMultiValued() -»«IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() && !emHasTransientStereotype() -» = null«ELSE -» = []«ENDIF -»«ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
