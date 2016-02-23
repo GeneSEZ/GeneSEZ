@@ -34,10 +34,11 @@
 «EXPAND Comment::CopyrightNotice -»
 
 «EXPAND Comment::ClassifierInformationBlock -»
-abstract class «asShortGeneralName()»
+class «asShortGeneralName() -»«EXPAND Generalization»
 {
 
     «EXPAND EnumerationLiteral::Declaration -»
+    «EXPAND Attribute::Declaration -»
     «EXPAND Operation::Implementation -»
     «EXPAND OwnCode -»
 
@@ -48,6 +49,17 @@ abstract class «asShortGeneralName()»
 «REM»
 	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
 «ENDREM»
+
+«REM»
+	Generates the generalization of an enumeration.
+	Only single inheritance is allowed.
+«ENDREM»
+«DEFINE Generalization FOR MEnumeration -»
+«IF !generalization.isEmpty -»
+ extends «generalization.first().asGeneralName() -»
+«ENDIF -»
+«ENDDEFINE»
+
 
 «REM»
 	Generates a protected region for own code.
