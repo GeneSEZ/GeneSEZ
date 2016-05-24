@@ -29,6 +29,9 @@ extension org::genesez::platform::typo3::cms::mvc::util::AccessElement;
 extension org::genesez::platform::typo3::cms::mvc::util::FileSystemConvention;
 
 
+// use GeneSEZ common Design Pattern profile scripts
+extension org::genesez::metamodel::core::util::profile::GenesezDesignPatternAccessElement;
+
 // use GeneSEZ common Persistence profile scripts
 extension org::genesez::metamodel::core::util::profile::GenesezPersistenceAccessElement;
 
@@ -591,7 +594,9 @@ String asGetAccessorName(MAttribute this) :
  * @return	the prefix to prepend
  */
 String setAccessorPrefix(MAttribute this) :
-	"set";
+	emHasDiSetter("true")
+		? "inject"
+		: "set";
 
 
 /**
