@@ -137,11 +137,11 @@ MClass classAddTypo3SingletonInterface(MClass this) :
  */
 MProperty classNoAccessorsIfDependencyInjectionIsSet(MProperty this) :
 	emHasDiSetter("true")
-		? (	logTrace( "GeneSEZ: Add 'accessor' stereotype and set its 'getter' and 'setter' property to 'false', because the property is injected by dependency injection! Model element: " + fqmn() ) ->
+		? (	logTrace( "GeneSEZ: Add 'accessor' stereotype and set its 'getter' property to 'false' and its 'setter' property to 'true', because the property is injected by dependency injection! Model element: " + fqmn() ) ->
 			(	let genesezAccessorStereotype = navModel().ensureStereotypeExistence( prAccessor(), prAccessor() ) :
 					ensureStereotypeAssignment(genesezAccessorStereotype)
 						.ensureSingleTaggedValueExistence( genesezAccessorStereotype.ensureTagExistence( prAccessorGetter(), "Boolean" ), "false" ).owningElement
-						.ensureSingleTaggedValueExistence( genesezAccessorStereotype.ensureTagExistence( prAccessorSetter(), "Boolean" ), "false" )
+						.ensureSingleTaggedValueExistence( genesezAccessorStereotype.ensureTagExistence( prAccessorSetter(), "Boolean" ), "true" )
 			)
 		) : this ->
 	this;
