@@ -65,8 +65,10 @@
 	«IF property.exists(e|e.type.mapName().asTypeName() == "TimerService")-»
 		import javax.ejb.TimerService;
 	«ENDIF-»
+	«IF property.exists(e|e.emHasStereotypeAssignment("jpaPersistenceContext"))-»
+		import javax.persistence.EntityManager;
+	«ENDIF-»
 «ENDDEFINE»
-
 
 «REM» 
 	evaluate the stereotype ejb3Callback for class import

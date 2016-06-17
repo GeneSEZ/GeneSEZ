@@ -122,7 +122,7 @@
 				}
 			«ENDIF-»
 			«this.asTypeName()-» o = («this.asTypeName()-») other;
-			return ( «EXPAND _SuperEquals-» «EXPAND _EqualsProperties-» );
+			return «EXPAND _SuperEquals-» «EXPAND _EqualsProperties-»;
 		}
 		
 		/**
@@ -150,8 +150,8 @@
 		«IF value.isJavaPrimitiveType()-»
 			this.«value.asGetter()-»() == o.«value.asGetter()-»()
 		«ELSE-»
-			( (this.«value.asGetter()-»() == null && o.«value.asGetter()-»() == null) ||
-			( this.«value.asGetter()-»() != null && this.«value.asGetter()-»().equals(o.«value.asGetter()-»()) ) )
+			(this.«value.asGetter()-»() == null && o.«value.asGetter()-»() == null) ||
+			( this.«value.asGetter()-»() != null && this.«value.asGetter()-»().equals(o.«value.asGetter()-»()) )
 		«ENDIF-»
 	«ENDFOREACH-»
 «ENDDEFINE»
@@ -407,6 +407,7 @@
 «ENDREM»
 «DEFINE Annotation FOR MOperation-»
 	«EXPAND Element::JavaAnnotation -»
+	«EXPAND _java5Override -»
 «ENDDEFINE»
 
 «REM»
@@ -421,4 +422,13 @@
 «ENDREM»
 «DEFINE Annotation FOR MAttribute-»
 	«EXPAND Element::JavaAnnotation -»
+«ENDDEFINE»
+
+«REM»
+	Evaluates the stereotype "java5Override".
+«ENDREM»
+«DEFINE _java5Override FOR MOperation -»
+	«IF emHasStereotypeAssignment("java5Override") -»
+		@Override
+	«ENDIF -»
 «ENDDEFINE»

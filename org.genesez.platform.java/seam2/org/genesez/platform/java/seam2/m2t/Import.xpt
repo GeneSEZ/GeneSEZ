@@ -21,11 +21,13 @@
 «EXTENSION org::genesez::metamodel::core::util::Conversion»
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 «EXTENSION org::genesez::metamodel::core::util::Helper»
+«EXTENSION org::genesez::platform::java::util::Naming»
 
 «REM»
 	create import statements
 «ENDREM»
 «DEFINE ImportStatements FOR MClassifier-»
+	«EXPAND ImportsLogger-»
 	«IF emHasStereotypeAssignment("seam2ApplicationException") && emHasStereotypeAssignment("seam2JavaBeanInterceptors")-»
 		import org.jboss.seam.annotations.ApplicationException;
 	«ENDIF-»
@@ -34,10 +36,6 @@
 	«ENDIF-»
 	«IF isClass() && operation.exists(e|e.emHasStereotypeAssignment("seam2Observer"))-»
 		import org.jboss.seam.annotations.Observer;
-	«ENDIF»
-	«IF emHasStereotypeAssignment("seam2Logger")-»
-		import org.jboss.seam.log.Log;
-		import org.jboss.seam.annotations.Logger;
 	«ENDIF»
 	«IF property.exists(e|e.emHasStereotypeAssignment("seam2DataModel"))-»
 		import org.jboss.seam.annotations.datamodel.DataModel;
@@ -65,5 +63,32 @@
 	«ENDIF»
 	«IF emHasStereotypeAssignment("seam2Converter")-»
 		import javax.faces.converter.Converter;
+	«ENDIF-»
+	«IF property.exists(e|e.emHasStereotypeAssignment("seam2Injection"))-»
+		import org.jboss.seam.annotations.In;
+	«ENDIF-»
+	«IF property.exists(e|e.emHasStereotypeAssignment("seam2Outjection"))-»
+		import org.jboss.seam.annotations.Out;
+	«ENDIF-»
+	«IF this.emHasTaggedValue("seam2Component", "seamPersistence", "true") &&
+		property.exists(e|e.type.mapName().asTypeName() == "EntityManager")-»
+		import javax.persistence.EntityManager;
+	«ENDIF»
+	«IF property.exists(e|e.type.mapName().asTypeName() == "Events")-»
+		import org.jboss.seam.core.Events;
+	«ENDIF»
+	«IF operation.exists(e|e.emHasStereotypeAssignment("http://www.genesez.org/java/seam2/DestroyOperation"))-»
+		import org.jboss.seam.annotations.Destroy;	
+		import javax.ejb.Remove;
+	«ENDIF»
+	«IF operation.exists(e|e.emHasStereotypeAssignment("http://www.genesez.org/java/seam2/CreateOperation"))-»
+		import org.jboss.seam.annotations.Create;		
+	«ENDIF»
+«ENDDEFINE»
+
+«DEFINE ImportsLogger FOR MClassifier-»
+	«IF property.exists(e|e.emHasStereotypeAssignment("seam2Logger"))-»
+		
+		import org.jboss.seam.annotations.Logger;
 	«ENDIF»
 «ENDDEFINE»
