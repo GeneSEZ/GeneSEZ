@@ -13,6 +13,7 @@ extension org::genesez::metamodel::core::util::CloneElement;
 extension org::genesez::metamodel::core::util::RemoveElement;
 extension org::genesez::platform::java::ejb3::m2m::Stereotypes;
 extension org::genesez::platform::java::util::Naming;
+extension org::genesez::platform::java::m2m::Stereotypes;
 extension org::genesez::util::logging::Logging;
 
 
@@ -36,6 +37,7 @@ Void addSessionBeanInterfaces(MClassifier this) :
 								this.realization.add(interface) ->
 								interface.addRemoteStereotype("") ->
 								this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor() ).cloneSessionBeanOperation(interface) ->
+								this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor() ).addOverrideStereotype() ->
 								this.emRemoveStereotypeAssignment(this.emGetStereotypeAssignment("ejb3Remote"))
 						)
 						: ""
@@ -46,6 +48,7 @@ Void addSessionBeanInterfaces(MClassifier this) :
 						interface.addRemoteStereotype("") ->
 						interface.navModel().externalTypes.remove("I"+asTypeName()+"Remote") ->
 						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor() ).cloneSessionBeanOperation(interface) ->
+						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor() ).addOverrideStereotype() ->
 						this.emRemoveStereotypeAssignment(this.emGetStereotypeAssignment("ejb3Remote"))
 				)
 		) 
@@ -60,6 +63,7 @@ Void addSessionBeanInterfaces(MClassifier this) :
 								this.realization.add(interface) ->
 								interface.addLocalStereotype("") ->
 								this.operation.select(e|e.visibility == "public" && !e.isConstructor()).cloneSessionBeanOperation(interface) ->
+								this.operation.select(e|e.visibility == "public" && !e.isConstructor()).addOverrideStereotype() ->
 								this.emRemoveStereotypeAssignment(this.emGetStereotypeAssignment("ejb3Local"))
 						)
 						: ""
@@ -70,6 +74,7 @@ Void addSessionBeanInterfaces(MClassifier this) :
 						interface.addLocalStereotype("") ->
 						interface.navModel().externalTypes.remove("I"+asTypeName()+"Local") ->
 						this.operation.select(e|e.visibility == "public" && !e.isConstructor()).cloneSessionBeanOperation(interface) ->
+						this.operation.select(e|e.visibility == "public" && !e.isConstructor()).addOverrideStereotype() ->
 						this.emRemoveStereotypeAssignment(this.emGetStereotypeAssignment("ejb3Local"))
 				)
 		)

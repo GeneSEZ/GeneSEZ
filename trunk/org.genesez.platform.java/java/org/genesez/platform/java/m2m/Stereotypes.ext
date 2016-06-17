@@ -1,0 +1,36 @@
+import gcore;
+
+/**
+ * 	functions for creating new MStereotypes, MTags, MTaggedValues and for changing the value
+ *	of an MTaggedValue 
+ * 
+ * 
+ * @author	andre lauterbach
+ * @date	2016-06-17
+ */
+
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
+
+/**
+ *	function to add an "java5Override" stereotype to a MOperation
+ *
+ *	@param		this			instance of MOperation
+ *
+ */
+Void addOverrideStereotype(MOperation this) :
+	let s = makeOverrideStereotype(this) :
+		this.stereotype.add(s);
+
+/**
+ *	function to create an "java5Override" stereotype
+ *	default values are not set by this function!
+ *	function adds MStereotype only to the stereotype list of the MOperation, not to 
+ *	anyStereotype list of MModel
+ *
+ *	@param		container		instance of MOperation
+ *
+ */
+MStereotype makeOverrideStereotype(MOperation this) :
+	navModel().ensureStereotypeExistence("java5Override", "java5Override");
