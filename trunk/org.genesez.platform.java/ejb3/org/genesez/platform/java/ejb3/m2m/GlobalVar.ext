@@ -1,0 +1,32 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+
+/**
+ * Utility scripts to access global variable information which are configured inside a workflow file.
+ *  
+ * HINT: All scripts for global variables are available under the prefix 'globalVar'.
+ * 
+ * @author	André Lauterbach <admin@andre-lauterbach.de>
+ */
+ 
+/**
+ * Getter for the global variable 'ejbVersion'. Default value will be '3.1'.
+ 
+ * GeneSEZ also supports the code generation for EJB version '3.0'. If version '3.0'
+ * is selected, GeneSEZ will automatically add Local Business Interfaces for 
+ * session beans if there is no 'ejb3Local' or 'ejb3Remote' or correct modelled and 
+ * configured interface for this session bean.
+ * Since version '3.1' there are no business interfaces, so there is no need for GeneSEZ
+ * to generate Local Business interfaces any more.  
+ * 
+ * @return	The value of the global variable, otherwise false.
+ * @api
+ */
+boolean globalVarEjbVersion() : 
+	GLOBALVAR ejbVersion != null 
+		? GLOBALVAR ejbVersion
+		: "3.1";

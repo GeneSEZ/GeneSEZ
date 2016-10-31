@@ -25,7 +25,7 @@
 «REM» 
 	main method for evaluation of annotations	
 «ENDREM»
-«DEFINE Annotation FOR MOperation»
+«DEFINE Annotation FOR MOperation-»	
 	«EXPAND _Timer-»	
 	«EXPAND _Callback-»
 	«EXPAND Element::CMTransactionality-»
@@ -153,7 +153,7 @@
 «ENDREM»
 «DEFINE _PersistentEntityCallback FOR MOperation-»
 	«IF emHasTaggedValue("jpaCallback", "external", "false") && 
-		classifier.emHasStereotypeAssignment("ejb3PersistentEntity")»
+		classifier.emHasStereotypeAssignment("ejb3PersistentEntity")-»
 		«IF emHasTaggedValue("jpaCallback", "postPersist", "true")-»
 			@PostPersist
 		«ENDIF-»
@@ -187,7 +187,7 @@
 			@Interceptors(value={«FOREACH emAllTaggedValues("ejb3OperationInterceptor", "interceptors") AS interceptor SEPARATOR ", "-»
 					«interceptor-».class
 			«ENDFOREACH-»})
-		«ENDIF»
+		«ENDIF-»
 		«IF emHasTaggedValue("ejb3OperationInterceptor", "aroundInvoke", "true")-»
 			@AroundInvoke
 		«ENDIF-»	
