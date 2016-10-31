@@ -15,6 +15,7 @@ extension org::genesez::platform::java::util::JavaTypes;
 extension org::genesez::platform::java::m2m::Constructor;
 extension org::genesez::platform::java::ejb3::m2m::Stereotypes;
 extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
+extension org::genesez::platform::java::ejb3::m2m::GlobalVar;
 /* remove this import to be independent from jpa cartridge */
 extension org::genesez::platform::java::jpa::m2m::Stereotypes;
 
@@ -114,13 +115,14 @@ MClassifier addMessageListener(MClass this) :
 
 /**
  *	adds the stereotype "ejb3Local" to a session bean
- *	if no business interface is implemented and 
- *	there is neither stereotype "ejb3Local" nor "ejb3Remote"
- *	available
+ *	if GlobalVar "EJB version" ist set to '3.0', no business 
+ *  interface is implemented and there is neither stereotype 
+ *  "ejb3Local" nor "ejb3Remote" available.
  *
  *	this		instance of MClassifier	
  */
 addLocalBusinessInterface(MClassifier this) :
+	globalVarEjbVersion() == "3.0" &&
 	emHasStereotypeAssignment("ejb3SessionBean") &&
 	realization.isEmpty && 
 	!(emHasStereotypeAssignment("ejb3Local") || emHasStereotypeAssignment("ejb3Remote"))

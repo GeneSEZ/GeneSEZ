@@ -32,31 +32,21 @@
 «ENDREM»
 «DEFINE RemoteLocal FOR MClassifier-»
 	«IF emHasStereotypeAssignment("ejb3SessionBean")-»
-		«IF emHasStereotypeAssignment("ejb3Remote")»
+		«IF emHasStereotypeAssignment("ejb3Remote")-»
 			«IF emHasUtilizableTaggedValue("ejb3Remote", "name")-»
-				«REM»erzeuge remote interface mit angegebenem namen«ENDREM»
 				@Remote(I«emGetTaggedValue("ejb3Remote", "name")-».class)
-				«REM»«EXPAND _Interface(emGetTaggedValue("ejb3Remote", "name"), "")-»«ENDREM»
-			«ELSE»
-				«REM»erzeuge remote interface mit standardnamen«ENDREM»
-				«REM»«EXPAND _Interface(asTypeName(), "Remote")-»«ENDREM»
-			«ENDIF»
-		«ENDIF»
+			«ENDIF-»
+		«ENDIF-»
 		«IF emHasStereotypeAssignment("ejb3Local")-»
 			«IF emHasUtilizableTaggedValue("ejb3Local", "name")-»
-				«REM»erzeuge local interface mit angegebenem namen«ENDREM»
 				@Local(I«emGetTaggedValue("ejb3Local", "name")-».class)
-				«REM»«EXPAND _Interface(emGetTaggedValue("ejb3Local", "name"), "")-»«ENDREM»
-			«ELSE»
-				«REM»erzeuge local interface mit standardnamen«ENDREM»
-				«REM»«EXPAND _Interface(asTypeName(), "Local")-»«ENDREM»
-			«ENDIF»
-		«ENDIF»
-	«ELSEIF emHasStereotypeAssignment("ejb3Remote")»
+			«ENDIF-»
+		«ENDIF-»
+	«ELSEIF emHasStereotypeAssignment("ejb3Remote")-»
 		@Remote
-	«ELSEIF emHasStereotypeAssignment("ejb3Local")»
+	«ELSEIF emHasStereotypeAssignment("ejb3Local")-»
 		@Local	
-	«ENDIF»
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM»
@@ -83,7 +73,7 @@
 «DEFINE _SessionBean FOR MClass-»
 	«IF emHasStereotypeAssignment("ejb3SessionBean")-»
 		«EXPAND RemoteLocal-»	
-		«IF emHasTaggedValue("ejb3SessionBean", "stateful", "true")»
+		«IF emHasTaggedValue("ejb3SessionBean", "stateful", "true")-»
 			@Stateful(
 		«ELSEIF emHasTaggedValue("ejb3SessionBean", "stateful", "false")-»
 			@Stateless(
@@ -107,7 +97,7 @@
 	evaluates the stereotype "ejb3MessageDriven"
 «ENDREM»
 «DEFINE _MessageDriven FOR MClass-»
-	«IF emHasStereotypeAssignment("ejb3MessageDrivenBean")»
+	«IF emHasStereotypeAssignment("ejb3MessageDrivenBean")-»
 		@MessageDriven(
 		«IF emHasUtilizableTaggedValue("ejb3MessageDrivenBean", "name")-»
 			name = "«emGetTaggedValue("ejb3MessageDrivenBean", "name")-»"
@@ -133,18 +123,18 @@
  				«ENDFOREACH»
  				}
  			«ENDIF-»
- 		«ENDIF»
+ 		«ENDIF-»
  		)
-	«ENDIF»
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM»
 	evaluates the stereotype "ejb3EntityListener"
 «ENDREM»
 «DEFINE _EntityListener FOR MClass-»
-	«IF emHasStereotypeAssignment("ejb3EntityListener")»
+	«IF emHasStereotypeAssignment("ejb3EntityListener")-»
 		«IF emHasUtilizableTaggedValue("ejb3EntityListener", "listeners")-»
-			@EntityListeners(«FOREACH emAllTaggedValues("ejb3EntityListener", "listeners") AS listeners SEPARATOR ", "»
+			@EntityListeners(«FOREACH emAllTaggedValues("ejb3EntityListener", "listeners") AS listeners SEPARATOR ", "-»
 				«listeners-».class
 			«ENDFOREACH-»
 			«IF emHasTaggedValue("ejb3EntityListener", "generateDefault", "true") && 
@@ -157,13 +147,13 @@
 			@EntityListeners(«asTypeName()-»Listener.class)
 			«EXPAND _EntityListenerClass(asTypeName()+"Listener")-»
 		«ENDIF»
-		«IF emHasTaggedValue("ejb3EntityListener", "excludeDefaultListeners", "true")»
+		«IF emHasTaggedValue("ejb3EntityListener", "excludeDefaultListeners", "true")-»
 			@ExcludeDefaultListeners
-		«ENDIF»
-		«IF emHasTaggedValue("ejb3EntityListener", "excludeSuperclassListeners", "true")»
+		«ENDIF-»
+		«IF emHasTaggedValue("ejb3EntityListener", "excludeSuperclassListeners", "true")-»
 			@ExcludeSuperclassListeners
-		«ENDIF»				
-	«ENDIF»
+		«ENDIF-»				
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM» 
@@ -224,7 +214,7 @@
 		«ENDIF-»
 		«IF emHasTaggedValue("ejb3ClassInterceptor", "excludeDefaultInterceptors", "true")-»
 			@ExcludeDefaultInterceptors
-		«ENDIF»
+		«ENDIF-»
 	«ENDIF-»
 «ENDDEFINE»
 
@@ -355,9 +345,9 @@
 	«IF emHasUtilizableTaggedValue("ejb3ClassInterceptor", "methods")-»
 		«FOREACH emAllTaggedValues("ejb3ClassInterceptor", "methods") AS methods SEPARATOR ", "-»
 			/**
-			  *	generated business method for class "«asTypeName()»"
+			  *	generated business method for class "«asTypeName()-»"
 			  * method has been mentioned in "ejb3Interceptor"-annotation 
-			  * at class "«asTypeName()»"
+			  * at class "«asTypeName()-»"
 			  *
 			  */
 			@AroundInvoke
@@ -366,8 +356,8 @@
 				«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + methods + "Interceptor")-»
 				return ctx.proceed();
 			}
-		«ENDFOREACH»
-	«ENDIF»
+		«ENDFOREACH-»
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM» 
@@ -394,10 +384,10 @@
 			already implemented in this class
 		«ENDREM»
 		«FOREACH realization.typeSelect(MInterface) AS interface»
-		  	«IF !((interface.asTypeName() == "I"+asTypeName()+"Local") || (interface.asTypeName() == "I"+asTypeName()+"Remote"))»
+		  	«IF !((interface.asTypeName() == "I"+asTypeName()+"Local") || (interface.asTypeName() == "I"+asTypeName()+"Remote"))-»
 		  		«EXPAND org::genesez::platform::java::m2t::Operation::Implementation FOR interface -»
-		  	«ENDIF»
-		«ENDFOREACH»
+		  	«ENDIF-»
+		«ENDFOREACH-»
 	«ENDIF-»
 «ENDDEFINE»
 

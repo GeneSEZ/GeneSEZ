@@ -52,7 +52,7 @@
 	evaluates the stereotype seam2Interceptor
 «ENDREM»
 «DEFINE _Interceptor FOR MClass-»
-	«IF emHasStereotypeAssignment("seam2Interceptor")»
+	«IF emHasStereotypeAssignment("seam2Interceptor")-»
 		@Interceptor(stateless=«taggedValue.selectFirst(e|e.tag.name == "stateless").value-»
 		«IF emHasUtilizableTaggedValue("seam2Interceptor", "type") && !emHasTaggedValue("seam2Interceptor", "type", "DEFAULT")-»
 			, type=InterceptorType.«taggedValue.selectFirst(e|e.tag.name == "type").value-»	
@@ -67,7 +67,7 @@
 				«values-»
 			«ENDFOREACH-»}	
 		«ENDIF-»)
-	«ENDIF»
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM»
@@ -130,22 +130,22 @@
 	evaluates the stereotype seam2ServletContainerIntegration
 «ENDREM»
 «DEFINE _ServletContainerIntegration FOR MClass-»
-	«IF emHasStereotypeAssignment("seam2ServletContainerIntegration")»
+	«IF emHasStereotypeAssignment("seam2ServletContainerIntegration")-»
 		«IF emHasUtilizableTaggedValue("seam2ServletContainerIntegration", "within") || 
-			emHasUtilizableTaggedValue("seam2ServletContainerIntegration", "around")»
+			emHasUtilizableTaggedValue("seam2ServletContainerIntegration", "around")-»
 			@Filter
 			«IF emHasUtilizableTaggedValue("seam2ServletContainerIntegration", "around")-»
 				({«FOREACH emAllTaggedValues("seam2ServletContainerIntegration", "around") AS values SEPARATOR ", "-»
 					"«values-»"
 				«ENDFOREACH-»})	
 			«ENDIF-»
-			«IF emHasUtilizableTaggedValue("seam2ServletContainerIntegration", "within")»
+			«IF emHasUtilizableTaggedValue("seam2ServletContainerIntegration", "within")-»
 				({«FOREACH emAllTaggedValues("seam2ServletContainerIntegration", "around") AS values SEPARATOR ", "-»
 					"«values-»"
 				«ENDFOREACH-»})	
 			«ENDIF-»
-		«ENDIF»
-	«ENDIF»
+		«ENDIF-»
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM»
@@ -194,10 +194,10 @@
 		«IF emHasUtilizableTaggedValue("seam2Component", "jndiName")-»
 			@JndiName("«emGetTaggedValue("seam2Component", "jndiName")-»")
 		«ENDIF-»
-		«IF emHasTaggedValue("seam2Component", "byPassInterceptor", "true")»
+		«IF emHasTaggedValue("seam2Component", "byPassInterceptor", "true")-»
 			@ByPassInterceptor
 		«ENDIF-»
-		«IF emHasTaggedValue("seam2Component", "conversational", "true")»
+		«IF emHasTaggedValue("seam2Component", "conversational", "true")-»
 			@Conversational
 		«ENDIF-»
 		«IF emHasUtilizableTaggedValue("seam2Component", "synchronizedTimeout") && !emHasTaggedValue("seam2Component", "synchronizedTimeout", "1000")-»
