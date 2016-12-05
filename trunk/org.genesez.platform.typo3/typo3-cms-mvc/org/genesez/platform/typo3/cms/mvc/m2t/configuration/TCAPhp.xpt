@@ -21,6 +21,9 @@
 «EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
 
 
+«REM» use GeneSEZ common Design Pattern profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezDesignPatternAccessElement»
+
 «REM» use GeneSEZ common Persistence profile scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::profile::GenesezPersistenceAccessElement»
 
@@ -120,7 +123,7 @@ return [
 	Points to the field name of the table which should be used as the "title" when the record is displayed in the system.
 «ENDREM»
 «DEFINE CtrlLabel FOR MClass -»
-        'label' => '«IF emHasTypo3TcaUtilizableCtrlLabel() -»«emGetTypo3TcaCtrlLabel().asConfigurationName() -»«ELSEIF property.typeSelect(MAttribute).exists( a | !a.derived && !a.static && !a.emHasTransientStereotype() ) -»«property.typeSelect(MAttribute).selectFirst( a | !a.derived && !a.static && !a.emHasTransientStereotype() ).asConfigurationName() -»«ELSE -»uid«ENDIF -»',
+        'label' => '«IF emHasTypo3TcaUtilizableCtrlLabel() -»«emGetTypo3TcaCtrlLabel().asConfigurationName() -»«ELSEIF property.typeSelect(MAttribute).exists( a | !a.derived && !a.static && !a.emHasTransientStereotype() && !a.emHasDiStereotype() ) -»«property.typeSelect(MAttribute).selectFirst( a | !a.derived && !a.static && !a.emHasTransientStereotype() && !a.emHasDiStereotype() ).asConfigurationName() -»«ELSE -»uid«ENDIF -»',
 «ENDDEFINE»
 
 
@@ -389,7 +392,7 @@ return [
 «REM»
 «ENDREM»
 «DEFINE CtrlSearchFields FOR MClass -»
-        'searchFields' => '«IF emHasTypo3TcaUtilizableCtrlSearchFields() -»«FOREACH emGetTypo3TcaCtrlSearchFields() AS searchField SEPARATOR ", " -»«searchField.asConfigurationName() -»«ENDFOREACH -»«ELSE -»«FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static && !a.emHasTransientStereotype() ) AS searchField SEPARATOR ", " -»«searchField.asConfigurationName() -»«ENDFOREACH -»«ENDIF -»',
+        'searchFields' => '«IF emHasTypo3TcaUtilizableCtrlSearchFields() -»«FOREACH emGetTypo3TcaCtrlSearchFields() AS searchField SEPARATOR ", " -»«searchField.asConfigurationName() -»«ENDFOREACH -»«ELSE -»«FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static && !a.emHasTransientStereotype() && !a.emHasDiStereotype() ) AS searchField SEPARATOR ", " -»«searchField.asConfigurationName() -»«ENDFOREACH -»«ENDIF -»',
 «ENDDEFINE»
 
 
@@ -426,7 +429,7 @@ return [
 «REM»
 «ENDREM»
 «DEFINE InterfaceShowRecordFieldList FOR MClass -»
-        'showRecordFieldList' => '«FOREACH allProperties().select( p | !p.derived && !p.isStatic() && !p.emHasTransientStereotype() ) AS p SEPARATOR ", " -»«p.asConfigurationName() -»«ENDFOREACH»',
+        'showRecordFieldList' => '«FOREACH allProperties().select( p | !p.derived && !p.isStatic() && !p.emHasTransientStereotype() && !p.emHasDiStereotype() ) AS p SEPARATOR ", " -»«p.asConfigurationName() -»«ENDFOREACH»',
 «ENDDEFINE»
 
 
@@ -451,13 +454,13 @@ return [
         «EXPAND ColumnsPublishingSupport -»
         «EXPAND ColumnsLocalizationSupport -»
         «EXPAND ColumnsVersioningSupport -»
-        «EXPAND ColumnsAttribute(this) FOREACH allAttributes().select( a | !a.derived && !a.static && !a.emHasTransientStereotype() ) -»
+        «EXPAND ColumnsAttribute(this) FOREACH allAttributes().select( a | !a.derived && !a.static && !a.emHasTransientStereotype() && !a.emHasDiStereotype() ) -»
         «FOREACH allSingleTableInheritanceSpecializations() AS s -»
-        «EXPAND ColumnsAttribute(s) FOREACH s.property.typeSelect(MAttribute).select( a | !a.derived && !a.static && !a.emHasTransientStereotype() ) -»
+        «EXPAND ColumnsAttribute(s) FOREACH s.property.typeSelect(MAttribute).select( a | !a.derived && !a.static && !a.emHasTransientStereotype() && !a.emHasDiStereotype() ) -»
         «ENDFOREACH -»
-        «EXPAND ColumnsAssociation(this) FOREACH allAssociationRoles().select( ar | !ar.derived && !ar.emHasTransientStereotype() ) -»
+        «EXPAND ColumnsAssociation(this) FOREACH allAssociationRoles().select( ar | !ar.derived && !ar.emHasTransientStereotype() && !ar.emHasDiStereotype() ) -»
         «FOREACH allSingleTableInheritanceSpecializations() AS s -»
-        «EXPAND ColumnsAssociation(s) FOREACH s.property.typeSelect(MAssociationRole).select( ar | !ar.derived && !ar.emHasTransientStereotype() ) -»
+        «EXPAND ColumnsAssociation(s) FOREACH s.property.typeSelect(MAssociationRole).select( ar | !ar.derived && !ar.emHasTransientStereotype() && !ar.emHasDiStereotype() ) -»
         «ENDFOREACH -»
         «EXPAND OwnColumnsSectionCode -»
     ],
@@ -473,9 +476,9 @@ return [
             'config' => [
                 'type' =>'select',
                 'items' => [
-                    ['«asShortGeneralName() -»', '0'],
+                    ['LLL:EXT:«extensionKey() -»/«filePathLocallangTcaXlf() -»:«asBackendLocalizationName() -»', '0'],
                     «FOREACH allSingleTableInheritanceSpecializations() AS s -»
-                    ['«s.asShortGeneralName() -»', '«s.asGeneralName() -»'],
+                    ['LLL:EXT:«extensionKey() -»/«filePathLocallangTcaXlf() -»:«s.asBackendLocalizationName() -»', '«s.asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" ) -»'],
                     «ENDFOREACH -»
                 ],
                 'default' => '0',
@@ -985,6 +988,7 @@ return [
                 «EXPAND ColumnConfigType("text") -»
                 «EXPAND ColumnConfigCols(40) -»
                 «EXPAND ColumnConfigRows(15) -»
+                «EXPAND ColumnConfigMax(null) -»
                 «EXPAND ColumnConfigDefault(null) -»
                 «EXPAND ColumnConfigEval({"trim"}) -»
                 «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
@@ -1000,6 +1004,7 @@ return [
                 «EXPAND ColumnConfigType("text") -»
                 «EXPAND ColumnConfigCols(40) -»
                 «EXPAND ColumnConfigRows(15) -»
+                «EXPAND ColumnConfigMax(null) -»
                 «EXPAND ColumnConfigDefault(null) -»
                 «EXPAND ColumnConfigEval({"trim"}) -»
                 «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
@@ -1830,15 +1835,20 @@ return [
 «ENDREM»
 «DEFINE TypesNumbers FOR MClass -»
         '0' => [
-            'showitem' => '«EXPAND TypesNumbersType -»«EXPAND TypesNumbersLocalization -»«EXPAND TypesNumbersHidden -»«EXPAND TypesNumbersStartime -»«EXPAND TypesNumbersEndtime -»«EXPAND TypesNumbersFeGroup -»«FOREACH allProperties().select( p | !p.derived && !p.isStatic() && !p.emHasTransientStereotype() ) AS p SEPARATOR ", " -»«p.asConfigurationName() -»«ENDFOREACH -»',
+            «EXPAND TypesNumbersShowitem -»
             «EXPAND OwnTypesSectionTypeCode -»
         ],
         «FOREACH allSingleTableInheritanceSpecializations() AS s -»
-        '«s.asGeneralName() -»' => [
-            'showitem' => '«EXPAND TypesNumbersType -»«EXPAND TypesNumbersLocalization FOR s -»«EXPAND TypesNumbersHidden FOR s -»«EXPAND TypesNumbersStartime FOR s -»«EXPAND TypesNumbersEndtime FOR s -»«EXPAND TypesNumbersFeGroup FOR s -»«FOREACH s.allProperties().select( p | !p.derived && !p.isStatic() && !p.emHasTransientStereotype() ) AS p SEPARATOR ", " -»«p.asConfigurationName() -»«ENDFOREACH -»',
+        '«s.asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" ) -»' => [
+            «EXPAND TypesNumbersShowitem FOR s»
             «EXPAND OwnTypesSectionTypeCode FOR s -»
         ],
         «ENDFOREACH -»
+«ENDDEFINE»
+
+
+«DEFINE TypesNumbersShowitem FOR MClass -»
+            'showitem' => '«EXPAND TypesNumbersType -»«EXPAND TypesNumbersLocalization -»«EXPAND TypesNumbersHidden -»«EXPAND TypesNumbersStartime -»«EXPAND TypesNumbersEndtime -»«EXPAND TypesNumbersFeGroup -»«FOREACH allProperties().select( p | !p.derived && !p.isStatic() && !p.emHasTransientStereotype() && !p.emHasDiStereotype() ) AS p SEPARATOR ", " -»«p.asConfigurationName() -»«ENDFOREACH -»',
 «ENDDEFINE»
 
 
