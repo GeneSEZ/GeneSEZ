@@ -21,6 +21,9 @@
 «EXTENSION org::genesez::platform::typo3::cms::mvc::profile::Typo3CmsExtbaseAccessElement»
 
 
+«REM» use GeneSEZ common Design Pattern profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezDesignPatternAccessElement»
+
 «REM» use GeneSEZ common Persistence profile scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::profile::GenesezPersistenceAccessElement»
 
@@ -87,8 +90,8 @@ CREATE TABLE «asPersistenceName() -» (
 «ENDREM»
 «DEFINE ConcreteTableColumns FOR MClass -»
     «EXPAND ColumnsInternalManagement -»
-    «EXPAND Column FOREACH allAttributes().select( a | !a.derived && !a.static && !a.emHasTransientStereotype() ) -»
-    «EXPAND Column FOREACH allAssociationRoles().select( ar | !ar.derived && !ar.emHasTransientStereotype() ) -»
+    «EXPAND Column FOREACH allAttributes().select( a | !a.derived && !a.static && !a.emHasTransientStereotype() && !a.emHasDiStereotype() ) -»
+    «EXPAND Column FOREACH allAssociationRoles().select( ar | !ar.derived && !ar.emHasTransientStereotype() && !ar.emHasDiStereotype() ) -»
 
     «EXPAND ColumnSortingSupport -»
     «EXPAND ColumnsEditingSupport -»
@@ -102,8 +105,8 @@ CREATE TABLE «asPersistenceName() -» (
 «REM»
 «ENDREM»
 «DEFINE ConcreteIntermediateTables FOR MClass -»
-    «EXPAND IntermediateTable(this) FOREACH allAttributes().select( a | !a.derived && !a.static && !a.emHasTransientStereotype() ) -»
-    «EXPAND IntermediateTable(this) FOREACH allAssociationRoles().select( ar | !ar.derived && !ar.emHasTransientStereotype() ) -»
+    «EXPAND IntermediateTable(this) FOREACH allAttributes().select( a | !a.derived && !a.static && !a.emHasTransientStereotype() && !a.emHasDiStereotype() ) -»
+    «EXPAND IntermediateTable(this) FOREACH allAssociationRoles().select( ar | !ar.derived && !ar.emHasTransientStereotype() && !ar.emHasDiStereotype() ) -»
 «ENDDEFINE»
 
 
@@ -127,8 +130,8 @@ CREATE TABLE «asPersistenceName() -» (
 «REM»
 «ENDREM»
 «DEFINE SingleTableColumns FOR MClass -»
-    «EXPAND Column FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static && !a.emHasTransientStereotype() ) -»
-    «EXPAND Column FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived && !ar.emHasTransientStereotype() ) -»
+    «EXPAND Column FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static && !a.emHasTransientStereotype() && !a.emHasDiStereotype() ) -»
+    «EXPAND Column FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived && !ar.emHasTransientStereotype() && !ar.emHasDiStereotype() ) -»
 
     «EXPAND ColumnType -»
     «EXPAND ColumnSortingSupport -»
@@ -138,8 +141,8 @@ CREATE TABLE «asPersistenceName() -» (
 «REM»
 «ENDREM»
 «DEFINE SingleIntermediateTables FOR MClass -»
-    «EXPAND IntermediateTable(this) FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static && !a.emHasTransientStereotype() ) -»
-    «EXPAND IntermediateTable(this) FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived && !ar.emHasTransientStereotype() ) -»
+    «EXPAND IntermediateTable(this) FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static && !a.emHasTransientStereotype() && !a.emHasDiStereotype() ) -»
+    «EXPAND IntermediateTable(this) FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived && !ar.emHasTransientStereotype() && !ar.emHasDiStereotype() ) -»
 «ENDDEFINE»
 
 
@@ -164,8 +167,8 @@ CREATE TABLE «asPersistenceName() -» (
 «REM»
 «ENDREM»
 «DEFINE TableMappingColumns FOR MClass -»
-    «EXPAND Column FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static && !a.emHasTransientStereotype() && !a.emHasColumnMappingStereotype() ) -»
-    «EXPAND Column FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived && !ar.emHasTransientStereotype() && !ar.emHasColumnMappingStereotype() ) -»
+    «EXPAND Column FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static && !a.emHasTransientStereotype() && !a.emHasDiStereotype() && !a.emHasColumnMappingStereotype() ) -»
+    «EXPAND Column FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived && !ar.emHasTransientStereotype() && !ar.emHasDiStereotype() && !ar.emHasColumnMappingStereotype() ) -»
 
     «EXPAND ColumnType -»
     «EXPAND ColumnSortingSupport -»
@@ -175,8 +178,8 @@ CREATE TABLE «asPersistenceName() -» (
 «REM»
 «ENDREM»
 «DEFINE TableMappingIntermediateTables FOR MClass -»
-    «EXPAND IntermediateTable(this) FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static && !a.emHasTransientStereotype() ) -»
-    «EXPAND IntermediateTable(this) FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived && !ar.emHasTransientStereotype() ) -»
+    «EXPAND IntermediateTable(this) FOREACH property.typeSelect(MAttribute).select( a | !a.derived && !a.static && !a.emHasTransientStereotype() && !a.emHasDiStereotype() ) -»
+    «EXPAND IntermediateTable(this) FOREACH property.typeSelect(MAssociationRole).select( ar | !ar.derived && !ar.emHasTransientStereotype() && !ar.emHasDiStereotype() ) -»
 «ENDDEFINE»
 
 

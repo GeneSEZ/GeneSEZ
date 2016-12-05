@@ -18,6 +18,10 @@
 «EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
 
 
+«REM» use GeneSEZ common Design Pattern profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezDesignPatternAccessElement»
+
+
 «REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
 «EXTENSION org::genesez::platform::typo3::cms::mvc::util::AccessElement»
 
@@ -116,7 +120,7 @@
 		<body>
 			«FOREACH allEntitiesAndValueObjects().sortBy( do | do.asFrontendLocalizationName() ) AS domainObject -»
 			«EXPAND ClassLocalization(isoLanguageCode) FOR domainObject -»
-			«EXPAND PropertyLocalization(isoLanguageCode) FOREACH domainObject.property.select( p | !p.isStatic() ) -»
+			«EXPAND PropertyLocalization(isoLanguageCode) FOREACH domainObject.property.select( p | !p.isStatic() && !p.emHasDiStereotype() ) -»
 
 			«ENDFOREACH -»
 			«EXPAND OwnLocalizations(isoLanguageCode) -»
