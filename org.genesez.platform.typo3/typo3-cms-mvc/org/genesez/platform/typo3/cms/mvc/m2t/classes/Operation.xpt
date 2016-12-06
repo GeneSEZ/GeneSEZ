@@ -25,6 +25,10 @@
 «EXTENSION org::genesez::platform::php::util::AccessHelper»
 
 
+«REM» use GeneSEZ common Standard profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezStandardAccessElement»
+
+
 «REM» use GeneSEZ common access element scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::AccessElement»
 
@@ -162,7 +166,9 @@
 «DEFINE TypeHint FOR MParameter -»
 «IF multiplicity.isSingleValued() -»
 «IF !isPhpPrimitiveType( type.asGeneralName() ) -»«type.asGeneralName() -» «ENDIF -»
-«ELSE -»«mapCollection() -» «ENDIF -»
+«ELSE -»
+«IF !emHasPrimitiveStereotype() -»«mapCollection("ObjectStorage") -» «ELSE- »«mapCollection() -» «ENDIF -»
+«ENDIF -»
 «ENDDEFINE»
 
 
