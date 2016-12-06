@@ -39,7 +39,7 @@
 «REM»
 	Processes all constructors.
 «ENDREM»
-«DEFINE Constructor FOR MClass -»
+«DEFINE Constructor FOR MClassifier -»
     «EXPAND Constructor FOREACH uniqueOperations().select( o | o.isConstructor() ) -»
 «ENDDEFINE»
 
@@ -47,7 +47,7 @@
 «REM»
 	Processes all destructors.
 «ENDREM»
-«DEFINE Destructor FOR MClass -»
+«DEFINE Destructor FOR MClassifier -»
     «EXPAND Destructor FOREACH uniqueOperations().select( o | o.isDestructor() ) -»
 «ENDDEFINE»
 
@@ -74,17 +74,9 @@
 	Processes all operations to implement.
 	Order: realized operations from interfaces first
 «ENDREM»
-«DEFINE Implementation FOR MClass -»
+«DEFINE Implementation FOR MClassifier -»
     «EXPAND Implementation FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && !o.abstract && realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
     «EXPAND Implementation FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && !o.abstract && !realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
-«ENDDEFINE»
-
-
-«REM»
-	Processes all static operations to implement.
-«ENDREM»
-«DEFINE Implementation FOR MEnumeration -»
-    «EXPAND Implementation FOREACH uniqueOperations().select( o | o.static ) -»
 «ENDDEFINE»
 
 
