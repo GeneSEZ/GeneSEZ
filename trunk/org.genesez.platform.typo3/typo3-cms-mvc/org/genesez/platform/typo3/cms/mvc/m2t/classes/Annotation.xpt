@@ -67,8 +67,8 @@
 «IF multiplicity.isSingleValued() -»
      * @var «type.asGeneralName()»
 «ELSE -»
-«IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() && !emHasTransientStereotype() -»
-     * @var «mapCollection("DomainModel") -»<«type.asGeneralName() -»>
+«IF !emHasPrimitiveStereotype() -»
+     * @var «mapCollection("ObjectStorage") -»<«type.asGeneralName() -»>
 «ELSE -»
      * @var «mapCollection()»
 «ENDIF -» 
@@ -87,8 +87,8 @@
 «IF multiplicity.isSingleValued() -»
      * @return «type.asGeneralName() -»«IF hasComment() -» «comment("; ", "") -»«ENDIF»
 «ELSE -»
-«IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() && !emHasTransientStereotype() -»
-     * @return «mapCollection("DomainModel") -»<«type.asGeneralName() -»>«IF hasComment() -» «comment("; ", "") -»«ENDIF»
+«IF !emHasPrimitiveStereotype() -»
+     * @return «mapCollection("ObjectStorage") -»<«type.asGeneralName() -»>«IF hasComment() -» «comment("; ", "") -»«ENDIF»
 «ELSE -»
      * @return «mapCollection() -»«IF hasComment() -» «comment("; ", "") -»«ENDIF»
 «ENDIF -»
@@ -103,8 +103,8 @@
 «IF multiplicity.isSingleValued() -»
      * @param «type.asGeneralName() -» $«asGeneralName() -»«IF hasComment() -» «comment("; ", "") -»«ENDIF»
 «ELSE -»
-«IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() && !emHasTransientStereotype() -»
-     * @param «mapCollection("DomainModel") -»<«type.asGeneralName() -»> $«asGeneralName() -»«IF hasComment() -» «comment("; ", "") -»«ENDIF»
+«IF !emHasPrimitiveStereotype() -»
+     * @param «mapCollection("ObjectStorage") -»<«type.asGeneralName() -»> $«asGeneralName() -»«IF hasComment() -» «comment("; ", "") -»«ENDIF»
 «ELSE -»
      * @param «mapCollection() -» $«asGeneralName() -»«IF hasComment() -» «comment("; ", "") -»«ENDIF»
 «ENDIF -» 
@@ -208,7 +208,11 @@
 «IF multiplicity.isSingleValued() -»
      * @param «type.asGeneralName() -» $«asGeneralName() -»«IF hasComment() -» «comment("; ", "") -»«ENDIF»
 «ELSE -»
+«IF !emHasPrimitiveStereotype() -»
+     * @param «mapCollection("ObjectStorage") -»<«type.asGeneralName() -»> $«asGeneralName() -»«IF hasComment() -» «comment("; ", "") -»«ENDIF»
+«ELSE -»
      * @param «mapCollection() -» $«asGeneralName() -»«IF hasComment() -» «comment("; ", "") -»«ENDIF»
+«ENDIF -» 
 «ENDIF -»
 «ENDDEFINE»
 
@@ -218,8 +222,8 @@
 «IF return.multiplicity.isSingleValued() -»
      * @return «return.type.asGeneralName() -»«IF return.hasComment() -» «return.comment("; ", "") -»«ENDIF»
 «ELSE -»
-«IF classifier.isDomainModelPackageElement() && !emHasPrimitiveStereotype() && !emHasTransientStereotype() -»
-     * @return «return.mapCollection("DomainModel") -»<«return.type.asGeneralName() -»>«IF return.hasComment() -» «return.comment("; ", "") -»«ENDIF»
+«IF !emHasPrimitiveStereotype() -»
+     * @return «return.mapCollection("ObjectStorage") -»<«return.type.asGeneralName() -»>«IF return.hasComment() -» «return.comment("; ", "") -»«ENDIF»
 «ELSE -»
      * @return «return.mapCollection() -»«IF return.hasComment() -» «return.comment("; ", "") -»«ENDIF»
 «ENDIF -»
