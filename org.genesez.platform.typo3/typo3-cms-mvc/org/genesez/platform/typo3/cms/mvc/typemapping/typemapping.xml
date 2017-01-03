@@ -21,7 +21,7 @@
 	<tns:multiValuedTypes>
 		<tns:multiValuedType>
 			<tns:default>array</tns:default>
-			<tns:context name="DomainModel">\TYPO3\CMS\Extbase\Persistence\ObjectStorage</tns:context>
+			<tns:context name="ObjectStorage">\TYPO3\CMS\Extbase\Persistence\ObjectStorage</tns:context>
 		</tns:multiValuedType>
 	</tns:multiValuedTypes>
 
@@ -114,10 +114,16 @@
 
 
 		<!-- PHP specific Types -->
+		<tns:type from="array">
+			<tns:to>array</tns:to>
+		</tns:type>
+		
 		<tns:type from="mixed">
 			<tns:to>mixed</tns:to>
-			<tns:context name="SqlColumnType">varchar(255) DEFAULT '' NOT NULL</tns:context>
-			<tns:context name="GuiType">String</tns:context>
+		</tns:type>
+		
+		<tns:type from="Exception">
+			<tns:to>\Exception</tns:to>
 		</tns:type>
 
 
