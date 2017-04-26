@@ -18,10 +18,19 @@ import gcore;
 extension org::genesez::platform::typo3::cms::profile::Typo3CmsProfile;
 extension org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement;
 
+// use TYPO3 CMS specific Extbase + Fluid access element scripts
+extension org::genesez::platform::typo3::cms::mvc::util::AccessElement;
 
-// use TYPO3 MVC workflow global var scripts
+// use GeneSEZ common Persistence profile scripts
+extension org::genesez::metamodel::core::util::profile::GenesezPersistenceAccessElement;
+
+
+// use TYPO3 CMS workflow global var scripts
 extension org::genesez::platform::typo3::cms::util::GlobalVar;
 
+
+// use GeneSEZ common access element scripts
+extension org::genesez::metamodel::core::util::AccessElement;
 
 // use GeneSEZ common conversion scripts
 extension org::genesez::metamodel::core::util::Conversion;
@@ -96,3 +105,37 @@ context MModel
 	if emHasTypo3ExtensionConfigurationStereotype() 
 	ERROR "GeneSEZ: The description of the extension for TYPO3 CMS extension manager (stereotype: " + prTypo3ExtensionConfiguration() + ", property: " + prTypo3ExtensionConfigurationDescription() + ") is missing or empty! See model element: " + fqmn() : 
 	emGetTypo3ExtensionConfigurationDescription() != "";
+
+
+// -- Property Checks ---------------------------------------------------------------------------------------
+
+/**
+ * Checks if the visibility of attributes from domain objects is 'protected'.
+ * 
+ * @return	False, if the visibility is not 'protected', otherwise true.
+ */
+context MAttribute 
+	if ( classifier.isEntity() || classifier.isValueObject() ) && !( derived || ( static && final ) || emHasTransientStereotype() ) 
+	WARNING "GeneSEZ: The visibility of the attribute from the domain object is not protected! See model element: " + fqmn() :
+	visibility == "protected";
+
+/**
+ * Checks if the visibility of association roles from domain objects is 'protected'.
+ * 
+ * @return	False, if the visibility is not 'protected', otherwise true.
+ */
+context MAssociationRole 
+	if ( classifier.isEntity() || classifier.isValueObject() ) && ! ( derived || emHasTransientStereotype() )
+	WARNING "GeneSEZ: The visibility of the association role from the domain object is not protected! See model element: " + fqmn() :
+	visibility == "protected";
+
+/**
+ * Checks if no default enumeration value is set for an attribute.
+ * Hint: PHP does not support an object initialization, see http://php.net/manual/en/language.oop5.properties.php. 
+ * 
+ * @return	False, if the default enumeration value is set, otherwise true.
+ */
+context MAttribute 
+	if type.isEnumeration()
+	WARNING "GeneSEZ: The default enumeration value of the attribute could not be generated, because PHP does not support object initializations. Please set the default value through the constructor of this classifier or otherwise! See model element: " + fqmn() :
+	!hasDefaultValue();
