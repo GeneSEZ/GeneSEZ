@@ -76,7 +76,7 @@ public class Typo3Model2TextComponent extends Model2TextComponent {
 	@WfDefault(parameter = "typeMappingFile")
 	public java.util.Set<String> getDefaultTypeMappingFile() {
 		java.util.Set<String> result = new java.util.LinkedHashSet<String>();
-		result.add("org/genesez/platform/typo3/cms/mvc/typemapping/typemapping.xml");
+		result.add("org/genesez/platform/typo3/cms/typemapping/typemapping.xml");
 		return result;
 	}
 	
