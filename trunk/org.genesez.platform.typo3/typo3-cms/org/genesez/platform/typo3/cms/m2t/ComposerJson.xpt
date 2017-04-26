@@ -50,19 +50,22 @@
 {
   «EXPAND Name -»
   «EXPAND Description -»
-  «EXPAND Version -»
-
   «EXPAND Type -»
-
   «EXPAND Keywords -»
   «EXPAND Homepage -»
   «EXPAND License -»
-
-  «EXPAND OwnCode -»
-
+  «EXPAND Authors -»
+  «EXPAND Support -»
+  «EXPAND Require -»
+  «EXPAND RequireDev -»
+  «EXPAND Conflict -»
+  «EXPAND Provide -»
+  «EXPAND Suggest -»
   «EXPAND Replace -»
-
   «EXPAND Autoload -»
+  «EXPAND AutoloadDev -»
+  «EXPAND Config -»
+  «EXPAND Extra -» 
 }
 «ENDDEFINE»
 
@@ -71,39 +74,57 @@
 	Performs the generation of the 'name' field.
 «ENDREM»
 «DEFINE Name FOR MModel -»
-  "name": "«composerExtensionVendorName() -»/«composerExtensionKey() -»",
+  "name": «EXPAND NameValue -»,
 «ENDDEFINE»
+
+«REM»
+	Performs the generation of the 'name' field value.
+«ENDREM»
+«DEFINE NameValue FOR MModel -»
+"«composerExtensionVendorName() -»/«composerExtensionKey() -»"«ENDDEFINE -»
 
 
 «REM»
 	Performs the generation of the 'description' field.
 «ENDREM»
 «DEFINE Description FOR MModel -»
-  "description": "«emGetTypo3ExtensionConfigurationTitle() -»",
-«ENDDEFINE»
+  "description": «EXPAND DescriptionValue -»,
 
+«ENDDEFINE»
 
 «REM»
-	Performs the generation of the 'version' field.
+	Performs the generation of the 'description' field value.
 «ENDREM»
-«DEFINE Version FOR MModel -»
-  "version": "«emGetTypo3ExtensionConfigurationVersion() -»",
-«ENDDEFINE»
+«DEFINE DescriptionValue FOR MModel -»
+"«emGetTypo3ExtensionConfigurationTitle() -»"«ENDDEFINE»
 
 
 «REM»
 	Performs the generation of the 'type' field.
 «ENDREM»
 «DEFINE Type FOR MModel -»
-  "type": "typo3-cms-extension",
+  "type": «EXPAND TypeValue -»,
+
 «ENDDEFINE»
+
+«REM»
+	Performs the generation of the 'type' field value.
+«ENDREM»
+«DEFINE TypeValue FOR MModel -»
+"typo3-cms-extension"«ENDDEFINE»
 
 
 «REM»
 	Performs the generation of the 'keywords' field.
 «ENDREM»
 «DEFINE Keywords FOR MModel -»
-  "keywords": [""],
+  "keywords": [«EXPAND KeywordsValue -»],
+«ENDDEFINE»
+
+«REM»
+	Performs the generation of the 'keywords' field value.
+«ENDREM»
+«DEFINE KeywordsValue FOR MModel -»
 «ENDDEFINE»
 
 
@@ -111,21 +132,147 @@
 	Performs the generation of the 'homepage' field.
 «ENDREM»
 «DEFINE Homepage FOR MModel -»
-  "homepage": "",
+  "homepage": «EXPAND HomepageValue -»,
 «ENDDEFINE»
+
+«REM»
+	Performs the generation of the 'homepage' field value.
+«ENDREM»
+«DEFINE HomepageValue FOR MModel -»
+""«ENDDEFINE»
 
 
 «REM»
 	Performs the generation of the 'license' field.
 «ENDREM»
 «DEFINE License FOR MModel -»
-  "license": "GPL-2.0+",
+  "license": «EXPAND LicenseValue -»,
+
+«ENDDEFINE»
+
+«REM»
+	Performs the generation of the 'license' field value.
+«ENDREM»
+«DEFINE LicenseValue FOR MModel -»
+"GPL-2.0+"«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'authors' field.
+«ENDREM»
+«DEFINE Authors FOR MModel -»
+  "authors": [
+    «EXPAND AuthorsValue -»
+  ],
+
+«ENDDEFINE»
+
+«REM»
+	Performs the generation of the 'authors' field value.
+«ENDREM»
+«DEFINE AuthorsValue FOR MModel -»
 «ENDDEFINE»
 
 
 «REM»
+	Performs the generation of the 'support' field.
 «ENDREM»
-«DEFINE OwnCode FOR MModel -»
+«DEFINE Support FOR MModel -»
+  "support": {
+    «EXPAND SupportValue -»
+  },
+
+«ENDDEFINE»
+
+«REM»
+	Performs the generation of the 'support' field value.
+«ENDREM»
+«DEFINE SupportValue FOR MModel -»
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'require' field.
+«ENDREM»
+«DEFINE Require FOR MModel -»
+  "require": {
+    «EXPAND RequireValue -»
+  },
+
+«ENDDEFINE»
+
+«REM»
+	Performs the generation of the 'require' field value.
+«ENDREM»
+«DEFINE RequireValue FOR MModel -»
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'require-dev' field.
+«ENDREM»
+«DEFINE RequireDev FOR MModel -»
+  "require-dev": {
+    «EXPAND RequireDevValue -»
+  },
+
+«ENDDEFINE»
+
+«REM»
+	Performs the generation of the 'require-dev' field value.
+«ENDREM»
+«DEFINE RequireDevValue FOR MModel -»
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'conflict' field.
+«ENDREM»
+«DEFINE Conflict FOR MModel -»
+  "conflict": {
+    «EXPAND ConflictValue -»
+  },
+
+«ENDDEFINE»
+
+«REM»
+	Performs the generation of the 'conflict' field value.
+«ENDREM»
+«DEFINE ConflictValue FOR MModel -»
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'provide' field.
+«ENDREM»
+«DEFINE Provide FOR MModel -»
+  "provide": {
+    «EXPAND ProvideValue -»
+  },
+
+«ENDDEFINE»
+
+«REM»
+	Performs the generation of the 'provide' field value.
+«ENDREM»
+«DEFINE ProvideValue FOR MModel -»
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'suggest' field.
+«ENDREM»
+«DEFINE Suggest FOR MModel -»
+  "suggest": {
+    «EXPAND SuggestValue -»
+  },
+
+«ENDDEFINE»
+
+«REM»
+	Performs the generation of the 'suggest' field value.
+«ENDREM»
+«DEFINE SuggestValue FOR MModel -»
 «ENDDEFINE»
 
 
@@ -134,9 +281,17 @@
 «ENDREM»
 «DEFINE Replace FOR MModel -»
   "replace": {
+    «EXPAND ReplaceValue -»
+  },
+
+«ENDDEFINE»
+
+«REM»
+	Performs the generation of the 'replace' field value.
+«ENDREM»
+«DEFINE ReplaceValue FOR MModel -»
     "«extensionKey() -»": "self.version",
     "typo3-ter/«extensionKey() -»": "self.version"
-  },
 «ENDDEFINE»
 
 
@@ -145,8 +300,91 @@
 «ENDREM»
 «DEFINE Autoload FOR MModel -»
   "autoload": {
+    «EXPAND AutoloadPsr4 -»
+  },
+
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'autoload:psr-4' field.
+«ENDREM»
+«DEFINE AutoloadPsr4 FOR MModel -»
     "psr-4": {
-      "«extensionVendorName() -»\\«extensionPackageName() -»\\": "«dirPathClasses() -»/"
+      «EXPAND AutoloadPsr4Value -»
     }
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'autoload:psr-4' field value.
+«ENDREM»
+«DEFINE AutoloadPsr4Value FOR MModel -»
+      "«extensionVendorName() -»\\«extensionPackageName() -»\\": "«dirPathClasses() -»/"
+«ENDDEFINE»
+
+«REM»
+	Performs the generation of the 'autoload-dev' field.
+«ENDREM»
+«DEFINE AutoloadDev FOR MModel -»
+  "autoload-dev": {
+    «EXPAND AutoloadDevPsr4 -»
+  },
+
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'autoload-dev:psr-4' field.
+«ENDREM»
+«DEFINE AutoloadDevPsr4 FOR MModel -»
+    "psr-4": {
+      «EXPAND AutoloadDevPsr4Value -»
+    }
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'autoload-dev:psr-4' field value.
+«ENDREM»
+«DEFINE AutoloadDevPsr4Value FOR MModel -»
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'config' field.
+«ENDREM»
+«DEFINE Config FOR MModel -»
+  "config": {
+    «EXPAND ConfigValue -»
+  },
+
+«ENDDEFINE»
+
+«REM»
+	Performs the generation of the 'config' field value.
+«ENDREM»
+«DEFINE ConfigValue FOR MModel -»
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'extra' field.
+«ENDREM»
+«DEFINE Extra FOR MModel -»
+  "extra": {
+    «EXPAND ExtraValue -»
   }
 «ENDDEFINE»
+
+«REM»
+	Performs the generation of the 'extra' field value.
+«ENDREM»
+«DEFINE ExtraValue FOR MModel -»
+«ENDDEFINE»
+
+
+
+
+
+
