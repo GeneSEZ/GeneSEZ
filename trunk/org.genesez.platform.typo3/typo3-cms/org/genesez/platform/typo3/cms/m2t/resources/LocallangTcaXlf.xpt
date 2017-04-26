@@ -1,0 +1,173 @@
+«REM»
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+
+«REM»
+	Entry point for generating "locallang_tca.xlf".
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+«ENDREM»
+
+«REM» use TYPO3 CMS profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
+
+
+«REM» use GeneSEZ common Design Pattern profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezDesignPatternAccessElement»
+
+«REM» use GeneSEZ common Persistence profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezPersistenceAccessElement»
+
+
+«REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::AccessElement»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid file system convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::FileSystemConvention»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::NamingConvention»
+
+
+«REM» use GeneSEZ common access element scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+
+«REM» use GeneSEZ common date time helper scripts «ENDREM»
+«EXTENSION org::genesez::util::sysenv::DateTimeHelper»
+
+
+«REM»
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
+«ENDREM»
+
+«REM»
+	Processes the generation of "locallang_tca.xlf".
+«ENDREM»
+«DEFINE Root FOR MModel -»
+«EXPAND LocallangTca -»
+«ENDDEFINE»
+
+
+«REM»
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
+«ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE LocallangTca FOR MModel -»
+«EXPAND SourceLanguage -»
+
+«FOREACH emGetTypo3LocalizationLanguageKeys() AS targetLanguageKey -»
+	«EXPAND TargetLanguage( targetLanguageKey.asIsoLanguageCode() ) -»
+«ENDFOREACH -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE SourceLanguage FOR MModel -»
+«FILE filePathLocallangTcaXlf() -»
+«EXPAND XmlDefinition -»
+«EXPAND Xliff("en") -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE TargetLanguage(String isoLanguageCode) FOR MModel -»
+«FILE filePathLocallangTcaXlf(isoLanguageCode) -»
+«EXPAND XmlDefinition -»
+«EXPAND Xliff(isoLanguageCode) -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«DEFINE XmlDefinition FOR MModel -»
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+«ENDDEFINE»
+
+
+«DEFINE Xliff(String isoLanguageCode) FOR MModel -»
+<xliff version="1.0">
+	«EXPAND File(isoLanguageCode) -»
+</xliff>
+«ENDDEFINE»
+
+
+«DEFINE File(String isoLanguageCode) FOR MModel -»
+	<file source-language="en" datatype="plaintext" original="messages" date="«EXPAND CurrentTimeStamp -»" product-name="«extensionKey() -»"«IF isoLanguageCode != "en"» target-language="«isoLanguageCode -»"«ENDIF -»>
+		«EXPAND Header(isoLanguageCode) -»
+		«EXPAND Body(isoLanguageCode) -»
+	</file>
+«ENDDEFINE»
+
+
+«DEFINE CurrentTimeStamp FOR MModel -»
+«getIso8601TimeStamp() -»
+«ENDDEFINE»
+
+
+«DEFINE Header(String isoLanguageCode) FOR MModel -»
+		<header/>
+«ENDDEFINE»
+
+
+«DEFINE Body(String isoLanguageCode) FOR MModel -»
+		<body>
+			«FOREACH allEntitiesAndValueObjects().sortBy( do | do.asBackendLocalizationName() ) AS domainObject -»
+			«EXPAND ClassLocalization(isoLanguageCode) FOR domainObject -»
+			«EXPAND PropertyLocalization(isoLanguageCode) FOREACH domainObject.property.select( p | !p.derived && !p.isStatic() && !p.emHasTransientStereotype() && !p.emHasDiStereotype() ) -»
+
+			«ENDFOREACH -»
+			«EXPAND OwnLocalizations(isoLanguageCode) -»
+		</body>
+«ENDDEFINE»
+
+
+«DEFINE ClassLocalization(String isoLanguageCode) FOR MClass -»
+			«EXPAND ClassLocalizationHint -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_tca.xlf." + isoLanguageCode + "." + xmiGuid) DISABLE»
+			<trans-unit id="«asBackendLocalizationName() -»" xml:space="preserve">
+				<source>«name.toFirstUpper() -»</source>
+			</trans-unit>
+			«ENDPROTECT»
+
+«ENDDEFINE»
+
+
+«DEFINE ClassLocalizationHint FOR MClass -»
+			<!-- GeneSEZ Generator Hint: id="«asBackendLocalizationName() -»" -->
+«ENDDEFINE»
+
+
+«DEFINE PropertyLocalization(String isoLanguageCode) FOR MProperty -»
+			«EXPAND PropertyLocalizationHint -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_tca.xlf." + isoLanguageCode + "." + xmiGuid) DISABLE»
+			<trans-unit id="«asBackendLocalizationName() -»" xml:space="preserve">
+				<source>«name.toFirstUpper() -»</source>
+			</trans-unit>
+			«ENDPROTECT»
+
+«ENDDEFINE»
+
+
+«DEFINE PropertyLocalizationHint FOR MProperty -»
+			<!-- GeneSEZ Generator Hint: id="«asBackendLocalizationName() -»" -->
+«ENDDEFINE»
+
+
+«REM»
+	Generates a protected region for own localizations.
+«ENDREM»
+«DEFINE OwnLocalizations(String isoLanguageCode) FOR MModel -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_tca.xlf." + isoLanguageCode + ".own.localizations." + xmiGuid)»
+			<!-- TODO: put your further '«isoLanguageCode -»' localizations here -->
+			«ENDPROTECT»
+«ENDDEFINE»

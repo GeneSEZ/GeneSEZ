@@ -1,0 +1,488 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+
+import gcore;
+
+
+/**
+ * Model modifications before generation of source code begins.
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ */
+
+// use TYPO3 CMS specific Extbase profile scripts
+extension org::genesez::platform::typo3::cms::profile::Typo3CmsExtbaseProfile;
+extension org::genesez::platform::typo3::cms::profile::Typo3CmsExtbaseAccessElement;
+
+
+// use TYPO3 CMS specific Extbase + Fluid access element scripts
+extension org::genesez::platform::typo3::cms::util::AccessElement;
+
+// use TYPO3 CMS specific Extbase + Fluid naming convention scripts
+extension org::genesez::platform::typo3::cms::util::NamingConvention;
+
+
+// use GeneSEZ Design Pattern profile scripts
+extension org::genesez::metamodel::core::util::profile::GenesezDesignPatternAccessElement;
+
+// use GeneSEZ Standard profile scripts
+extension org::genesez::metamodel::core::util::profile::GenesezStandardProfile;
+
+// use GeneSEZ Validation profile scripts
+extension org::genesez::metamodel::core::util::profile::GenesezValidationProfile;
+
+
+// use GeneSEZ common access element scripts
+extension org::genesez::metamodel::core::util::AccessElement;
+
+// use GeneSEZ common create element scripts
+extension org::genesez::metamodel::core::util::CreateElement;
+
+// use GeneSEZ common conversion scripts
+extension org::genesez::metamodel::core::util::Conversion;
+
+// use GeneSEZ common navigate element scripts
+extension org::genesez::metamodel::core::util::NavigateElement;
+
+// use GeneSEZ common logging scripts
+extension org::genesez::util::logging::Logging;
+
+
+// -- Interation over Model and Package Structures ----------------------------------------------------------
+
+MModel modelModifications(MModel this) :
+	useLogger("org.genesez.platform.typo3") ->
+	logTrace( "GeneSEZ: Modifications for Model! Model element: " + fqmn() ) ->
+	
+	// perform modifications for all nested packages
+	nestedPackage.packageModifications() ->	
+	// perform modifications for all classes
+	classifier.typeSelect(MClass).classModifications() ->
+	// perform modifications for all enumerations
+	classifier.typeSelect(MEnumeration).enumerationModifications() ->
+	
+	// perform modifications for all stereotypes
+	anyStereotype.stereotypeModifications() ->
+	this;
+
+
+// -- Modification of Packages ------------------------------------------------------------------------------
+
+MPackage packageModifications(MPackage this) :
+	logTrace( "GeneSEZ: Modifications for Package! Model element: " + fqmn() ) ->
+	packageChangePackageNameToFirstUpper() ->
+	
+	// perform modifications for all nested packages
+	nestedPackage.packageModifications() ->
+	// perform modifications for all classes
+	classifier.typeSelect(MClass).classModifications() ->
+	// perform modifications for all enumerations
+	classifier.typeSelect(MEnumeration).enumerationModifications() ->
+	this;
+
+
+/**
+ * @todo: should performed by a check validation rule
+ */
+MPackage packageChangePackageNameToFirstUpper(MPackage this) :
+	name.matches("^[a-z].*")
+		? (	logTrace( "GeneSEZ: Change package name to first upper! Model element: " + fqmn() ) ->
+			setName( name.toFirstUpper() )
+		) : this ->
+	this;
+
+
+// -- Modification of Classes -------------------------------------------------------------------------------
+
+MClass classModifications(MClass this) :
+	logTrace( "GeneSEZ: Modifications for Class! Model element: " + fqmn() ) ->
+	classAddTypo3SingletonInterface() ->
+	property.classNoAccessorsIfDependencyInjectionIsSet() ->
+	switch {
+		case isController() :
+			controllerModifications()
+		case isEntity() :
+			domainObjectModifications().entityModifications()
+		case isValueObject() :
+			domainObjectModifications().valueObjectModifications()
+		case isRepository() :
+			repositoryModifications()
+		case isValidator() :
+			validatorModifications()
+		case isViewHelper() :
+			viewHelperModifications()
+		default :
+			this
+	} ->
+	this;
+
+
+/**
+ * @todo:	Check of realization already set.
+ */
+MClass classAddTypo3SingletonInterface(MClass this) :
+	emHasSingletonStereotype()
+		? (	logTrace( "GeneSEZ: Add TYPO3 CMS singleton interface! Model element: " + fqmn() ) ->
+			realization.add( navModel().ensureExternalTypeExistence("SingletonInterface", "SingletonInterface") )
+		) : this ->
+	this;
+
+
+/**
+ * @todo	Check if accessor stereotype is already added.
+ */
+MProperty classNoAccessorsIfDependencyInjectionIsSet(MProperty this) :
+	emHasDiSetter("true")
+		? (	logTrace( "GeneSEZ: Add 'accessor' stereotype and set its 'getter' property to 'false' and its 'setter' property to 'true', because the property is injected by dependency injection! Model element: " + fqmn() ) ->
+			(	let genesezAccessorStereotype = navModel().ensureStereotypeExistence( prAccessor(), prAccessor() ) :
+					ensureStereotypeAssignment(genesezAccessorStereotype)
+						.ensureSingleTaggedValueExistence( genesezAccessorStereotype.ensureTagExistence( prAccessorGetter(), "Boolean" ), "false" ).owningElement
+						.ensureSingleTaggedValueExistence( genesezAccessorStereotype.ensureTagExistence( prAccessorSetter(), "Boolean" ), "true" )
+			)
+		) : this ->
+	this;
+
+
+// -- Modification of Enumerations --------------------------------------------------------------------------
+
+MEnumeration enumerationModifications(MEnumeration this) :
+	logTrace( "GeneSEZ: Modifications for Enumeration! Model element: " + fqmn() ) ->
+	// add default generalization if hook is registered by AOP
+	enumerationHookAddGeneralization() ->
+	this;
+
+
+MEnumeration enumerationHookAddGeneralization(MEnumeration this) :
+	this;
+
+
+MEnumeration enumerationAddGeneralization(MEnumeration this) :
+	!generalization.isEmpty
+		? (	logTrace( "GeneSEZ: Add default generalization to enumeration! Model element: " + fqmn() ) ->
+			generalization.add( navModel().ensureExternalTypeExistence("Enumeration", "Enumeration") )
+		) : this ->
+	this;
+	
+
+// -- Modification of Controllers ---------------------------------------------------------------------------
+
+/**
+ * Modification of an TYPO3 CMS specific Extbase Controller.
+ */
+MClass controllerModifications(MClass this) :
+	// add default generalization if hook is registered by AOP
+	controllerHookAddGeneralization() ->
+	
+	controllerAddInitializeAction() ->
+	controllerAddErrorAction() ->
+	operation.controllerAddInitializeAction();
+
+
+MClass controllerHookAddGeneralization(MClass this) :
+	this;
+
+
+MClass controllerAddGeneralization(MClass this) :
+	!generalization.isEmpty
+		? (	logTrace( "GeneSEZ: Add default generalization to controller class! Model element: " + fqmn() ) ->
+			generalization.add( navModel().ensureExternalTypeExistence("ActionController", "ActionController") )
+		) : this ->
+	this;
+
+
+MClass controllerAddInitializeAction(MClass this) :
+	// checks if the 'initalizeAction' operation should be created and does not already exists
+	emHasExtbaseControllerCreateInitializeAction("true") && !operation.exists( o | o.asGeneralName() == "initializeAction" )
+		? ( logTrace( "GeneSEZ: Add 'initializeAction' operation to controller class! Model element: " + fqmn() ) ->
+			ensureOperationExistence(this.xmiGuid + ".initializeAction", "initalizeAction")
+				.processOperation("protected", false, false, false)
+				.ensureCommentExistence(this.xmiGuid + ".initializeAction.comment", "Override initalizeAction to solve tasks which all actions have in common.")
+		) : this ->
+	this;
+
+
+MClass controllerAddErrorAction(MClass this) :
+	// checks if the 'errorAction' operation should be created and does not already exists
+	emHasExtbaseControllerCreateErrorAction("true") && !operation.exists( o | o.asGeneralName() == "errorAction" )
+		? ( logTrace( "GeneSEZ: Add 'errorAction' operation to controller class! Model element: " + fqmn() ) ->
+			ensureOperationExistence(this.xmiGuid + ".errorAction", "errorAction")
+				.processOperation("protected", false, false, false)
+				.ensureCommentExistence(this.xmiGuid + ".errorAction.comment", "Override errorAction to show that errors happend.")
+		) : this ->
+	this;
+
+
+
+MOperation controllerAddInitializeAction(MOperation this) :
+	// checks if the 'initalize<Controller Action>' operation should be created and does not already exists
+	emHasExtbaseControllerActionCreateInitializeAction("true") && !classifier.operation.exists( o | o.asGeneralName() == "initialize" + asGeneralName().toFirstUpper() )
+		? ( logTrace( "GeneSEZ: Add 'initialize<Controller Action>' operation for controller action! Model element: " + fqmn() ) ->
+			classifier.ensureOperationExistence( this.xmiGuid + ".initializeAction", "initialize" + asGeneralName().toFirstUpper() )
+				.processOperation("protected", false, false, false)
+				.ensureCommentExistence(this.xmiGuid + ".initializeAction.comment", "Define initialize" + asGeneralName().toFirstUpper() + " to solve tasks before the action is called.")
+		) : this ->
+	this;
+
+
+
+
+// -- Modification of Entities and Value Objects ------------------------------------------------------------
+
+/**
+ * Modification of an TYPO3 CMS specific Extbase Entity or Value Object.
+ */
+MClass domainObjectModifications(MClass this) :
+	// add 'NotEmptyValidator' stereotype if hook is registered by AOP
+	property.domainObjectHookAddNotEmptyValidatorStereotype() ->
+	// add 'StringLengthValidator' stereotype if hook is registered by AOP
+	property.domainObjectHookAddStringLengthValidatorStereotype() ->
+	
+	property.domainObjectChangePropertyVisibilityToProtected() ->
+	this;
+
+
+MClass domainObjectHookAddNotEmptyValidatorStereotype(MProperty this) :
+	this;
+
+
+MProperty domainObjectAddNotEmptyValidatorStereotype(MProperty this) :
+	multiplicity.lowerBound >= 1 && !stereotype.exists( s | s.name == prNotEmptyValidator() )
+		? ( logTrace( "GeneSEZ: Add 'NotEmptyValidator' stereotype to domain object property! Model element: " + fqmn() ) ->
+			ensureStereotypeAssignment( navModel().ensureStereotypeExistence( prNotEmptyValidator(), prNotEmptyValidator() ) )
+		) : this ->
+	this;
+
+
+MClass domainObjectHookAddStringLengthValidatorStereotype(MProperty this) :
+	this;
+
+
+MProperty domainObjectAddStringLengthValidatorStereotype(MProperty this) :
+	type.isExternalType() && type.asSqlColumnType().hasUtilizableCalculateTcaMaxValue() && !stereotype.exists( s | s.name == prStringLengthValidator() )
+		? ( logInfo( "GeneSEZ: Add 'StringLengthValidator' stereotype to domain object property! Model element: " + fqmn() ) ->
+			(	let validationStringLengthStereotype = navModel().ensureStereotypeExistence( prStringLengthValidator(), prStringLengthValidator() ) :
+					ensureStereotypeAssignment(validationStringLengthStereotype)
+						.ensureSingleTaggedValueExistence( validationStringLengthStereotype.ensureTagExistence( prStringLengthValidatorMaxLength(), "String" ), "\"" + type.asSqlColumnType().calculateTcaMaxValue() + "\"" )
+			)
+		) : this ->
+	this;
+
+
+MProperty domainObjectChangePropertyVisibilityToProtected(MProperty this) :
+	!derived && visibility != "protected"
+		? ( logTrace( "GeneSEZ: Change visibility to 'protected' of domain object property! Model element: " + fqmn() ) ->
+			setVisibility("protected")
+		) : this ->
+	this;
+
+
+// -- Modification of Entities ------------------------------------------------------------------------------
+
+/**
+ * Modification of an TYPO3 CMS specific Extbase Entity.
+ */
+MClass entityModifications(MClass this) :
+	// add default generalization if hook is registered by AOP
+	entityHookAddGeneralization() ->
+	
+	this;
+
+
+MClass entityHookAddGeneralization(MClass this) :
+	this;
+
+
+MClass entityAddGeneralization(MClass this) :
+	!generalization.isEmpty
+		? (	logTrace( "GeneSEZ: Add default generalization to entity class! Model element: " + fqmn() ) ->
+			generalization.add( navModel().ensureExternalTypeExistence("AbstractEntity", "AbstractEntity") )
+		) : this ->
+	this;
+
+
+// -- Modification of Value Objects -------------------------------------------------------------------------
+
+/**
+ * Modification of an TYPO3 CMS specific Extbase Value Objects.
+ */
+MClass valueObjectModifications(MClass this) :
+	// add default generalization if hook is registered by AOP
+	valueObjectHookAddGeneralization() ->
+	
+	this;
+
+
+MClass valueObjectHookAddGeneralization(MClass this) :
+	this;
+
+
+MClass valueObjectAddGeneralization(MClass this) :
+	!generalization.isEmpty
+		? (	logTrace( "GeneSEZ: Add default generalization to value object class! Model element: " + fqmn() ) ->
+			generalization.add( navModel().ensureExternalTypeExistence("AbstractValueObject", "AbstractValueObject") )
+		) : this ->
+	this;
+
+
+// -- Modification of Repositories --------------------------------------------------------------------------
+
+/**
+ * Modification of an TYPO3 CMS specific Extbase Repositories.
+ */
+MClass repositoryModifications(MClass this) :
+	// add default generalization if hook is registered by AOP
+	repositoryHookAddGeneralization() ->
+	
+	this;
+
+
+MClass repositoryHookAddGeneralization(MClass this) :
+	this;
+
+
+MClass repositoryAddGeneralization(MClass this) :
+	!generalization.isEmpty
+		? (	logTrace( "GeneSEZ: Add default generalization to repository class! Model element: " + fqmn() ) ->
+			generalization.add( navModel().ensureExternalTypeExistence("Repository", "Repository") )
+		) : this ->
+	this;
+
+
+// -- Modification of Validators ----------------------------------------------------------------------------
+
+/**
+ * Modification of an TYPO3 CMS specific Extbase Validators.
+ */
+MClass validatorModifications(MClass this) :
+	// add default generalization if hook is registered by AOP
+	validatorHookAddGeneralization() ->
+	
+	validatorAddIsValid() ->
+	this;
+
+
+MClass validatorHookAddGeneralization(MClass this) :
+	this;
+
+
+MClass validatorAddGeneralization(MClass this) :
+	!generalization.isEmpty
+		? (	logTrace( "GeneSEZ: Add default generalization to validator class! Model element: " + fqmn() ) ->
+			generalization.add( navModel().ensureExternalTypeExistence("AbstractValidator", "AbstractValidator") )
+		) : this ->
+	this;
+
+
+MClass validatorAddIsValid(MClass this) :
+	// checks if the 'isValid' operation does not already exists
+	!operation.exists( o | o.asGeneralName() == "isValid" )
+		? ( logTrace( "GeneSEZ: Add 'isValid' operation to validator class! Model element: " + fqmn() ) ->
+			ensureOperationExistence(this.xmiGuid + ".isValid", "isValid")
+				.processOperation("public", false, false, false)
+				.ensureCommentExistence(this.xmiGuid + ".isValid.comment", "Checks if the given value is valid according to the validator.").owningElement
+				// add 'isValid' parameter (Error message: "Couldn't find operation 'ensureParameterExistence(String, String)' for type 'gcore::MElement'" is normal) 
+				.ensureParameterExistence(this.xmiGuid + ".isValid.value", "value")
+					.wireType( navModel().ensureExternalTypeExistence("mixed", "mixed") )
+					.ensureCommentExistence(this.xmiGuid + ".isValid.value.comment", "The value that should be validated.").owningElement
+				// add return parameter
+				.ensureReturnParameterExistence(this.xmiGuid + ".isValid.return", "")
+					.wireType( navModel().ensureExternalTypeExistence("boolean", "boolean") )
+					.ensureCommentExistence(this.xmiGuid + ".isValid.return.comment", "TRUE if the value is valid, FALSE if an error occured.")
+		) : this ->
+	this;
+
+
+// -- Modification of View Helpers --------------------------------------------------------------------------
+
+/**
+ * Modification of an TYPO3 CMS specific Fluid View Helper.
+ */
+MClass viewHelperModifications(MClass this) :
+	// add default generalization if hook is registered by AOP
+	viewHelperHookAddGeneralization() ->
+	
+	this;
+
+
+MClass viewHelperHookAddGeneralization(MClass this) :
+	this;
+
+
+MClass viewHelperAddGeneralization(MClass this) :
+	!generalization.isEmpty
+		? (	logTrace( "GeneSEZ: Add default generalization to view helper class! Model element: " + fqmn() ) ->
+			generalization.add( navModel().ensureExternalTypeExistence("AbstractViewHelper", "AbstractViewHelper") )
+		) : this ->
+	this;
+
+
+
+// -- Modification of Stereotypes ---------------------------------------------------------------------------
+
+MStereotype stereotypeModifications(MStereotype this) :
+	logTrace( "GeneSEZ: Modifications for Stereotype! Model element: " + fqmn() ) ->
+	switch {
+		case name == prNumberRangeValidator() :
+			numberRangeValidatorModifications()
+		case name == prStringLengthValidator() :
+			stringLengthValidatorModifications()
+		default :
+			this
+	} ->
+	this;
+
+
+// -- Modification of Validator Stereotypes -----------------------------------------------------------------
+
+/**
+ * Modification of an TYPO3 CMS specific Extbase 'NumberRangeValidator' Validator.
+ */
+MStereotype numberRangeValidatorModifications(MStereotype this) :
+	numberRangeValidatorChangePropertyStartRangeToMinimum() ->
+	numberRangeValidatorChangePropertyEndRangeToMaximum() ->
+	this;
+
+
+MStereotype numberRangeValidatorChangePropertyStartRangeToMinimum(MStereotype this) :
+	property.exists( p | p.name == prNumberRangeValidatorStartRange() ) 
+		? (	logTrace( "GeneSEZ: Change name of property 'startRange' to 'mimimum' of 'NumberRangeValidator' stereotype! Model element: " + fqmn() ) ->
+			property.select( p | p.name == prNumberRangeValidatorStartRange() ).setName("minimum")
+		) : this ->
+	this;
+
+
+MStereotype numberRangeValidatorChangePropertyEndRangeToMaximum(MStereotype this) :
+	property.exists( p | p.name == prNumberRangeValidatorEndRange() ) 
+		? (	logTrace( "GeneSEZ: Change name of property 'endRange' to 'maximum' of 'NumberRangeValidator' stereotype! Model element: " + fqmn() ) ->
+			property.select( p | p.name == prNumberRangeValidatorEndRange() ).setName("maximum")
+		) : this ->
+	this;
+
+
+/**
+ * Modification of an TYPO3 CMS specific Extbase 'StringLengthValidator' Validator.
+ */
+MStereotype stringLengthValidatorModifications(MStereotype this) :
+	stringLengthValidatorChangePropertyMinLengthToMinimum() ->
+	stringLengthValidatorChangePropertyMaxLengthToMaximum() ->
+	this;
+
+
+MStereotype stringLengthValidatorChangePropertyMinLengthToMinimum(MStereotype this) :
+	property.exists( p | p.name == prStringLengthValidatorMinLength() ) 
+		? (	logTrace( "GeneSEZ: Change name of property 'minLength' to 'mimimum' of 'StringLengthValidator' stereotype! Model element: " + fqmn() ) ->
+			property.select( p | p.name == prStringLengthValidatorMinLength() ).setName("minimum")
+		) : this ->
+	this;
+
+
+MStereotype stringLengthValidatorChangePropertyMaxLengthToMaximum(MStereotype this) :
+	property.exists( p | p.name == prStringLengthValidatorMaxLength() ) 
+		? (	logTrace( "GeneSEZ: Change name of property 'maxLength' to 'maximum' of 'StringLengthValidator' stereotype! Model element: " + fqmn() ) ->
+			property.select( p | p.name == prStringLengthValidatorMaxLength() ).setName("maximum")
+		) : this ->
+	this;

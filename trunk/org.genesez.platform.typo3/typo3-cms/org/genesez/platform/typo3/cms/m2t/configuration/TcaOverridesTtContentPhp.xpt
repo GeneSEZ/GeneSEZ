@@ -1,0 +1,134 @@
+«REM»
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+
+«REM»
+	Entry point for generating "Configuration/TCA/Overrides/tt_content.php".
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+«ENDREM»
+
+«REM» use TYPO3 CMS specific Extbase profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsExtbaseAccessElement»
+
+«REM» use TYPO3 CMS profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
+
+
+«REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::AccessElement»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid file system convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::FileSystemConvention»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::NamingConvention»
+
+
+«REM» use GeneSEZ common access element scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+
+«REM» use GeneSEZ common conversion scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+
+
+«REM»
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
+«ENDREM»
+
+«REM»
+	Processes the generation of "tt_content.php".
+«ENDREM»
+«DEFINE Root FOR MModel -»
+«FILE filePathTcaOverridesTtContentPhp() -»
+<?php
+«EXPAND AccessDenied -»
+«EXPAND PluginConfiguration -»
+«EXPAND OwnCode -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«REM»
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
+«ENDREM»
+
+«REM»
+	TYPO3 access control to check if this file is called from the outside of TYPO3. 
+«ENDREM»
+«DEFINE AccessDenied FOR MElement -»
+defined('TYPO3_MODE') || die();
+
+«ENDDEFINE»
+
+«REM»
+«ENDREM»
+«DEFINE PluginConfiguration FOR MModel -»
+«IF !allPlugins().isEmpty -»
+«EXPAND PluginRegistration FOREACH allPlugins().sortBy( p | p.asExtbasePluginName() ) -»
+«EXPAND OwnPluginCode -»
+
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Registers all TYPO3 Extbase plugins by using "registerPlugin" from class 
+	"\TYPO3\CMS\Extbase\Utility\ExtensionUtility".
+«ENDREM»
+«DEFINE PluginRegistration FOR MInterface -»
+«EXPAND PluginComment -»
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
+    '«extensionKey() -»',
+    '«asExtbasePluginName() -»',
+    '«emGetExtbasePluginTitle() -»'«IF emHasExtbasePluginUtilizableIconPathAndFilename() -»,
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . '«emGetExtbasePluginIconPathAndFilename() -»'«ENDIF»
+);
+
+«IF hasAttributes() || emHasExtbasePluginUtilizablePluginConfigurations() || emHasTypo3FlexFormStereotype() -»
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['«asExtbasePluginSignatureName() -»'] = 'pi_flexform';
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
+    '«asExtbasePluginSignatureName() -»',
+    'FILE:EXT:«extensionKey() -»/«filePathFlexFormXml() -»'
+);
+
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a plugin comment.
+«ENDREM»
+«DEFINE PluginComment FOR MInterface -»
+«IF hasComment() -»
+/**
+«formatComment() -»
+ */
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a protected region for own plugin code.
+«ENDREM»
+«DEFINE OwnPluginCode FOR MModel -»
+«PROTECT CSTART '/* ' CEND ' */' ID ("tca.overrides.tt_content.php.own.plugin.code." + xmiGuid)»
+// TODO: put your further plugin code here
+«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a protected region for own code.
+«ENDREM»
+«DEFINE OwnCode FOR MModel -»
+«PROTECT CSTART '// ' CEND '' ID ("tca.overrides.tt_content.php.own.code." + xmiGuid)»
+// TODO: put your further code here
+«ENDPROTECT»
+«ENDDEFINE»

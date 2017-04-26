@@ -1,0 +1,183 @@
+«REM»
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+
+«REM»
+	Entry point for generating "locallang_module_<module name>.xlf".
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+«ENDREM»
+
+«REM» use TYPO3 CMS profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
+
+
+«REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::AccessElement»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid file system convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::FileSystemConvention»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::NamingConvention»
+
+
+«REM» use GeneSEZ common navigate element scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::NavigateElement»
+
+«REM» use GeneSEZ common date time helper scripts «ENDREM»
+«EXTENSION org::genesez::util::sysenv::DateTimeHelper»
+
+
+«REM»
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
+«ENDREM»
+
+«REM»
+	Processes the generation of "locallang_module_<module name>.xlf".
+«ENDREM»
+«DEFINE Root FOR MInterface -»
+«IF isModule() -»
+«EXPAND LocallangModule -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
+«ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE LocallangModule FOR MInterface -»
+«EXPAND SourceLanguage -»
+
+«FOREACH navModel().emGetTypo3LocalizationLanguageKeys() AS targetLanguageKey -»
+	«EXPAND TargetLanguage( targetLanguageKey.asIsoLanguageCode() ) -»
+«ENDFOREACH -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE SourceLanguage FOR MInterface -»
+«FILE filePathLocallangModuleXlf() -»
+«EXPAND XmlDefinition -»
+«EXPAND Xliff("en") -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE TargetLanguage(String isoLanguageCode) FOR MInterface -»
+«FILE filePathLocallangModuleXlf(isoLanguageCode) -»
+«EXPAND XmlDefinition -»
+«EXPAND Xliff(isoLanguageCode) -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«DEFINE XmlDefinition FOR MInterface -»
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+«ENDDEFINE»
+
+
+«DEFINE Xliff(String isoLanguageCode) FOR MInterface -»
+<xliff version="1.0">
+	«EXPAND File(isoLanguageCode) -»
+</xliff>
+«ENDDEFINE»
+
+
+«DEFINE File(String isoLanguageCode) FOR MInterface -»
+	<file source-language="en" datatype="plaintext" original="messages" date="«EXPAND CurrentTimeStamp -»" product-name="«extensionPrefixWithoutUnderscores() -»"«IF isoLanguageCode != "en"» target-language="«isoLanguageCode -»"«ENDIF -»>
+		«EXPAND Header(isoLanguageCode) -»
+		«EXPAND Body(isoLanguageCode) -»
+	</file>
+«ENDDEFINE»
+
+
+«DEFINE CurrentTimeStamp FOR MInterface -»
+«getIso8601TimeStamp() -»
+«ENDDEFINE»
+
+
+«DEFINE Header(String isoLanguageCode) FOR MInterface -»
+		<header/>
+«ENDDEFINE»
+
+
+«DEFINE Body(String isoLanguageCode) FOR MInterface -»
+		<body>
+			«EXPAND MlangTabsTabLocalization(isoLanguageCode) -»
+			«EXPAND MlangLabelsTabdescrLocalization(isoLanguageCode) -»
+			«EXPAND MlangLabelsTablabelLocalization(isoLanguageCode) -»
+
+			«EXPAND OwnLocalizations(isoLanguageCode) -»
+		</body>
+«ENDDEFINE»
+
+
+«DEFINE MlangTabsTabLocalization(String isoLanguageCode) FOR MInterface -»
+			«EXPAND MlangTabsTabLocalizationHint -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_module.xlf." + isoLanguageCode + ".mlang_tabs_tab." + xmiGuid) DISABLE»
+			<trans-unit id="mlang_tabs_tab" xml:space="preserve">
+				<source>«name.toFirstUpper() -»</source>
+			</trans-unit>
+			«ENDPROTECT»
+
+«ENDDEFINE»
+
+
+«DEFINE MlangTabsTabLocalizationHint FOR MInterface -»
+			<!-- GeneSEZ Generator Hint: id="mlang_tabs_tab" -->
+«ENDDEFINE»
+
+
+«DEFINE MlangLabelsTabdescrLocalization(String isoLanguageCode) FOR MInterface -»
+			«EXPAND MlangLabelsTabdescrLocalizationHint -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_module.xlf." + isoLanguageCode + ".mlang_labels_tabdescr." + xmiGuid) DISABLE»
+			<trans-unit id="mlang_labels_tabdescr" xml:space="preserve">
+				<source>Module Description</source>
+			</trans-unit>
+			«ENDPROTECT»
+
+«ENDDEFINE»
+
+
+«DEFINE MlangLabelsTabdescrLocalizationHint FOR MInterface -»
+			<!-- GeneSEZ Generator Hint: id="mlang_labels_tabdescr" -->
+«ENDDEFINE»
+
+
+«DEFINE MlangLabelsTablabelLocalization(String isoLanguageCode) FOR MInterface -»
+			«EXPAND MlangLabelsTablabelLocalizationHint -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_module.xlf." + isoLanguageCode + ".mlang_labels_tablabel." + xmiGuid) DISABLE»
+			<trans-unit id="mlang_labels_tablabel" xml:space="preserve">
+				<source>Module Tab Name</source>
+			</trans-unit>
+			«ENDPROTECT»
+
+«ENDDEFINE»
+
+
+«DEFINE MlangLabelsTablabelLocalizationHint FOR MInterface -»
+			<!-- GeneSEZ Generator Hint: id="mlang_labels_tablabel" -->
+«ENDDEFINE»
+
+
+«REM»
+	Generates a protected region for own localizations.
+«ENDREM»
+«DEFINE OwnLocalizations(String isoLanguageCode) FOR MInterface -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_module.xlf." + isoLanguageCode + ".own.localizations." + xmiGuid)»
+			<!-- TODO: put your further '«isoLanguageCode -»' localizations here -->
+			«ENDPROTECT»
+«ENDDEFINE»
