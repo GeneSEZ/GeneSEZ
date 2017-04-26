@@ -1,0 +1,89 @@
+«REM»
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+
+«REM»
+	Entry point for generating TYPO3 CMS specific Extbase + Fluid Classes code.
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+«ENDREM»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::AccessElement»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid file system convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::FileSystemConvention»
+
+
+«REM» use GeneSEZ common conversion scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+
+«REM» use GeneSEZ common logging scripts «ENDREM»
+«EXTENSION org::genesez::util::logging::Logging»
+
+
+«REM»
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
+«ENDREM»
+
+«REM»
+	Processes the generation of a class.
+«ENDREM»
+«DEFINE Root FOR MClass -»
+«FILE filePath( fileNamePhp() ) -»
+«EXPAND Class::Root -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the contents of an interface, but exclude interfaces with:
+	
+	* stereotype 'ExtbasePlugin' 
+	* stereotype 'ExtbaseModule'
+«ENDREM»
+«DEFINE Root FOR MInterface -»
+«IF !isPlugin() && !isPluginConfiguration() && !isModule() -»
+«FILE filePath( fileNamePhp() ) -»
+«EXPAND Interface::Root -»
+«ENDFILE -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the generation of an enumeration.
+«ENDREM»
+«DEFINE Root FOR MEnumeration -»
+«logWarn("GeneSEZ: Generation of 'MEnumeration's is only experimentally supported.") -»
+«FILE filePath( fileNamePhp() ) -»
+«EXPAND Enumeration::Root -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the generation of a data type.
+«ENDREM»
+«DEFINE Root FOR MDataType -»
+«logFatal("GeneSEZ: Generation of 'MDataType's is currently not supported.") -»
+«ENDDEFINE»
+
+
+«REM»
+	Because the fact, 'MClassifier' is abstract, an object of type MClassifier cannot exist!
+«ENDREM»
+«DEFINE Root FOR MClassifier -»
+«logFatal("GeneSEZ: Generation of 'MClassifier's is currently not supported.") -»
+«ENDDEFINE»
+
+
+«REM»
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
+«ENDREM»

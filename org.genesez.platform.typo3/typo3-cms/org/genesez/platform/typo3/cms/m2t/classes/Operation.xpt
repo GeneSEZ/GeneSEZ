@@ -1,0 +1,221 @@
+«REM»
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+
+«REM»
+	Entry point for generating classes.
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+«ENDREM»
+
+«REM» TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::AccessElement»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::NamingConvention»
+
+
+«REM» use GeneSEZ PHP access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::php::util::AccessHelper»
+
+
+«REM» use GeneSEZ common Standard profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezStandardAccessElement»
+
+
+«REM» use GeneSEZ common access element scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+
+«REM» use GeneSEZ common type mapping scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+
+
+«REM»
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
+«ENDREM»
+
+«REM»
+	Processes all constructors.
+«ENDREM»
+«DEFINE Constructor FOR MClassifier -»
+    «EXPAND Constructor FOREACH uniqueOperations().select( o | o.isConstructor() ) -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes all destructors.
+«ENDREM»
+«DEFINE Destructor FOR MClassifier -»
+    «EXPAND Destructor FOREACH uniqueOperations().select( o | o.isDestructor() ) -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes all operations to declare.
+	Order: realized operations from interfaces first
+«ENDREM»
+«DEFINE Declaration FOR MClass -»
+    «EXPAND Declaration FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && o.abstract && realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
+    «EXPAND Declaration FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && o.abstract && !realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes operation declarations for an interface.
+«ENDREM»
+«DEFINE Declaration FOR MInterface -»
+    «EXPAND Declaration FOREACH uniqueOperations() -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes all operations to implement.
+	Order: realized operations from interfaces first
+«ENDREM»
+«DEFINE Implementation FOR MClassifier -»
+    «EXPAND Implementation FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && !o.abstract && realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
+    «EXPAND Implementation FOREACH uniqueOperations().select( o | !o.isConstructor() && !o.isDestructor() && !o.abstract && !realization.typeSelect(MInterface).operation.name.contains(o.name) ) -»
+«ENDDEFINE»
+
+
+«REM»
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
+«ENDREM»
+
+«REM»
+	Generates a constructor which cannot has a return value.
+«ENDREM»
+«DEFINE Constructor FOR MOperation -»
+    «EXPAND Comment::Constructor -»
+    «visibility -» function __construct(«EXPAND Params -»)
+    {
+        «EXPAND OwnCodeConstructor -»
+    }
+
+«ENDDEFINE»
+
+
+«REM»
+	Generates a destructor which cannot have parameters or a return value.
+«ENDREM»
+«DEFINE Destructor FOR MOperation -»
+    «EXPAND Comment::Destructor -»
+    «visibility -» function __destruct()
+    {
+        «EXPAND OwnCodeDestructor -»
+    }
+
+«ENDDEFINE»
+
+
+«REM»
+	Generates an operation declaration.
+«ENDREM»
+«DEFINE Declaration FOR MOperation -»
+    «EXPAND Comment::Operation -»
+    «EXPAND Modifier -» function «asGeneralName() -»(«EXPAND Params -»);
+
+«ENDDEFINE»
+
+
+«REM»
+	Generates an operation implementation.
+«ENDREM»
+«DEFINE Implementation FOR MOperation -»
+    «EXPAND Comment::Operation -»
+    «EXPAND Modifier -» function «asGeneralName() -»(«EXPAND Params -»)
+    {
+        «EXPAND OwnCodeOperation -»
+    }
+
+«ENDDEFINE»
+
+
+«REM»
+	Generates the visibility and the modifiers static, final + abstract for an operation.
+	Abstract only if the class is also abstract.
+«ENDREM»
+«DEFINE Modifier FOR MOperation -»
+«IF classifier.metaType == MInterface -»
+    public«"" -»
+«ELSE -»
+    «IF abstract && classifier.abstract»abstract «ENDIF»«IF final»final «ENDIF»«visibility»«IF static» static«ENDIF -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the parameters of an operation.
+«ENDREM»
+«DEFINE Params FOR MOperation -»
+«FOREACH parameter AS p SEPARATOR ", " -»
+«EXPAND TypeHint FOR p -»«EXPAND Parameter FOR p -»
+«ENDFOREACH -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates type hints for special single valued types or multi valued types.
+«ENDREM»
+«DEFINE TypeHint FOR MParameter -»
+«IF multiplicity.isSingleValued() -»
+«IF !isPhpPrimitiveType( type.asGeneralName() ) -»«type.asGeneralName() -» «ENDIF -»
+«ELSE -»
+«IF !emHasPrimitiveStereotype() -»«mapCollection("ObjectStorage") -» «ELSE- »«mapCollection() -» «ENDIF -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the parameter name.
+«ENDREM»
+«DEFINE Parameter FOR MParameter -»
+$«asGeneralName() -»«EXPAND DefaultValue -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the default value.
+«ENDREM»
+«DEFINE DefaultValue FOR MParameter -»
+«IF hasDefaultValue() -» = «defaultvalue -»«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the protected region of a constructor operation.
+«ENDREM»
+«DEFINE OwnCodeConstructor FOR MOperation -»
+        «PROTECT CSTART '/* ' CEND ' */' ID ("php.constructor.own.code." + xmiGuid)»
+        // TODO: implementation of constructor for class «classifier.asShortGeneralName()»
+        throw new Exception('The implementation of the constructor for class «classifier.asShortGeneralName() -» is missing!');
+        «ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the protected region of a destructor operation.
+«ENDREM»
+«DEFINE OwnCodeDestructor FOR MOperation -»
+        «PROTECT CSTART '/* ' CEND ' */' ID ("php.destructor.own.code." + xmiGuid)»
+        // TODO: implementation of destructor for class «classifier.asShortGeneralName()»
+        throw new \Exception('The implementation of the destructor for class «classifier.asShortGeneralName() -» is missing!');
+        «ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the protected region of an operation.
+«ENDREM»
+«DEFINE OwnCodeOperation FOR MOperation -»
+        «PROTECT CSTART '/* ' CEND ' */' ID ("php.operation.own.code." + xmiGuid)»
+        // TODO: implementation of method «asGeneralName() -» for class «classifier.asShortGeneralName()»
+        throw new \Exception('The implementation of the method «asGeneralName() -» for class «classifier.asShortGeneralName() -» is missing!');
+        «ENDPROTECT»
+«ENDDEFINE»

@@ -1,0 +1,288 @@
+«REM»
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+
+«REM»
+	Entry point for generating comments.
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+«ENDREM»
+
+«REM» use TYPO3 CMS profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
+
+
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::NamingConvention»
+
+
+«REM» use GeneSEZ common Design Pattern profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezDesignPatternAccessElement»
+
+
+«REM» use GeneSEZ common access element scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+
+«REM» use GeneSEZ common conversion scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+
+«REM» use GeneSEZ common navigate element scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::NavigateElement»
+
+«REM» use GeneSEZ common date time helper scripts «ENDREM»
+«EXTENSION org::genesez::util::sysenv::DateTimeHelper»
+
+«REM» use GeneSEZ common user info helper scripts «ENDREM»
+«EXTENSION org::genesez::util::sysenv::UserInfoHelper»
+
+
+«REM»
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
+«ENDREM»
+
+«REM»
+	Every PHP file needs to have this license information.
+«ENDREM»
+«DEFINE CopyrightNotice FOR MClassifier -»
+/***************************************************************
+ *  Copyright notice
+ *
+ *  (c) «EXPAND CopyrightYear -» «EXPAND CopyrightAuthor -»
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *  A copy is found in the textfile GPL.txt and important notices to the license
+ *  from the author is found in LICENSE.txt distributed with these scripts.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for a classifier.
+«ENDREM»
+«DEFINE ClassifierInformationBlock FOR MClassifier -»
+/**
+«IF hasComment() -»
+«formatComment() -»
+ *
+«ENDIF -»
+«EXPAND Annotation::ClassifierInformationBlock -»
+ */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for an attribute.
+«ENDREM»
+«DEFINE Attribute FOR MAttribute -»
+    /**
+    «IF hasComment() -»
+    «formatComment(" * ", "\n    ") -»
+     *
+    «ENDIF -» 
+    «EXPAND Annotation::Property -»
+     */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for a get accessor method of an attribute.
+«ENDREM»
+«DEFINE GetAccessor FOR MAttribute -»
+    /**
+     * Get accessor for «asGeneralName() -».
+     *
+    «EXPAND Annotation::GetAccessor -»
+     */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for a set accessor method of an attribute.
+«ENDREM»
+«DEFINE SetAccessor FOR MAttribute -»
+    /**
+     * «emHasDiSetter("true") ? "Setter Dependency Injection for" : "Set accessor for" -» «asGeneralName() -».
+     *
+    «EXPAND Annotation::SetAccessor -»
+     */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for an add accessor method of an attribute.
+«ENDREM»
+«DEFINE AddAccessor FOR MAttribute -»
+    /**
+     * Add accessor for «asGeneralName() -».
+     *
+    «EXPAND Annotation::AddAccessor -»
+     */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for a remove accessor method of an attribute.
+«ENDREM»
+«DEFINE RemoveAccessor FOR MAttribute -»
+    /**
+     * Remove accessor for «asGeneralName() -».
+     *
+    «EXPAND Annotation::RemoveAccessor -»
+     */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for an association role.
+«ENDREM»
+«DEFINE Association FOR MAssociationRole -»
+    /**
+    «IF hasComment() -»
+    «formatComment(" * ", "\n    ") -»
+     *
+    «ENDIF -» 
+    «EXPAND Annotation::Property -»
+     */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for a get accessor method of an association role.
+«ENDREM»
+«DEFINE GetAccessor FOR MAssociationRole -»
+    /**
+     * Get accessor for «asGeneralName() -».
+     *
+    «EXPAND Annotation::GetAccessor -»
+     */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for a set accessor method of an association role.
+«ENDREM»
+«DEFINE SetAccessor FOR MAssociationRole -»
+    /**
+     * Set accessor for «asGeneralName() -».
+     *
+    «EXPAND Annotation::SetAccessor -»
+     */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for an add accessor method of an association role.
+«ENDREM»
+«DEFINE AddAccessor FOR MAssociationRole -»
+    /**
+     * Add accessor for «asGeneralName() -».
+     *
+    «EXPAND Annotation::AddAccessor -»
+     */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for a remove accessor method of an association role.
+«ENDREM»
+«DEFINE RemoveAccessor FOR MAssociationRole -»
+    /**
+     * Remove accessor for «asGeneralName() -».
+     *
+    «EXPAND Annotation::RemoveAccessor -»
+     */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for an enumeration literal.
+«ENDREM»
+«DEFINE EnumerationLiteral FOR MLiteral -»
+    /**
+    «IF hasComment() -»
+    «formatComment(" * ", "\n    ") -»
+     *
+    «ENDIF -» 
+     */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for a constructor operation.
+«ENDREM»
+«DEFINE Constructor FOR MOperation -»
+    /**
+    «IF hasComment() -»
+    «formatComment(" * ", "\n    ") -»
+     *
+    «ENDIF -»
+    «EXPAND Annotation::Constructor -»
+     */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for a destructor operation.
+«ENDREM»
+«DEFINE Destructor FOR MOperation -»
+    /**
+    «IF hasComment() -»
+    «formatComment(" * ", "\n    ") -»
+     *
+    «ENDIF -»
+    «EXPAND Annotation::Destructor -»
+     */
+«ENDDEFINE»
+
+
+«REM»
+	Generates the documentation for an operation.
+«ENDREM»
+«DEFINE Operation FOR MOperation -»
+    /**
+    «IF hasComment() -»
+    «formatComment(" * ", "\n    ") -»
+     *
+    «ENDIF -»
+    «EXPAND Annotation::Operation -»
+     */
+«ENDDEFINE»
+
+
+«REM»
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
+«ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE CopyrightYear FOR MClassifier -»
+«getTimeStamp("yyyy") -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE CopyrightAuthor FOR MClassifier -»
+«IF navModel().emHasTypo3ExtensionConfigurationUtilizableAuthor() -»«navModel().emGetTypo3ExtensionConfigurationAuthor() -»«ELSE -»«getUserAccountName() -»«ENDIF»
+«ENDDEFINE»

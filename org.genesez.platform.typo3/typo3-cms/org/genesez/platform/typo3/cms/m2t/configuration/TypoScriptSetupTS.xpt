@@ -1,0 +1,253 @@
+«REM»
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+
+«REM»
+	Entry point for generating "setup.txt".
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+«ENDREM»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::AccessElement»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid file system convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::FileSystemConvention»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::NamingConvention»
+
+
+«REM»
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
+«ENDREM»
+
+«REM»
+	Processes the generation of "ext_typoscript_setup.txt".
+«ENDREM»
+«DEFINE Root FOR MModel -»
+«FILE filePathTypoScriptSetupTs() -»
+«EXPAND PluginConfiguration -»
+«EXPAND ModuleConfiguration -»
+«EXPAND PersistenceClassesMappingConfiguration -»
+«EXPAND OwnCode -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«REM»
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
+«ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE PluginConfiguration FOR MModel -»
+«IF !allPlugins().isEmpty -»
+plugin.«extensionPrefix() -» {
+    «EXPAND PluginPersistence -»
+    «EXPAND PluginView -»
+    «EXPAND OwnPluginCode -»
+}
+
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PluginPersistence FOR MModel -»
+    persistence {
+        storagePid = {$plugin.«extensionPrefix() -».persistence.storagePid}
+    }
+«ENDDEFINE»
+
+
+«REM»
+	@todo	Support of templateRootPaths
+«ENDREM»
+«DEFINE PluginView FOR MModel -»
+    view {
+        templateRootPaths {
+            10 = EXT:«extensionKey() -»/«dirPathResourcesPrivateTemplates() -»/
+            20 = {$plugin.«extensionPrefix() -».view.templateRootPath}
+        }
+        partialRootPaths {
+            10 = EXT:«extensionKey() -»/«dirPathResourcesPrivatePartials() -»/
+            20 = {$plugin.«extensionPrefix() -».view.partialRootPath}
+        }
+        layoutRootPaths {
+            10 = EXT:«extensionKey() -»/«dirPathResourcesPrivateLayouts() -»/
+            20 = {$plugin.«extensionPrefix() -».view.layoutRootPath}
+        }
+    }
+«ENDDEFINE»
+
+
+«REM»
+	Generates a protected region for own plugin code.
+«ENDREM»
+«DEFINE OwnPluginCode FOR MModel -»
+    «PROTECT CSTART '// ' CEND '' ID ("setup.txt.own.plugin.code." + xmiGuid)»
+    // TODO: put your further plugin code here
+    «ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ModuleConfiguration FOR MModel -»
+«IF !allModules().isEmpty -»
+module.«extensionPrefix() -» {
+    «EXPAND ModulePersistence -»
+    «EXPAND ModuleView -»
+    «EXPAND OwnModuleCode -»
+}
+
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ModulePersistence FOR MModel -»
+    persistence {
+        storagePid = {$module.«extensionPrefix() -».persistence.storagePid}
+    }
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ModuleView FOR MModel -»
+    view {
+        templateRootPaths {
+            10 = EXT:«extensionKey() -»/«dirPathResourcesPrivateTemplates() -»/
+            20 = {$module.«extensionPrefix() -».view.templateRootPath}
+        }
+        partialRootPaths {
+            10 = EXT:«extensionKey() -»/«dirPathResourcesPrivatePartials() -»/
+            20 = {$module.«extensionPrefix() -».view.partialRootPath}
+        }
+        layoutRootPaths {
+            10 = EXT:«extensionKey() -»/«dirPathResourcesPrivateLayouts() -»/
+            20 = {$module.«extensionPrefix() -».view.layoutRootPath}
+        }
+    }
+«ENDDEFINE»
+
+
+«REM»
+	Generates a protected region for own module code.
+«ENDREM»
+«DEFINE OwnModuleCode FOR MModel -»
+    «PROTECT CSTART '// ' CEND '' ID ("setup.txt.own.module.code." + xmiGuid) »
+    // TODO: put your further module code here
+    «ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceClassesMappingConfiguration FOR MModel -»
+«IF !allPersistenceClassMappings().isEmpty -»
+config.tx_extbase {
+    persistence {
+        classes {
+            «EXPAND PersistenceClassMapping FOREACH allPersistenceClassMappings().sortBy( e | e.asGeneralName() ) -»
+        }
+    }
+}
+
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceClassMapping FOR MClass -»
+            «asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" ) -» {
+                mapping {
+                    «EXPAND PersistenceClassMappingTableName -»
+                    «EXPAND PersistenceClassMappingRecordType -»
+                    «EXPAND PersistenceColumnsMapping -»
+                }
+                «EXPAND PersistenceSubclasses -»
+            }
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceClassMapping FOR MType -»
+            «asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" ) -» {
+                «EXPAND PersistenceSubclasses -»
+            }
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceClassMappingTableName FOR MClass -»
+                    tableName = «asPersistenceName()»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceClassMappingRecordType FOR MClass -»
+«IF getPersistenceRecordTypeColumnName().length != 0 -»
+                    recordType = «asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" )»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceColumnsMapping FOR MClass -»
+«IF !owningPersistencePropertyMappings().isEmpty -»
+                    columns {
+                        «EXPAND PersistenceColumnMapping FOREACH owningPersistencePropertyMappings().sortBy( p | p.asGeneralName() ) -»
+                    }
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceColumnMapping FOR MProperty -»
+                        «asPersistenceName() -».mapOnProperty = «asGeneralName()»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceSubclasses FOR MType -»
+«IF !owningSingleTableInheritanceSpecializations().isEmpty -»
+                subclasses {
+                    «EXPAND PersistenceSubclass FOREACH owningSingleTableInheritanceSpecializations().sortBy( c | c.asGeneralName() ) -»						
+                }
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceSubclass FOR MClass -»
+                    «asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" ) -» = «asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" )»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a protected region for own code.
+«ENDREM»
+«DEFINE OwnCode FOR MModel -»
+«PROTECT CSTART '// ' CEND '' ID ("setup.txt.own.code." + xmiGuid)»
+// TODO: put your further code here
+«ENDPROTECT»
+«ENDDEFINE»

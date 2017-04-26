@@ -1,0 +1,803 @@
+«REM»
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+
+«REM»
+	Entry point for generating "flexform_<plugin>.xml".
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+«ENDREM»
+
+«REM» use TYPO3 CMS specific Extbase profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsExtbaseAccessElement»
+
+«REM» use TYPO3 CMS profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsProfile»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
+
+
+«REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::AccessElement»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid file system convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::FileSystemConvention»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::NamingConvention»
+
+
+«REM» use GeneSEZ common GUI profile scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::profile::GenesezGuiAccessElement»
+
+
+«REM» use GeneSEZ common access element scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+
+
+«REM»
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
+«ENDREM»
+
+«REM»
+	Processes the generation of "flexform_<plugin>.xml".
+«ENDREM»
+«DEFINE Root FOR MInterface -»
+«IF isPlugin() && ( hasAttributes() || emHasExtbasePluginUtilizablePluginConfigurations() || emHasTypo3FlexFormStereotype() ) -»
+«EXPAND FlexForm -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
+«ENDREM»
+
+«DEFINE FlexForm FOR MInterface -»
+«FILE filePathFlexFormXml() -»
+<T3DataStructure>
+	<sheets>
+		«EXPAND SheetConfiguration("sDEF") -»
+		«FOREACH allFlexFormSheetsWithoutGeneralSheet().sortBy( s | s ) AS sheetName -»
+		«EXPAND SheetConfiguration(sheetName) -»
+		«ENDFOREACH -»
+		«EXPAND OwnCode("flexform.xml.own.code." + xmiGuid) -» 
+	</sheets>
+</T3DataStructure>
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«DEFINE SheetConfiguration(String sheetName) FOR MInterface -»
+		<«sheetName -»>
+			<ROOT>
+				«EXPAND SheetTceForms(sheetName) -»
+				«EXPAND SheetType -»
+				«EXPAND SheetElements(sheetName) -»
+			</ROOT>
+		</«sheetName -»>
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE SheetTceForms(String sheetName) FOR MInterface -»
+				<TCEforms>
+					<sheetTitle>LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:sheet.«sheetName -»</sheetTitle>
+				</TCEforms>
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE SheetType FOR MInterface -»
+				<type>array</type>
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE SheetElements(String sheetName) FOR MInterface -»
+				<el>
+					«IF sheetName == "sDEF" -»«EXPAND SheetElementSwitchableControllerActions -»«ENDIF -»
+					«EXPAND SheetElement FOREACH allFlexFormSheetElements(sheetName) -»
+					«EXPAND OwnSheetElementCode("flexform.xml.own.sheet.element.code." + sheetName + "." + xmiGuid) -»
+				</el>
+«ENDDEFINE»
+
+
+
+«DEFINE SheetElementSwitchableControllerActions FOR MInterface -»
+«IF emHasExtbasePluginUtilizablePluginConfigurations() -»
+					<switchableControllerActions>
+                        <TCEforms>
+                            <label>LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:switchableControllerAction</label>
+                            <onChange>reload</onChange>
+                            <config>
+                                <type>select</type>
+                                <items type="array">
+                                	«FOREACH emGetExtbasePluginPluginConfigurations() AS pluginConfiguration -»
+                                	<numIndex index="«pluginConfiguration.emGetExtbasePluginConfigurationSwitchableControllerActionIndex() -»" type="array">
+                                        <numIndex index="0">LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:switchableControllerAction.«pluginConfiguration.name -»</numIndex>
+                                        <numIndex index="1">«FOREACH pluginConfiguration.emGetExtbasePluginConfigurationSwitchableControllerActions() AS controllerAction SEPARATOR "; "»«controllerAction.classifier.asControllerName() -»->«controllerAction.asControllerActionName() -»«ENDFOREACH -»</numIndex>
+                                    </numIndex>
+                                	«ENDFOREACH -»
+                                </items>
+                            </config>
+                        </TCEforms>
+                    </switchableControllerActions>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE SheetElement FOR MAttribute -»
+					<settings.«asGeneralName() -»>
+						«EXPAND SheetElementTceForms -»
+					</settings.«asGeneralName() -»>
+«ENDDEFINE»
+
+
+«REM»
+	Generates a protected region for own FlexForm Sheet Element code
+«ENDREM»
+«DEFINE OwnSheetElementCode(String id) FOR MInterface -»
+					«PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
+					<!-- TODO: put your further sheet element code here -->
+					«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE SheetElementTceForms FOR MAttribute -»
+						<TCEforms>
+							«EXPAND SheetElementTceFormsExclude -»
+							«EXPAND SheetElementTceFormsLabel -»
+							«EXPAND SheetElementTceFormsDefaultExtras -»
+							«EXPAND OwnSheetElementTceFormsCode("flexform.xml.own.sheet.element.code." + xmiGuid) -»
+							«EXPAND SheetElementTceFormsConfig -»
+						</TCEforms>
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE SheetElementTceFormsExclude FOR MAttribute -»
+							<exclude>«emHasTypo3FlexFormElementElementExclude("true").asPhpBoolean() -»</exclude>
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE SheetElementTceFormsLabel FOR MAttribute -»
+							<label>LLL:EXT:«extensionKey() -»/«((MInterface) classifier).filePathLocallangPluginXlf() -»:«asPluginLocalizationName() -»</label>
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE SheetElementTceFormsDefaultExtras FOR MAttribute -»
+«IF emHasTypo3FlexFormElementUtilizableElementDefaultExtras() -»
+							<defaultExtras>«emGetTypo3FlexFormElementElementDefaultExtras() -»</defaultExtras>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a protected region for own TCA Columns Section column code.
+«ENDREM»
+«DEFINE OwnSheetElementTceFormsCode(String id) FOR MProperty -»
+							«PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
+							<!-- TODO: put your further element code here -->
+							«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE SheetElementTceFormsConfig FOR MAttribute -»
+							<config>
+								«PROTECT CSTART '<!-- ' CEND ' -->' ID ("flexform.xml.own.sheet.element.config.code." + xmiGuid) DISABLE»
+						«IF isTypo3PrimitiveType( type.asGeneralName() ) && type.asGuiType() != "Association" -»
+							«IF type.asGuiType() == "Input" -»
+								«EXPAND ConfigTypeInput -»
+							«ELSEIF type.asGuiType() == "Integer" -»
+								«EXPAND ConfigTypeInteger -»
+							«ELSEIF type.asGuiType() == "Float" -»
+								«EXPAND ConfigTypeFloat -»
+							«ELSEIF type.asGuiType() == "DateTime" -»
+								«EXPAND ConfigTypeDateTime -»	
+							«ELSEIF type.asGuiType() == "Date" -»
+								«EXPAND ConfigTypeDate -»	
+							«ELSEIF type.asGuiType() == "Time" -»
+								«EXPAND ConfigTypeTime -»	
+							«ELSEIF type.asGuiType() == "TimeSec" -»
+								«EXPAND ConfigTypeTimeSec -»	
+							«ELSEIF type.asGuiType() == "String" -»
+								«EXPAND ConfigTypeString -»
+							«ELSEIF type.asGuiType() == "Password" -»
+								«EXPAND ConfigTypePassword -»
+							«ELSEIF type.asGuiType() == "Text" -»
+								«EXPAND ConfigTypeText -»
+							«ELSEIF type.asGuiType() == "RichText" -»
+								«EXPAND ConfigTypeRichText -»
+							«ELSEIF type.asGuiType() == "Check" -»
+								«EXPAND ConfigTypeCheck -»
+							«ELSEIF type.asGuiType() == "Boolean" -»
+								«EXPAND ConfigTypeBoolean -»
+							«ELSEIF type.asGuiType() == "Radio" -»
+								«EXPAND ConfigTypeRadio -»
+							«ELSEIF type.asGuiType() == "Select" -»
+								«EXPAND ConfigTypeSelect -»
+							«ELSEIF type.asGuiType() == "File" -»
+								«EXPAND ConfigTypeFile -»
+							«ELSEIF type.asGuiType() == "FileReference" -»
+								«EXPAND ConfigTypeFileReference -»
+							«ELSEIF type.asGuiType() == "Image" -»
+								«EXPAND ConfigTypeImage -»
+							«ELSEIF type.asGuiType() == "ImageReference" -»
+								«EXPAND ConfigTypeImageReference -»
+							«ELSEIF type.asGuiType() == "Folder" -»
+								«EXPAND ConfigTypeFolder -»
+							«ELSEIF type.asGuiType() == "Database" -»
+								«EXPAND ConfigTypeDatabase -»
+							«ELSEIF type.asGuiType() == "None" -»
+								«EXPAND ConfigTypeNone -»
+							«ELSEIF type.asGuiType() == "Passthrough" -»
+								«EXPAND ConfigTypePassthrough -»
+							«ELSE -»
+								«EXPAND ConfigTypeOther( type.asGuiType() ) -»
+							«ENDIF -»
+						«ELSE -»
+							«IF multiplicity.isSingleValued() -»
+								«EXPAND ConfigTypeToOneUnidirectional -»
+							«ELSE -»
+								«EXPAND ConfigTypeToManyUnidirectional -»
+							«ENDIF -»
+						«ENDIF -»
+								«ENDPROTECT»
+							</config>
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigTypeInput FOR MAttribute -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(30) -»
+								«EXPAND ConfigMax(null) -»
+								«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigEval(null) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeInteger FOR MAttribute -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(30) -»
+								«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigEval({"int"}) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeFloat FOR MAttribute -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(30) -»
+								«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigEval({"double2"}) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeDateTime FOR MAttribute -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(16) -»
+								«EXPAND ConfigDefault("time()") -»
+								«EXPAND ConfigEval({"datetime"}) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeDate FOR MAttribute -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(20) -»
+								«EXPAND ConfigDefault("time()") -»
+								«EXPAND ConfigEval({"date"}) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeTime FOR MAttribute -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(5) -»
+								«EXPAND ConfigDefault("time()") -»
+								«EXPAND ConfigEval({"time"}) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeTimeSec FOR MAttribute -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(8) -»
+								«EXPAND ConfigDefault("time()") -»
+								«EXPAND ConfigEval({"timesec"}) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeString FOR MAttribute -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(30) -»
+								«EXPAND ConfigMax(null) -»
+								«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigEval({"trim"}) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypePassword FOR MAttribute -»
+								«EXPAND ConfigType("input") -»
+								«EXPAND ConfigSize(30) -»
+								«EXPAND ConfigMax(null) -»
+								«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigEval({"password"}) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeText FOR MAttribute -»
+								«EXPAND ConfigType("text") -»
+								«EXPAND ConfigCols(40) -»
+								«EXPAND ConfigRows(15) -»
+								«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigEval({"trim"}) -»
+«ENDDEFINE»
+
+
+«REM»
+	@todo	Wizards RTE
+«ENDREM»
+«DEFINE ConfigTypeRichText FOR MAttribute -»
+								«EXPAND ConfigType("text") -»
+								«EXPAND ConfigCols(40) -»
+								«EXPAND ConfigRows(15) -»
+								«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigEval({"trim"}) -»
+								«EXPAND ConfigDefaultExtras("richtext:rte_transform[flag=rte_enabled|mode=ts]") -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeCheck FOR MAttribute -»
+								«EXPAND ConfigType("check") -»
+								«EXPAND ConfigItems(null) -»
+								«EXPAND ConfigCols(5) -»
+								«EXPAND ConfigDefault(null) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeBoolean FOR MAttribute -»
+								«EXPAND ConfigType("check") -»
+								«EXPAND ConfigDefault(null) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeRadio FOR MAttribute -»
+								«EXPAND ConfigType("radio") -»
+								«EXPAND ConfigItems(null) -»
+								«EXPAND ConfigDefault(null) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeSelect FOR MAttribute -»
+								«EXPAND ConfigType("select") -»
+								«EXPAND ConfigItems(null) -»
+								«EXPAND ConfigDefault(null) -»
+								«EXPAND ConfigSize(1) -»
+								«EXPAND ConfigMinitems(0) -»
+								«EXPAND ConfigMaxitems(1) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeFile FOR MAttribute -»
+								«EXPAND ConfigType("group") -»
+								«EXPAND ConfigInternalType("file") -»
+								«EXPAND ConfigAllowed("*") -»
+								«EXPAND ConfigDisallowed("php") -»
+								«EXPAND ConfigMaxSize("$GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize']") -»
+								«EXPAND ConfigUploadfolder( dirPathExtensionUploadFolder() ) -»
+								«EXPAND ConfigShowThumbs(true) -»
+								«EXPAND ConfigSize(1) -»
+								«EXPAND ConfigMinitems(0) -»
+								«EXPAND ConfigMaxitems(1) -»
+«ENDDEFINE»
+
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeFileReference FOR MAttribute -»
+								«EXPAND ConfigType("group") -»
+								«EXPAND ConfigInternalType("file_reference") -»
+								«EXPAND ConfigAllowed("*") -»
+								«EXPAND ConfigDisallowed("php") -»
+								«EXPAND ConfigMaxSize("$GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize']") -»
+								«EXPAND ConfigUploadfolder( dirPathExtensionUploadFolder() ) -»
+								«EXPAND ConfigShowThumbs(true) -»
+								«EXPAND ConfigSize(1) -»
+								«EXPAND ConfigMinitems(0) -»
+								«EXPAND ConfigMaxitems(1) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeImage FOR MAttribute -»
+								«EXPAND ConfigType("group") -»
+								«EXPAND ConfigInternalType("file") -»
+								«EXPAND ConfigAllowed("gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai") -»
+								«EXPAND ConfigDisallowed("") -»
+								«EXPAND ConfigMaxSize("$GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize']") -»
+								«EXPAND ConfigUploadfolder( dirPathExtensionUploadFolder() ) -»
+								«EXPAND ConfigShowThumbs(true) -»
+								«EXPAND ConfigSize(1) -»
+								«EXPAND ConfigMinitems(0) -»
+								«EXPAND ConfigMaxitems(1) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeImageReference FOR MAttribute -»
+								«EXPAND ConfigType("group") -»
+								«EXPAND ConfigInternalType("file_reference") -»
+								«EXPAND ConfigAllowed("gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai") -»
+								«EXPAND ConfigDisallowed("") -»
+								«EXPAND ConfigMaxSize("$GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize']") -»
+								«EXPAND ConfigUploadfolder( dirPathExtensionUploadFolder() ) -»
+								«EXPAND ConfigShowThumbs(true) -»
+								«EXPAND ConfigSize(1) -»
+								«EXPAND ConfigMinitems(0) -»
+								«EXPAND ConfigMaxitems(1) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeFolder FOR MAttribute -»
+								«EXPAND ConfigType("group") -»
+								«EXPAND ConfigInternalType("folder") -»
+								«EXPAND ConfigSize(1) -»
+								«EXPAND ConfigMinitems(0) -»
+								«EXPAND ConfigMaxitems(1) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeDatabase FOR MAttribute -»
+								«EXPAND ConfigType("group") -»
+								«EXPAND ConfigInternalType("db") -»
+								«EXPAND ConfigAllowed("*") -»
+								«EXPAND ConfigDisallowed("") -»
+								«EXPAND ConfigSize(1) -»
+								«EXPAND ConfigMinitems(0) -»
+								«EXPAND ConfigMaxitems(1) -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeNone FOR MAttribute -»
+								«EXPAND ConfigType("none") -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypePassthrough FOR MAttribute -»
+								«EXPAND ConfigType("passthrough") -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeOther(String otherPropertyType) FOR MAttribute -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeToOneUnidirectional FOR MAttribute -»
+								«EXPAND ConfigType("group") -»
+								«EXPAND ConfigInternalType("db") -»
+								«EXPAND ConfigAllowed( type.asPersistenceName() ) -»
+								«EXPAND ConfigDisallowed("") -»
+								«EXPAND ConfigSize(1) -»
+								«EXPAND ConfigMinitems -»
+								«EXPAND ConfigMaxitems -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE ConfigTypeToManyUnidirectional FOR MAttribute -»
+								«EXPAND ConfigType("group") -»
+								«EXPAND ConfigInternalType("db") -»
+								«EXPAND ConfigAllowed( type.asPersistenceName() ) -»
+								«EXPAND ConfigDisallowed("") -»
+								«EXPAND ConfigSize(10) -»
+								«EXPAND ConfigMinitems -»
+								«EXPAND ConfigMaxitems -»
+«ENDDEFINE»
+
+
+
+
+
+
+«REM» -- Type Settings -- «ENDREM»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigType(String defaultType) FOR MProperty -»
+«IF defaultType != null -»
+								<type>«defaultType -»</type>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigDbType(String defaultDbType) FOR MProperty -»
+«IF defaultDbType != null -»
+								<dbType>«defaultDbType -»</dbType>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigInternalType(String defaultInternalType) FOR MProperty -»
+«IF defaultInternalType != null -»
+								<internal_type>«defaultInternalType -»</internal_type>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM» -- Graphical User Interface Settings -- «ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE ConfigCols(Integer defaultCols) FOR MProperty -»
+«IF defaultCols != null || emHasGuiPropertyWidthUtilizableWidth() -»
+								<cols>«IF emHasGuiPropertyWidthUtilizableWidth() -»«emGetGuiPropertyWidthWidth() -»«ELSE -»«defaultCols -»«ENDIF -»</cols>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigRows(Integer defaultRows) FOR MProperty -»
+«IF defaultRows != null || emHasGuiPropertyHeightUtilizableHeight() -»
+								<rows>«IF emHasGuiPropertyHeightUtilizableHeight() -»«emGetGuiPropertyHeightHeight() -»«ELSE -»«defaultRows -»«ENDIF -»</rows>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigSize(Integer defaultSize) FOR MProperty -»
+«IF defaultSize != null || emHasGuiPropertyWidthUtilizableWidth() -»
+								<size>«IF emHasGuiPropertyWidthUtilizableWidth() -»«emGetGuiPropertyWidthWidth() -»«ELSE -»«defaultSize -»«ENDIF -»</size>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+hier evtl. versuch über sql type maximum herauszufinden
+«ENDREM»
+«DEFINE ConfigMax(Integer defaultMax) FOR MProperty -»
+«IF defaultMax != null || emHasGuiPropertyMaxLengthUtilizableMaxLength() -»
+								<max>«IF emHasGuiPropertyMaxLengthUtilizableMaxLength() -»«emGetGuiPropertyMaxLengthMaxLength() -»«ELSE -»«defaultMax -»«ENDIF -»</max>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM» -- Default Settings -- «ENDREM»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigDefault(String defaultDefault) FOR MAttribute -»
+«IF defaultDefault != null || hasDefaultValue() -»
+								<default>«IF hasDefaultValue() -»«defaultvalue -»«ELSE -»«defaultDefault -»«ENDIF -»</default>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigDefaultExtras(String defaultDefaultExtras) FOR MProperty -»
+«IF defaultDefaultExtras != null -»
+								<defaultExtras>«defaultDefaultExtras -»</defaultExtras>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM» -- File Handling Settings -- «ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE ConfigAllowed(String defaultAllowed) FOR MProperty -»
+«IF defaultAllowed != null || emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»
+								<allowed>«IF emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»«emGetGuiPropertyAllowedFileExtensionsAllowedFileExtensions() -»«ELSE -»«defaultAllowed -»«ENDIF -»</allowed>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigDisallowed(String defaultDisallowed) FOR MProperty -»
+«IF defaultDisallowed != null || emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»
+								<disallowed>«IF emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»«emGetGuiPropertyDisallowedFileExtensionsDisallowedFileExtensions() -»«ELSE -»«defaultDisallowed -»«ENDIF -»</disallowed>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigMaxSize(String defaultMaxSize) FOR MProperty -»
+«IF defaultMaxSize != null || emHasGuiPropertyMaxFileSizeUtilizableMaxFileSize() -»
+								<max_size>«IF emHasGuiPropertyMaxFileSizeUtilizableMaxFileSize() -»«emGetGuiPropertyMaxFileSizeMaxFileSize() -»«ELSE -»«defaultMaxSize -»«ENDIF -»</max_size>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigShowThumbs(Boolean defaultShowThumbs) FOR MProperty -»
+«IF defaultShowThumbs != null || emHasGuiPropertyShowThumbnailsUtilizableShowThumbnails() -»
+								<show_thumbs>«IF emHasGuiPropertyShowThumbnailsUtilizableShowThumbnails() -»«emGetGuiPropertyShowThumbnailsShowThumbnails().asPhpBoolean() -»«ELSE -»«defaultShowThumbs.asPhpBoolean() -»«ENDIF -»</show_thumbs>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigUploadfolder(String defaultUploadfolder) FOR MProperty -»
+«IF defaultUploadfolder != null || emHasGuiPropertyUploadFolderUtilizableUploadFolder() -»
+								<uploadfolder>«IF emHasGuiPropertyUploadFolderUtilizableUploadFolder() -»«emGetGuiPropertyUploadFolderUploadFolder() -»«ELSE -»«defaultUploadfolder -»«ENDIF -»</uploadfolder>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM» -- Validation Settings -- «ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE ConfigEval(List[String] defaultEvals) FOR MProperty -»
+«IF defaultEvals != null && !defaultEvals.isEmpty -»
+								<eval>«FOREACH defaultEvals AS eval SEPARATOR ", "»«eval -»«ENDFOREACH -»</eval>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM» -- Items Settings -- «ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE ConfigItems(List[String] defaultItems) FOR MProperty -»
+«IF emHasGuiPropertyItemsUtilizableItems() -»
+								<items type="array">
+									«FOREACH emGetGuiPropertyItemsItems() AS item -»
+									«item»
+									«ENDFOREACH -»
+								</items>
+«ELSEIF defaultItems != null && !defaultItems.isEmpty -»
+								<items type="array">
+									«FOREACH defaultItems AS item -»
+									«item»
+									«ENDFOREACH -»
+								</items>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE ConfigItems FOR MProperty -»
+«IF multiplicity.lowerBound < 1 -»
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0"></numIndex>
+										<numIndex index="1">0</numIndex>
+									</numIndex>
+								</items>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigMinitems(Integer defaultMinitems) FOR MProperty -»
+«IF defaultMinitems != null || emHasGuiPropertyMinItemsUtilizableMinItems() -»
+								<minitems>«IF emHasGuiPropertyMaxItemsUtilizableMaxItems() -»«emGetGuiPropertyMinItemsMinItems() -»«ELSE -»«defaultMinitems -»«ENDIF -»</minitems>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE ConfigMinitems FOR MAttribute -»
+								<minitems>«IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»</minitems>
+«ENDDEFINE»
+
+
+«DEFINE ConfigMinitems FOR MAssociationRole -»
+								<minitems>«IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»</minitems>
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigMaxitems(Integer defaultMaxitems) FOR MProperty -»
+«IF defaultMaxitems != null || emHasGuiPropertyMaxItemsUtilizableMaxItems() -»
+								<maxitems>«IF emHasGuiPropertyMaxItemsUtilizableMaxItems() -»«emGetGuiPropertyMaxItemsMaxItems() -»«ELSE -»«defaultMaxitems -»«ENDIF -»</maxitems>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE ConfigMaxitems FOR MAttribute -»
+								<maxitems>«IF multiplicity.hasFixedUpperBoundMultiplicity() -»«multiplicity.upperBound -»«ELSE -»999999«ENDIF -»</maxitems>
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ConfigMultiple(String defaultMultiple) FOR MProperty -»
+«IF defaultMultiple != null -»
+								<multiple>«defaultMultiple.asPhpBoolean() -»</multiple>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE ConfigMultiple FOR MProperty -»
+								«EXPAND ConfigMultiple( (!multiplicity.unique).asPhpBoolean() ) -»
+«ENDDEFINE»
+
+
+
+
+
+«REM»
+	Generates a protected region for own code.
+«ENDREM»
+«DEFINE OwnCode(String id) FOR MInterface -»
+		«PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
+		<!-- TODO: put your further code here -->
+		«ENDPROTECT»
+«ENDDEFINE»

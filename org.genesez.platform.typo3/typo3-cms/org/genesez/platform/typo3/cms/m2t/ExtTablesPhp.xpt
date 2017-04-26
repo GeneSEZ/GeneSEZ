@@ -1,0 +1,191 @@
+«REM»
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+
+«REM»
+	Entry point for generating "ext_tables.php".
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+«ENDREM»
+
+«REM» use TYPO3 CMS specific Extbase profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsExtbaseAccessElement»
+
+«REM» use TYPO3 CMS profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
+
+
+«REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::AccessElement»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid file system convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::FileSystemConvention»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::NamingConvention»
+
+
+«REM» use GeneSEZ common access element scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+
+«REM» use GeneSEZ common conversion scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+
+
+«REM»
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
+«ENDREM»
+
+«REM»
+	Processes the generation of "ext_tables.php".
+«ENDREM»
+«DEFINE Root FOR MModel -»
+«FILE filePathExtTablesPhp() -»
+<?php
+«EXPAND AccessDenied -»
+«EXPAND ModuleConfiguration -»
+«EXPAND DomainObjectConfiguration -»
+«EXPAND OwnCode -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«REM»
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
+«ENDREM»
+
+«REM»
+	TYPO3 access control to check if this file is called from the outside of TYPO3. 
+«ENDREM»
+«DEFINE AccessDenied FOR MElement -»
+defined('TYPO3_MODE') || die();
+
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ModuleConfiguration FOR MModel -»
+if (TYPO3_MODE === 'BE') {
+    «EXPAND ModuleRegistration FOREACH allModules().sortBy( m | m.asTypo3ModuleName() ) -»
+    «EXPAND OwnModuleCode -»
+}
+
+«ENDDEFINE»
+
+
+«REM»
+	Registers all TYPO3 Extbase modules by using "registerModule" from class 
+	"\TYPO3\CMS\Extbase\Utility\ExtensionUtility".
+«ENDREM»
+«DEFINE ModuleRegistration FOR MInterface -»
+    «EXPAND ModuleComment -»
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+        '«extensionVendorName() -».' . $_EXTKEY,
+        '«emGetExtbaseModuleMainModule().asTypo3MainModul() -»',
+        '«asTypo3ModuleName() -»',
+        '«emGetExtbaseModulePosition() -»',
+        [«FOREACH emGetExtbaseModuleControllers() AS controller SEPARATOR ", "»
+            '«controller.asControllerName()»' => '«FOREACH emGetExtbaseModuleControllerActions(this, controller) AS controllerAction SEPARATOR ", "»«controllerAction.asControllerActionName() -»«ENDFOREACH»'«ENDFOREACH»
+        ],
+        [
+            'access' => '«FOREACH emGetExtbaseModuleAccess() AS accessRole SEPARATOR ", " -»«accessRole.asTypo3AccessRole() -»«ENDFOREACH -»',
+            'icon' => 'EXT:' . $_EXTKEY . '/ext_icon.png',
+            'labels' => 'LLL:EXT:' . $_EXTKEY . '/«filePathLocallangModuleXlf("") -»',
+            «EXPAND OwnModuleConfigurationCode -»
+        ]
+    );
+
+«ENDDEFINE»
+
+
+«REM»
+	Generates a module comment.
+«ENDREM»
+«DEFINE ModuleComment FOR MInterface -»
+«IF hasComment() -»
+    /**
+    «formatComment(" * ", "\n    ") -»
+     */
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a protected region for own module configuration code.
+«ENDREM»
+«DEFINE OwnModuleConfigurationCode FOR MInterface -»
+            «PROTECT CSTART '/* ' CEND ' */' ID ("ext_tables.php.own.module.configuration.code." + xmiGuid)»
+            // TODO: put your further module configuration code here
+            «ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a protected region for own module code.
+«ENDREM»
+«DEFINE OwnModuleCode FOR MModel -»
+    «PROTECT CSTART '/* ' CEND ' */' ID ("ext_tables.php.own.module.code." + xmiGuid)»
+    // TODO: put your further module code here
+    «ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE DomainObjectConfiguration FOR MModel -»
+«FOREACH allConreteTableInheritances().sortBy( do | do.asConfigurationName() ) AS domainObject -»
+    «EXPAND DomainObjectAllowTableOnStandardPages FOR domainObject -»
+    «EXPAND DomainObjectContextSensitiveHelpInclusion FOR domainObject -»
+«ENDFOREACH -»
+
+«ENDDEFINE»
+
+
+«REM»
+	By default records can be created only in "Folder"-type pages. 
+	To enable the creation of records on any kind of page, this additional call must be made.
+«ENDREM»
+«DEFINE DomainObjectAllowTableOnStandardPages FOR MClass -»
+«IF emHasExtbaseDomainObjectAllowTableOnStandardPages("true") -»
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('«asConfigurationName() -»');
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a link to the context sensitive help of an entity or value object.
+«ENDREM»
+«DEFINE DomainObjectContextSensitiveHelpInclusion FOR MClass -»
+«FOREACH allGeneralizations().typeSelect(MClass) AS g -»
+    «EXPAND DomainObjectContextSensitiveHelpInclusion(this) FOR g -»
+«ENDFOREACH -»
+«EXPAND DomainObjectContextSensitiveHelpInclusion(this) -»
+«FOREACH allSingleTableInheritanceSpecializations() AS s -»
+    «EXPAND DomainObjectContextSensitiveHelpInclusion(this) FOR s -»
+«ENDFOREACH -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a link to the context sensitive help of an entity or value object.
+«ENDREM»
+«DEFINE DomainObjectContextSensitiveHelpInclusion(MClass class) FOR MClass -»
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('«class.asConfigurationName() -»', 'EXT:' . $_EXTKEY . '/«filePathLocallangCshXlf() -»');
+«ENDDEFINE»
+
+
+«REM»
+	Generates a protected region for own code.
+«ENDREM»
+«DEFINE OwnCode FOR MModel -»
+«PROTECT CSTART '/* ' CEND ' */' ID ("ext_tables.php.own.code." + xmiGuid)»
+// TODO: put your further code here
+«ENDPROTECT»
+«ENDDEFINE»

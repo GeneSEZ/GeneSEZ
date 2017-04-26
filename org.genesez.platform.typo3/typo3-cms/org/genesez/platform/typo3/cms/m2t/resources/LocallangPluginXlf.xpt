@@ -1,0 +1,213 @@
+«REM»
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+
+«REM»
+	Entry point for generating "locallang_plugin_<plugin name>.xlf".
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+«ENDREM»
+
+«REM» use TYPO3 CMS specific Extbase profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsExtbaseAccessElement»
+
+«REM» use TYPO3 CMS profile scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::profile::Typo3CmsAccessElement»
+
+
+«REM» use TYPO3 CMS specific Extbase + Fluid access element scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::AccessElement»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid file system convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::FileSystemConvention»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::NamingConvention»
+
+
+«REM» use GeneSEZ common access element scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+
+«REM» use GeneSEZ common navigate element scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::NavigateElement»
+
+«REM» use GeneSEZ common date time helper scripts «ENDREM»
+«EXTENSION org::genesez::util::sysenv::DateTimeHelper»
+
+
+«REM»
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
+«ENDREM»
+
+«REM»
+	Processes the generation of "locallang_plugin_<plugin name>.xlf".
+	TODO add switchableControllerActions
+«ENDREM»
+«DEFINE Root FOR MInterface -»
+«IF isPlugin() && ( hasAttributes() || emHasExtbasePluginUtilizablePluginConfigurations() || emHasTypo3FlexFormStereotype() ) -»
+«EXPAND LocallangPlugin -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
+«ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE LocallangPlugin FOR MInterface -»
+«EXPAND SourceLanguage -»
+
+«FOREACH navModel().emGetTypo3LocalizationLanguageKeys() AS targetLanguageKey -»
+	«EXPAND TargetLanguage( targetLanguageKey.asIsoLanguageCode() ) -»
+«ENDFOREACH -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE SourceLanguage FOR MInterface -»
+«FILE filePathLocallangPluginXlf() -»
+«EXPAND XmlDefinition -»
+«EXPAND Xliff("en") -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE TargetLanguage(String isoLanguageCode) FOR MInterface -»
+«FILE filePathLocallangPluginXlf(isoLanguageCode) -»
+«EXPAND XmlDefinition -»
+«EXPAND Xliff(isoLanguageCode) -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«DEFINE XmlDefinition FOR MInterface -»
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+«ENDDEFINE»
+
+
+«DEFINE Xliff(String isoLanguageCode) FOR MInterface -»
+<xliff version="1.0">
+	«EXPAND File(isoLanguageCode) -»
+</xliff>
+«ENDDEFINE»
+
+
+«DEFINE File(String isoLanguageCode) FOR MInterface -»
+	<file source-language="en" datatype="plaintext" original="messages" date="«EXPAND CurrentTimeStamp -»" product-name="«extensionPrefixWithoutUnderscores() -»"«IF isoLanguageCode != "en"» target-language="«isoLanguageCode -»"«ENDIF -»>
+		«EXPAND Header(isoLanguageCode) -»
+		«EXPAND Body(isoLanguageCode) -»
+	</file>
+«ENDDEFINE»
+
+
+«DEFINE CurrentTimeStamp FOR MInterface -»
+«getIso8601TimeStamp() -»
+«ENDDEFINE»
+
+
+«DEFINE Header(String isoLanguageCode) FOR MInterface -»
+		<header/>
+«ENDDEFINE»
+
+
+«DEFINE Body(String isoLanguageCode) FOR MInterface -»
+		<body>
+			«EXPAND SheetLocalization(isoLanguageCode, "sDEF") -»
+			«EXPAND SwitchableControllerActionLocalization(isoLanguageCode) -»
+			«EXPAND SwitchableControllerActionConfigurationLocalization(isoLanguageCode) FOREACH emGetExtbasePluginPluginConfigurations() -»
+			«EXPAND ElementLocalization(isoLanguageCode) FOREACH allFlexFormSheetElements("sDEF") -»
+			«FOREACH allFlexFormSheetsWithoutGeneralSheet().sortBy( s | s ) AS sheetName -»
+			«EXPAND SheetLocalization(isoLanguageCode, sheetName) -»
+			«EXPAND ElementLocalization(isoLanguageCode) FOREACH allFlexFormSheetElements(sheetName) -»
+			«ENDFOREACH -»
+
+			«EXPAND OwnLocalizations(isoLanguageCode) -»
+		</body>
+«ENDDEFINE»
+
+
+«DEFINE SheetLocalization(String isoLanguageCode, String sheetName) FOR MInterface -»
+			«EXPAND SheetLocalizationHint(sheetName) -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + "." + sheetName + "." + xmiGuid) DISABLE»
+			<trans-unit id="sheet.«sheetName -»" xml:space="preserve">
+				<source>«sheetName.toFirstUpper() -»</source>
+			</trans-unit>
+			«ENDPROTECT»
+
+«ENDDEFINE»
+
+
+«DEFINE SheetLocalizationHint(String sheetName) FOR MInterface -»
+			<!-- GeneSEZ Generator Hint: id="sheet.«sheetName -»" -->
+«ENDDEFINE»
+
+
+«DEFINE SwitchableControllerActionLocalization(String isoLanguageCode) FOR MInterface -»
+«IF emHasExtbasePluginUtilizablePluginConfigurations() -»
+			«EXPAND SwitchableControllerActionLocalizationHint -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + ".switchableControllerAction." + xmiGuid) DISABLE»
+			<trans-unit id="switchableControllerAction" xml:space="preserve">
+				<source>Switchable Controller Action</source>
+			</trans-unit>
+			«ENDPROTECT»
+
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE SwitchableControllerActionLocalizationHint FOR MInterface -»
+			<!-- GeneSEZ Generator Hint: id="switchableControllerAction" -->
+«ENDDEFINE»
+
+
+«DEFINE SwitchableControllerActionConfigurationLocalization(String isoLanguageCode) FOR MInterface -»
+			«EXPAND SwitchableControllerActionConfigurationLocalizationHint -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + ".switchableControllerAction." + xmiGuid) DISABLE»
+			<trans-unit id="switchableControllerAction.«name -»" xml:space="preserve">
+				<source>Switchable Controller Action «name -»</source>
+			</trans-unit>
+			«ENDPROTECT»
+
+«ENDDEFINE»
+
+
+«DEFINE SwitchableControllerActionConfigurationLocalizationHint FOR MInterface -»
+			<!-- GeneSEZ Generator Hint: id="switchableControllerAction.«name -»" -->
+«ENDDEFINE»
+
+
+«DEFINE ElementLocalization(String isoLanguageCode) FOR MProperty -»
+			«EXPAND ElementLocalizationHint -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + "." + xmiGuid) DISABLE»
+			<trans-unit id="«asPluginLocalizationName() -»" xml:space="preserve">
+				<source>«name.toFirstUpper() -»</source>
+			</trans-unit>
+			«ENDPROTECT»
+
+«ENDDEFINE»
+
+
+«DEFINE ElementLocalizationHint FOR MProperty -»
+			<!-- GeneSEZ Generator Hint: id="«asPluginLocalizationName() -»" -->
+«ENDDEFINE»
+
+
+«REM»
+	Generates a protected region for own localizations.
+«ENDREM»
+«DEFINE OwnLocalizations(String isoLanguageCode) FOR MInterface -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + ".own.localizations." + xmiGuid)»
+			<!-- TODO: put your further '«isoLanguageCode -»' localizations here -->
+			«ENDPROTECT»
+«ENDDEFINE»

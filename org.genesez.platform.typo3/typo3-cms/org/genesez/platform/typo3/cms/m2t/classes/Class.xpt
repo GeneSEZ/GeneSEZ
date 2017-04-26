@@ -1,0 +1,97 @@
+«REM»
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+
+«REM»
+	Entry point for generating classes.
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+«ENDREM»
+
+«REM» use TYPO3 CMS specific Extbase + Fluid naming convention scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3::cms::util::NamingConvention»
+
+
+«REM»
+	-- Public Templates (THE FOLLOWING TEMPLATES CAN BE INVOKED FROM OUTSIDE OF THIS FILE) ------------------
+«ENDREM»
+
+«REM»
+	Processes the generation of a class.
+«ENDREM»
+«DEFINE Root FOR MClass -»
+<?php
+«EXPAND Type::Namespace -»
+
+«EXPAND Type::OwnUseImports("php.class.own.use.imports." + xmiGuid) -»
+
+«EXPAND Comment::CopyrightNotice -»
+
+«EXPAND Comment::ClassifierInformationBlock -»
+«EXPAND Modifier -»class «asShortGeneralName() -»«EXPAND Generalization -»«EXPAND Realization»
+{
+
+    «EXPAND Attribute::Declaration -»
+    «EXPAND Association::Declaration -»
+    «EXPAND Operation::Constructor -»
+    «EXPAND Operation::Destructor -»
+    «EXPAND Operation::Declaration -»
+    «EXPAND Operation::Implementation -»
+    «EXPAND Attribute::Derived -»
+    «EXPAND Association::Derived -»
+    «EXPAND Attribute::Accessors -»
+    «EXPAND Association::Accessors -»
+    «EXPAND OwnCode -»
+
+}
+«ENDDEFINE»
+
+
+«REM»
+	-- Private Templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
+«ENDREM»
+
+«REM»
+	Generates the modifiers of a class.
+	A class can be either abstract or final, not both!
+«ENDREM»
+«DEFINE Modifier FOR MClass -»
+«IF abstract -»abstract «ELSEIF final -»final «ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the generalization of a class.
+	Only single inheritance is allowed.
+«ENDREM»
+«DEFINE Generalization FOR MClass -»
+«IF !generalization.isEmpty -»
+ extends «generalization.first().asGeneralName() -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the realizations of a class.
+«ENDREM»
+«DEFINE Realization FOR MClass -»
+«IF !realization.isEmpty -»
+ implements «FOREACH realization AS r SEPARATOR ", " -»«r.asGeneralName() -»«ENDFOREACH -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a protected region for own code.
+«ENDREM»
+«DEFINE OwnCode FOR MClass -»
+    «PROTECT CSTART '/* ' CEND ' */' ID ("php.class.own.code." + xmiGuid)»
+    // TODO: put your further code here
+    «ENDPROTECT»
+«ENDDEFINE»
