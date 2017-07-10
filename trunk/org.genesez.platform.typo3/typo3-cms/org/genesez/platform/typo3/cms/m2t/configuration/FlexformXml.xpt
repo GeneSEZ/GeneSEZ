@@ -61,60 +61,60 @@
 «DEFINE FlexForm FOR MInterface -»
 «FILE filePathFlexFormXml() -»
 <T3DataStructure>
-	<sheets>
-		«EXPAND SheetConfiguration("sDEF") -»
-		«FOREACH allFlexFormSheetsWithoutGeneralSheet().sortBy( s | s ) AS sheetName -»
-		«EXPAND SheetConfiguration(sheetName) -»
-		«ENDFOREACH -»
-		«EXPAND OwnCode("flexform.xml.own.code." + xmiGuid) -» 
-	</sheets>
+    <sheets>
+        «EXPAND SheetConfiguration("sDEF") -»
+        «FOREACH allFlexFormSheetsWithoutGeneralSheet().sortBy( s | s ) AS sheetName -»
+        «EXPAND SheetConfiguration(sheetName) -»
+        «ENDFOREACH -»
+        «EXPAND OwnCode("flexform.xml.own.code." + xmiGuid) -» 
+    </sheets>
 </T3DataStructure>
 «ENDFILE -»
 «ENDDEFINE»
 
 
 «DEFINE SheetConfiguration(String sheetName) FOR MInterface -»
-		<«sheetName -»>
-			<ROOT>
-				«EXPAND SheetTceForms(sheetName) -»
-				«EXPAND SheetType -»
-				«EXPAND SheetElements(sheetName) -»
-			</ROOT>
-		</«sheetName -»>
+        <«sheetName -»>
+            <ROOT>
+                «EXPAND SheetTceForms(sheetName) -»
+                «EXPAND SheetType -»
+                «EXPAND SheetElements(sheetName) -»
+            </ROOT>
+        </«sheetName -»>
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE SheetTceForms(String sheetName) FOR MInterface -»
-				<TCEforms>
-					<sheetTitle>LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:sheet.«sheetName -»</sheetTitle>
-				</TCEforms>
+                <TCEforms>
+                    <sheetTitle>LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:sheet.«sheetName -»</sheetTitle>
+                </TCEforms>
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE SheetType FOR MInterface -»
-				<type>array</type>
+                <type>array</type>
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE SheetElements(String sheetName) FOR MInterface -»
-				<el>
-					«IF sheetName == "sDEF" -»«EXPAND SheetElementSwitchableControllerActions -»«ENDIF -»
-					«EXPAND SheetElement FOREACH allFlexFormSheetElements(sheetName) -»
-					«EXPAND OwnSheetElementCode("flexform.xml.own.sheet.element.code." + sheetName + "." + xmiGuid) -»
-				</el>
+                <el>
+                    «IF sheetName == "sDEF" -»«EXPAND SheetElementSwitchableControllerActions -»«ENDIF -»
+                    «EXPAND SheetElement FOREACH allFlexFormSheetElements(sheetName) -»
+                    «EXPAND OwnSheetElementCode("flexform.xml.own.sheet.element.code." + sheetName + "." + xmiGuid) -»
+                </el>
 «ENDDEFINE»
 
 
 
 «DEFINE SheetElementSwitchableControllerActions FOR MInterface -»
 «IF emHasExtbasePluginUtilizablePluginConfigurations() -»
-					<switchableControllerActions>
+                    <switchableControllerActions>
                         <TCEforms>
                             <label>LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:switchableControllerAction</label>
                             <onChange>reload</onChange>
@@ -122,7 +122,7 @@
                                 <type>select</type>
                                 <items type="array">
                                 	«FOREACH emGetExtbasePluginPluginConfigurations() AS pluginConfiguration -»
-                                	<numIndex index="«pluginConfiguration.emGetExtbasePluginConfigurationSwitchableControllerActionIndex() -»" type="array">
+                                    <numIndex index="«pluginConfiguration.emGetExtbasePluginConfigurationSwitchableControllerActionIndex() -»" type="array">
                                         <numIndex index="0">LLL:EXT:«extensionKey() -»/«filePathLocallangPluginXlf() -»:switchableControllerAction.«pluginConfiguration.name -»</numIndex>
                                         <numIndex index="1">«FOREACH pluginConfiguration.emGetExtbasePluginConfigurationSwitchableControllerActions() AS controllerAction SEPARATOR "; "»«controllerAction.classifier.asControllerName() -»->«controllerAction.asControllerActionName() -»«ENDFOREACH -»</numIndex>
                                     </numIndex>
@@ -138,9 +138,9 @@
 «REM» 
 «ENDREM»
 «DEFINE SheetElement FOR MAttribute -»
-					<settings.«asGeneralName() -»>
-						«EXPAND SheetElementTceForms -»
-					</settings.«asGeneralName() -»>
+                    <settings.«asGeneralName() -»>
+                        «EXPAND SheetElementTceForms -»
+                    </settings.«asGeneralName() -»>
 «ENDDEFINE»
 
 
@@ -148,36 +148,36 @@
 	Generates a protected region for own FlexForm Sheet Element code
 «ENDREM»
 «DEFINE OwnSheetElementCode(String id) FOR MInterface -»
-					«PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
-					<!-- TODO: put your further sheet element code here -->
-					«ENDPROTECT»
+                    «PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
+                    <!-- TODO: put your further sheet element code here -->
+                    «ENDPROTECT»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE SheetElementTceForms FOR MAttribute -»
-						<TCEforms>
-							«EXPAND SheetElementTceFormsExclude -»
-							«EXPAND SheetElementTceFormsLabel -»
-							«EXPAND SheetElementTceFormsDefaultExtras -»
-							«EXPAND OwnSheetElementTceFormsCode("flexform.xml.own.sheet.element.code." + xmiGuid) -»
-							«EXPAND SheetElementTceFormsConfig -»
-						</TCEforms>
+                        <TCEforms>
+                            «EXPAND SheetElementTceFormsExclude -»
+                            «EXPAND SheetElementTceFormsLabel -»
+                            «EXPAND SheetElementTceFormsDefaultExtras -»
+                            «EXPAND OwnSheetElementTceFormsCode("flexform.xml.own.sheet.element.code." + xmiGuid) -»
+                            «EXPAND SheetElementTceFormsConfig -»
+                        </TCEforms>
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE SheetElementTceFormsExclude FOR MAttribute -»
-							<exclude>«emHasTypo3FlexFormElementElementExclude("true").asPhpBoolean() -»</exclude>
+                            <exclude>«emHasTypo3FlexFormElementElementExclude("true").asPhpBoolean() -»</exclude>
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE SheetElementTceFormsLabel FOR MAttribute -»
-							<label>LLL:EXT:«extensionKey() -»/«((MInterface) classifier).filePathLocallangPluginXlf() -»:«asPluginLocalizationName() -»</label>
+                            <label>LLL:EXT:«extensionKey() -»/«((MInterface) classifier).filePathLocallangPluginXlf() -»:«asPluginLocalizationName() -»</label>
 «ENDDEFINE»
 
 
@@ -185,7 +185,7 @@
 «ENDREM»
 «DEFINE SheetElementTceFormsDefaultExtras FOR MAttribute -»
 «IF emHasTypo3FlexFormElementUtilizableElementDefaultExtras() -»
-							<defaultExtras>«emGetTypo3FlexFormElementElementDefaultExtras() -»</defaultExtras>
+                            <defaultExtras>«emGetTypo3FlexFormElementElementDefaultExtras() -»</defaultExtras>
 «ENDIF -»
 «ENDDEFINE»
 
@@ -194,17 +194,17 @@
 	Generates a protected region for own TCA Columns Section column code.
 «ENDREM»
 «DEFINE OwnSheetElementTceFormsCode(String id) FOR MProperty -»
-							«PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
-							<!-- TODO: put your further element code here -->
-							«ENDPROTECT»
+                            «PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
+                            <!-- TODO: put your further element code here -->
+                            «ENDPROTECT»
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
 «DEFINE SheetElementTceFormsConfig FOR MAttribute -»
-							<config>
-								«PROTECT CSTART '<!-- ' CEND ' -->' ID ("flexform.xml.own.sheet.element.config.code." + xmiGuid) DISABLE»
+                            <config>
+                                «PROTECT CSTART '<!-- ' CEND ' -->' ID ("flexform.xml.own.sheet.element.config.code." + xmiGuid) DISABLE»
 						«IF isTypo3PrimitiveType( type.asGeneralName() ) && type.asGuiType() != "Association" -»
 							«IF type.asGuiType() == "Input" -»
 								«EXPAND ConfigTypeInput -»
@@ -797,7 +797,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 	Generates a protected region for own code.
 «ENDREM»
 «DEFINE OwnCode(String id) FOR MInterface -»
-		«PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
-		<!-- TODO: put your further code here -->
-		«ENDPROTECT»
+        «PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
+        <!-- TODO: put your further code here -->
+        «ENDPROTECT»
 «ENDDEFINE»
