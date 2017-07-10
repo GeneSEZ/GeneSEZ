@@ -61,7 +61,7 @@
 «EXPAND SourceLanguage -»
 
 «FOREACH emGetTypo3LocalizationLanguageKeys() AS targetLanguageKey -»
-	«EXPAND TargetLanguage( targetLanguageKey.asIsoLanguageCode() ) -»
+    «EXPAND TargetLanguage( targetLanguageKey.asIsoLanguageCode() ) -»
 «ENDFOREACH -»
 «ENDDEFINE»
 
@@ -93,16 +93,16 @@
 
 «DEFINE Xliff(String isoLanguageCode) FOR MModel -»
 <xliff version="1.0">
-	«EXPAND File(isoLanguageCode) -»
+    «EXPAND File(isoLanguageCode) -»
 </xliff>
 «ENDDEFINE»
 
 
 «DEFINE File(String isoLanguageCode) FOR MModel -»
-	<file source-language="en" datatype="plaintext" original="messages" date="«EXPAND CurrentTimeStamp -»" product-name="«extensionKey() -»"«IF isoLanguageCode != "en"» target-language="«isoLanguageCode -»"«ENDIF -»>
-		«EXPAND Header(isoLanguageCode) -»
-		«EXPAND Body(isoLanguageCode) -»
-	</file>
+    <file source-language="en" datatype="plaintext" original="messages" date="«EXPAND CurrentTimeStamp -»" product-name="«extensionKey() -»"«IF isoLanguageCode != "en"» target-language="«isoLanguageCode -»"«ENDIF -»>
+        «EXPAND Header(isoLanguageCode) -»
+        «EXPAND Body(isoLanguageCode) -»
+    </file>
 «ENDDEFINE»
 
 
@@ -112,51 +112,51 @@
 
 
 «DEFINE Header(String isoLanguageCode) FOR MModel -»
-		<header/>
+        <header/>
 «ENDDEFINE»
 
 
 «DEFINE Body(String isoLanguageCode) FOR MModel -»
-		<body>
-			«FOREACH allEntitiesAndValueObjects().sortBy( do | do.asFrontendLocalizationName() ) AS domainObject -»
-			«EXPAND ClassLocalization(isoLanguageCode) FOR domainObject -»
-			«EXPAND PropertyLocalization(isoLanguageCode) FOREACH domainObject.property.select( p | !p.isStatic() && !p.emHasDiStereotype() ) -»
+        <body>
+            «FOREACH allEntitiesAndValueObjects().sortBy( do | do.asFrontendLocalizationName() ) AS domainObject -»
+            «EXPAND ClassLocalization(isoLanguageCode) FOR domainObject -»
+            «EXPAND PropertyLocalization(isoLanguageCode) FOREACH domainObject.property.select( p | !p.isStatic() && !p.emHasDiStereotype() ) -»
 
-			«ENDFOREACH -»
-			«EXPAND OwnLocalizations(isoLanguageCode) -»
-		</body>
+            «ENDFOREACH -»
+            «EXPAND OwnLocalizations(isoLanguageCode) -»
+        </body>
 «ENDDEFINE»
 
 
 «DEFINE ClassLocalization(String isoLanguageCode) FOR MClass -»
-			«EXPAND ClassLocalizationHint -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang.xlf." + isoLanguageCode + "." + xmiGuid) DISABLE»
-			<trans-unit id="«asFrontendLocalizationName() -»" xml:space="preserve">
-				<source>«name.toFirstUpper() -»</source>
-			</trans-unit>
-			«ENDPROTECT»
+            «EXPAND ClassLocalizationHint -»
+            «PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang.xlf." + isoLanguageCode + "." + xmiGuid) DISABLE»
+            <trans-unit xml:space="preserve" id="«asFrontendLocalizationName() -»">
+                <source>«name.toFirstUpper() -»</source>
+            </trans-unit>
+            «ENDPROTECT»
 
 «ENDDEFINE»
 
 
 «DEFINE ClassLocalizationHint FOR MClass -»
-			<!-- GeneSEZ Generator Hint: id="«asFrontendLocalizationName() -»" -->
+            <!-- GeneSEZ Generator Hint: id="«asFrontendLocalizationName() -»" -->
 «ENDDEFINE»
 
 
 «DEFINE PropertyLocalization(String isoLanguageCode) FOR MProperty -»
-			«EXPAND PropertyLocalizationHint -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang.xlf." + isoLanguageCode + "." + xmiGuid) DISABLE»
-			<trans-unit id="«asFrontendLocalizationName() -»" xml:space="preserve">
-				<source>«name.toFirstUpper() -»</source>
-			</trans-unit>
-			«ENDPROTECT»
+            «EXPAND PropertyLocalizationHint -»
+            «PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang.xlf." + isoLanguageCode + "." + xmiGuid) DISABLE»
+            <trans-unit xml:space="preserve" id="«asFrontendLocalizationName() -»">
+                <source>«name.toFirstUpper() -»</source>
+            </trans-unit>
+            «ENDPROTECT»
 
 «ENDDEFINE»
 
 
 «DEFINE PropertyLocalizationHint FOR MProperty -»
-			<!-- GeneSEZ Generator Hint: id="«asFrontendLocalizationName() -»" -->
+            <!-- GeneSEZ Generator Hint: id="«asFrontendLocalizationName() -»" -->
 «ENDDEFINE»
 
 
@@ -164,7 +164,7 @@
 	Generates a protected region for own localizations.
 «ENDREM»
 «DEFINE OwnLocalizations(String isoLanguageCode) FOR MModel -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang.xlf." + isoLanguageCode + ".own.localizations." + xmiGuid)»
-			<!-- TODO: put your further '«isoLanguageCode -»' localizations here -->
-			«ENDPROTECT»
+            «PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang.xlf." + isoLanguageCode + ".own.localizations." + xmiGuid)»
+            <!-- TODO: put your further '«isoLanguageCode -»' localizations here -->
+            «ENDPROTECT»
 «ENDDEFINE»

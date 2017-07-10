@@ -66,7 +66,7 @@
 «EXPAND SourceLanguage -»
 
 «FOREACH navModel().emGetTypo3LocalizationLanguageKeys() AS targetLanguageKey -»
-	«EXPAND TargetLanguage( targetLanguageKey.asIsoLanguageCode() ) -»
+    «EXPAND TargetLanguage( targetLanguageKey.asIsoLanguageCode() ) -»
 «ENDFOREACH -»
 «ENDDEFINE»
 
@@ -98,16 +98,16 @@
 
 «DEFINE Xliff(String isoLanguageCode) FOR MInterface -»
 <xliff version="1.0">
-	«EXPAND File(isoLanguageCode) -»
+    «EXPAND File(isoLanguageCode) -»
 </xliff>
 «ENDDEFINE»
 
 
 «DEFINE File(String isoLanguageCode) FOR MInterface -»
-	<file source-language="en" datatype="plaintext" original="messages" date="«EXPAND CurrentTimeStamp -»" product-name="«extensionPrefixWithoutUnderscores() -»"«IF isoLanguageCode != "en"» target-language="«isoLanguageCode -»"«ENDIF -»>
-		«EXPAND Header(isoLanguageCode) -»
-		«EXPAND Body(isoLanguageCode) -»
-	</file>
+    <file source-language="en" datatype="plaintext" original="messages" date="«EXPAND CurrentTimeStamp -»" product-name="«extensionKey() -»"«IF isoLanguageCode != "en"» target-language="«isoLanguageCode -»"«ENDIF -»>
+        «EXPAND Header(isoLanguageCode) -»
+        «EXPAND Body(isoLanguageCode) -»
+    </file>
 «ENDDEFINE»
 
 
@@ -117,89 +117,89 @@
 
 
 «DEFINE Header(String isoLanguageCode) FOR MInterface -»
-		<header/>
+        <header/>
 «ENDDEFINE»
 
 
 «DEFINE Body(String isoLanguageCode) FOR MInterface -»
-		<body>
-			«EXPAND SheetLocalization(isoLanguageCode, "sDEF") -»
-			«EXPAND SwitchableControllerActionLocalization(isoLanguageCode) -»
-			«EXPAND SwitchableControllerActionConfigurationLocalization(isoLanguageCode) FOREACH emGetExtbasePluginPluginConfigurations() -»
-			«EXPAND ElementLocalization(isoLanguageCode) FOREACH allFlexFormSheetElements("sDEF") -»
-			«FOREACH allFlexFormSheetsWithoutGeneralSheet().sortBy( s | s ) AS sheetName -»
-			«EXPAND SheetLocalization(isoLanguageCode, sheetName) -»
-			«EXPAND ElementLocalization(isoLanguageCode) FOREACH allFlexFormSheetElements(sheetName) -»
-			«ENDFOREACH -»
+        <body>
+            «EXPAND SheetLocalization(isoLanguageCode, "sDEF") -»
+            «EXPAND SwitchableControllerActionLocalization(isoLanguageCode) -»
+            «EXPAND SwitchableControllerActionConfigurationLocalization(isoLanguageCode) FOREACH emGetExtbasePluginPluginConfigurations() -»
+            «EXPAND ElementLocalization(isoLanguageCode) FOREACH allFlexFormSheetElements("sDEF") -»
+            «FOREACH allFlexFormSheetsWithoutGeneralSheet().sortBy( s | s ) AS sheetName -»
+            «EXPAND SheetLocalization(isoLanguageCode, sheetName) -»
+            «EXPAND ElementLocalization(isoLanguageCode) FOREACH allFlexFormSheetElements(sheetName) -»
+            «ENDFOREACH -»
 
-			«EXPAND OwnLocalizations(isoLanguageCode) -»
-		</body>
+            «EXPAND OwnLocalizations(isoLanguageCode) -»
+        </body>
 «ENDDEFINE»
 
 
 «DEFINE SheetLocalization(String isoLanguageCode, String sheetName) FOR MInterface -»
-			«EXPAND SheetLocalizationHint(sheetName) -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + "." + sheetName + "." + xmiGuid) DISABLE»
-			<trans-unit id="sheet.«sheetName -»" xml:space="preserve">
-				<source>«sheetName.toFirstUpper() -»</source>
-			</trans-unit>
-			«ENDPROTECT»
+            «EXPAND SheetLocalizationHint(sheetName) -»
+            «PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + "." + sheetName + "." + xmiGuid) DISABLE»
+            <trans-unit xml:space="preserve" id="sheet.«sheetName -»">
+                <source>«sheetName.toFirstUpper() -»</source>
+            </trans-unit>
+            «ENDPROTECT»
 
 «ENDDEFINE»
 
 
 «DEFINE SheetLocalizationHint(String sheetName) FOR MInterface -»
-			<!-- GeneSEZ Generator Hint: id="sheet.«sheetName -»" -->
+            <!-- GeneSEZ Generator Hint: id="sheet.«sheetName -»" -->
 «ENDDEFINE»
 
 
 «DEFINE SwitchableControllerActionLocalization(String isoLanguageCode) FOR MInterface -»
 «IF emHasExtbasePluginUtilizablePluginConfigurations() -»
-			«EXPAND SwitchableControllerActionLocalizationHint -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + ".switchableControllerAction." + xmiGuid) DISABLE»
-			<trans-unit id="switchableControllerAction" xml:space="preserve">
-				<source>Switchable Controller Action</source>
-			</trans-unit>
-			«ENDPROTECT»
+            «EXPAND SwitchableControllerActionLocalizationHint -»
+            «PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + ".switchableControllerAction." + xmiGuid) DISABLE»
+            <trans-unit xml:space="preserve" id="switchableControllerAction">
+                <source>Switchable Controller Action</source>
+            </trans-unit>
+            «ENDPROTECT»
 
 «ENDIF -»
 «ENDDEFINE»
 
 
 «DEFINE SwitchableControllerActionLocalizationHint FOR MInterface -»
-			<!-- GeneSEZ Generator Hint: id="switchableControllerAction" -->
+            <!-- GeneSEZ Generator Hint: id="switchableControllerAction" -->
 «ENDDEFINE»
 
 
 «DEFINE SwitchableControllerActionConfigurationLocalization(String isoLanguageCode) FOR MInterface -»
-			«EXPAND SwitchableControllerActionConfigurationLocalizationHint -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + ".switchableControllerAction." + xmiGuid) DISABLE»
-			<trans-unit id="switchableControllerAction.«name -»" xml:space="preserve">
-				<source>Switchable Controller Action «name -»</source>
-			</trans-unit>
-			«ENDPROTECT»
+            «EXPAND SwitchableControllerActionConfigurationLocalizationHint -»
+            «PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + ".switchableControllerAction." + xmiGuid) DISABLE»
+            <trans-unit xml:space="preserve" id="switchableControllerAction.«name -»">
+                <source>Switchable Controller Action «name -»</source>
+            </trans-unit>
+            «ENDPROTECT»
 
 «ENDDEFINE»
 
 
 «DEFINE SwitchableControllerActionConfigurationLocalizationHint FOR MInterface -»
-			<!-- GeneSEZ Generator Hint: id="switchableControllerAction.«name -»" -->
+            <!-- GeneSEZ Generator Hint: id="switchableControllerAction.«name -»" -->
 «ENDDEFINE»
 
 
 «DEFINE ElementLocalization(String isoLanguageCode) FOR MProperty -»
-			«EXPAND ElementLocalizationHint -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + "." + xmiGuid) DISABLE»
-			<trans-unit id="«asPluginLocalizationName() -»" xml:space="preserve">
-				<source>«name.toFirstUpper() -»</source>
-			</trans-unit>
-			«ENDPROTECT»
+            «EXPAND ElementLocalizationHint -»
+            «PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + "." + xmiGuid) DISABLE»
+            <trans-unit xml:space="preserve" id="«asPluginLocalizationName() -»">
+                <source>«name.toFirstUpper() -»</source>
+            </trans-unit>
+            «ENDPROTECT»
 
 «ENDDEFINE»
 
 
 «DEFINE ElementLocalizationHint FOR MProperty -»
-			<!-- GeneSEZ Generator Hint: id="«asPluginLocalizationName() -»" -->
+            <!-- GeneSEZ Generator Hint: id="«asPluginLocalizationName() -»" -->
 «ENDDEFINE»
 
 
@@ -207,7 +207,7 @@
 	Generates a protected region for own localizations.
 «ENDREM»
 «DEFINE OwnLocalizations(String isoLanguageCode) FOR MInterface -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + ".own.localizations." + xmiGuid)»
-			<!-- TODO: put your further '«isoLanguageCode -»' localizations here -->
-			«ENDPROTECT»
+            «PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_plugin.xlf." + isoLanguageCode + ".own.localizations." + xmiGuid)»
+            <!-- TODO: put your further '«isoLanguageCode -»' localizations here -->
+            «ENDPROTECT»
 «ENDDEFINE»

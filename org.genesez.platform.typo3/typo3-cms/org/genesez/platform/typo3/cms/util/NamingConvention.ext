@@ -51,7 +51,7 @@ extension org::genesez::metamodel::core::util::NavigateElement;
 extension org::genesez::metamodel::core::util::mapping::TypeMapping;
 
 
-// -- TYPO3 CMS extension key + vendor name + package name conventions --------------------------------------
+// -- TYPO3 CMS extension key + extension name + vendor name conventions ------------------------------------
 
 /**
  * Getter of the extension key. 
@@ -76,6 +76,19 @@ String extensionKeyWithoutUnderscores() :
 
 
 /**
+ * Getter of the extension name.
+ * The extension name corresponds to the extension key which means that underscores in the extension key 
+ * are removed and replaced by upper camel case.
+ * E.g.: Extension key "blog_example" would become "BlogExample" as extension name.
+ *
+ * @return	The extension name.
+ */
+String extensionName() :
+	// using toString() method without parameter does not work
+	extensionKey().split("_").toFirstUpper().toString("");
+
+
+/**
  * Getter of the extension vendor name. 
  * This script is only a wrapper for "globalVarExtensionVendorName()" defined in "GlobalVar.ext".
  * E.g.: If the extension vendor name is "GeneSEZ" then this method returns the same extension vendor name "GeneSEZ".
@@ -84,19 +97,6 @@ String extensionKeyWithoutUnderscores() :
  */
 String extensionVendorName() :
 	globalVarExtensionVendorName();
-
-
-/**
- * Getter of the extension package name.
- * The package name corresponds to the extension key which means that underscores in the extension key 
- * are removed and replaced by upper camel case.
- * E.g.: Extension key "blog_example" would become "BlogExample" as package name.
- *
- * @return	The extension package name.
- */
-String extensionPackageName() :
-	// using toString() method without parameter does not work
-	extensionKey().split("_").toFirstUpper().toString("");
 
 
 // -- PHP Composer extension key + vendor name conventions --------------------------------------------------
@@ -281,17 +281,17 @@ String namespaceSeperator() :
 	'\\';
 
 
-// -- Extension vendor name + extension package name --
+// -- Extension vendor name + extension name --
 
 /**
- * Getter of the vendor + package name separated by the namespace seperator, which are added as namespace section.
- * E.g.: If the extension vendor name is "GeneSEZ" and the extension package name is "BlogExample"
+ * Getter of the vendor name + extension name separated by the namespace seperator, which are added as namespace section.
+ * E.g.: If the extension vendor name is "GeneSEZ" and the extension name is "BlogExample"
  *       then this method returns "GeneSEZ\BlogExample".
  *
- * @return	The vendor + package name in namespace notation.
+ * @return	The vendor name + extension name in namespace notation.
  */
-String namespaceVendorNameAndPackageName() :
-	extensionVendorName() + namespaceSeperator() + extensionPackageName();
+String namespaceVendorAndExtensionName() :
+	extensionVendorName() + namespaceSeperator() + extensionName();
 
 
 // -- Extension category name --
@@ -314,15 +314,15 @@ String namespaceCategoryName(MClassifier this) :
 
 /**
  * Getter of the namespace of a classifier.
- * E.g.: If the extension vendor name is "GeneSEZ", the extension package name is "BlogExample" 
+ * E.g.: If the extension vendor name is "GeneSEZ", the extension name is "BlogExample" 
  *       and the classifier is modeled inside package path "Classes/Domain/Model" 
  *       then this method returns "GeneSEZ\BlogExample\Domain\Model".
  * @return	The namespace of a classifier.
  */
 String namespace(MClassifier this) :
 	namespaceCategoryName().length != 0 
-		? namespaceVendorNameAndPackageName() + namespaceSeperator() + namespaceCategoryName() // e.g. GeneSEZ\BlogExample\Domain\Model 
-		: namespaceVendorNameAndPackageName(); // e.g. GeneSEZ\BlogExample
+		? namespaceVendorAndExtensionName() + namespaceSeperator() + namespaceCategoryName() // e.g. GeneSEZ\BlogExample\Domain\Model 
+		: namespaceVendorAndExtensionName(); // e.g. GeneSEZ\BlogExample
 
 
 // -- TYPO3 CMS specific Extbase + Fluid type name conventions ----------------------------------------------
@@ -464,7 +464,7 @@ cached String asShortGeneralName(MType this) :
 
 /**
  * Formats the name of a classifier in "General" naming context.
- * E.g.: If the extension vendor name is "GeneSEZ", the extension package name is "BlogExample" 
+ * E.g.: If the extension vendor name is "GeneSEZ", the extension name is "BlogExample" 
  *       and the domain object class "Blog" is modeled inside package path "Classes/Domain/Model" 
  *       then this method returns "\GeneSEZ\BlogExample\Domain\Model\Blog".
  * 
@@ -498,7 +498,7 @@ cached String asGeneralName(MType this) :
 
 /**
  * Formats the name of a classifier in "Configuration" naming context.
- * E.g.: If the extension key is "blog_example", the corresponding extension package name is "BlogExample"
+ * E.g.: If the extension key is "blog_example", the corresponding extension name is "BlogExample"
  *       and the domain object class "Blog" is modeled inside package path "Classes/Domain/Model" 
  *       then this method returns "tx_blogexample_domain_model_blog".
  * 
@@ -580,7 +580,7 @@ cached String asPersistenceName(MType this) :
 
 /**
  * Formats the name of a classifier (validator) in "AssignedValidatorName" naming context.
- * E.g.: If the extension vendor name is "GeneSEZ", the extension package name is "BlogExample" 
+ * E.g.: If the extension vendor name is "GeneSEZ", the extension name is "BlogExample" 
  *       and the validator class "BlogValidator" is modeled inside package path "Classes/Domain/Validator" 
  *       then this method returns "\GeneSEZ\BlogExample\Domain\Validator\Blog".
  * 
@@ -708,7 +708,7 @@ cached String asPersistenceName(MProperty this) :
 
 /**
  * Formats the name of an attribute in "IntermediateTable" naming context.
- * E.g.: If the extension key is "blog_example", the corresponding extension package name is "BlogExample"
+ * E.g.: If the extension key is "blog_example", the corresponding extension name is "BlogExample"
  *       and the domain object class "Post" has an attribute "tags" with a multiplicity of "0..*" 
  *       and a reference type to the domain object class "Tag"
  *       then this method returns "tx_blogexample_post_tag_tags_mm".
