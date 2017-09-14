@@ -98,6 +98,7 @@ return [
         «EXPAND CtrlAdminOnly -»
         «EXPAND CtrlReadOnly -»
         «EXPAND CtrlIsStatic -»
+        «EXPAND CtrlRootLevel -»
         «EXPAND CtrlIconFile -»
         «EXPAND CtrlSortingSupport -»
         «EXPAND CtrlEditingSupport -»
@@ -196,7 +197,7 @@ return [
 «REM» 
 «ENDREM»
 «DEFINE CtrlRootLevel FOR MClass -»
-«IF emHasTypo3TcaCtrlRootLevel("true") -»
+«IF emHasTypo3TcaUtilizableCtrlRootLevel() && emGetTypo3TcaCtrlRootLevel().asTcaRootLevel() != 0 -»
         'rootLevel' => «emGetTypo3TcaCtrlRootLevel().asTcaRootLevel() -»,
 «ENDIF-»
 «ENDDEFINE»
@@ -472,9 +473,10 @@ return [
 «DEFINE ColumnsType FOR MClass -»
 «IF !allSingleTableInheritanceSpecializations().isEmpty && getPersistenceRecordTypeColumnName().length != 0 -»
         '«getPersistenceRecordTypeColumnName() -»' => [
-            'label' => 'Type',
+            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.type',
             'config' => [
                 'type' =>'select',
+                'renderType' => 'selectSingle',
                 'items' => [
                     ['LLL:EXT:«extensionKey() -»/«filePathLocallangTcaXlf() -»:«asBackendLocalizationName() -»', '0'],
                     «FOREACH allSingleTableInheritanceSpecializations() AS s -»
@@ -482,6 +484,8 @@ return [
                     «ENDFOREACH -»
                 ],
                 'default' => '0',
+                'authMode' => $GLOBALS['TYPO3_CONF_VARS']['BE']['explicitADmode'],
+                'authMode_enforce' => 'strict',
             ],
         ],
 «ENDIF -»
@@ -1428,9 +1432,9 @@ return [
 «ENDREM»
 «DEFINE ColumnConfigTypeFalFileReference(MClass class) FOR MProperty -»
             'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig('«asConfigurationName() -»', [
-            	'minitems' => «IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»,
-            	'maxitems' => «IF multiplicity.hasFixedUpperBoundMultiplicity() -»«multiplicity.upperBound -»«ELSE -»999999«ENDIF -»,
-            	«EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+                'minitems' => «IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»,
+                'maxitems' => «IF multiplicity.hasFixedUpperBoundMultiplicity() -»«multiplicity.upperBound -»«ELSE -»999999«ENDIF -»,
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
             ], «IF emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»'«FOREACH emGetGuiPropertyAllowedFileExtensionsAllowedFileExtensions() AS allowedFileExtension SEPARATOR ","-»«allowedFileExtension -»«ENDFOREACH -»'«ELSE -»''«ENDIF -», «IF emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»'«emGetGuiPropertyDisallowedFileExtensionsDisallowedFileExtensions() -»'«ELSE -»''«ENDIF -»),
 «ENDDEFINE»
 
@@ -1439,9 +1443,9 @@ return [
 «ENDREM»
 «DEFINE ColumnConfigTypeFalImageReference(MClass class) FOR MProperty -»
             'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig('«asConfigurationName() -»', [
-            	'minitems' => «IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»,
-            	'maxitems' => «IF multiplicity.hasFixedUpperBoundMultiplicity() -»«multiplicity.upperBound -»«ELSE -»999999«ENDIF -»,
-            	«EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
+                'minitems' => «IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»,
+                'maxitems' => «IF multiplicity.hasFixedUpperBoundMultiplicity() -»«multiplicity.upperBound -»«ELSE -»999999«ENDIF -»,
+                «EXPAND OwnColumnConfigCode("tca.php.own.columns.section.column.config.code." + class.xmiGuid + "." + xmiGuid) -»
             ], «IF emHasGuiPropertyAllowedFileExtensionsUtilizableAllowedFileExtensions() -»'«emGetGuiPropertyAllowedFileExtensionsAllowedFileExtensions() -»'«ELSE -»$GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']«ENDIF -», «IF emHasGuiPropertyDisallowedFileExtensionsUtilizableDisallowedFileExtensions() -»'«emGetGuiPropertyDisallowedFileExtensionsDisallowedFileExtensions() -»'«ELSE -»''«ENDIF -»),
 «ENDDEFINE»
 
@@ -1846,7 +1850,7 @@ return [
         ],
         «FOREACH allSingleTableInheritanceSpecializations() AS s -»
         '«s.asGeneralName().replaceFirst( "\\" + namespaceSeperator(), "" ) -»' => [
-            «EXPAND TypesNumbersShowitem FOR s»
+            «EXPAND TypesNumbersShowitem FOR s -»
             «EXPAND OwnTypesSectionTypeCode FOR s -»
         ],
         «ENDFOREACH -»
