@@ -89,7 +89,7 @@ MPackage packageModifications(MPackage this) :
  * @todo: should performed by a check validation rule
  */
 MPackage packageChangePackageNameToFirstUpper(MPackage this) :
-	name.matches("^[a-z].*")
+	 this.metaType != MModel && name.matches("^[a-z].*")
 		? (	logTrace( "GeneSEZ: Change package name to first upper! Model element: " + fqmn() ) ->
 			setName( name.toFirstUpper() )
 		) : this ->
