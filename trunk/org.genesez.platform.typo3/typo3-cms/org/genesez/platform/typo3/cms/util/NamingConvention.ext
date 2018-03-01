@@ -61,7 +61,7 @@ extension org::genesez::metamodel::core::util::mapping::TypeMapping;
  *
  * @return	The extension key.
  */
-String extensionKey() :
+String extensionKey(MElement this) :
 	globalVarExtensionKey();
 
 
@@ -71,7 +71,7 @@ String extensionKey() :
  *
  * @return	The extension key without underscores.
  */
-String extensionKeyWithoutUnderscores() :
+String extensionKeyWithoutUnderscores(MElement this) :
 	extensionKey().replaceAll("_", "");
 
 
@@ -83,7 +83,7 @@ String extensionKeyWithoutUnderscores() :
  *
  * @return	The extension name.
  */
-String extensionName() :
+String extensionName(MElement this) :
 	// using toString() method without parameter does not work
 	extensionKey().split("_").toFirstUpper().toString("");
 
@@ -95,7 +95,7 @@ String extensionName() :
  *
  * @return	The extension vendor name.
  */
-String extensionVendorName() :
+String extensionVendorName(MElement this) :
 	globalVarExtensionVendorName();
 
 
@@ -107,7 +107,7 @@ String extensionVendorName() :
  *
  * @return	The extension key in PHP Composer notation.
  */
-String composerExtensionKey() :
+String composerExtensionKey(MElement this) :
 	extensionKey().replaceAll("_", "-");
 
 
@@ -117,7 +117,7 @@ String composerExtensionKey() :
  *
  * @return	The extension vendor name in PHP composer notation.
  */
-String composerExtensionVendorName() :
+String composerExtensionVendorName(MElement this) :
 	extensionVendorName().toLowerCase();
 
 
@@ -131,7 +131,7 @@ String composerExtensionVendorName() :
  * 
  * @return	The prefix to prepend to extensions.
  */
-String extensionPrefix() :
+String extensionPrefix(MElement this) :
 	// checks if the extension is a general or a user specific extension, 
 	// by determination of the extension key if it does start with prefix "user_"
 	isGeneralExtension()
@@ -147,7 +147,7 @@ String extensionPrefix() :
  * 
  * @return	The prefix to prepend to extensions.
  */
-String extensionPrefixWithoutUnderscores() :
+String extensionPrefixWithoutUnderscores(MElement this) :
 	extensionPrefix().replaceAll("_", "");
 
 
@@ -156,7 +156,7 @@ String extensionPrefixWithoutUnderscores() :
  * by determination if the extension key does not start with prefix "user_".
  * See http://docs.typo3.org/typo3cms/CoreApiReference/ExtensionArchitecture/NamingConventions/Index.html
  */
-Boolean isGeneralExtension() :
+Boolean isGeneralExtension(MElement this) :
 	!extensionKey().startsWith("user_");
 
 
@@ -290,7 +290,7 @@ String namespaceSeperator() :
  *
  * @return	The vendor name + extension name in namespace notation.
  */
-String namespaceVendorAndExtensionName() :
+String namespaceVendorAndExtensionName(MElement this) :
 	extensionVendorName() + namespaceSeperator() + extensionName();
 
 
@@ -333,13 +333,7 @@ String namespace(MClassifier this) :
  * @return	The prefix to prepend.
  */
 String typeNamePrefix(MClass this) : 
-	switch {
-		// checks if class is abstract and does not already starts with "Abstract"
-		case abstract && !name.startsWith("Abstract") : 
-			"Abstract"
-		default :
-			""
-	};
+	"";
 
 
 /**
